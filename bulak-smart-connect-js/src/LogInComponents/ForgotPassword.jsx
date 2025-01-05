@@ -12,6 +12,7 @@ export default function ForgotPassword({ open, handleClose }) {
   return (
     <Dialog
       open={open}
+      className='DialogForgetPassword'
       onClose={handleClose}
       PaperProps={{
         component: 'form',
@@ -21,9 +22,9 @@ export default function ForgotPassword({ open, handleClose }) {
         },
       }}
     >
-      <DialogTitle className="dialog-title">Reset password</DialogTitle>
-      <DialogContent className="dialog-content">
-        <DialogContentText className="dialog-content-text">
+      <DialogTitle className="DialogTitle">Reset password</DialogTitle>
+      <DialogContent className="DialogContent">
+        <DialogContentText className="DiallogContentText">
           Enter your account&apos;s email address, and we&apos;ll send you a link to reset your password.
         </DialogContentText>
         <OutlinedInput
@@ -38,9 +39,9 @@ export default function ForgotPassword({ open, handleClose }) {
           fullWidth
         />
       </DialogContent>
-      <DialogActions className="dialog-actions">
-        <Button onClick={handleClose}>Cancel</Button>
-        <Button variant="contained" type="submit">
+      <DialogActions className="DialogActions">
+        <Button onClick={handleClose} className='CancelButton'>Cancel</Button>
+        <Button variant="contained" className='ContinueButton' type="submit">
           Continue
         </Button>
       </DialogActions>
