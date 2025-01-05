@@ -3,8 +3,11 @@
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
-}
 
+}
+.App {
+  background-color: white;
+}
 .logo {
   height: 6em;
   padding: 1.5em;
@@ -38,5 +41,5 @@
 }
 
 .read-the-docs {
-  color: #888;
+  color: white;
 }
