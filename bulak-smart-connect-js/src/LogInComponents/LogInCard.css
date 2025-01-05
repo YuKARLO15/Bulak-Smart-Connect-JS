@@ -1,0 +1,90 @@
+.LogInCardContainer {
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+  width: 100%;
+  padding: 75px;
+  gap: 16px;
+  box-shadow: none !important;
+  color: #184a5b;
+  border-left: 2px solid #184a5b;
+ 
+}
+
+@media (min-width: 600px) {
+  .LogInCardContainer{
+    width: 450px;
+  }
+}
+
+.LogInTitle {
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 16px;
+  color: #184a5b;
+}
+
+.LogInForm {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 16px;
+  box-shadow: none;
+}
+
+.LogInLabel {
+  text-align: left;
+  display: block;
+  margin-bottom: 8px;
+  color: #184a5b;
+}
+
+.PasswordContainer {
+  display: flex;
+  justify-content: space-between;
+}
+
+.forgot-password-link {
+  align-self: baseline;
+  color: #184a5b;
+}
+#email{
+  color: #ffffff;
+}
+#password {
+  color: #ffffff;
+}
+
+.TextField {
+  background-color: #184a5b;
+  color: #ffffff !important;
+  border-radius: 10px;
+  box-shadow: none !important;
+}
+
+.TextField.error{
+  border-color: whitesmoke !important;
+  border-radius: 10px;
+  color: #ffffff !important; 
+}
+
+.MuiFormHelperText-root.Mui-error {
+  color: white !important;
+}
+
+
+.RemembeMe{
+  color: #184a5b;
+}
+
+.LoginButton {
+  color: #ffffff !important;
+  background-color: #184a5b !important;;
+  border-radius: 8px;
+}
+
+.LoginButton:hover {
+  border-color: #184a5b !important;
+  background-color: #ffffff !important;
+  color: #184a5b !important;
+}
