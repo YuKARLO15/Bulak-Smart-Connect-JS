@@ -1,0 +1,89 @@
+/* LogInContent.css */
+.LogInContainerContent {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 70px;
+ 
+  text-align: center;
+ 
+}
+
+.WelcomeMessage {
+  margin-bottom: 16px;
+}
+
+.MainTitle {
+  font-weight: bold;
+  color: #003366;
+  margin-bottom: 16px;
+  font-size: 2rem; /* Default size for mobile */
+}
+
+.PlaceholderText {
+  color: #6c757d;
+  margin-bottom: 32px;
+  max-width: 500px;
+  font-size: 1rem;
+}
+
+.SignUpText {
+  color: #6c757d;
+}
+
+.SignUpButton {
+  border-radius: 8px;
+  border-color: #003366;
+  color: #003366;
+  text-transform: uppercase;
+  padding: 12px 30px;
+  font-size: 1rem;
+  &:hover {
+    border-color: #003366;
+    background-color: #003366;
+    color: #fff;
+  }
+}
+
+/* Media Queries for Responsiveness */
+@media (min-width: 600px) {
+  .MainTitle {
+    font-size: 2.5rem; /* Larger font size for tablets */
+  }
+
+  .SignUpButton {
+    font-size: 1.2rem;
+    padding: 15px 40px;
+  }
+}
+
+@media (min-width: 768px) {
+  .LogInContainer {
+    padding: 32px;
+  }
+
+  .MainTitle {
+    font-size: 3rem; /* Larger font size for larger devices like tablets */
+  }
+
+  .SignUpButton {
+    font-size: 1.5rem;
+    padding: 20px 50px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .LogInContainer {
+    padding: 48px;
+  }
+
+  .MainTitle {
+    font-size: 4rem; /* Larger font size for desktops */
+  }
+
+  .SignUpButton {
+    font-size: 1.5rem;
+    padding: 20px 60px;
+  }
+}

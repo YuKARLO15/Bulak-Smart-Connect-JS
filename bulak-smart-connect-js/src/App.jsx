@@ -5,7 +5,13 @@ import './App.css'
 import SignUpForm from './pages/SignUpForm.jsx'
 
 function App() {
-  return <div><SignUpForm>SignUpForm</SignUpForm></div>
+return <div><SignUpForm>SignUpForm</SignUpForm></div>
+import LogIn from './LogInComponents/LogIn'
+function App() {
+ 
+  return (
+ <div><LogIn></LogIn></div>
+  )
 }
 
 export default App
