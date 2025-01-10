@@ -1,6 +1,7 @@
 import React from "react";
-import { Box, Typography, Button, Stack } from "@mui/material";
+import { Box, Typography, Button, Stack, Link } from "@mui/material";
 import "./LogInContent.css"; // Make sure the path is correct
+import { Link as RouterLink } from "react-router-dom";
 
 const LogInContent = () => {
   return (
@@ -26,10 +27,10 @@ const LogInContent = () => {
         <Typography variant="body2" color="text.secondary" className="SignUpText">
           DON'T HAVE AN ACCOUNT?
         </Typography>
-
+      <RouterLink to = '/SignupForm' className="SignupLink">
         <Button className="SignUpButton" variant="outlined">
           Sign Up
-        </Button>
+        </Button></RouterLink>
       </Stack>
     </Box>
   );
