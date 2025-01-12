@@ -16,7 +16,7 @@
 
 .MainTitle {
   font-weight: bold;
-  color: #003366;
+  color: #184a5b;
   margin-bottom: 16px;
   font-size: 2rem; /* Default size for mobile */
 }
@@ -34,15 +34,15 @@
 
 .SignUpButton {
   border-radius: 8px;
-  border-color: #003366;
-  color: #003366;
+  border-color: #184a5b !important;
+  color: #184a5b !important;
   text-transform: uppercase;
   padding: 12px 30px;
   font-size: 1rem;
   &:hover {
-    border-color: #003366;
-    background-color: #003366;
-    color: #fff;
+    border-color: #184a5b;
+    background-color: #184a5b;
+    color: #fff !important;
   }
 }
 
