@@ -31,7 +31,7 @@ export default function ForgotPassword({ open, handleClose }) {
           autoFocus
           required
           margin="dense"
-          id="email"
+          id="email-input"
           name="email"
           label="Email address"
           placeholder="Email address"
