@@ -1,0 +1,32 @@
+/* NavBar.css */
+
+.sidebar {
+    height: 100%;
+    width: 20vw;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: #1C4D5A;
+    overflow-x: hidden;
+    padding-top: 20px;
+}
+
+.sidebar a {
+    padding: 10px 15px;
+    text-decoration: none;
+    font-size: 18px;
+    color: white;
+    display: block;
+}
+
+.sidebar a:hover {
+    background-color: #6797a5;
+    color: white;
+}
+
+.main-content {
+    margin-left: 260px; 
+    padding: 20px;
+}
+
+
