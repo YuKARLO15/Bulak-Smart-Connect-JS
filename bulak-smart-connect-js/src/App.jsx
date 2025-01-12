@@ -5,6 +5,12 @@ import LogIn from './LogInComponents/LogIn';
 import UserDashboard from './UserDashboard/UserDashboard'; 
 
 
+
+function App() {
+ 
+  return (
+ <div><SignUpForm></SignUpForm></div>
+  )
 function App() {
   return (
     <Routes>

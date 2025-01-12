@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "../styles/SignUpForm.css";
 
-const SignupForm = () => {
+const SignUpForm = () => {
   const [formData, setFormData] = useState({
     username: "",
     password: "",
