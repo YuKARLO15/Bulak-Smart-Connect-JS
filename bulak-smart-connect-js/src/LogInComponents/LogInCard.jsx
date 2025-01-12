@@ -127,7 +127,7 @@ export default function LogInCard() {
           className="RememberMe"
         />
         <ForgotPassword open={open} handleClose={handleClose} />
-        <RouterLink to='/Dashboard' underline="none"> 
+        <RouterLink to='/UserDashboard' underline="none"> 
         <Button
           type="submit"
           fullWidth

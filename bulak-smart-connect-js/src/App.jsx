@@ -2,7 +2,8 @@ import { Route, Routes } from 'react-router-dom'; // Import necessary components
 import './App.css';
 import SignupForm from './pages/SignUpForm'; 
 import LogIn from './LogInComponents/LogIn';  
-import Dashboard from './DashboardComponents/Dashboard'; 
+import UserDashboard from './UserDashboard/UserDashboard'; 
+
 
 function App() {
   return (
@@ -10,7 +11,7 @@ function App() {
       {/* Define Routes */}
       <Route path="/" element={<LogIn />} />
       <Route path='/SignUpForm' element={<SignupForm />} />
-      <Route path='/DashBoard' element={<Dashboard />} />
+      <Route path='/UserDashBoard' element={<UserDashboard />} />
     </Routes>
   );
 }
