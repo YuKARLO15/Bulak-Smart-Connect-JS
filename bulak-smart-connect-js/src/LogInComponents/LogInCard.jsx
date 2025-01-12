@@ -12,6 +12,7 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import ForgotPassword from "./ForgotPassword";
 import "./LogInCard.css";
+import { Link as RouterLink } from "react-router-dom";
 
 export default function LogInCard() {
   const [emailError, setEmailError] = React.useState(false);
@@ -126,15 +127,17 @@ export default function LogInCard() {
           className="RememberMe"
         />
         <ForgotPassword open={open} handleClose={handleClose} />
+        <RouterLink to='/Dashboard' underline="none"> 
         <Button
           type="submit"
           fullWidth
           variant="contained"
           onClick={validateInputs}
           className="LoginButton"
-        >
+      
+          >
           Log In
-        </Button>
+        </Button> </RouterLink>
       </Box>
     </Card>
   );
