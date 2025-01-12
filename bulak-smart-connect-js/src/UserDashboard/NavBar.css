@@ -6,27 +6,54 @@
     position: fixed;
     top: 0;
     left: 0;
-    background-color: #1C4D5A;
+    background-color: #8AACB5;
     overflow-x: hidden;
     padding-top: 20px;
+}
+.Profile {
+    display: flex;
+    flex-direction: column;
+    height: 10vh;
+    padding: 20px;
+    margin-bottom: 5vh;
+
+}
+.Username{
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+  
+
 }
 
 .sidebar a {
     padding: 10px 15px;
     text-decoration: none;
     font-size: 18px;
-    color: white;
+    color: #1C4D5A;
     display: block;
+    font-weight:500;
 }
 
 .sidebar a:hover {
     background-color: #6797a5;
-    color: white;
+    color: #1C4D5A;
+    font-weight:500;
 }
 
 .main-content {
     margin-left: 260px; 
     padding: 20px;
+}
+.Logout{
+    margin-top: 15vh;
+    height: 10px;
+
+}
+.Logout:hover{
+    background-color: #6797a5;
+    color: white;
+   
 }
 
 
