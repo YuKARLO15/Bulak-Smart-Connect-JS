@@ -27,7 +27,7 @@ const LogInContent = () => {
         <Typography variant="body2" color="text.secondary" className="SignUpText">
           DON'T HAVE AN ACCOUNT?
         </Typography>
-      <RouterLink to = '/SignupForm' className="SignupLink">
+      <RouterLink to = '/SignUpForm' className="SignUpLink">
         <Button className="SignUpButton" variant="outlined">
           Sign Up
         </Button></RouterLink>
