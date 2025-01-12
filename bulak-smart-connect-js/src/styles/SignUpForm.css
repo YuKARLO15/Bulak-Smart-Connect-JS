@@ -2,11 +2,6 @@ body {
   font-family: "Roboto", sans-serif;
   margin: 0;
   min-height: 100vh;
-  background: radial-gradient(
-    ellipse at center,
-    hsl(210, 100%, 97%),
-    hsl(0, 0%, 100%)
-  );
 }
 
 .signup-container {
@@ -51,29 +46,33 @@ form {
   margin-bottom: 20px;
   font-weight: 500;
   text-align: left;
-  color: #1c4d5a;
+  color: #1c4d5a !important;
   font-weight: 700;
 }
 
 .labels {
   text-align: left;
+ 
 }
 
 h2 {
   text-align: center;
   font-size: 2rem;
   margin-bottom: 24px;
+  color: #1c4d5a;
 }
 
 .form-group {
   margin-bottom: 16px;
   padding: 0px 25px;
+
 }
 
 .form-group label {
   display: block;
   margin-bottom: 8px;
   font-weight: 500;
+  color: #1c4d5a !important;
 }
 
 .form-group input {
@@ -81,20 +80,23 @@ h2 {
   padding: 8px;
   border-radius: 6px;
   font-size: 16px;
-  border: 1.5px solid #2a5764;
+  border: 1.5px solid #2a5764 !important;
   background-color: #fffdfd;
   box-shadow: inset 0px 3px 2px rgba(0, 0, 0, 0.1);
+
 }
 
 .form-group input:focus {
   outline: none;
   border: 2px solid #24677a;
+  color: #1c4d5a !important;
 }
 
 .form-group.inline {
   display: flex;
   gap: 20px;
   justify-content: space-between;
+  color: #1c4d5a !important;
 }
 
 .form-control {
@@ -134,7 +136,7 @@ h2 {
 
 .checkbox-extension label {
   font-size: 12px; 
-  color: #1c4d5a; 
+  color: #1c4d5a !important; 
 }
 .checkbox-extension .extension-text {
   font-size: 5px; 
@@ -154,6 +156,7 @@ h2 {
   border: 2px solid #1c4d5a; 
   display: flex;
   font-size:15px;
+  color: #1c4d5a;
 }
 
 .error-message {
@@ -177,6 +180,7 @@ form select {
   border: 1.5px solid #2a5764;
   background-color: #fffdfd;
   box-shadow: inset 0px 3px 2px rgba(0, 0, 0, 0.1);
+  color: #1c4d5a !important;
 }
 
 form select:focus {
@@ -254,6 +258,7 @@ button.btn:hover {
   justify-content: center;
   align-items: center;
   margin-top: 20px;
+
 }
 
 .ReceiveUpdateText {
@@ -274,7 +279,7 @@ button.btn:hover {
   border-radius: 5px;
   background-color: #fff;
   font-size: 12px;
-  color: #333;
+  color: #333 !important;
   box-sizing: border-box;
   cursor: not-allowed;
   transition: border-color 0.3s ease;
