@@ -1,8 +1,9 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-import SignUpForm from './pages/SignUpForm.jsx'
+import { Route, Routes } from 'react-router-dom'; // Import necessary components from react-router-dom
+import './App.css';
+import SignupForm from './pages/SignUpForm'; 
+import LogIn from './LogInComponents/LogIn';  
+import UserDashboard from './UserDashboard/UserDashboard'; 
+
 
 
 function App() {
@@ -10,6 +11,15 @@ function App() {
   return (
  <div><SignUpForm></SignUpForm></div>
   )
+function App() {
+  return (
+    <Routes>
+      {/* Define Routes */}
+      <Route path="/" element={<LogIn />} />
+      <Route path='/SignUpForm' element={<SignupForm />} />
+      <Route path='/UserDashBoard' element={<UserDashboard />} />
+    </Routes>
+  );
 }
 
-export default App
+export default App;
