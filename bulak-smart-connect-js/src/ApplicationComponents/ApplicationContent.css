@@ -1,0 +1,68 @@
+.certificate-card {
+    background-color: #D9D9D9 !important;
+    border-radius: 8px;
+    width: 30vw;
+    height: 30vh;
+    text-align: center;
+    padding: 5px;
+    
+  }
+  .OnlineApplicationTitle{
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 20vh;
+    color: #184a5b !important;
+
+  }
+
+  .title{
+    display: flex;
+    flex-direction: row;
+    height: 4vh;
+  }
+.title img{
+    width: 10vw;
+    height: 15vh;
+    margin-right: 8px;}
+.title h6 {
+    font-size: 10px !important;
+}
+  .ApplicationContentContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 80vw;
+    margin-left: 20vw;
+
+  }
+  .title {
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  
+  .details {
+    list-style: none;
+    padding: 0;
+    margin-top: 3vh;
+    margin-left: 10vw;
+    color: #6c757d;
+    font-size: 14px;
+
+  }
+  
+  .actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  
+  .requirements-btn {
+    color: #184a5b !important;
+    text-transform: none;
+  }
+  
+  .request-btn {
+    background-color: #184a5b !important;
+    color: white;
+    text-transform: none;
+  }

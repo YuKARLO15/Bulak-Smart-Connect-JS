@@ -33,8 +33,9 @@
     margin: 1vw;
   }
   
-  .ApplicationsHeader {
+.ApplicationHeader {
     margin-bottom: 8px;
+    margin-left: 5vw;
   }
   
 .ApplicationCard, .ScheduledAppionmentnCard{
@@ -44,14 +45,15 @@
   flex-direction: column ;
 
 }
-.ApplicationCard{
+.ApplicationCard, .ApplicationHeader{
   margin-left: 10vw;
 }
 .AppiontmentHeader, .ApplicationHeader{
   font-size: 1.5vw;
   font-weight: bolder;
   color: #184a5b;
-  text-align: center;
+ 
+
 }
 .ApplicationCardTitle{
   font-size: 1.2vw;

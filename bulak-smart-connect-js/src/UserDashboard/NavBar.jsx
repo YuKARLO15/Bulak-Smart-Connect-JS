@@ -1,5 +1,6 @@
 import React from "react";
 import "./NavBar.css";
+import { Link as RouterLink } from "react-router-dom";
 
 const NavBar = () => {
   return (
@@ -10,9 +11,9 @@ const NavBar = () => {
           <typography className="UserEmail" >User@gmail.com</typography>
         </div>
         <div className="NavigationButtons">
-        <a href="/dashboard">Dashboard</a>
-        <a href="/appointments">Appointments</a>
-        <a href="/document_application">Document Application</a>
+        <a href="/UserDashboard">Dashboard</a>
+        <a href="/AppointmentForm">Appointments</a>
+        <a href="/ApplicationForm">Document Application</a>
         <a href="/qrcode">QR Code</a>
         <a href="/account">Account</a>
         <a href="/settings">Settings</a>
