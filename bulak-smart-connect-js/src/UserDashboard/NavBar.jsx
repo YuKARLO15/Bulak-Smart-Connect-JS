@@ -19,7 +19,7 @@ const NavBar = () => {
         <a href="/settings">Settings</a>
         </div>
         <div className="Logout">
-          <a href="/logout">Log Out</a>
+          <a href="/">Log Out</a>
           </div>
       </div>
 
