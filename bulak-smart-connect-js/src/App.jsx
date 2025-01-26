@@ -3,6 +3,8 @@ import './App.css';
 import SignUpForm from './pages/SignUpForm'; 
 import LogIn from './LogInComponents/LogIn';  
 import UserDashboard from './UserDashboard/UserDashboard'; 
+import AppoionmentForm from './AppointmentComponents/AppointemtForm'; 
+import ApplicationForm from './ApplicationComponents/ApplicationForm'; 
 
 
 
@@ -14,6 +16,9 @@ function App() {
       <Route path="/" element={<LogIn />} />
       <Route path='/SignUpForm' element={<SignUpForm />} />
       <Route path='/UserDashBoard' element={<UserDashboard />} />
+      <Route path='/AppointmentForm' element={<AppoionmentForm />} />
+      <Route path='/ApplicationForm' element={<ApplicationForm/>} />
+
     </Routes>
   );
 }

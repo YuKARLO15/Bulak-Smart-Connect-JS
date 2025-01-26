@@ -25,8 +25,18 @@ const SignUpForm = () => {
   const [errors, setErrors] = useState({});
 
   const months = [
-    "January", "February", "March", "April", "May", "June", "July", "August", 
-    "September", "October", "November", "December",
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
   ];
 
   const days = Array.from({ length: 31 }, (_, index) => index + 1);
@@ -37,16 +47,44 @@ const SignUpForm = () => {
     (_, index) => currentYear - index
   );
 
-
   const barangays = [
-    "Akle", "Alagao", "Anyatam", "Bagong Barrio", "Basuit", "Bubulong Malaki", "Bubulong Munti", 
-    "Buhol na Mangga", "Bulusukan", "Calasag", "Calawitan", "Casalat", "Gabihan", "Garlang", 
-    "Lapnit", "Maasim", "Makapilapil", "Malipampang", "Mataas na Parang", "Matimbubong", 
-    "Nabaong Garlang", "Palapala", "Pasong Bangkal", "Pinaod", "Poblacion", "Pulong Tamo", 
-    "San Juan", "Santa Catalina Bata", "Santa Catalina Matanda", "Sapang Dayap", "Sapang Putik", 
-    "Sapang Putol", "Sumandig", "Telapatio", "Umpucan", "Upig"
+    "Akle",
+    "Alagao",
+    "Anyatam",
+    "Bagong Barrio",
+    "Basuit",
+    "Bubulong Malaki",
+    "Bubulong Munti",
+    "Buhol na Mangga",
+    "Bulusukan",
+    "Calasag",
+    "Calawitan",
+    "Casalat",
+    "Gabihan",
+    "Garlang",
+    "Lapnit",
+    "Maasim",
+    "Makapilapil",
+    "Malipampang",
+    "Mataas na Parang",
+    "Matimbubong",
+    "Nabaong Garlang",
+    "Palapala",
+    "Pasong Bangkal",
+    "Pinaod",
+    "Poblacion",
+    "Pulong Tamo",
+    "San Juan",
+    "Santa Catalina Bata",
+    "Santa Catalina Matanda",
+    "Sapang Dayap",
+    "Sapang Putik",
+    "Sapang Putol",
+    "Sumandig",
+    "Telapatio",
+    "Umpucan",
+    "Upig",
   ];
-
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -61,7 +99,7 @@ const SignUpForm = () => {
     console.log("month" + formData.month);
     console.log("day" + formData.day);
     console.log("year" + formData.year);
-    
+
     if (formData.day && formData.month && formData.year) {
       const birthDate = new Date(
         `${formData.month} ${formData.day}, ${formData.year}`
@@ -107,7 +145,6 @@ const SignUpForm = () => {
       console.log("Form submitted:", formData);
     }
   };
-
 
   return (
     <div className="signup-container">
@@ -203,23 +240,23 @@ const SignUpForm = () => {
             </label>
             <div className="extension-name">
               {formData.hasExtension && (
-              <select
-                id="Extension"
-                name="extension"
-                value={formData.extension || ""}
-                onChange={handleInputChange}
-              >
-                <option value="">Select Extension</option>
-                <option value="Sr.">Sr.</option>
-                <option value="Jr.">Jr.</option>
-                <option value="I">I</option>
-                <option value="II">II</option>
-                <option value="III">III</option>
-                <option value="IV">IV</option>
-                <option value="V">V</option>
-                <option value="VI">VI</option>
-              </select>
-            )}
+                <select
+                  id="Extension"
+                  name="extension"
+                  value={formData.extension || ""}
+                  onChange={handleInputChange}
+                >
+                  <option value="">Select Extension</option>
+                  <option value="Sr.">Sr.</option>
+                  <option value="Jr.">Jr.</option>
+                  <option value="I">I</option>
+                  <option value="II">II</option>
+                  <option value="III">III</option>
+                  <option value="IV">IV</option>
+                  <option value="V">V</option>
+                  <option value="VI">VI</option>
+                </select>
+              )}
             </div>
           </div>
         </div>
@@ -259,7 +296,7 @@ const SignUpForm = () => {
             />
           </div>
           <div className="form-group inline">
-          <select
+            <select
               id="Barangay"
               name="barangay"
               value={formData.barangay}
@@ -330,10 +367,8 @@ const SignUpForm = () => {
                   {year}
                 </option>
               ))}
-              
             </select>
 
-           
             <input
               type="text"
               id="Age"
@@ -393,7 +428,7 @@ const SignUpForm = () => {
 
         {/* Footer Section */}
         <div className="footer">
-          Already have an account? <a href="#">Sign in</a>
+          Already have an account? <a href="/">Sign in</a>
         </div>
       </form>
     </div>

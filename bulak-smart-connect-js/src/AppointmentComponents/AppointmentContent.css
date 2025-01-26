@@ -1,0 +1,170 @@
+.AppointmentContainer {
+  max-width: 90vw;
+  padding: 30px;
+  background: #fff;
+  border-radius: 10px;
+  font-family: Arial, sans-serif;
+  width: 65vw;
+  margin-left: 17vw;
+  margin-top: 0;
+
+}
+
+.AppointmentTitle {
+  font-size: 28px;
+  font-weight: bold;
+  text-align: left;
+  margin-bottom: 10vh;
+  color: #1e3a56;
+  margin-top: 0cm;
+}
+.MiddleInitial input{
+width: 5vw !important;
+
+}
+.ButtonContainer {
+  display: flex;
+  justify-content: flex-start;
+  gap: 20px;
+  margin-bottom: 20px;
+
+}
+
+.SelfAppointment,
+.OtherAppointment {
+  flex: 1;
+  max-width: 250px;
+  padding: 12px;
+  font-size: 16px;
+  background: #d3d3d3;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  color: #333;
+  text-align: center;
+}
+
+.SelfAppointment:hover,
+.OtherAppointment:hover {
+  background: #bbb;
+}
+
+.FormGroup {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.FormGroup label {
+  flex: 1 1 100%;
+  font-size: 14px;
+  color: #333;
+  font-weight: bold;
+}
+
+.FormGroup select {
+  flex: 1;
+  padding: 12px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  outline: none;
+  width: 100%;
+  color: #1e3a56;
+}
+
+.FormGroup input::placeholder {
+  color: #aaa;
+  font-style: italic;
+}
+
+.ConfirmButton {
+  padding: 15px;
+  font-size: 15px;
+  background: #1C4D5A;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+  width: 15vw;
+  display: flex;
+  justify-content: center;
+}
+
+.ConfirmButton:hover {
+  background: #1C4D5A;
+}
+.ConfirmContainer{
+  display: flex;
+  justify-content: end;
+  margin-top: 20px;
+}
+
+.RowGroup {
+  display: flex;
+  gap: 20px;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.InputWrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  color: #1e3a56;
+}
+
+.InputWrapper label {
+  font-weight: bold;
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 5px;
+  text-align: left;
+}
+
+.InputWrapper input {
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+  outline: none;
+  max-width: 23vw;
+  background-color: #f9f9f9;
+  color: #1e3a56;
+}
+
+.InputWrapper input::placeholder {
+  font-style: italic;
+  color: #1C4D5A;
+
+}
+.SmallInput {
+  width: 5vw;
+  flex: 0 0 10vw;
+}
+
+@media screen and (max-width: 768px) {
+  .AppointmentContainer {
+    width: 90vw;
+    margin-left: 5vw;
+  }
+
+  .InputWrapper input {
+    width: 100%;
+  }
+
+  .RowGroup {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .ConfirmButton {
+    font-size: 16px;
+  }
+
+  .SmallInput {
+    max-width: 60px;
+  }
+}
