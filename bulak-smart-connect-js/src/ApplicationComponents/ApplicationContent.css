@@ -8,9 +8,10 @@
     
   }
   .OnlineApplicationTitle{
-    font-size: 20px;
+    font-size: 40px;
     font-weight: 600;
-    margin-bottom: 20vh;
+    text-align: start;
+    margin-bottom: 10vh !important;
     color: #184a5b !important;
 
   }
@@ -82,19 +83,20 @@
 
   .OnlineApplicationTitle {
     font-size: 14px;
-    margin-bottom: 10vh;
+    margin-bottom: 20vh;
   }
 
   .title {
     flex-direction: column;
     height: auto;
+
   }
 
   .title img {
     width: 20vw;
     height: auto;
     margin-right: 0;
-    margin-bottom: 10px;
+    margin-bottom: 30px;
     justify-content: center;
     align-self: center;
   }

@@ -1,8 +1,10 @@
 import React from 'react';
 import { Box, Grid, Card, CardContent, Typography, Button } from '@mui/material';
 import './ApplicationContent.css'; // Import your CSS file here
+import CardHeader from '@mui/material/CardHeader';
 
 // Import images
+
 import BirthCertificateIcon from './ApplicationAssets/BirthCertificate.png';
 import MarriageCertificateIcon from './ApplicationAssets/MarriageCertificate.png';
 import DeathCertificateIcon from './ApplicationAssets/DeathCertificate.png';
@@ -19,7 +21,7 @@ const ApplicationContent = () => {
     return (
     <div className="ApplicationContentContainer">
     <Box sx={{ padding: 3 }}>
-      <Typography variant="h4" className='OnlineApplicationTitle' gutterBottom>
+      <Typography variant="h4" className='OnlineApplicationTitle' >
         ONLINE APPLICATION
       </Typography>
       <Grid container spacing={3}>
