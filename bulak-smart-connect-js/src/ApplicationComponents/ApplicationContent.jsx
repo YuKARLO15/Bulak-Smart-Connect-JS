@@ -29,7 +29,8 @@ const ApplicationContent = () => {
               <CardContent>
                
                 <Typography variant="h6" className="title">
-                  <img src={cert.icon} alt={`${cert.title} Icon`} className="icon" /> {cert.title}
+                  <img src={cert.icon} alt={`${cert.title} Icon`} className="icon" />
+                  <Typography className='Card-Title'> {cert.title} </Typography>
                 </Typography>
                 <ul className="details">
                   <li>Lorem ipsum dolor sit amet</li>
