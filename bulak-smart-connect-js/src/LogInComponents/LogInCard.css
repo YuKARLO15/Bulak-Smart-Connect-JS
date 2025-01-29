@@ -11,6 +11,9 @@
 
 
 }
+.LogIn {
+  margin: 0vw;
+}
 
 @media (min-width: 600px) {
   .LogInCardContainer{

@@ -1,68 +1,185 @@
-.certificate-card {
-    background-color: #D9D9D9 !important;
-    border-radius: 8px;
-    width: 30vw;
-    height: 30vh;
-    text-align: center;
-    padding: 5px;
-    
-  }
-  .OnlineApplicationTitle{
-    font-size: 20px;
-    font-weight: 600;
-    margin-bottom: 20vh;
-    color: #184a5b !important;
-
-  }
-
-  .title{
-    display: flex;
-    flex-direction: row;
-    height: 4vh;
-  }
-.title img{
-    width: 10vw;
-    height: 15vh;
-    margin-right: 8px;}
-.title h6 {
-    font-size: 10px !important;
+.CertificateCard {
+  background-color: #D9D9D9 !important;
+  border-radius: 8px;
+  width: 30vw;
+  height: auto;
+  text-align: center;
+  padding: 5px;
+  display: flex;
+  flex-direction: column;
 }
+
+.OnlineApplicationTitle {
+  font-size: 40px;
+  font-weight: 600;
+  text-align: start;
+  margin-bottom: 10vh !important;
+  color: #184a5b !important;
+}
+
+.CardTitle {
+  display: flex;
+  flex-direction: row;
+  height: 4vh;
+}
+
+.Icon {
+  width: 10vw;
+  height: 15vh;
+  margin-right: 8px;
+}
+
+.CardTitle h6 {
+  font-size: 10px !important;
+}
+
+.ApplicationContentContainer {
+  display: flex;
+  flex-direction: column;
+  width: 80vw;
+  margin-left: 20vw;
+}
+
+.Details {
+  list-style: none;
+  padding: 0;
+  margin-top: 3vh;
+  margin-left: 10vw;
+  color: #6c757d;
+  font-size: 14px;
+}
+
+.Actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.RequirementsBtn {
+  color: #184a5b !important;
+  text-transform: none;
+}
+
+.RequestBtn {
+  background-color: #184a5b !important;
+  color: white;
+  text-transform: none;
+}
+
+/* For Recent Applications */
+ 
+.RecentApplicationsTitle {
+  color: #184a5b !important;
+ text-align: start;
+}
+.RecentApplicationsDivider {
+  display: flex;
+  flex-direction: column;
+  justify-items: left;
+}
+.ApplicationCard {
+  justify-content: start;
+  margin-left: 0vw;
+}
+.ApplicationHeader {
+  margin-bottom: 8px;
+  margin-left: 5vw;
+}
+
+.ApplicationCardTitle{
+font-size: 1.2vw;
+font-weight: bolder;
+color: #184a5b;
+}
+
+.ApplicationStatus{
+font-size: 1.1vw !important;
+color: green;
+text-align: right !important;
+}
+.ApplicationStatusP{
+font-size: 1.1vw !important;
+color: darkorange;
+text-align: right !important;
+}
+.ApplicationStatusD{
+font-size: 1.2vw !important;
+color: red;
+text-align: right !important;
+}
+.ApplicationDate{
+font-size: 1vw !important;
+color: #184a5b;
+text-align: right;
+}
+
+
+@media (max-width: 768px) {
+  .CertificateCard {
+      width: 50vw;
+      height: auto;
+      margin-left: 20vw;
+      flex-direction: column;
+  }
+  
+  .CardTitle {
+      font-size: 35px;
+  }
+  
+  .OnlineApplicationTitle {
+      font-size: 14px;
+      margin-bottom: 20vh;
+  }
+  
+  .Title {
+      flex-direction: column;
+      height: auto;
+  }
+  
+  .Title img {
+      width: 20vw;
+      height: auto;
+      margin-right: 0;
+      margin-bottom: 30px;
+      justify-content: center;
+      align-self: center;
+  }
+  
+  .Title h6 {
+      font-size: 12px !important;
+  }
+  
   .ApplicationContentContainer {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 80vw;
-    margin-left: 20vw;
+      width: 100vw;
+      margin-left: 0;
+  }
+  
+  .Details {
+      margin-left: 0;
+      font-size: 12px;
+  }
+  
+  .Actions {
+      flex-direction: column;
+      align-items: center;
+  }
+}
 
-  }
-  .title {
-    font-weight: 600;
-    margin-bottom: 8px;
-  }
-  
-  .details {
-    list-style: none;
-    padding: 0;
-    margin-top: 3vh;
-    margin-left: 10vw;
-    color: #6c757d;
-    font-size: 14px;
-
+@media (max-width: 480px) {
+  .CertificateCard {
+      width: 60vw;
+      margin-left: 15vw;
   }
   
-  .actions {
-    display: flex;
-    justify-content: space-between;
-    gap: 8px;
+  .OnlineApplicationTitle {
+      font-size: 14px;
   }
   
-  .requirements-btn {
-    color: #184a5b !important;
-    text-transform: none;
+  .Title img {
+      width: 50vw;
   }
   
-  .request-btn {
-    background-color: #184a5b !important;
-    color: white;
-    text-transform: none;
+  .Details {
+      font-size: 10px;
   }
+}

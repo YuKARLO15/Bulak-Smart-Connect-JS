@@ -14,6 +14,7 @@ import ForgotPassword from "./ForgotPassword";
 import "./LogInCard.css";
 import { Link as RouterLink } from "react-router-dom";
 
+
 export default function LogInCard() {
   const [emailError, setEmailError] = React.useState(false);
   const [emailErrorMessage, setEmailErrorMessage] = React.useState("");
@@ -62,7 +63,7 @@ export default function LogInCard() {
 
     return isValid;
   };
-
+  
   return (
     <Card className="LogInCardContainer">
       <Typography variant="h4" className="LogInTitle">
