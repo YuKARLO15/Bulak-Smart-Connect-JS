@@ -1,0 +1,111 @@
+/* Full Name Section */
+
+
+body {
+  font-family: "Roboto", sans-serif;
+  margin: 0;
+  min-height: 100vh;
+}
+
+.signup-container {
+  width: 100%;
+  height: 100%;
+  padding: 32px;
+  color: #1c4d5a;
+  background: radial-gradient(
+    ellipse at center,
+    hsl(210, 100%, 97%),
+    hsl(0, 0%, 100%)
+  );
+  justify-content: center;
+  align-items: center;
+}
+
+
+.CategoryDivider {
+  margin-bottom: 20px;
+  padding: 10px;
+  border-bottom: 2px solid #fff;
+}
+
+.CategoryDivider h2 {
+  font-size: 18px;
+  color: #f3f0f0;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.label-category {
+  font-weight: bold;
+  font-size: 14px;
+  color: #444;
+  margin-bottom: 5px;
+  display: block;
+}
+
+.form-group.fullname {
+  display: grid;
+  gap: 15px;
+  grid-template-columns: repeat(3, 1fr); /* Three equal columns */
+  grid-template-rows: auto;
+  grid-column-gap: 40px;
+  grid-row-gap: 10px;
+}
+
+.form-group.fullname .textbox {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.form-group.fullname input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+input[name="lastname"], 
+input[name="firstname"], 
+input[name="middlename"] {
+  width: 100%;
+}
+
+.asterisk {
+  color: rgb(194, 45, 45);
+}
+
+
+.optional {
+  color: rgb(168, 47, 47);
+  font-size: smaller;
+}
+/* Ensure label styles are consistent */
+.label-in {
+  font-size: 14px;
+  color: #ffffff;
+}
+
+.checkbox-extension {
+  margin-top: 10px;
+  display: flex;
+  grid-template-columns: 1fr 1fr; /* Two-column layout */
+  gap: 20px;
+}
+
+.checkbox-extension label {
+  margin-left: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.extension-name select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+}

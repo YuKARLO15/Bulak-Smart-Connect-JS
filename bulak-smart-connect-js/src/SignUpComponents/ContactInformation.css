@@ -1,0 +1,44 @@
+/* Contact Information Section */
+
+
+  
+.form-group.contactinformation {
+  display: grid;
+  gap: 15px;
+  grid-template-columns: repeat(2, 1fr); /* Three equal columns */
+  grid-template-rows: auto;
+  grid-column-gap: 50px;
+  
+}
+
+.form-group.contactinformation .textbox {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.form-group.contactinformation input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+  .form-group.inline input:focus {
+    outline: none;
+    border: 2px solid #24677a;
+  }
+  
+  input[name="contact"] {
+    padding-left: 10px;
+  }
+  
+  input[name="email"] {
+    padding-left: 10px;
+  }
+
+  .optional {
+    color: rgb(168, 47, 47);
+    font-size: smaller;
+  }
