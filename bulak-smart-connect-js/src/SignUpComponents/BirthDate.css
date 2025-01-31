@@ -1,0 +1,95 @@
+/* Birthdate Section */
+
+.form-group .label-category {
+    margin-top: 20px;
+    margin-bottom: 15px;
+    font-weight: 600;
+    text-align: left;
+    color: #1c4d5a;
+  }
+  
+
+  .form-group.birthdate {
+    display: grid;
+    gap: none;
+    grid-template-columns: repeat(4, 1fr); /* Three equal columns */
+    grid-template-rows: auto;
+    grid-column-gap: 40px;
+    grid-row-gap: 10px;
+  }
+  
+  .form-group.birthdate .textbox {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .form-group.birthdate input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+  }
+  
+  input[name="age"] {
+    width: 20%;
+    padding: 8px;
+    border-radius: 6px;
+    font-size: 16px;
+    border: 1.5px solid #2a5764;
+    background-color: #e9ecef; /* To indicate readonly status */
+    color: #333;
+    box-shadow: inset 0px 3px 2px rgba(0, 0, 0, 0.1);
+    cursor: not-allowed;
+  }
+  
+  input[name="age"]:focus {
+    outline: none;
+    border: 2px solid #24677a;
+  }
+
+
+  * for the date and month */
+form select {
+  width: 90%; 
+  padding: 8px;
+  border-radius: 6px;
+  font-size: 16px;
+  border: 1.5px solid #2a5764;
+  background-color: #fffdfd;
+  box-shadow: inset 0px 3px 2px rgba(0, 0, 0, 0.1);
+  color: #1c4d5a !important;
+}
+
+form select:focus {
+  outline: none;
+  border: 2px solid #24677a;
+}
+
+.form-group.inline {
+  display: flex;
+  gap: 20px;
+  justify-content: space-between;
+}
+
+select {
+  flex-grow: 1;
+  padding: 8px;
+  border-radius: 6px;
+  font-size: 16px;
+  border: 1.5px solid #2a5764;
+  background-color: #fffdfd;
+  box-shadow: inset 0px 3px 2px rgba(0, 0, 0, 0.1);
+}
+
+select:focus {
+  outline: none;
+  border: 2px solid #24677a;
+}
+
+
+#Month, #Day {
+  width: auto;
+  font-size: 16px;
+}
