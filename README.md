@@ -9,3 +9,13 @@ npm run dev </br>
 cd bsc-js-backend </br>
 npm install or npm i -g @nestjs/cli (optional) </br>
 npm run start </br>
+
+# Firebase Tools (Firebase Emulator)
+
+npm install -g firebase-tools (can be skipped) </br>
+cd bsc-js-backend </br>
+firebase login </br>
+firebase init emulators or firebase init (can be skipped) </br>
+firebase emulators:start </br>
+
+install Java JDK from https://www.java.com/en/download/ and https://download.oracle.com/java/23/latest/jdk-23_windows-x64_bin.exe </br>
