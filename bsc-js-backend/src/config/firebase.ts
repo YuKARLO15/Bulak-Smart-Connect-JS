@@ -9,7 +9,7 @@ admin.initializeApp({
 // Connect Firestore to emulator
 const firestore = admin.firestore();
 firestore.settings({
-  host: 'localhost:8080', // Default emulator port
+  host: 'localhost:8081', // Default emulator port
   ssl: false,
 });
 
