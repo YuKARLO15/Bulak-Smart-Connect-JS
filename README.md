@@ -30,4 +30,23 @@ serviceAccountKey.json was ignored on git so if needed, just get it on our secur
 
 npm run dev on the frontend folder now runs concurrently, meaning React, NestJs, & Firebase Emulator runs simultaneously </br>
 
-If you want to run it on its default behavior, go to package.json on the folder, C:\Users\YuKARLO15\Desktop\Programming_Codes\Bulak-Smart-Connect-JS\bulak-smart-connect-js and change the dev under the scripts into "dev": "vite",
+If you want to run it on its default behavior, go to package.json on the folder, C:\Users\YuKARLO15\Desktop\Programming_Codes\Bulak-Smart-Connect-JS\bulak-smart-connect-js and change the dev under the scripts into "dev": "vite", </br>
+
+# New Ways to Run Project (Mostly on Frontend Folder)
+
+cd bulak-smart-connect-js </br>
+npm run dev: will run React, NestJS (0n Dev Mode), and Firebase Emulator concurrently </br>
+npm run start-frontend: will run React only </br>
+npm run start-backend: will run NestJS (On Dev Mode) only </br>
+npm run start-emulators: will run Firebase Emulators only </br>
+npm run build: vite build </br>
+npm run lint: eslint </br>
+npm run preview: vite preview </br></br>
+To further see other options, just enter "npm run" to see options for React and Concurrently</br>
+
+For more options to run (mostly for Backend): </br>
+cd bsc-js-backend </br>
+npm run start: to start NestJS normally </br>
+firebase emulators:start: to start Firebase emulator </br>
+To further see other options, just enter "npm run" to see options for NestJS or "firebase" to see options for Firebase. </br>
+
