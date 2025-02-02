@@ -10,6 +10,8 @@ cd bsc-js-backend </br>
 npm install or npm i -g @nestjs/cli (optional) </br>
 npm run start </br>
 
+Test at http://localhost:3000/ </br>
+
 # Firebase Tools (Firebase Emulator)
 
 npm install -g firebase-tools (can be skipped) </br>
