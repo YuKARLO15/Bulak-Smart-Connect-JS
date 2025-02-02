@@ -1,5 +1,7 @@
+//FIRST SIGNUP HINDI NAKAHIWALAY
+
 import React, { useState, useEffect } from "react";
-import "../styles/SignUpForm.css";
+import "../SignUpComponents/SignUpForm.css";
 
 const SignUpForm = () => {
   const [formData, setFormData] = useState({

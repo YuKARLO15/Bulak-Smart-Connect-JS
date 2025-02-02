@@ -1,0 +1,29 @@
+.NavBarContainer{
+    display: flex;
+   flex-direction: row;
+    padding: 10px 20px;
+    background-color: white;
+    position: fixed;
+    top: 0%;
+    width: 90vw;
+   
+
+  
+}
+.NavBarContainer Button {
+    color: #184a5b ;
+    display: flex;
+
+
+}
+.NavButtons {
+    display: flex;
+    flex-direction: row;
+    justify-content: right;
+    margin-left: auto;
+
+}
+.Logo {
+    font-size:2vw !important;
+    color: #184a5b;
+}
