@@ -57,7 +57,7 @@ const AddressSection = ({ formData, handleInputChange }) => {
       <div className="form-group fullname">
         <div className="textbox">
           <label className="label-in">
-            Region/Rehiyon <span className="asterisk">*</span>
+            Region / Rehiyon <span className="asterisk">*</span>
           </label>
           <input
             type="text"
@@ -73,7 +73,7 @@ const AddressSection = ({ formData, handleInputChange }) => {
 
         <div className="textbox">
           <label className="label-in">
-            Province/Probinsya <span className="asterisk">*</span>
+            Province / Probinsya <span className="asterisk">*</span>
           </label>
           <input
             type="text"
@@ -89,7 +89,7 @@ const AddressSection = ({ formData, handleInputChange }) => {
 
         <div className="textbox">
           <label className="label-in">
-            City/Siyudad <span className="asterisk">*</span>
+            City / Siyudad <span className="asterisk">*</span>
           </label>
           <input
             type="text"
@@ -127,9 +127,7 @@ const AddressSection = ({ formData, handleInputChange }) => {
         </div>
 
         <div className="textbox">
-          <label className="label-in">
-            Residence/Street <span className="optional">optional</span>
-          </label>
+          <label className="label-in">Residence / Street</label>
           <input
             type="text"
             id="Street"
@@ -138,101 +136,104 @@ const AddressSection = ({ formData, handleInputChange }) => {
             value={formData.residence}
             onChange={handleInputChange}
             disabled={isOutOfTown}
+            required
           />
         </div>
       </div>
 
- 
       <div className="form-group checkbox">
-      
-        <input
-          type="checkbox"
-          id="outOfTown"
-          name="outOfTown"
-          checked={isOutOfTown}
-          onChange={handleCheckboxChange}
-        />
-      <label classsName="outOfTown">Are you an out-of-town registrant?</label>
+        <label classsName="outOfTown">
+          <input
+            type="checkbox"
+            id="outOfTown"
+            name="outOfTown"
+            checked={isOutOfTown}
+            onChange={handleCheckboxChange}
+          />
+          Are you an Out of Town Registrant? If yes, please check the checkbox
+        </label>
       </div>
 
       {/* Second Set of Address Fields (Only shown if checkbox is checked) */}
       {isOutOfTown && (
         <div className="form-group out-of-town-address">
           <label className="label-category">
-            New Address (for Out-of-Town Registrants)
+            Address (for Out-of-Town Registrants only)
           </label>
           <div className="textbox">
-            <label className="label-in">
-              Region/Rehiyon <span className="asterisk">*</span>
-            </label>
-            <input
-              type="text"
-              id="newRegion"
-              name="newRegion"
-              placeholder="Enter new region"
-              value={formData.newRegion}
-              onChange={handleInputChange}
-              required
-            />
+            <div className="form-group fullname">
+              <div className="textbox">
+                <label className="label-in">
+                  Region / Rehiyon <span className="asterisk">*</span>
+                </label>
+                <input
+                  type="text"
+                  id="OutOfTownRegion"
+                  name="OutOfTownregion"
+                  placeholder="Region"
+                  value={formData.newRegion}
+                  onChange={handleInputChange}
+                  required
+                />
+              </div>
+
+              <div className="textbox">
+                <label className="label-in">
+                  Province / Probinsya <span className="asterisk">*</span>
+                </label>
+                <input
+                  type="text"
+                  id="OutOfTownProvince"
+                  name="OutOfTownProvince"
+                  placeholder="Province"
+                  value={formData.newProvince}
+                  onChange={handleInputChange}
+                  required
+                />
+              </div>
+              <div className="textbox">
+                <label className="label-in">
+                  City / Siyudad <span className="asterisk">*</span>
+                </label>
+                <input
+                  type="text"
+                  id="OutOfTownCity"
+                  name="OutOfTownCity"
+                  placeholder="City"
+                  value={formData.newCity}
+                  onChange={handleInputChange}
+                  required
+                />
+              </div>
+            </div>
           </div>
 
-          <div className="textbox">
-            <label className="label-in">
-              Province/Probinsya <span className="asterisk">*</span>
-            </label>
-            <input
-              type="text"
-              id="newProvince"
-              name="newProvince"
-              placeholder="Enter new province"
-              value={formData.newProvince}
-              onChange={handleInputChange}
-              required
-            />
-          </div>
-
-          <div className="textbox">
-            <label className="label-in">
-              City/Siyudad <span className="asterisk">*</span>
-            </label>
-            <input
-              type="text"
-              id="newCity"
-              name="newCity"
-              placeholder="Enter new city"
-              value={formData.newCity}
-              onChange={handleInputChange}
-              required
-            />
-          </div>
-
-          <div className="textbox">
-            <label className="label-in">
-              Barangay <span className="asterisk">*</span>
-            </label>
-            <input
-              type="text"
-              id="newBarangay"
-              name="newBarangay"
-              placeholder="Enter new barangay"
-              value={formData.newBarangay}
-              onChange={handleInputChange}
-              required
-            />
-          </div>
-
-          <div className="textbox">
-            <label className="label-in">
-              Residence/Street <span className="optional">optional</span>
-            </label>
-            <input
-              type="text"
-              id="newStreet"
-              name="newResidence"
-              placeholder="Enter new street"
-              value={formData.newResidence}
-              onChange={handleInputChange}
-            />
+          <div className="form-group newaddress">
+            <div className="textbox">
+              <label className="label-in">
+                Barangay <span className="asterisk">*</span>
+              </label>
+              <input
+                type="text"
+                id="OutOfTownBarangay"
+                name="newBarangay"
+                placeholder="Barangay"
+                value={formData.newBarangay}
+                onChange={handleInputChange}
+                required
+              />
+            </div>
+            <div className="textbox">
+              <label className="label-in">Residence / Street</label>
+              <input
+                type="text"
+                id="OutOfTownStreet"
+                name="OutOfTownResidence"
+                placeholder="Street"
+                value={formData.newResidence}
+                onChange={handleInputChange}
+              />
+            </div>
           </div>
         </div>
       )}
