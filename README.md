@@ -22,7 +22,7 @@ firebase emulators:start </br>
 
 Test at http://127.0.0.1:4000/ </br>
 
-install Java JDK from https://www.java.com/en/download/ and https://download.oracle.com/java/23/latest/jdk-23_windows-x64_bin.exe </br>
+install Java JDK from https://www.java.com/en/download/ and https://download.oracle.com/java/23/latest/jdk-23_windows-x64_bin.exe or https://www.oracle.com/java/technologies/downloads/ </br>
 
 # serviceAccountKey
 
