@@ -171,7 +171,7 @@ const AddressSection = ({ formData, handleInputChange }) => {
                   id="OutOfTownRegion"
                   name="OutOfTownregion"
                   placeholder="Region"
-                  value={formData.region}
+                  value={formData.newRegion}
                   onChange={handleInputChange}
                   required
                 />
