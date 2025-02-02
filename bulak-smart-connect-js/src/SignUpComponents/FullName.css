@@ -89,23 +89,39 @@ input[name="middlename"] {
   color: #ffffff;
 }
 
-.checkbox-extension {
-  margin-top: 10px;
-  display: flex;
-  grid-template-columns: 1fr 1fr; /* Two-column layout */
-  gap: 20px;
-}
 
-.checkbox-extension label {
-  margin-left: 20px;
+
+
+/* checkbox */
+.checkbox-extension {
   display: flex;
+  justify-content: space-between;
   align-items: center;
 }
 
-.extension-name select {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 14px;
+.checkbox-extension label {
+  font-size: 12px; 
+  color: #1c4d5a !important; 
+}
+.checkbox-extension .extension-text {
+  font-size: 5px; 
+}
+
+#HasExtension {
+  background-color: #ffffff; 
+  border: 1px solid #ccc; 
+  width: 16px; 
+  height: 16px; 
+  cursor: pointer;
+ 
+}
+
+#Extension {
+  width: 50%;
+  background-color: #fff; 
+  border: 2px solid #1c4d5a; 
+  display: flex;
+  font-size:15px;
+  color: #1c4d5a;
+  margin-right: 21px;
 }

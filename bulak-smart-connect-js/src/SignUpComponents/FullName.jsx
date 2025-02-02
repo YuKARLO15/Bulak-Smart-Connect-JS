@@ -31,7 +31,7 @@ const FullNameSection = () => {
         
         <div className="form-group fullname">
           <div className="textbox">
-            <label className="label-in">Last Name/Apelyido <span className="asterisk"> *</span></label>
+            <label className="label-in">Last Name / Apelyido <span className="asterisk"> *</span></label>
             <input
               type="text"
               id="LastName"
@@ -44,7 +44,7 @@ const FullNameSection = () => {
           </div>
           
           <div className="textbox">
-            <label className="label-in">First Name/Pangalan <span className="asterisk"> *</span></label>
+            <label className="label-in">First Name / Pangalan <span className="asterisk"> *</span></label>
             <input
               type="text"
               id="FirstName"
@@ -57,7 +57,7 @@ const FullNameSection = () => {
           </div>
 
           <div className="textbox">
-            <label className="label-in">Middle Name/Pangalan <span className="optional"> optional</span> </label>
+            <label className="label-in middlename">Middle Name / GitnangPangalan </label>
             <input
               type="text"
               id="MiddleName"

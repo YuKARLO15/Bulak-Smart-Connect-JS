@@ -1,6 +1,5 @@
 /* Address Section */
 
-
 .CategoryDivider {
   margin-bottom: 20px;
   padding: 10px;
@@ -36,12 +35,10 @@ select[name="barangay"] {
   color: #1c4d5a;
 }
 
-
-
 .form-group.address {
   display: grid;
   gap: 15px;
-  grid-template-columns: repeat(2, 1fr); /* Two equal columns */
+  grid-template-columns: repeat(2, 1fr);
   grid-template-rows: auto;
   grid-column-gap: 20px;
   grid-row-gap: 40px;
@@ -63,6 +60,31 @@ select[name="barangay"] {
   font-size: 14px;
 }
 
+.form-group.newaddress {
+  display: grid;
+  gap: 15px;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: auto;
+  grid-column-gap: 40px;
+  grid-row-gap: 40px;
+}
+
+.form-group.newaddress .textbox {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.form-group.newaddress input,
+.form-group.newaddress select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
 /* Specific Styling for Inputs in Address Section */
 input[name="region"],
 input[name="province"],
@@ -72,7 +94,6 @@ select[name="barangay"] {
   width: 100%;
 }
 
-
 .optional {
   color: rgb(168, 47, 47);
   margin-left: 3px;
@@ -80,25 +101,34 @@ select[name="barangay"] {
   font-weight: bold;
 }
 
-
-
-
-.checkbox label {
-  font-size: 14px;
-  color: #1c4d5a;
-  font-weight: 600;
-  align-items: left;
-}
+/* checkbox */
 
 .checkbox-extension label {
-  margin-left: 50px;
+  margin-left: 40px;
   align-items: left;
+
 }
 
-
-.form-group.checkbox input[type="checkbox"] {
-  transform: scale(0.8); 
-  margin-top: 4px; 
+.checkbox-extension {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
+.form-group label {
+  font-size: 12px; 
+  color: #1c4d5a !important; 
+}
+.form-group   {
+  font-size: 12px; 
+}
+
+#outOfTown {
+  background-color: #ffffff; 
+  border: 1px solid #ccc; 
+  width: 16px; 
+  height: 16px; 
+  cursor: pointer;
+ 
+}
 
