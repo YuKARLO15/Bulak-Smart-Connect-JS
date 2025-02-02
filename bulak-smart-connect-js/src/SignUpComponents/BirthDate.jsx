@@ -1,6 +1,6 @@
 import React from "react";
 import "../SignUpComponents/BirthDate.css";
-import "../SignUpComponents/SignUpForm.css";
+
 
 const BirthdateSection = ({ formData, handleInputChange }) => (
   <div className="form-group">
@@ -8,7 +8,7 @@ const BirthdateSection = ({ formData, handleInputChange }) => (
     <div className="form-group inline">
       <div className="form-group birthdate">
         <div className="textbox">
-        <label className="label-in">Month <span className="asterisk"> *</span></label>
+        <label className="label-in">Month / Buwan <span className="asterisk"> *</span></label>
           <select
             id="Month"
             name="month"
@@ -39,7 +39,7 @@ const BirthdateSection = ({ formData, handleInputChange }) => (
         </div>
 
         <div className="textbox">
-        <label className="label-in">Day <span className="asterisk"> *</span></label>
+        <label className="label-in">Day / Araw <span className="asterisk"> *</span></label>
           <select
             id="Day"
             name="day"
@@ -57,7 +57,7 @@ const BirthdateSection = ({ formData, handleInputChange }) => (
         </div>
 
         <div className="textbox">
-        <label className="label-in">Year <span className="asterisk"> *</span></label>
+        <label className="label-in">Year / Taon <span className="asterisk"> *</span></label>
           <select
             id="Year"
             name="year"

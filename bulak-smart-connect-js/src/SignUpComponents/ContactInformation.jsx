@@ -36,7 +36,7 @@ const ContactInformationSection = ({ formData, handleInputChange }) => (
           <input
         type="email"
         name="email"
-        placeholder="Email Address"
+        placeholder="juandelacruz@gmail.com ( optional )"
         value={formData.email}
         onChange={handleInputChange}
       />

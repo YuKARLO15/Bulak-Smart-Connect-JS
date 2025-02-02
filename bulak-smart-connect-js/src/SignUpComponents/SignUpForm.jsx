@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import UsernamePasswordSection from "./UserNamePassword";
 import FullNameSection from "./FullName";
 import AddressSection from "./Address";
-import BirthdateSection from "./BirthDate";
+import BirthdateSection from "./Birthdate";
 import ContactInformationSection from "./ContactInformation";
 import UpdatesCheckbox from "./UpdateCheckbox";
 import NavBar from "./NavBar";
