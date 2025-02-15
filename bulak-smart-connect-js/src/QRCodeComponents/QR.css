@@ -1,0 +1,82 @@
+.qrcode-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #f4f4f4;
+    font-family: Arial, sans-serif;
+  }
+  
+  .qrcode-card {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    width: 350px;
+  }
+  
+  .qrcode-number {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #0056b3;
+    margin: 10px 0;
+  }
+  
+
+  .qr-code {
+    width:200px;
+    height: 200px;
+    object-fit: contain;
+  }
+  .qrcode-image {
+    margin: 20px 0;
+  }
+  
+  .qrcode-link {
+    color: #0056b3;
+    text-decoration: none;
+    font-weight: bold;
+  }
+  
+  .qrcode-link:hover {
+    text-decoration: underline;
+  }
+  
+  .qrcode-details {
+    margin-top: 15px;
+    font-size: 1rem;
+  }
+  
+  .qrcode-footer {
+    margin-top: 20px;
+    font-size: 0.85rem;
+    color: gray;
+    text-align: center;
+  }
+  
+.note{
+    margin-left: 50px;
+  }
+
+.queue-info{
+    margin-left: 20vw;
+}
+
+.appointment-details-section{
+  display: flex;
+  justify-content: center;
+}
+
+.appointment-details {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    margin-top: 15px;
+}
+
+.appointment-details p {
+    width: 100%; 
+    margin: 5px 0; 
+}

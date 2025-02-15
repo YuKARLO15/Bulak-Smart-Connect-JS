@@ -6,6 +6,7 @@ import UserDashboard from './UserDashboard/UserDashboard';
 import AppoionmentForm from './AppointmentComponents/AppointemtForm'; 
 import ApplicationForm from './ApplicationComponents/ApplicationForm'; 
 import SignUpForm from './SignUpComponents/SignUpForm'; //(gumagana)
+import QRCodePage from './QRCodeComponents/QR';
 
 
 
@@ -18,7 +19,7 @@ function App() {
       <Route path='/UserDashBoard' element={<UserDashboard />} />
       <Route path='/AppointmentForm' element={<AppoionmentForm />} />
       <Route path='/ApplicationForm' element={<ApplicationForm/>} />
-
+      <Route path='/QR' element={<QRCodePage />} />
     </Routes>
   );
 }
