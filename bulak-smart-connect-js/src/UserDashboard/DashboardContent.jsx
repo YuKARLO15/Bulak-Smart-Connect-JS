@@ -14,7 +14,9 @@ import "react-calendar/dist/Calendar.css";
 import "./DashboardContent.css"; // Import the CSS file
 
 const DashboardContent = () => {
+  
   return (
+    
     <Box className="DashboardContainer">
       {/* Header */}
       <Typography variant="h4" className="DashboardHeader">
