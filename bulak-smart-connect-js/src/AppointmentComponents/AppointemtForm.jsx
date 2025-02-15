@@ -1,5 +1,5 @@
 import React from "react";
-import NavBar from "../UserDashBoard/NavBar";
+import NavBar from "../UserDashboard/NavBar";
 import "./AppoinmentForm.css"; 
 import AppointmentContainer from "./AppointmentContent";
 

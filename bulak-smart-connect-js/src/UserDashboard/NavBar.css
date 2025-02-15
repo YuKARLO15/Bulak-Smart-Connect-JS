@@ -9,7 +9,11 @@
     background-color: #8AACB5;
     overflow-x: hidden;
     padding-top: 20px;
+    transition: transform ease-in-out;
+    z-index: 100;
 }
+
+
 .Profile {
     display: flex;
     flex-direction: column;
@@ -105,7 +109,44 @@
 }
   }
 
+.sidebar.closed {
+    transform: translateX(-100%);
+}
 
+.sidebar.open {
+    transform: translateX(0);
+}
+
+/* Toggle Button */
+.SidebarToggleBtn {
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    background: #184a5b;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+    z-index: 1000;
+    border-radius: 5px;
+}
+
+.SidebarToggleBtn.open {
+    background: #8AACB5 !important;
+}
+/* Adjust sidebar width for smaller screens */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 50vw;
+    }
+}
+
+/* Ensure sidebar is hidden by default on smaller screens */
+@media (max-width: 568px) {
+    .sidebar {
+        transform: translateX(-100%);
+    }
+}
     
 
 
