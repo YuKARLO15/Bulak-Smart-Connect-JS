@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import "./NavBar.css";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 
 const NavBar = ({ isSidebarOpen, setIsSidebarOpen }) => {
+  
   return (
     <>
       {/* Toggle Button */}

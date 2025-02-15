@@ -4,3 +4,12 @@
     align-items: center;
  
 }
+.UserDashboardContainer{
+    transition: margin-left  ease;
+    margin-left: 0;
+}
+
+/* Move content when sidebar is open */
+.UserDashboardContainer.sidebar-open {
+    margin-left: 250px; /* Adjust to match sidebar width */
+}
