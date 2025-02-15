@@ -1,117 +1,99 @@
+.ApplicationContentContainer {
+  display: flex;
+  flex-direction: column;
+  width: 80vw;
+  margin-top: 5vw;
+}
+.OnlineApplicationTitleContainer{
+display: flex;
+width: 100vw;
+background-color: #184a5b;
+height: 10vh;
+}
+.OnlineApplicationTitle {
+  font-size: 30px !important;
+  font-weight: 600 !important;
+  text-align: start;
+  margin-bottom: 10vh !important;
+  color: #FFF6F6 !important;
+  padding: 10px;
+  margin-left: 10vw !important;
+}
 .CertificateCard {
-  background-color: #D9D9D9 !important;
-  border-radius: 8px;
-  width: 30vw;
+  background-color: #FFF6F6 !important;
+  border-radius: 10px;
+  width: 20vw;
   height: auto;
   text-align: center;
   padding: 5px;
   display: flex;
   flex-direction: column;
+  border: #184a5b 1px solid;
 }
-
-.OnlineApplicationTitle {
-  font-size: 40px;
-  font-weight: 600;
-  text-align: start;
-  margin-bottom: 10vh !important;
-  color: #184a5b !important;
-}
-
 .CardTitle {
   display: flex;
-  flex-direction: row;
+  flex-direction:column;
   height: 4vh;
 }
 
 .Icon {
   width: 10vw;
-  height: 15vh;
-  margin-right: 8px;
+  height: 20vh;
+
+  align-self: center;
+  
 }
 
-.CardTitle h6 {
-  font-size: 10px !important;
-}
-
-.ApplicationContentContainer {
-  display: flex;
-  flex-direction: column;
-  width: 80vw;
-  margin-left: 20vw;
+.CardTitle {
+  font-size: 20px !important;
+  color: #184a5b !important; 
+  font-weight: bold !important;
 }
 
 .Details {
   list-style: none;
   padding: 0;
-  margin-top: 3vh;
-  margin-left: 10vw;
+  margin-top: 20vh;
   color: #6c757d;
   font-size: 14px;
 }
 
 .Actions {
-  display: flex;
-  justify-content: space-between;
-  gap: 8px;
+  display: flex;  
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
 }
 
 .RequirementsBtn {
   color: #184a5b !important;
   text-transform: none;
+  text-decoration: underline !important;
 }
 
 .RequestBtn {
   background-color: #184a5b !important;
   color: white;
   text-transform: none;
+  width: 13vw;
+  height: 5vh;
+  font-size: 12px !important;
+    color: white;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-weight: bold;
+    box-shadow: 0px 4px 10px rgba(58, 77, 139, 0.2);
+
+}
+.RequestBtn:hover {
+  background-color: #066D88 !important;
+
+}
+.RequirementsBtn:hover {
+  color: #066D88 !important;
 }
 
-/* For Recent Applications */
- 
-.RecentApplicationsTitle {
-  color: #184a5b !important;
- text-align: start;
-}
-.RecentApplicationsDivider {
-  display: flex;
-  flex-direction: column;
-  justify-items: left;
-}
-.ApplicationCard {
-  justify-content: start;
-  margin-left: 0vw;
-}
-.ApplicationHeader {
-  margin-bottom: 8px;
-  margin-left: 5vw;
-}
 
-.ApplicationCardTitle{
-font-size: 1.2vw;
-font-weight: bolder;
-color: #184a5b;
-}
-
-.ApplicationStatus{
-font-size: 1.1vw !important;
-color: green;
-text-align: right !important;
-}
-.ApplicationStatusP{
-font-size: 1.1vw !important;
-color: darkorange;
-text-align: right !important;
-}
-.ApplicationStatusD{
-font-size: 1.2vw !important;
-color: red;
-text-align: right !important;
-}
-.ApplicationDate{
-font-size: 1vw !important;
-color: #184a5b;
-text-align: right;
-}
 
 
 @media (max-width: 768px) {
