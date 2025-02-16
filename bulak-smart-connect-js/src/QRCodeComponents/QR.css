@@ -1,26 +1,24 @@
-.qrcode-container {
+.qr-code-container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
     height: 100vh;
     background-color: #f4f4f4;
     font-family: Arial, sans-serif;
   }
-  
   .qrcode-card {
     background: #ffffff;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     text-align: center;
-    width: 350px;
+   
   }
   
   .qrcode-number {
     font-size: 2rem;
     font-weight: bold;
-    color: #0056b3;
+    color: #0056b3 !important;
     margin: 10px 0;
   }
   
@@ -75,13 +73,13 @@
 }
 
 /* for Nav side bar */
-.qrcode-container{
+.qr-code-container {
   transition: margin-left  ease;
   margin-left: 0;
 }
 
 
-.qrcode-container.sidebar-open {
+.qr-code-container .sidebar-open {
   margin-left: 250px;
 }
   
