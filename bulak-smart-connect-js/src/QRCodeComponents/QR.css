@@ -55,14 +55,7 @@
     color: gray;
     text-align: center;
   }
-  
-.note{
-    margin-left: 50px;
-  }
 
-.queue-info{
-    margin-left: 20vw;
-}
 
 .appointment-details-section{
   display: flex;
@@ -80,3 +73,15 @@
     width: 100%; 
     margin: 5px 0; 
 }
+
+/* for Nav side bar */
+.qrcode-container{
+  transition: margin-left  ease;
+  margin-left: 0;
+}
+
+
+.qrcode-container.sidebar-open {
+  margin-left: 250px;
+}
+  

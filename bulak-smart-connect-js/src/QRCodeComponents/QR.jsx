@@ -1,14 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import NavBar from "../UserDashboard/NavBar";
 import "../QRCodeComponents/QR.css";
 import qrpic from "./QRCodeAssets/qrpic.png";
 
 const QRCodePage = () => {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    
   return (
-      <div className="qr-code-container">
-      <div className="Navigation">
-        <NavBar />
-      </div>
+    <div className={`qr-code-container ${isSidebarOpen ? "sidebar-open" : ""}`}>
+          <NavBar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
         <div className="queue-info">
           <h2>
             Welcome to <span className="highlight">NAME</span>! You Are

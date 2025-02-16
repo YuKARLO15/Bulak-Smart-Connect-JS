@@ -9,7 +9,7 @@
     margin-left: 0;
 }
 
-/* Move content when sidebar is open */
+
 .UserDashboardContainer.sidebar-open {
-    margin-left: 250px; /* Adjust to match sidebar width */
+    margin-left: 250px; 
 }
