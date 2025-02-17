@@ -27,7 +27,7 @@ const NavBar = ({ isSidebarOpen, setIsSidebarOpen }) => {
             <a href="/UserDashboard">Dashboard</a>
             <a href="/AppointmentForm">Appointments</a>
             <a href="/ApplicationForm">Document Application</a>
-            <a href="/qrcode">QR Code</a>
+            <a href="/QR">QR Code</a>
             <a href="/account">Account</a>
             <a href="/settings">Settings</a>
           </div>
