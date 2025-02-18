@@ -4,6 +4,7 @@ updates:
     directory: "/bsc-js-backend" # Location of package manifests
     schedule:
       interval: "weekly"
+    target-branch: "npm-backend"
     labels:
       - "tag > bot"
       - "kind > dependencies"
@@ -12,6 +13,7 @@ updates:
     directory: "/bulak-smart-connect-js" # Location of package manifests
     schedule:
       interval: "weekly"
+    target-branch: "npm-frontend"
     labels:
       - "tag > bot"
       - "kind > dependencies"
