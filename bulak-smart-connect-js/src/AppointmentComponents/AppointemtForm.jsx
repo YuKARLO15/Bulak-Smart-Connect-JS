@@ -1,13 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import NavBar from "../UserDashboard/NavBar";
 import "./AppoinmentForm.css"; 
 import AppointmentContainer from "./AppointmentContent";
 
 
+
 const AppoionmentForm = () => {
-    return (
-        <div className="AppoinmentFormContainer">
-        <NavBar />
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    return (        
+    <div className={`AppoinmentFormContainer ${isSidebarOpen ? "sidebar-open" : ""}`}>
+    <NavBar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />     
         <AppointmentContainer />
         </div>
     );

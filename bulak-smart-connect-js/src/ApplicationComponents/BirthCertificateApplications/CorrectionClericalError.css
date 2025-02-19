@@ -1,0 +1,48 @@
+.file-upload-container {
+    margin-top: 16px;
+  }
+  
+  .file-label {
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+    color: black;
+  }
+  
+  .sample-text {
+    color: blue;
+    text-decoration: underline;
+    cursor: pointer;
+    font-size: 12px;
+  }
+  
+  .file-upload-box {
+    border: 2px dashed #1C4D5Ad2;
+    border-radius: 5px;
+    padding: 15px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    background-color:#FFF6F6;
+  }
+  
+  .file-upload-box:hover {
+    border-color: #68a4e0;
+    background-color: #f0f8ff;
+  }
+  .file-uploaddesc{
+    color: #1C4D5Ad2;
+  }
+  .upload-icon {
+    font-size: 40px;
+    color: #1C4D5Ad2;
+    margin-bottom: 5px;
+  }
+  
+  .hidden-input {
+    display: none;
+  }
+  .ClericalCB {
+    color:#1C4D5Ad2 !important;
+  }
