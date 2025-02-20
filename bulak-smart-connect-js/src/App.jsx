@@ -7,7 +7,7 @@ import AppoionmentForm from './AppointmentComponents/AppointemtForm';
 import ApplicationForm from './ApplicationComponents/ApplicationForm'; 
 import SignUpForm from './SignUpComponents/SignUpForm'; //(gumagana)
 import QRCodePage from './QRCodeComponents/QR';
-import FileUploadForm from './ApplicationComponents/BirthCertificateApplications/CorrectionClericalError';
+import ClericalErrorApplication from './ApplicationComponents/BirthCertificateApplications/CorrectionClericalError';
 import BirthCertificateDashboard from './ApplicationComponents/BirthCertificateApplications/BirthCertificateDashboard';
 
 
@@ -23,7 +23,7 @@ function App() {
       <Route path='/AppointmentForm' element={<AppoionmentForm />} />
       <Route path='/ApplicationForm' element={<ApplicationForm/>} />
       <Route path='/QR' element={<QRCodePage />} />
-      <Route path='/FileUploadForm' element={<FileUploadForm />} />
+      <Route path='/ClericalErrorApplication' element={<ClericalErrorApplication />} />
       <Route path='/BirthCertificateDashboard' element={<BirthCertificateDashboard />} />
     </Routes>
   );
