@@ -36,7 +36,7 @@ const RecentApplicationsComponent = () => {
                         <Card className="ApplicationCard">
                             <CardContent>
                                 <Grid container justifyContent="space-between" alignItems="center">
-                                    <div classname="ApplicationDetails">
+                                    <div className="ApplicationDetails">
                                     <Typography className="ApplicationCardTitle">{app.type}</Typography>
                                    
                                     <Typography className="ApplicationDescription">{app.message}</Typography>

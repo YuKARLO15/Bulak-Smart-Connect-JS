@@ -1,15 +1,16 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  text-align: center;
-  background: linear-gradient(to bottom, rgb(255, 255, 255), rgb(255, 252, 249));
 
-}
 .app{
   background: linear-gradient(to bottom, rgb(255, 255, 255), rgb(255, 252, 249));
 }
-.card {
-  padding: 2em;
+html, body {
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+}
+body {
+  display: flex;
 }
 
 

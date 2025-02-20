@@ -15,7 +15,7 @@ const fileCategories = [
   "Others",
 ];
 
-const FileUploadForm = () => {
+const ClericalErrorApplication= () => {
   const [selectedOptions, setSelectedOptions] = useState({
     firstName: false,
     lastName: false,
@@ -64,4 +64,4 @@ const FileUploadForm = () => {
   );
 };
 
-export default FileUploadForm;
+export default ClericalErrorApplication;

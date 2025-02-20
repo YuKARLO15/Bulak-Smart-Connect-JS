@@ -1,10 +1,10 @@
 .DashboardContainer {
   border-radius: 10px;
-  width: 90vw;
-  max-width: 1200px;
+  width: 100vw;
+
+  
 
 }
-
 .DashboardHeader {
   display: flex;
   justify-content: space-between;
@@ -12,9 +12,10 @@
   font-weight: bold;
   color:#FFF6F6;
   background-color: #184a5b;
-  width: 99.3vw;
+  width: 100vw;
   height: 10vh;
-  margin-left: -5vw;
+  text-align: left;
+  
 }
 .DashboardHeader h4{
   margin-left: 10vw !important;
@@ -51,7 +52,16 @@
 .TopSection {
   display: flex;
   gap: 20px;
+  flex-direction: row;
+  justify-content: center; 
+  width: 80vw;
+  margin: 0 auto;
+  text-align: center;
+  display: flex;
+  justify-content: center;  
+  gap: 20px;
   flex-wrap: wrap;
+
 }
 
 .DashboardCard {
@@ -98,7 +108,6 @@ background-color: #FFF6F6;
   background: #8AACB5 !important;
   color: #184a5b;
 }
-/* Header styling */
 .react-calendar__navigation {
   display: flex;
   justify-content: space-between;
