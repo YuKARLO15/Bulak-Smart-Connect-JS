@@ -1,9 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import Checkbox from "@mui/material/Checkbox";
-import Divider from "@mui/material/Divider";
 import FormLabel from "@mui/material/FormLabel";
 import FormControl from "@mui/material/FormControl";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -13,57 +12,43 @@ import Typography from "@mui/material/Typography";
 import ForgotPassword from "./ForgotPassword";
 import "./LogInCard.css";
 import { Link as RouterLink } from "react-router-dom";
+import { auth, signInWithEmailAndPassword } from "../firebase";
 
-
-export default function LogInCard() {
-  const [emailError, setEmailError] = React.useState(false);
-  const [emailErrorMessage, setEmailErrorMessage] = React.useState("");
-  const [passwordError, setPasswordError] = React.useState(false);
-  const [passwordErrorMessage, setPasswordErrorMessage] = React.useState("");
-  const [open, setOpen] = React.useState(false);
+export default function LogInCard({ onLogin }) {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [open, setOpen] = useState(false);
 
   const handleClickOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const handleSubmit = (event) => {
-    if (emailError || passwordError) {
-      event.preventDefault();
-      return;
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const token = await userCredential.user.getIdToken();
+
+      // Send token to backend
+      const response = await fetch("http://localhost:3001/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ token }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        onLogin(data); // Save user session
+      } else {
+        setError("Invalid credentials");
+      }
+    } catch (error) {
+      setError(error.message);
     }
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
   };
 
-  const validateInputs = () => {
-    const email = document.getElementById("email");
-    const password = document.getElementById("password");
-
-    let isValid = true;
-
-    if (!email.value || !/\S+@\S+\.\S+/.test(email.value)) {
-      setEmailError(true);
-      setEmailErrorMessage("Please enter a valid email address.");
-      isValid = false;
-    } else {
-      setEmailError(false);
-      setEmailErrorMessage("");
-    }
-
-    if (!password.value || password.value.length < 6) {
-      setPasswordError(true);
-      setPasswordErrorMessage("Password must be at least 6 characters long.");
-      isValid = false;
-    } else {
-      setPasswordError(false);
-      setPasswordErrorMessage("");
-    }
-
-    return isValid;
-  };
-  
   return (
     <Card className="LogInCardContainer">
       <Typography variant="h4" className="LogInTitle">
@@ -80,8 +65,8 @@ export default function LogInCard() {
             Email
           </FormLabel>
           <TextField
-            error={emailError}
-            helperText={emailErrorMessage}
+            error={!!error}
+            helperText={error}
             id="email"
             type="email"
             name="email"
@@ -91,7 +76,9 @@ export default function LogInCard() {
             required
             fullWidth
             variant="outlined"
-            className={`TextField ${emailError ? "error" : ""}`}
+            className={`TextField ${error ? "error" : ""}`}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
         </FormControl>
         <FormControl>
@@ -110,8 +97,8 @@ export default function LogInCard() {
             </Link>
           </Box>
           <TextField
-            error={passwordError}
-            helperText={passwordErrorMessage}
+            error={!!error}
+            helperText={error}
             name="password"
             placeholder="••••••"
             type="password"
@@ -119,7 +106,9 @@ export default function LogInCard() {
             autoComplete="current-password"
             required
             fullWidth
-            className={`TextField ${passwordError ? "error" : ""}`}
+            className={`TextField ${error ? "error" : ""}`}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
           />
         </FormControl>
         <FormControlLabel
@@ -128,19 +117,15 @@ export default function LogInCard() {
           className="RememberMe"
         />
         <ForgotPassword open={open} handleClose={handleClose} />
-        <RouterLink to='/UserDashboard' underline="none"> 
         <Button
           type="submit"
           fullWidth
           variant="contained"
-          onClick={validateInputs}
           className="LoginButton"
-      
-          >
+        >
           Log In
-        </Button> </RouterLink>
+        </Button>
       </Box>
     </Card>
   );
 }
-

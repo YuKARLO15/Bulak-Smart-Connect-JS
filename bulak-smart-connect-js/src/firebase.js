@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, connectAuthEmulator } from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword, connectAuthEmulator } from "firebase/auth";
 import { getFirestore, connectFirestoreEmulator } from "firebase/firestore";
 
 const firebaseConfig = {
@@ -19,4 +19,4 @@ if (window.location.hostname === "localhost") {
   connectFirestoreEmulator(firestore, "localhost", 8081);
 }
 
-export { app, auth, firestore };
+export { app, auth, signInWithEmailAndPassword, firestore };
