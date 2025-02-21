@@ -1,0 +1,72 @@
+.BirthDashboardContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+  }
+  
+  .FormPaper {
+    padding: 20px;
+    width: 80vw !important;
+    background-color: white;
+    border-radius: 8px;
+    margin-top: 5vh !important;
+
+  }
+  
+  .FormTitle {
+    text-align: center;
+    font-weight: bold;
+    background-color: #1C4D5A;
+    color: white;
+    font-size: 3vw !important;
+    width: 100vw;
+    padding: 10px;
+  }
+  
+  .Section {
+    margin-bottom: 15px;
+    text-align: start;
+  }
+  
+  .SectionTitle {
+    font-weight: bold;
+    margin-bottom: 5px;
+    background-color: #1C4D5A;
+    color: white;
+    text-align: start;
+    padding: 10px;
+
+  }
+  
+  .SubTitleBirthCertificate {
+    font-size: 1.3vw !important;
+    color: #555;
+    margin-left: 35px !important;
+    text-align: start;
+    font-style: italic !important;
+    font-weight: bold !important;
+    margin-top: 3vh !important;
+  }
+  .BirthDashRadioGroup {
+    margin-left: 30px !important;
+  }
+.BirthNextButton {
+  background-color: #1C4D5A !important;
+  color: white !important;
+  width: 10vw ;
+  margin-top: 5vh !important;
+
+}
+/* for Nav side bar */
+.BirthDashboardContainer  {
+  transition: margin-left  ease;
+  margin-left: 0;
+}
+
+
+.BirthDashboardContainer.sidebar-open {
+  margin-left: 250px;
+  width: 80vw;
+}

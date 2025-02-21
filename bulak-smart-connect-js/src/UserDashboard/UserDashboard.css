@@ -1,7 +1,10 @@
 .UserDashboardContainer {
     display: flex;
     flex-direction: column;
+   justify-content: center;
     align-items: center;
+    
+    
  
 }
 .UserDashboardContainer{
@@ -11,5 +14,5 @@
 
 
 .UserDashboardContainer.sidebar-open {
-    margin-left: 250px; 
+    margin-left: 240px; 
 }

@@ -3,6 +3,26 @@
     flex-direction: row;
     
   }
+
+  .IconSectionContainer {
+    display: flex;
+    flex-direction: column;
+    z-index: 100;
+    color: #184a5b;
+    font-weight: 600;
+    background-color: white !important;
+    border-radius: 20px ;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  .IconSectionContainer h5 {
+    color: #184a5b;
+    font-weight: bold;
+    margin-left: 20px;
+    margin-top: 20px;
+    padding: 0;
+    justify-content: center;
+   
+  }
   
   .IconButton {
     color: #184a5b !important; 
@@ -16,8 +36,8 @@
   
   }
   .IconButton img {
-    width: 10vw;
-   height: 10vw;
+    width: 7vw;
+   height: 7vw;
    border-radius: 20px !important;
    margin-bottom: 1vw;
   }

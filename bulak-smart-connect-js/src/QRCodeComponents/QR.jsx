@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import NavBar from "../UserDashboard/NavBar";
-import "../QRCodeComponents/QR.css";
 import qrpic from "./QRCodeAssets/qrpic.png";
+import "./QR.css";
 
 const QRCodePage = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);

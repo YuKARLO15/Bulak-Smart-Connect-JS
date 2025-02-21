@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Grid, Card, CardContent, Typography, Button, List, ListItem } from '@mui/material';
-
+import FileUploadForm  from './BirthCertificateApplications/CorrectionClericalError';
+import { Link as RouterLink } from "react-router-dom";
 import './ApplicationContent.css';
 
 // Import images
@@ -43,8 +44,12 @@ const ApplicationContent = () => {
                     </ul>
                     <div className="Actions">
                       <Button variant="text" className="RequirementsBtn">Requirements</Button>
-                      <Button variant="contained" className="RequestBtn">Request Now</Button>
+                      <RouterLink to="/BirthCertificateDashboard">
+                      <Button variant="contained" className="RequestBtn"
+                        > Request Now</Button>
+                      </RouterLink>
                     </div>
+                 
                   </CardContent>
                 </Card>
               </Grid>
