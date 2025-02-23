@@ -7,6 +7,7 @@ export class AuthController {
 
   @Post('login')
   async login(@Body('token') token: string) {
-    return this.authService.verifyToken(token);
+    const decodedToken = await this.authService.verifyToken(token);
+    return { user: decodedToken };
   }
 }
