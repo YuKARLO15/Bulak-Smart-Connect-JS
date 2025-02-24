@@ -37,7 +37,7 @@ export default function LogInCard({ onLogin }) {
         const token = await userCredential.user.getIdToken();
 
         // Send token to backend
-        const response = await fetch("http://localhost:3001/auth/login", {
+        const response = await fetch("http://localhost:3000/auth/login", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
