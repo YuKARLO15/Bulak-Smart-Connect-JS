@@ -27,6 +27,7 @@
     color: white;
     font-size: 20px;
     font-weight: bold;
+    margin-top: 5vh;
   
 
 }
@@ -135,6 +136,7 @@
 
 .SidebarToggleBtn.open {
     background: #8AACB5 !important;
+  
 }
 /* Adjust sidebar width for smaller screens */
 @media (max-width: 768px) {
