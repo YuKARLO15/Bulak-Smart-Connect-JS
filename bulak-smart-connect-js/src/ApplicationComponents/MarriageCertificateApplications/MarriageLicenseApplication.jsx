@@ -13,7 +13,7 @@ const mandatoryDocuments = [
 ];
 
 const MarriageLicenseApplication = () => {
-   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [foreignNational, setForeignNational] = useState(false);
   const [widowWidower, setWidowWidower] = useState(false);
   const [annulled, setAnnulled] = useState(false);
@@ -37,7 +37,7 @@ const MarriageLicenseApplication = () => {
   const isMandatoryComplete = mandatoryDocuments.every((doc) => uploadedFiles[doc]);
 
   const isFormComplete = isMandatoryComplete && 
-    (!foreignNational || (foreignNationalType && isDivorced)) &&
+    (!foreignNational || (foreignNationalType)) &&
     (!widowWidower || widowWidowerType) &&
     (!annulled || annulledType);
 
@@ -83,7 +83,6 @@ const MarriageLicenseApplication = () => {
       {foreignNational && (
         <Box className="AdditionalDocumentsMarriageLicense">
           <Typography variant="body1" className="SectionTitleMarriageLicense">For Foreign Nationals:</Typography>
-
           <FormControl className="RadioGroupMarriageLicense">
             <Typography>Who is a foreign national?</Typography>
             <RadioGroup
