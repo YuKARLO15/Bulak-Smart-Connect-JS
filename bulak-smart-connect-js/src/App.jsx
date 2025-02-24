@@ -10,6 +10,7 @@ import QRCodePage from './QRCodeComponents/QR';
 import ClericalErrorApplication from './ApplicationComponents/BirthCertificateApplications/CorrectionClericalError';
 import BirthCertificateDashboard from './ApplicationComponents/BirthCertificateApplications/BirthCertificateDashboard';
 import FirstNameCorrection from './ApplicationComponents/BirthCertificateApplications/FristNameCorrection';
+import MarriageLicenseApplication from './ApplicationComponents/MarriageCertificateApplications/MarriageLicenseApplication';
 
 
 
@@ -27,6 +28,7 @@ function App() {
       <Route path='/ClericalErrorApplication' element={<ClericalErrorApplication />} />
       <Route path='/BirthCertificateDashboard' element={<BirthCertificateDashboard />} />
       <Route path='/FirstNameCorrection' element={<FirstNameCorrection />} />
+      <Route path='/MarriageLicenseApplication' element={<MarriageLicenseApplication />} />
     </Routes>
   );
 }

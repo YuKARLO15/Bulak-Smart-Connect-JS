@@ -1,4 +1,4 @@
-.FirstNameContainer {
+.MarriageLicenseContainer {
     max-width: 100vw;
     width: 100vw;
     height: auto;
@@ -7,26 +7,20 @@
     display: flex;
     flex-direction: column;
     margin: 0 !important;
-
   }
-  * {
-    margin: 0;
-    padding: 0;
-}
   
-  .TitleFirstName {
+  .TitleMarriageLicense{
     font-weight: 600 !important;
     background-color: #184a5b;
     text-align: center ;
     margin-bottom: 10px;
     color: white;
-    padding: 20px !important;
+    padding: 20px;
     width: 120vw;
     margin-top: 0 !important;
-    
   }
   
-  .SubtitleFirstName {
+  .SubtitleMarriageLicense {
     text-align: left !important ;
     margin-bottom: 20px;
     color: #184a5b;
@@ -35,28 +29,12 @@
     margin-top: 5vh !important;
   }
   
-  .SectionTitleFirstName {
+  .SectionTitleMarriageLicense {
     font-weight: 550 !important;
     margin-bottom: 10px;
     color: #184a5b;
     margin-top: 5vh !important;
     font-size: 1.2vw;
-  }
-  
-  .MarriedCheckboxFirstName {
-    margin-top: 10px;
-    color: #184a5b !important;
-  }
-  
-  .ImportantNotes {
-    margin-top: 20px;
-    padding: 15px;
-    width: 45vw;
-    background-color: #f9f9f9;
-    border-left: 5px solid #184a5b;
-    color: #184a5b;
-  }
-  .ImportantNotes h6, .SectionTitleFirstName {
     font-weight: bold;
     margin-bottom: 5px;
     color: white;
@@ -64,14 +42,30 @@
     padding: 5px;
     padding-left: 15px;
   }
- 
-  .FirstNameContainer {
+  .ApplicantTypeSectionMarriageLicense {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    color: #184a5b;
+  }
+  
+  .AdditionalDocumentsMarriageLicense {
+    margin-top: 20px;
+    background-color: #fff;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    color: #184a5b;
+  }
+  
+  /* for Nav side bar */
+.MarriageLicenseContainer  {
     transition: margin-left  ease;
     margin-left: 0;
   }
   
   
-  .FirstNameContainer.sidebar-open {
+  .MarriageLicenseContainer.sidebar-open {
     margin-left: 250px;
     width: 100vw;
   }

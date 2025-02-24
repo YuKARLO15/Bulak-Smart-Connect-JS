@@ -49,7 +49,7 @@ const BirthCertificateDashboard = () => {
 
   return (
     
-      <Box className={`BirthDashboardContainer ${isSidebarOpen ? "sidebar-open" : ""}`}>
+    <Box className={`BirthDashboardContainer ${isSidebarOpen ? "sidebar-open" : ""}`}>
     <NavBar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
       <Typography variant="h4" className="FormTitle">
         Birth Certificate Application
