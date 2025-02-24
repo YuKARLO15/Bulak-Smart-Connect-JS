@@ -9,6 +9,7 @@ import SignUpForm from './SignUpComponents/SignUpForm'; //(gumagana)
 import QRCodePage from './QRCodeComponents/QR';
 import ClericalErrorApplication from './ApplicationComponents/BirthCertificateApplications/CorrectionClericalError';
 import BirthCertificateDashboard from './ApplicationComponents/BirthCertificateApplications/BirthCertificateDashboard';
+import FirstNameCorrection from './ApplicationComponents/BirthCertificateApplications/FristNameCorrection';
 
 
 
@@ -25,6 +26,7 @@ function App() {
       <Route path='/QR' element={<QRCodePage />} />
       <Route path='/ClericalErrorApplication' element={<ClericalErrorApplication />} />
       <Route path='/BirthCertificateDashboard' element={<BirthCertificateDashboard />} />
+      <Route path='/FirstNameCorrection' element={<FirstNameCorrection />} />
     </Routes>
   );
 }
