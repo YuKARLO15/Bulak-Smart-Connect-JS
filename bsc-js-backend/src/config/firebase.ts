@@ -3,7 +3,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 // Determine the correct path for the service account key
-const serviceAccountPath = path.resolve(__dirname, process.env.NODE_ENV === 'production' ? '../config/serviceAccountKey.json' : 'serviceAccountKey.json');
+const serviceAccountPath = path.resolve(__dirname, 'serviceAccountKey.json');
 const serviceAccount = JSON.parse(fs.readFileSync(serviceAccountPath, 'utf-8'));
 
 admin.initializeApp({

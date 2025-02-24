@@ -15,7 +15,7 @@ const firestore = getFirestore(app);
 
 // Connect to Firebase Emulator
 if (window.location.hostname === "localhost") {
-  connectAuthEmulator(auth, "http://localhost:9099");
+  connectAuthEmulator(auth, "http://localhost:9099", { disableWarnings: true });
   connectFirestoreEmulator(firestore, "localhost", 8081);
 }
 
