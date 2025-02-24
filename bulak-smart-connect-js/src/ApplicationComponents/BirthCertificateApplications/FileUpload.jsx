@@ -1,9 +1,9 @@
 import React, { useRef, useState } from "react";
 import { Box, Button, Typography } from "@mui/material";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import "./CorrectionClericalError.css";
+import "./FileUpload.css";
 
-const FileUpload = ({ label }) => {
+const FileUpload = ({ label, onUpload }) => {
   const fileInputRef = useRef(null);
   const [fileName, setFileName] = useState("");
 
@@ -11,6 +11,7 @@ const FileUpload = ({ label }) => {
     const file = event.target.files[0];
     if (file) {
       setFileName(file.name);
+      onUpload(label, true); // Notify parent that this document is uploaded
     }
   };
 
