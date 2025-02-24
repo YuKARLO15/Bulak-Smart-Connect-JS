@@ -12,9 +12,8 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import ForgotPassword from "./ForgotPassword";
 import "./LogInCard.css";
-import { Link as RouterLink } from "react-router-dom";
-import { auth, signInWithEmailAndPassword } from "../firebase"; //Firbase Authentication
-
+import { Link as RouterLink, useNavigate } from "react-router-dom";
+import { auth, signInWithEmailAndPassword } from "../firebase";  //Firbase Authentication
 
 export default function LogInCard({ onLogin }) {
   const [email, setEmail] = useState("");
@@ -25,6 +24,7 @@ export default function LogInCard({ onLogin }) {
   const [passwordErrorMessage, setPasswordErrorMessage] = useState("");
   const [error, setError] = useState("");
   const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
 
   const handleClickOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -35,7 +35,7 @@ export default function LogInCard({ onLogin }) {
       try {
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
         const token = await userCredential.user.getIdToken();
-  
+
         // Send token to backend
         const response = await fetch("http://localhost:3000/auth/login", {
           method: "POST",
@@ -44,10 +44,11 @@ export default function LogInCard({ onLogin }) {
           },
           body: JSON.stringify({ token }),
         });
-  
+
         if (response.ok) {
           const data = await response.json();
           onLogin(data); // Save user session
+          navigate("/UserDashboard"); // Redirect to UserDashboard
         } else {
           const errorData = await response.json();
           setError(errorData.message || "Invalid credentials");
