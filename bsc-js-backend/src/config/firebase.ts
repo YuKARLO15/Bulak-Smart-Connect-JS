@@ -1,6 +1,9 @@
 import * as admin from 'firebase-admin';
 import * as fs from 'fs';
 import * as path from 'path';
+import * as dotenv from 'dotenv';
+
+dotenv.config();
 
 // Determine the correct path for the service account key
 const serviceAccountPath = process.env.SERVICE_ACCOUNT_KEY_PATH || path.resolve(__dirname, 'serviceAccountKey.json');
