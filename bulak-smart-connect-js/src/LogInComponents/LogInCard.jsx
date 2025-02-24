@@ -35,7 +35,7 @@ export default function LogInCard({ onLogin }) {
       try {
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
         const token = await userCredential.user.getIdToken();
-
+  
         // Send token to backend
         const response = await fetch("http://localhost:3000/auth/login", {
           method: "POST",
@@ -44,7 +44,7 @@ export default function LogInCard({ onLogin }) {
           },
           body: JSON.stringify({ token }),
         });
-
+  
         if (response.ok) {
           const data = await response.json();
           onLogin(data); // Save user session
