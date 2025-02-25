@@ -1,16 +1,17 @@
 import { Route, Routes } from 'react-router-dom'; // Import necessary components from react-router-dom
 import './App.css';
-//import SignUpForm from './SignUpComponents/SignUpForm'; //(FIRST SIGNUP HINDI NAKA HIWALAY PER COMPONENT)
 import LogIn from './LogInComponents/LogIn';  
 import UserDashboard from './UserDashboard/UserDashboard'; 
 import AppoionmentForm from './AppointmentComponents/AppointemtForm'; 
 import ApplicationForm from './ApplicationComponents/ApplicationForm'; 
-import SignUpForm from './SignUpComponents/SignUpForm'; //(gumagana)
+import SignUpForm from './SignUpComponents/SignUpForm'; 
 import QRCodePage from './QRCodeComponents/QR';
 import ClericalErrorApplication from './ApplicationComponents/BirthCertificateApplications/CorrectionClericalError';
 import BirthCertificateDashboard from './ApplicationComponents/BirthCertificateApplications/BirthCertificateDashboard';
 import FirstNameCorrection from './ApplicationComponents/BirthCertificateApplications/FristNameCorrection';
 import MarriageLicenseApplication from './ApplicationComponents/MarriageCertificateApplications/MarriageLicenseApplication';
+import Above18Registration from './ApplicationComponents/BirthCertificateApplications/DelayedAbove18';
+
 
 
 
@@ -29,6 +30,7 @@ function App() {
       <Route path='/BirthCertificateDashboard' element={<BirthCertificateDashboard />} />
       <Route path='/FirstNameCorrection' element={<FirstNameCorrection />} />
       <Route path='/MarriageLicenseApplication' element={<MarriageLicenseApplication />} />
+      <Route path='/Above18Registration'element={<Above18Registration />} />
     </Routes>
   );
 }
