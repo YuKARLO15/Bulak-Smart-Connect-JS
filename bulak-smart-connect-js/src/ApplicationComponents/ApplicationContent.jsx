@@ -1,21 +1,19 @@
-import React, { useEffect, useState } from 'react';
-import { Box, Grid, Card, CardContent, Typography, Button, List, ListItem } from '@mui/material';
-import FileUploadForm  from './BirthCertificateApplications/CorrectionClericalError';
+import React from 'react';
+import { Box, Grid, Card, CardContent, Typography, Button } from '@mui/material';
 import { Link as RouterLink } from "react-router-dom";
 import './ApplicationContent.css';
 
-// Import images
+
 import BirthCertificateIcon from './ApplicationAssets/BirthCertificate.png';
 import MarriageCertificateIcon from './ApplicationAssets/MarriageCertificate.png';
 import DeathCertificateIcon from './ApplicationAssets/DeathCertificate.png';
 
-
 const ApplicationContent = () => {
   
   const certificates = [
-    { title: 'Birth Certificate', icon: BirthCertificateIcon },
-    { title: 'Marriage Certificate', icon: MarriageCertificateIcon },
-    { title: 'Death Certificate', icon: DeathCertificateIcon },
+    { title: 'Birth Certificate', icon: BirthCertificateIcon, route: '/BirthCertificateDashboard' },
+    { title: 'Marriage Certificate', icon: MarriageCertificateIcon, route: '/MarriageLicenseApplication' },
+    { title: 'Death Certificate', icon: DeathCertificateIcon, route: '/DeathDashboard' },
   ];
 
   return (
@@ -44,12 +42,10 @@ const ApplicationContent = () => {
                     </ul>
                     <div className="Actions">
                       <Button variant="text" className="RequirementsBtn">Requirements</Button>
-                      <RouterLink to="/BirthCertificateDashboard">
-                      <Button variant="contained" className="RequestBtn"
-                        > Request Now</Button>
+                      <RouterLink to={cert.route} style={{ textDecoration: 'none' }}>
+                        <Button variant="contained" className="RequestBtn">Request Now</Button>
                       </RouterLink>
                     </div>
-                 
                   </CardContent>
                 </Card>
               </Grid>

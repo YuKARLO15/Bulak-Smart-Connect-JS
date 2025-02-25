@@ -1,6 +1,13 @@
 import React, { useState } from "react";
-import { Box, Button, Checkbox, FormControlLabel, Grid, Typography } from "@mui/material";
-import FileUpload from "./FileUpload";
+import {
+  Box,
+  Button,
+  Checkbox,
+  FormControlLabel,
+  Grid,
+  Typography,
+} from "@mui/material";
+import FileUpload from "../FileUpload";
 import "./CorrectionClericalError.css";
 
 const fileCategories = [
@@ -15,7 +22,7 @@ const fileCategories = [
   "Others",
 ];
 
-const ClericalErrorApplication= () => {
+const ClericalErrorApplication = () => {
   const [selectedOptions, setSelectedOptions] = useState({
     firstName: false,
     lastName: false,
@@ -24,31 +31,47 @@ const ClericalErrorApplication= () => {
   });
 
   const handleCheckboxChange = (event) => {
-    setSelectedOptions({ ...selectedOptions, [event.target.name]: event.target.checked });
+    setSelectedOptions({
+      ...selectedOptions,
+      [event.target.name]: event.target.checked,
+    });
   };
 
   return (
     <Box sx={{ maxWidth: 600, margin: "auto", padding: 3 }}>
-      <Typography variant="h5" sx={{ fontWeight: "bold", textAlign: "center", marginBottom: 2, color: "#184a5b" }}>
+      <Typography
+        variant="h5"
+        sx={{
+          fontWeight: "bold",
+          textAlign: "center",
+          marginBottom: 2,
+          color: "#184a5b",
+        }}
+      >
         BIRTH CERTIFICATE APPLICATION
       </Typography>
-      <Typography variant="subtitle1" sx={{ textAlign: "center", marginBottom: 2,  color: "#184a5b" }}>
+      <Typography
+        variant="subtitle1"
+        sx={{ textAlign: "center", marginBottom: 2, color: "#184a5b" }}
+      >
         Application for Correction of Clerical Errors
       </Typography>
       <Box>
-        <Typography variant="body1" sx={{ fontWeight: "bold", marginBottom: 1,  color: "#184a5b" }}>
+        <Typography
+          variant="body1"
+          sx={{ fontWeight: "bold", marginBottom: 1, color: "#184a5b" }}
+        >
           Select the applicable:
         </Typography>
         <Grid container spacing={1}>
           {Object.keys(selectedOptions).map((option) => (
-            <Grid item xs={6} key={option}className="ClericalCB">
+            <Grid item xs={6} key={option} className="ClericalCB">
               <FormControlLabel
                 control={
                   <Checkbox
                     checked={selectedOptions[option]}
                     onChange={handleCheckboxChange}
-                              name={option}
-                    
+                    name={option}
                   />
                 }
                 label={option.replace(/([A-Z])/g, " $1").trim()}
