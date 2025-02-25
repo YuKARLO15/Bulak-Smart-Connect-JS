@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react"; //useState Here
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
@@ -12,38 +12,64 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import ForgotPassword from "./ForgotPassword";
 import "./LogInCard.css";
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
+import { auth, signInWithEmailAndPassword } from "../firebase";  //Firbase Authentication
 
-
-export default function LogInCard() {
-  const [emailError, setEmailError] = React.useState(false);
-  const [emailErrorMessage, setEmailErrorMessage] = React.useState("");
-  const [passwordError, setPasswordError] = React.useState(false);
-  const [passwordErrorMessage, setPasswordErrorMessage] = React.useState("");
-  const [open, setOpen] = React.useState(false);
+export default function LogInCard({ onLogin }) {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [emailError, setEmailError] = useState(false);
+  const [emailErrorMessage, setEmailErrorMessage] = useState("");
+  const [passwordError, setPasswordError] = useState(false);
+  const [passwordErrorMessage, setPasswordErrorMessage] = useState("");
+  const [error, setError] = useState("");
+  const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
 
   const handleClickOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const handleSubmit = (event) => {
-    if (emailError || passwordError) {
-      event.preventDefault();
-      return;
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    if (validateInputs()) {
+      try {
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        const token = await userCredential.user.getIdToken();
+
+        // Send token to backend
+        const response = await fetch("http://localhost:3000/auth/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ token }),
+        });
+        console.log(response); //Remove later
+        if (response.ok) {
+          const data = await response.json();
+          onLogin(data); // Save user session
+          navigate("/UserDashboard"); // Redirect to UserDashboard
+        } else {
+          const errorData = await response.json();
+          setError(errorData.message || "Invalid credentials");
+        }
+      } catch (error) {
+        console.error("Fetch error:", error);
+        if (error.code === 'auth/user-not-found') {
+          setError("User not found. Please check your email and password.");
+        } else if (error.code === 'auth/wrong-password') {
+          setError("Incorrect password. Please try again.");
+        } else {
+          setError("An error occurred during login. Please try again.");
+        }
+      }
     }
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
   };
 
   const validateInputs = () => {
-    const email = document.getElementById("email");
-    const password = document.getElementById("password");
-
     let isValid = true;
 
-    if (!email.value || !/\S+@\S+\.\S+/.test(email.value)) {
+    if (!email || !/\S+@\S+\.\S+/.test(email)) {
       setEmailError(true);
       setEmailErrorMessage("Please enter a valid email address.");
       isValid = false;
@@ -52,7 +78,7 @@ export default function LogInCard() {
       setEmailErrorMessage("");
     }
 
-    if (!password.value || password.value.length < 6) {
+    if (!password || password.length < 6) {
       setPasswordError(true);
       setPasswordErrorMessage("Password must be at least 6 characters long.");
       isValid = false;
@@ -63,7 +89,7 @@ export default function LogInCard() {
 
     return isValid;
   };
-  
+
   return (
     <Card className="LogInCardContainer">
       <Typography variant="h4" className="LogInTitle">
@@ -92,6 +118,8 @@ export default function LogInCard() {
             fullWidth
             variant="outlined"
             className={`TextField ${emailError ? "error" : ""}`}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
         </FormControl>
         <FormControl>
@@ -120,6 +148,8 @@ export default function LogInCard() {
             required
             fullWidth
             className={`TextField ${passwordError ? "error" : ""}`}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
           />
         </FormControl>
         <FormControlLabel
@@ -128,19 +158,16 @@ export default function LogInCard() {
           className="RememberMe"
         />
         <ForgotPassword open={open} handleClose={handleClose} />
-        <RouterLink to='/UserDashboard' underline="none"> 
         <Button
           type="submit"
           fullWidth
           variant="contained"
-          onClick={validateInputs}
           className="LoginButton"
-      
-          >
+        >
           Log In
-        </Button> </RouterLink>
+        </Button>
+        {error && <Typography color="error">{error}</Typography>}
       </Box>
     </Card>
   );
 }
-

@@ -1,10 +1,13 @@
 import * as admin from 'firebase-admin';
 import * as fs from 'fs';
+import * as path from 'path';
+import * as dotenv from 'dotenv';
 
-// Load the service account key
-const serviceAccount = JSON.parse(
-  fs.readFileSync('serviceAccountKey.json', 'utf-8')
-);
+dotenv.config();
+
+// Determine the correct path for the service account key
+const serviceAccountPath = process.env.SERVICE_ACCOUNT_KEY_PATH || path.resolve(__dirname, 'serviceAccountKey.json');
+const serviceAccount = JSON.parse(fs.readFileSync(serviceAccountPath, 'utf-8'));
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount as admin.ServiceAccount),
@@ -20,5 +23,9 @@ firestore.settings({
   host: 'localhost:8081', // Default emulator port
   ssl: false,
 });
+
+if (process.env.USE_FIREBASE_EMULATOR === 'true') {
+  process.env.FIREBASE_AUTH_EMULATOR_HOST = '127.0.0.1:9099';
+}
 
 export { firestore };
