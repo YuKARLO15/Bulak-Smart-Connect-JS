@@ -44,7 +44,7 @@ export default function LogInCard({ onLogin }) {
           },
           body: JSON.stringify({ token }),
         });
-
+        console.log(response); //Remove later
         if (response.ok) {
           const data = await response.json();
           onLogin(data); // Save user session

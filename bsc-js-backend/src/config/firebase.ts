@@ -24,4 +24,8 @@ firestore.settings({
   ssl: false,
 });
 
+if (process.env.USE_FIREBASE_EMULATOR === 'true') {
+  process.env.FIREBASE_AUTH_EMULATOR_HOST = '127.0.0.1:9099';
+}
+
 export { firestore };
