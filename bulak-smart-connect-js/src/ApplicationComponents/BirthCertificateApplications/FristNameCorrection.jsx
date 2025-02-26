@@ -30,7 +30,7 @@ const supportingDocuments = [
 
 const FirstNameCorrection = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  
+
   const [isMarried, setIsMarried] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -60,8 +60,13 @@ const FirstNameCorrection = () => {
   };
 
   return (
-    <div className={`FirstNameContainer ${isSidebarOpen ? "sidebar-open" : ""}`}>
-       <NavBar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
+    <div
+      className={`FirstNameContainer ${isSidebarOpen ? "sidebar-open" : ""}`}
+    >
+      <NavBar
+        isSidebarOpen={isSidebarOpen}
+        setIsSidebarOpen={setIsSidebarOpen}
+      />
       <Typography variant="h5" className="TitleFirstName">
         BIRTH CERTIFICATE APPLICATION
       </Typography>
