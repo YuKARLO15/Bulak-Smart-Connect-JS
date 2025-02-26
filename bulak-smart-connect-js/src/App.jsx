@@ -11,6 +11,7 @@ import BirthCertificateDashboard from './ApplicationComponents/BirthCertificateA
 import FirstNameCorrection from './ApplicationComponents/BirthCertificateApplications/FristNameCorrection';
 import MarriageLicenseApplication from './ApplicationComponents/MarriageCertificateApplications/MarriageLicenseApplication';
 import Above18Registration from './ApplicationComponents/BirthCertificateApplications/DelayedAbove18';
+import Below18Registration from './ApplicationComponents/BirthCertificateApplications/DelayedBelow18';
 
 
 
@@ -30,7 +31,9 @@ function App() {
       <Route path='/BirthCertificateDashboard' element={<BirthCertificateDashboard />} />
       <Route path='/FirstNameCorrection' element={<FirstNameCorrection />} />
       <Route path='/MarriageLicenseApplication' element={<MarriageLicenseApplication />} />
-      <Route path='/Above18Registration'element={<Above18Registration />} />
+      <Route path='/Above18Registration' element={<Above18Registration />} />
+      <Route path='/Below18Registration' element={<Below18Registration />} />
+      
     </Routes>
   );
 }
