@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Box,
   Button,
@@ -6,8 +7,10 @@ import {
   FormControlLabel,
   Grid,
   Typography,
+  Alert,
 } from "@mui/material";
 import FileUpload from "../FileUpload";
+import NavBar from "../../UserDashboard/NavBar";
 import "./CorrectionClericalError.css";
 
 const fileCategories = [
@@ -22,13 +25,17 @@ const fileCategories = [
   "Others",
 ];
 
-const ClericalErrorApplication = () => {
+const CorrectionClericalError = () => {
+  const navigate = useNavigate();
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [selectedOptions, setSelectedOptions] = useState({
     firstName: false,
     lastName: false,
     middleName: false,
     others: false,
   });
+  const [uploadedFiles, setUploadedFiles] = useState({});
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const handleCheckboxChange = (event) => {
     setSelectedOptions({
@@ -37,35 +44,52 @@ const ClericalErrorApplication = () => {
     });
   };
 
+  const handleFileUpload = (label, isUploaded) => {
+    setUploadedFiles((prevState) => ({
+      ...prevState,
+      [label]: isUploaded,
+    }));
+  };
+
+  const isAnyOptionSelected = Object.values(selectedOptions).some((val) => val);
+
+  const isFilesComplete = fileCategories.every((cat) => uploadedFiles[cat]);
+
+  const isFormComplete = isAnyOptionSelected && isFilesComplete;
+
+  const handleSubmit = () => {
+    if (isFormComplete) {
+      setIsSubmitted(true);
+      setTimeout(() => {
+        navigate("/ApplicationForm");
+      }, 2000);
+    }
+  };
+
   return (
-    <Box sx={{ maxWidth: 600, margin: "auto", padding: 3 }}>
-      <Typography
-        variant="h5"
-        sx={{
-          fontWeight: "bold",
-          textAlign: "center",
-          marginBottom: 2,
-          color: "#184a5b",
-        }}
-      >
+    <div
+      className={`ClericalErrorContainer ${
+        isSidebarOpen ? "sidebar-open" : ""
+      }`}
+    >
+      <NavBar
+        isSidebarOpen={isSidebarOpen}
+        setIsSidebarOpen={setIsSidebarOpen}
+      />
+      <Typography variant="h5" className="TitleClerical">
         BIRTH CERTIFICATE APPLICATION
       </Typography>
-      <Typography
-        variant="subtitle1"
-        sx={{ textAlign: "center", marginBottom: 2, color: "#184a5b" }}
-      >
+      <Typography variant="subtitle1" className="SubtitleClerical">
         Application for Correction of Clerical Errors
       </Typography>
-      <Box>
-        <Typography
-          variant="body1"
-          sx={{ fontWeight: "bold", marginBottom: 1, color: "#184a5b" }}
-        >
+
+      <Box sx={{ marginBottom: 3 }}>
+        <Typography className="SectionTitleClerical" variant="body1">
           Select the applicable:
         </Typography>
-        <Grid container spacing={1}>
+        <Grid container spacing={2}>
           {Object.keys(selectedOptions).map((option) => (
-            <Grid item xs={6} key={option} className="ClericalCB">
+            <Grid item xs="auto" key={option} className="ClericalCB">
               <FormControlLabel
                 control={
                   <Checkbox
@@ -80,11 +104,47 @@ const ClericalErrorApplication = () => {
           ))}
         </Grid>
       </Box>
-      {fileCategories.map((category, index) => (
-        <FileUpload key={index} label={category} />
-      ))}
-    </Box>
+      <Box sx={{ marginBottom: 3 }}>
+        {fileCategories.map((category, index) => (
+          <FileUpload
+            key={index}
+            label={category}
+            onUpload={(status) => handleFileUpload(category, status)}
+          />
+        ))}
+      </Box>
+
+      <Box className="ImpotantNotesClerical">
+        <Typography variant="h6" className="ImportantNote">
+          IMPORTANT NOTES:
+        </Typography>
+        <Typography variant="body2">PAYMENT:</Typography>
+        <Typography variant="body2">1. Filing Fee - PHP 1000.00</Typography>
+        <Typography variant="body2">2. MISC, EXPENSES - P600</Typography>
+        <Typography variant="body2">
+          3. Other Fees - PHP 500.00 (notarized, new PSA corrected copy)
+        </Typography>
+        <Typography variant="body2">PROCESSING DURATION: 4-6 months</Typography>
+        <Typography variant="body2">FOR INQUIRY (text only)</Typography>
+        <Typography variant="body2">MCR LANI - 0928-551-0767</Typography>
+      </Box>
+      {isSubmitted && (
+        <Alert severity="success" sx={{ marginBottom: 2 }}>
+          Your application has been submitted successfully! Redirecting...
+        </Alert>
+      )}
+
+      <Button
+        variant="contained"
+        color="primary"
+        disabled={!isFormComplete}
+        onClick={handleSubmit}
+        sx={{ display: "block", margin: "auto" }}
+      >
+        Submit
+      </Button>
+    </div>
   );
 };
 
-export default ClericalErrorApplication;
+export default CorrectionClericalError;
