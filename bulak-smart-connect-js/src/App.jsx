@@ -13,6 +13,7 @@ import MarriageLicenseApplication from './ApplicationComponents/MarriageCertific
 import Above18Registration from './ApplicationComponents/BirthCertificateApplications/DelayedAbove18';
 import Below18Registration from './ApplicationComponents/BirthCertificateApplications/DelayedBelow18';
 import SexDobCorrection from './ApplicationComponents/BirthCertificateApplications/CorrectionChildSex';
+import PrivateRoute from './PrivateRoute';
 
 
 
@@ -24,6 +25,7 @@ function App() {
       {/* Define Routes */}
       <Route path="/" element={<LogIn />} />
       <Route path='/SignUpForm' element={<SignUpForm />} /> 
+      <Route element={<PrivateRoute />}> {/* Protected Route Start */}
       <Route path='/UserDashBoard' element={<UserDashboard />} />
       <Route path='/AppointmentForm' element={<AppoionmentForm />} />
       <Route path='/ApplicationForm' element={<ApplicationForm/>} />
@@ -35,6 +37,7 @@ function App() {
       <Route path='/Above18Registration' element={<Above18Registration />} />
       <Route path='/Below18Registration' element={<Below18Registration />} />
       <Route path='/SexDobCorrection' element ={<SexDobCorrection/>} />
+      </Route> {/* Protected Route End */}
       
     </Routes>
   );

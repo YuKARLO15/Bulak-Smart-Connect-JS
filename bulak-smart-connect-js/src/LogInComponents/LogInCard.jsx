@@ -14,6 +14,7 @@ import ForgotPassword from "./ForgotPassword";
 import "./LogInCard.css";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { auth, signInWithEmailAndPassword } from "../firebase";  //Firbase Authentication
+import { useAuth } from "../AuthContext"; //AuthContext
 
 export default function LogInCard({ onLogin }) {
   const [email, setEmail] = useState("");
@@ -25,6 +26,7 @@ export default function LogInCard({ onLogin }) {
   const [error, setError] = useState("");
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
+  const { login } = useAuth(); // login function from AuthContext
 
   const handleClickOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -48,6 +50,7 @@ export default function LogInCard({ onLogin }) {
         if (response.ok) {
           const data = await response.json();
           onLogin(data); // Save user session
+          login(); // Set the authentication state to true
           navigate("/UserDashboard"); // Redirect to UserDashboard
         } else {
           const errorData = await response.json();
