@@ -5,14 +5,14 @@ import AddressSection from "./Address";
 import BirthdateSection from "./Birthdate";
 import ContactInformationSection from "./ContactInformation";
 import UpdatesCheckbox from "./UpdateCheckbox";
-import NavBar from "./NavBar";
+import NavBar from "../LogInComponents/NavBar";
 import "../SignUpComponents/BirthDate.css";
 import "../SignUpComponents/Address.css";
 import "../SignUpComponents/ContactInformation.css";
 import "../SignUpComponents/UpdateCheckbox.css";
 import "../SignUpComponents/UserNamePassword.css";
-import "../SignUpComponents//NavBar.css";
-//import "../SignUpForm.css";
+import "../LogInComponents/NavBar.css";
+//import "../SignUpComponents/SignUpForm.css";
 
 const SignUpForm = () => {
   const [formData, setFormData] = useState({
@@ -93,7 +93,9 @@ const SignUpForm = () => {
 
   return (
     <div className="signup-container">
-      <div className="Navigation"><NavBar /></div>
+          <div className="Navigation">
+            <NavBar />
+            </div>
       <h2>Signup Form</h2>
       <form onSubmit={handleSubmit}>
         <UsernamePasswordSection formData={formData} handleInputChange={handleInputChange} errors={errors} />
