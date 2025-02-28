@@ -1,0 +1,27 @@
+.RecentAppointmentsAppointment {
+    display: flex;
+    flex-direction: column;
+    background-color: #FFFBFA !important;
+    padding: 15px;
+    border-radius: 8px;
+  }
+  
+  .AppointmentItemAppointment {
+    display: flex;
+    justify-content: space-between;
+    width: 25vw;
+    align-items: center;
+    background-color: #e0e0e0;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 10px;
+  }
+  .AppointmentDivider{
+    display: flex;
+    flex-direction: column;
+  }
+  .SeeMoreAppointment {
+    text-transform: none;
+    color: #1b4d5b;
+  }
+  
