@@ -1,4 +1,4 @@
-import { Route, Routes } from 'react-router-dom'; // Import necessary components from react-router-dom
+import { Route, Router, Routes } from 'react-router-dom'; // Import necessary components from react-router-dom
 import './App.css';
 import LogIn from './LogInComponents/LogIn';  
 import UserDashboard from './UserDashboard/UserDashboard'; 
@@ -16,11 +16,14 @@ import SexDobCorrection from './ApplicationComponents/BirthCertificateApplicatio
 import DelayedOutOfTownRegistration from './ApplicationComponents/BirthCertificateApplications/DelayedOutOfTown';
 import DelayedOneParentForeignerRegistration from './ApplicationComponents/BirthCertificateApplications/DelayedOneParentForeigner';
 
+import QRCodeAppointment from "./AppointmentComponents/QRCodeAppointment";
+
 
 
 
 function App() {
   return (
+  
     <Routes>
       {/* Define Routes */}
       <Route path="/" element={<LogIn />} />
@@ -37,8 +40,11 @@ function App() {
       <Route path='/Below18Registration' element={<Below18Registration />} />
       <Route path='/SexDobCorrection' element ={<SexDobCorrection/>} />
       <Route path='/DelayedOutOfTownRegistration' element ={<DelayedOutOfTownRegistration/>} />
-      <Route path='/DelayedOneParentForeignerRegistration' element ={<DelayedOneParentForeignerRegistration/>}  />
-    </Routes>
+      <Route path='/DelayedOneParentForeignerRegistration' element={<DelayedOneParentForeignerRegistration />} />
+      <Route path="/QrCodeAppointment/:id" element={<QRCodeAppointment />} />
+    
+      </Routes>
+      
   );
 }
 
