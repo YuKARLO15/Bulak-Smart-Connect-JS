@@ -3,6 +3,7 @@
 .sidebar {
     height: 100%;
     width: 20vw;
+   
     position: fixed;
     top: 0;
     left: 0;
@@ -122,6 +123,7 @@
 
 /* Toggle Button */
 .SidebarToggleBtn {
+    width: 50px;
     position: fixed;
     top: 15px;
     left: 15px;
@@ -135,6 +137,7 @@
 }
 
 .SidebarToggleBtn.open {
+    width: 50px;
     background: #8AACB5 !important;
   
 }

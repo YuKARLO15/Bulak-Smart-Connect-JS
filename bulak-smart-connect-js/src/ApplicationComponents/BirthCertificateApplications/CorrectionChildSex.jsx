@@ -5,36 +5,56 @@ import {
   Button,
   Checkbox,
   FormControlLabel,
+  Grid,
   Typography,
   Alert,
 } from "@mui/material";
 import FileUpload from "../FileUpload";
-import "./FirstNameCorrection.css";
+import "./CorrectionChildSex.css";
 import NavBar from "../../UserDashboard/NavBar";
 
 const mandatoryDocuments = [
   "NBI Clearance",
   "PNP Clearance",
-  "Employer’s Clearance / Business Records / Affidavit of Unemployment",
+  "Employer’s Clearance (no pending case) OR business records or affidavid of unempployment with no pending case", 
+  "Earliest church record/s or certificate of no church record/s available and affidavid of no church record/s available",
+  "Eariest school record (form 137A) OR certificate of no school record/s available AND affidavid of no school record available",
+   "Medical record/s OR affidavid of no medical record/s available"
 ];
 
 const supportingDocuments = [
-  "School Records",
-  "Church Records",
+  "Other school records-transcript, dimploma, certificates",
   "Birth and/or Church Certificates of Child/Children",
-  "Voter’s Record",
+  "Voter’s Record", 
   "Employment Records",
   "Identification Cards - National ID, Driver’s License, Senior’s ID, etc.",
   "Others - Passport, Insurance Documents, Member’s Data Record",
 ];
 
-const FirstNameCorrection = () => {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+const  addiotionalDocuments = [
+  "Certification from Dr. Reginell Nuñez or Dr. Jeanette Dela Cruz-that the document owner is MALE or FEMALE and has not underwent sex transplant ",
+];
 
+
+const SexDobCorrection = () => {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [selectedOptions, setSelectedOptions] = useState({
+    Sex: false,
+    birthDay: false,
+    birthMonth: false
+  });
   const [isMarried, setIsMarried] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
   const navigate = useNavigate();
+
+  const handleCheckboxChange = (event) => {
+    const { name, checked } = event.target;
+    setSelectedOptions((prevState) => ({
+      ...prevState,
+      [name]: checked,
+    }));
+  };
 
   const handleFileUpload = (label, isUploaded) => {
     setUploadedFiles((prevState) => ({
@@ -61,21 +81,41 @@ const FirstNameCorrection = () => {
 
   return (
     <div
-      className={`FirstNameContainer ${isSidebarOpen ? "sidebar-open" : ""}`}
+      className={`CorrectionContainer ${isSidebarOpen ? "sidebar-open" : ""}`}
     >
       <NavBar
         isSidebarOpen={isSidebarOpen}
         setIsSidebarOpen={setIsSidebarOpen}
       />
-      <Typography variant="h5" className="TitleFirstName">
+      <Typography variant="h5" className="TitleCorrection">
         BIRTH CERTIFICATE APPLICATION
       </Typography>
-      <Typography className="SubtitleFirstName">
-        Application for Correction of Child’s First Name
+      <Typography className="SubTitleCorrection">
+         Application for Correction of Child’s Sex / Date of Birth-Day & Month 
+        </Typography>
+     <Box sx={{ marginBottom: 3 }}>
+      <Typography variant="body1">
+      Select the correction :
       </Typography>
-
+      <Grid container spacing={2}>
+          {Object.keys(selectedOptions).map((option) => (
+            <Grid item xs="auto" key={option} className="CorrectionCB">
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={selectedOptions[option]}
+                    onChange={handleCheckboxChange}
+                    name={option}
+                  />
+                }
+                label={option.replace(/([A-Z])/g, " $1").trim()}
+              />
+            </Grid>
+        ))}
+        </Grid>
+        </Box>
       <Box>
-        <Typography variant="body1" className="SectionTitleFirstName">
+        <Typography variant="body1" className="SectionTitleCorrection">
           Mandatory Documents:
         </Typography>
         {mandatoryDocuments.map((doc, index) => (
@@ -84,7 +124,7 @@ const FirstNameCorrection = () => {
       </Box>
 
       <Box>
-        <Typography variant="body1" className="SectionTitleFirstName">
+        <Typography variant="body1" className="SectionTitleCorrection">
           Supporting Documents:
         </Typography>
         <FormControlLabel
@@ -95,7 +135,7 @@ const FirstNameCorrection = () => {
             />
           }
           label="Married"
-          className="MarriedCheckboxFirstName"
+          className="MarriedCheckbox"
         />
         {isMarried && (
           <FileUpload
@@ -108,8 +148,17 @@ const FirstNameCorrection = () => {
         ))}
       </Box>
 
-      <Box className="ImportantNotes">
-        <Typography variant="h6">IMPORTANT NOTES:</Typography>
+      <Box>
+        <Typography variant="body1" className="SectionTitleCorrection">
+          Additional Requirements For Document Correction Of Sex:
+        </Typography>
+        {addiotionalDocuments.map((doc, index) => (
+          <FileUpload key={index} label={doc} onUpload={handleFileUpload} />
+        ))}
+      </Box>
+
+      <Box className="ImportantNotesCorection">
+        <Typography variant="h6" className="ImportantNote">IMPORTANT NOTES:</Typography>
         <Typography variant="body2">PAYMENT:</Typography>
         <Typography variant="body2">1. Filing Fee - PHP 300.00</Typography>
         <Typography variant="body2">
@@ -143,4 +192,4 @@ const FirstNameCorrection = () => {
   );
 };
 
-export default FirstNameCorrection;
+export default SexDobCorrection;
