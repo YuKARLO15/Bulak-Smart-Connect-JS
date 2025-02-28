@@ -12,6 +12,7 @@ import FirstNameCorrection from './ApplicationComponents/BirthCertificateApplica
 import MarriageLicenseApplication from './ApplicationComponents/MarriageCertificateApplications/MarriageLicenseApplication';
 import Above18Registration from './ApplicationComponents/BirthCertificateApplications/DelayedAbove18';
 import Below18Registration from './ApplicationComponents/BirthCertificateApplications/DelayedBelow18';
+import SexDobCorrection from './ApplicationComponents/BirthCertificateApplications/CorrectionChildSex';
 
 
 
@@ -33,6 +34,7 @@ function App() {
       <Route path='/MarriageLicenseApplication' element={<MarriageLicenseApplication />} />
       <Route path='/Above18Registration' element={<Above18Registration />} />
       <Route path='/Below18Registration' element={<Below18Registration />} />
+      <Route path='/SexDobCorrection' element ={<SexDobCorrection/>} />
       
     </Routes>
   );
