@@ -13,7 +13,8 @@ import MarriageLicenseApplication from './ApplicationComponents/MarriageCertific
 import Above18Registration from './ApplicationComponents/BirthCertificateApplications/DelayedAbove18';
 import Below18Registration from './ApplicationComponents/BirthCertificateApplications/DelayedBelow18';
 import SexDobCorrection from './ApplicationComponents/BirthCertificateApplications/CorrectionChildSex';
-
+import DelayedOutOfTownRegistration from './ApplicationComponents/BirthCertificateApplications/DelayedOutOfTown';
+import DelayedOneParentForeignerRegistration from './ApplicationComponents/BirthCertificateApplications/DelayedOneParentForeigner';
 
 
 
@@ -35,7 +36,8 @@ function App() {
       <Route path='/Above18Registration' element={<Above18Registration />} />
       <Route path='/Below18Registration' element={<Below18Registration />} />
       <Route path='/SexDobCorrection' element ={<SexDobCorrection/>} />
-      
+      <Route path='/DelayedOutOfTownRegistration' element ={<DelayedOutOfTownRegistration/>} />
+      <Route path='/DelayedOneParentForeignerRegistration' element ={<DelayedOneParentForeignerRegistration/>}  />
     </Routes>
   );
 }

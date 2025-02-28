@@ -86,8 +86,19 @@ const Above18Registration = () => {
             Mandatory Documents:
           </Typography>
           {(status === "marital" ? maritalDocuments : nonMaritalDocuments).map((doc, index) => (
-            <FileUpload key={index} label={doc} onUpload={handleFileUpload} />
+            doc !== "Two (2) Documentary evidences" ? (
+              <FileUpload key={index} label={doc} onUpload={handleFileUpload} />
+            ) : null
           ))}
+
+          <Typography variant="body1" className="SectionTitleDelayedAbove18">
+            Any two (2) of the following documentary evidence:
+          </Typography>
+          <Box>
+            {[...Array(2)].map((_, index) => (
+              <FileUpload key={index} label={`Documentary Evidence ${index + 1}`} onUpload={handleFileUpload} />
+            ))}
+          </Box>
         </Box>
       )}
 
