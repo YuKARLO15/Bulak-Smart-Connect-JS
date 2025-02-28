@@ -21,7 +21,11 @@
     flex-direction: column;
   }
   .SeeMoreAppointment {
-    text-transform: none;
+    text-decoration: underline !important;
+    color: #1b4d5b !important;
+  }
+  .AppointmentTypeAppointment {
+    font-size: 20px;
+    font-weight: 600 !important;
     color: #1b4d5b;
   }
-  
