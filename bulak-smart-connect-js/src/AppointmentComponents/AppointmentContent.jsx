@@ -94,7 +94,8 @@ const AppointmentContainer = () => {
 
     alert("Appointment Confirmed!");
 
-    navigate(`/QRCodeAppointment/${appointment.id}`, { state: { appointment } });
+
+    navigate(`/QRCodeAppointment/${appointmentId}`, { state: { appointment: newAppointment } });
 
     setFormData({
       lastName: "",
