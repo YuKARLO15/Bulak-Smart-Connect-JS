@@ -75,3 +75,43 @@
     margin-left: 250px;
     width: 100vw;
   }
+
+  .dialog-box .MuiPaper-root {
+    border-radius: 10px;
+    padding: 20px;
+    max-width: 400px;
+  }
+  
+  .dialog-box .MuiDialogTitle-root {
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+   
+  }
+ 
+  
+.ApplicationDialogContainer {
+  width: 100vw;
+  
+
+}
+.ApplicationDialogTitle {
+  background-color: #184a5b;
+  color: #f9f9f9;
+  margin-bottom: 5vh !important;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
+
+}
+
+.ApplicationDialogContent{
+  color: #184a5b !important;
+  
+}
+.ApplicationDialogBtnC {
+  color: gray !important;
+}
+.ApplicationDialogBtnS{
+  color: white !important;
+  background-color: #184a5b !important;
+  width: 10vw;
+}

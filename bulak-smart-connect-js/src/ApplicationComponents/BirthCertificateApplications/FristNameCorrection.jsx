@@ -7,6 +7,11 @@ import {
   FormControlLabel,
   Typography,
   Alert,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
 } from "@mui/material";
 import FileUpload from "../FileUpload";
 import "./FirstNameCorrection.css";
@@ -30,10 +35,10 @@ const supportingDocuments = [
 
 const FirstNameCorrection = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
   const [isMarried, setIsMarried] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [openDialog, setOpenDialog] = useState(false);
   const navigate = useNavigate();
 
   const handleFileUpload = (label, isUploaded) => {
@@ -51,12 +56,15 @@ const FirstNameCorrection = () => {
   const isFormComplete = isMandatoryComplete && isMarriageCertComplete;
 
   const handleSubmit = () => {
-    if (isFormComplete) {
-      setIsSubmitted(true);
-      setTimeout(() => {
-        navigate("/ApplicationForm");
-      }, 2000);
-    }
+    setOpenDialog(true);
+  };
+
+  const confirmSubmit = () => {
+    setOpenDialog(false);
+    setIsSubmitted(true);
+    setTimeout(() => {
+      navigate("/ApplicationForm");
+    }, 2000);
   };
 
   return (
@@ -140,6 +148,23 @@ const FirstNameCorrection = () => {
       >
         Submit
       </Button>
+
+      <Dialog open={openDialog} onClose={() => setOpenDialog(false)} className="ApplicationDialogContainer">
+        <DialogTitle  className="ApplicationDialogTitle"  >Confirm Submission</DialogTitle>
+        <DialogContent>
+          <DialogContentText  className="ApplicationDialogContent">
+            Are you sure that all details are correct?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpenDialog(false)} color="secondary"  className="ApplicationDialogBtnC">
+            Cancel
+          </Button>
+          <Button onClick={confirmSubmit} color="primary" autoFocus className="ApplicationDialogBtnS">
+            Yes, Submit
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 };
