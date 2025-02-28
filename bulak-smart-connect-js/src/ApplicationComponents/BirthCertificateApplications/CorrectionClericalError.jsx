@@ -140,6 +140,7 @@ const CorrectionClericalError = () => {
         disabled={!isFormComplete}
         onClick={handleSubmit}
         sx={{ display: "block", margin: "auto" }}
+         className="ButtonApplication"
       >
         Submit
       </Button>

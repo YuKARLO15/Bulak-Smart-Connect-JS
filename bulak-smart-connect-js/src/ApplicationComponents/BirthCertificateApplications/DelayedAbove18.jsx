@@ -120,6 +120,7 @@ const Above18Registration = () => {
           disabled={!isMandatoryComplete}
           sx={{ marginTop: "20px" }}
           onClick={handleSubmit}
+          className="ButtonApplication"
         >
           Submit
         </Button>
