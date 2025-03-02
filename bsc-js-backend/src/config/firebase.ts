@@ -6,7 +6,9 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 
 // Determine the correct path for the service account key
-const serviceAccountPath = process.env.SERVICE_ACCOUNT_KEY_PATH || path.resolve(__dirname, 'serviceAccountKey.json');
+const serviceAccountPath =
+  process.env.SERVICE_ACCOUNT_KEY_PATH ||
+  path.resolve(__dirname, 'serviceAccountKey.json');
 const serviceAccount = JSON.parse(fs.readFileSync(serviceAccountPath, 'utf-8'));
 
 admin.initializeApp({
