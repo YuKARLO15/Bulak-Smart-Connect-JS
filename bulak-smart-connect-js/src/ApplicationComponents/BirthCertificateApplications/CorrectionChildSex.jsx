@@ -40,8 +40,8 @@ const SexDobCorrection = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [selectedOptions, setSelectedOptions] = useState({
     Sex: false,
-    birthDay: false,
-    birthMonth: false
+    BirthDay: false,
+    BirthMonth: false
   });
   const [isMarried, setIsMarried] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState({});
@@ -115,7 +115,7 @@ const SexDobCorrection = () => {
         </Grid>
         </Box>
       <Box>
-        <Typography variant="body1" className="SectionTitleCorrection">
+        <Typography variant="body1" className="SectionTitleDOBCorrection">
           Mandatory Documents:
         </Typography>
         {mandatoryDocuments.map((doc, index) => (
@@ -124,7 +124,7 @@ const SexDobCorrection = () => {
       </Box>
 
       <Box>
-        <Typography variant="body1" className="SectionTitleCorrection">
+        <Typography variant="body1" className="SectionTitleDOBCorrection">
           Supporting Documents:
         </Typography>
         <FormControlLabel
@@ -185,6 +185,7 @@ const SexDobCorrection = () => {
         disabled={!isFormComplete}
         sx={{ marginTop: "20px" }}
         onClick={handleSubmit}
+         className="ButtonApplication"
       >
         Submit
       </Button>

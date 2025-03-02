@@ -43,11 +43,14 @@
   }
   
   
-  button {
-    width: 100%;
+  .ButtonApplication{
+    width: 40vw;
+    color: white;
+    background-color: #184a5b !important;
     padding: 10px;
     font-size: 16px;
     margin-top: 10px;
+    margin-bottom: 10vh !important;
   }
   
   .FormContainerBelow18 {

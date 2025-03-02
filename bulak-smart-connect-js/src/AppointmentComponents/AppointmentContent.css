@@ -1,14 +1,21 @@
-.AppointmentContainer {
-  max-width: 90vw;
+.AppointmentFormsContainer {
+  max-width: 80vw;
   padding: 30px;
-  background: #fff;
   border-radius: 10px;
+  align-items: center;
   font-family: Arial, sans-serif;
-  width: 65vw;
-  margin-top: 0;
-
+  width: 70vw;
+ height: 81vh;
 }
-
+.AppointmentFContainer {
+  background-color: #fffaf9;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+  height: 80vh;
+  width: 70vw;
+  padding: 30px;
+  padding-top:30px ;
+   
+}
 .AppointmentTitle {
   font-size: 28px;
   font-weight: bold;
@@ -22,12 +29,13 @@
 width: 5vw !important;
 
 }
-.ButtonContainer {
+.ConfirmContainer {
   display: flex;
-  justify-content: flex-start;
-  gap: 20px;
-  margin-bottom: 20px;
-
+  justify-content: end;
+  align-items: end;
+  width: 100%;
+  height: 35vh;
+  margin-right: 50px;
 }
 
 .SelfAppointment,
@@ -51,27 +59,39 @@ width: 5vw !important;
 
 .FormGroup {
   display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  margin-bottom: 20px;
+ flex-direction: row;
+  gap: 10px !important;
+  margin-bottom: 30px;
 }
 
 .FormGroup label {
-  flex: 1 1 100%;
+  flex: 1 100%;
   font-size: 14px;
   color: #333;
   font-weight: bold;
 }
 
 .FormGroup select {
-  flex: 1;
+  display: flex;
+  flex-direction: row;
+  width: 21.5vw !important;
   padding: 12px;
   font-size: 14px;
   border: 1px solid #ccc;
   border-radius: 5px;
   outline: none;
-  width: 100%;
   color: #1e3a56;
+
+}
+.SlotGroup {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  margin-bottom: 20px;
+  align-self: start;
+}
+.AppointTime {
+  height: 40px;
 }
 
 .FormGroup input::placeholder {
@@ -88,8 +108,8 @@ width: 5vw !important;
   border-radius: 5px;
   cursor: pointer;
   margin-top: 10px;
-  width: 15vw;
-  display: flex;
+  width: 350px;
+  display:flex;
   justify-content: center;
 }
 
@@ -104,13 +124,12 @@ width: 5vw !important;
 
 .RowGroup {
   display: flex;
+  flex-direction: row;
   gap: 20px;
-  justify-content: space-between;
   align-items: center;
 }
 
 .InputWrapper {
-  flex: 1;
   display: flex;
   flex-direction: column;
   color: #1e3a56;
@@ -130,8 +149,8 @@ width: 5vw !important;
   border-radius: 5px;
   font-size: 14px;
   outline: none;
-  max-width: 23vw;
-  background-color: #f9f9f9;
+  width: 20vw;
+  background-color: hsl(0, 0%, 98%);
   color: #1e3a56;
 }
 
@@ -140,9 +159,14 @@ width: 5vw !important;
   color: #1C4D5A;
 
 }
-.SmallInput {
-  width: 5vw;
+.SmallInput input {
+  width: 4vw !important;
   flex: 0 0 10vw;
+  max-height: 2vh !important;
+}
+.LargeInput input {
+  width: 41vw !important;
+  max-height: 2vh !important;
 }
 
 @media screen and (max-width: 768px) {
@@ -165,6 +189,6 @@ width: 5vw !important;
   }
 
   .SmallInput {
-    max-width: 60px;
+    max-width: 5vw;
   }
 }

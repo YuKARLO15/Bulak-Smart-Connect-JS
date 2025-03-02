@@ -1,91 +1,128 @@
-
+/* General Reset */
 * {
-    margin: 0;
-    padding: 0;
-  }
-  
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
-  .DelayedAbove18Container {
-    max-width: 100vw;
-    width: 100vw;
-    height: auto;
-    min-width: 100vh;
-    align-items: center;
-    display: flex;
-    flex-direction: column;
-    margin: 0 !important;
-    transition: margin-left ease;
-    margin-left: 0;
-  }
-  
+/* Container Styling */
+.DelayedAbove18Container {
+  max-width: 100vw;
+  width: 100vw;
+  height: auto;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #f9f9f9;
+  padding: 20px;
+  transition: margin-left 0.3s ease;
+}
 
-  .TitleDelayedAbove18 {
-    font-weight: 600 !important;
-    background-color: #184a5b;
-    text-align: center;
-    margin-bottom: 10px;
-    color: white;
-    padding: 20px !important;
-    width: 120vw;
-    margin-top: 0 !important;
-  }
-  
+/* Sidebar Open State */
+.DelayedAbove18Container.sidebar-open {
+  margin-left: 250px;
+  width: calc(100vw - 250px);
+}
 
-  .SubtitleDelayedAbove18 {
-    text-align: left !important;
-    margin-bottom: 20px;
-    color: #184a5b;
-    font-size: 1.2vw !important;
-    font-weight: bolder !important;
-    margin-top: 5vh !important;
-  }
+/* Title Styling */
+.TitleDelayedAbove18 {
+  font-weight: 600 !important;
+  background-color: #184a5b;
+  text-align: center;
+  color: white;
+  padding: 20px !important;
+  width: 100vw;
+  margin-bottom: 20px;
+}
 
-  .Subtitle{
-    text-align: left !important;
-    margin-bottom: 20px;
-    color: #184a5b;
-    font-size: 1.0vw !important;
-    font-weight: bolder !important;
-    margin-top: 5vh !important;
-  }
-  
+/* Section Title */
+.SectionTitleDelayedAbove18 {
+  font-weight: 550 !important;
+  color: #184a5b;
+  font-size: 1.2rem;
+  margin-top: 5vh !important;
+  text-align: left;
+  width: 100%;
+  max-width: 800px;
+}
 
-  .SectionTitleDelayedAbove18 {
-    font-weight: 550 !important;
-    margin-bottom: 10px;
-    color: #184a5b;
-    margin-top: 5vh !important;
-    font-size: 1.2vw;
-  }
-  
-  
-  .MarriedCheckboxDelayedAbove18 {
-    margin-top: 10px;
-    color: #184a5b !important;
-  }
-  
+/* Requirements Section */
+.RequirementsContainer {
+  padding: 15px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 800px;
+}
 
-  .ImportantNotes {
-    margin-top: 20px;
-    padding: 15px;
-    width: 45vw;
-    background-color: #f9f9f9;
-    border-left: 5px solid #184a5b;
-    color: #184a5b;
-  }
-  
-  .ImportantNotes h6, .SectionTitleDelayedAbove18 {
-    font-weight: bold;
-    margin-bottom: 5px;
-    color: white;
-    background-color: #184a5b;
-    padding: 5px;
-    padding-left: 15px;
-  }
-  
+.RequirementItem {
+  padding: 8px 0;
+  font-size: 16px;
+  border-bottom: 1px solid #ddd;
+}
 
-  .DelayedAbove18Container.sidebar-open {
-    margin-left: 250px;
-    width: 100vw;
-  }
-  
+.RequirementItem:last-child {
+  border-bottom: none;
+}
+
+/* File Upload */
+.FileUploadContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 100%;
+  max-width: 800px;
+}
+
+.FileUploadContainer label {
+  font-size: 16px;
+  font-weight: bold;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.FileUploadContainer input[type="file"] {
+  display: block;
+  margin-bottom: 10px;
+  padding: 5px;
+}
+
+/* Submit Button */
+.SubmitButton {
+  margin-top: 20px;
+  background-color: #184a5b !important;
+  color: white !important;
+  padding: 10px 20px;
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  width: 100%;
+  max-width: 800px;
+}
+
+.SubmitButton:disabled {
+  background-color: #ccc !important;
+  cursor: not-allowed;
+}
+
+.SubmitButton:hover:not(:disabled) {
+  background-color: #13647d !important;
+}
+
+/* Success Alert */
+.SuccessAlert {
+  margin-top: 20px;
+  padding: 10px;
+  background: #28a745;
+  color: white;
+  text-align: center;
+  border-radius: 5px;
+  font-weight: bold;
+  width: 100%;
+  max-width: 800px;
+}

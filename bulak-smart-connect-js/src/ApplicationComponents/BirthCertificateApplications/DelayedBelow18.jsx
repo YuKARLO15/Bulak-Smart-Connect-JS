@@ -146,6 +146,7 @@ const Below18Registration = () => {
         disabled={!isFormComplete}
         sx={{ marginTop: "20px" }}
         onClick={handleSubmit}
+        className="ButtonApplication"
       >
         Submit
       </Button>
