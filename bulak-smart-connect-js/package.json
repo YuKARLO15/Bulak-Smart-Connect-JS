@@ -10,6 +10,7 @@
     "start-frontend": "vite",
     "build": "vite build",
     "lint": "eslint .",
+    "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx,json,css}\"",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -38,6 +39,7 @@
     "eslint-plugin-react-hooks": "^5.0.0",
     "eslint-plugin-react-refresh": "^0.4.16",
     "globals": "^15.14.0",
+    "prettier": "^3.5.2",
     "vite": "^6.0.11"
   }
 }
