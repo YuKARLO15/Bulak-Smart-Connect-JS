@@ -1,0 +1,29 @@
+.BirthCertificateFormContainer {
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .BirthCertificateFormTitle {
+    text-align: center;
+    color: #333;
+  }
+  
+  .BirthCertificateForm {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width:60vw;
+   
+  }
+  
+  .BirthCertificateFormButton {
+    margin-top: 10px;
+  }
+  
