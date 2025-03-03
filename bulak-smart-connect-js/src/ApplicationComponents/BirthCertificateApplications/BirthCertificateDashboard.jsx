@@ -12,52 +12,33 @@ import {
 import "./BirthCertificateDashboard.css";
 import NavBar from "../../UserDashboard/NavBar";
 
-
-
 const BirthCertificateDashboard = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-      
-    
   const [selectedOption, setSelectedOption] = useState("");
   const [agreedPrivacy, setAgreedPrivacy] = useState(false);
   const [agreedTerms, setAgreedTerms] = useState(false);
   const navigate = useNavigate();
+
   const handleNext = () => {
     if (!selectedOption) {
       alert("Please select an option before proceeding.");
       return;
     }
+    localStorage.setItem("selectedBirthCertificateOption", selectedOption);
 
-    const routeMap = {
-      "Regular application": "/RegularApplication",
-      "Request copy": "/RequestCopy",
-      "Above 18": "/Above18Registration",
-      "Below 18": "/Below18Registration",
-      "Foreign Parent": "/DelayedOneParentForeignerRegistration",
-      "Out of town": "/DelayedOutOfTownRegistration",
-      "Clerical Error": "/ClericalErrorApplication",
-      "Sex DOB": "/SexDobCorrection",
-      "First Name": "/FirstNameCorrection",
-    };
-
-    if (routeMap[selectedOption]) {
-      navigate(routeMap[selectedOption]);
-    } else {
-      alert("No route found for this option.");
-    }
+    navigate("/BirthCertificateForm");
   };
 
   return (
-    
     <Box className={`BirthDashboardContainer ${isSidebarOpen ? "sidebar-open" : ""}`}>
-    <NavBar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
+      <NavBar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
       <Typography variant="h4" className="FormTitle">
         Birth Certificate Application
       </Typography>
       <Paper className="FormPaper" elevation={3}>
         <Box className="Section">
           <Typography variant="h6" className="SectionTitle">
-          Applying for:
+            Applying for:
           </Typography>
           <RadioGroup
             value={selectedOption}

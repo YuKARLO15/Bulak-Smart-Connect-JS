@@ -15,7 +15,7 @@ import Below18Registration from './ApplicationComponents/BirthCertificateApplica
 import SexDobCorrection from './ApplicationComponents/BirthCertificateApplications/CorrectionChildSex';
 import DelayedOutOfTownRegistration from './ApplicationComponents/BirthCertificateApplications/DelayedOutOfTown';
 import DelayedOneParentForeignerRegistration from './ApplicationComponents/BirthCertificateApplications/DelayedOneParentForeigner';
-
+import BirthCertificateForm from './ApplicationComponents/BirthCertificateApplications/BirthCertificateForm';
 import QRCodeAppointment from "./AppointmentComponents/QRCodeAppointment";
 
 
@@ -42,6 +42,7 @@ function App() {
       <Route path='/DelayedOutOfTownRegistration' element ={<DelayedOutOfTownRegistration/>} />
       <Route path='/DelayedOneParentForeignerRegistration' element={<DelayedOneParentForeignerRegistration />} />
       <Route path="/QrCodeAppointment/:id" element={<QRCodeAppointment />} />
+      <Route path='/BirthCertificateForm' element={<BirthCertificateForm />} />
     
       </Routes>
       
