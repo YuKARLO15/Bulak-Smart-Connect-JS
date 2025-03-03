@@ -4,6 +4,7 @@ import "./UserDashboard.css"; // Import the CSS file
 import DashboardContent from "./DashboardContent";
 import RecentApplicationsComponent from "../ApplicationComponents/RecentApplicationsComponent";
 import DashboardButtons from "./DashboardButtons";
+import RecentAppointments from "../AppointmentComponents/RecentAppointment";
 
 const UserDashboard = () => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -13,7 +14,11 @@ const UserDashboard = () => {
             <NavBar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
             <DashboardContent />
             <DashboardButtons />
+            <div className="BottomDashboard">
+            <RecentAppointments  />
             <RecentApplicationsComponent />
+            
+             </div>
         </div>
     );
 }

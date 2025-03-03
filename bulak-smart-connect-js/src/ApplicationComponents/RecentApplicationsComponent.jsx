@@ -59,13 +59,15 @@ const RecentApplicationsComponent = () => {
                             <CardContent>
                                 <Grid container justifyContent="space-between" alignItems="center">
                                     <div className="ApplicationDetails">
-                                        <Typography className="ApplicationCardTitle">{app.type}</Typography>
-                                        <Typography className="ApplicationDescription">{app.message}</Typography>
-                                    </div>
-                                    <Typography className="ApplicationDate">{app.date}</Typography>
-                                    <Typography className="ApplicationStatus" sx={{ color: StatusColor(app.status) }}>
+                                        <Typography className="ApplicationCardTitle">{app.type} </Typography>
+                                        <Typography className="ApplicationDate">{app.date}</Typography>
+                                        <Typography className="ApplicationStatus" sx={{ color: StatusColor(app.status) }}>
                                         {app.status}
                                     </Typography>
+                                        <Typography className="ApplicationDescription">{app.message}</Typography>
+                                       
+                                    </div>
+                                 
                                     <Button size="small" className='ApplicationBtn' onClick={() => handleNavigation(app.type)}>
                                         See More
                                     </Button>
