@@ -75,7 +75,7 @@
   margin-top: 5vh;
   margin-left: 1vw;
   min-height: 40vh;
-  width: 30vw;
+  max-width: 25vw;
   min-width: 20vw;
   display: flex;
   flex-direction: column;

@@ -9,7 +9,7 @@
   .AppointmentItemAppointment {
     display: flex;
     justify-content: space-between;
-    width: 25vw;
+    width: 20vw;
     align-items: center;
     background-color: #e0e0e0;
     padding: 10px;
