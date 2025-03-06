@@ -2,9 +2,9 @@ name: Firebase Tests
 
 on:
   push:
-    branches: [ workflows ]
+    branches: [ '*' ]
   pull_request:
-    branches: [ workflows ]
+    branches: [ main ]
 
 jobs:
   integration-tests:

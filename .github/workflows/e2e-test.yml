@@ -2,9 +2,9 @@ name: End-to-End Tests
 
 on:
   push:
-    branches: [ main, develop, workflows ]
+    branches: [ '*' ]
   pull_request:
-    branches: [ workflows ]
+    branches: [ main ]
   schedule:
     - cron: '0 0 * * 5' # Weekly on Friday
   # Add manual trigger for easier testing

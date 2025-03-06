@@ -2,9 +2,9 @@ name: Browser Compatibility Testing
 
 on:
   push:
-    branches: [ workflows ]
+    branches: [ '*' ]
   pull_request:
-    branches: [ workflows ]
+    branches: [ main ]
   schedule:
     - cron: '0 0 * * 3' # Weekly on Wednesday
 

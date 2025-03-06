@@ -2,7 +2,7 @@ name: API Documentation
 
 on:
   push:
-    branches: [ main, develop, workflows ]
+    branches: [ '*']
     paths:
       - 'bsc-js-backend/src/**'
       - 'bsc-js-backend/docs/**'

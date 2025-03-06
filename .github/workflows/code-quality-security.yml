@@ -2,9 +2,9 @@ name: Code Quality and Security
 
 on:
   push:
-    branches: [ workflows ]
+    branches: [ '*' ]
   pull_request:
-    branches: [ workflows ]
+    branches: [ main ]
   schedule:
     - cron: '0 0 * * 1' # Weekly on Monday
 
