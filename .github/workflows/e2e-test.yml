@@ -1,0 +1,60 @@
+name: End-to-End Tests
+
+on:
+  pull_request:
+    branches: [ workflows ]
+  schedule:
+    - cron: '0 0 * * 5' # Weekly on Friday
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: Install backend dependencies
+        run: cd bsc-js-backend && npm ci
+      
+      - name: Start backend
+        run: |
+          cd bsc-js-backend
+          npm run start:dev &
+          sleep 10
+      
+      - name: Install frontend dependencies
+        run: cd bulak-smart-connect-js && npm ci
+      
+      - name: Install Cypress dependencies
+        run: |
+          cd bulak-smart-connect-js
+          npx cypress install
+      
+      - name: Build and start frontend
+        run: |
+          cd bulak-smart-connect-js
+          npm run build
+          npx serve -s build &
+          sleep 5
+      
+      - name: Run E2E tests
+        run: |
+          cd bulak-smart-connect-js
+          npm run cypress:run
+      
+      - name: Upload screenshots on failure
+        uses: actions/upload-artifact@v3
+        if: failure()
+        with:
+          name: cypress-screenshots
+          path: bulak-smart-connect-js/cypress/screenshots
+      
+      - name: Upload videos
+        uses: actions/upload-artifact@v3
+        with:
+          name: cypress-videos
+          path: bulak-smart-connect-js/cypress/videos

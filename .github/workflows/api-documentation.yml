@@ -1,0 +1,36 @@
+name: API Documentation
+
+on:
+  push:
+    branches: [ workflows ]
+    paths:
+      - 'bsc-js-backend/src/**'
+      - 'bsc-js-backend/docs/**'
+
+jobs:
+  build-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: Install dependencies
+        run: |
+          cd bsc-js-backend
+          npm ci
+      
+      - name: Generate API documentation
+        run: |
+          cd bsc-js-backend
+          npx @compodoc/compodoc -p tsconfig.json -s -d docs/api
+      
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: bsc-js-backend/docs/api
+          target-folder: api-docs
+          branch: gh-pages
