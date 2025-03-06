@@ -1,0 +1,60 @@
+name: Auto-review Dependency Updates
+
+# This workflow is currently set to manual trigger only
+# To enable automatic runs, uncomment the section below:
+on:
+  workflow_dispatch:
+    # Manual trigger with description
+    inputs:
+      reason:
+        description: 'Reason for manually running'
+        required: true
+        default: 'Testing dependency update workflow'
+  # Uncomment below to enable automatic run on dependency PRs
+  # pull_request:
+  #   branches: [ main, develop ]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  review-dependencies:
+    runs-on: ubuntu-latest
+    # This ensures it only runs for Dependabot PRs when the pull_request trigger is enabled
+    if: ${{ github.event_name == 'workflow_dispatch' || github.actor == 'dependabot[bot]' }}
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Dependency Review
+        uses: actions/dependency-review-action@v3
+        with:
+          fail-on-severity: moderate
+      
+      - name: Run frontend tests for dependency changes
+        if: contains(github.event.pull_request.title, 'bulak-smart-connect-js') || github.event_name == 'workflow_dispatch'
+        run: |
+          cd bulak-smart-connect-js
+          npm ci
+          npm run test
+      
+      - name: Run backend tests for dependency changes
+        if: contains(github.event.pull_request.title, 'bsc-js-backend') || github.event_name == 'workflow_dispatch'
+        run: |
+          cd bsc-js-backend
+          npm ci
+          npm run test
+      
+      - name: Auto-approve PR
+        if: success() && github.event_name == 'pull_request'
+        run: |
+          gh pr review ${{ github.event.pull_request.number }} --approve
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Add label to PR
+        if: success() && github.event_name == 'pull_request'
+        run: |
+          gh pr edit ${{ github.event.pull_request.number }} --add-label "safe-to-merge"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
