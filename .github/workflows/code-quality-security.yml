@@ -103,7 +103,7 @@ jobs:
           npx source-map-explorer 'build/static/js/*.js' --html bundle-analysis.html
       
       - name: Upload bundle analysis
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: bundle-analysis
           path: bulak-smart-connect-js/bundle-analysis.html
