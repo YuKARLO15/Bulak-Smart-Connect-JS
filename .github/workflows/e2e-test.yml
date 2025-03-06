@@ -5,6 +5,8 @@ on:
     branches: [ workflows ]
   schedule:
     - cron: '0 0 * * 5' # Weekly on Friday
+  # Add manual trigger for easier testing
+  workflow_dispatch:
 
 jobs:
   e2e:
@@ -16,45 +18,134 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+          cache: 'npm'
+
+      # Check if package.json files exist
+      - name: Verify project structure
+        run: |
+          if [ ! -f "bulak-smart-connect-js/package.json" ]; then
+            echo "Error: Frontend package.json not found"
+            ls -la
+            exit 1
+          fi
+          if [ ! -f "bsc-js-backend/package.json" ]; then
+            echo "Error: Backend package.json not found"
+            ls -la
+            exit 1
+          fi
       
       - name: Install backend dependencies
-        run: cd bsc-js-backend && npm ci
+        run: |
+          cd bsc-js-backend
+          npm ci
       
+      # Check if start:dev script exists
+      - name: Verify backend scripts
+        run: |
+          cd bsc-js-backend
+          if ! grep -q "start:dev" package.json; then
+            echo "Error: start:dev script not found in backend package.json"
+            echo "Adding default start script"
+            npx json -I -f package.json -e 'this.scripts["start:dev"]="nest start --watch"'
+          fi
+      
+      # Start backend with better error handling
       - name: Start backend
         run: |
           cd bsc-js-backend
-          npm run start:dev &
-          sleep 10
+          npm run start:dev > backend.log 2>&1 &
+          echo $! > backend.pid
+          sleep 15
+          if ! ps -p $(cat backend.pid) > /dev/null; then
+            echo "Backend failed to start. Logs:"
+            cat backend.log
+            exit 1
+          fi
+          echo "Backend started successfully"
       
       - name: Install frontend dependencies
-        run: cd bulak-smart-connect-js && npm ci
+        run: |
+          cd bulak-smart-connect-js
+          npm ci
       
-      - name: Install Cypress dependencies
+      # Install Cypress with explicit verification
+      - name: Install Cypress
         run: |
           cd bulak-smart-connect-js
           npx cypress install
+          npx cypress verify
+      
+      # Check if cypress.config.js exists
+      - name: Verify Cypress configuration
+        run: |
+          cd bulak-smart-connect-js
+          if [ ! -f "cypress.config.js" ] && [ ! -f "cypress.json" ]; then
+            echo "Creating basic Cypress configuration"
+            echo "export default {
+              e2e: {
+                baseUrl: 'http://localhost:3000',
+                supportFile: false
+              },
+            }" > cypress.config.js
+            mkdir -p cypress/e2e
+            echo "describe('Basic test', () => {
+              it('Loads the homepage', () => {
+                cy.visit('/')
+                cy.contains('h1', 'Welcome')
+              })
+            })" > cypress/e2e/basic.cy.js
+          fi
+      
+      # Check if cypress:run script exists
+      - name: Verify frontend scripts
+        run: |
+          cd bulak-smart-connect-js
+          if ! grep -q "cypress:run" package.json; then
+            echo "Adding cypress:run script to package.json"
+            npx json -I -f package.json -e 'this.scripts["cypress:run"]="cypress run"'
+          fi
       
       - name: Build and start frontend
         run: |
           cd bulak-smart-connect-js
           npm run build
-          npx serve -s build &
-          sleep 5
+          npx serve -s build > frontend.log 2>&1 &
+          echo $! > frontend.pid
+          sleep 10
+          if ! ps -p $(cat frontend.pid) > /dev/null; then
+            echo "Frontend failed to start. Logs:"
+            cat frontend.log
+            exit 1
+          fi
+          echo "Frontend started successfully at http://localhost:3000"
+          curl -s http://localhost:3000 | grep -q "<!DOCTYPE html>" || (echo "Frontend not responding properly" && exit 1)
       
+      # Create Cypress directories if they don't exist
+      - name: Prepare Cypress directories
+        run: |
+          mkdir -p bulak-smart-connect-js/cypress/screenshots
+          mkdir -p bulak-smart-connect-js/cypress/videos
+      
+      # Run Cypress tests with proper debugging
       - name: Run E2E tests
         run: |
           cd bulak-smart-connect-js
-          npm run cypress:run
+          echo "Running Cypress tests..."
+          npm run cypress:run || (echo "Cypress tests failed" && exit 1)
       
+      # Upload screenshots with updated action
       - name: Upload screenshots on failure
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: failure()
         with:
           name: cypress-screenshots
           path: bulak-smart-connect-js/cypress/screenshots
+          retention-days: 7
       
+      # Upload videos with updated action
       - name: Upload videos
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: cypress-videos
           path: bulak-smart-connect-js/cypress/videos
+          retention-days: 7
