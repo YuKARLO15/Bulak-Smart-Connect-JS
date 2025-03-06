@@ -1,6 +1,8 @@
 name: End-to-End Tests
 
 on:
+  push:
+    branches: [ main, develop, workflows ]
   pull_request:
     branches: [ workflows ]
   schedule:
