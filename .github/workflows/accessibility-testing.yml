@@ -2,9 +2,9 @@ name: Accessibility Testing
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [ workflows ]
   pull_request:
-    branches: [ main ]
+    branches: [ workflows ]
   schedule:
     - cron: '0 0 * * 4' # Weekly on Thursday
 
