@@ -9,8 +9,8 @@ on:
     - cron: '0 0 * * 1' # Weekly on Monday
 
 jobs:
-  linting:
-    name: Lint and Format Check
+  frontend-linting:
+    name: Frontend Lint and Format Check
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -20,18 +20,45 @@ jobs:
         with:
           node-version: '20'
       
-      - name: Frontend Lint and Format Check
+      - name: Install Dependencies
         run: |
           cd bulak-smart-connect-js
           npm ci
-          npm run lint
-          npx prettier --check "src/**/*.{js,jsx,ts,tsx,json,css,scss}"
       
-      - name: Backend Lint and Format Check
+      - name: Run Lint
+        run: |
+          cd bulak-smart-connect-js
+          npm run lint
+      
+      - name: Check Formatting
+        run: |
+          cd bulak-smart-connect-js
+          npx prettier --check "src/**/*.{js,jsx,ts,tsx,json,css,scss}"
+  
+  backend-linting:
+    name: Backend Lint and Format Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: Install Dependencies
         run: |
           cd bsc-js-backend
           npm ci
+      
+      - name: Run Lint
+        run: |
+          cd bsc-js-backend
           npm run lint
+      
+      - name: Check Formatting
+        run: |
+          cd bsc-js-backend
           npx prettier --check "src/**/*.{js,ts,json}"
 
   security:
