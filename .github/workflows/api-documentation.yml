@@ -1,0 +1,72 @@
+name: API Documentation
+
+on:
+  push:
+    branches: [ '*']
+    paths:
+      - 'bsc-js-backend/src/**'
+      - 'bsc-js-backend/docs/**'
+      - '.github/workflows/api-documentation.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: Install dependencies
+        run: |
+          cd bsc-js-backend
+          npm ci
+          npm install --save-dev @compodoc/compodoc
+      
+      - name: Check tsconfig.json exists
+        run: |
+          if [ ! -f "bsc-js-backend/tsconfig.json" ]; then
+            echo "Error: tsconfig.json not found in bsc-js-backend directory"
+            echo "Creating a basic tsconfig.json file"
+            echo '{
+              "compilerOptions": {
+                "target": "es2017",
+                "module": "commonjs",
+                "declaration": true,
+                "removeComments": true,
+                "emitDecoratorMetadata": true,
+                "experimentalDecorators": true,
+                "sourceMap": true,
+                "outDir": "./dist",
+                "baseUrl": "./",
+                "incremental": true
+              },
+              "include": ["src/**/*"],
+              "exclude": ["node_modules", "dist"]
+            }' > bsc-js-backend/tsconfig.json
+          fi
+      
+      - name: Create docs directory if not exists
+        run: mkdir -p bsc-js-backend/docs
+      
+      - name: Generate API documentation
+        run: |
+          cd bsc-js-backend
+          npx @compodoc/compodoc -p tsconfig.json -d docs/api
+      
+      - name: Debug docs output
+        run: |
+          ls -la bsc-js-backend/docs/api || echo "API docs directory not found"
+      
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: bsc-js-backend/docs/api
+          target-folder: api-docs
+          branch: gh-pages
