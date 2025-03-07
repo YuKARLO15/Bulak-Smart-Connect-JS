@@ -22,7 +22,7 @@
     "@mui/icons-material": "^6.4.7",
     "@mui/material": "^6.4.7",
     "@mui/x-date-pickers": "^7.27.3",
-    "axios": "^1.7.9",
+    "axios": "^1.8.2",
     "date-fns": "^4.1.0",
     "firebase": "^11.2.0",
     "qrcode.react": "^4.2.0",
