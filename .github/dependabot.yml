@@ -1,29 +1,65 @@
 version: 2
 updates:
-  - package-ecosystem: "npm" # See documentation for possible values
-    directory: "/bsc-js-backend" # Location of package manifests
+  # Backend dependencies
+  - package-ecosystem: "npm"
+    directory: "/bsc-js-backend"
     schedule:
       interval: "weekly"
+      day: "monday"
     open-pull-requests-limit: 10
-    target-branch: "npm-backend"
     labels:
-      - "tag > bot"
-      - "kind > dependencies"
-      - "scope > backend"
+      - "dependencies"
+      - "backend"
+    groups:
+      backend-minor:
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
+    commit-message:
+      prefix: "npm"
+      include: "scope"
+    versioning-strategy: auto
+    ignore:
+      # Ignore major updates that might break things
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
 
-  - package-ecosystem: "npm" # See documentation for possible values
-    directory: "/bulak-smart-connect-js" # Location of package manifests
+  # Frontend dependencies
+  - package-ecosystem: "npm"
+    directory: "/bulak-smart-connect-js"
     schedule:
       interval: "weekly"
+      day: "monday"
     open-pull-requests-limit: 10
-    target-branch: "npm-frontend"
     labels:
-      - "tag > bot"
-      - "kind > dependencies"
-      - "scope > frontend"
+      - "dependencies"
+      - "frontend"
+    groups:
+      frontend-minor:
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
+    commit-message:
+      prefix: "npm"
+      include: "scope"
+    versioning-strategy: auto
+    ignore:
+      # Ignore major updates that might break things
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
 
+  # GitHub Actions
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: "monthly"
-    open-pull-requests-limit: 10
+      interval: "weekly"
+    labels:
+      - "dependencies"
+      - "github-actions"
+    commit-message:
+      prefix: "github-actions"
+      include: "scope"
