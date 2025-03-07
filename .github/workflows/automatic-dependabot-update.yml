@@ -25,6 +25,8 @@ jobs:
         uses: actions/dependency-review-action@v4
         with:
           fail-on-severity: moderate
+          base-ref: ${{ github.event.pull_request.base.sha || 'main' }}
+          head-ref: ${{ github.event.pull_request.head.sha || github.sha }}
       
       - name: Run frontend tests for dependency changes
         if: contains(github.event.pull_request.title, 'bulak-smart-connect-js') || github.event_name == 'workflow_dispatch'
