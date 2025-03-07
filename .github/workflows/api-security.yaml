@@ -1,0 +1,53 @@
+name: API Security Scanning
+
+on:
+  push:
+    branches: [ '*' ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    - cron: '0 0 * * 1'  # Weekly on Monday
+  workflow_dispatch:
+
+jobs:
+  api-security-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: Install backend dependencies
+        run: cd bsc-js-backend && npm ci
+      
+      - name: Start API server for scanning
+        run: |
+          cd bsc-js-backend
+          npm run start:dev > api.log 2>&1 &
+          echo $! > api.pid
+          sleep 10
+          if ! ps -p $(cat api.pid) > /dev/null; then
+            echo "API server failed to start"
+            cat api.log
+            exit 1
+          fi
+      
+      - name: Install OWASP ZAP
+        run: |
+          mkdir -p /tmp/zaproxy
+          wget -q https://github.com/zaproxy/zaproxy/releases/download/v2.14.0/ZAP_2.14.0_Linux.tar.gz -O /tmp/zaproxy.tar.gz
+          tar -xzf /tmp/zaproxy.tar.gz -C /tmp/zaproxy --strip-components=1
+      
+      - name: Run ZAP API scan
+        run: |
+          cd /tmp/zaproxy
+          ./zap.sh -cmd -port 8090 -quickurl http://localhost:3000 -quickprogress -quickout /tmp/zap-report.html
+      
+      - name: Upload ZAP scan results
+        uses: actions/upload-artifact@v4
+        with:
+          name: zap-api-scan-report
+          path: /tmp/zap-report.html
