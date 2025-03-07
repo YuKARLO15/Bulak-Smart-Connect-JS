@@ -1,18 +1,14 @@
-name: Auto-review Dependency Updates
+name: Auto-review and Merge Dependency Updates
 
-# This workflow is currently set to manual trigger only
-# To enable automatic runs, uncomment the section below:
 on:
+  pull_request:
+    branches: [ main, develop ]
   workflow_dispatch:
-    # Manual trigger with description
     inputs:
       reason:
         description: 'Reason for manually running'
         required: true
         default: 'Testing dependency update workflow'
-  # Uncomment below to enable automatic run on dependency PRs
-  # pull_request:
-  #   branches: [ main, develop ]
 
 permissions:
   contents: write
@@ -21,13 +17,12 @@ permissions:
 jobs:
   review-dependencies:
     runs-on: ubuntu-latest
-    # This ensures it only runs for Dependabot PRs when the pull_request trigger is enabled
     if: ${{ github.event_name == 'workflow_dispatch' || github.actor == 'dependabot[bot]' }}
     steps:
       - uses: actions/checkout@v4
       
       - name: Dependency Review
-        uses: actions/dependency-review-action@v3
+        uses: actions/dependency-review-action@v4
         with:
           fail-on-severity: moderate
       
@@ -37,6 +32,7 @@ jobs:
           cd bulak-smart-connect-js
           npm ci
           npm run test
+          npm audit --production
       
       - name: Run backend tests for dependency changes
         if: contains(github.event.pull_request.title, 'bsc-js-backend') || github.event_name == 'workflow_dispatch'
@@ -44,6 +40,30 @@ jobs:
           cd bsc-js-backend
           npm ci
           npm run test
+          npm audit --production
+      
+      - name: Determine update type
+        id: update-type
+        if: github.actor == 'dependabot[bot]' && github.event_name == 'pull_request'
+        run: |
+          PR_TITLE="${{ github.event.pull_request.title }}"
+          echo "PR title: $PR_TITLE"
+          
+          if [[ $PR_TITLE =~ from\ [0-9]+\.[0-9]+\.[0-9]+\ to\ ([0-9]+)\.[0-9]+\.[0-9]+ ]]; then
+            OLD_MAJOR=$(echo $PR_TITLE | sed -E 's/.*from ([0-9]+)\.[0-9]+\.[0-9]+ to.*/\1/')
+            NEW_MAJOR=$(echo $PR_TITLE | sed -E 's/.*to ([0-9]+)\.[0-9]+\.[0-9]+.*/\1/')
+            
+            if [[ $NEW_MAJOR -gt $OLD_MAJOR ]]; then
+              echo "update_type=major" >> $GITHUB_OUTPUT
+              echo "Major version update detected - requires manual review"
+            else
+              echo "update_type=minor" >> $GITHUB_OUTPUT
+              echo "Minor/patch update detected - can be auto-merged"
+            fi
+          else
+            echo "update_type=unknown" >> $GITHUB_OUTPUT
+            echo "Could not determine update type - requires manual review"
+          fi
       
       - name: Auto-approve PR
         if: success() && github.event_name == 'pull_request'
@@ -52,9 +72,33 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
-      - name: Add label to PR
+      - name: Add labels based on update type
         if: success() && github.event_name == 'pull_request'
         run: |
-          gh pr edit ${{ github.event.pull_request.number }} --add-label "safe-to-merge"
+          if [ "${{ steps.update-type.outputs.update_type }}" == "major" ]; then
+            gh pr edit ${{ github.event.pull_request.number }} --add-label "dependency,major-update,manual-review-required"
+          elif [ "${{ steps.update-type.outputs.update_type }}" == "minor" ]; then
+            gh pr edit ${{ github.event.pull_request.number }} --add-label "dependency,minor-update,safe-to-merge"
+          else
+            gh pr edit ${{ github.event.pull_request.number }} --add-label "dependency,needs-review"
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Auto-merge minor updates
+        if: success() && steps.update-type.outputs.update_type == 'minor' && github.event_name == 'pull_request'
+        run: |
+          PR_NUMBER=${{ github.event.pull_request.number }}
+          BRANCH_NAME="deps/auto-merge-$PR_NUMBER"
+          
+          # Create a new branch to store these changes
+          git fetch origin pull/$PR_NUMBER/head:$BRANCH_NAME
+          git checkout $BRANCH_NAME
+          
+          # Push branch to repository
+          git push origin $BRANCH_NAME
+          
+          # Enable auto-merge on the PR
+          gh pr merge $PR_NUMBER --auto --squash --delete-branch=false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
