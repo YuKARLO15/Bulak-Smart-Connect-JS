@@ -1,0 +1,39 @@
+.FormContainerMotherForm {
+    max-width: 900px;
+    margin: auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .SectionTitleMotherForm {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #2c3e50;
+    text-align: center;
+  }
+  
+  .RowMotherForm {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 15px;
+  }
+  
+  .InputFieldMotherForm {
+    flex: 1;
+    min-width: 200px;
+  }
+  
+  @media (max-width: 600px) {
+    .RowMotherForm {
+      flex-direction: column;
+    }
+  
+    .InputFieldMotherForm {
+      width: 100%;
+    }
+  }
+  
