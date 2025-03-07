@@ -101,21 +101,34 @@ jobs:
         id: security-check
         if: github.actor == 'dependabot[bot]' && github.event_name == 'pull_request'
         run: |
-          # Wait for security scan to potentially complete
-          sleep 30
-    
-          # Check status of security scan
-          STATUS=$(gh api \
+          echo "Checking security scan status..."
+            
+          # Wait a bit for security scan to potentially start/complete
+          sleep 15
+            
+          # Check if security scan workflow has been triggered
+          RUNS=$(gh api \
             -H "Accept: application/vnd.github+json" \
-            /repos/${{ github.repository }}/commits/${{ github.event.pull_request.head.sha }}/check-runs \
-            --jq '.check_runs[] | select(.name=="security-scan") | .conclusion')
-    
-          if [[ "$STATUS" == "success" ]]; then
+            /repos/${{ github.repository }}/actions/workflows/dependency-security-scan.yml/runs \
+            --jq '.workflow_runs[] | select(.head_sha=="${{ github.event.pull_request.head.sha }}") | .conclusion')
+            
+          if [[ "$RUNS" == "success" ]]; then
             echo "security_passed=true" >> $GITHUB_OUTPUT
-            echo "Security scan passed!"
+            echo "✅ Security scan passed!"
           else
-            echo "security_passed=false" >> $GITHUB_OUTPUT
-            echo "Security scan not completed or failed."
+            # Check if it's still running
+            RUNNING=$(gh api \
+              -H "Accept: application/vnd.github+json" \
+              /repos/${{ github.repository }}/actions/workflows/dependency-security-scan.yml/runs \
+              --jq '.workflow_runs[] | select(.head_sha=="${{ github.event.pull_request.head.sha }}") | .status')
+              
+            if [[ "$RUNNING" == "in_progress" ]]; then
+              echo "security_passed=pending" >> $GITHUB_OUTPUT
+              echo "⏳ Security scan is still running. Auto-merge will be skipped until it completes."
+            else
+              echo "security_passed=false" >> $GITHUB_OUTPUT
+              echo "❌ Security scan failed or wasn't triggered."
+            fi
           fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -124,20 +137,31 @@ jobs:
         if: >
           success() && 
           (steps.update-type.outputs.update_type == 'minor' || steps.actions-check.outputs.is_actions_update == 'true') && 
-          steps.security-check.outputs.security_passed == 'true' && 
+          steps.security-check.outputs.security_passed == 'true' &&
           github.event_name == 'pull_request'
         run: |
           PR_NUMBER=${{ github.event.pull_request.number }}
           BRANCH_NAME="deps/auto-merge-$PR_NUMBER"
-          
+            
           # Create a new branch to store these changes
           git fetch origin pull/$PR_NUMBER/head:$BRANCH_NAME
           git checkout $BRANCH_NAME
-          
+            
           # Push branch to repository
           git push origin $BRANCH_NAME
-          
+            
           # Enable auto-merge on the PR
           gh pr merge $PR_NUMBER --auto --squash --delete-branch=false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        
+      - name: Add pending security scan message
+        if: >
+          success() &&
+          (steps.update-type.outputs.update_type == 'minor' || steps.actions-check.outputs.is_actions_update == 'true') && 
+          steps.security-check.outputs.security_passed == 'pending' &&
+          github.event_name == 'pull_request'
+        run: |
+            gh pr comment ${{ github.event.pull_request.number }} --body "⏳ This PR is eligible for auto-merge, but security scan is still running. Auto-merge will be enabled once security checks pass."
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
