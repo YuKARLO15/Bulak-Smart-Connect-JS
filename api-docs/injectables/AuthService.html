@@ -79,7 +79,7 @@
                    <compodoc-menu mode="normal"></compodoc-menu>
                </div>
                <!-- START CONTENT -->
-               <div class="content miscellaneous-variables">
+               <div class="content injectable">
                    <div class="content-data">
 
 
@@ -89,154 +89,180 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
 <ol class="breadcrumb">
-  <li class="breadcrumb-item">Miscellaneous</li>
-  <li class="breadcrumb-item">Variables</li>
+  <li class="breadcrumb-item">Injectables</li>
+  <li class="breadcrumb-item" >AuthService</li>
 </ol>
 
-<section data-compodoc="block-index">
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" 
+                class="nav-link"
+                class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" 
+                class="nav-link"
+                
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info">
+        <p class="comment">
+            <h3>File</h3>
+        </p>
+        <p class="comment">
+            <code>src/auth/auth.service.ts</code>
+        </p>
+
+
+
+
+
+            <section data-compodoc="block-index">
     <h3 id="index">Index</h3>
     <table class="table table-sm table-bordered index-table">
         <tbody>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#verifyToken" >verifyToken</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+
+            <section data-compodoc="block-methods">
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
             <tr>
                 <td class="col-md-4">
-                    <ul class="index-list">
-                        <li>
-                            <a href="#auth" title="src/config/firebase.ts" ><b>auth</b>&nbsp;&nbsp;&nbsp;(src/.../firebase.ts)</a>
-                        </li>
-                        <li>
-                            <a href="#firestore" title="src/config/firebase.ts" ><b>firestore</b>&nbsp;&nbsp;&nbsp;(src/.../firebase.ts)</a>
-                        </li>
-                        <li>
-                            <a href="#serviceAccount" title="src/config/firebase.ts" ><b>serviceAccount</b>&nbsp;&nbsp;&nbsp;(src/.../firebase.ts)</a>
-                        </li>
-                        <li>
-                            <a href="#serviceAccountPath" title="src/config/firebase.ts" ><b>serviceAccountPath</b>&nbsp;&nbsp;&nbsp;(src/.../firebase.ts)</a>
-                        </li>
-                        <li>
-                            <a href="#storage" title="src/config/firebase.ts" ><b>storage</b>&nbsp;&nbsp;&nbsp;(src/.../firebase.ts)</a>
-                        </li>
-                    </ul>
+                    <a name="verifyToken"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>verifyToken</b></span>
+                        <a href="#verifyToken"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>verifyToken(token: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="6"
+                                    class="link-to-prism">src/auth/auth.service.ts:6</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>token</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
                 </td>
             </tr>
         </tbody>
     </table>
 </section>
 
-    <h3>src/config/firebase.ts</h3>
-    <section data-compodoc="block-properties">
-    <h3></h3>    <table class="table table-sm table-bordered">
-        <tbody>
-            <tr>
-                <td class="col-md-4">
-                    <a name="auth"></a>
-                    <span class="name">
-                        <span ><b>auth</b></span>
-                        <a href="#auth"><span class="icon ion-ios-link"></span></a>
-                    </span>
-                </td>
-            </tr>
-                <tr>
-                    <td class="col-md-4">
-                        <i>Default value : </i><code>admin.auth()</code>
-                    </td>
-                </tr>
+    </div>
 
 
-        </tbody>
-    </table>
-    <table class="table table-sm table-bordered">
-        <tbody>
-            <tr>
-                <td class="col-md-4">
-                    <a name="firestore"></a>
-                    <span class="name">
-                        <span ><b>firestore</b></span>
-                        <a href="#firestore"><span class="icon ion-ios-link"></span></a>
-                    </span>
-                </td>
-            </tr>
-                <tr>
-                    <td class="col-md-4">
-                        <i>Default value : </i><code>admin.firestore()</code>
-                    </td>
-                </tr>
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable, UnauthorizedException } from &#x27;@nestjs/common&#x27;;
+import { auth } from &#x27;../config/firebase&#x27;;
+
+@Injectable()
+export class AuthService {
+  async verifyToken(token: string) {
+    try {
+      console.log(&#x27;Verifying token:&#x27;, token); // Debugging statement
+      const decodedToken &#x3D; await auth.verifyIdToken(token);
+      console.log(&#x27;Decoded token:&#x27;, decodedToken); // Debugging statement
+      return decodedToken;
+    } catch (error) {
+      console.error(&#x27;Token verification error:&#x27;, error); // Debugging statement
+      throw new UnauthorizedException(&#x27;Invalid token&#x27;);
+    }
+  }
+}
+</code></pre>
+    </div>
+
+</div>
 
 
-        </tbody>
-    </table>
-    <table class="table table-sm table-bordered">
-        <tbody>
-            <tr>
-                <td class="col-md-4">
-                    <a name="serviceAccount"></a>
-                    <span class="name">
-                        <span ><b>serviceAccount</b></span>
-                        <a href="#serviceAccount"><span class="icon ion-ios-link"></span></a>
-                    </span>
-                </td>
-            </tr>
-                <tr>
-                    <td class="col-md-4">
-                        <i>Default value : </i><code>JSON.parse(fs.readFileSync(serviceAccountPath, &#x27;utf-8&#x27;))</code>
-                    </td>
-                </tr>
 
 
-        </tbody>
-    </table>
-    <table class="table table-sm table-bordered">
-        <tbody>
-            <tr>
-                <td class="col-md-4">
-                    <a name="serviceAccountPath"></a>
-                    <span class="name">
-                        <span ><b>serviceAccountPath</b></span>
-                        <a href="#serviceAccountPath"><span class="icon ion-ios-link"></span></a>
-                    </span>
-                </td>
-            </tr>
-                <tr>
-                    <td class="col-md-4">
-                        <i>Default value : </i><code>process.env.SERVICE_ACCOUNT_KEY_PATH ||
-  path.resolve(__dirname, &#x27;serviceAccountKey.json&#x27;)</code>
-                    </td>
-                </tr>
 
 
-        </tbody>
-    </table>
-    <table class="table table-sm table-bordered">
-        <tbody>
-            <tr>
-                <td class="col-md-4">
-                    <a name="storage"></a>
-                    <span class="name">
-                        <span ><b>storage</b></span>
-                        <a href="#storage"><span class="icon ion-ios-link"></span></a>
-                    </span>
-                </td>
-            </tr>
-                <tr>
-                    <td class="col-md-4">
-                        <i>Default value : </i><code>admin.storage().bucket()</code>
-                    </td>
-                </tr>
 
 
-        </tbody>
-    </table>
-</section>
+
+
 
 
 
@@ -265,8 +291,8 @@
 
        <script>
             var COMPODOC_CURRENT_PAGE_DEPTH = 1;
-            var COMPODOC_CURRENT_PAGE_CONTEXT = 'miscellaneous-variables';
-            var COMPODOC_CURRENT_PAGE_URL = 'variables.html';
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'injectable';
+            var COMPODOC_CURRENT_PAGE_URL = 'AuthService.html';
             var MAX_SEARCH_RESULTS = 15;
        </script>
 
