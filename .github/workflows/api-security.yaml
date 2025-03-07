@@ -28,7 +28,7 @@ jobs:
           cd bsc-js-backend
           npm run start:dev > api.log 2>&1 &
           echo $! > api.pid
-          sleep 10
+          sleep 20
           if ! ps -p $(cat api.pid) > /dev/null; then
             echo "API server failed to start"
             cat api.log
