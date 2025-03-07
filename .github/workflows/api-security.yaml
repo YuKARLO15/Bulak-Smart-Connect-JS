@@ -34,20 +34,31 @@ jobs:
             cat api.log
             exit 1
           fi
+          echo "API server started successfully"
       
-      - name: Install OWASP ZAP
-        run: |
-          mkdir -p /tmp/zaproxy
-          wget -q https://github.com/zaproxy/zaproxy/releases/download/v2.14.0/ZAP_2.14.0_Linux.tar.gz -O /tmp/zaproxy.tar.gz
-          tar -xzf /tmp/zaproxy.tar.gz -C /tmp/zaproxy --strip-components=1
-      
-      - name: Run ZAP API scan
-        run: |
-          cd /tmp/zaproxy
-          ./zap.sh -cmd -port 8090 -quickurl http://localhost:3000 -quickprogress -quickout /tmp/zap-report.html
+      # Using ZAP GitHub Action instead of manual installation
+      - name: ZAP API Scan
+        uses: zaproxy/action-api-scan@v0.6.0
+        with:
+          target: 'http://localhost:3000'
+          fail_action: false
+          allow_issue_writing: false
+          issue_title: 'ZAP API Scan Results'
+          format: "html"
+          cmd_options: '-a'
       
       - name: Upload ZAP scan results
         uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: zap-api-scan-report
-          path: /tmp/zap-report.html
+          path: zap-report.html
+          retention-days: 30
+      
+      # Stop the API server
+      - name: Stop API server
+        if: always()
+        run: |
+          if [ -f "bsc-js-backend/api.pid" ]; then
+            kill $(cat bsc-js-backend/api.pid) || true
+          fi
