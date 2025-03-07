@@ -60,6 +60,13 @@ updates:
     labels:
       - "dependencies"
       - "github-actions"
+    groups:
+      github-actions-updates:
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
     commit-message:
       prefix: "github-actions"
       include: "scope"
