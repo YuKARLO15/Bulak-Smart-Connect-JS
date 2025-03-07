@@ -1,0 +1,50 @@
+.form-container {
+    padding: 20px;
+    background: white;
+    border-radius: 5px;
+    margin: auto;
+    font-family: Arial, sans-serif;
+  }
+  
+  .section-title {
+    font-size: 18px;
+    font-weight: bold;
+    background: #1C4D5A;
+    color: white;
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .row {
+    width: 65vw;
+    gap: 10px;
+    margin-top: 3vh;
+    display: flex;
+    flex-wrap: wrap;   
+  
+    margin-bottom: 15px;
+  }
+
+  .label {
+    width: 100%;
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  
+  .input-field {
+    
+    min-width: 250px !important;
+  
+  }
+  
+  .input-small {
+    width: 100px;
+    margin-right: 10px;
+  }
+  
+  .input-wide {
+    width: 100%;
+    margin-right: 10px;
+  }
+  
