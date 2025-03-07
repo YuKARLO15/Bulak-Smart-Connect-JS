@@ -37,15 +37,13 @@ jobs:
           echo "API server started successfully"
       
       # Using ZAP GitHub Action instead of manual installation
-      - name: ZAP API Scan
-        uses: zaproxy/action-api-scan@v0.6.0
+      - name: ZAP Full Scan
+        uses: zaproxy/action-full-scan@v0.8.0
         with:
           target: 'http://localhost:3000'
           fail_action: false
           allow_issue_writing: false
-          issue_title: 'ZAP API Scan Results'
-          format: "html"
-          cmd_options: '-a'
+          issue_title: 'ZAP Full Scan Results'
       
       - name: Upload ZAP scan results
         uses: actions/upload-artifact@v4
