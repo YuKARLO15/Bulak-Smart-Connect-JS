@@ -1,0 +1,187 @@
+name: Code Quality and Security
+
+on:
+  push:
+    branches: [ '*' ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    - cron: '0 0 * * 1' # Weekly on Monday
+
+jobs:
+  frontend-linting:
+    name: Frontend Lint and Format Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: Install Dependencies
+        run: |
+          cd bulak-smart-connect-js
+          npm ci
+      
+      - name: Run Lint
+        run: |
+          cd bulak-smart-connect-js
+          npm run lint
+      
+      - name: Check Formatting
+        run: |
+          cd bulak-smart-connect-js
+          npx prettier --check "src/**/*.{js,jsx,ts,tsx,json,css,scss}"
+  
+  backend-linting:
+    name: Backend Lint and Format Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: Install Dependencies
+        run: |
+          cd bsc-js-backend
+          npm ci
+      
+      - name: Run Lint
+        run: |
+          cd bsc-js-backend
+          npm run lint
+      
+      - name: Check Formatting
+        run: |
+          cd bsc-js-backend
+          npx prettier --check "src/**/*.{js,ts,json}"
+
+  frontend-security:
+    name: Frontend Security Scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: Install Dependencies
+        run: |
+          cd bulak-smart-connect-js
+          npm ci
+      
+      - name: Security Audit
+        run: |
+          cd bulak-smart-connect-js
+          npm audit --production --audit-level=moderate
+
+  backend-security:
+    name: Backend Security Scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: Install Dependencies
+        run: |
+          cd bsc-js-backend
+          npm ci
+      
+      - name: Security Audit
+        run: |
+          cd bsc-js-backend
+          npm audit --production --audit-level=moderate
+  
+  frontend-coverage:
+    name: Frontend Code Coverage
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: Install Dependencies
+        run: |
+          cd bulak-smart-connect-js
+          npm ci
+          npm install --save-dev @vitest/coverage-v8
+      
+      - name: Run Tests with Coverage
+        run: |
+          cd bulak-smart-connect-js
+          npm run test -- --coverage
+      
+      - name: Upload Coverage Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-coverage-report
+          path: bulak-smart-connect-js/coverage/
+  
+  backend-coverage:
+    name: Backend Code Coverage
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: Install Dependencies
+        run: |
+          cd bsc-js-backend
+          npm ci
+      
+      - name: Run Tests with Coverage
+        run: |
+          cd bsc-js-backend
+          npm run test -- --coverage
+      
+      - name: Upload Coverage Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-coverage-report
+          path: bsc-js-backend/coverage/
+
+  bundle-analysis:
+    name: Bundle Size Analysis
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: Install dependencies
+        run: cd bulak-smart-connect-js && npm ci
+      
+      - name: Build with source maps
+        run: cd bulak-smart-connect-js && npm run build
+      
+      - name: Analyze bundle size
+        run: |
+          cd bulak-smart-connect-js
+          npx source-map-explorer 'build/static/js/*.js' --html bundle-analysis.html
+      
+      - name: Upload bundle analysis
+        uses: actions/upload-artifact@v4
+        with:
+          name: bundle-analysis
+          path: bulak-smart-connect-js/bundle-analysis.html

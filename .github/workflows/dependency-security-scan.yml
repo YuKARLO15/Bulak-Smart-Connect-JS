@@ -1,0 +1,70 @@
+name: Dependency Security Scan
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    - cron: '0 0 * * 1'  # Weekly on Monday
+  workflow_dispatch:
+
+jobs:
+  security-scan:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          
+      - name: Run npm audit (frontend)
+        working-directory: ./bulak-smart-connect-js
+        run: |
+          npm audit --json > ../frontend-audit.json || true
+          
+      - name: Run npm audit (backend)
+        working-directory: ./bsc-js-backend
+        run: |
+          npm audit --json > ../backend-audit.json || true
+          
+      - name: Process audit results
+        run: |
+          echo "## Security Vulnerability Summary" > audit-report.md
+          echo "" >> audit-report.md
+          echo "### Frontend" >> audit-report.md
+          echo '```' >> audit-report.md
+          jq -r '.metadata.vulnerabilities | "Total: \(.total), Critical: \(.critical), High: \(.high), Moderate: \(.moderate), Low: \(.low)"' frontend-audit.json >> audit-report.md || echo "No vulnerabilities found" >> audit-report.md
+          echo '```' >> audit-report.md
+          echo "" >> audit-report.md
+          echo "### Backend" >> audit-report.md
+          echo '```' >> audit-report.md
+          jq -r '.metadata.vulnerabilities | "Total: \(.total), Critical: \(.critical), High: \(.high), Moderate: \(.moderate), Low: \(.low)"' backend-audit.json >> audit-report.md || echo "No vulnerabilities found" >> audit-report.md
+          echo '```' >> audit-report.md
+          
+      - name: Upload audit report
+        uses: actions/upload-artifact@v4
+        with:
+          name: security-audit-reports
+          path: |
+            audit-report.md
+            frontend-audit.json
+            backend-audit.json
+          
+      - name: Comment PR with audit results
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const report = fs.readFileSync('audit-report.md', 'utf8');
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: report
+            });
