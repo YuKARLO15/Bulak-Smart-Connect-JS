@@ -44,13 +44,27 @@ jobs:
           fail_action: false
           allow_issue_writing: false
           issue_title: 'ZAP Full Scan Results'
+          cmd_options: '-J report.json -w report.md -r report.html'
+      
+      - name: List report files
+        if: always()
+        run: |
+          ls -la *.html *.json *.md || echo "No report files found in root"
+          ls -la report* || echo "No report* files found in root"
+          find . -name "*.html" -o -name "*.json" -o -name "*.md" | grep -v "node_modules" || echo "No report files found"
       
       - name: Upload ZAP scan results
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: zap-api-scan-report
-          path: zap-report.html
+          name: zap-scan-report
+          path: |
+            report.html
+            report.json
+            report.md
+            report_html.html
+            report_json.json
+            report_md.md
           retention-days: 30
       
       # Stop the API server
