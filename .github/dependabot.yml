@@ -17,14 +17,15 @@ updates:
         update-types:
           - "minor"
           - "patch"
+      backend-major:
+        patterns:
+          - "*"
+        update-types:
+          - "major"
     commit-message:
       prefix: "npm"
       include: "scope"
     versioning-strategy: auto
-    ignore:
-      # Ignore major updates that might break things
-      - dependency-name: "*"
-        update-types: ["version-update:semver-major"]
 
   # Frontend dependencies
   - package-ecosystem: "npm"
@@ -43,14 +44,15 @@ updates:
         update-types:
           - "minor"
           - "patch"
+      frontend-major:
+        patterns:
+          - "*"
+        update-types:
+          - "major"
     commit-message:
       prefix: "npm"
       include: "scope"
     versioning-strategy: auto
-    ignore:
-      # Ignore major updates that might break things
-      - dependency-name: "*"
-        update-types: ["version-update:semver-major"]
 
   # GitHub Actions
   - package-ecosystem: "github-actions"
@@ -60,6 +62,18 @@ updates:
     labels:
       - "dependencies"
       - "github-actions"
+    groups:
+      github-actions-updates:
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
+      github-actions-major:
+        patterns:
+          - "*"
+        update-types:
+          - "major"
     commit-message:
       prefix: "github-actions"
       include: "scope"
