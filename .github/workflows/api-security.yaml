@@ -36,35 +36,35 @@ jobs:
           fi
           echo "API server started successfully"
       
-      # Using ZAP GitHub Action with SIMPLIFIED parameters
-      - name: ZAP Full Scan
-        uses: zaproxy/action-full-scan@v0.8.0
-        with:
-          target: 'http://localhost:3000'
-          fail_action: false
-          allow_issue_writing: false
-          issue_title: 'ZAP Full Scan Results'
-          # Don't specify custom file paths, let ZAP use its defaults
+      # Using direct command approach to avoid artifact conflict
+      - name: Run ZAP Full Scan
+        run: |
+          # Pull ZAP Docker image
+          docker pull ghcr.io/zaproxy/zaproxy:stable
+          
+          # Create directory for reports
+          mkdir -p reports
+          touch reports/report.html reports/report.json reports/report.md
+          chmod 777 reports/report.html reports/report.json reports/report.md
+          
+          # Run ZAP scan
+          docker run --rm -v "$(pwd)/reports:/zap/wrk/reports:rw" --network=host \
+            ghcr.io/zaproxy/zaproxy:stable zap-full-scan.py \
+            -t http://localhost:3000 \
+            -r /zap/wrk/reports/report.html \
+            -J /zap/wrk/reports/report.json \
+            -w /zap/wrk/reports/report.md
       
       - name: List report files
         if: always()
         run: |
-          ls -la *.html *.json *.md || echo "No report files found"
+          ls -la reports/ || echo "No report files found"
       
-      - name: Create report directory
-        if: always()
-        run: |
-          mkdir -p reports
-          # Move any ZAP-generated reports to the directory
-          mv -f *.html *.json *.md reports/ 2>/dev/null || true
-          # List what we captured
-          ls -la reports/ || echo "No files moved to reports directory"
-      
-      - name: Upload ZAP scan results
+      - name: Upload scan reports
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: security-scan-reports
+          name: zap-security-reports
           path: reports/
           retention-days: 30
       
