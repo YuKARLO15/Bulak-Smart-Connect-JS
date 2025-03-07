@@ -1,0 +1,77 @@
+name: API Security Scanning
+
+on:
+  push:
+    branches: [ '*' ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    - cron: '0 0 * * 1'  # Weekly on Monday
+  workflow_dispatch:
+
+jobs:
+  api-security-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: Install backend dependencies
+        run: cd bsc-js-backend && npm ci
+      
+      - name: Start API server for scanning
+        run: |
+          cd bsc-js-backend
+          npm run start:dev > api.log 2>&1 &
+          echo $! > api.pid
+          sleep 20
+          if ! ps -p $(cat api.pid) > /dev/null; then
+            echo "API server failed to start"
+            cat api.log
+            exit 1
+          fi
+          echo "API server started successfully"
+      
+      # Using direct command approach to avoid artifact conflict
+      - name: Run ZAP Full Scan
+        run: |
+          # Pull ZAP Docker image
+          docker pull ghcr.io/zaproxy/zaproxy:stable
+          
+          # Create directory for reports
+          mkdir -p reports
+          touch reports/report.html reports/report.json reports/report.md
+          chmod 777 reports/report.html reports/report.json reports/report.md
+          
+          # Run ZAP scan
+          docker run --rm -v "$(pwd)/reports:/zap/wrk/reports:rw" --network=host \
+            ghcr.io/zaproxy/zaproxy:stable zap-full-scan.py \
+            -t http://localhost:3000 \
+            -r /zap/wrk/reports/report.html \
+            -J /zap/wrk/reports/report.json \
+            -w /zap/wrk/reports/report.md
+      
+      - name: List report files
+        if: always()
+        run: |
+          ls -la reports/ || echo "No report files found"
+      
+      - name: Upload scan reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: zap-security-reports
+          path: reports/
+          retention-days: 30
+      
+      # Stop the API server
+      - name: Stop API server
+        if: always()
+        run: |
+          if [ -f "bsc-js-backend/api.pid" ]; then
+            kill $(cat bsc-js-backend/api.pid) || true
+          fi
