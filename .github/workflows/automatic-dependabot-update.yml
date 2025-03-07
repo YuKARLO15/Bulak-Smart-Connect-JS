@@ -64,7 +64,19 @@ jobs:
             echo "update_type=unknown" >> $GITHUB_OUTPUT
             echo "Could not determine update type - requires manual review"
           fi
-      
+
+      - name: Determine if GitHub Actions update
+        id: actions-check
+        if: github.actor == 'dependabot[bot]' && github.event_name == 'pull_request'
+        run: |
+          PR_TITLE="${{ github.event.pull_request.title }}"
+          if [[ $PR_TITLE == *"github-actions"* ]]; then
+            echo "is_actions_update=true" >> $GITHUB_OUTPUT
+            echo "GitHub Actions update detected"
+          else
+            echo "is_actions_update=false" >> $GITHUB_OUTPUT
+          fi
+
       - name: Auto-approve PR
         if: success() && github.event_name == 'pull_request'
         run: |
@@ -84,9 +96,36 @@ jobs:
           fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Check security scan status
+        id: security-check
+        if: github.actor == 'dependabot[bot]' && github.event_name == 'pull_request'
+        run: |
+          # Wait for security scan to potentially complete
+          sleep 30
+    
+          # Check status of security scan
+          STATUS=$(gh api \
+            -H "Accept: application/vnd.github+json" \
+            /repos/${{ github.repository }}/commits/${{ github.event.pull_request.head.sha }}/check-runs \
+            --jq '.check_runs[] | select(.name=="security-scan") | .conclusion')
+    
+          if [[ "$STATUS" == "success" ]]; then
+            echo "security_passed=true" >> $GITHUB_OUTPUT
+            echo "Security scan passed!"
+          else
+            echo "security_passed=false" >> $GITHUB_OUTPUT
+            echo "Security scan not completed or failed."
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           
       - name: Auto-merge minor updates
-        if: success() && steps.update-type.outputs.update_type == 'minor' && github.event_name == 'pull_request'
+        if: >
+          success() && 
+          (steps.update-type.outputs.update_type == 'minor' || steps.actions-check.outputs.is_actions_update == 'true') && 
+          steps.security-check.outputs.security_passed == 'true' && 
+          github.event_name == 'pull_request'
         run: |
           PR_NUMBER=${{ github.event.pull_request.number }}
           BRANCH_NAME="deps/auto-merge-$PR_NUMBER"
