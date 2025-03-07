@@ -36,7 +36,13 @@ jobs:
           fi
           echo "API server started successfully"
       
-      # Using ZAP GitHub Action instead of manual installation
+      # Create a directory with proper permissions for the reports
+      - name: Prepare report directory
+        run: |
+          mkdir -p zap-reports
+          chmod 777 zap-reports
+      
+      # Using ZAP GitHub Action with updated parameters
       - name: ZAP Full Scan
         uses: zaproxy/action-full-scan@v0.8.0
         with:
@@ -44,27 +50,19 @@ jobs:
           fail_action: false
           allow_issue_writing: false
           issue_title: 'ZAP Full Scan Results'
-          cmd_options: '-J report.json -w report.md -r report.html'
+          cmd_options: '-J zap-reports/report.json -w zap-reports/report.md -r zap-reports/report.html'
       
       - name: List report files
         if: always()
         run: |
-          ls -la *.html *.json *.md || echo "No report files found in root"
-          ls -la report* || echo "No report* files found in root"
-          find . -name "*.html" -o -name "*.json" -o -name "*.md" | grep -v "node_modules" || echo "No report files found"
+          find zap-reports -type f -name "*" || echo "No reports found"
       
       - name: Upload ZAP scan results
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: zap-scan-report
-          path: |
-            report.html
-            report.json
-            report.md
-            report_html.html
-            report_json.json
-            report_md.md
+          name: zapscan-reports
+          path: zap-reports/
           retention-days: 30
       
       # Stop the API server
