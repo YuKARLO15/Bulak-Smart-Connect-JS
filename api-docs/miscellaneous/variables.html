@@ -121,9 +121,6 @@
                             <a href="#serviceAccount" title="src/config/firebase.ts" ><b>serviceAccount</b>&nbsp;&nbsp;&nbsp;(src/.../firebase.ts)</a>
                         </li>
                         <li>
-                            <a href="#serviceAccountPath" title="src/config/firebase.ts" ><b>serviceAccountPath</b>&nbsp;&nbsp;&nbsp;(src/.../firebase.ts)</a>
-                        </li>
-                        <li>
                             <a href="#storage" title="src/config/firebase.ts" ><b>storage</b>&nbsp;&nbsp;&nbsp;(src/.../firebase.ts)</a>
                         </li>
                     </ul>
@@ -188,28 +185,9 @@
             </tr>
                 <tr>
                     <td class="col-md-4">
-                        <i>Default value : </i><code>JSON.parse(fs.readFileSync(serviceAccountPath, &#x27;utf-8&#x27;))</code>
-                    </td>
-                </tr>
-
-
-        </tbody>
-    </table>
-    <table class="table table-sm table-bordered">
-        <tbody>
-            <tr>
-                <td class="col-md-4">
-                    <a name="serviceAccountPath"></a>
-                    <span class="name">
-                        <span ><b>serviceAccountPath</b></span>
-                        <a href="#serviceAccountPath"><span class="icon ion-ios-link"></span></a>
-                    </span>
-                </td>
-            </tr>
-                <tr>
-                    <td class="col-md-4">
-                        <i>Default value : </i><code>process.env.SERVICE_ACCOUNT_KEY_PATH ||
-  path.resolve(__dirname, &#x27;serviceAccountKey.json&#x27;)</code>
+                        <i>Default value : </i><code>JSON.parse(
+  fs.readFileSync(&#x27;serviceAccountKey.json&#x27;, &#x27;utf-8&#x27;)
+)</code>
                     </td>
                 </tr>
 
