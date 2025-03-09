@@ -3,6 +3,7 @@
   "collection": "@nestjs/schematics",
   "sourceRoot": "src",
   "compilerOptions": {
+    "assets": ["config/serviceAccountKey.json"],
     "deleteOutDir": true
   }
 }
