@@ -1,39 +1,190 @@
+
 .FormContainerMotherForm {
-    max-width: 900px;
-    margin: auto;
-    padding: 20px;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
-  
-  .SectionTitleMotherForm {
-    font-size: 18px;
-    font-weight: bold;
-    margin-bottom: 15px;
-    color: #2c3e50;
-    text-align: center;
-  }
-  
-  .RowMotherForm {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 15px;
-    margin-bottom: 15px;
-  }
-  
-  .InputFieldMotherForm {
-    flex: 1;
-    min-width: 200px;
-  }
-  
-  @media (max-width: 600px) {
-    .RowMotherForm {
-      flex-direction: column;
-    }
-  
-    .InputFieldMotherForm {
-      width: 100%;
-    }
-  }
-  
+  max-width: 100%;
+  padding: 16px;
+  font-family: Arial, sans-serif;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+
+.SectionTitleMotherForm {
+  background-color: #1d4e5f;
+  color: white;
+  padding: 8px 12px;
+  font-weight: 600;
+  margin-bottom: 5vh !important;
+  width: 100%;
+  text-align: center;
+}
+.checkboxContainer {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.RowMotherForm {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.label {
+  font-weight: 600;
+  margin-right: 16px;
+  min-width: 120px;
+  display: flex;
+  align-items: center;
+}
+
+
+.InputFieldMotherForm {
+  flex: 1;
+  min-width: 150px;
+  max-width: 300px !important;
+  margin-right: 10px;
+  margin-bottom: 16px;
+}
+.BigInputFieldMotherForm{
+  width: 350px;
+}
+
+.SmallInputFieldMotherForm {
+  width: 200px;
+  min-width: 150px;
+  gap: 0;
+
+  margin-bottom: 16px;
+}
+.LargeInputFieldMotherForm{
+  width: 1000px;
+}
+
+.checkboxContainer {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+
+
+.checkboxLabel {
+  margin-left: 5px;
+  font-size: 0.9rem;
+}
+
+
+.extensionField {
+  margin-left: 20px;
+  width: 120px;
+  min-width: 120px;
+}
+
+.bornAlive {
+  gap: 5vw;
+}
+
+.Occupation {
+  gap: 5vw;
+}
+
+
+.field-third {
+  width: calc(33% - 10px);
+}
+
+.field-half {
+  width: calc(50% - 10px);
+}
+
+.field-full {
+  width: 100%;
+}
+
+
+.required-field::after {
+  content: "*";
+  color: red;
+  margin-left: 4px;
+}
+
+
+.extension-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+
+.field-label {
+  font-size: 0.85rem;
+  margin-bottom: 4px;
+  color: #555;
+}
+
+
+.field-group {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 16px;
+  width: 100%;
+}
+
+
+.section-header {
+  font-weight: bold;
+  margin-bottom: 8px;
+  margin-top: 16px;
+  width: 100%;
+}
+
+.select-field {
+  min-width: 120px;
+}
+
+.residence-section {
+  margin-top: 16px;
+}
+
+
+.form-section {
+  margin-bottom: 24px;
+  width: 100%;
+}
+
+.numbered-section {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.section-number {
+  margin-right: 8px;
+  font-weight: bold;
+}
+
+.MuiOutlinedInput-root {
+  min-height: 40px;
+border-radius: 10% !important;
+}
+
+
+.children-count-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.location-fields {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  width: 100%;
+}

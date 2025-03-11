@@ -1,0 +1,78 @@
+.FormContainerFatherForm {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.SectionTitleFatherForm {
+  background-color: #1e4e5f;
+  color: white;
+  padding: 12px 20px;
+margin-bottom: 5vh !important;
+  font-size: 18px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.RowFatherForm {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+  padding: 0 20px;
+}
+
+.label {
+  font-weight: bold;
+  color: #1e4e5f;
+  margin-bottom: 5px;
+}
+
+.InputFieldFatherForm {
+  width: 100%;
+  margin-right: 10px;
+}
+
+.SmallInputFieldFatherForm {
+  width: 150px;
+}
+
+.checkboxContainer {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.checkboxLabel {
+  font-size: 14px;
+  margin-left: 8px;
+  margin-right: 20px;
+}
+
+.extensionField {
+  width: 150px;
+  margin-left: auto;
+}
+
+
+@media (max-width: 768px) {
+  .RowFatherForm {
+    flex-direction: column;
+  }
+  
+  .InputFieldFatherForm, 
+  .SmallInputFieldFatherForm {
+    width: 100%;
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
+  
+  .checkboxContainer {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .extensionField {
+    width: 100%;
+    margin-left: 0;
+    margin-top: 10px;
+  }
+}

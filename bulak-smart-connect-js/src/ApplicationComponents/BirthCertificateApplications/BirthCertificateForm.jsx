@@ -31,7 +31,7 @@ const BirthCertificateForm = () => {
     2: [
       "motherLastName", "motherFirstName", "motherCitizenship", "motherReligion",
       "motherTotalChildren", "motherLivingChildren", "motherDeceasedChildren",
-      "motherOccupation", "motherAge", "motherResidence"
+      "motherOccupation", "motherAge", "motherStreet", "motherCity" 
     ],
     3: ["fatherLastName", "fatherFirstName", "fatherCitizenship", "fatherReligion", "fatherOccupation"],
     4: ["marriageDate", "marriagePlace"]
