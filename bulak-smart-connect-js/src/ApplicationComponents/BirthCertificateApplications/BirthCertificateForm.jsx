@@ -34,7 +34,7 @@ const BirthCertificateForm = () => {
       "motherOccupation", "motherAge", "motherStreet", "motherCity" 
     ],
     3: ["fatherLastName", "fatherFirstName", "fatherCitizenship", "fatherReligion", "fatherOccupation"],
-    4: ["marriageDate", "marriagePlace"]
+    4: []
   };
 
   const validateStep = () => {
@@ -119,7 +119,7 @@ const BirthCertificateForm = () => {
           </>
         )}
 
-        {step === 4 && (
+{step === 4 && (
           <>
             <MarriageInformationBirthForm formData={formData} handleChange={handleChange} errors={errors} />
             <Button variant="contained" onClick={handlePrevious} className="BirthCertificateFormButton">

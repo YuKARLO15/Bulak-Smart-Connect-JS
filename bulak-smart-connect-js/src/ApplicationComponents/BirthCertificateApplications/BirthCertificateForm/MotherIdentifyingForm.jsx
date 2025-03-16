@@ -1,94 +1,274 @@
-import React from "react";
-import { TextField, Typography, Box } from "@mui/material";
-import "./MotherIdentifyingForm.css"; 
+import React, { useState } from "react";
+import "./MotherIdentifyingForm.css";
 
-const MotherInformationBirthForm = ({ formData, handleChange, errors }) => {
+const MotherInformationBirthForm = ({ formData, handleChange }) => {
+  const [showExtension, setShowExtension] = useState(false);
+  const requiredField = <span className="RequiredFieldMother">*</span>;
+
   return (
-    <Box className="FormContainerMotherForm">
-      <Typography variant="h6" className="SectionTitleMotherForm">II. MOTHER IDENTIFYING INFORMATION</Typography>
-      <div className="RowMotherForm">
-      <Typography className="label">7. MAIDEN NAME (Pangalan sa Pagkadalaga)</Typography>
-      </div>
-      <div className="RowMotherForm">
-        <TextField label="First Name (Pangalan)" name="motherFirstName" onChange={handleChange} value={formData.motherFirstName || ""} className="InputFieldMotherForm" error={!!errors.motherFirstName} helperText={errors.motherFirstName} />
-        <TextField label="Middle Name (Gitnang Pangalan)" name="motherMiddleName" onChange={handleChange} value={formData.motherMiddleName || ""} className="InputFieldMotherForm" error={!!errors.motherMiddleName} helperText={errors.motherMiddleName} />
-        <TextField label="Last Name (Apelyido)" name="motherLastName" onChange={handleChange} value={formData.motherLastName || ""} className="InputFieldMotherForm" error={!!errors.motherLastName} helperText={errors.motherLastName} />
-      </div>
-      <div className="RowMotherForm">
-        <Typography className="label" style={{ width: "50%" }} >8. CITIZENSHIP</Typography>
-        <Typography className="label">9. RELIGION/ RELIGIOUS SECT</Typography>
-      </div>
-      <div className="RowMotherForm">
-        <TextField label="Citizenship" name="motherCitizenship" onChange={handleChange} value={formData.motherCitizenship || ""} className="InputFieldMotherForm" error={!!errors.motherCitizenship} helperText={errors.motherCitizenship} />
-       
-        <TextField label="Religion/Religious Sect" name="motherReligion" onChange={handleChange} value={formData.motherReligion || ""} className="InputFieldMotherForm" error={!!errors.motherReligion} helperText={errors.motherReligion} />
-      </div>
-      <div className="RowMotherForm">
-        <Typography className="label" style={{ width: "30%" }} >10a. Total number</Typography>
-        <Typography className="label" style={{ width: "30%" }}>10b. No. of children still </Typography>
-        <Typography className="label">10c. No. of children born alive</Typography>
-     
-      </div>
-      <div className="RowMotherForm"  >
-        <Typography className="label" style={{ width: "32%" }} >children born alive:</Typography>
-        <Typography className="label"  style={{ width: "32%" }}>living including this birth:</Typography>
-        <Typography className="label">live but are now dead:</Typography>
-     
-      </div>
-      
-      <div className="RowMotherForm bornAlive">
-        <TextField name="motherTotalChildren" onChange={handleChange} value={formData.motherTotalChildren || ""} className="SmallInputFieldMotherForm" error={!!errors.motherTotalChildren} helperText={errors.motherTotalChildren} />
-        <TextField name="motherLivingChildren" onChange={handleChange} value={formData.motherLivingChildren || ""} className="SmallInputFieldMotherForm" error={!!errors.motherLivingChildren} helperText={errors.motherLivingChildren} />
-        <TextField name="motherDeceasedChildren" onChange={handleChange} value={formData.motherDeceasedChildren || ""} className="SmallInputFieldMotherForm" error={!!errors.motherDeceasedChildren} helperText={errors.motherDeceasedChildren} />
-      </div>
-      <div className="RowMotherForm"  >
-        <Typography className="label"  style={{ width: "50%" }}>11. OCCUPATION</Typography>
-        <Typography className="label">12. AGE at the time of this birth:</Typography>
-     
-      </div>
-      <div className="RowMotherForm Occupation">
- 
-        <TextField name="motherOccupation" onChange={handleChange} value={formData.motherOccupation || ""} className="BigInputFieldMotherForm" error={!!errors.motherOccupation} helperText={errors.motherOccupation} />
-      
-        <TextField name="motherAge" onChange={handleChange} value={formData.motherAge || ""} className=" BigInputFieldMotherForm" error={!!errors.motherAge} helperText={errors.motherAge} />
-      </div>
-      
-      <div className="RowMotherForm">
-        <Typography className="label">13. RESIDENCE</Typography>
-      </div>
-      <div className="RowMotherForm"  >
-        
-        <Typography className="label" style={{ width: "60%" }}>House NO., Street</Typography>
-      
-      </div>
+    <div className="BirthFormContainerMother">
+      <div className="FormHeaderMother">II. MOTHER IDENTIFYING INFORMATION</div>
 
-      <div className="RowMotherForm">
-       
-        <TextField name="motherStreet" onChange={handleChange} value={formData.motherStreet || ""} className="LargeInputFieldMotherForm" />
-        
-       
-      </div>
-      <div className="RowMotherForm"  >
-      <Typography className="label " style={{ width: "50%" }}>Barangay</Typography>
-        <Typography className="label" >City/Municipality</Typography>
-        
-      
-      </div>
+      <div className="FormContentMother">
+        {/* Maiden Name Section */}
+        <div className="FormSectionMother">
+          <div className="SectionTitleMother">7. MAIDEN NAME (Pangalan sa Pagkadalaga)</div>
 
-      <div className="RowMotherForm Occupation">
-      <TextField name="motherBarangay" onChange={handleChange} value={formData.motherBarangay || ""} className="BigInputFieldMotherForm" />
-        <TextField name="motherCity" onChange={handleChange} value={formData.motherCity || ""} className="BigInputFieldMotherForm" />
- 
-      </div>
-      <div className="RowMotherForm "  >
-      <Typography className="label" style={{ width: "50%" }} >Province</Typography>
-        <Typography className="label" >Country</Typography>
+          <div className="FormRowMother">
+            <div className="FormGroupMother">
+              <label className="FormLabelMother">
+                First Name (Pangalan) {requiredField}
+              </label>
+              <input
+                type="text"
+                name="motherFirstName"
+                value={formData?.motherFirstName || ""}
+                onChange={handleChange}
+                className="FormInputMother"
+                required
+              />
+            </div>
+
+            <div className="FormGroupMother">
+              <label className="FormLabelMother">
+                Middle Name (Gitnang Pangalan) {requiredField}
+              </label>
+              <input
+                type="text"
+                name="motherMiddleName"
+                value={formData?.motherMiddleName || ""}
+                onChange={handleChange}
+                className="FormInputMother"
+                required
+              />
+            </div>
+
+            <div className="FormGroupMother">
+              <label className="FormLabelMother">
+                Last Name (Apelyido) {requiredField}
+              </label>
+              <input
+                type="text"
+                name="motherLastName"
+                value={formData?.motherLastName || ""}
+                onChange={handleChange}
+                className="FormInputMother"
+                required
+              />
+            </div>
+          </div>
+
+          <div className="FormRowMother">
+            <div className="CheckboxContainerMother">
+              <input
+                type="checkbox"
+                id="extensionCheckboxMother"
+                checked={showExtension}
+                onChange={() => setShowExtension(!showExtension)}
+                className="CheckboxInputMother"
+              />
+              <label htmlFor="extensionCheckboxMother" className="CheckboxLabelMother">
+                Check this box if the MOTHER have extension name
+              </label>
+            </div>
+
+            {showExtension && (
+              <div className="ExtensionContainerMother">
+                <span className="ExtensionLabelMother">Extension</span>
+                <select
+                  name="motherExtension"
+                  value={formData?.motherExtension || ""}
+                  onChange={handleChange}
+                  className="SelectInputMother"
+                >
+                  <option value="">Select</option>
+                  <option value="Jr.">Jr.</option>
+                  <option value="Sr.">Sr.</option>
+                  <option value="III">III</option>
+                  <option value="IV">IV</option>
+                </select>
+              </div>
+            )}
+          </div>
         </div>
-      <div className="RowMotherForm Occupation">
-      <TextField name="motherProvince" onChange={handleChange} value={formData.motherProvince || ""} className="BigInputFieldMotherForm" />
-        <TextField name="motherCountry" onChange={handleChange} value={formData.motherCountry || ""} className="BigInputFieldMotherForm" />
+
+        {/* Citizenship and Religion Section */}
+        <div className="FormSectionMother">
+          <div className="FormRowMother">
+            <div className="FormGroupMother" style={{ flex: 1 }}>
+              <div className="SectionTitleHalfMother">
+                8. CITIZENSHIP
+              </div>
+              <input
+                type="text"
+                name="motherCitizenship"
+                value={formData?.motherCitizenship || ""}
+                onChange={handleChange}
+                className="FormInputMother"
+              />
+            </div>
+
+            <div className="FormGroupMother" style={{ flex: 1 }}>
+              <div className="SectionTitleHalfMother">
+                9. RELIGION/ RELIGIOUS SECT
+              </div>
+              <input
+                type="text"
+                name="motherReligion"
+                value={formData?.motherReligion || ""}
+                onChange={handleChange}
+                className="FormInputMother"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Children Information Section */}
+        <div className="FormSectionMother">
+          <div className="FormRowMother">
+            <div className="FormGroupMother" style={{ flex: 1 }}>
+              <div className="SectionTitleHalfMother">
+                10a. Total number of mother's children born alive:
+              </div>
+              <input
+                type="text"
+                name="motherTotalChildren"
+                value={formData?.motherTotalChildren || ""}
+                onChange={handleChange}
+                className="FormInputMother"
+              />
+            </div>
+
+            <div className="FormGroupMother" style={{ flex: 1 }}>
+              <div className="SectionTitleHalfMother">
+                10b. No. of children still living including this birth:
+              </div>
+              <input
+                type="text"
+                name="motherLivingChildren"
+                value={formData?.motherLivingChildren || ""}
+                onChange={handleChange}
+                className="FormInputMother"
+              />
+            </div>
+
+            <div className="FormGroupMother" style={{ flex: 1 }}>
+              <div className="SectionTitleHalfMother">
+                10c. No. of children born alive but are now dead:
+              </div>
+              <input
+                type="text"
+                name="motherDeceasedChildren"
+                value={formData?.motherDeceasedChildren || ""}
+                onChange={handleChange}
+                className="FormInputMother"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Occupation and Age Section */}
+        <div className="FormSectionMother">
+          <div className="FormRowMother">
+            <div className="FormGroupMother" style={{ flex: 1 }}>
+              <div className="SectionTitleHalfMother">
+                11. OCCUPATION
+              </div>
+              <input
+                type="text"
+                name="motherOccupation"
+                value={formData?.motherOccupation || ""}
+                onChange={handleChange}
+                className="FormInputMother"
+              />
+            </div>
+
+            <div className="FormGroupMother" style={{ flex: 1 }}>
+              <div className="SectionTitleHalfMother">
+                12. AGE at the time of this birth:
+              </div>
+              <input
+                type="text"
+                name="motherAge"
+                value={formData?.motherAge || ""}
+                onChange={handleChange}
+                className="FormInputMother"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Residence Section */}
+        <div className="FormSectionMother">
+          <div className="SectionTitleMother">
+            13. RESIDENCE
+          </div>
+
+          <div className="FormRowMother">
+            <div className="FormFullWidthGroupMother">
+              <label className="FormLabelMother">
+                House NO., Street
+              </label>
+              <input
+                type="text"
+                name="motherStreet"
+                value={formData?.motherStreet || ""}
+                onChange={handleChange}
+                className="FormInputMother"
+              />
+            </div>
+          </div>
+
+          <div className="FormRowMother">
+            <div className="FormGroupMother">
+              <label className="FormLabelMother">Barangay</label>
+              <input
+                type="text"
+                name="motherBarangay"
+                value={formData?.motherBarangay || ""}
+                onChange={handleChange}
+                className="FormInputMother"
+              />
+            </div>
+
+            <div className="FormGroupMother">
+              <label className="FormLabelMother">City/Municipality</label>
+              <input
+                type="text"
+                name="motherCity"
+                value={formData?.motherCity || ""}
+                onChange={handleChange}
+                className="FormInputMother"
+              />
+            </div>
+          </div>
+
+          <div className="FormRowMother">
+            <div className="FormGroupMother">
+              <label className="FormLabelMother">Province</label>
+              <input
+                type="text"
+                name="motherProvince"
+                value={formData?.motherProvince || ""}
+                onChange={handleChange}
+                className="FormInputMother"
+              />
+            </div>
+
+            <div className="FormGroupMother">
+              <label className="FormLabelMother">Country</label>
+              <input
+                type="text"
+                name="motherCountry"
+                value={formData?.motherCountry || ""}
+                onChange={handleChange}
+                className="FormInputMother"
+              />
+            </div>
+          </div>
+        </div>
       </div>
-    </Box>
+    </div>
   );
 };
 

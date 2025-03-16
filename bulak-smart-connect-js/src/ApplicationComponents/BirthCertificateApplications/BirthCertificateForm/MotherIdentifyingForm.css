@@ -1,190 +1,213 @@
 
-.FormContainerMotherForm {
-  max-width: 100%;
-  padding: 16px;
-  font-family: Arial, sans-serif;
+
+.BirthFormContainerMother {
+  width: 100%;
   border: 1px solid #ddd;
   border-radius: 4px;
+  margin-bottom: 20px;
+  font-family: Arial, sans-serif;
 }
 
-
-.SectionTitleMotherForm {
+.FormHeaderMother {
   background-color: #1d4e5f;
   color: white;
-  padding: 8px 12px;
-  font-weight: 600;
-  margin-bottom: 5vh !important;
-  width: 100%;
+  padding: 10px 15px;
+  font-weight: bold;
   text-align: center;
-}
-.checkboxContainer {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  width: 100%;
+  font-size: 16px;
 }
 
-.RowMotherForm {
+.FormContentMother {
+  padding: 16px;
+}
+
+.FormSectionMother {
+  margin-bottom: 24px;
+}
+
+.SectionTitleMother {
+  font-weight: bold;
+  margin-bottom: 16px;
+  color: #333;
+  font-size: 15px;
+}
+
+.SectionTitleHalfMother {
+  font-weight: bold;
+  margin-bottom: 12px;
+  color: #333;
+  font-size: 15px;
+}
+
+.FormRowMother {
   display: flex;
   flex-wrap: wrap;
   margin-bottom: 16px;
-  align-items: flex-start;
-  gap: 10px;
+  gap: 16px;
 }
 
-.label {
-  font-weight: 600;
-  margin-right: 16px;
-  min-width: 120px;
-  display: flex;
-  align-items: center;
-}
-
-
-.InputFieldMotherForm {
+.FormGroupMother {
   flex: 1;
-  min-width: 150px;
-  max-width: 300px !important;
-  margin-right: 10px;
-  margin-bottom: 16px;
-}
-.BigInputFieldMotherForm{
-  width: 350px;
+  min-width: 200px;
 }
 
-.SmallInputFieldMotherForm {
-  width: 200px;
-  min-width: 150px;
-  gap: 0;
-
-  margin-bottom: 16px;
-}
-.LargeInputFieldMotherForm{
-  width: 1000px;
+.FormFullWidthGroupMother {
+  width: 100%;
+  margin-bottom: 12px;
 }
 
-.checkboxContainer {
+.FormLabelMother {
+  display: block;
+  font-size: 14px;
+  margin-bottom: 6px;
+  color: #1d4e5f;
+}
+
+.FormInputMother {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  background: #fff;
+  color: #1d4e5f;
+  height: 45px;
+  border-radius: 4px;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.FormInputMother:focus {
+  border-color: #1d4e5f;
+  outline: none;
+}
+
+.CheckboxContainerMother {
   display: flex;
   align-items: center;
-  flex-wrap: wrap;
-  width: 100%;
+  margin-bottom: 12px;
 }
 
 
-
-.checkboxLabel {
-  margin-left: 5px;
-  font-size: 0.9rem;
+.CheckboxLabelMother {
+  font-size: 14px;
+  color: #333;
 }
 
-
-.extensionField {
+.ExtensionContainerMother {
+  display: flex;
+  align-items: center;
+  gap: 12px;
   margin-left: 20px;
-  width: 120px;
+}
+
+.ExtensionLabelMother {
+  font-size: 14px;
+ color: #1d4e5f;;
+}
+
+.SelectInputMother {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  color: #1d4e5f;
+  border-radius: 4px;
+  font-size: 14px;
   min-width: 120px;
 }
 
-.bornAlive {
-  gap: 5vw;
+.SmallInputMother {
+  width: 100px;
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  color: #1d4e5f;
+  border-radius: 4px;
+  font-size: 14px;
 }
 
-.Occupation {
-  gap: 5vw;
+.RadioGroupMother {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 8px;
 }
 
-
-.field-third {
-  width: calc(33% - 10px);
+.RadioGroupInlineMother {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 8px;
+  align-items: center;
 }
 
-.field-half {
-  width: calc(50% - 10px);
+.RadioLabelMother {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: #333;
 }
 
-.field-full {
-  width: 100%;
+.RadioInputMother {
+  margin: 0;
 }
 
-
-.required-field::after {
-  content: "*";
+.RequiredFieldMother {
   color: red;
   margin-left: 4px;
 }
 
-
-.extension-container {
+.FormRowSpaceBetweenMother {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: 10px;
+}
+
+.NotRequiredLabelMother {
+  font-size: 12px;
+  color: #666;
+  font-style: italic;
+}
+.CheckboxContainerMother input[type="checkbox"] {
+
+  appearance: none;
+  -webkit-appearance: none;
+  margin-right: 10px;
+  width: 18px;
+  height: 18px;
+  border: 2px solid #1d4e5f;
+  border-radius: 3px;
+  cursor: pointer;
+  position: relative;
+}
+
+.CheckboxContainerMother input[type="checkbox"]:checked {
+  background-color: #1d4e5f;
+  border-color: #1d4e5f;
+}
+
+.CheckboxContainerMother input[type="checkbox"]:checked::after {
+  content: '';
+  position: absolute;
+  left: 5px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
 }
 
 
-.field-label {
-  font-size: 0.85rem;
-  margin-bottom: 4px;
-  color: #555;
-}
-
-
-.field-group {
-  display: flex;
-  gap: 16px;
-  margin-bottom: 16px;
-  width: 100%;
-}
-
-
-.section-header {
-  font-weight: bold;
-  margin-bottom: 8px;
-  margin-top: 16px;
-  width: 100%;
-}
-
-.select-field {
-  min-width: 120px;
-}
-
-.residence-section {
-  margin-top: 16px;
-}
-
-
-.form-section {
-  margin-bottom: 24px;
-  width: 100%;
-}
-
-.numbered-section {
-  display: flex;
-  align-items: center;
-  margin-bottom: 8px;
-  font-weight: 600;
-}
-
-.section-number {
-  margin-right: 8px;
-  font-weight: bold;
-}
-
-.MuiOutlinedInput-root {
-  min-height: 40px;
-border-radius: 10% !important;
-}
-
-
-.children-count-container {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-  width: 100%;
-  margin-bottom: 16px;
-}
-
-.location-fields {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
-  width: 100%;
+/* For better responsive behavior */
+@media screen and (max-width: 768px) {
+  .FormRowMother {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .FormGroupMother {
+    width: 100%;
+  }
+  
+  .ExtensionContainerMother {
+    margin-left: 0;
+    margin-top: 8px;
+  }
 }
