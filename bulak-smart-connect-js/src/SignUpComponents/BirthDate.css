@@ -79,6 +79,7 @@ select {
   border-radius: 6px;
   font-size: 16px;
   border: 1.5px solid #2a5764;
+  color: #1c4d5a;
   background-color: #fffdfd;
   box-shadow: inset 0px 3px 2px rgba(0, 0, 0, 0.1);
 }
