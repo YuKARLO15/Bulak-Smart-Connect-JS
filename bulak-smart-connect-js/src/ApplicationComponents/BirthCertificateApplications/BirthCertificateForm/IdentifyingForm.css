@@ -1,50 +1,362 @@
-.form-container {
-    padding: 20px;
-    background: white;
-    border-radius: 5px;
-    margin: auto;
-    font-family: Arial, sans-serif;
-  }
-  
-  .section-title {
-    font-size: 18px;
-    font-weight: bold;
-    background: #1C4D5A;
-    color: white;
-    padding: 10px;
+
+.BirthFormContainerChild {
+  width: 100%;
+  max-width: 100%;
+  font-family: Arial, sans-serif;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #fff;
+  box-sizing: border-box;
+}
+
+.FormHeaderChild {
+  background-color: #1d4e5f;
+  color: white;
+  padding: 8px 12px;
+  font-weight: 600;
+  width: 100%;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.FormContentChild {
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+.FormSectionChild {
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.SectionTitleChild {
+  font-weight: 600;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+.SectionTitleHalfChild {
+  font-weight: 600;
+  width: 100%;
+}
+
+.FormRowChild {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 12px;
+  align-items: flex-start;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.FormRowSpaceBetweenChild {
+  justify-content: space-between;
+}
+
+.FormGroupChild {
+  flex: 1;
+  min-width: 150px;
+  box-sizing: border-box;
+}
+
+.FormFullWidthGroupChild {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.FormLabelChild {
+  display: block;
+  font-size: 0.875rem;
+  margin-bottom: 4px;
+  white-space: normal;
+  color: #1d4e5f;
+}
+
+.RequiredFieldChild {
+  color: red;
+}
+
+.FormInputChild {
+  width: 100%;
+  padding: 8px;
+  margin-top: 10px;
+  border: 1px solid #ccc;
+  background-color: #ffffff;
+  color: #1d4e5f;
+  height: 40px;
+  border-radius: 4px;
+  box-sizing: border-box;
+  height: 36px;
+ 
+}
+
+.SmallInputChild {
+  width: 100px;
+  padding: 8px;
+  height: 40px;
+  background-color: #ffffff;
+  color: #1d4e5f;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  height: 36px;
+}
+
+.SelectInputChild {
+  padding: 8px;
+  border: 1px solid #ccc;
+  color: #1d4e5f;
+  border-radius: 4px;
+  height: 36px;
+  box-sizing: border-box;
+}
+
+.DateSelectChild {
+  width: 100%;
+  min-width: 80px;
+}
+
+.DateSectionContainerChild {
+  display: flex;
+  flex-direction: column;
+  flex: 3;
+  box-sizing: border-box;
+}
+
+.DateRowChild {
+  display: flex;
+  margin-top: 20px;
+  gap: 12px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.DateLabelChild {
+  flex: 1;
+  min-width: 60px;
+  font-size: 0.875rem;
+  margin-bottom: 4px;
+}
+
+.DateInputsRowChild {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.SexContainerChild {
+  flex: 1;
+  min-width: 150px;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+.RadioGroupChild {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 20px;
+  width: 100%;
+
+}
+
+.RadioGroupInlineChild {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 20px;
+  gap: 20px;
+  align-items: center;
+}
+
+.RadioLabelChild {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.RadioInputChild {
+  margin: 0;
+  cursor: pointer;
+
+
+}
+.RadioLabelChild input[type="radio"] {
+ 
+  appearance: none;
+  -webkit-appearance: none;
+  margin: 0;
+  width: 18px;
+  height: 18px;
+  border: 2px solid #1d4e5f;
+  border-radius: 50%;
+  outline: none;
+  cursor: pointer;
+}
+.RadioLabelChild input[type="radio"]:checked {
+ 
+  background-color: #1d4e5f;
+  border: 2px solid #1d4e5f;
+  box-shadow: inset 0 0 0 3px white; 
+}
+.CheckboxInputChild {
+  margin: 0;
+  cursor: pointer;
+}
+
+.CheckboxContainerChild {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.CheckboxLabelChild {
+  cursor: pointer;
+
+ 
+}
+.CheckboxContainerChild input[type="checkbox"] {
+
+  appearance: none;
+  -webkit-appearance: none;
+  margin: 0;
+  width: 18px;
+  height: 18px;
+  border: 2px solid #1d4e5f;
+  border-radius: 3px;
+  cursor: pointer;
+  position: relative;
+}
+
+.CheckboxContainerChild input[type="checkbox"]:checked {
+  background-color: #1d4e5f;
+  border-color: #1d4e5f;
+}
+
+.CheckboxContainerChild input[type="checkbox"]:checked::after {
+  content: '';
+  position: absolute;
+  left: 5px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.ExtensionContainerChild {
+  display: flex;
+ margin-left: 15vw;
+  align-items: center;
+  gap: 8px;
+}
+
+.ExtensionLabelChild {
+  white-space: nowrap;
+}
+
+.BirthOrderContainerChild {
+  flex: 1;
+  min-width: 150px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.BirthOrderNoteChild {
+  font-size: 0.75rem;
+  color: #666;
+}
+
+.WeightContainerChild {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.WeightUnitChild {
+  white-space: nowrap;
+}
+
+.NotRequiredLabelChild {
+  font-size: 0.75rem;
+  color: #666;
+}
+
+.TypeBirthContainerChild {
+  flex: 2;
+  min-width: 150px;
+}
+
+
+@media screen and (max-width: 768px) {
+  .SectionTitleHalfChild {
+    width: 100%;
     margin-bottom: 10px;
   }
   
-  .row {
-    width: 65vw;
-    gap: 10px;
-    margin-top: 3vh;
-    display: flex;
-    flex-wrap: wrap;   
-  
-    margin-bottom: 15px;
+  .FormRowSpaceBetweenChild {
+    flex-direction: column;
+    gap: 8px;
   }
+  
+  .DateSectionContainerChild {
+    width: 100%;
+  }
+  
+  .SexContainerChild {
+    width: 100%;
+    margin-top: 12px;
+  }
+  
+  .BirthOrderContainerChild {
+    width: 100%;
+    margin-top: 12px;
+  }
+  
+  .TypeBirthContainerChild {
+    width: 100%;
+  }
+}
 
-  .label {
+@media screen and (max-width: 576px) {
+  .FormContentChild {
+    padding: 12px 8px;
+  }
+  
+  .FormGroupChild {
     width: 100%;
-    font-size: 14px;
-    font-weight: bold;
-    margin-bottom: 5px;
+    flex: none;
   }
   
-  .input-field {
-    
-    min-width: 250px !important;
-  
+  .DateRowChild {
+    gap: 8px;
   }
   
-  .input-small {
-    width: 100px;
-    margin-right: 10px;
+  .DateInputsRowChild {
+    gap: 8px;
   }
   
-  .input-wide {
+  .RadioGroupInlineChild {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .SmallInputChild {
     width: 100%;
-    margin-right: 10px;
   }
   
+  .FormLabelChild {
+    font-size: 0.8rem;
+  }
+  
+  .RadioLabelChild {
+    font-size: 0.8rem;
+  }
+}
+
