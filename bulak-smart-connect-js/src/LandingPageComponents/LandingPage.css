@@ -3,6 +3,12 @@
     color: #333;
     
   }
+  .PhTimeComponent {
+    align-self: flex-end;
+    display: flex;
+    justify-content: end;
+    margin-right: 50px;
+  }
   .LandingContent {
     width: 85vw;
     min-width: 80vw;
