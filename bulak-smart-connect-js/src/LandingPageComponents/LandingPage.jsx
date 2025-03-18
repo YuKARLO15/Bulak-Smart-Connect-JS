@@ -18,12 +18,16 @@ import QrCodeScannerIcon from "@mui/icons-material/QrCodeScanner";
 import NavBar from "../LogInComponents/NavBar";
 import DeviceMockUp from "./LandingPageAssets/DeviceMockUp.png";
 import BulakLGULogo from "./LandingPageAssets/BulakLGULogo.png";
+import PhTimeComponent from "./PhTimeComponent";
 
 const LandingPage = () => {
   return (
     <Box className="LandingContainer">
-      <NavBar />
-      <Container className="">
+          <NavBar />
+          <div className="PhTimeComponent">
+          <PhTimeComponent /> </div>
+          <Container className="">
+             
         <Box className="HeroLanding">
           <Grid container spacing={4} alignItems="center">
             <Grid item xs={12} md={6}>
