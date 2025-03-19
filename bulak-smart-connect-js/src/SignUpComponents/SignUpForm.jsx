@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import UsernamePasswordSection from "./UserNamePassword";
 import FullNameSection from "./FullName";
 import AddressSection from "./Address";
@@ -106,7 +107,7 @@ const SignUpForm = () => {
         <UpdatesCheckbox formData={formData} handleInputChange={handleInputChange} />
         <button type="submit" className="btn">Signup</button>
         <div className="footer">
-          Already have an account? <a href="/">Sign in</a>
+          Already have an account? <Link to="/LogIn">Sign in</Link>
         </div>
       </form>
     </div>
