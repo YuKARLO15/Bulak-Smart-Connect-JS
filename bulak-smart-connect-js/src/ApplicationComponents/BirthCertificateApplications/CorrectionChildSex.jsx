@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Router, Link as RouterLink } from "react-router-dom";
 import {
   Box,
   Button,
@@ -178,7 +179,7 @@ const SexDobCorrection = () => {
           Your application has been submitted successfully! Redirecting...
         </Alert>
       )}
-
+    <RouterLink to = '/BirthApplicationSummary'>
       <Button
         variant="contained"
         color="primary"
@@ -188,7 +189,7 @@ const SexDobCorrection = () => {
          className="ButtonApplication"
       >
         Submit
-      </Button>
+      </Button> </RouterLink>
     </div>
   );
 };

@@ -125,16 +125,17 @@ const Above18Registration = () => {
       )}
 
       {status && (
+        <RouterLink to = '/BirthApplicationSummary'>
         <Button
           variant="contained"
           color="primary"
-          disabled={!isMandatoryComplete}
+          disabled={!isFormComplete}
           sx={{ marginTop: "20px" }}
           onClick={handleSubmit}
-          className="ButtonApplication"
+           className="ButtonApplication"
         >
           Submit
-        </Button>
+        </Button> </RouterLink>
       )}
     </div>
   );

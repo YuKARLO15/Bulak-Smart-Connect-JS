@@ -64,7 +64,9 @@ const BirthCertificateForm = () => {
       alert("Please fill in all required fields before submitting.");
       return;
     }
-    BirthCertificateApplicationData(formData);
+    
+    const applicationId = BirthCertificateApplicationData(formData);
+    localStorage.setItem("currentApplicationId", applicationId);
     const selectedOption = localStorage.getItem("selectedBirthCertificateOption");
     const routeMap = {
       "Regular application": "/RegularApplication",
@@ -119,7 +121,7 @@ const BirthCertificateForm = () => {
           </>
         )}
 
-{step === 4 && (
+        {step === 4 && (
           <>
             <MarriageInformationBirthForm formData={formData} handleChange={handleChange} errors={errors} />
             <Button variant="contained" onClick={handlePrevious} className="BirthCertificateFormButton">

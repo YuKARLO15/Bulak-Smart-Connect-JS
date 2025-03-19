@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Router, Link as RouterLink } from "react-router-dom";
 import {
   Box,
   Button,
@@ -160,9 +161,18 @@ const FirstNameCorrection = () => {
           <Button onClick={() => setOpenDialog(false)} color="secondary"  className="ApplicationDialogBtnC">
             Cancel
           </Button>
-          <Button onClick={confirmSubmit} color="primary" autoFocus className="ApplicationDialogBtnS">
-            Yes, Submit
-          </Button>
+
+          <RouterLink to = '/BirthApplicationSummary'>
+      <Button
+        variant="contained"
+        color="primary"
+        disabled={!isFormComplete}
+        sx={{ marginTop: "20px" }}
+        onClick={handleSubmit}
+         className="ButtonApplication"
+      >
+        Submit
+      </Button> </RouterLink>
         </DialogActions>
       </Dialog>
     </div>

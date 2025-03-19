@@ -18,6 +18,7 @@ import DelayedOneParentForeignerRegistration from './ApplicationComponents/Birth
 import BirthCertificateForm from './ApplicationComponents/BirthCertificateApplications/BirthCertificateForm';
 import QRCodeAppointment from "./AppointmentComponents/QRCodeAppointment";
 import LandingPage from './LandingPageComponents/LandingPage';
+import BirthApplicationSummary from './ApplicationComponents/BirthCertificateApplications/BirthApplicationSummary';
 
 
 
@@ -44,6 +45,7 @@ function App() {
       <Route path='/DelayedOneParentForeignerRegistration' element={<DelayedOneParentForeignerRegistration />} />
       <Route path="/QrCodeAppointment/:id" element={<QRCodeAppointment />} />
       <Route path='/BirthCertificateForm' element={<BirthCertificateForm />} />
+      <Route path='/BirthApplicationSummary' element={<BirthApplicationSummary />} />
 
     </Routes>
   );

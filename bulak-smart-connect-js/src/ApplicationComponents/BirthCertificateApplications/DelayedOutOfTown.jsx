@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Router, Link as RouterLink } from "react-router-dom";
 import { Box, Button, Typography, Alert } from "@mui/material";
 import FileUpload from "../FileUpload";
 import "./DelayedOutOfTown.css";
@@ -51,7 +52,7 @@ const DelayedOutOfTownRegistration = () => {
     if (isMandatoryComplete) {
       setIsSubmitted(true);
       setTimeout(() => {
-        navigate("/ApplicationForm");
+        navigate("/BirthApplicationSummary");
       }, 2000);
     }
   };
@@ -113,15 +114,17 @@ const DelayedOutOfTownRegistration = () => {
         </Alert>
       )}
 
+<RouterLink to = '/BirthApplicationSummary'>
       <Button
         variant="contained"
         color="primary"
         disabled={!isMandatoryComplete}
         sx={{ marginTop: "20px" }}
         onClick={handleSubmit}
+         className="ButtonApplication"
       >
         Submit
-      </Button>
+      </Button> </RouterLink>
     </div>
   );
 };
