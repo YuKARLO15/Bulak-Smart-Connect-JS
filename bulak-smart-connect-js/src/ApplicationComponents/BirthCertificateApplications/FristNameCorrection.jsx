@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Router, Link as RouterLink } from "react-router-dom";
 import {
   Box,
   Button,
@@ -7,6 +8,11 @@ import {
   FormControlLabel,
   Typography,
   Alert,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle
 } from "@mui/material";
 import FileUpload from "../FileUpload";
 import "./FirstNameCorrection.css";
@@ -30,10 +36,10 @@ const supportingDocuments = [
 
 const FirstNameCorrection = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
   const [isMarried, setIsMarried] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [openDialog, setOpenDialog] = useState(false);
   const navigate = useNavigate();
 
   const handleFileUpload = (label, isUploaded) => {
@@ -51,12 +57,15 @@ const FirstNameCorrection = () => {
   const isFormComplete = isMandatoryComplete && isMarriageCertComplete;
 
   const handleSubmit = () => {
-    if (isFormComplete) {
-      setIsSubmitted(true);
-      setTimeout(() => {
-        navigate("/ApplicationForm");
-      }, 2000);
-    }
+    setOpenDialog(true);
+  };
+
+  const confirmSubmit = () => {
+    setOpenDialog(false);
+    setIsSubmitted(true);
+    setTimeout(() => {
+      navigate("/ApplicationForm");
+    }, 2000);
   };
 
   return (
@@ -136,9 +145,36 @@ const FirstNameCorrection = () => {
         disabled={!isFormComplete}
         sx={{ marginTop: "20px" }}
         onClick={handleSubmit}
+        className="ButtonApplication"
       >
         Submit
       </Button>
+
+      <Dialog open={openDialog} onClose={() => setOpenDialog(false)} className="ApplicationDialogContainer">
+        <DialogTitle  className="ApplicationDialogTitle"  >Confirm Submission</DialogTitle>
+        <DialogContent>
+          <DialogContentText  className="ApplicationDialogContent">
+            Are you sure that all details are correct?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpenDialog(false)} color="secondary"  className="ApplicationDialogBtnC">
+            Cancel
+          </Button>
+
+          <RouterLink to = '/BirthApplicationSummary'>
+      <Button
+        variant="contained"
+        color="primary"
+        disabled={!isFormComplete}
+        
+        onClick={handleSubmit}
+         className="ApplicationDialogBtnS"
+      >
+        Submit
+      </Button> </RouterLink>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 };

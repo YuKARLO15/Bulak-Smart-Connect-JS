@@ -1,0 +1,70 @@
+.AppointmentDashboardContainer {
+    display: flex; 
+    flex-direction: column;
+    margin-top: 5vh !important;
+    font-family: Arial, sans-serif;
+    
+  }
+
+  
+  .HeaderAppointment {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #9EB2B8 ;
+    height: 20vh;
+    padding: 20px;
+    border-radius: 8px;
+    
+  }
+  
+  .TitleAppointment {
+    font-weight: 600 !important;
+  
+
+  }
+  .RightSectionAppointment {
+    width: 30vw;
+  }
+  
+  .ButtonAppointment {
+    background-color: #1b4d5b !important;
+    color: white;
+  }
+  
+  .ContentAppointment {
+    display: flex;
+    gap: 20px;
+    margin-top: 20px;
+  }
+  
+  .AvailableSlotsAppointment,
+  .AnnouncementAppointment {
+    flex: 1;
+    padding: 15px;
+    border-radius: 8px;
+  }
+  .AvailableSlotsAppointment {
+    background-color: #FFFBFA;
+  }
+  .AnnouncementAppointment {
+    margin-top: 10px;
+    background-color: #9EB2B8 !important;
+    color:white !important ;
+  }
+  
+  .CalendarAppointment {
+    width: 100%;
+    border: none;
+
+  }
+  
+  .AnnouncementTextAppointment {
+    margin-top: 10px;
+  }
+  .SectionTitleAppointment {
+    font-weight: bolder !important;
+    color: #1b4d5b;
+    
+  }
+  

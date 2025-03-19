@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+
 import { useNavigate } from "react-router-dom";
 import {
   Box,
@@ -54,7 +55,7 @@ const Below18Registration = () => {
     if (isFormComplete) {
       setIsSubmitted(true);
       setTimeout(() => {
-        navigate("/ApplicationForm");
+        navigate("/BirthApplicationSummary");
       }, 2000);
     }
   };
@@ -146,9 +147,10 @@ const Below18Registration = () => {
         disabled={!isFormComplete}
         sx={{ marginTop: "20px" }}
         onClick={handleSubmit}
+         className="ButtonApplication"
       >
         Submit
-      </Button>
+      </Button> 
     </div>
   );
 };

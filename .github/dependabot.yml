@@ -1,20 +1,79 @@
 version: 2
 updates:
-  - package-ecosystem: "npm" # See documentation for possible values
-    directory: "/bsc-js-backend" # Location of package manifests
+  # Backend dependencies
+  - package-ecosystem: "npm"
+    directory: "/bsc-js-backend"
     schedule:
       interval: "weekly"
-    target-branch: "npm-backend"
+      day: "monday"
+    open-pull-requests-limit: 10
     labels:
-      - "tag > bot"
-      - "kind > dependencies"
-      - "scope > backend"
-  - package-ecosystem: "npm" # See documentation for possible values
-    directory: "/bulak-smart-connect-js" # Location of package manifests
+      - "dependencies"
+      - "backend"
+    groups:
+      backend-minor:
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
+      backend-major:
+        patterns:
+          - "*"
+        update-types:
+          - "major"
+    commit-message:
+      prefix: "npm"
+      include: "scope"
+    versioning-strategy: auto
+
+  # Frontend dependencies
+  - package-ecosystem: "npm"
+    directory: "/bulak-smart-connect-js"
     schedule:
       interval: "weekly"
-    target-branch: "npm-frontend"
+      day: "monday"
+    open-pull-requests-limit: 10
     labels:
-      - "tag > bot"
-      - "kind > dependencies"
-      - "scope > frontend"
+      - "dependencies"
+      - "frontend"
+    groups:
+      frontend-minor:
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
+      frontend-major:
+        patterns:
+          - "*"
+        update-types:
+          - "major"
+    commit-message:
+      prefix: "npm"
+      include: "scope"
+    versioning-strategy: auto
+
+  # GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    labels:
+      - "dependencies"
+      - "github-actions"
+    groups:
+      github-actions-updates:
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
+      github-actions-major:
+        patterns:
+          - "*"
+        update-types:
+          - "major"
+    commit-message:
+      prefix: "github-actions"
+      include: "scope"

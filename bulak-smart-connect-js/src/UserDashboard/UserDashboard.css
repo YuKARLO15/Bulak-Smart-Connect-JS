@@ -4,7 +4,15 @@
    justify-content: center;
     align-items: center;
     width: 100vw;
+    margin-bottom: 10vh;
  
+}
+.BottomDashboard{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 10vh;
+    height: auto;
 }
 .UserDashboardContainer{
     transition: margin-left  ease;
@@ -14,4 +22,21 @@
 
 .UserDashboardContainer.sidebar-open {
     margin-left: 240px; 
+}
+
+.UserDashboardContainer .RecentApplicationsDivider{
+    width: 30vw ;
+    margin-top: 0;
+  
+}
+.UserDashboardContainer .SectionTitleAppointment {
+    color: #184a5b;
+    font-weight: 600;
+    font-size: 22px;
+    
+}
+.footer {
+
+    width: 100%;
+
 }

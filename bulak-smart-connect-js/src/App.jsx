@@ -1,4 +1,4 @@
-import { Route, Routes } from 'react-router-dom'; // Import necessary components from react-router-dom
+import { Route, Router, Routes } from 'react-router-dom'; // Import necessary components from react-router-dom
 import './App.css';
 import LogIn from './LogInComponents/LogIn';  
 import UserDashboard from './UserDashboard/UserDashboard'; 
@@ -15,19 +15,24 @@ import Below18Registration from './ApplicationComponents/BirthCertificateApplica
 import SexDobCorrection from './ApplicationComponents/BirthCertificateApplications/CorrectionChildSex';
 import DelayedOutOfTownRegistration from './ApplicationComponents/BirthCertificateApplications/DelayedOutOfTown';
 import DelayedOneParentForeignerRegistration from './ApplicationComponents/BirthCertificateApplications/DelayedOneParentForeigner';
-
+import BirthCertificateForm from './ApplicationComponents/BirthCertificateApplications/BirthCertificateForm';
+import QRCodeAppointment from "./AppointmentComponents/QRCodeAppointment";
+import LandingPage from './LandingPageComponents/LandingPage';
+import BirthApplicationSummary from './ApplicationComponents/BirthCertificateApplications/BirthApplicationSummary';
 
 
 
 function App() {
   return (
+  
     <Routes>
       {/* Define Routes */}
-      <Route path="/" element={<LogIn />} />
-      <Route path='/SignUpForm' element={<SignUpForm />} /> 
+      <Route path="/" element={<LandingPage />} />
+      <Route path="/LogIn" element={<LogIn />} />
+      <Route path='/SignUpForm' element={<SignUpForm />} />
       <Route path='/UserDashBoard' element={<UserDashboard />} />
       <Route path='/AppointmentForm' element={<AppoionmentForm />} />
-      <Route path='/ApplicationForm' element={<ApplicationForm/>} />
+      <Route path='/ApplicationForm' element={<ApplicationForm />} />
       <Route path='/QR' element={<QRCodePage />} />
       <Route path='/ClericalErrorApplication' element={<ClericalErrorApplication />} />
       <Route path='/BirthCertificateDashboard' element={<BirthCertificateDashboard />} />
@@ -35,9 +40,13 @@ function App() {
       <Route path='/MarriageLicenseApplication' element={<MarriageLicenseApplication />} />
       <Route path='/Above18Registration' element={<Above18Registration />} />
       <Route path='/Below18Registration' element={<Below18Registration />} />
-      <Route path='/SexDobCorrection' element ={<SexDobCorrection/>} />
-      <Route path='/DelayedOutOfTownRegistration' element ={<DelayedOutOfTownRegistration/>} />
-      <Route path='/DelayedOneParentForeignerRegistration' element ={<DelayedOneParentForeignerRegistration/>}  />
+      <Route path='/SexDobCorrection' element={<SexDobCorrection />} />
+      <Route path='/DelayedOutOfTownRegistration' element={<DelayedOutOfTownRegistration />} />
+      <Route path='/DelayedOneParentForeignerRegistration' element={<DelayedOneParentForeignerRegistration />} />
+      <Route path="/QrCodeAppointment/:id" element={<QRCodeAppointment />} />
+      <Route path='/BirthCertificateForm' element={<BirthCertificateForm />} />
+      <Route path='/BirthApplicationSummary' element={<BirthApplicationSummary />} />
+
     </Routes>
   );
 }

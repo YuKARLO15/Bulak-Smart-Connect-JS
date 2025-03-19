@@ -4,6 +4,10 @@
     justify-items: left;
     width: 80vw;
     margin-top: 10vh;
+    background-color: #FFFBFA !important;
+    padding: 15px;
+    border-radius: 8px;
+    
   }
 .RecentApplicationsTitle {
     color: #184a5b !important;
@@ -15,10 +19,16 @@
     justify-content: start;
     margin-left: 0vw;
     width: 70vw;
+    height: 130px;
+     background-color: #e0e0e0;
   }
   .ApplicationHeader {
     margin-bottom: 8px;
     margin-left: 5vw;
+  }
+  .ApplicationDescription {
+    font-size: 15px !important;
+    color: grey;
   }
   
   .ApplicationCardTitle{
@@ -28,26 +38,22 @@
   }
   
   .ApplicationStatus{
-  font-size: 1.3vw !important;
+  font-size: 15px!important;
   color: green;
-  text-align: right !important;
   display: flex;
   flex-direction: column;
   }
   .ApplicationStatusP{
   font-size: 1.3vw !important;
   color: darkorange;
-  text-align: right !important;
   }
   .ApplicationStatusD{
   font-size: 1.3vw !important;
   color: red;
-  text-align: right !important;
   }
   .ApplicationDate{
-  font-size: 1.3vw !important;
+  font-size: 12px !important;
   color: #184a5b;
-  text-align: right;
   }
   .ApplicationBtn{
     text-decoration: underline !important;
