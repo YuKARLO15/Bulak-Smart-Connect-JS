@@ -14,7 +14,6 @@
     align-items: center;
     justify-content: center;
     background: #f9f9f9;
-    padding: 20px;
     transition: margin-left 0.3s ease;
 }
 
@@ -36,12 +35,14 @@
 .SectionTitleForeigner{
     font-weight: 600 !important;
     text-align: center;
-    color:#184a5b;
+    color:#184a5b !important;
     padding: 20px !important;
     width: 50vw;
     margin-bottom: 20px;
 }
-
+.SectionulForeigner{
+    color: #13647d;
+}
 .PersonalAppearance {
     font-weight: 600 !important;
     text-align: center;

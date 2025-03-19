@@ -128,7 +128,7 @@ const AppointmentContainer = () => {
           <div className="InputWrapper SmallInput">
             <label>Middle Initial</label>
             <input type="text" name="middleInitial" value={formData.middleInitial} onChange={handleChange} />
-            {errors.middleInitial && <span className="ErrorText">{errors.middleInitial}</span>}
+          
           </div>
         </div>
 
@@ -158,7 +158,7 @@ const AppointmentContainer = () => {
           </div>
 
           <div className="InputWrapper AppointTime">
-            <label>Select Time</label>
+            <label className="AppointTimeSelected">Select Time</label>
             <select name="time" value={formData.time} onChange={handleChange}>
               <option value="">Select a Time Slot</option>
               {timeSlots.map((slot, index) => (

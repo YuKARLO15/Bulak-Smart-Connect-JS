@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Router, Link as RouterLink } from "react-router-dom";
 import {
   Box,
   Button,
@@ -11,7 +12,7 @@ import {
   DialogActions,
   DialogContent,
   DialogContentText,
-  DialogTitle,
+  DialogTitle
 } from "@mui/material";
 import FileUpload from "../FileUpload";
 import "./FirstNameCorrection.css";
@@ -160,9 +161,18 @@ const FirstNameCorrection = () => {
           <Button onClick={() => setOpenDialog(false)} color="secondary"  className="ApplicationDialogBtnC">
             Cancel
           </Button>
-          <Button onClick={confirmSubmit} color="primary" autoFocus className="ApplicationDialogBtnS">
-            Yes, Submit
-          </Button>
+
+          <RouterLink to = '/BirthApplicationSummary'>
+      <Button
+        variant="contained"
+        color="primary"
+        disabled={!isFormComplete}
+        
+        onClick={handleSubmit}
+         className="ApplicationDialogBtnS"
+      >
+        Submit
+      </Button> </RouterLink>
         </DialogActions>
       </Dialog>
     </div>

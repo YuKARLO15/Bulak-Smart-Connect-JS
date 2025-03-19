@@ -14,7 +14,7 @@
     align-items: center;
     justify-content: center;
     background: #f9f9f9;
-    padding: 20px;
+    
     transition: margin-left 0.3s ease;
   }
   
@@ -36,7 +36,7 @@
   .PersonalAppearance{
     font-weight: 600 !important;
     text-align: center;
-    color: rgb(119, 17, 17);
+    color: rgb(119, 17, 17) !important;
     padding: 20px !important;
     width: 100vw;
     margin-bottom: 20px;

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Router, Link as RouterLink } from "react-router-dom";
 import {
   Box,
   Button,
@@ -74,7 +75,7 @@ const SexDobCorrection = () => {
     if (isFormComplete) {
       setIsSubmitted(true);
       setTimeout(() => {
-        navigate("/ApplicationForm");
+        navigate("/BirthApplicationSummary");
       }, 2000);
     }
   };
@@ -178,7 +179,7 @@ const SexDobCorrection = () => {
           Your application has been submitted successfully! Redirecting...
         </Alert>
       )}
-
+   
       <Button
         variant="contained"
         color="primary"
@@ -188,7 +189,7 @@ const SexDobCorrection = () => {
          className="ButtonApplication"
       >
         Submit
-      </Button>
+      </Button> 
     </div>
   );
 };

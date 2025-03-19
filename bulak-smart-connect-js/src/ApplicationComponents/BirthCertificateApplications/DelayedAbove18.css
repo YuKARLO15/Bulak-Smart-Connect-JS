@@ -10,15 +10,23 @@
   max-width: 100vw;
   width: 100vw;
   height: auto;
-  min-height: 100vh;
+  min-height: 100vh !important;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   background: #f9f9f9;
-  padding: 20px;
+
   transition: margin-left 0.3s ease;
 }
+.SubtitleDelayedAbove18 {
+  color: #184a5b;
+  margin-top: 10px !important;
+
+}
+.CheckboxDelayedAbove18{
+  color: #184a5b;
+}
+
 
 /* Sidebar Open State */
 .DelayedAbove18Container.sidebar-open {

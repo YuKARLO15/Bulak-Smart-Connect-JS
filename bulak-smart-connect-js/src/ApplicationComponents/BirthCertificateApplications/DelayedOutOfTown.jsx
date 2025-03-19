@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Router, Link as RouterLink } from "react-router-dom";
 import { Box, Button, Typography, Alert } from "@mui/material";
 import FileUpload from "../FileUpload";
 import "./DelayedOutOfTown.css";
@@ -51,7 +52,7 @@ const DelayedOutOfTownRegistration = () => {
     if (isMandatoryComplete) {
       setIsSubmitted(true);
       setTimeout(() => {
-        navigate("/ApplicationForm");
+        navigate("/BirthApplicationSummary");
       }, 2000);
     }
   };
@@ -69,7 +70,7 @@ const DelayedOutOfTownRegistration = () => {
       </Typography>
 
       
-      <Typography variant="body1" className="PersonalAppea">
+      <Typography variant="body1" className="PersonalAppearance">
         Personal Appearance of the Document Owner
       </Typography>
 
@@ -82,11 +83,7 @@ const DelayedOutOfTownRegistration = () => {
       <Typography variant="body1" className="SectionTitleDelayedOutOfTown">
         Any two (2) of the following documents of parents:
       </Typography>
-      <ul>
-        {parentDocuments.map((doc, index) => (
-          <li key={index}>{doc}</li>
-        ))}
-      </ul>
+    
       <Box>
         {[...Array(2)].map((_, index) => (
           <FileUpload key={index} label={`Parent Document ${index + 1}`} onUpload={handleFileUpload} />
@@ -96,11 +93,7 @@ const DelayedOutOfTownRegistration = () => {
       <Typography variant="body1" className="SectionTitleDelayedOutOfTown">
         Any two (2) of the following documentary evidence:
       </Typography>
-      <ul>
-        {documentaryEvidence.map((doc, index) => (
-          <li key={index}>{doc}</li>
-        ))}
-      </ul>
+     
       <Box>
         {[...Array(2)].map((_, index) => (
           <FileUpload key={index} label={`Documentary Evidence ${index + 1}`} onUpload={handleFileUpload} />
@@ -113,15 +106,17 @@ const DelayedOutOfTownRegistration = () => {
         </Alert>
       )}
 
+
       <Button
         variant="contained"
         color="primary"
         disabled={!isMandatoryComplete}
         sx={{ marginTop: "20px" }}
         onClick={handleSubmit}
+         className="ButtonApplication"
       >
         Submit
-      </Button>
+      </Button> 
     </div>
   );
 };
