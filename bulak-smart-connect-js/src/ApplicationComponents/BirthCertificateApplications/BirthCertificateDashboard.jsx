@@ -77,7 +77,7 @@ const BirthCertificateDashboard = () => {
               value="Out of town"
               control={<Radio />}
               label="Out of town registration"
-            />
+            /> 
           </RadioGroup>
           <Typography variant="subtitle1" className="SubTitleBirthCertificate">
             Correction for Birth Certificate
@@ -86,12 +86,12 @@ const BirthCertificateDashboard = () => {
             value={selectedOption}
             onChange={(e) => setSelectedOption(e.target.value)}
              className="BirthDashRadioGroup"
-          >
+          > 
             <FormControlLabel
               value="Clerical Error"
               control={<Radio />}
               label="Correction of Clerical Errors"
-            />
+            /> 
             <FormControlLabel
               value="Sex DOB"
               control={<Radio />}
@@ -112,7 +112,7 @@ const BirthCertificateDashboard = () => {
           <FormControlLabel
             control={<Radio checked={agreedPrivacy} onChange={() => setAgreedPrivacy(!agreedPrivacy)} />}
             label="I agree to the Data Privacy Notice"
-              className="BirthDashRadioGroup"
+              className="BirthDashRadioGroup" 
           />
         </Box>
 
@@ -120,7 +120,7 @@ const BirthCertificateDashboard = () => {
           <Typography variant="h6" className="SectionTitle">
             Terms and Conditions
           </Typography>
-          <FormControlLabel
+          <FormControlLabel 
             control={<Radio checked={agreedTerms} onChange={() => setAgreedTerms(!agreedTerms)} />}
             label="I agree to the terms and conditions"
              className="BirthDashRadioGroup"

@@ -1,0 +1,43 @@
+.PhClockContainer {
+    align-self: flex-end;
+    position: relative;
+    Top: 100px;
+
+    z-index: 1000;
+    width: fit-content;
+  }
+  
+  .PhClockWrapper {
+    background-color: white;
+    padding: 10px 15px;
+    border-radius: 4px;
+    text-align: center;
+  }
+  
+  .PhClockTitle {
+    color: #184a5b;
+    font-weight: 600 !important;
+    margin-bottom: 2px !important;
+  }
+  
+  .PhClockTime {
+    color: #333;
+    font-weight: 400 !important;
+  }
+  
+ 
+  @media (max-width: 600px) {
+    .PhClockContainer {
+      left: 20px;
+      right: 20px;
+      bottom: 10px;
+    }
+    
+    .PhClockWrapper {
+      width: 100%;
+    }
+    
+    .PhClockTitle, .PhClockTime {
+      font-size: 14px !important;
+    }
+  }
