@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useParams, useLocation } from "react-router-dom";
 import { QRCodeCanvas } from "qrcode.react";
 import NavBar from "../UserDashboard/NavBar";
@@ -8,6 +8,8 @@ const QRCodeAppointment = () => {
   const { id } = useParams(); 
   const location = useLocation();
   const { appointment } = location.state || {};
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  
 
   if (!appointment) return <p>No appointment found.</p>;
 
@@ -20,14 +22,16 @@ const QRCodeAppointment = () => {
   });
 
   return (
-    <div className="QrCodeContainerAppointment">
-      <NavBar />
+    
+    <div className={`QrCodeContainerAppointment ${isSidebarOpen ? "sidebar-open" : ""}`}>
+            <NavBar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
+  
       <div className="QueueInfoAppointment">
         <h2>
           You have scheduled an appointment at <span className="HighlightAppointment">Civil Registrar Office</span>!
           You are currently in queue.
         </h2>
-        <p>Your Appointment ID:</p>
+        <p className="LabelAppointmentID">Your Appointment ID:</p>
         <h1 className="QueueNumberAppointment">{id}</h1>
         <div className="QrSectionAppointment">
           <QRCodeCanvas className="QrCodeAppointment" value={qrData} size={200} />

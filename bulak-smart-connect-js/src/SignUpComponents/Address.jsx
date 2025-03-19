@@ -142,7 +142,7 @@ const AddressSection = ({ formData, handleInputChange }) => {
       </div>
 
       <div className="form-group checkbox">
-        <label classsName="outOfTown">
+        <label className="outOfTown">
           <input
             type="checkbox"
             id="outOfTown"
