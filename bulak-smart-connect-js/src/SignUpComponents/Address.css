@@ -85,6 +85,7 @@ select[name="barangay"] {
   font-size: 14px;
 }
 
+
 /* Specific Styling for Inputs in Address Section */
 input[name="region"],
 input[name="province"],
