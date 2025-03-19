@@ -62,7 +62,7 @@ const CorrectionClericalError = () => {
     if (isFormComplete) {
       setIsSubmitted(true);
       setTimeout(() => {
-        navigate("/ApplicationForm");
+        navigate("/BirthApplicationSummary");
       }, 2000);
     }
   };
@@ -135,7 +135,7 @@ const CorrectionClericalError = () => {
         </Alert>
       )}
 
-<RouterLink to = '/BirthApplicationSummary'>
+
       <Button
         variant="contained"
         color="primary"
@@ -145,7 +145,7 @@ const CorrectionClericalError = () => {
          className="ButtonApplication"
       >
         Submit
-      </Button> </RouterLink>
+      </Button> 
     </div>
   );
 };

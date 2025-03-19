@@ -63,7 +63,7 @@ const BirthApplicationSummary = () => {
                     
               
                     const timestamp = Date.now();
-                    const randomString = Math.random().toString(36);
+                    const randomString = Math.random().toString(10).slice(2);
                     const generatedId = `BA-${timestamp}-${randomString}`;
                     
                     setApplicationId(generatedId);

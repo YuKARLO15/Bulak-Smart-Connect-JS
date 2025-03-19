@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+
 import { useNavigate } from "react-router-dom";
 import {
   Box,
@@ -54,7 +55,7 @@ const Below18Registration = () => {
     if (isFormComplete) {
       setIsSubmitted(true);
       setTimeout(() => {
-        navigate("/ApplicationForm");
+        navigate("/BirthApplicationSummary");
       }, 2000);
     }
   };
@@ -140,7 +141,6 @@ const Below18Registration = () => {
         </Alert>
       )}
 
-<RouterLink to = '/BirthApplicationSummary'>
       <Button
         variant="contained"
         color="primary"
@@ -150,7 +150,7 @@ const Below18Registration = () => {
          className="ButtonApplication"
       >
         Submit
-      </Button> </RouterLink>
+      </Button> 
     </div>
   );
 };

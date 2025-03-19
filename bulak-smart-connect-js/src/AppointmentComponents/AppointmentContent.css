@@ -5,15 +5,12 @@
   align-items: center;
   font-family: Arial, sans-serif;
   width: 70vw;
- height: 81vh;
+
 }
 .AppointmentFContainer {
-  background-color: #fffaf9;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
-  height: 80vh;
   width: 70vw;
   padding: 30px;
-  padding-top:30px ;
+  padding-top:1cap ;
    
 }
 .AppointmentTitle {
@@ -25,8 +22,9 @@
   margin-top: 0cm;
 }
 
-.MiddleInitial input{
+.MiddleInitial{
 width: 5vw !important;
+
 
 }
 .ConfirmContainer {
@@ -161,12 +159,13 @@ width: 5vw !important;
 }
 .SmallInput input {
   width: 4vw !important;
-  flex: 0 0 10vw;
-  max-height: 2vh !important;
+ 
+ 
 }
+
 .LargeInput input {
   width: 41vw !important;
-  max-height: 2vh !important;
+
 }
 
 @media screen and (max-width: 768px) {
@@ -183,12 +182,29 @@ width: 5vw !important;
     flex-direction: column;
     gap: 10px;
   }
+  .SlotGroup {
+    flex-direction: column;
+    gap: 20px;
+    margin-bottom: 50px;
+    margin-left: 20px !important;
+  }
+  .AppointTimeSelected{
+    margin-top: 20px;
+  }
+  
+  .AppointTime select {
+    width: 50vw !important;
 
+  }
+  .InputWrapper input {
+    width: 50vw !important;
+  }
   .ConfirmButton {
     font-size: 16px;
   }
 
-  .SmallInput {
-    max-width: 5vw;
+  .SmallInput Input {
+    min-width: 40vw;
   }
+
 }

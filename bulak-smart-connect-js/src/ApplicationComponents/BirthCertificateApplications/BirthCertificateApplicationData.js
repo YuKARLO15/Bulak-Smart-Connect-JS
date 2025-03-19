@@ -1,7 +1,7 @@
 const BirthCertificateApplicationData = (formData) => {
     
     const timestamp = Date.now();
-    const randomString = Math.random().toString(36);
+    const randomString = Math.random().toString(8);
     const applicationId = `BA-${timestamp}-${randomString}`;
     localStorage.setItem("currentApplicationId", applicationId);
     localStorage.setItem("birthCertificateApplication", JSON.stringify(formData));

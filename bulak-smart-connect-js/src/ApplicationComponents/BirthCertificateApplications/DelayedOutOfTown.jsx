@@ -70,7 +70,7 @@ const DelayedOutOfTownRegistration = () => {
       </Typography>
 
       
-      <Typography variant="body1" className="PersonalAppea">
+      <Typography variant="body1" className="PersonalAppearance">
         Personal Appearance of the Document Owner
       </Typography>
 
@@ -83,11 +83,7 @@ const DelayedOutOfTownRegistration = () => {
       <Typography variant="body1" className="SectionTitleDelayedOutOfTown">
         Any two (2) of the following documents of parents:
       </Typography>
-      <ul>
-        {parentDocuments.map((doc, index) => (
-          <li key={index}>{doc}</li>
-        ))}
-      </ul>
+    
       <Box>
         {[...Array(2)].map((_, index) => (
           <FileUpload key={index} label={`Parent Document ${index + 1}`} onUpload={handleFileUpload} />
@@ -97,11 +93,7 @@ const DelayedOutOfTownRegistration = () => {
       <Typography variant="body1" className="SectionTitleDelayedOutOfTown">
         Any two (2) of the following documentary evidence:
       </Typography>
-      <ul>
-        {documentaryEvidence.map((doc, index) => (
-          <li key={index}>{doc}</li>
-        ))}
-      </ul>
+     
       <Box>
         {[...Array(2)].map((_, index) => (
           <FileUpload key={index} label={`Documentary Evidence ${index + 1}`} onUpload={handleFileUpload} />
@@ -114,7 +106,7 @@ const DelayedOutOfTownRegistration = () => {
         </Alert>
       )}
 
-<RouterLink to = '/BirthApplicationSummary'>
+
       <Button
         variant="contained"
         color="primary"
@@ -124,7 +116,7 @@ const DelayedOutOfTownRegistration = () => {
          className="ButtonApplication"
       >
         Submit
-      </Button> </RouterLink>
+      </Button> 
     </div>
   );
 };

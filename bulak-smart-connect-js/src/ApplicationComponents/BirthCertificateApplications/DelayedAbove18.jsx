@@ -6,7 +6,7 @@ import {
   Checkbox,
   FormControlLabel,
   Typography,
-  Alert,
+  Alert
 } from "@mui/material";
 import FileUpload from "../FileUpload";
 import "./DelayedAbove18.css";
@@ -14,7 +14,6 @@ import NavBar from "../../UserDashboard/NavBar";
 
 const maritalDocuments = [
   "Negative Certification from PSA",
-  "Two (2) Documentary evidences",
   "Affidavit of (2) Disinterested Persons with ID",
   "Certificate of Marriage, if married",
   "National ID or ePhil ID",
@@ -25,10 +24,11 @@ const maritalDocuments = [
   "Personal Appearance of Father or Affidavit of the document owner registrant stating why the document owner cannot appear personally; and death certificate in case the document owner is deceased",
 ];
 
-const nonMaritalDocuments = [
-    ...maritalDocuments.filter(doc => doc !== "Certificate of Marriage of Parents"),
-    "Personal Appearance of the Father or Affidavit of Admission of Paternity executed before a Notary Public",
-  ];
+const nonMaritalDocuments = maritalDocuments.filter(doc => 
+  doc !== "Certificate of Marriage of Parents").concat([
+  "Personal Appearance of the Father or Affidavit of Admission of Paternity executed before a Notary Public"
+]);
+
 const Above18Registration = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [status, setStatus] = useState("");
@@ -43,17 +43,25 @@ const Above18Registration = () => {
     }));
   };
 
-  const isMandatoryComplete =
-    status &&
-    (status === "marital" ? maritalDocuments : nonMaritalDocuments).every(
-      (doc) => uploadedFiles[doc]
-    );
+  const isMandatoryComplete = () => {
+    if (!status) return false;
+    
+    // Check all required documents based on status
+    const requiredDocs = status === "marital" ? maritalDocuments : nonMaritalDocuments;
+    const allRequiredDocsUploaded = requiredDocs.every(doc => uploadedFiles[doc]);
+    
+    // Check documentary evidences
+    const evidence1Uploaded = uploadedFiles["Documentary Evidence 1"];
+    const evidence2Uploaded = uploadedFiles["Documentary Evidence 2"];
+    
+    return allRequiredDocsUploaded && evidence1Uploaded && evidence2Uploaded;
+  };
 
   const handleSubmit = () => {
-    if (isMandatoryComplete) {
+    if (isMandatoryComplete()) {
       setIsSubmitted(true);
       setTimeout(() => {
-        navigate("/ApplicationForm");
+        navigate("/BirthApplicationSummary");
       }, 2000);
     }
   };
@@ -68,15 +76,15 @@ const Above18Registration = () => {
         Application for Delayed Registration Above 18
       </Typography>
 
-      <Typography className="Subtitle">Select One / Pumili ng Isa</Typography>
+      <Typography className="SubtitleDelayedAbove18">Select One / Pumili ng Isa</Typography>
       <Box>
         <FormControlLabel
           control={<Checkbox checked={status === "marital"} onChange={() => setStatus("marital")} />}
-          label="Marital Child"
+          label="Marital Child" className="CheckboxDelayedAbove18"
         />
         <FormControlLabel
           control={<Checkbox checked={status === "non-marital"} onChange={() => setStatus("non-marital")} />}
-          label="Non-Marital Child"
+          label="Non-Marital Child" className="CheckboxDelayedAbove18"
         />
       </Box>
 
@@ -86,18 +94,15 @@ const Above18Registration = () => {
             Mandatory Documents:
           </Typography>
           {(status === "marital" ? maritalDocuments : nonMaritalDocuments).map((doc, index) => (
-            doc !== "Two (2) Documentary evidences" ? (
-              <FileUpload key={index} label={doc} onUpload={handleFileUpload} />
-            ) : null
+            <FileUpload key={index} label={doc} onUpload={handleFileUpload} />
           ))}
 
           <Typography variant="body1" className="SectionTitleDelayedAbove18">
             Any two (2) of the following documentary evidence:
           </Typography>
           <Box>
-            {[...Array(2)].map((_, index) => (
-              <FileUpload key={index} label={`Documentary Evidence ${index + 1}`} onUpload={handleFileUpload} />
-            ))}
+            <FileUpload label="Documentary Evidence 1" onUpload={handleFileUpload} />
+            <FileUpload label="Documentary Evidence 2" onUpload={handleFileUpload} />
           </Box>
         </Box>
       )}
@@ -125,17 +130,16 @@ const Above18Registration = () => {
       )}
 
       {status && (
-        <RouterLink to = '/BirthApplicationSummary'>
         <Button
           variant="contained"
           color="primary"
-          disabled={!isFormComplete}
+          disabled={!isMandatoryComplete()}
           sx={{ marginTop: "20px" }}
           onClick={handleSubmit}
-           className="ButtonApplication"
+          className="ButtonApplication"
         >
           Submit
-        </Button> </RouterLink>
+        </Button> 
       )}
     </div>
   );

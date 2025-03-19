@@ -13,10 +13,11 @@ height: 10vh;
 .OnlineApplicationTitle {
   font-size: 30px !important;
   font-weight: 600 !important;
-  text-align: start;
+  ;
+  text-align: start !important;
   margin-bottom: 10vh !important;
   color: #FFF6F6 !important;
-  padding: 10px;
+  padding: 20px;
   margin-left: 10vw !important;
 }
 .CertificateCard {

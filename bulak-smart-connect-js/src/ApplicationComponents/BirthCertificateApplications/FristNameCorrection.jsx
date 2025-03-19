@@ -12,7 +12,7 @@ import {
   DialogActions,
   DialogContent,
   DialogContentText,
-  DialogTitle,
+  DialogTitle
 } from "@mui/material";
 import FileUpload from "../FileUpload";
 import "./FirstNameCorrection.css";
@@ -167,9 +167,9 @@ const FirstNameCorrection = () => {
         variant="contained"
         color="primary"
         disabled={!isFormComplete}
-        sx={{ marginTop: "20px" }}
+        
         onClick={handleSubmit}
-         className="ButtonApplication"
+         className="ApplicationDialogBtnS"
       >
         Submit
       </Button> </RouterLink>
