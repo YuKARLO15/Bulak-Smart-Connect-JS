@@ -7,9 +7,9 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <link rel="icon" type="image/x-icon" href="./images/favicon.ico">
-	   <link rel="stylesheet" href="./styles/style.css">
-        <link rel="stylesheet" href="./styles/dark.css">
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
     </head>
     <body>
           <script>
@@ -64,7 +64,7 @@
 
         <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
                <div class="d-flex">
-                    <a href="./" class="navbar-brand">bsc-js-backend documentation</a>
+                    <a href="../" class="navbar-brand">bsc-js-backend documentation</a>
                     <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
                </div>
         </div>
@@ -79,72 +79,71 @@
                    <compodoc-menu mode="normal"></compodoc-menu>
                </div>
                <!-- START CONTENT -->
-               <div class="content modules">
+               <div class="content injectable">
                    <div class="content-data">
 
 
 
+
+
+
+
+
 <ol class="breadcrumb">
-    <li class="breadcrumb-item">Modules</li>
+  <li class="breadcrumb-item">Injectables</li>
+  <li class="breadcrumb-item" >JwtAuthGuard</li>
 </ol>
-<div class="container-fluid modules">
-    <div class="row">
-            <div class="col-md-6 col-lg-4">
-                <div class="card card-module">
-                    <div class="card-header">
-                        <h4 class="card-title">AppModule</h4>
-                    </div>
-                    <div class="card-block">
-                                <p>
-                                    <object id="demo-svg" type="image/svg+xml" lazy="./modules/AppModule/dependencies.svg" style="width: 100%; height: 175px;">
-                                        Your browser does not support SVG
-                                    </object>
-                                </p>
-                        <footer class="text-center">
-                            <a href="./modules/AppModule.html" class="btn btn-default">Browse</a>
-                        </footer>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 col-lg-4">
-                <div class="card card-module">
-                    <div class="card-header">
-                        <h4 class="card-title">AuthModule</h4>
-                    </div>
-                    <div class="card-block">
-                                <p>
-                                    <object id="demo-svg" type="image/svg+xml" lazy="./modules/AuthModule/dependencies.svg" style="width: 100%; height: 175px;">
-                                        Your browser does not support SVG
-                                    </object>
-                                </p>
-                        <footer class="text-center">
-                            <a href="./modules/AuthModule.html" class="btn btn-default">Browse</a>
-                        </footer>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 col-lg-4">
-                <div class="card card-module">
-                    <div class="card-header">
-                        <h4 class="card-title">UsersModule</h4>
-                    </div>
-                    <div class="card-block">
-                                <p class="no-graph">
-                                    No graph available.
-                                </p>
-                        <footer class="text-center">
-                            <a href="./modules/UsersModule.html" class="btn btn-default">Browse</a>
-                        </footer>
-                    </div>
-                </div>
-            </div>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" 
+                class="nav-link"
+                class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" 
+                class="nav-link"
+                
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info">
+        <p class="comment">
+            <h3>File</h3>
+        </p>
+        <p class="comment">
+            <code>src/auth/jwt-auth.guard.ts</code>
+        </p>
+
+
+
+            <p class="comment">
+                <h3>Extends</h3>
+            </p>
+            <p class="comment">
+                        <code>AuthGuard(&#x27;jwt&#x27;)</code>
+            </p>
+
+
+
+
+
+
     </div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable } from &#x27;@nestjs/common&#x27;;
+import { AuthGuard } from &#x27;@nestjs/passport&#x27;;
+
+@Injectable()
+export class JwtAuthGuard extends AuthGuard(&#x27;jwt&#x27;) {}</code></pre>
+    </div>
+
 </div>
-
-
-
-
-
 
 
 
@@ -182,9 +181,9 @@
           </label>
 
        <script>
-            var COMPODOC_CURRENT_PAGE_DEPTH = 0;
-            var COMPODOC_CURRENT_PAGE_CONTEXT = 'modules';
-            var COMPODOC_CURRENT_PAGE_URL = 'modules.html';
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'injectable';
+            var COMPODOC_CURRENT_PAGE_URL = 'JwtAuthGuard.html';
             var MAX_SEARCH_RESULTS = 15;
        </script>
 
@@ -201,30 +200,30 @@
                }
           </script>
 
-       <script src="./js/libs/custom-elements.min.js"></script>
-       <script src="./js/libs/lit-html.js"></script>
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
 
-       <script src="./js/menu-wc.js" defer></script>
-       <script nomodule src="./js/menu-wc_es5.js" defer></script>
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
 
-       <script src="./js/libs/bootstrap-native.js"></script>
+       <script src="../js/libs/bootstrap-native.js"></script>
 
-       <script src="./js/libs/es6-shim.min.js"></script>
-       <script src="./js/libs/EventDispatcher.js"></script>
-       <script src="./js/libs/promise.min.js"></script>
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
 
-       <script src="./js/compodoc.js"></script>
+       <script src="../js/compodoc.js"></script>
 
-       <script src="./js/tabs.js"></script>
-       <script src="./js/menu.js"></script>
-       <script src="./js/libs/clipboard.min.js"></script>
-       <script src="./js/libs/prism.js"></script>
-       <script src="./js/sourceCode.js"></script>
-          <script src="./js/search/search.js"></script>
-          <script src="./js/search/lunr.min.js"></script>
-          <script src="./js/search/search-lunr.js"></script>
-          <script src="./js/search/search_index.js"></script>
-       <script src="./js/lazy-load-graphs.js"></script>
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
 
 
     </body>
