@@ -13,8 +13,8 @@ import Typography from "@mui/material/Typography";
 import ForgotPassword from "./ForgotPassword";
 import "./LogInCard.css";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
-import { auth, signInWithEmailAndPassword } from "../firebase";  //Firbase Authentication
-import { useAuth } from "../AuthContext"; //AuthContext
+import { useAuth } from "../AuthContext"; //Auth Context
+import { authService } from "../services/api"; //API Service to NestJS
 
 export default function LogInCard({ onLogin }) {
   const [email, setEmail] = useState("");
@@ -35,34 +35,22 @@ export default function LogInCard({ onLogin }) {
     event.preventDefault();
     if (validateInputs()) {
       try {
-        const userCredential = await signInWithEmailAndPassword(auth, email, password);
-        const token = await userCredential.user.getIdToken();
-
-        // Send token to backend
-        const response = await fetch("http://localhost:3000/auth/login", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ token }),
-        });
-        console.log(response); //Remove later
-        if (response.ok) {
-          const data = await response.json();
-          onLogin(data); // Save user session
-          login(); // Set the authentication state to true
-          navigate("/UserDashboard"); // Redirect to UserDashboard
-        } else {
-          const errorData = await response.json();
-          setError(errorData.message || "Invalid credentials");
-        }
+        console.log('Sending login request with:', { email, password });
+        const data = await authService.login(email, password);
+        console.log('Login successful:', data);
+        onLogin(data.user);
+        login(); // Set auth context
+        navigate("/UserDashboard");
       } catch (error) {
-        console.error("Fetch error:", error);
-        if (error.code === 'auth/user-not-found') {
-          setError("User not found. Please check your email and password.");
-        } else if (error.code === 'auth/wrong-password') {
-          setError("Incorrect password. Please try again.");
+        console.error("Login error:", error);
+        
+        if (error.response) {
+          // Include more details for debugging
+          console.log('Error status:', error.response.status);
+          console.log('Error data:', error.response.data);
+          setError(error.response.data.message || "Invalid credentials");
         } else {
+          // Network error or other issue
           setError("An error occurred during login. Please try again.");
         }
       }

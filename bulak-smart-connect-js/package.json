@@ -4,8 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "concurrently \"npm:start-emulators\" \"npm:start-backend\" \"npm:start-frontend\"",
-    "start-emulators": "cd ../bsc-js-backend && firebase emulators:start",
+    "dev": "concurrently \"npm:start-backend\" \"npm:start-frontend\"",
     "start-backend": "cd ../bsc-js-backend && npm run start:dev",
     "start-frontend": "vite",
     "build": "vite build",
@@ -25,7 +24,6 @@
     "@mui/x-date-pickers": "^7.27.3",
     "axios": "^1.8.2",
     "date-fns": "^4.1.0",
-    "firebase": "^11.4.0",
     "qrcode.react": "^4.2.0",
     "react": "^18.3.1",
     "react-calendar": "^5.1.0",

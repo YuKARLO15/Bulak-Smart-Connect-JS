@@ -52,3 +52,8 @@ npm run start: to start NestJS normally </br>
 firebase emulators:start: to start Firebase emulator </br>
 To further see other options, just enter "npm run" to see options for NestJS or "firebase" to see options for Firebase. </br>
 
+# MySQL Setup
+
+
+# XAMPP Setup (Optional)
+

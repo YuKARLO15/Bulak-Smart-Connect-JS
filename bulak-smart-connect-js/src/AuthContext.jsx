@@ -1,39 +1,28 @@
-import React, { createContext, useState, useContext, useEffect } from 'react';
+import React, { createContext, useState, useContext, useEffect } from "react";
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
-    // Get the initial state from localStorage
-    const storedAuthState = localStorage.getItem('isAuthenticated');
-    return storedAuthState === 'true';
+    // Check if token exists in localStorage on initial load
+    return localStorage.getItem("token") !== null;
   });
-
-  const [timeoutId, setTimeoutId] = useState(null);
 
   const login = () => {
     setIsAuthenticated(true);
-    localStorage.setItem('isAuthenticated', 'true');
-    startLogoutTimer();
   };
 
   const logout = () => {
+    localStorage.removeItem("token"); // Remove the token
     setIsAuthenticated(false);
-    localStorage.removeItem('isAuthenticated');
-    if (timeoutId) {
-      clearTimeout(timeoutId);
-    }
   };
 
+  // Auto-logout timer (optional)
   const startLogoutTimer = () => {
-    if (timeoutId) {
-      clearTimeout(timeoutId);
-    }
-    const id = setTimeout(() => {
+    const logoutTime = 60 * 60 * 1000; // 1 hour
+    setTimeout(() => {
       logout();
-      alert('You have been logged out due to inactivity.');
-    }, 30 * 60 * 1000); // 30 minutes timeout
-    setTimeoutId(id);
+    }, logoutTime);
   };
 
   useEffect(() => {
