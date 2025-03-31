@@ -1,5 +1,4 @@
 import React from "react";
-import { Navigate, Link } from "react-router-dom";
 import {
   Box,
   Button,
@@ -11,9 +10,8 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import "./LandingPage.css";
+import { Link } from "react-router-dom"; 
 import Footer from "../footer";
-import { useAuth } from "../AuthContext"; // AuthState
-
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import DescriptionIcon from "@mui/icons-material/Description";
 import QrCodeScannerIcon from "@mui/icons-material/QrCodeScanner";
@@ -23,15 +21,7 @@ import DeviceMockUp from "./LandingPageAssets/DeviceMockUp.png";
 import BulakLGULogo from "./LandingPageAssets/BulakLGULogo.png";
 import PhTimeComponent from "./PhTimeComponent";
 
-
 const LandingPage = () => {
-
-  const { isAuthenticated } = useAuth(); //Auth State
-  
-  if (isAuthenticated) {
-    return <Navigate to="/UserDashBoard" />; //Auth State
-  }
-
   return (
     <Box className="LandingContainer">
       <NavBar />
@@ -61,8 +51,6 @@ const LandingPage = () => {
                   variant="contained"
                   color="primary"
                   className="SignUpButtonLanding"
-                  component={Link}
-                  to="/SignUpForm"
                 >
                   SIGN UP
                 </Button>
@@ -117,12 +105,9 @@ const LandingPage = () => {
           <Typography variant="h5" className="KeyFeaturesTitleLanding">
             KEY FEATURES
           </Typography>
-
-          <Box 
-            className="FeatureItemLanding"
-            onClick={() => handleFeatureClick("/AppointmentForm")}
-            style={{ cursor: "pointer" }}
-          >
+         <Link    to="/LogIn" >
+          <Box className="FeatureItemLanding">
+         
             <Grid container spacing={2} alignItems="center">
               <Grid item xs={12} md={3}>
                 <Box className="FeatureIconContainerLanding">
@@ -144,14 +129,13 @@ const LandingPage = () => {
                   </Typography>
                 </Box>
               </Grid>
-            </Grid>
-          </Box>
+              </Grid>
+            
+            </Box>
+          </Link>
 
-          <Box 
-            className="FeatureItemLanding"
-            onClick={() => handleFeatureClick("/ApplicationForm")}
-            style={{ cursor: "pointer" }}
-          >
+          <Link    to="/LogIn" >
+          <Box className="FeatureItemLanding">
             <Grid container spacing={2} alignItems="center">
               <Grid item xs={12} md={9}>
                 <Box className="FeatureContentLanding">
@@ -179,12 +163,9 @@ const LandingPage = () => {
               </Grid>
             </Grid>
           </Box>
-
-          <Box 
-            className="FeatureItemLanding"
-            onClick={() => handleFeatureClick("/QR")}
-            style={{ cursor: "pointer" }}
-          >
+          </Link>
+          <Link    to="/LogIn" >
+          <Box className="FeatureItemLanding">
             <Grid container spacing={2} alignItems="center">
               <Grid item xs={12} md={3}>
                 <Box className="FeatureIconContainerLanding">
@@ -210,13 +191,10 @@ const LandingPage = () => {
                 </Box>
               </Grid>
             </Grid>
-          </Box>
-
-          <Box 
-            className="FeatureItemLanding"
-            onClick={() => handleFeatureClick("/")}
-            style={{ cursor: "pointer" }}
-          >
+            </Box>
+            </Link>
+            <Link    to="/LogIn" >
+          <Box className="FeatureItemLanding">
             <Grid container spacing={2} alignItems="center">
               <Grid item xs={12} md={9}>
                 <Box className="FeatureContentLanding">
@@ -241,7 +219,8 @@ const LandingPage = () => {
                 </Box>
               </Grid>
             </Grid>
-          </Box>
+            </Box>
+          </Link>
         </Box>
       </Container>
       <Footer />
