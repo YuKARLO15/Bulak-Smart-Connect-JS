@@ -21,7 +21,7 @@
     "test:a11y": "jest --testMatch='**/*.a11y.{js,ts,jsx,tsx}'"
   },
   "dependencies": {
-    "@nestjs/common": "^11.0.11",
+    "@nestjs/common": "^11.0.12",
     "@nestjs/config": "^4.0.1",
     "@nestjs/core": "^11.0.11",
     "@nestjs/jwt": "^11.0.0",
