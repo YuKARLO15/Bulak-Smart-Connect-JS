@@ -52,8 +52,77 @@ npm run start: to start NestJS normally </br>
 firebase emulators:start: to start Firebase emulator </br>
 To further see other options, just enter "npm run" to see options for NestJS or "firebase" to see options for Firebase. </br>
 
+# Complementary Instructions After Revisions
 # MySQL Setup
 
+1. Download and install MySQL Installer from https://dev.mysql.com/downloads/installer/ </br>
+2. During installation, select: </br>
+- MySQL Server </br>
+- MySQL Workbench </br>
+- MySQL Shell </br>
+- Connector/J </br>
+3. Configure MySQL Server with these settings: </br>
+- Authentication Method: Use Strong Password Encryption </br>
+- Root Password: [create a secure password] </br>
+4. Launch MySQL Workbench </br>
+5. Create a new database: </br>
 
-# XAMPP Setup (Optional)
+CREATE DATABASE bulak_smart_connect; </br>
+USE bulak_smart_connect; </br>
+
+-- Create users table </br>
+CREATE TABLE users ( </br>
+  id INT AUTO_INCREMENT PRIMARY KEY, </br>
+  email VARCHAR(255) NOT NULL UNIQUE, </br>
+  password VARCHAR(255) NOT NULL, </br>
+  name VARCHAR(255) NOT NULL, </br>
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP </br>
+); </br>
+
+-- Create a test user (password: password123) </br>
+INSERT INTO users (email, password, name) </br>
+VALUES ('test@example.com', '$2b$10$mExcKUyHurlq1zNDNos9LOXbtUJZuvIKybmHr/BngC6ZamAjz1ohS', 'Test User'); </br>
+
+# Environment Setup
+
+Create a .env file in the bsc-js-backend directory with: </br>
+
+DB_HOST=localhost </br>
+DB_PORT=3306 </br>
+DB_USERNAME=root </br>
+DB_PASSWORD=your_password </br>
+DB_NAME=bulak_smart_connect </br>
+JWT_SECRET=your_jwt_secret_key </br>
+
+Generate a secure JWT secret using: </br>
+
+node -e "console.log(require('crypto').randomBytes(64).toString('hex'))" </br>
+
+Optionally, you can retrieve the env file from our secure channel and put it in the bsc-js-backend directory </br>
+
+# XAMPP Setup (Alternative to MySQL Installer/Optional)
+
+If you prefer using XAMPP instead of MySQL Installer: </br>
+
+1. Download and install XAMPP from https://www.apachefriends.org/ </br>
+2. Start the MySQL and Apache services from XAMPP Control Panel </br>
+3. Open phpMyAdmin at http://localhost/phpmyadmin </br>
+4. Create database and tables as described in the MySQL Setup section </br>
+5. Note that XAMPP uses MariaDB instead of MySQL, but this is compatible with the provided instructions </br>
+
+# New Ways to Run Project
+
+cd bulak-smart-connect-js </br>
+npm run dev            # Run React and NestJS concurrently </br>
+npm run start-frontend # Run React only </br>
+npm run start-backend  # Run NestJS only </br>
+npm run build          # Vite build </br>
+npm run lint           # ESLint </br>
+npm run preview        # Vite preview </br>
+
+For more backend options: </br>
+
+cd bsc-js-backend </br>
+npm run start          # Start NestJS normally </br>
+npm run start:dev      # Start NestJS in development mode </br>
 
