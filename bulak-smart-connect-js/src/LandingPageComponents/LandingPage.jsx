@@ -1,4 +1,5 @@
 import React from "react";
+import { Navigate, Link } from "react-router-dom";
 import {
   Box,
   Button,
@@ -11,6 +12,7 @@ import {
 import { styled } from "@mui/material/styles";
 import "./LandingPage.css";
 import Footer from "../footer";
+import { useAuth } from "../AuthContext"; // AuthState
 
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import DescriptionIcon from "@mui/icons-material/Description";
@@ -22,6 +24,13 @@ import BulakLGULogo from "./LandingPageAssets/BulakLGULogo.png";
 import PhTimeComponent from "./PhTimeComponent";
 
 const LandingPage = () => {
+
+  const { isAuthenticated } = useAuth(); //Auth State
+  
+  if (isAuthenticated) {
+    return <Navigate to="/UserDashBoard" />; //Auth State
+  }
+
   return (
     <Box className="LandingContainer">
       <NavBar />
@@ -51,6 +60,8 @@ const LandingPage = () => {
                   variant="contained"
                   color="primary"
                   className="SignUpButtonLanding"
+                  component={Link}
+                  to="/SignUpForm"
                 >
                   SIGN UP
                 </Button>
