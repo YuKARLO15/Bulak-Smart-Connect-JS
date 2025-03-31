@@ -23,6 +23,7 @@ Test at http://localhost:3000/ </br>
 - MySQL Workbench </br>
 - MySQL Shell </br>
 - Connector/J </br>
+- I selected all though </br>
 3. Configure MySQL Server with these settings: </br>
 - Authentication Method: Use Strong Password Encryption </br>
 - Root Password: [create a secure password] </br>
