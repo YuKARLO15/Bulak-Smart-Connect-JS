@@ -1,5 +1,4 @@
 import React from "react";
-import { Navigate, Link } from "react-router-dom";
 import {
   Box,
   Button,
@@ -11,9 +10,8 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import "./LandingPage.css";
+import { Link } from "react-router-dom"; 
 import Footer from "../footer";
-import { useAuth } from "../AuthContext"; // AuthState
-
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import DescriptionIcon from "@mui/icons-material/Description";
 import QrCodeScannerIcon from "@mui/icons-material/QrCodeScanner";
@@ -24,13 +22,6 @@ import BulakLGULogo from "./LandingPageAssets/BulakLGULogo.png";
 import PhTimeComponent from "./PhTimeComponent";
 
 const LandingPage = () => {
-
-  const { isAuthenticated } = useAuth(); //Auth State
-  
-  if (isAuthenticated) {
-    return <Navigate to="/UserDashBoard" />; //Auth State
-  }
-
   return (
     <Box className="LandingContainer">
       <NavBar />
@@ -60,8 +51,6 @@ const LandingPage = () => {
                   variant="contained"
                   color="primary"
                   className="SignUpButtonLanding"
-                  component={Link}
-                  to="/SignUpForm"
                 >
                   SIGN UP
                 </Button>
@@ -116,8 +105,9 @@ const LandingPage = () => {
           <Typography variant="h5" className="KeyFeaturesTitleLanding">
             KEY FEATURES
           </Typography>
-
+         <Link    to="/LogIn" >
           <Box className="FeatureItemLanding">
+         
             <Grid container spacing={2} alignItems="center">
               <Grid item xs={12} md={3}>
                 <Box className="FeatureIconContainerLanding">
@@ -139,9 +129,12 @@ const LandingPage = () => {
                   </Typography>
                 </Box>
               </Grid>
-            </Grid>
-          </Box>
+              </Grid>
+            
+            </Box>
+          </Link>
 
+          <Link    to="/LogIn" >
           <Box className="FeatureItemLanding">
             <Grid container spacing={2} alignItems="center">
               <Grid item xs={12} md={9}>
@@ -170,7 +163,8 @@ const LandingPage = () => {
               </Grid>
             </Grid>
           </Box>
-
+          </Link>
+          <Link    to="/LogIn" >
           <Box className="FeatureItemLanding">
             <Grid container spacing={2} alignItems="center">
               <Grid item xs={12} md={3}>
@@ -197,8 +191,9 @@ const LandingPage = () => {
                 </Box>
               </Grid>
             </Grid>
-          </Box>
-
+            </Box>
+            </Link>
+            <Link    to="/LogIn" >
           <Box className="FeatureItemLanding">
             <Grid container spacing={2} alignItems="center">
               <Grid item xs={12} md={9}>
@@ -224,7 +219,8 @@ const LandingPage = () => {
                 </Box>
               </Grid>
             </Grid>
-          </Box>
+            </Box>
+          </Link>
         </Box>
       </Container>
       <Footer />
