@@ -55,7 +55,8 @@ To further see other options, just enter "npm run" to see options for NestJS or 
 # Complementary Instructions After Revisions
 # MySQL Setup
 
-1. Download and install MySQL Installer from https://dev.mysql.com/downloads/installer/ </br>
+1. Download and install MySQL Installer from https://dev.mysql.com/downloads/installer/
+- or https://dev.mysql.com/downloads/workbench/ </br>
 2. During installation, select: </br>
 - MySQL Server </br>
 - MySQL Workbench </br>
