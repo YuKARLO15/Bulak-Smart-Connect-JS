@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   Box,
   Button,
@@ -11,7 +11,7 @@ import {
 import { styled } from "@mui/material/styles";
 import "./LandingPage.css";
 import Footer from "../footer";
-
+import { Link as RouterLink, useNavigate } from "react-router-dom";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import DescriptionIcon from "@mui/icons-material/Description";
 import QrCodeScannerIcon from "@mui/icons-material/QrCodeScanner";
@@ -21,7 +21,20 @@ import DeviceMockUp from "./LandingPageAssets/DeviceMockUp.png";
 import BulakLGULogo from "./LandingPageAssets/BulakLGULogo.png";
 import PhTimeComponent from "./PhTimeComponent";
 
+
 const LandingPage = () => {
+  const { isAuthenticated } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+
+  const handleFeatureClick = (destination) => {
+    if (isAuthenticated) {
+      navigate(destination);
+    } else {
+      navigate("/signup");
+    }
+  };
+
   return (
     <Box className="LandingContainer">
       <NavBar />
@@ -51,6 +64,8 @@ const LandingPage = () => {
                   variant="contained"
                   color="primary"
                   className="SignUpButtonLanding"
+                  component={RouterLink}
+                  to="/signup"
                 >
                   SIGN UP
                 </Button>
@@ -106,7 +121,11 @@ const LandingPage = () => {
             KEY FEATURES
           </Typography>
 
-          <Box className="FeatureItemLanding">
+          <Box 
+            className="FeatureItemLanding"
+            onClick={() => handleFeatureClick("/AppointmentForm")}
+            style={{ cursor: "pointer" }}
+          >
             <Grid container spacing={2} alignItems="center">
               <Grid item xs={12} md={3}>
                 <Box className="FeatureIconContainerLanding">
@@ -131,7 +150,11 @@ const LandingPage = () => {
             </Grid>
           </Box>
 
-          <Box className="FeatureItemLanding">
+          <Box 
+            className="FeatureItemLanding"
+            onClick={() => handleFeatureClick("/ApplicationForm")}
+            style={{ cursor: "pointer" }}
+          >
             <Grid container spacing={2} alignItems="center">
               <Grid item xs={12} md={9}>
                 <Box className="FeatureContentLanding">
@@ -160,7 +183,11 @@ const LandingPage = () => {
             </Grid>
           </Box>
 
-          <Box className="FeatureItemLanding">
+          <Box 
+            className="FeatureItemLanding"
+            onClick={() => handleFeatureClick("/QR")}
+            style={{ cursor: "pointer" }}
+          >
             <Grid container spacing={2} alignItems="center">
               <Grid item xs={12} md={3}>
                 <Box className="FeatureIconContainerLanding">
@@ -188,7 +215,11 @@ const LandingPage = () => {
             </Grid>
           </Box>
 
-          <Box className="FeatureItemLanding">
+          <Box 
+            className="FeatureItemLanding"
+            onClick={() => handleFeatureClick("/")}
+            style={{ cursor: "pointer" }}
+          >
             <Grid container spacing={2} alignItems="center">
               <Grid item xs={12} md={9}>
                 <Box className="FeatureContentLanding">
