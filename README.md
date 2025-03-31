@@ -1,10 +1,11 @@
-# How to Install (Frontend)
+# Bulak LGU Smart Connect: Information and Queuing Management System
+## How to Install (Frontend)
 
 cd bulak-smart-connect-js </br>
 npm install (optional) </br>
 npm run dev </br>
 
-# How to Install (Backend)
+## How to Install (Backend)
 
 cd bsc-js-backend </br>
 npm install or npm i -g @nestjs/cli (optional) </br>
@@ -13,7 +14,7 @@ npm run start </br>
 Test at http://localhost:3000/ </br>
 
 # Complementary Instructions After Revisions
-# MySQL Setup
+## MySQL Setup
 
 1. Download and install MySQL Installer from https://dev.mysql.com/downloads/installer/
 - or https://dev.mysql.com/downloads/workbench/ </br>
@@ -44,7 +45,7 @@ CREATE TABLE users ( </br>
 INSERT INTO users (email, password, name) </br>
 VALUES ('test@example.com', '$2b$10$mExcKUyHurlq1zNDNos9LOXbtUJZuvIKybmHr/BngC6ZamAjz1ohS', 'Test User'); </br>
 
-# Environment Setup
+## Environment Setup
 
 Create a .env file in the bsc-js-backend directory with: </br>
 
@@ -61,7 +62,7 @@ node -e "console.log(require('crypto').randomBytes(64).toString('hex'))" </br>
 
 Optionally, you can retrieve the env file from our secure channel and put it in the bsc-js-backend directory </br>
 
-# XAMPP Setup (Alternative to MySQL Installer/Optional)
+## XAMPP Setup (Alternative to MySQL Installer/Optional)
 
 If you prefer using XAMPP instead of MySQL Installer: </br>
 
@@ -71,7 +72,7 @@ If you prefer using XAMPP instead of MySQL Installer: </br>
 4. Create database and tables as described in the MySQL Setup section </br>
 5. Note that XAMPP uses MariaDB instead of MySQL, but this is compatible with the provided instructions </br>
 
-# New Ways to Run Project
+## New Ways to Run Project
 
 cd bulak-smart-connect-js </br>
 npm run dev            # Run React and NestJS concurrently </br>
@@ -88,7 +89,7 @@ npm run start          # Start NestJS normally </br>
 npm run start:dev      # Start NestJS in development mode </br>
 
 # Old Instructions (Archived)
-# Firebase Tools (Firebase Emulator)
+## Firebase Tools (Firebase Emulator)
 
 npm install -g firebase-tools (can be skipped) </br>
 cd bsc-js-backend </br>
@@ -100,17 +101,17 @@ Test at http://127.0.0.1:4000/ </br>
 
 install Java JDK from https://www.java.com/en/download/ and https://download.oracle.com/java/23/latest/jdk-23_windows-x64_bin.exe or https://www.oracle.com/java/technologies/downloads/ </br>
 
-# serviceAccountKey
+## serviceAccountKey
 
 serviceAccountKey.json was ignored on git so if needed, just get it on our secure channel and put it on bsc-js-backend\src\config </br>
 
-# npm run dev
+## npm run dev
 
 npm run dev on the frontend folder now runs concurrently, meaning React, NestJs, & Firebase Emulator runs simultaneously </br>
 
 If you want to run it on its default behavior, go to package.json on the folder, C:\Users\YuKARLO15\Desktop\Programming_Codes\Bulak-Smart-Connect-JS\bulak-smart-connect-js and change the dev under the scripts into "dev": "vite", </br>
 
-# New Ways to Run Project (Mostly on Frontend Folder)
+## New Ways to Run Project (Mostly on Frontend Folder)
 
 cd bulak-smart-connect-js </br>
 npm run dev: will run React, NestJS (0n Dev Mode), and Firebase Emulator concurrently </br>
