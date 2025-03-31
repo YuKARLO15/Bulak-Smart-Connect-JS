@@ -2,8 +2,11 @@ import React, { useState } from "react";
 import "./NavBar.css";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
+import { Link } from "react-router-dom"; // Import Link from react-router-dom
+import { useAuth } from "../AuthContext"; // Import useAuth
 
 const NavBar = ({ isSidebarOpen, setIsSidebarOpen }) => {
+  const { logout } = useAuth(); // Use the logout function from AuthContext
   
   return (
     <>
@@ -32,7 +35,7 @@ const NavBar = ({ isSidebarOpen, setIsSidebarOpen }) => {
             <a href="/settings">Settings</a>
           </div>
           <div className="Logout">
-            <a href="/">Log Out</a>
+          <Link to="/" onClick={logout}>Log Out</Link>
           </div>
         </div>
       </nav>

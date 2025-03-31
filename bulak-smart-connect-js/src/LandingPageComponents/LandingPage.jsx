@@ -1,4 +1,5 @@
-import React, { useContext } from "react";
+import React from "react";
+import { Navigate, Link } from "react-router-dom";
 import {
   Box,
   Button,
@@ -11,7 +12,8 @@ import {
 import { styled } from "@mui/material/styles";
 import "./LandingPage.css";
 import Footer from "../footer";
-import { Link as RouterLink, useNavigate } from "react-router-dom";
+import { useAuth } from "../AuthContext"; // AuthState
+
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import DescriptionIcon from "@mui/icons-material/Description";
 import QrCodeScannerIcon from "@mui/icons-material/QrCodeScanner";
@@ -23,17 +25,12 @@ import PhTimeComponent from "./PhTimeComponent";
 
 
 const LandingPage = () => {
-  const { isAuthenticated } = useContext(AuthContext);
-  const navigate = useNavigate();
 
-
-  const handleFeatureClick = (destination) => {
-    if (isAuthenticated) {
-      navigate(destination);
-    } else {
-      navigate("/signup");
-    }
-  };
+  const { isAuthenticated } = useAuth(); //Auth State
+  
+  if (isAuthenticated) {
+    return <Navigate to="/UserDashBoard" />; //Auth State
+  }
 
   return (
     <Box className="LandingContainer">
@@ -64,8 +61,8 @@ const LandingPage = () => {
                   variant="contained"
                   color="primary"
                   className="SignUpButtonLanding"
-                  component={RouterLink}
-                  to="/signup"
+                  component={Link}
+                  to="/SignUpForm"
                 >
                   SIGN UP
                 </Button>
