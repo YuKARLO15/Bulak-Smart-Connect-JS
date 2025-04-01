@@ -251,8 +251,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="95"
-                                    class="link-to-prism">src/auth/auth.service.ts:95</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="102"
+                                    class="link-to-prism">src/auth/auth.service.ts:102</a></div>
                         </td>
                     </tr>
 
@@ -320,8 +320,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="27"
-                                    class="link-to-prism">src/auth/auth.service.ts:27</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="29"
+                                    class="link-to-prism">src/auth/auth.service.ts:29</a></div>
                         </td>
                     </tr>
 
@@ -389,8 +389,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="69"
-                                    class="link-to-prism">src/auth/auth.service.ts:69</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="74"
+                                    class="link-to-prism">src/auth/auth.service.ts:74</a></div>
                         </td>
                     </tr>
 
@@ -529,8 +529,10 @@ export class AuthService {
   ) {}
 
   async validateUser(loginDto: LoginDto): Promise&lt;any&gt; {
-    const user &#x3D; await this.usersRepository.findOne({ where: { email: loginDto.email } });
-    if (user &amp;&amp; await bcrypt.compare(loginDto.password, user.password)) {
+    const user &#x3D; await this.usersRepository.findOne({
+      where: { email: loginDto.email },
+    });
+    if (user &amp;&amp; (await bcrypt.compare(loginDto.password, user.password))) {
       const { password, ...result } &#x3D; user;
       return result;
     }
@@ -539,36 +541,39 @@ export class AuthService {
 
   async login(loginDto: LoginDto) {
     console.log(&#x27;Login attempt with:&#x27;, loginDto);
-    
+
     try {
-      const user &#x3D; await this.usersRepository.findOne({ 
-        where: { email: loginDto.email } 
+      const user &#x3D; await this.usersRepository.findOne({
+        where: { email: loginDto.email },
       });
-      
+
       console.log(&#x27;User found:&#x27;, user ? &#x27;Yes&#x27; : &#x27;No&#x27;);
-      
+
       if (!user) {
         throw new UnauthorizedException(&#x27;Invalid email or password&#x27;);
       }
-      
+
       // Debug password check
       console.log(&#x27;Stored password hash:&#x27;, user.password);
       console.log(&#x27;Comparing with:&#x27;, loginDto.password);
-      
-      const isPasswordValid &#x3D; await bcrypt.compare(loginDto.password, user.password);
+
+      const isPasswordValid &#x3D; await bcrypt.compare(
+        loginDto.password,
+        user.password,
+      );
       console.log(&#x27;Password valid:&#x27;, isPasswordValid);
-      
+
       if (!isPasswordValid) {
         throw new UnauthorizedException(&#x27;Invalid email or password&#x27;);
       }
-      
+
       const payload &#x3D; { sub: user.id, email: user.email };
       const token &#x3D; this.jwtService.sign(payload);
       console.log(&#x27;Generated token:&#x27;, token ? &#x27;Success&#x27; : &#x27;Failed&#x27;);
-      
+
       // Remove password from response
       const { password: _, ...userWithoutPassword } &#x3D; user;
-      
+
       return {
         access_token: token,
         user: userWithoutPassword,
@@ -581,26 +586,28 @@ export class AuthService {
 
   async register(registerDto: RegisterDto) {
     const { email, password, name } &#x3D; registerDto;
-    
+
     // Check if user exists
-    const existingUser &#x3D; await this.usersRepository.findOne({ where: { email } });
+    const existingUser &#x3D; await this.usersRepository.findOne({
+      where: { email },
+    });
     if (existingUser) {
       throw new UnauthorizedException(&#x27;Email already exists&#x27;);
     }
-    
+
     // Hash password
     const salt &#x3D; await bcrypt.genSalt();
     const hashedPassword &#x3D; await bcrypt.hash(password, salt);
-    
+
     // Create new user
     const user &#x3D; this.usersRepository.create({
       email,
       password: hashedPassword,
       name,
     });
-    
+
     await this.usersRepository.save(user);
-    
+
     const { password: _, ...result } &#x3D; user;
     return result;
   }
@@ -610,11 +617,12 @@ export class AuthService {
     if (!user) {
       throw new UnauthorizedException(&#x27;User not found&#x27;);
     }
-    
+
     const { password, ...result } &#x3D; user;
     return result;
   }
-}</code></pre>
+}
+</code></pre>
     </div>
 
 </div>

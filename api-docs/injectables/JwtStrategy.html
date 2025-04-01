@@ -295,11 +295,11 @@ import { ConfigService } from &#x27;@nestjs/config&#x27;;
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(private configService: ConfigService) {
     const secretKey &#x3D; configService.get&lt;string&gt;(&#x27;JWT_SECRET&#x27;);
-    
+
     if (!secretKey) {
       throw new Error(&#x27;JWT_SECRET is not defined in environment variables&#x27;);
     }
-    
+
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
@@ -310,7 +310,8 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   async validate(payload: any) {
     return { userId: payload.sub, email: payload.email };
   }
-}</code></pre>
+}
+</code></pre>
     </div>
 
 </div>
