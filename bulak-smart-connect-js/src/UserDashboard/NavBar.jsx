@@ -6,11 +6,11 @@ import { Link } from "react-router-dom"; // Import Link from react-router-dom
 import { useAuth } from "../AuthContext"; // Import useAuth
 
 const NavBar = ({ isSidebarOpen, setIsSidebarOpen }) => {
-  const { logout } = useAuth(); // Use the logout function from AuthContext
+  const { logout } = useAuth();
   
   return (
     <>
-      {/* Toggle Button */}
+   
       <button
         className="SidebarToggleBtn"
         style={{ backgroundColor: isSidebarOpen ? "#8AACB5" : "#184a5b" }}
@@ -19,7 +19,6 @@ const NavBar = ({ isSidebarOpen, setIsSidebarOpen }) => {
         {isSidebarOpen ? <CloseIcon /> : <MenuIcon />}
       </button>
 
-      {/* Sidebar Navigation */}
       <nav className={`sidebar ${isSidebarOpen ? "open" : "closed"}`}>
         <div className="NavigationBar">
           <div className="Profile">
@@ -28,6 +27,7 @@ const NavBar = ({ isSidebarOpen, setIsSidebarOpen }) => {
           </div>
           <div className="NavigationButtons">
             <a href="/UserDashboard">Dashboard</a>
+            <a href="/Home">Home</a>
             <a href="/AppointmentForm">Appointments</a>
             <a href="/ApplicationForm">Document Application</a>
             <a href="/QR">QR Code</a>
