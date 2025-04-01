@@ -51,7 +51,7 @@ const FullNameSection = () => {
           </div>
 
           <div className="textbox">
-            <label className="label-in middlename">Middle Name / GitnangPangalan </label>
+            <label className="label-in middlename">Middle Name / Gitnang Pangalan </label>
             <input
               type="text"
               id="MiddleName"
