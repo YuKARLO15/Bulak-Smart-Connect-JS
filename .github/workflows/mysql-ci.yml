@@ -1,0 +1,145 @@
+name: MySQL Authentication CI
+
+on:
+  push:
+    branches: [ '*' ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  backend-tests:
+    name: Backend Tests with MySQL
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: bulak_smart_connect_test
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Use Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+        cache: 'npm'
+        cache-dependency-path: 'bsc-js-backend/package-lock.json'
+    
+    - name: Install dependencies
+      run: |
+        cd bsc-js-backend
+        npm ci
+    
+    - name: Build
+      run: |
+        cd bsc-js-backend
+        npm run build
+    
+    - name: Set up database
+      run: |
+        mysql -h 127.0.0.1 -uroot -proot -e "
+        USE bulak_smart_connect_test;
+        CREATE TABLE IF NOT EXISTS users (
+          id INT AUTO_INCREMENT PRIMARY KEY,
+          email VARCHAR(255) NOT NULL UNIQUE,
+          password VARCHAR(255) NOT NULL,
+          name VARCHAR(255) NOT NULL,
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        );"
+    
+    - name: Test authentication system
+      run: |
+        cd bsc-js-backend
+        npm test
+      env:
+        DB_HOST: 127.0.0.1
+        DB_PORT: 3306
+        DB_USERNAME: root
+        DB_PASSWORD: root
+        DB_NAME: bulak_smart_connect_test
+        JWT_SECRET: test_jwt_secret
+  
+  integration-tests:
+    name: Integration Tests
+    runs-on: ubuntu-latest
+    needs: backend-tests
+    
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: bulak_smart_connect_test
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+    
+    - name: Install backend dependencies
+      run: |
+        cd bsc-js-backend
+        npm ci
+    
+    - name: Install frontend dependencies
+      run: |
+        cd bulak-smart-connect-js
+        npm ci
+    
+    - name: Set up database with test user
+      run: |
+        mysql -h 127.0.0.1 -uroot -proot -e "
+        USE bulak_smart_connect_test;
+        CREATE TABLE IF NOT EXISTS users (
+          id INT AUTO_INCREMENT PRIMARY KEY,
+          email VARCHAR(255) NOT NULL UNIQUE,
+          password VARCHAR(255) NOT NULL,
+          name VARCHAR(255) NOT NULL,
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        );
+        
+        -- Insert test user with known password hash for 'password123'
+        INSERT INTO users (email, password, name) 
+        VALUES ('test@example.com', '$2b$10$3iXRBKLQZ.Pxc/SfxO1mEOzRqsLD2dSbbK5hDnE/HgDrnULvWutsy', 'Test User');"
+    
+    - name: Start backend server
+      run: |
+        cd bsc-js-backend
+        npm run start:dev > backend.log 2>&1 &
+        echo $! > backend.pid
+        sleep 10
+      env:
+        DB_HOST: 127.0.0.1
+        DB_PORT: 3306
+        DB_USERNAME: root
+        DB_PASSWORD: root
+        DB_NAME: bulak_smart_connect_test
+        JWT_SECRET: test_jwt_secret
+    
+    - name: Test login endpoint
+      run: |
+        response=$(curl -s -X POST http://localhost:3000/auth/login \
+          -H "Content-Type: application/json" \
+          -d '{"email":"test@example.com","password":"password123"}')
+        
+        # Check if response contains access_token
+        if echo "$response" | grep -q "access_token"; then
+          echo "Login successful"
+        else
+          echo "Login failed. Response:"
+          echo "$response"
+          exit 1
+        fi
