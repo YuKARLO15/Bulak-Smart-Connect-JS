@@ -8,7 +8,7 @@ async function bootstrap() {
   // Debug env variables
   console.log('JWT_SECRET exists:', !!process.env.JWT_SECRET);
   console.log('JWT_SECRET length:', process.env.JWT_SECRET?.length);
-  
+
   const app = await NestFactory.create(AppModule);
 
   // Enable CORS
