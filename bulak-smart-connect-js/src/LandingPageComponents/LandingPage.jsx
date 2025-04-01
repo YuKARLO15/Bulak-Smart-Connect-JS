@@ -50,7 +50,7 @@ const LandingPage = () => {
                   queues and applications online, enhancing service efficiency
                   and convenience.
                 </Typography>
-                <Link to={isAuthenticated ? "/dashboard" : "/SignUpForm"}>
+                <Link to={isAuthenticated ? "/Home" : "/SignUpForm"}>
                   <Button
                     variant="contained"
                     color="primary"
