@@ -15,9 +15,9 @@ function LogIn() {
     login(); // Set the authentication state to true
   };
 
-  // Redirect to UserDashboard if already authenticated
+  // Redirect to Home if already authenticated
   if (isAuthenticated) {
-    return <Navigate to="/UserDashboard" />;
+    return <Navigate to="/Home" />;
   }
 
   return (

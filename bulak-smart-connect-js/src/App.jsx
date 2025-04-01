@@ -33,7 +33,8 @@ function App() {
       <Route path="/LogIn" element={<LogIn />} />
       <Route path='/SignUpForm' element={<SignUpForm />} />
       <Route element={<PrivateRoute />}> {/* Protected Route Start */}
-      <Route path='/UserDashBoard' element={<UserDashboard />} />
+        <Route path="/Home" element={<LandingPage />} />
+        <Route path="/UserDashboard" element={<UserDashboard />} />
       <Route path='/AppointmentForm' element={<AppoionmentForm />} />
       <Route path='/ApplicationForm' element={<ApplicationForm />} />
       <Route path='/QR' element={<QRCodePage />} />

@@ -20,8 +20,11 @@ import NavBar from "../LogInComponents/NavBar";
 import DeviceMockUp from "./LandingPageAssets/DeviceMockUp.png";
 import BulakLGULogo from "./LandingPageAssets/BulakLGULogo.png";
 import PhTimeComponent from "./PhTimeComponent";
+import { useAuth } from "../AuthContext"; 
 
 const LandingPage = () => {
+  const { isAuthenticated } = useAuth();
+
   return (
     <Box className="LandingContainer">
       <NavBar />
@@ -47,13 +50,15 @@ const LandingPage = () => {
                   queues and applications online, enhancing service efficiency
                   and convenience.
                 </Typography>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  className="SignUpButtonLanding"
-                >
-                  SIGN UP
-                </Button>
+                <Link to={isAuthenticated ? "/dashboard" : "/SignUpForm"}>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    className="SignUpButtonLanding"
+                  >
+                    {isAuthenticated ? "DASHBOARD" : "SIGN UP"}
+                  </Button>
+                </Link>
               </Box>
             </Grid>
             <Grid item xs={12} md={6}>
@@ -105,120 +110,120 @@ const LandingPage = () => {
           <Typography variant="h5" className="KeyFeaturesTitleLanding">
             KEY FEATURES
           </Typography>
-         <Link    to="/LogIn" >
-          <Box className="FeatureItemLanding">
-         
-            <Grid container spacing={2} alignItems="center">
-              <Grid item xs={12} md={3}>
-                <Box className="FeatureIconContainerLanding">
-                  <CalendarTodayIcon className="FeatureIconLanding" />
-                </Box>
+          <Link to={isAuthenticated ? "/AppointmentForm" : "/LogIn"}>
+            <Box className="FeatureItemLanding">
+              <Grid container spacing={2} alignItems="center">
+                <Grid item xs={12} md={3}>
+                  <Box className="FeatureIconContainerLanding">
+                    <CalendarTodayIcon className="FeatureIconLanding" />
+                  </Box>
+                </Grid>
+                <Grid item xs={12} md={9}>
+                  <Box className="FeatureContentLanding">
+                    <Typography variant="h6" className="FeatureTitleLanding">
+                      BOOK AN APPOINTMENT
+                    </Typography>
+                    <Typography
+                      variant="body1"
+                      className="FeatureDescriptionLanding"
+                    >
+                      Book a slot online for birth, marriage, and death
+                      certificate applications, eliminating the need for long
+                      waits.
+                    </Typography>
+                  </Box>
+                </Grid>
               </Grid>
-              <Grid item xs={12} md={9}>
-                <Box className="FeatureContentLanding">
-                  <Typography variant="h6" className="FeatureTitleLanding">
-                    BOOK AN APPOINTMENT
-                  </Typography>
-                  <Typography
-                    variant="body1"
-                    className="FeatureDescriptionLanding"
-                  >
-                    Book a slot online for birth, marriage, and death
-                    certificate applications, eliminating the need for long
-                    waits.
-                  </Typography>
-                </Box>
-              </Grid>
-              </Grid>
-            
             </Box>
           </Link>
 
-          <Link    to="/LogIn" >
-          <Box className="FeatureItemLanding">
-            <Grid container spacing={2} alignItems="center">
-              <Grid item xs={12} md={9}>
-                <Box className="FeatureContentLanding">
-                  <Typography variant="h6" className="FeatureTitleLanding">
-                    DOCUMENT APPLICATION
-                  </Typography>
-                  <Typography
-                    variant="body1"
-                    className="FeatureDescriptionLanding"
-                  >
-                    Apply for important documents with ease through Bulak LGU
-                    Smart Connect! Submit your birth, marriage, or death
-                    certificate application online, upload the required
-                    documents, and track your request in real time. Get notified
-                    once your application is processed and ready for pickup no
-                    more unnecessary visits or long waits. Convenient,
-                    efficient, and hassle-free!
-                  </Typography>
-                </Box>
+          <Link to={isAuthenticated ? "/ApplicationForm" : "/LogIn"}>
+            <Box className="FeatureItemLanding">
+              <Grid container spacing={2} alignItems="center">
+                <Grid item xs={12} md={9}>
+                  <Box className="FeatureContentLanding">
+                    <Typography variant="h6" className="FeatureTitleLanding">
+                      DOCUMENT APPLICATION
+                    </Typography>
+                    <Typography
+                      variant="body1"
+                      className="FeatureDescriptionLanding"
+                    >
+                      Apply for important documents with ease through Bulak LGU
+                      Smart Connect! Submit your birth, marriage, or death
+                      certificate application online, upload the required
+                      documents, and track your request in real time. Get notified
+                      once your application is processed and ready for pickup no
+                      more unnecessary visits or long waits. Convenient,
+                      efficient, and hassle-free!
+                    </Typography>
+                  </Box>
+                </Grid>
+                <Grid item xs={12} md={3}>
+                  <Box className="FeatureIconContainerLanding">
+                    <DescriptionIcon className="FeatureIconLanding" />
+                  </Box>
+                </Grid>
               </Grid>
-              <Grid item xs={12} md={3}>
-                <Box className="FeatureIconContainerLanding">
-                  <DescriptionIcon className="FeatureIconLanding" />
-                </Box>
-              </Grid>
-            </Grid>
-          </Box>
-          </Link>
-          <Link    to="/LogIn" >
-          <Box className="FeatureItemLanding">
-            <Grid container spacing={2} alignItems="center">
-              <Grid item xs={12} md={3}>
-                <Box className="FeatureIconContainerLanding">
-                  <QrCodeScannerIcon className="FeatureIconLanding" />
-                </Box>
-              </Grid>
-              <Grid item xs={12} md={9}>
-                <Box className="FeatureContentLanding">
-                  <Typography variant="h6" className="FeatureTitleLanding">
-                    QR SCANNING
-                  </Typography>
-                  <Typography
-                    variant="body1"
-                    className="FeatureDescriptionLanding"
-                  >
-                    Fast-track your transaction with QR scanning! Municipal
-                    staff will scan your QR code to quickly retrieve your queue
-                    number, appointment details, or document application status.
-                    This ensures faster processing, reduces wait times, and
-                    provides a smooth and efficient experience at the Municipal
-                    Civil Registrar of San Ildefonso Bulacan
-                  </Typography>
-                </Box>
-              </Grid>
-            </Grid>
             </Box>
-            </Link>
-            <Link    to="/LogIn" >
-          <Box className="FeatureItemLanding">
-            <Grid container spacing={2} alignItems="center">
-              <Grid item xs={12} md={9}>
-                <Box className="FeatureContentLanding">
-                  <Typography variant="h6" className="FeatureTitleLanding">
-                    SMART WALK-IN QUEUE
-                  </Typography>
-                  <Typography
-                    variant="body1"
-                    className="FeatureDescriptionLanding"
-                  >
-                    The Smart Walk-In feature of Bulak LGU Smart Connect
-                    provides you real-time updates on the queue status, allowing
-                    you to see how many numbers are ahead of you. This ensures
-                    transparency, reduces waiting uncertainty, For you to manage
-                    your time efficiently while waiting for their turn.
-                  </Typography>
-                </Box>
+          </Link>
+
+          <Link to={isAuthenticated ? "/Home" : "/LogIn"}>
+            <Box className="FeatureItemLanding">
+              <Grid container spacing={2} alignItems="center">
+                <Grid item xs={12} md={3}>
+                  <Box className="FeatureIconContainerLanding">
+                    <QrCodeScannerIcon className="FeatureIconLanding" />
+                  </Box>
+                </Grid>
+                <Grid item xs={12} md={9}>
+                  <Box className="FeatureContentLanding">
+                    <Typography variant="h6" className="FeatureTitleLanding">
+                      QR SCANNING
+                    </Typography>
+                    <Typography
+                      variant="body1"
+                      className="FeatureDescriptionLanding"
+                    >
+                      Fast-track your transaction with QR scanning! Municipal
+                      staff will scan your QR code to quickly retrieve your queue
+                      number, appointment details, or document application status.
+                      This ensures faster processing, reduces wait times, and
+                      provides a smooth and efficient experience at the Municipal
+                      Civil Registrar of San Ildefonso Bulacan
+                    </Typography>
+                  </Box>
+                </Grid>
               </Grid>
-              <Grid item xs={12} md={3}>
-                <Box className="FeatureIconContainerLanding">
-                  <DirectionsWalkOutlinedIcon className="FeatureIconLanding" />
-                </Box>
+            </Box>
+          </Link>
+
+          <Link to={isAuthenticated ? "/WalkInForm" : "/LogIn"}>
+            <Box className="FeatureItemLanding">
+              <Grid container spacing={2} alignItems="center">
+                <Grid item xs={12} md={9}>
+                  <Box className="FeatureContentLanding">
+                    <Typography variant="h6" className="FeatureTitleLanding">
+                      SMART WALK-IN QUEUE
+                    </Typography>
+                    <Typography
+                      variant="body1"
+                      className="FeatureDescriptionLanding"
+                    >
+                      The Smart Walk-In feature of Bulak LGU Smart Connect
+                      provides you real-time updates on the queue status, allowing
+                      you to see how many numbers are ahead of you. This ensures
+                      transparency, reduces waiting uncertainty, For you to manage
+                      your time efficiently while waiting for their turn.
+                    </Typography>
+                  </Box>
+                </Grid>
+                <Grid item xs={12} md={3}>
+                  <Box className="FeatureIconContainerLanding">
+                    <DirectionsWalkOutlinedIcon className="FeatureIconLanding" />
+                  </Box>
+                </Grid>
               </Grid>
-            </Grid>
             </Box>
           </Link>
         </Box>
