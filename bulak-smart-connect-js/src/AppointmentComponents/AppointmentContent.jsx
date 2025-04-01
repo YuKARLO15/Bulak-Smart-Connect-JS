@@ -1,11 +1,11 @@
-import React, { useState } from "react"; 
+import React, { useState, useEffect } from "react"; 
 import { useNavigate } from "react-router-dom";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import "./AppointmentContent.css";
 import { saveRecentAppointments } from "./RecentAppointmentData";
 
-const AppointmentContainer = () => {
+const AppointmentContainer = ({ onBack, preselectedDate }) => {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -20,8 +20,16 @@ const AppointmentContainer = () => {
   });
 
   const [errors, setErrors] = useState({});
-  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(preselectedDate);
   const [tooltip, setTooltip] = useState(false);
+
+
+  useEffect(() => {
+    if (preselectedDate) {
+      setSelectedDate(preselectedDate);
+      setFormData({ ...formData, date: preselectedDate.toLocaleDateString() });
+    }
+  }, [preselectedDate]);
 
   const generateTimeSlots = () => {
     const slots = [];
@@ -75,7 +83,6 @@ const AppointmentContainer = () => {
       return;
     }
 
-
     const appointmentId = `APPT-${Date.now()}`;
 
     const newAppointment = {
@@ -93,7 +100,6 @@ const AppointmentContainer = () => {
     saveRecentAppointments(newAppointment);
 
     alert("Appointment Confirmed!");
-
 
     navigate(`/QRCodeAppointment/${appointmentId}`, { state: { appointment: newAppointment } });
 
@@ -113,6 +119,25 @@ const AppointmentContainer = () => {
     <div className="AppointmentFormsContainer">
       <div className="AppointmentFContainer">
         <h2 className="AppointmentTitle">APPOINTMENT FORM</h2>
+        
+        {onBack && (
+          <button 
+            className="BackButton" 
+            onClick={onBack}
+            style={{ 
+              position: 'absolute', 
+              top: '10px', 
+              left: '10px',
+              padding: '5px 10px',
+              background: '#f0f0f0',
+              border: '1px solid #ccc',
+              borderRadius: '4px',
+              cursor: 'pointer'
+            }}
+          >
+            Back
+          </button>
+        )}
 
         <div className="FormGroup RowGroup">
           <div className="InputWrapper">
@@ -128,7 +153,6 @@ const AppointmentContainer = () => {
           <div className="InputWrapper SmallInput">
             <label>Middle Initial</label>
             <input type="text" name="middleInitial" value={formData.middleInitial} onChange={handleChange} />
-          
           </div>
         </div>
 
@@ -175,10 +199,16 @@ const AppointmentContainer = () => {
             <Calendar
               className="Calendar"
               onChange={handleDateChange}
+              value={selectedDate}
               tileDisabled={({ date }) => date.getDay() === 0 || date.getDay() === 6 || date < new Date()}
             />
             {errors.date && <span className="ErrorText">{errors.date}</span>}
             {tooltip && <span className="ErrorText">Office is closed on weekends.</span>}
+            {selectedDate && (
+              <div className="SelectedDateInfo">
+                Selected: {selectedDate.toLocaleDateString()}
+              </div>
+            )}
           </div>
           <div className="ConfirmContainer">
             <button className="ConfirmButton" onClick={handleSubmit}>Confirm</button>

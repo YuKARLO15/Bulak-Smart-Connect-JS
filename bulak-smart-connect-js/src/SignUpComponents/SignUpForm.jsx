@@ -2,16 +2,13 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import UsernamePasswordSection from "./UserNamePassword";
 import FullNameSection from "./FullName";
-import AddressSection from "./Address";
-import BirthdateSection from "./BirthDate";
 import ContactInformationSection from "./ContactInformation";
 import UpdatesCheckbox from "./UpdateCheckbox";
 import NavBar from "../LogInComponents/NavBar";
-import "../SignUpComponents/BirthDate.css";
-import "../SignUpComponents/Address.css";
 import "../SignUpComponents/ContactInformation.css";
 import "../SignUpComponents/UpdateCheckbox.css";
 import "../SignUpComponents/UserNamePassword.css";
+import "../SignUpComponents/SignUpForm.css";
 import "../LogInComponents/NavBar.css";
 //import "../SignUpComponents/SignUpForm.css";
 
@@ -19,17 +16,10 @@ const SignUpForm = () => {
   const [formData, setFormData] = useState({
     username: "",
     password: "",
+    confirmpassword: "",
     lastname: "",
     firstname: "",
     middlename: "",
-    region: "",
-    province: "",
-    city: "",
-    barangay: "",
-    residence: "",
-    month: "",
-    day: "",
-    year: "",
     contact: "",
     email: "",
     updates: false,
@@ -62,26 +52,14 @@ const SignUpForm = () => {
     }
   };
 
-  useEffect(() => {
-    if (formData.day && formData.month && formData.year) {
-      const birthDate = new Date(`${formData.month} ${formData.day}, ${formData.year}`);
-      if (!isNaN(birthDate)) {
-        const age = new Date().getFullYear() - birthDate.getFullYear();
-        const monthDifference = new Date().getMonth() - birthDate.getMonth();
-        if (monthDifference < 0 || (monthDifference === 0 && new Date().getDate() < birthDate.getDate())) {
-          setFormData((prevFormData) => ({ ...prevFormData, age: age - 1 }));
-        } else {
-          setFormData((prevFormData) => ({ ...prevFormData, age }));
-        }
-      }
-    }
-  }, [formData.day, formData.month, formData.year]);
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
     let formErrors = {};
     if (!formData.username) formErrors.username = "Username is required";
     if (!formData.password) formErrors.password = "Password is required";
+    if (!formData.confirmpassword) formErrors.password = "Password is required";
     if (!formData.lastname) formErrors.lastname = "Last name is required";
     if (!formData.firstname) formErrors.firstname = "First name is required";
     if (!formData.email) formErrors.email = "Email is required";
@@ -99,10 +77,8 @@ const SignUpForm = () => {
             </div>
       <h2>Signup Form</h2>
       <form onSubmit={handleSubmit}>
-        <UsernamePasswordSection formData={formData} handleInputChange={handleInputChange} errors={errors} />
         <FullNameSection formData={formData} handleInputChange={handleInputChange} />
-        <AddressSection formData={formData} handleInputChange={handleInputChange} />
-        <BirthdateSection formData={formData} handleInputChange={handleInputChange} />
+        <UsernamePasswordSection formData={formData} handleInputChange={handleInputChange} errors={errors} setErrors={setErrors} />
         <ContactInformationSection formData={formData} handleInputChange={handleInputChange} />
         <UpdatesCheckbox formData={formData} handleInputChange={handleInputChange} />
         <button type="submit" className="btn">Signup</button>
