@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import UsernamePasswordSection from "./UserNamePassword";
 import FullNameSection from "./FullName";
 import AddressSection from "./Address";
-import BirthdateSection from "./Birthdate";
+import BirthdateSection from "./BirthDate";
 import ContactInformationSection from "./ContactInformation";
 import UpdatesCheckbox from "./UpdateCheckbox";
 import NavBar from "../LogInComponents/NavBar";
