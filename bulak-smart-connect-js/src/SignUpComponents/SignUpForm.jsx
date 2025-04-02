@@ -5,11 +5,13 @@ import FullNameSection from "./FullName";
 import ContactInformationSection from "./ContactInformation";
 import UpdatesCheckbox from "./UpdateCheckbox";
 import NavBar from "../LogInComponents/NavBar";
+import DataPrivacy from "./DataPrivacy";
 import "../SignUpComponents/ContactInformation.css";
 import "../SignUpComponents/UpdateCheckbox.css";
 import "../SignUpComponents/UserNamePassword.css";
 import "../SignUpComponents/SignUpForm.css";
 import "../LogInComponents/NavBar.css";
+import "../SignUpComponents/DataPrivacy.css"
 //import "../SignUpComponents/SignUpForm.css";
 
 const SignUpForm = () => {
@@ -80,6 +82,7 @@ const SignUpForm = () => {
         <FullNameSection formData={formData} handleInputChange={handleInputChange} />
         <UsernamePasswordSection formData={formData} handleInputChange={handleInputChange} errors={errors} setErrors={setErrors} />
         <ContactInformationSection formData={formData} handleInputChange={handleInputChange} />
+        <DataPrivacy formData={formData} handleInputChange={handleInputChange} />
         <UpdatesCheckbox formData={formData} handleInputChange={handleInputChange} />
         <button type="submit" className="btn">Signup</button>
         <div className="footer">

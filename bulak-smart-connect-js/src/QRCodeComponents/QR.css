@@ -31,6 +31,10 @@
   max-width: 65vw;
 }
 
+.p{
+  margin-top: 10px;
+}
+
 .queue-number {
   font-size: 2.5rem;
   font-weight: bold;
@@ -59,12 +63,26 @@
   color: #333;
 }
 
+p.Screenshot{
+  font-size: 14px;
+  color: #c41c1c;
+  text-align: center;
+  margin-top: 10px;
+
+}
+
 .requirements-link {
-  color: #184a5b;
+  color: #5ca3bb;
   text-decoration: none;
   font-weight: bold;
   margin-top: 10px;
   display: inline-block;
+  text-decoration: underline;
+}
+p.requirement-label{
+  font-size: 14px;
+  margin-top: 20px;
+
 }
 
 .requirements-link:hover {
