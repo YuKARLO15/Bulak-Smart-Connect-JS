@@ -17,8 +17,7 @@ import DelayedOutOfTownRegistration from './ApplicationComponents/BirthCertifica
 import DelayedOneParentForeignerRegistration from './ApplicationComponents/BirthCertificateApplications/DelayedOneParentForeigner';
 import BirthCertificateForm from './ApplicationComponents/BirthCertificateApplications/BirthCertificateForm';
 import QRCodeAppointment from "./AppointmentComponents/QRCodeAppointment";
-
-
+import MarriageCertificateForm from './ApplicationComponents/MarriageCertificateApplications/MarriageCertificateForm/MarriageCertificateForm';
 
 
 function App() {
@@ -43,7 +42,7 @@ function App() {
       <Route path='/DelayedOneParentForeignerRegistration' element={<DelayedOneParentForeignerRegistration />} />
       <Route path="/QrCodeAppointment/:id" element={<QRCodeAppointment />} />
       <Route path='/BirthCertificateForm' element={<BirthCertificateForm />} />
-    
+      <Route path='/MarriageCertificateForm' element={<MarriageCertificateForm />} />
       </Routes>
       
   );
