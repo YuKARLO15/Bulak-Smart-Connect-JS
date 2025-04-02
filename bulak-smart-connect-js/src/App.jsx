@@ -16,8 +16,11 @@ import SexDobCorrection from './ApplicationComponents/BirthCertificateApplicatio
 import DelayedOutOfTownRegistration from './ApplicationComponents/BirthCertificateApplications/DelayedOutOfTown';
 import DelayedOneParentForeignerRegistration from './ApplicationComponents/BirthCertificateApplications/DelayedOneParentForeigner';
 import BirthCertificateForm from './ApplicationComponents/BirthCertificateApplications/BirthCertificateForm';
+import PrivateRoute from './PrivateRoute';
+
 import QRCodeAppointment from "./AppointmentComponents/QRCodeAppointment";
-import MarriageCertificateForm from './ApplicationComponents/MarriageCertificateApplications/MarriageCertificateForm/MarriageCertificateForm';
+import LandingPage from './LandingPageComponents/LandingPage';
+import BirthApplicationSummary from './ApplicationComponents/BirthCertificateApplications/BirthApplicationSummary';import MarriageCertificateForm from './ApplicationComponents/MarriageCertificateApplications/MarriageCertificateForm/MarriageCertificateForm';
 
 
 function App() {
@@ -25,11 +28,14 @@ function App() {
   
     <Routes>
       {/* Define Routes */}
-      <Route path="/" element={<LogIn />} />
-      <Route path='/SignUpForm' element={<SignUpForm />} /> 
-      <Route path='/UserDashBoard' element={<UserDashboard />} />
+      <Route path="/" element={<LandingPage />} />
+      <Route path="/LogIn" element={<LogIn />} />
+      <Route path='/SignUpForm' element={<SignUpForm />} />
+      <Route element={<PrivateRoute />}> {/* Protected Route Start */}
+        <Route path="/Home" element={<LandingPage />} />
+        <Route path="/UserDashboard" element={<UserDashboard />} />
       <Route path='/AppointmentForm' element={<AppoionmentForm />} />
-      <Route path='/ApplicationForm' element={<ApplicationForm/>} />
+      <Route path='/ApplicationForm' element={<ApplicationForm />} />
       <Route path='/QR' element={<QRCodePage />} />
       <Route path='/ClericalErrorApplication' element={<ClericalErrorApplication />} />
       <Route path='/BirthCertificateDashboard' element={<BirthCertificateDashboard />} />
@@ -37,14 +43,15 @@ function App() {
       <Route path='/MarriageLicenseApplication' element={<MarriageLicenseApplication />} />
       <Route path='/Above18Registration' element={<Above18Registration />} />
       <Route path='/Below18Registration' element={<Below18Registration />} />
-      <Route path='/SexDobCorrection' element ={<SexDobCorrection/>} />
-      <Route path='/DelayedOutOfTownRegistration' element ={<DelayedOutOfTownRegistration/>} />
+      <Route path='/SexDobCorrection' element={<SexDobCorrection />} />
+      <Route path='/DelayedOutOfTownRegistration' element={<DelayedOutOfTownRegistration />} />
       <Route path='/DelayedOneParentForeignerRegistration' element={<DelayedOneParentForeignerRegistration />} />
       <Route path="/QrCodeAppointment/:id" element={<QRCodeAppointment />} />
       <Route path='/BirthCertificateForm' element={<BirthCertificateForm />} />
-      <Route path='/MarriageCertificateForm' element={<MarriageCertificateForm />} />
-      </Routes>
-      
+      <Route path='/BirthApplicationSummary' element={<BirthApplicationSummary />} />
+      </Route> {/* Protected Route End */}
+  <Route path='/MarriageCertificateForm' element={<MarriageCertificateForm />} />
+    </Routes>
   );
 }
 

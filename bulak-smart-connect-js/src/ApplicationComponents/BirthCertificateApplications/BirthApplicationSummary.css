@@ -1,0 +1,146 @@
+
+
+.MainContainerSummaryBirth {
+    padding: 2rem;
+    max-width: 70w;
+    margin: 0 auto;
+    justify-items: center !important;
+    align-items: center;
+  }
+  
+  .SummaryPaperSummaryBirth {
+    padding: 2rem;
+    margin-bottom: 2rem;
+  }
+  
+  .HeaderSummaryBirth {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  
+  .TitleSummaryBirth {
+    font-size: 2rem !important;
+    font-weight: 600 !important;
+    color:#1C4D5A ;
+    margin-bottom: 0.5rem !important;
+  }
+  
+  .SubtitleSummaryBirth {
+    color: #5a5a5a;
+    font-size: 1rem !important;
+  }
+  
+  .DividerSummaryBirth {
+    margin: 1.5rem 0 !important;
+  }
+  
+  .SectionSummaryBirth {
+    margin-bottom: 1.5rem;
+  }
+  
+  .SectionTitleSummaryBirth {
+    font-weight: 600 !important;
+    color: #1C4D5A;
+    margin-bottom: 1rem !important;
+    border-bottom: 1px solid #eaeaea;
+    padding-bottom: 0.5rem;
+  }
+  
+  .InfoGridSummaryBirth {
+    padding: 0 1rem;
+  }
+  
+  .LabelSummaryBirth {
+    font-weight: 600 !important;
+    color: #5a5a5a;
+    margin-bottom: 0.25rem !important;
+  }
+  .GridGroupBirth{
+    margin-left: 1rem !important;
+    margin-bottom: 5px !important;
+  }
+  
+  .ValueSummaryBirth {
+    margin-bottom: 1rem !important;
+  }
+  
+  .StatusSectionSummaryBirth {
+    background-color: #f5f5f5;
+    padding: 1.5rem;
+    border-radius: 4px;
+    margin: 2rem 0;
+  }
+  
+  .StatusTitleSummaryBirth {
+    font-weight: 600 !important;
+    margin-bottom: 0.5rem !important;
+  }
+  
+  .StatusValueSummaryBirth {
+    font-weight: 600 !important;
+    color: #ff9800;
+    margin-bottom: 0.5rem !important;
+  }
+  
+  .StatusMessageSummaryBirth {
+    color: #5a5a5a;
+  }
+  
+  .ButtonsSectionSummaryBirth {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2rem;
+ 
+  }
+  
+  .BackButtonSummaryBirth {
+    padding: 0.5rem 2rem !important;
+    
+    background-color: #1C4D5A !important;
+  }
+  
+  .LoadingContainerSummaryBirth {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 50vh;
+    gap: 1rem;
+  }
+  
+  .ErrorContainerSummaryBirth {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 50vh;
+    gap: 2rem;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  
+
+  
+
+  @media (max-width: 768px) {
+    .MainContainerSummaryBirth {
+      padding: 1rem;
+    }
+    
+    .SummaryPaperSummaryBirth {
+      padding: 1rem;
+    }
+    
+    .TitleSummaryBirth {
+      font-size: 1.5rem !important;
+    }
+    
+    .ButtonsSectionSummaryBirth {
+      flex-direction: column;
+      gap: 1rem;
+    }
+    
+    .BackButtonSummaryBirth, .PrintButtonSummaryBirth {
+      width: 100%;
+    }
+  }

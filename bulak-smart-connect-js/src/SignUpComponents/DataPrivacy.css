@@ -1,0 +1,117 @@
+/* Data Privacy Section */
+
+body {
+    font-family: "Roboto", sans-serif;
+    margin: 0;
+    min-height: 100vh;
+  }
+  
+  .data-privacy-section {
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+    color: #1c4d5a;
+    background: radial-gradient(
+      ellipse at center,
+      hsl(210, 100%, 97%),
+      hsl(0, 0%, 100%)
+    );
+    flex-direction: column;
+    align-items: center;
+
+  }
+  
+  .privacy-text {
+    max-width: 900px; 
+    margin: 0 auto; 
+    text-align: center; 
+    padding: 10px 20px; 
+  }
+
+  .privacy-text h2 {
+    font-size: 22px; 
+    font-weight: bold;
+    color: #1c4d5a; 
+    margin-bottom: 10px;
+  }
+  
+  .privacy-text p {
+    font-size: 14px; 
+    color: #444; 
+    line-height: 1.5;
+    margin-bottom: 20px;
+  }
+  
+
+
+  .radio-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; 
+    gap: 10px; 
+    margin-top: 15px;
+    max-width: 400px; 
+    margin-left: auto; 
+    margin-right: auto;
+  }
+  
+  .radio-group label {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    color: #1c4d5a;
+    cursor: pointer;
+  }
+  
+  .radio-group input[type="radio"] {
+    margin-right: 10px; /* Creates space between radio button and text */
+    transform: scale(1.2); /* Increases radio button size */
+    cursor: pointer;
+  }
+
+  /* Modal Styling */
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .modal-content {
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    width: 50%;
+    text-align: center;
+  }
+  
+  .modal-content h2 {
+    color: #1c4d5a;
+    font-size: 18px;
+  }
+  
+  .modal-content p {
+    font-size: 14px;
+    color: #444;
+  }
+  
+  .close-btn {
+    padding: 8px 15px;
+    background-color: #1c4d5a;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+  
+  .close-btn:hover {
+    background-color: #163d47;
+  }
+  

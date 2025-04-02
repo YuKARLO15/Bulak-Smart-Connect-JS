@@ -20,14 +20,8 @@ const FullNameSection = () => {
 
   return (
     <div>
-      <div className="CategoryDivider">
-        <h2>Identifying Information </h2>
-      </div>
 
       <div className="form-group">
-        <label className="label-category">
-          1. Full Name ( Buong Pangalan )
-        </label>
         
         <div className="form-group fullname">
           <div className="textbox">
@@ -36,7 +30,7 @@ const FullNameSection = () => {
               type="text"
               id="LastName"
               name="lastname"
-              placeholder="Dela Cruz"
+              placeholder="Enter Last Name"
               value={formData.lastname}
               onChange={handleInputChange}
               required
@@ -49,7 +43,7 @@ const FullNameSection = () => {
               type="text"
               id="FirstName"
               name="firstname"
-              placeholder="Juan"
+              placeholder="Enter First Name"
               value={formData.firstname}
               onChange={handleInputChange}
               required
@@ -57,7 +51,7 @@ const FullNameSection = () => {
           </div>
 
           <div className="textbox">
-            <label className="label-in middlename">Middle Name / GitnangPangalan </label>
+            <label className="label-in middlename">Middle Name / Gitnang Pangalan </label>
             <input
               type="text"
               id="MiddleName"

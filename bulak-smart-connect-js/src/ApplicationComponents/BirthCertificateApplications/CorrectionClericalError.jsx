@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Router, Link as RouterLink } from "react-router-dom";
 import {
   Box,
   Button,
@@ -61,7 +62,7 @@ const CorrectionClericalError = () => {
     if (isFormComplete) {
       setIsSubmitted(true);
       setTimeout(() => {
-        navigate("/ApplicationForm");
+        navigate("/BirthApplicationSummary");
       }, 2000);
     }
   };
@@ -134,16 +135,17 @@ const CorrectionClericalError = () => {
         </Alert>
       )}
 
+
       <Button
         variant="contained"
         color="primary"
         disabled={!isFormComplete}
+        sx={{ marginTop: "20px" }}
         onClick={handleSubmit}
-        sx={{ display: "block", margin: "auto" }}
          className="ButtonApplication"
       >
         Submit
-      </Button>
+      </Button> 
     </div>
   );
 };

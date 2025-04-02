@@ -55,7 +55,7 @@ const DelayedOneParentForeignerRegistration = () => {
     if (isMandatoryComplete) {
       setIsSubmitted(true);
       setTimeout(() => {
-        navigate("/ApplicationForm");
+        navigate("/BirthApplicationSummary");
       }, 2000);
     }
   };
@@ -90,11 +90,7 @@ const DelayedOneParentForeignerRegistration = () => {
       <Typography variant="body1" className="SectionTitleForeigner">
         Any two (2) of the following documents of parents:
       </Typography>
-      <ul>
-        {parentDocuments.map((doc, index) => (
-          <li key={index}>{doc}</li>
-        ))}
-      </ul>
+   
       <Box>
         {[...Array(2)].map((_, index) => (
           <FileUpload
@@ -110,11 +106,7 @@ const DelayedOneParentForeignerRegistration = () => {
         name of the child, date and palce of birth, and name of the mother (and
         anme of father, if the child has been acknowledge)
       </Typography>
-      <ul>
-        {documentaryEvidence.map((doc, index) => (
-          <li key={index}>{doc}</li>
-        ))}
-      </ul>
+
       <Box>
         {[...Array(2)].map((_, index) => (
           <FileUpload
@@ -137,15 +129,17 @@ const DelayedOneParentForeignerRegistration = () => {
         </Alert>
       )}
 
+
       <Button
         variant="contained"
         color="primary"
         disabled={!isMandatoryComplete}
         sx={{ marginTop: "20px" }}
         onClick={handleSubmit}
+         className="ButtonApplication"
       >
         Submit
-      </Button>
+      </Button> 
     </div>
   );
 };
