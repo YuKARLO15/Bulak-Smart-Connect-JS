@@ -20,7 +20,8 @@ import PrivateRoute from './PrivateRoute';
 
 import QRCodeAppointment from "./AppointmentComponents/QRCodeAppointment";
 import LandingPage from './LandingPageComponents/LandingPage';
-import BirthApplicationSummary from './ApplicationComponents/BirthCertificateApplications/BirthApplicationSummary';import MarriageCertificateForm from './ApplicationComponents/MarriageCertificateApplications/MarriageCertificateForm/MarriageCertificateForm';
+import BirthApplicationSummary from './ApplicationComponents/BirthCertificateApplications/BirthApplicationSummary';
+import MarriageCertificateForm from './ApplicationComponents/MarriageCertificateApplications/MarriageCertificateForm/MarriageCertificateForm';
 
 
 function App() {
@@ -49,8 +50,8 @@ function App() {
       <Route path="/QrCodeAppointment/:id" element={<QRCodeAppointment />} />
       <Route path='/BirthCertificateForm' element={<BirthCertificateForm />} />
       <Route path='/BirthApplicationSummary' element={<BirthApplicationSummary />} />
+      <Route path='/MarriageCertificateForm' element={<MarriageCertificateForm />} />
       </Route> {/* Protected Route End */}
-  <Route path='/MarriageCertificateForm' element={<MarriageCertificateForm />} />
     </Routes>
   );
 }
