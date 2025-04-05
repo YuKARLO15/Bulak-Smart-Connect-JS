@@ -10,8 +10,12 @@ const ProfileUpload = ({ onUpload }) => {
   const handleFileUpload = (event) => {
     const file = event.target.files[0];
     if (file) {
-      const url = URL.createObjectURL(file); 
-      setImageSrc(url); 
+      if (file.type.startsWith("image/")) {
+        const url = URL.createObjectURL(file);
+        setImageSrc(url);
+      } else {
+        alert("Please upload a valid image file.");
+      }
       onUpload(file);
     }
   };
