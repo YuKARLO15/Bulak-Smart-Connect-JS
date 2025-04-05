@@ -17,21 +17,24 @@ import DelayedOutOfTownRegistration from './ApplicationComponents/BirthCertifica
 import DelayedOneParentForeignerRegistration from './ApplicationComponents/BirthCertificateApplications/DelayedOneParentForeigner';
 import BirthCertificateForm from './ApplicationComponents/BirthCertificateApplications/BirthCertificateForm';
 import PrivateRoute from './PrivateRoute';
-
 import QRCodeAppointment from "./AppointmentComponents/QRCodeAppointment";
 import LandingPage from './LandingPageComponents/LandingPage';
 import BirthApplicationSummary from './ApplicationComponents/BirthCertificateApplications/BirthApplicationSummary';
 import MarriageCertificateForm from './ApplicationComponents/MarriageCertificateApplications/MarriageCertificateForm/MarriageCertificateForm';
 
+//ADMIN//
+
+import AccountManagement from './AdminBulakSmart/AdminManageAccount'
 
 function App() {
   return (
-  
+ 
     <Routes>
       {/* Define Routes */}
       <Route path="/" element={<LandingPage />} />
       <Route path="/LogIn" element={<LogIn />} />
       <Route path='/SignUpForm' element={<SignUpForm />} />
+      <Route path="/AccountManagement" element={<AccountManagement />} />
       <Route element={<PrivateRoute />}> {/* Protected Route Start */}
         <Route path="/Home" element={<LandingPage />} />
         <Route path="/UserDashboard" element={<UserDashboard />} />
@@ -53,6 +56,7 @@ function App() {
       <Route path='/MarriageCertificateForm' element={<MarriageCertificateForm />} />
       </Route> {/* Protected Route End */}
     </Routes>
+    
   );
 }
 
