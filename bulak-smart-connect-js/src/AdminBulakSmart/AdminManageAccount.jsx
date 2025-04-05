@@ -40,7 +40,7 @@ const AccountManagement = () => {
 
     return (
         <div className="admin-container">
-          <div className="header">User  Management</div>
+          <div className="header">User Management</div>
           <div className="search-user">
             <input type="text" placeholder="Search User..." />
             <button className="add-user">Add User</button>
