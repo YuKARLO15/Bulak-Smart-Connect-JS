@@ -1,4 +1,4 @@
-// src/components/ProfileUpload.js
+// src/components/ProfileUpload.jsx
 import React, { useRef, useState } from "react";
 import { Box } from "@mui/material";
 import "./ProfileUpload.css"; 
