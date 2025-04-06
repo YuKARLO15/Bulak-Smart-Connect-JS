@@ -30,7 +30,7 @@ const NavBar = ({ isSidebarOpen, setIsSidebarOpen }) => {
             <a href="/Home">Home</a>
             <a href="/AppointmentForm">Appointments</a>
             <a href="/ApplicationForm">Document Application</a>
-            <a href="/QR">QR Code</a>
+            <a href="/WalkInQueue"> Smart Walk - In</a>
             <a href="/account">Account</a>
             <a href="/settings">Settings</a>
           </div>

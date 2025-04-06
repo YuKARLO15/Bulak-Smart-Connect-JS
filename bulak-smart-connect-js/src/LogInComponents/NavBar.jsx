@@ -79,7 +79,7 @@ const NavBar = () => {
                   <ListItemIcon>
                     <DirectionsWalkOutlinedIcon fontSize="small" />
                   </ListItemIcon>
-                  <RouterLink to="/WalkInForm" style={{ textDecoration: 'none', color: 'inherit', width: '100%' }}>
+                  <RouterLink to="/WalkInQueue" style={{ textDecoration: 'none', color: 'inherit', width: '100%' }}>
                     <ListItemText primary="Smart Walk-In Queue" />
                   </RouterLink>
                 </MenuItem>

@@ -21,10 +21,13 @@ import QRCodeAppointment from "./AppointmentComponents/QRCodeAppointment";
 import LandingPage from './LandingPageComponents/LandingPage';
 import BirthApplicationSummary from './ApplicationComponents/BirthCertificateApplications/BirthApplicationSummary';
 import MarriageCertificateForm from './ApplicationComponents/MarriageCertificateApplications/MarriageCertificateForm/MarriageCertificateForm';
+import WalkInQueueContainer from './WalkInComponents/WalkInDashBoard';
+import WalkInForm from './WalkInComponents/WalkInForm';
+import WalkInQueueDetail from './WalkInComponents/WalkInDetails';
 
 //ADMIN//
 
-import AccountManagement from './AdminBulakSmart/AdminManageAccount'
+import AccountManagement from './AdminBulakSmart/AdminManageAccount';
 
 function App() {
   return (
@@ -53,7 +56,10 @@ function App() {
       <Route path="/QrCodeAppointment/:id" element={<QRCodeAppointment />} />
       <Route path='/BirthCertificateForm' element={<BirthCertificateForm />} />
       <Route path='/BirthApplicationSummary' element={<BirthApplicationSummary />} />
-      <Route path='/MarriageCertificateForm' element={<MarriageCertificateForm />} />
+        <Route path='/MarriageCertificateForm' element={<MarriageCertificateForm />} />
+        <Route path='/WalkInQueue' element={<WalkInQueueContainer />} />
+        <Route path='/WalkInForm' element={<WalkInForm />} />
+        <Route path='/WalkInDetails' element={<WalkInQueueDetail />} />
       </Route> {/* Protected Route End */}
     </Routes>
     
