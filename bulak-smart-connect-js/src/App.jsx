@@ -25,14 +25,19 @@ import WalkInQueueContainer from './WalkInComponents/WalkInDashBoard';
 import WalkInForm from './WalkInComponents/WalkInForm';
 import WalkInQueueDetail from './WalkInComponents/WalkInDetails';
 
+//ADMIN//
+
+import AccountManagement from './AdminBulakSmart/AdminManageAccount';
+
 function App() {
   return (
-  
+ 
     <Routes>
       {/* Define Routes */}
       <Route path="/" element={<LandingPage />} />
       <Route path="/LogIn" element={<LogIn />} />
       <Route path='/SignUpForm' element={<SignUpForm />} />
+      <Route path="/AccountManagement" element={<AccountManagement />} />
       <Route element={<PrivateRoute />}> {/* Protected Route Start */}
         <Route path="/Home" element={<LandingPage />} />
         <Route path="/UserDashboard" element={<UserDashboard />} />
@@ -57,6 +62,7 @@ function App() {
         <Route path='/WalkInDetails' element={<WalkInQueueDetail />} />
       </Route> {/* Protected Route End */}
     </Routes>
+    
   );
 }
 
