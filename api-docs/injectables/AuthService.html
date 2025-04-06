@@ -140,6 +140,10 @@
                                 <a href="#getProfile" >getProfile</a>
                             </li>
                             <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#isValidEmail" >isValidEmail</a>
+                            </li>
+                            <li>
                                     <span class="modifier">Async</span>
                                 <a href="#login" >login</a>
                             </li>
@@ -251,8 +255,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="102"
-                                    class="link-to-prism">src/auth/auth.service.ts:102</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="123"
+                                    class="link-to-prism">src/auth/auth.service.ts:123</a></div>
                         </td>
                     </tr>
 
@@ -289,6 +293,75 @@
                             </div>
                         <div class="io-description">
                             <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="isValidEmail"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>isValidEmail</b></span>
+                        <a href="#isValidEmail"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>isValidEmail(email: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="118"
+                                    class="link-to-prism">src/auth/auth.service.ts:118</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>email</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
 
                         </div>
                             <div class="io-description">
@@ -511,7 +584,7 @@
 
 
     <div class="tab-pane fade  tab-source-code" id="source">
-        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable, UnauthorizedException } from &#x27;@nestjs/common&#x27;;
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable, UnauthorizedException, ConflictException, BadRequestException } from &#x27;@nestjs/common&#x27;;
 import { JwtService } from &#x27;@nestjs/jwt&#x27;;
 import { InjectRepository } from &#x27;@nestjs/typeorm&#x27;;
 import { Repository } from &#x27;typeorm&#x27;;
@@ -586,30 +659,51 @@ export class AuthService {
 
   async register(registerDto: RegisterDto) {
     const { email, password, name } &#x3D; registerDto;
-
-    // Check if user exists
-    const existingUser &#x3D; await this.usersRepository.findOne({
-      where: { email },
-    });
-    if (existingUser) {
-      throw new UnauthorizedException(&#x27;Email already exists&#x27;);
+    
+    // Validate email format
+    if (!this.isValidEmail(email)) {
+      throw new BadRequestException(&#x27;Invalid email format&#x27;);
     }
-
+    
+    // Check if user exists
+    const existingUser &#x3D; await this.usersRepository.findOne({ where: { email } });
+    if (existingUser) {
+      throw new ConflictException(&#x27;Email already exists&#x27;);
+    }
+    
+    // Validate password strength
+    if (password.length &lt; 6) {
+      throw new BadRequestException(&#x27;Password must be at least 6 characters&#x27;);
+    }
+    
     // Hash password
     const salt &#x3D; await bcrypt.genSalt();
     const hashedPassword &#x3D; await bcrypt.hash(password, salt);
-
+    
     // Create new user
     const user &#x3D; this.usersRepository.create({
       email,
       password: hashedPassword,
       name,
     });
-
+    
     await this.usersRepository.save(user);
-
-    const { password: _, ...result } &#x3D; user;
-    return result;
+    
+    // Generate JWT token
+    const payload &#x3D; { sub: user.id, email: user.email };
+    
+    // Remove password from response
+    const { password: _, ...userWithoutPassword } &#x3D; user;
+    
+    return {
+      access_token: this.jwtService.sign(payload),
+      user: userWithoutPassword,
+    };
+  }
+  
+  private isValidEmail(email: string): boolean {
+    const emailRegex &#x3D; /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
   }
 
   async getProfile(userId: number) {
