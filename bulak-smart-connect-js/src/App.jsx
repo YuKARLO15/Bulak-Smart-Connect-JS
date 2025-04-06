@@ -8,7 +8,7 @@ import SignUpForm from './SignUpComponents/SignUpForm';
 import QRCodePage from './QRCodeComponents/QR';
 import ClericalErrorApplication from './ApplicationComponents/BirthCertificateApplications/CorrectionClericalError';
 import BirthCertificateDashboard from './ApplicationComponents/BirthCertificateApplications/BirthCertificateDashboard';
-import FirstNameCorrection from './ApplicationComponents/BirthCertificateApplications/FristNameCorrection';
+import FirstNameCorrection from './ApplicationComponents/BirthCertificateApplications/FirstNameCorrection';
 import MarriageLicenseApplication from './ApplicationComponents/MarriageCertificateApplications/MarriageLicenseApplication';
 import Above18Registration from './ApplicationComponents/BirthCertificateApplications/DelayedAbove18';
 import Below18Registration from './ApplicationComponents/BirthCertificateApplications/DelayedBelow18';
