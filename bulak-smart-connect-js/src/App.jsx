@@ -17,23 +17,30 @@ import DelayedOutOfTownRegistration from './ApplicationComponents/BirthCertifica
 import DelayedOneParentForeignerRegistration from './ApplicationComponents/BirthCertificateApplications/DelayedOneParentForeigner';
 import BirthCertificateForm from './ApplicationComponents/BirthCertificateApplications/BirthCertificateForm';
 import PrivateRoute from './PrivateRoute';
-
 import QRCodeAppointment from "./AppointmentComponents/QRCodeAppointment";
 import LandingPage from './LandingPageComponents/LandingPage';
 import BirthApplicationSummary from './ApplicationComponents/BirthCertificateApplications/BirthApplicationSummary';
+import MarriageCertificateForm from './ApplicationComponents/MarriageCertificateApplications/MarriageCertificateForm/MarriageCertificateForm';
+import WalkInQueueContainer from './WalkInComponents/WalkInDashBoard';
+import WalkInForm from './WalkInComponents/WalkInForm';
+import WalkInQueueDetail from './WalkInComponents/WalkInDetails';
 
+//ADMIN//
 
+import AccountManagement from './AdminBulakSmart/AdminManageAccount';
 
 function App() {
   return (
-  
+ 
     <Routes>
       {/* Define Routes */}
       <Route path="/" element={<LandingPage />} />
       <Route path="/LogIn" element={<LogIn />} />
       <Route path='/SignUpForm' element={<SignUpForm />} />
+      <Route path="/AccountManagement" element={<AccountManagement />} />
       <Route element={<PrivateRoute />}> {/* Protected Route Start */}
-      <Route path='/UserDashBoard' element={<UserDashboard />} />
+        <Route path="/Home" element={<LandingPage />} />
+        <Route path="/UserDashboard" element={<UserDashboard />} />
       <Route path='/AppointmentForm' element={<AppoionmentForm />} />
       <Route path='/ApplicationForm' element={<ApplicationForm />} />
       <Route path='/QR' element={<QRCodePage />} />
@@ -49,9 +56,13 @@ function App() {
       <Route path="/QrCodeAppointment/:id" element={<QRCodeAppointment />} />
       <Route path='/BirthCertificateForm' element={<BirthCertificateForm />} />
       <Route path='/BirthApplicationSummary' element={<BirthApplicationSummary />} />
+        <Route path='/MarriageCertificateForm' element={<MarriageCertificateForm />} />
+        <Route path='/WalkInQueue' element={<WalkInQueueContainer />} />
+        <Route path='/WalkInForm' element={<WalkInForm />} />
+        <Route path='/WalkInDetails' element={<WalkInQueueDetail />} />
       </Route> {/* Protected Route End */}
-
     </Routes>
+    
   );
 }
 

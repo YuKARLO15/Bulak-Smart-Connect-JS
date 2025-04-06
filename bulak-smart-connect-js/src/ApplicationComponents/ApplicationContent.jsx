@@ -12,7 +12,7 @@ const ApplicationContent = () => {
   
   const certificates = [
     { title: 'Birth Certificate', icon: BirthCertificateIcon, route: '/BirthCertificateDashboard' },
-    { title: 'Marriage Certificate', icon: MarriageCertificateIcon, route: '/MarriageLicenseApplication' },
+    { title: 'Marriage Certificate', icon: MarriageCertificateIcon, route: '/MarriageCertificateForm' },
     { title: 'Death Certificate', icon: DeathCertificateIcon, route: '/DeathDashboard' },
   ];
 

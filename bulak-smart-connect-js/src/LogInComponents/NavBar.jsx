@@ -1,32 +1,25 @@
 import React, { useState } from "react";
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { 
   Box, 
   Typography, 
   Button, 
   Menu, 
-  MenuItem 
+  MenuItem,
+  ListItemIcon,
+  ListItemText
 } from "@mui/material";
 import "./NavBar.css";
 import BulakLGULogo from "../LandingPageComponents/LandingPageAssets/BulakLGULogo.png";
+import { useAuth } from "../AuthContext";
+import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
+import DirectionsWalkOutlinedIcon from "@mui/icons-material/DirectionsWalkOutlined";
+import DescriptionIcon from "@mui/icons-material/Description";
 
 const NavBar = () => {
-
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  
-
+  const { isAuthenticated, logout } = useAuth();
   const [anchorEl, setAnchorEl] = useState(null);
-
-
-  const handleLogin = () => {
-    setIsLoggedIn(true);
-  };
-
-  // Handle logout
-  const handleLogout = () => {
-    setIsLoggedIn(false);
-  };
-
+  const navigate = useNavigate();
 
   const handleServicesClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -36,51 +29,74 @@ const NavBar = () => {
     setAnchorEl(null);
   };
 
+  const handleLogout = () => {
+    logout();
+    navigate('/LogIn'); 
+  };
+
   return (
-    <div className="NavBarContainer">
-      <RouterLink to='/'>
-        <img className="LogoNavBar" src={BulakLGULogo} alt="Bulak LGU Logo" />
-      </RouterLink>
+    <>
       
-      <div className="NavButtons">
-        <RouterLink to='/'><Button>Home</Button></RouterLink>
+      
+      <div className="NavBarContainer">
+        <RouterLink to='/'>
+          <img className="LogoNavBar" src={BulakLGULogo} alt="Bulak LGU Logo" />
+        </RouterLink>
         
-        {isLoggedIn ? (
-          <>
-            <Button 
-              onClick={handleServicesClick}
-            >
-              Services
-            </Button>
-            <Menu
-              anchorEl={anchorEl}
-              open={Boolean(anchorEl)}
-              onClose={handleServicesClose}
-            >
-              <MenuItem onClick={handleServicesClose}>
-                <RouterLink to="/birth-certificate">Birth Certificate</RouterLink>
-              </MenuItem>
-              <MenuItem onClick={handleServicesClose}>
-                <RouterLink to="/marriage-certificate">Marriage Certificate</RouterLink>
-              </MenuItem>
-              <MenuItem onClick={handleServicesClose}>
-                <RouterLink to="/death-certificate">Death Certificate</RouterLink>
-              </MenuItem>
-              <MenuItem onClick={handleServicesClose}>
-                <RouterLink to="/appointment-booking">Appointment Booking</RouterLink>
-              </MenuItem>
-            </Menu>
-            
-            <Button onClick={handleLogout}>Log Out</Button>
-          </>
-        ) : (
-          <>
-            <RouterLink to='/SignUpForm'><Button>Sign Up</Button></RouterLink>
-            <RouterLink to='/LogIn'><Button>Log In</Button></RouterLink>
-          </>
-        )}
+        <div className="NavButtons">
+          <RouterLink to='/'><Button>Home</Button></RouterLink>
+          
+          {isAuthenticated ? (
+            <>
+              <Button 
+                onClick={handleServicesClick}
+              >
+                Services
+              </Button>
+              <Menu
+                anchorEl={anchorEl}
+                open={Boolean(anchorEl)}
+                onClose={handleServicesClose}
+              >
+                <MenuItem className="submenu-container">
+                  <ListItemIcon>
+                    <DescriptionIcon fontSize="small" />
+                  </ListItemIcon>
+                  <RouterLink to="/ApplicationForm" style={{ textDecoration: 'none', color: 'inherit', width: '100%' }}>
+                 <ListItemText primary="Document Application" />
+                 </RouterLink>  
+                </MenuItem>
+             
+                <MenuItem onClick={handleServicesClose}>
+                  <ListItemIcon>
+                    <CalendarTodayIcon fontSize="small" />
+                  </ListItemIcon>
+                  <RouterLink to="/AppointmentForm" style={{ textDecoration: 'none', color: 'inherit', width: '100%' }}>
+                    <ListItemText primary="Appointment Booking" />
+                  </RouterLink>
+                </MenuItem>
+                <MenuItem onClick={handleServicesClose}>
+                  <ListItemIcon>
+                    <DirectionsWalkOutlinedIcon fontSize="small" />
+                  </ListItemIcon>
+                  <RouterLink to="/WalkInQueue" style={{ textDecoration: 'none', color: 'inherit', width: '100%' }}>
+                    <ListItemText primary="Smart Walk-In Queue" />
+                  </RouterLink>
+                </MenuItem>
+              </Menu>
+              
+              <RouterLink to="/UserDashboard"><Button>Dashboard</Button></RouterLink>
+              <Button onClick={handleLogout}>Log Out</Button>
+            </>
+          ) : (
+            <>
+              <RouterLink to='/SignUpForm'><Button>Sign Up</Button></RouterLink>
+              <RouterLink to='/LogIn'><Button>Log In</Button></RouterLink>
+            </>
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

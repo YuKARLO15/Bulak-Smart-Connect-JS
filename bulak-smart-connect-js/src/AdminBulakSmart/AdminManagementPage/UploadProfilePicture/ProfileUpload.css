@@ -1,0 +1,35 @@
+
+.profile-upload-container {
+    width: 40px; 
+    height: 40px; 
+    border-radius: 50%; 
+    position: relative; 
+    overflow: hidden; 
+    background-image: url('path/to/your/background-image.jpg'); 
+    background-size: cover; 
+    background-position: center; 
+    cursor: pointer; 
+}
+
+.upload-icon {
+    position: absolute; 
+    top: 50%; 
+    left: 50%; 
+    transform: translate(-50%, -50%); 
+    font-size: 18px; 
+    color: white; 
+    background-color: rgba(99, 97, 97, 0.5); 
+    border-radius: 50%; 
+    width: 30px; 
+    height: 30px; 
+    display: flex; 
+    align-items: center;
+    justify-content: center; 
+}
+
+.profile-image {
+    width: 100%;
+    height: 100%; 
+    border-radius: 50%; 
+    object-fit: cover; 
+}

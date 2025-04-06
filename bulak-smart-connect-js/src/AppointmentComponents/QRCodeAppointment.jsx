@@ -51,8 +51,11 @@ const QRCodeAppointment = () => {
           </div>
         </div>
         <p className="NoteAppointment">
-          <strong>Note:</strong> All clients are required to arrive at least 15 minutes before their scheduled
-          appointment time. Late arrivals will need to reschedule.
+          <strong>Note:</strong>
+          
+          <li>Please Screenshot this QR Code and present it to the Civil Registrar Office staff upon arrival.</li> 
+          <li> All clients are required to arrive at least 15 minutes before their scheduled
+          appointment time. Late arrivals will need to reschedule.</li>
         </p>
       </div>
     </div>

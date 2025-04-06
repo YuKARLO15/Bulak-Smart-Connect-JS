@@ -1,0 +1,145 @@
+/* General container styling */
+.MarriageCertificateFormContainer {
+  width: 100vw;
+  margin: 2rem auto;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.MarriageCertificateFormTitle {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #fff;
+}
+
+.MarriageCertificateForm {
+  padding: 2rem;
+  width: 80vw;
+}
+
+/* Section styling */
+.section {
+  margin-bottom: 2rem;
+}
+
+.section h3 {
+  color: #1C4D5A;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid #3498db;
+  padding-bottom: 0.5rem;
+  text-transform: uppercase;
+}
+
+.section h4 {
+  color: #34495e;
+  margin: 1rem 0;
+} 
+
+/* Input group styling */
+.input-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.input-container {
+  flex: 1;
+  min-width: 200px;
+  position: relative;
+}
+
+.input-container.full-width {
+  flex-basis: 100%;
+}
+
+/* Input field styling */
+.input-container input[type="text"],
+.input-container select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  background-color: #fff; /* Set background to white */
+  color: #333; /* Set text color to dark for contrast */
+}
+
+.input-container input[type="text"]:focus,
+.input-container select:focus {
+  border-color: #3498db;
+  outline: none;
+  background-color: #fff; /* Ensure background remains white on focus */
+}
+
+/* Radio group styling */
+.radio-group {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.radio-group input[type="radio"] {
+  margin-right: 5px;
+}
+
+/* Checkbox container styling */
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Error message styling */
+.error-message {
+  color: #e74c3c;
+  font-size: 12px;
+  position: absolute;
+  bottom: -18px;
+  left: 0;
+}
+
+/* Info text styling */
+.info-text {
+  font-size: 14px;
+  color: #7f8c8d;
+  margin-bottom: 1rem;
+}
+
+.note-text {
+  font-size: 14px;
+  color: #e74c3c;
+  font-weight: bold;
+  margin-top: 1rem;
+}
+
+/* Button styling */
+.MarriageCertificateFormButton {
+  margin-top: 1rem !important;
+  margin-right: 1rem !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .input-container {
+    min-width: 100%;
+  }
+
+  .MarriageCertificateForm {
+    padding: 1rem;
+  }
+}
+
+/* Style for required field indicators */
+label::after {
+  content: " *";
+  color: #e74c3c;
+}
+
+/* Override for optional fields */
+label:not([data-required])::after {
+  content: "";
+}

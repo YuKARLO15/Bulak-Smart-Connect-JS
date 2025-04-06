@@ -5,11 +5,13 @@ import FullNameSection from "./FullName";
 import ContactInformationSection from "./ContactInformation";
 import UpdatesCheckbox from "./UpdateCheckbox";
 import NavBar from "../LogInComponents/NavBar";
+import DataPrivacy from "./DataPrivacy";
 import "../SignUpComponents/ContactInformation.css";
 import "../SignUpComponents/UpdateCheckbox.css";
 import "../SignUpComponents/UserNamePassword.css";
 import "../SignUpComponents/SignUpForm.css";
 import "../LogInComponents/NavBar.css";
+import "../SignUpComponents/DataPrivacy.css"
 import { authService } from "../services/api"; //API Service to NestJS
 
 const SignUpForm = () => {
@@ -129,6 +131,7 @@ const SignUpForm = () => {
         <FullNameSection formData={formData} handleInputChange={handleInputChange} errors={errors} />
         <UsernamePasswordSection formData={formData} handleInputChange={handleInputChange} errors={errors} setErrors={setErrors} />
         <ContactInformationSection formData={formData} handleInputChange={handleInputChange} errors={errors} />
+        <DataPrivacy formData={formData} handleInputChange={handleInputChange} />
         <UpdatesCheckbox formData={formData} handleInputChange={handleInputChange} />
         
         {/* Visualization if working */}

@@ -1,0 +1,177 @@
+.admin-container {
+    max-width: 100vw;
+    width: 100vw;
+    height: auto;
+    min-height: 100vh;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    background-color: #f5f5f5;
+    padding: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+  
+.header {
+    font-weight: 600;
+    background-color: #184a5b;
+    color: white;
+    text-align: center;
+    padding: 20px;
+    width: 100%;
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+}
+  
+.search-user {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; 
+    width: 100%;
+    max-width: 900px; 
+    margin-bottom: 20px;
+}
+
+.search-user input {
+    padding: 8px; 
+    border-radius: 6px;
+    font-size: 16px; 
+    border: 1.5px solid #2a5764;
+    background-color: #fffdfd; 
+    box-shadow: inset 0px 3px 2px rgba(0, 0, 0, 0.1);
+    flex-grow: 1; 
+    margin-right: 10px;
+}
+
+.search-user input:focus {
+    outline: none;
+    border: 2px solid #24677a; 
+}
+  
+.search-user button {
+    padding: 10px 20px; 
+    background-color: #4c727d;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    flex-shrink: 0; 
+    max-width: 150px; 
+    width: auto; 
+}
+  
+.search-user button:hover {
+    background-color: #184a5b;
+}
+  
+table {
+    width: 100%;
+    max-width: 900px;
+    border-collapse: collapse;
+    background-color: white;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    border-radius: 10px;
+    overflow: hidden;
+}
+  
+thead {
+    background-color: #184a5b;
+    color: white;
+}
+  
+th, td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+  
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+  
+.user-info img {
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+}
+  
+.status-logged {
+    color: rgb(25, 119, 25);
+    font-weight: 600;
+}
+  
+.status-not-logged {
+    color: rgb(157, 35, 35);
+    font-weight: 600;
+}
+  
+.roles {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+}
+  
+.role {
+    padding: 5px 10px;
+    border-radius: 15px;
+    color: white;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+  
+.role.admin {
+    background-color: #3c6670; 
+    color: #ffffff;
+    font-weight:500;
+}
+  
+.role.manager {
+    background-color: #e2e381; 
+    color: #000;
+    font-weight:500;
+}
+  
+.role.staff {
+    background-color: #747a7b; 
+    color: #ffffff;
+    font-weight:500;
+}
+  
+.actions button {
+    margin-right: 10px;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+  
+.actions .modify {
+    background-color: #4c727d;
+}
+  
+.actions .remove {
+    background-color: #a83232;
+}
+  
+.actions .modify:hover {
+    background-color: #184a5b;
+}
+  
+.actions .remove:hover {
+    background-color: #8c1e1e;
+}
+  
+.user-name {
+    color: #184a5b;
+    font-weight:600; 
+}
+
+.footer {
+    margin-top: 15px;
+    color: #184a5b;
+    font-weight: bold;
+}
