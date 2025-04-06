@@ -1,28 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import "../SignUpComponents/FullName.css";
 
-const FullNameSection = () => {
-  const [formData, setFormData] = useState({
-    lastname: "",
-    firstname: "",
-    middlename: "",
-    hasExtension: false,
-    extension: "",
-  });
-
-  const handleInputChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      [name]: type === "checkbox" ? checked : value,
-    }));
-  };
-
+const FullNameSection = ({ formData, handleInputChange, errors }) => {
   return (
     <div>
-
       <div className="form-group">
-        
         <div className="form-group fullname">
           <div className="textbox">
             <label className="label-in">Last Name / Apelyido <span className="asterisk"> *</span></label>
@@ -35,6 +17,7 @@ const FullNameSection = () => {
               onChange={handleInputChange}
               required
             />
+            {errors.lastname && <span className="error-message">{errors.lastname}</span>}
           </div>
           
           <div className="textbox">
@@ -48,6 +31,7 @@ const FullNameSection = () => {
               onChange={handleInputChange}
               required
             />
+            {errors.firstname && <span className="error-message">{errors.firstname}</span>}
           </div>
 
           <div className="textbox">
@@ -71,13 +55,7 @@ const FullNameSection = () => {
               id="HasExtension"
               name="hasExtension"
               checked={formData.hasExtension || false}
-              onChange={(e) =>
-                setFormData((prevFormData) => ({
-                  ...prevFormData,
-                  hasExtension: e.target.checked,
-                  extension: e.target.checked ? prevFormData.extension : "",
-                }))
-              }
+              onChange={handleInputChange}
             />
             Check this box if the registrant has a name extension
           </label>
