@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, UnauthorizedException, ConflictException, BadRequestException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -73,30 +73,51 @@ export class AuthService {
 
   async register(registerDto: RegisterDto) {
     const { email, password, name } = registerDto;
-
-    // Check if user exists
-    const existingUser = await this.usersRepository.findOne({
-      where: { email },
-    });
-    if (existingUser) {
-      throw new UnauthorizedException('Email already exists');
+    
+    // Validate email format
+    if (!this.isValidEmail(email)) {
+      throw new BadRequestException('Invalid email format');
     }
-
+    
+    // Check if user exists
+    const existingUser = await this.usersRepository.findOne({ where: { email } });
+    if (existingUser) {
+      throw new ConflictException('Email already exists');
+    }
+    
+    // Validate password strength
+    if (password.length < 6) {
+      throw new BadRequestException('Password must be at least 6 characters');
+    }
+    
     // Hash password
     const salt = await bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(password, salt);
-
+    
     // Create new user
     const user = this.usersRepository.create({
       email,
       password: hashedPassword,
       name,
     });
-
+    
     await this.usersRepository.save(user);
-
-    const { password: _, ...result } = user;
-    return result;
+    
+    // Generate JWT token
+    const payload = { sub: user.id, email: user.email };
+    
+    // Remove password from response
+    const { password: _, ...userWithoutPassword } = user;
+    
+    return {
+      access_token: this.jwtService.sign(payload),
+      user: userWithoutPassword,
+    };
+  }
+  
+  private isValidEmail(email: string): boolean {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
   }
 
   async getProfile(userId: number) {
