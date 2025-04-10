@@ -1,5 +1,8 @@
 import { Route, Router, Routes } from 'react-router-dom'; // Import necessary components from react-router-dom
 import './App.css';
+
+//USER SIDE//
+
 import LogIn from './LogInComponents/LogIn';  
 import UserDashboard from './UserDashboard/UserDashboard'; 
 import AppoionmentForm from './AppointmentComponents/AppointemtForm'; 
@@ -8,7 +11,7 @@ import SignUpForm from './SignUpComponents/SignUpForm';
 import QRCodePage from './QRCodeComponents/QR';
 import ClericalErrorApplication from './ApplicationComponents/BirthCertificateApplications/CorrectionClericalError';
 import BirthCertificateDashboard from './ApplicationComponents/BirthCertificateApplications/BirthCertificateDashboard';
-import FirstNameCorrection from './ApplicationComponents/BirthCertificateApplications/FristNameCorrection';
+import FirstNameCorrection from './ApplicationComponents/BirthCertificateApplications/FirstNameCorrection';
 import MarriageLicenseApplication from './ApplicationComponents/MarriageCertificateApplications/MarriageLicenseApplication';
 import Above18Registration from './ApplicationComponents/BirthCertificateApplications/DelayedAbove18';
 import Below18Registration from './ApplicationComponents/BirthCertificateApplications/DelayedBelow18';
@@ -25,9 +28,8 @@ import WalkInQueueContainer from './WalkInComponents/WalkInDashBoard';
 import WalkInForm from './WalkInComponents/WalkInForm';
 import WalkInQueueDetail from './WalkInComponents/WalkInDetails';
 
-//ADMIN//
-
-import AccountManagement from './AdminBulakSmart/AdminManageAccount';
+//ADMIN SIDE//
+import AdminAccountManagement from './AdminBulakSmartConnect/AccountManagementComponents/AccountManagement';
 
 function App() {
   return (
@@ -37,7 +39,7 @@ function App() {
       <Route path="/" element={<LandingPage />} />
       <Route path="/LogIn" element={<LogIn />} />
       <Route path='/SignUpForm' element={<SignUpForm />} />
-      <Route path="/AccountManagement" element={<AccountManagement />} />
+      <Route path="/AdminAccountManagement" element={<AdminAccountManagement />} />
       <Route element={<PrivateRoute />}> {/* Protected Route Start */}
         <Route path="/Home" element={<LandingPage />} />
         <Route path="/UserDashboard" element={<UserDashboard />} />

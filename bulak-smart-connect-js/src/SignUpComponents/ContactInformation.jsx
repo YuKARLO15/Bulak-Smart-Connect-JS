@@ -2,7 +2,7 @@ import React from "react";
 import "../SignUpComponents/ContactInformation.css";
 import "../SignUpComponents/SignUpForm.css";
 
-const ContactInformationSection = ({ formData, handleInputChange }) => (
+const ContactInformationSection = ({ formData, handleInputChange, errors }) => (
   <div className="form-group">
 
     {/* Contact Number Input */}
@@ -33,12 +33,14 @@ const ContactInformationSection = ({ formData, handleInputChange }) => (
         </label>
         <input
           type="email"
+          id="email"
           name="email"
           placeholder="Enter your Email Address"
           value={formData.email}
           onChange={handleInputChange}
           required
         />
+        {errors.email && <span className="error-message">{errors.email}</span>}
       </div>
     </div>
   </div>

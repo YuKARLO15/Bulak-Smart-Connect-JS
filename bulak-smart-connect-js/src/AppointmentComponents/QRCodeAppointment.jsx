@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useParams, useLocation } from "react-router-dom";
 import { QRCodeCanvas } from "qrcode.react";
 import NavBar from "../UserDashboard/NavBar";
-import "./QRCodeAppointment.css";
+import "./QrCodeAppointment.css";
 
 const QRCodeAppointment = () => {
   const { id } = useParams(); 

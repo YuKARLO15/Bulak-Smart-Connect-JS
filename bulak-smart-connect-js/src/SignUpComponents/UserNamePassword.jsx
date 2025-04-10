@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "../SignUpComponents/UsernamePassword.css";
+import "../SignUpComponents/UserNamePassword.css";
 import "../SignUpComponents/SignUpForm";
 
 const UsernamePasswordSection = ({ formData, handleInputChange, errors, setErrors }) => {

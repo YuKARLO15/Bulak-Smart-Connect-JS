@@ -27,9 +27,17 @@ export const authService = {
     localStorage.setItem('token', response.data.access_token);
     return response.data;
   },
+  
+  register: async (userData) => {
+    const response = await api.post('/auth/register', userData);
+    localStorage.setItem('token', response.data.access_token);
+    return response.data;
+  },
+  
   logout: () => {
     localStorage.removeItem('token');
   },
+  
   getProfile: async () => {
     return api.get('/auth/profile');
   },
