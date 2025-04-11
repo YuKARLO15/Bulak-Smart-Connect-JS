@@ -1,29 +1,21 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { Router, Link as RouterLink } from "react-router-dom";
-import {
-  Box,
-  Button,
-  Checkbox,
-  FormControlLabel,
-  Grid,
-  Typography,
-  Alert,
-} from "@mui/material";
-import FileUpload from "../FileUpload";
-import NavBar from "../../UserDashboard/NavBar";
-import "./CorrectionClericalError.css";
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Router, Link as RouterLink } from 'react-router-dom';
+import { Box, Button, Checkbox, FormControlLabel, Grid, Typography, Alert } from '@mui/material';
+import FileUpload from '../FileUpload';
+import NavBar from '../../NavSide';
+import './CorrectionClericalError.css';
 
 const fileCategories = [
-  "PSA copy of wrong document",
-  "MCA copy of wrong document",
-  "Church record document owner & relatives",
-  "School record document owner & relatives",
-  "Marriage certificate document owner (if married) & relatives",
-  "Birth certificate document owner & relatives",
-  "Comelec record document owner & relatives",
-  "Identification cards",
-  "Others",
+  'PSA copy of wrong document',
+  'MCA copy of wrong document',
+  'Church record document owner & relatives',
+  'School record document owner & relatives',
+  'Marriage certificate document owner (if married) & relatives',
+  'Birth certificate document owner & relatives',
+  'Comelec record document owner & relatives',
+  'Identification cards',
+  'Others',
 ];
 
 const CorrectionClericalError = () => {
@@ -38,7 +30,7 @@ const CorrectionClericalError = () => {
   const [uploadedFiles, setUploadedFiles] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const handleCheckboxChange = (event) => {
+  const handleCheckboxChange = event => {
     setSelectedOptions({
       ...selectedOptions,
       [event.target.name]: event.target.checked,
@@ -46,15 +38,15 @@ const CorrectionClericalError = () => {
   };
 
   const handleFileUpload = (label, isUploaded) => {
-    setUploadedFiles((prevState) => ({
+    setUploadedFiles(prevState => ({
       ...prevState,
       [label]: isUploaded,
     }));
   };
 
-  const isAnyOptionSelected = Object.values(selectedOptions).some((val) => val);
+  const isAnyOptionSelected = Object.values(selectedOptions).some(val => val);
 
-  const isFilesComplete = fileCategories.every((cat) => uploadedFiles[cat]);
+  const isFilesComplete = fileCategories.every(cat => uploadedFiles[cat]);
 
   const isFormComplete = isAnyOptionSelected && isFilesComplete;
 
@@ -62,21 +54,14 @@ const CorrectionClericalError = () => {
     if (isFormComplete) {
       setIsSubmitted(true);
       setTimeout(() => {
-        navigate("/BirthApplicationSummary");
+        navigate('/BirthApplicationSummary');
       }, 2000);
     }
   };
 
   return (
-    <div
-      className={`ClericalErrorContainer ${
-        isSidebarOpen ? "sidebar-open" : ""
-      }`}
-    >
-      <NavBar
-        isSidebarOpen={isSidebarOpen}
-        setIsSidebarOpen={setIsSidebarOpen}
-      />
+    <div className={`ClericalErrorContainer ${isSidebarOpen ? 'sidebar-open' : ''}`}>
+      <NavBar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
       <Typography variant="h5" className="TitleClerical">
         BIRTH CERTIFICATE APPLICATION
       </Typography>
@@ -89,7 +74,7 @@ const CorrectionClericalError = () => {
           Select the applicable:
         </Typography>
         <Grid container spacing={2}>
-          {Object.keys(selectedOptions).map((option) => (
+          {Object.keys(selectedOptions).map(option => (
             <Grid item xs="auto" key={option} className="ClericalCB">
               <FormControlLabel
                 control={
@@ -99,7 +84,7 @@ const CorrectionClericalError = () => {
                     name={option}
                   />
                 }
-                label={option.replace(/([A-Z])/g, " $1").trim()}
+                label={option.replace(/([A-Z])/g, ' $1').trim()}
               />
             </Grid>
           ))}
@@ -110,7 +95,7 @@ const CorrectionClericalError = () => {
           <FileUpload
             key={index}
             label={category}
-            onUpload={(status) => handleFileUpload(category, status)}
+            onUpload={status => handleFileUpload(category, status)}
           />
         ))}
       </Box>
@@ -135,17 +120,16 @@ const CorrectionClericalError = () => {
         </Alert>
       )}
 
-
       <Button
         variant="contained"
         color="primary"
         disabled={!isFormComplete}
-        sx={{ marginTop: "20px" }}
+        sx={{ marginTop: '20px' }}
         onClick={handleSubmit}
-         className="ButtonApplication"
+        className="ButtonApplication"
       >
         Submit
-      </Button> 
+      </Button>
     </div>
   );
 };
