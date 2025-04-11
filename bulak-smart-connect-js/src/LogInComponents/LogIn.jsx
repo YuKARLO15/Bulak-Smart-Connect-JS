@@ -3,7 +3,7 @@ import { Navigate } from "react-router-dom";
 import "./LogIn.css";
 import LogInContent from "./LogInContent";
 import LogInCard from "./LogInCard";
-import NavBar from "./NavBar";
+import NavBar from "../NavigationComponents/NavBar";
 import { useAuth } from "../AuthContext"; // Import useAuth
 
 function LogIn() {

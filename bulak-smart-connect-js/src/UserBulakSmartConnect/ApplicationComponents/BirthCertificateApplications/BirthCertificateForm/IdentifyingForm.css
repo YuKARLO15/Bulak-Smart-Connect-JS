@@ -115,6 +115,7 @@
 .DateSelectChild {
   width: 100%;
   min-width: 80px;
+  background-color: #ffffff;
 }
 
 .DateSectionContainerChild {

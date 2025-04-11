@@ -16,7 +16,7 @@ import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import DescriptionIcon from "@mui/icons-material/Description";
 import QrCodeScannerIcon from "@mui/icons-material/QrCodeScanner";
 import DirectionsWalkOutlinedIcon from "@mui/icons-material/DirectionsWalkOutlined";
-import NavBar from "../LogInComponents/NavBar";
+import NavBar from "../NavigationComponents/NavBar";
 import DeviceMockUp from "./LandingPageAssets/DeviceMockUp.png";
 import BulakLGULogo from "./LandingPageAssets/BulakLGULogo.png";
 import PhTimeComponent from "./PhTimeComponent";
