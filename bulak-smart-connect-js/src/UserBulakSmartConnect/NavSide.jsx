@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./NavBar.css";
+import "./NavSide.css";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 import { Link } from "react-router-dom"; // Import Link from react-router-dom

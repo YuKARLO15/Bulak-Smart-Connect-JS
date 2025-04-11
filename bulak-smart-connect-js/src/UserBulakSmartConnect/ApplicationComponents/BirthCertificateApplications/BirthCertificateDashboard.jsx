@@ -1,36 +1,28 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";  
-import {
-  Radio,
-  RadioGroup,
-  FormControlLabel,
-  Typography,
-  Box,
-  Paper,
-  Button,
-} from "@mui/material";
-import "./BirthCertificateDashboard.css";
-import NavBar from "../../UserDashboard/NavBar";
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Radio, RadioGroup, FormControlLabel, Typography, Box, Paper, Button } from '@mui/material';
+import './BirthCertificateDashboard.css';
+import NavBar from '../../NavSide';
 
 const BirthCertificateDashboard = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState("");
+  const [selectedOption, setSelectedOption] = useState('');
   const [agreedPrivacy, setAgreedPrivacy] = useState(false);
   const [agreedTerms, setAgreedTerms] = useState(false);
   const navigate = useNavigate();
 
   const handleNext = () => {
     if (!selectedOption) {
-      alert("Please select an option before proceeding.");
+      alert('Please select an option before proceeding.');
       return;
     }
-    localStorage.setItem("selectedBirthCertificateOption", selectedOption);
+    localStorage.setItem('selectedBirthCertificateOption', selectedOption);
 
-    navigate("/BirthCertificateForm");
+    navigate('/BirthCertificateForm');
   };
 
   return (
-    <Box className={`BirthDashboardContainer ${isSidebarOpen ? "sidebar-open" : ""}`}>
+    <Box className={`BirthDashboardContainer ${isSidebarOpen ? 'sidebar-open' : ''}`}>
       <NavBar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
       <Typography variant="h4" className="FormTitle">
         Birth Certificate Application
@@ -42,7 +34,7 @@ const BirthCertificateDashboard = () => {
           </Typography>
           <RadioGroup
             value={selectedOption}
-            onChange={(e) => setSelectedOption(e.target.value)}
+            onChange={e => setSelectedOption(e.target.value)}
             className="BirthDashRadioGroup"
           >
             <FormControlLabel
@@ -77,21 +69,21 @@ const BirthCertificateDashboard = () => {
               value="Out of town"
               control={<Radio />}
               label="Out of town registration"
-            /> 
+            />
           </RadioGroup>
           <Typography variant="subtitle1" className="SubTitleBirthCertificate">
             Correction for Birth Certificate
           </Typography>
           <RadioGroup
             value={selectedOption}
-            onChange={(e) => setSelectedOption(e.target.value)}
-             className="BirthDashRadioGroup"
-          > 
+            onChange={e => setSelectedOption(e.target.value)}
+            className="BirthDashRadioGroup"
+          >
             <FormControlLabel
               value="Clerical Error"
               control={<Radio />}
               label="Correction of Clerical Errors"
-            /> 
+            />
             <FormControlLabel
               value="Sex DOB"
               control={<Radio />}
@@ -110,9 +102,11 @@ const BirthCertificateDashboard = () => {
             Data Privacy Notice
           </Typography>
           <FormControlLabel
-            control={<Radio checked={agreedPrivacy} onChange={() => setAgreedPrivacy(!agreedPrivacy)} />}
+            control={
+              <Radio checked={agreedPrivacy} onChange={() => setAgreedPrivacy(!agreedPrivacy)} />
+            }
             label="I agree to the Data Privacy Notice"
-              className="BirthDashRadioGroup" 
+            className="BirthDashRadioGroup"
           />
         </Box>
 
@@ -120,10 +114,10 @@ const BirthCertificateDashboard = () => {
           <Typography variant="h6" className="SectionTitle">
             Terms and Conditions
           </Typography>
-          <FormControlLabel 
+          <FormControlLabel
             control={<Radio checked={agreedTerms} onChange={() => setAgreedTerms(!agreedTerms)} />}
             label="I agree to the terms and conditions"
-             className="BirthDashRadioGroup"
+            className="BirthDashRadioGroup"
           />
         </Box>
 

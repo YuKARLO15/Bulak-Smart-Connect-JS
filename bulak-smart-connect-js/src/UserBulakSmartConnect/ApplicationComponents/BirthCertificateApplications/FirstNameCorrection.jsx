@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { Router, Link as RouterLink } from "react-router-dom";
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Router, Link as RouterLink } from 'react-router-dom';
 import {
   Box,
   Button,
@@ -12,26 +12,26 @@ import {
   DialogActions,
   DialogContent,
   DialogContentText,
-  DialogTitle
-} from "@mui/material";
-import FileUpload from "../FileUpload";
-import "./FirstNameCorrection.css";
-import NavBar from "../../UserDashboard/NavBar";
+  DialogTitle,
+} from '@mui/material';
+import FileUpload from '../FileUpload';
+import './FirstNameCorrection.css';
+import NavBar from '../../NavSide';
 
 const mandatoryDocuments = [
-  "NBI Clearance",
-  "PNP Clearance",
-  "Employer’s Clearance / Business Records / Affidavit of Unemployment",
+  'NBI Clearance',
+  'PNP Clearance',
+  'Employer’s Clearance / Business Records / Affidavit of Unemployment',
 ];
 
 const supportingDocuments = [
-  "School Records",
-  "Church Records",
-  "Birth and/or Church Certificates of Child/Children",
-  "Voter’s Record",
-  "Employment Records",
-  "Identification Cards - National ID, Driver’s License, Senior’s ID, etc.",
-  "Others - Passport, Insurance Documents, Member’s Data Record",
+  'School Records',
+  'Church Records',
+  'Birth and/or Church Certificates of Child/Children',
+  'Voter’s Record',
+  'Employment Records',
+  'Identification Cards - National ID, Driver’s License, Senior’s ID, etc.',
+  'Others - Passport, Insurance Documents, Member’s Data Record',
 ];
 
 const FirstNameCorrection = () => {
@@ -43,17 +43,14 @@ const FirstNameCorrection = () => {
   const navigate = useNavigate();
 
   const handleFileUpload = (label, isUploaded) => {
-    setUploadedFiles((prevState) => ({
+    setUploadedFiles(prevState => ({
       ...prevState,
       [label]: isUploaded,
     }));
   };
 
-  const isMandatoryComplete = mandatoryDocuments.every(
-    (doc) => uploadedFiles[doc]
-  );
-  const isMarriageCertComplete =
-    !isMarried || uploadedFiles["Marriage Certificate"];
+  const isMandatoryComplete = mandatoryDocuments.every(doc => uploadedFiles[doc]);
+  const isMarriageCertComplete = !isMarried || uploadedFiles['Marriage Certificate'];
   const isFormComplete = isMandatoryComplete && isMarriageCertComplete;
 
   const handleSubmit = () => {
@@ -64,18 +61,13 @@ const FirstNameCorrection = () => {
     setOpenDialog(false);
     setIsSubmitted(true);
     setTimeout(() => {
-      navigate("/ApplicationForm");
+      navigate('/ApplicationForm');
     }, 2000);
   };
 
   return (
-    <div
-      className={`FirstNameContainer ${isSidebarOpen ? "sidebar-open" : ""}`}
-    >
-      <NavBar
-        isSidebarOpen={isSidebarOpen}
-        setIsSidebarOpen={setIsSidebarOpen}
-      />
+    <div className={`FirstNameContainer ${isSidebarOpen ? 'sidebar-open' : ''}`}>
+      <NavBar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
       <Typography variant="h5" className="TitleFirstName">
         BIRTH CERTIFICATE APPLICATION
       </Typography>
@@ -97,21 +89,11 @@ const FirstNameCorrection = () => {
           Supporting Documents:
         </Typography>
         <FormControlLabel
-          control={
-            <Checkbox
-              checked={isMarried}
-              onChange={(e) => setIsMarried(e.target.checked)}
-            />
-          }
+          control={<Checkbox checked={isMarried} onChange={e => setIsMarried(e.target.checked)} />}
           label="Married"
           className="MarriedCheckboxFirstName"
         />
-        {isMarried && (
-          <FileUpload
-            label="Marriage Certificate"
-            onUpload={handleFileUpload}
-          />
-        )}
+        {isMarried && <FileUpload label="Marriage Certificate" onUpload={handleFileUpload} />}
         {supportingDocuments.map((doc, index) => (
           <FileUpload key={index} label={doc} onUpload={handleFileUpload} />
         ))}
@@ -128,13 +110,11 @@ const FirstNameCorrection = () => {
           3. Other Fees - PHP 500.00 (notarized, new PSA corrected copy)
         </Typography>
         <Typography variant="body2">PROCESSING DURATION: 4-6 months</Typography>
-        <Typography variant="body2">
-          INQUIRY: 0936-541-0787 / slbncr@yahoo.com
-        </Typography>
+        <Typography variant="body2">INQUIRY: 0936-541-0787 / slbncr@yahoo.com</Typography>
       </Box>
 
       {isSubmitted && (
-        <Alert severity="success" sx={{ marginTop: "20px" }}>
+        <Alert severity="success" sx={{ marginTop: '20px' }}>
           Your application has been submitted successfully! Redirecting...
         </Alert>
       )}
@@ -143,36 +123,44 @@ const FirstNameCorrection = () => {
         variant="contained"
         color="primary"
         disabled={!isFormComplete}
-        sx={{ marginTop: "20px" }}
+        sx={{ marginTop: '20px' }}
         onClick={handleSubmit}
         className="ButtonApplication"
       >
         Submit
       </Button>
 
-      <Dialog open={openDialog} onClose={() => setOpenDialog(false)} className="ApplicationDialogContainer">
-        <DialogTitle  className="ApplicationDialogTitle"  >Confirm Submission</DialogTitle>
+      <Dialog
+        open={openDialog}
+        onClose={() => setOpenDialog(false)}
+        className="ApplicationDialogContainer"
+      >
+        <DialogTitle className="ApplicationDialogTitle">Confirm Submission</DialogTitle>
         <DialogContent>
-          <DialogContentText  className="ApplicationDialogContent">
+          <DialogContentText className="ApplicationDialogContent">
             Are you sure that all details are correct?
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setOpenDialog(false)} color="secondary"  className="ApplicationDialogBtnC">
+          <Button
+            onClick={() => setOpenDialog(false)}
+            color="secondary"
+            className="ApplicationDialogBtnC"
+          >
             Cancel
           </Button>
 
-          <RouterLink to = '/BirthApplicationSummary'>
-      <Button
-        variant="contained"
-        color="primary"
-        disabled={!isFormComplete}
-        
-        onClick={handleSubmit}
-         className="ApplicationDialogBtnS"
-      >
-        Submit
-      </Button> </RouterLink>
+          <RouterLink to="/BirthApplicationSummary">
+            <Button
+              variant="contained"
+              color="primary"
+              disabled={!isFormComplete}
+              onClick={handleSubmit}
+              className="ApplicationDialogBtnS"
+            >
+              Submit
+            </Button>{' '}
+          </RouterLink>
         </DialogActions>
       </Dialog>
     </div>
