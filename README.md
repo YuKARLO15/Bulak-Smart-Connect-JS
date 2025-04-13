@@ -48,6 +48,7 @@ VALUES ('test@example.com', '$2b$10$mExcKUyHurlq1zNDNos9LOXbtUJZuvIKybmHr/BngC6Z
 
 Note: You can also import the database from the folder "database" </br>
 Export it if you make any changes on the database and/or to ensure we have a backup to match the proper database on the latest iterations </br>
+Also ensure there is no personal information on the database before you export it, for our safety. Optionally, you can just export it without the data, only the schema. </br>
 
 ## Environment Setup
 
