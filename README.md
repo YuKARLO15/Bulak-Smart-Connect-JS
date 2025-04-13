@@ -47,7 +47,7 @@ INSERT INTO users (email, password, name) </br>
 VALUES ('test@example.com', '$2b$10$mExcKUyHurlq1zNDNos9LOXbtUJZuvIKybmHr/BngC6ZamAjz1ohS', 'Test User'); </br>
 
 Note: You can also import the database from the folder "database" </br>
-Export it if you make any changes on the database and/or to ensure we have a backup to match the proper databse on the latest iterations </br>
+Export it if you make any changes on the database and/or to ensure we have a backup to match the proper database on the latest iterations </br>
 
 ## Environment Setup
 
