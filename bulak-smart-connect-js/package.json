@@ -29,7 +29,8 @@
     "react-calendar": "^5.1.0",
     "react-dom": "^18.3.1",
     "react-router": "^7.4.1",
-    "react-router-dom": "^7.4.1"
+    "react-router-dom": "^7.4.1",
+    "recharts": "^2.15.2"
   },
   "devDependencies": {
     "@eslint/js": "^9.23.0",

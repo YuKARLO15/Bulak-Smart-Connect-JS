@@ -33,6 +33,7 @@ const NavBar = ({ isSidebarOpen, setIsSidebarOpen }) => {
             <a href="/WalkInQueue"> Smart Walk - In</a>
             <a href="/account">Account</a>
             <a href="/settings">Settings</a>
+            <a href="/applicationAdmin">Application Admin</a>
           </div>
           <div className="Logout">
           <Link to="/" onClick={logout}>Log Out</Link>
