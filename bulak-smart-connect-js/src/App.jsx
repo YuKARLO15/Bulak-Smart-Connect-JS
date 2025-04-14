@@ -39,6 +39,7 @@ import WalkInQueueDetail from './UserBulakSmartConnect/WalkInComponents/WalkInDe
 //ADMIN SIDE//
 import AdminAccountManagement from './AdminBulakSmartConnect/AccountManagementComponents/AccountManagement';
 import AdminApplicationDashboard from './AdminBulakSmartConnect/AdminApplicationComponents/ApplicationAdminDashboard';
+import AppointmentDetailsCard from './AdminBulakSmartConnect/AppointmentDetailsComponents/AppointmentDetails';
 
 function App() {
   return (
@@ -48,6 +49,7 @@ function App() {
       <Route path="/LogIn" element={<LogIn />} />
       <Route path="/SignUpForm" element={<SignUpForm />} />
       <Route path="/AdminAccountManagement" element={<AdminAccountManagement />} />
+      <Route path="AppointmentDetailsCard" element={<AppointmentDetailsCard/>} />
       <Route element={<PrivateRoute />}>
         {' '}
         {/* Protected Route Start */}
