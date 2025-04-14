@@ -14,6 +14,7 @@ import {
 } from '@mui/material';
 import './ApplicationContent.css';
 import './RecentApplicationsComponent.css';
+import { getApplications } from './ApplicationData'; 
 
 const RecentApplicationsComponent = () => {
     const [applications, setApplications] = useState([]);
@@ -23,12 +24,11 @@ const RecentApplicationsComponent = () => {
     const location = useLocation();
 
     useEffect(() => {
-        const getApplications = async () => {
+        const fetchApplications = async () => {
             try {
                 setLoading(true);
-               
-                const storedApplications = JSON.parse(localStorage.getItem("applications")) || [];
-                setApplications(storedApplications);
+                const fetchedApplications = getApplications();
+                setApplications(fetchedApplications);
             } catch (err) {
                 setError("Error loading applications: " + err.message);
             } finally {
@@ -36,17 +36,16 @@ const RecentApplicationsComponent = () => {
             }
         };
 
-        getApplications();
+        fetchApplications();
         
         const handleStorageChange = (e) => {
             if (e.key === "applications") {
-                getApplications();
+                fetchApplications();
             }
         };
         
         window.addEventListener('storage', handleStorageChange);
         
-
         return () => {
             window.removeEventListener('storage', handleStorageChange);
         };
@@ -84,13 +83,10 @@ const RecentApplicationsComponent = () => {
     const handleViewSummary = (application) => {
         if (application.type === "Birth Certificate") {
             try {
-               
                 const applicationData = applications.find(app => app.id === application.id);
                 
                 if (applicationData && applicationData.formData) {
-                   
                     localStorage.setItem("birthCertificateApplication", JSON.stringify(applicationData.formData));
-                   
                     localStorage.setItem("currentApplicationId", application.id);
                     
                     navigate('/BirthApplicationSummary');
@@ -103,7 +99,6 @@ const RecentApplicationsComponent = () => {
                 alert("An error occurred while loading the application summary.");
             }
         } else {
-       
             handleNavigation(application.type);
         }
     };
@@ -160,7 +155,7 @@ const RecentApplicationsComponent = () => {
                             <CardContent>
                                 <Grid container justifyContent="space-between" alignItems="center">
                                     <div className="ApplicationDetails">
-                                        <Typography className="ApplicationCardTitle"   onClick={() => handleViewSummary(app)}>{app.type}</Typography>
+                                        <Typography className="ApplicationCardTitle" onClick={() => handleViewSummary(app)}>{app.type}</Typography>
                                         <Typography className="ApplicationId">ID: {app.id || "N/A"}</Typography>
                                         <Typography className="ApplicationDate">{app.date}</Typography>
                                         <Typography className="ApplicationStatus" sx={{ color: StatusColor(app.status) }}>
@@ -176,7 +171,6 @@ const RecentApplicationsComponent = () => {
                                         >
                                             View Summary
                                         </Button>
-                                        
                                     </Box>
                                 </Grid>
                             </CardContent>

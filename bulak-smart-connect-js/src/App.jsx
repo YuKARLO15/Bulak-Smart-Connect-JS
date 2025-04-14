@@ -38,6 +38,7 @@ import WalkInQueueDetail from './UserBulakSmartConnect/WalkInComponents/WalkInDe
 
 //ADMIN SIDE//
 import AdminAccountManagement from './AdminBulakSmartConnect/AccountManagementComponents/AccountManagement';
+import AdminApplicationDashboard from './AdminBulakSmartConnect/AdminApplicationComponents/ApplicationAdminDashboard';
 
 function App() {
   return (
@@ -74,6 +75,7 @@ function App() {
         <Route path="/WalkInQueue" element={<WalkInQueueContainer />} />
         <Route path="/WalkInForm" element={<WalkInForm />} />
         <Route path="/WalkInDetails" element={<WalkInQueueDetail />} />
+        <Route path="/applicationAdmin" element={<AdminApplicationDashboard />} />
       </Route>{' '}
       {/* Protected Route End */}
     </Routes>
