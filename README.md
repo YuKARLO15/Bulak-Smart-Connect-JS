@@ -46,6 +46,10 @@ CREATE TABLE users ( </br>
 INSERT INTO users (email, password, name) </br>
 VALUES ('test@example.com', '$2b$10$mExcKUyHurlq1zNDNos9LOXbtUJZuvIKybmHr/BngC6ZamAjz1ohS', 'Test User'); </br>
 
+Note: You can also import the database from the folder "database" </br>
+Export it if you make any changes on the database and/or to ensure we have a backup to match the proper database on the latest iterations </br>
+Also ensure there is no personal information on the database before you export it, for our safety. Optionally, you can just export it without the data, only the schema. </br>
+
 ## Environment Setup
 
 Create a .env file in the bsc-js-backend directory with: </br>
