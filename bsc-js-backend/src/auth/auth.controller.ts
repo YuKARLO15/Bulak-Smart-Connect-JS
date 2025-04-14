@@ -29,6 +29,7 @@ export class AuthController {
 
   @Post('register')
   async register(@Body() registerDto: RegisterDto) {
+    console.log('Register endpoint hit with data:', registerDto); //Debugging Statement
     return this.authService.register(registerDto);
   }
 
