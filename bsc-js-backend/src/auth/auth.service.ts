@@ -130,7 +130,9 @@ export class AuthService {
         await this.usersRepository.save(user);
       } catch (error) {
         console.error('Error assigning citizen role:', error);
-        // Continue without assigning role if it fails
+        // Rollback: Delete the user to maintain a consistent state
+        await this.usersRepository.delete(user.id);
+        throw new ConflictException('Failed to assign citizen role. Registration rolled back.');
       }
       
       // Generate JWT token
