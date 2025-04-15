@@ -267,8 +267,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="161"
-                                    class="link-to-prism">src/auth/auth.service.ts:161</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="163"
+                                    class="link-to-prism">src/auth/auth.service.ts:163</a></div>
                         </td>
                     </tr>
 
@@ -336,8 +336,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="156"
-                                    class="link-to-prism">src/auth/auth.service.ts:156</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="158"
+                                    class="link-to-prism">src/auth/auth.service.ts:158</a></div>
                         </td>
                     </tr>
 
@@ -728,7 +728,9 @@ export class AuthService {
         await this.usersRepository.save(user);
       } catch (error) {
         console.error(&#x27;Error assigning citizen role:&#x27;, error);
-        // Continue without assigning role if it fails
+        // Rollback: Delete the user to maintain a consistent state
+        await this.usersRepository.delete(user.id);
+        throw new ConflictException(&#x27;Failed to assign citizen role. Registration rolled back.&#x27;);
       }
       
       // Generate JWT token
