@@ -1,6 +1,8 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import * as dotenv from 'dotenv';
+import { DataSource } from 'typeorm';
+import { Role } from './roles/entities/role.entity';
 
 dotenv.config();
 
@@ -18,6 +20,27 @@ async function bootstrap() {
     credentials: true,
   });
 
+  // Optional: Check and seed database before full startup
+  const dataSource = app.get(DataSource);
+  await seedDatabaseIfNeeded(dataSource);
+
   await app.listen(process.env.PORT ?? 3000);
 }
+
+async function seedDatabaseIfNeeded(dataSource: DataSource) {
+  // Check if roles exist and create them if needed
+  // This helps prevent sync issues with references
+  const roleRepo = dataSource.getRepository(Role);
+  const count = await roleRepo.count();
+  
+  if (count === 0) {
+    await roleRepo.save([
+      { name: 'super_admin', description: 'Has all permissions' },
+      { name: 'admin', description: 'Can manage staff and citizens' },
+      { name: 'staff', description: 'Can process applications' },
+      { name: 'citizen', description: 'Regular user' }
+    ]);
+  }
+}
+
 bootstrap();

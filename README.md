@@ -13,6 +13,17 @@ npm run start </br>
 
 Test at http://localhost:3000/ </br>
 
+## TypeORM Migrations for Production
+
+#Install TypeORM CLI </br>
+npm install -g typeorm </br>
+
+#Generate a migration after making entity changes </br>
+typeorm migration:generate -n CreateUserRolesStructure </br>
+
+#Apply migrations </br>
+typeorm migration:run </br>
+
 # Complementary Instructions After Revisions
 ## MySQL Setup
 
@@ -79,7 +90,45 @@ ALTER TABLE `users` ADD CONSTRAINT `fk_users_roles` FOREIGN KEY (`default_role_i
 UPDATE `users` SET `default_role_id` = (SELECT id FROM roles WHERE name = 'citizen'); </br>
 
 -- Create a test admin (password: admin123) </br>
-TBA </br>
+INSERT INTO users (email, password, name) </br>
+VALUES ('admin@example.com', '$2b$10$I6mQJSzXN4ReCGTuRzfAvOYVMJLvtmUZOZV1wZ9Tk3tJH2ASXZkhy', 'Admin User'); </br>
+
+-- Create test super admin </br>
+INSERT INTO users (email, password, name)  </br>
+VALUES ('superadmin@example.com', '$2b$10$I6mQJSzXN4ReCGTuRzfAvOYVMJLvtmUZOZV1wZ9Tk3tJH2ASXZkhy', 'Super Admin User'); </br>
+
+-- Create test staff </br>
+INSERT INTO users (email, password, name)  </br>
+VALUES ('staff@example.com', '$2b$10$I6mQJSzXN4ReCGTuRzfAvOYVMJLvtmUZOZV1wZ9Tk3tJH2ASXZkhy', 'Staff User'); </br>
+
+-- Assign appropriate roles </br>
+INSERT INTO user_roles (user_id, role_id) </br>
+SELECT u.id, r.id </br>
+FROM users u, roles r </br>
+WHERE u.email = 'admin@example.com' AND r.name = 'admin'; </br>
+
+INSERT INTO user_roles (user_id, role_id) </br>
+SELECT u.id, r.id </br>
+FROM users u, roles r </br>
+WHERE u.email = 'superadmin@example.com' AND r.name = 'super_admin'; </br>
+
+INSERT INTO user_roles (user_id, role_id) </br>
+SELECT u.id, r.id </br>
+FROM users u, roles r </br>
+WHERE u.email = 'staff@example.com' AND r.name = 'staff'; </br>
+
+-- Set default roles </br>
+UPDATE users u JOIN roles r ON r.name = 'admin' </br>
+SET u.default_role_id = r.id </br>
+WHERE u.email = 'admin@example.com'; </br>
+
+UPDATE users u JOIN roles r ON r.name = 'super_admin' </br>
+SET u.default_role_id = r.id </br>
+WHERE u.email = 'superadmin@example.com'; </br>
+
+UPDATE users u JOIN roles r ON r.name = 'staff' </br>
+SET u.default_role_id = r.id </br>
+WHERE u.email = 'staff@example.com'; </br>
 
 Note: You can also import the database from the folder "database" </br>
 Export it if you make any changes on the database and/or to ensure we have a backup to match the proper database on the latest iterations </br>

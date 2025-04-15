@@ -6,6 +6,7 @@ import { User } from '../users/entities/user.entity';
 import * as bcrypt from 'bcrypt';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
+import { RolesService } from '../roles/roles.service';
 
 @Injectable()
 export class AuthService {
@@ -13,6 +14,7 @@ export class AuthService {
     @InjectRepository(User)
     private usersRepository: Repository<User>,
     private jwtService: JwtService,
+    private rolesService: RolesService, 
   ) {}
 
   async validateUser(loginDto: LoginDto): Promise<any> {
@@ -32,6 +34,7 @@ export class AuthService {
     try {
       const user = await this.usersRepository.findOne({
         where: { email: loginDto.email },
+        relations: ['defaultRole'],
       });
 
       console.log('User found:', user ? 'Yes' : 'No');
@@ -54,7 +57,16 @@ export class AuthService {
         throw new UnauthorizedException('Invalid email or password');
       }
 
-      const payload = { sub: user.id, email: user.email };
+      // Get user roles
+      const roles = await this.rolesService.getUserRoles(user.id);
+      const roleNames = roles.map(role => role.name);
+
+      const payload = { 
+        sub: user.id, 
+        email: user.email,
+        roles: roleNames
+      };
+      
       const token = this.jwtService.sign(payload);
       console.log('Generated token:', token ? 'Success' : 'Failed');
 
@@ -63,7 +75,11 @@ export class AuthService {
 
       return {
         access_token: token,
-        user: userWithoutPassword,
+        user: {
+          ...userWithoutPassword,
+          roles: roleNames,
+          defaultRole: user.defaultRole?.name || 'citizen'
+        },
       };
     } catch (error) {
       console.error('Login error:', error);
@@ -94,25 +110,47 @@ export class AuthService {
     const salt = await bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(password, salt);
     
-    // Create new user
-    const user = this.usersRepository.create({
-      email,
-      password: hashedPassword,
-      name,
-    });
-    
-    await this.usersRepository.save(user);
-    
-    // Generate JWT token
-    const payload = { sub: user.id, email: user.email };
-    
-    // Remove password from response
-    const { password: _, ...userWithoutPassword } = user;
-    
-    return {
-      access_token: this.jwtService.sign(payload),
-      user: userWithoutPassword,
-    };
+    try {
+      // Create new user
+      const user = this.usersRepository.create({
+        email,
+        password: hashedPassword,
+        name,
+      });
+      
+      await this.usersRepository.save(user);
+      
+      // Add citizen role to the user
+      try {
+        const citizenRole = await this.rolesService.findByName('citizen');
+        await this.rolesService.assignRolesToUser(user.id, [citizenRole.id]);
+        
+        // Set default role
+        user.defaultRoleId = citizenRole.id;
+        await this.usersRepository.save(user);
+      } catch (error) {
+        console.error('Error assigning citizen role:', error);
+        // Continue without assigning role if it fails
+      }
+      
+      // Generate JWT token
+      const payload = { sub: user.id, email: user.email, roles: ['citizen'] };
+      
+      // Remove password from response
+      const { password: _, ...userWithoutPassword } = user;
+      
+      return {
+        access_token: this.jwtService.sign(payload),
+        user: {
+          ...userWithoutPassword,
+          roles: ['citizen'],
+          defaultRole: 'citizen'
+        },
+      };
+    } catch (error) {
+      console.error('Registration error:', error);
+      throw error;
+    }
   }
   
   private isValidEmail(email: string): boolean {
@@ -121,12 +159,23 @@ export class AuthService {
   }
 
   async getProfile(userId: number) {
-    const user = await this.usersRepository.findOne({ where: { id: userId } });
+    const user = await this.usersRepository.findOne({ 
+      where: { id: userId },
+      relations: ['defaultRole']
+    });
     if (!user) {
       throw new UnauthorizedException('User not found');
     }
 
+    // Get user roles
+    const roles = await this.rolesService.getUserRoles(userId);
+    const roleNames = roles.map(role => role.name);
+
     const { password, ...result } = user;
-    return result;
+    return {
+      ...result,
+      roles: roleNames,
+      defaultRole: user.defaultRole?.name || 'citizen'
+    };
   }
 }
