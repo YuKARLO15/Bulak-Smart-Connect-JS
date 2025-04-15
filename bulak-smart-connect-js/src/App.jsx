@@ -1,7 +1,7 @@
-import { Route, Router, Routes } from 'react-router-dom'; // Import necessary components from react-router-dom
+import { Route, Routes } from 'react-router-dom'; 
 import './App.css';
 
-//USER SIDE//
+//-----------USER SIDE --------------//
 //Login and SignUp//
 import LogIn from './LogInComponents/LogIn';
 import SignUpForm from './UserBulakSmartConnect/SignUpComponents/SignUpForm';
@@ -27,6 +27,7 @@ import SexDobCorrection from './UserBulakSmartConnect/ApplicationComponents/Birt
 import DelayedOutOfTownRegistration from './UserBulakSmartConnect/ApplicationComponents/BirthCertificateApplications/DelayedOutOfTown';
 import DelayedOneParentForeignerRegistration from './UserBulakSmartConnect/ApplicationComponents/BirthCertificateApplications/DelayedOneParentForeigner';
 import BirthCertificateForm from './UserBulakSmartConnect/ApplicationComponents/BirthCertificateApplications/BirthCertificateForm';
+
 import PrivateRoute from './PrivateRoute';
 import BirthApplicationSummary from './UserBulakSmartConnect/ApplicationComponents/BirthCertificateApplications/BirthApplicationSummary';
 import MarriageCertificateForm from './UserBulakSmartConnect/ApplicationComponents/MarriageCertificateApplications/MarriageCertificateForm/MarriageCertificateForm';
@@ -36,8 +37,12 @@ import WalkInQueueContainer from './UserBulakSmartConnect/WalkInComponents/WalkI
 import WalkInForm from './UserBulakSmartConnect/WalkInComponents/WalkInForm';
 import WalkInQueueDetail from './UserBulakSmartConnect/WalkInComponents/WalkInDetails';
 
-//ADMIN SIDE//
+//-----------ADMIN SIDE --------------//
+
+// Account Management //
 import AdminAccountManagement from './AdminBulakSmartConnect/AccountManagementComponents/AccountManagement';
+
+// Application  //
 import AdminApplicationDashboard from './AdminBulakSmartConnect/AdminApplicationComponents/ApplicationAdminDashboard';
 import AppointmentDetailsCard from './AdminBulakSmartConnect/AppointmentDetailsComponents/AppointmentDetails';
 
