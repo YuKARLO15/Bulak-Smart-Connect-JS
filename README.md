@@ -13,6 +13,17 @@ npm run start </br>
 
 Test at http://localhost:3000/ </br>
 
+## TypeORM Migrations for Production
+
+#Install TypeORM CLI </br>
+npm install -g typeorm </br>
+
+#Generate a migration after making entity changes </br>
+typeorm migration:generate -n CreateUserRolesStructure </br>
+
+#Apply migrations </br>
+typeorm migration:run </br>
+
 # Complementary Instructions After Revisions
 ## MySQL Setup
 
@@ -45,6 +56,79 @@ CREATE TABLE users ( </br>
 -- Create a test user (password: password123) </br>
 INSERT INTO users (email, password, name) </br>
 VALUES ('test@example.com', '$2b$10$mExcKUyHurlq1zNDNos9LOXbtUJZuvIKybmHr/BngC6ZamAjz1ohS', 'Test User'); </br>
+
+-- Add roles table </br>
+CREATE TABLE `roles` ( </br>
+  `id` int NOT NULL AUTO_INCREMENT, </br>
+  `name` varchar(50) NOT NULL, </br>
+  `description` varchar(255), </br>
+  PRIMARY KEY (`id`), </br>
+  UNIQUE KEY `IDX_roles_name` (`name`) </br>
+); </br>
+
+-- Insert default roles </br>
+INSERT INTO `roles` (name, description) VALUES </br>
+('super_admin', 'Has all permissions and can manage other admins'), </br>
+('admin', 'Can manage staff and citizens'), </br>
+('staff', 'Can process applications and manage citizen requests'), </br>
+('citizen', 'Regular user of the system'); </br>
+
+-- Add user_roles table for role assignment </br>
+CREATE TABLE `user_roles` ( </br>
+  `user_id` int NOT NULL, </br>
+  `role_id` int NOT NULL, </br>
+  PRIMARY KEY (`user_id`, `role_id`), </br>
+  FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE, </br>
+  FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`) ON DELETE CASCADE </br>
+); </br>
+
+-- Add a default role column to users table for quick access </br>
+ALTER TABLE `users` ADD COLUMN `default_role_id` int; </br>
+ALTER TABLE `users` ADD CONSTRAINT `fk_users_roles` FOREIGN KEY (`default_role_id`) REFERENCES `roles` (`id`); </br>
+
+-- Update existing users to be citizens by default </br>
+UPDATE `users` SET `default_role_id` = (SELECT id FROM roles WHERE name = 'citizen'); </br>
+
+-- Create a test admin (password: admin123) </br>
+INSERT INTO users (email, password, name) </br>
+VALUES ('admin@example.com', '$2b$10$I6mQJSzXN4ReCGTuRzfAvOYVMJLvtmUZOZV1wZ9Tk3tJH2ASXZkhy', 'Admin User'); </br>
+
+-- Create test super admin </br>
+INSERT INTO users (email, password, name)  </br>
+VALUES ('superadmin@example.com', '$2b$10$I6mQJSzXN4ReCGTuRzfAvOYVMJLvtmUZOZV1wZ9Tk3tJH2ASXZkhy', 'Super Admin User'); </br>
+
+-- Create test staff </br>
+INSERT INTO users (email, password, name)  </br>
+VALUES ('staff@example.com', '$2b$10$I6mQJSzXN4ReCGTuRzfAvOYVMJLvtmUZOZV1wZ9Tk3tJH2ASXZkhy', 'Staff User'); </br>
+
+-- Assign appropriate roles </br>
+INSERT INTO user_roles (user_id, role_id) </br>
+SELECT u.id, r.id </br>
+FROM users u, roles r </br>
+WHERE u.email = 'admin@example.com' AND r.name = 'admin'; </br>
+
+INSERT INTO user_roles (user_id, role_id) </br>
+SELECT u.id, r.id </br>
+FROM users u, roles r </br>
+WHERE u.email = 'superadmin@example.com' AND r.name = 'super_admin'; </br>
+
+INSERT INTO user_roles (user_id, role_id) </br>
+SELECT u.id, r.id </br>
+FROM users u, roles r </br>
+WHERE u.email = 'staff@example.com' AND r.name = 'staff'; </br>
+
+-- Set default roles </br>
+UPDATE users u JOIN roles r ON r.name = 'admin' </br>
+SET u.default_role_id = r.id </br>
+WHERE u.email = 'admin@example.com'; </br>
+
+UPDATE users u JOIN roles r ON r.name = 'super_admin' </br>
+SET u.default_role_id = r.id </br>
+WHERE u.email = 'superadmin@example.com'; </br>
+
+UPDATE users u JOIN roles r ON r.name = 'staff' </br>
+SET u.default_role_id = r.id </br>
+WHERE u.email = 'staff@example.com'; </br>
 
 Note: You can also import the database from the folder "database" </br>
 Export it if you make any changes on the database and/or to ensure we have a backup to match the proper database on the latest iterations </br>
