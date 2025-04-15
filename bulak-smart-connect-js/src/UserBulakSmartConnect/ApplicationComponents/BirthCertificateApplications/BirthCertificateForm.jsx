@@ -7,6 +7,7 @@ import ChildIdentifyingForm from "./BirthCertificateForm/ChildIdentifyingForm";
 import MotherInformationBirthForm from "./BirthCertificateForm/MotherIdentifyingForm";
 import FatherInformationBirthForm from "./BirthCertificateForm/FatherIdentifyingForm";
 import MarriageInformationBirthForm from "./BirthCertificateForm/MarriageIdentifyingForm";
+import AffidavitBirthForm from "./BirthCertificateForm/BirthBackIdentifyingForm";
 
 const BirthCertificateForm = () => {
   const [step, setStep] = useState(1);
@@ -33,17 +34,25 @@ const BirthCertificateForm = () => {
       "motherTotalChildren", "motherLivingChildren", "motherDeceasedChildren",
       "motherOccupation", "motherAge", "motherStreet", "motherCity" 
     ],
-    3: ["fatherLastName", "fatherFirstName", "fatherCitizenship", "fatherReligion", "fatherOccupation"],
-    4: []
+    3: ["fatherLastName", "fatherFirstName", "fatherCitizenship", "fatherReligion", "fatherOccupation", "fatherAge", "fatherStreet", "fatherBarangay", "fatherCity", "fatherProvince", "fatherCountry"],
+    4: [],
+    5: [] 
   };
 
   const validateStep = () => {
     const newErrors = {};
+    
+
+    if (step === 3 && formData.notAcknowledgedByFather) {
+      return true;
+    }
+    
     requiredFields[step]?.forEach(field => {
       if (!formData[field] || formData[field].toString().trim() === "") {
         newErrors[field] = "This field is required";
       }
     });
+    
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -124,6 +133,18 @@ const BirthCertificateForm = () => {
         {step === 4 && (
           <>
             <MarriageInformationBirthForm formData={formData} handleChange={handleChange} errors={errors} />
+            <Button variant="contained" onClick={handlePrevious} className="BirthCertificateFormButton">
+              Previous
+            </Button>
+            <Button variant="contained" onClick={handleNext} className="BirthCertificateFormButton">
+              Next
+            </Button>
+          </>
+        )}
+
+        {step === 5 && (
+          <>
+            <AffidavitBirthForm formData={formData} handleChange={handleChange} />
             <Button variant="contained" onClick={handlePrevious} className="BirthCertificateFormButton">
               Previous
             </Button>

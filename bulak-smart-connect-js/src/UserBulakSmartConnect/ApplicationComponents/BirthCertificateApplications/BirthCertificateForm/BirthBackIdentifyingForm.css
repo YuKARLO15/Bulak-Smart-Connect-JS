@@ -1,0 +1,211 @@
+.BirthFormContainerAffidavit {
+    width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    font-family: Arial, sans-serif;
+  }
+  
+  .FormHeaderAffidavit {
+    background-color: #1d4e5f;
+    color: white;
+    padding: 10px 15px;
+    font-weight: bold;
+    text-align: center;
+    font-size: 16px;
+  }
+  
+  .SubHeaderAffidavit {
+    background-color: #f5f5f5;
+    color: #333;
+    padding: 6px 15px;
+    text-align: center;
+    font-size: 12px;
+    font-style: italic;
+  }
+  
+  .FormContentAffidavit {
+    padding: 16px;
+  }
+  
+  .FormSectionAffidavit {
+    margin-bottom: 24px;
+  }
+  
+  .FormRowAffidavit {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+    gap: 16px;
+  }
+  
+  .AffidavitText {
+    width: 100%;
+    line-height: 1.6;
+    font-size: 14px;
+    color: #333;
+  }
+  
+  .AffidavitUnderlineInput {
+    border: none;
+    border-bottom: 1px solid #333;
+    padding: 0 4px;
+    margin: 0 4px;
+    min-width: 150px;
+    color: #1d4e5f;
+    font-size: 14px;
+    outline: none;
+    background-color: #ddd;
+  }
+  
+  .AffidavitShortInput {
+    border: none;
+    border-bottom: 1px solid #333;
+    padding: 0 4px;
+    margin: 0 4px;
+    width: 40px;
+    color: #1d4e5f;
+    font-size: 14px;
+    text-align: center;
+    outline: none;
+    background-color: #ddd;
+  }
+  
+  .AffidavitMediumInput {
+    border: none;
+    border-bottom: 1px solid #333;
+    padding: 0 4px;
+    margin: 0 4px;
+    width: 120px;
+    color: #1d4e5f;
+    font-size: 14px;
+    outline: none;
+    background-color: #ddd;
+  }
+  
+  .AffidavitLongInput {
+    border: none;
+    border-bottom: 1px solid #333;
+    padding: 0 4px;
+    margin: 0 4px;
+    min-width: 250px;
+    color: #1d4e5f;
+    font-size: 14px;
+    outline: none;
+    background-color: #ddd;
+  }
+  
+  .SignatureBlockAffidavit {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 200px;
+  }
+  
+  .SignatureBlockAffidavit.FullWidth {
+    width: 100%;
+    text-align: center;
+  }
+  
+  .SignatureLine {
+    width: 100%;
+    border-bottom: 1px solid #333;
+    margin-bottom: 4px;
+  }
+  
+  .SignatureCaption {
+    font-size: 12px;
+    color: #555;
+    text-align: center;
+    margin-bottom: 16px;
+  }
+  
+  .CheckboxContainerAffidavit {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 8px;
+    margin-left: 20px;
+  }
+  
+  .CheckboxInputAffidavit {
+    appearance: none;
+    -webkit-appearance: none;
+    margin-right: 10px;
+    margin-top: 3px;
+    width: 18px;
+    height: 18px;
+    border: 2px solid #1d4e5f;
+    border-radius: 3px;
+    cursor: pointer;
+    position: relative;
+  }
+  
+  .CheckboxInputAffidavit:checked {
+    background-color: #1d4e5f;
+    border-color: #1d4e5f;
+  }
+  
+  .CheckboxInputAffidavit:checked::after {
+    content: '';
+    position: absolute;
+    left: 5px;
+    top: 1px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+  }
+  
+  .CheckboxLabelAffidavit {
+    font-size: 14px;
+    color: #333;
+    line-height: 1.6;
+  }
+  
+  .RequiredFieldAffidavit {
+    color: red;
+    margin-left: 4px;
+  }
+  /* Marital Status Checkboxes */
+.MaritalStatusOptions {
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: wrap;
+    margin: 0 5px;
+  }
+  
+  .MaritalStatusCheckbox {
+    margin-right: 10px;
+    display: inline-flex;
+    align-items: center;
+  }
+  
+  .MaritalStatusCheckbox label {
+    margin-left: 3px;
+    font-weight: normal;
+  }
+  
+  .MaritalStatusCheckbox input[type="checkbox"] {
+    margin: 0;
+  }
+  
+
+  @media screen and (max-width: 768px) {
+    .FormRowAffidavit {
+      flex-direction: column;
+      gap: 12px;
+    }
+    
+    .SignatureBlockAffidavit {
+      width: 100%;
+    }
+    
+    .AffidavitLongInput,
+    .AffidavitMediumInput,
+    .AffidavitUnderlineInput {
+      width: calc(100% - 8px);
+      min-width: unset;
+    }
+  }

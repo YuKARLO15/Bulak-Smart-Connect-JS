@@ -22,6 +22,7 @@
     "@mui/icons-material": "^6.4.7",
     "@mui/material": "^6.4.7",
     "@mui/x-date-pickers": "^7.28.2",
+    "@react-pdf/renderer": "^4.3.0",
     "axios": "^1.8.4",
     "date-fns": "^4.1.0",
     "qrcode.react": "^4.2.0",

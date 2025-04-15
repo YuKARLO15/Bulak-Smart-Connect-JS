@@ -16,6 +16,7 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import "./BirthApplicationSummary.css";
+import PDFPrintButton from "./BirthCertificateForm/PdfGenerator";
 
 const BirthApplicationSummary = () => {
     const [formData, setFormData] = useState(null);
@@ -455,6 +456,91 @@ const BirthApplicationSummary = () => {
                     </Grid>
                 </Box>
                 
+                <Divider className="DividerSummaryBirth" />
+                
+                {/* Affidavit Section */}
+                <Box className="SectionSummaryBirth">
+                    <Typography variant="h6" className="SectionTitleSummaryBirth">
+                        V. AFFIDAVIT INFORMATION
+                    </Typography>
+                    
+                    <Grid container spacing={2} className="InfoGridSummaryBirth">
+                        <Grid item xs={12} md={6}>
+                            <Typography variant="subtitle1" className="LabelSummaryBirth">
+                                Informant Name:
+                            </Typography>
+                            <Typography variant="body1" className="ValueSummaryBirth">
+                                {`${formData?.informantFirstName || ""} ${formData?.informantMiddleName || ""} ${formData?.informantLastName || ""} ${formData?.informantSuffix || ""}` || "N/A"}
+                            </Typography>
+                        </Grid>
+                        
+                        <Grid item xs={12} md={6}>
+                            <Typography variant="subtitle1" className="LabelSummaryBirth">
+                                Relationship to Child:
+                            </Typography>
+                            <Typography variant="body1" className="ValueSummaryBirth">
+                                {formData?.informantRelationship || "N/A"}
+                            </Typography>
+                        </Grid>
+                        
+                        <Grid item xs={12}>
+                            <Typography variant="subtitle1" className="LabelSummaryBirth">
+                                Informant Address:
+                            </Typography>
+                            <Typography variant="body1" className="ValueSummaryBirth">
+                                {`${formData?.informantStreet || ""}, ${formData?.informantBarangay || ""}, ${formData?.informantCity || ""}, ${formData?.informantProvince || ""}, ${formData?.informantCountry || ""}` || "N/A"}
+                            </Typography>
+                        </Grid>
+                        
+                        <Grid item xs={12} md={6}>
+                            <Typography variant="subtitle1" className="LabelSummaryBirth">
+                                Attendant at Birth:
+                            </Typography>
+                            <Typography variant="body1" className="ValueSummaryBirth">
+                                {formData?.attendantType || "N/A"}
+                            </Typography>
+                        </Grid>
+                        
+                        <Grid item xs={12} md={6}>
+                            <Typography variant="subtitle1" className="LabelSummaryBirth">
+                                Attendant Name:
+                            </Typography>
+                            <Typography variant="body1" className="ValueSummaryBirth">
+                                {formData?.attendantName || "N/A"}
+                            </Typography>
+                        </Grid>
+                        
+                        {formData?.attendantType === "Health Professional" && (
+                            <Grid item xs={12} md={6}>
+                                <Typography variant="subtitle1" className="LabelSummaryBirth">
+                                    Professional Title:
+                                </Typography>
+                                <Typography variant="body1" className="ValueSummaryBirth">
+                                    {formData?.attendantTitle || "N/A"}
+                                </Typography>
+                            </Grid>
+                        )}
+                        
+                        <Grid item xs={12} md={6}>
+                            <Typography variant="subtitle1" className="LabelSummaryBirth">
+                                Certification Date:
+                            </Typography>
+                            <Typography variant="body1" className="ValueSummaryBirth">
+                                {formatDate(formData?.certificationMonth, formData?.certificationDay, formData?.certificationYear) || "N/A"}
+                            </Typography>
+                        </Grid>
+                        
+                        <Grid item xs={12}>
+                            <Typography variant="subtitle1" className="LabelSummaryBirth">
+                                Additional Notes/Comments:
+                            </Typography>
+                            <Typography variant="body1" className="ValueSummaryBirth">
+                                {formData?.additionalNotes || "None provided"}
+                            </Typography>
+                        </Grid>
+                    </Grid>
+                </Box>
+                
                 <Box className="StatusSectionSummaryBirth">
                     <Typography variant="h6" className="StatusTitleSummaryBirth">
                         Application Status:
@@ -468,26 +554,28 @@ const BirthApplicationSummary = () => {
                 </Box>
                 
                 <Box className="ButtonsSectionSummaryBirth">
-                    <Button 
-                        variant="contained" 
-                        
-                        onClick={handleBackToApplications}
-                        className="BackButtonSummaryBirth"
-                    >
-                        Back to Applications
-                    </Button>
+    <Button 
+        variant="contained" 
+        onClick={handleBackToApplications}
+        className="BackButtonSummaryBirth"
+    >
+        Back to Applications
+    </Button>
+
+    {/* Add the PDF Print Button here */}
+    <PDFPrintButton formData={formData} applicationId={applicationId} />
+
+    <Button 
+        variant="contained" 
+        color="error" 
+        onClick={handleDeleteApplication}
+        className="DeleteButtonSummaryBirth"
+    >
+        Cancel Application
+    </Button>
+</Box>
                 
-                    <Button 
-                        variant="contained" 
-                        color="error" 
-                        onClick={handleDeleteApplication}
-                        className="DeleteButtonSummaryBirth"
-                    >
-                        Cancel Application
-                    </Button>
-                </Box>
             </Paper>
-            
             
             <Dialog
                 open={deleteDialogOpen}

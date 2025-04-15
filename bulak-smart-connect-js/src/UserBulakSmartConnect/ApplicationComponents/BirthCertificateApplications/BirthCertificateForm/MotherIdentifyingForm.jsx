@@ -5,6 +5,15 @@ const MotherInformationBirthForm = ({ formData, handleChange }) => {
   const [showExtension, setShowExtension] = useState(false);
   const requiredField = <span className="RequiredFieldMother">*</span>;
 
+  const validateNumberOnly = (e) => {
+
+    if (!/^\d*$/.test(e.target.value)) {
+      return;
+    }
+    
+
+    handleChange(e);
+  };
   return (
     <div className="BirthFormContainerMother">
       <div className="FormHeaderMother">II. MOTHER IDENTIFYING INFORMATION</div>
@@ -31,7 +40,7 @@ const MotherInformationBirthForm = ({ formData, handleChange }) => {
 
             <div className="FormGroupMother">
               <label className="FormLabelMother">
-                Middle Name (Gitnang Pangalan) {requiredField}
+                Middle Name (Gitnang Pangalan) Optional
               </label>
               <input
                 type="text"
@@ -134,8 +143,9 @@ const MotherInformationBirthForm = ({ formData, handleChange }) => {
                 type="text"
                 name="motherTotalChildren"
                 value={formData?.motherTotalChildren || ""}
-                onChange={handleChange}
+                onChange={validateNumberOnly}
                 className="FormInputMother"
+                   placeholder="Enter number only"
               />
             </div>
 
@@ -147,8 +157,9 @@ const MotherInformationBirthForm = ({ formData, handleChange }) => {
                 type="text"
                 name="motherLivingChildren"
                 value={formData?.motherLivingChildren || ""}
-                onChange={handleChange}
+                onChange={validateNumberOnly }
                 className="FormInputMother"
+                   placeholder="Enter number only"
               />
             </div>
 
@@ -160,8 +171,9 @@ const MotherInformationBirthForm = ({ formData, handleChange }) => {
                 type="text"
                 name="motherDeceasedChildren"
                 value={formData?.motherDeceasedChildren || ""}
-                onChange={handleChange}
+                onChange={validateNumberOnly}
                 className="FormInputMother"
+                   placeholder="Enter number only"
               />
             </div>
           </div>
@@ -191,8 +203,9 @@ const MotherInformationBirthForm = ({ formData, handleChange }) => {
                 type="text"
                 name="motherAge"
                 value={formData?.motherAge || ""}
-                onChange={handleChange}
+                onChange={validateNumberOnly}
                 className="FormInputMother"
+                   placeholder="Enter number only"
               />
             </div>
           </div>
