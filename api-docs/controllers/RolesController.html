@@ -88,7 +88,7 @@
 
 <ol class="breadcrumb">
   <li class="breadcrumb-item">Controllers</li>
-  <li class="breadcrumb-item" >AuthController</li>
+  <li class="breadcrumb-item" >RolesController</li>
 </ol>
 
 <ul class="nav nav-tabs" role="tablist">
@@ -112,14 +112,14 @@
             <h3>File</h3>
         </p>
         <p class="comment">
-            <code>src/auth/auth.controller.ts</code>
+            <code>src/roles/roles.controller.ts</code>
         </p>
 
             <p class="comment">
                 <h3>Prefix</h3>
             </p>
             <p class="comment">
-                <code>auth</code>
+                <code>roles</code>
             </p>
 
 
@@ -143,17 +143,17 @@
                             <li>
                                     <span class="modifier"></span>
                                     <span class="modifier"></span>
-                                <a href="#getProfile" >getProfile</a>
+                                <a href="#findAll" >findAll</a>
                             </li>
                             <li>
                                     <span class="modifier"></span>
-                                    <span class="modifier">Async</span>
-                                <a href="#login" >login</a>
+                                    <span class="modifier"></span>
+                                <a href="#findOne" >findOne</a>
                             </li>
                             <li>
                                     <span class="modifier"></span>
-                                    <span class="modifier">Async</span>
-                                <a href="#register" >register</a>
+                                    <span class="modifier"></span>
+                                <a href="#getUserRoles" >getUserRoles</a>
                             </li>
                         </ul>
                     </td>
@@ -176,19 +176,19 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
-                    <a name="getProfile"></a>
+                    <a name="findAll"></a>
                     <span class="name">
                             <span class="modifier"></span>
                             <span class="modifier"></span>
-                        <span ><b>getProfile</b></span>
-                        <a href="#getProfile"><span class="icon ion-ios-link"></span></a>
+                        <span ><b>findAll</b></span>
+                        <a href="#findAll"><span class="icon ion-ios-link"></span></a>
                     </span>
                 </td>
             </tr>
             <tr>
                 <td class="col-md-4">
                         <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>getProfile(req)</code>
+                    <code>findAll()</code>
                 </td>
             </tr>
 
@@ -196,14 +196,61 @@
                 <td class="col-md-4">
                     <b>Decorators : </b>
                     <br />
-                    <code>@UseGuards(JwtAuthGuard)<br />@Get(&#x27;profile&#x27;)<br /></code>
+                    <code>@Get()<br />@Roles(&#x27;admin&#x27;, &#x27;super_admin&#x27;)<br /></code>
                 </td>
             </tr>
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="38"
-                                    class="link-to-prism">src/auth/auth.controller.ts:38</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="14"
+                                    class="link-to-prism">src/roles/roles.controller.ts:14</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="findOne"></a>
+                    <span class="name">
+                            <span class="modifier"></span>
+                            <span class="modifier"></span>
+                        <span ><b>findOne</b></span>
+                        <a href="#findOne"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>findOne(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <b>Decorators : </b>
+                    <br />
+                    <code>@Get(&#x27;:id&#x27;)<br />@Roles(&#x27;admin&#x27;, &#x27;super_admin&#x27;)<br /></code>
+                </td>
+            </tr>
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="20"
+                                    class="link-to-prism">src/roles/roles.controller.ts:20</a></div>
                         </td>
                     </tr>
 
@@ -218,12 +265,16 @@
                                     <thead>
                                         <tr>
                                             <td>Name</td>
+                                                <td>Type</td>
                                             <td>Optional</td>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
-                                                <td>req</td>
+                                                <td>id</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
 
                                             <td>
                                                     No
@@ -249,19 +300,19 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
-                    <a name="login"></a>
+                    <a name="getUserRoles"></a>
                     <span class="name">
                             <span class="modifier"></span>
-                            <span class="modifier">Async</span>
-                        <span ><b>login</b></span>
-                        <a href="#login"><span class="icon ion-ios-link"></span></a>
+                            <span class="modifier"></span>
+                        <span ><b>getUserRoles</b></span>
+                        <a href="#getUserRoles"><span class="icon ion-ios-link"></span></a>
                     </span>
                 </td>
             </tr>
             <tr>
                 <td class="col-md-4">
                         <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>login(loginDto: <a href="../classes/LoginDto.html" target="_self">LoginDto</a>)</code>
+                    <code>getUserRoles(userId: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
                 </td>
             </tr>
 
@@ -269,14 +320,14 @@
                 <td class="col-md-4">
                     <b>Decorators : </b>
                     <br />
-                    <code>@Post(&#x27;login&#x27;)<br /></code>
+                    <code>@Get(&#x27;user/:userId&#x27;)<br />@Roles(&#x27;admin&#x27;, &#x27;super_admin&#x27;)<br /></code>
                 </td>
             </tr>
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="20"
-                                    class="link-to-prism">src/auth/auth.controller.ts:20</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="26"
+                                    class="link-to-prism">src/roles/roles.controller.ts:26</a></div>
                         </td>
                     </tr>
 
@@ -297,9 +348,9 @@
                                     </thead>
                                     <tbody>
                                         <tr>
-                                                <td>loginDto</td>
+                                                <td>userId</td>
                                             <td>
-                                                            <code><a href="../classes/LoginDto.html" target="_self" >LoginDto</a></code>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
                                             </td>
 
                                             <td>
@@ -312,84 +363,7 @@
                                 </table>
                             </div>
                         <div class="io-description">
-                            <b>Returns : </b>    <code>unknown</code>
-
-                        </div>
-                            <div class="io-description">
-                                
-                            </div>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    <table class="table table-sm table-bordered">
-        <tbody>
-            <tr>
-                <td class="col-md-4">
-                    <a name="register"></a>
-                    <span class="name">
-                            <span class="modifier"></span>
-                            <span class="modifier">Async</span>
-                        <span ><b>register</b></span>
-                        <a href="#register"><span class="icon ion-ios-link"></span></a>
-                    </span>
-                </td>
-            </tr>
-            <tr>
-                <td class="col-md-4">
-                        <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>register(registerDto: <a href="../classes/RegisterDto.html" target="_self">RegisterDto</a>)</code>
-                </td>
-            </tr>
-
-            <tr>
-                <td class="col-md-4">
-                    <b>Decorators : </b>
-                    <br />
-                    <code>@Post(&#x27;register&#x27;)<br /></code>
-                </td>
-            </tr>
-
-                    <tr>
-                        <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="31"
-                                    class="link-to-prism">src/auth/auth.controller.ts:31</a></div>
-                        </td>
-                    </tr>
-
-
-            <tr>
-                <td class="col-md-4">
-
-                            <div class="io-description">
-                                <b>Parameters :</b>
-                                
-                                <table class="params">
-                                    <thead>
-                                        <tr>
-                                            <td>Name</td>
-                                                <td>Type</td>
-                                            <td>Optional</td>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                                <td>registerDto</td>
-                                            <td>
-                                                            <code><a href="../classes/RegisterDto.html" target="_self" >RegisterDto</a></code>
-                                            </td>
-
-                                            <td>
-                                                    No
-                                            </td>
-
-
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        <div class="io-description">
-                            <b>Returns : </b>    <code>unknown</code>
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
 
                         </div>
                             <div class="io-description">
@@ -403,48 +377,35 @@
 
 
     <div class="tab-pane fade  tab-source-code" id="source">
-        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import {
-  Controller,
-  Post,
-  Body,
-  Get,
-  UseGuards,
-  Request,
-  UnauthorizedException,
-} from &#x27;@nestjs/common&#x27;;
-import { AuthService } from &#x27;./auth.service&#x27;;
-import { LoginDto } from &#x27;./dto/login.dto&#x27;;
-import { RegisterDto } from &#x27;./dto/register.dto&#x27;;
-import { JwtAuthGuard } from &#x27;./guards/jwt-auth.guard&#x27;;
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Controller, Get, Param, UseGuards } from &#x27;@nestjs/common&#x27;;
+import { RolesService } from &#x27;./roles.service&#x27;;
+import { JwtAuthGuard } from &#x27;../auth/guards/jwt-auth.guard&#x27;;
+import { RolesGuard } from &#x27;../auth/guards/roles.guard&#x27;;
+import { Roles } from &#x27;../auth/decorators/roles.decorator&#x27;;
 
-@Controller(&#x27;auth&#x27;)
-export class AuthController {
-  constructor(private authService: AuthService) {}
+@Controller(&#x27;roles&#x27;)
+@UseGuards(JwtAuthGuard, RolesGuard)
+export class RolesController {
+  constructor(private readonly rolesService: RolesService) {}
 
-  @Post(&#x27;login&#x27;)
-  async login(@Body() loginDto: LoginDto) {
-    console.log(&#x27;Login request received:&#x27;, loginDto);
-    try {
-      const result &#x3D; await this.authService.login(loginDto);
-      return result;
-    } catch (error) {
-      throw new UnauthorizedException(error.message || &#x27;Invalid credentials&#x27;);
-    }
+  @Get()
+  @Roles(&#x27;admin&#x27;, &#x27;super_admin&#x27;)
+  findAll() {
+    return this.rolesService.findAll();
   }
 
-  @Post(&#x27;register&#x27;)
-  async register(@Body() registerDto: RegisterDto) {
-    console.log(&#x27;Register endpoint hit with data:&#x27;, registerDto); //Debugging Statement
-    return this.authService.register(registerDto);
+  @Get(&#x27;:id&#x27;)
+  @Roles(&#x27;admin&#x27;, &#x27;super_admin&#x27;)
+  findOne(@Param(&#x27;id&#x27;) id: string) {
+    return this.rolesService.findOne(+id);
   }
 
-  @UseGuards(JwtAuthGuard)
-  @Get(&#x27;profile&#x27;)
-  getProfile(@Request() req) {
-    return this.authService.getProfile(req.user.userId);
+  @Get(&#x27;user/:userId&#x27;)
+  @Roles(&#x27;admin&#x27;, &#x27;super_admin&#x27;)
+  getUserRoles(@Param(&#x27;userId&#x27;) userId: string) {
+    return this.rolesService.getUserRoles(+userId);
   }
-}
-</code></pre>
+}</code></pre>
     </div>
 </div>
 
@@ -489,7 +450,7 @@ export class AuthController {
        <script>
             var COMPODOC_CURRENT_PAGE_DEPTH = 1;
             var COMPODOC_CURRENT_PAGE_CONTEXT = 'controller';
-            var COMPODOC_CURRENT_PAGE_URL = 'AuthController.html';
+            var COMPODOC_CURRENT_PAGE_URL = 'RolesController.html';
             var MAX_SEARCH_RESULTS = 15;
        </script>
 

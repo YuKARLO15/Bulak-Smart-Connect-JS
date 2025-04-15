@@ -137,6 +137,15 @@
                             </li>
                             <li>
                                     <span class="modifier"></span>
+                                    <span class="modifier"></span>
+                                <a href="#defaultRole" >defaultRole</a>
+                            </li>
+                            <li>
+                                    <span class="modifier"></span>
+                                <a href="#defaultRoleId" >defaultRoleId</a>
+                            </li>
+                            <li>
+                                    <span class="modifier"></span>
                                 <a href="#email" >email</a>
                             </li>
                             <li>
@@ -150,6 +159,11 @@
                             <li>
                                     <span class="modifier"></span>
                                 <a href="#password" >password</a>
+                            </li>
+                            <li>
+                                    <span class="modifier"></span>
+                                    <span class="modifier"></span>
+                                <a href="#roles" >roles</a>
                             </li>
                         </ul>
                     </td>
@@ -198,7 +212,80 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="23" class="link-to-prism">src/users/entities/user.entity.ts:23</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="28" class="link-to-prism">src/users/entities/user.entity.ts:28</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="defaultRole"></a>
+                    <span class="name">
+                            <span class="modifier"></span>
+                            <span class="modifier"></span>
+                        <span ><b>defaultRole</b></span>
+                        <a href="#defaultRole"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../entitys/Role.html" target="_self" >Role</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <b>Decorators : </b>
+                        <br />
+                        <code>
+                            @ManyToOne(undefined, {nullable: true})<br />@JoinColumn({name: &#x27;default_role_id&#x27;})<br />
+                        </code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="32" class="link-to-prism">src/users/entities/user.entity.ts:32</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="defaultRoleId"></a>
+                    <span class="name">
+                            <span class="modifier"></span>
+                        <span ><b>defaultRoleId</b></span>
+                        <a href="#defaultRoleId"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <b>Decorators : </b>
+                        <br />
+                        <code>
+                            @Column({name: &#x27;default_role_id&#x27;, nullable: true})<br />
+                        </code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="35" class="link-to-prism">src/users/entities/user.entity.ts:35</a></div>
                         </td>
                     </tr>
 
@@ -234,7 +321,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="14" class="link-to-prism">src/users/entities/user.entity.ts:14</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="19" class="link-to-prism">src/users/entities/user.entity.ts:19</a></div>
                         </td>
                     </tr>
 
@@ -270,7 +357,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="11" class="link-to-prism">src/users/entities/user.entity.ts:11</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="16" class="link-to-prism">src/users/entities/user.entity.ts:16</a></div>
                         </td>
                     </tr>
 
@@ -306,7 +393,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="20" class="link-to-prism">src/users/entities/user.entity.ts:20</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="25" class="link-to-prism">src/users/entities/user.entity.ts:25</a></div>
                         </td>
                     </tr>
 
@@ -342,7 +429,44 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="17" class="link-to-prism">src/users/entities/user.entity.ts:17</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="22" class="link-to-prism">src/users/entities/user.entity.ts:22</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="roles"></a>
+                    <span class="name">
+                            <span class="modifier"></span>
+                            <span class="modifier"></span>
+                        <span ><b>roles</b></span>
+                        <a href="#roles"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../entitys/Role.html" target="_self" >Role[]</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <b>Decorators : </b>
+                        <br />
+                        <code>
+                            @ManyToMany(undefined)<br />@JoinTable({name: &#x27;user_roles&#x27;, joinColumn: undefined, inverseJoinColumn: undefined})<br />
+                        </code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="49" class="link-to-prism">src/users/entities/user.entity.ts:49</a></div>
                         </td>
                     </tr>
 
@@ -359,7 +483,12 @@
   Column,
   PrimaryGeneratedColumn,
   CreateDateColumn,
+  ManyToOne,
+  JoinColumn,
+  ManyToMany,
+  JoinTable
 } from &#x27;typeorm&#x27;;
+import { Role } from &#x27;../../roles/entities/role.entity&#x27;;
 
 @Entity(&#x27;users&#x27;)
 export class User {
@@ -377,6 +506,27 @@ export class User {
 
   @CreateDateColumn({ name: &#x27;created_at&#x27; })
   createdAt: Date;
+  
+  @ManyToOne(() &#x3D;&gt; Role, { nullable: true })
+  @JoinColumn({ name: &#x27;default_role_id&#x27; })
+  defaultRole: Role;
+  
+  @Column({ name: &#x27;default_role_id&#x27;, nullable: true })
+  defaultRoleId: number;
+  
+  @ManyToMany(() &#x3D;&gt; Role)
+  @JoinTable({
+    name: &quot;user_roles&quot;,
+    joinColumn: {
+      name: &quot;user_id&quot;,
+      referencedColumnName: &quot;id&quot;
+    },
+    inverseJoinColumn: {
+      name: &quot;role_id&quot;,
+      referencedColumnName: &quot;id&quot;
+    }
+  })
+  roles: Role[];
 }
 </code></pre>
     </div>

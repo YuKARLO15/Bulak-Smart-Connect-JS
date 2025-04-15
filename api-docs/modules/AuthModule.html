@@ -115,69 +115,85 @@
 <text text-anchor="start" x="429.73" y="-15.4" font-family="Times-12" font-size="14.00"> &#160;Exports</text>
 <g id="clust1" class="cluster">
 <title>cluster_AuthModule</title>
-<polygon fill="none" stroke="black" stroke-dasharray="1,5" points="107,-70 107,-268 389,-268 389,-70 107,-70"/>
+<polygon fill="none" stroke="black" stroke-dasharray="1,5" points="49,-70 49,-268 447,-268 447,-70 49,-70"/>
+</g>
+<g id="clust3" class="cluster">
+<title>cluster_AuthModule_imports</title>
+<polygon fill="none" stroke="black" points="331,-78 331,-130 439,-130 439,-78 331,-78"/>
 </g>
 <g id="clust4" class="cluster">
 <title>cluster_AuthModule_exports</title>
-<polygon fill="none" stroke="black" points="133,-208 133,-260 343,-260 343,-208 133,-208"/>
+<polygon fill="none" stroke="black" points="152,-208 152,-260 362,-260 362,-208 152,-208"/>
 </g>
 <g id="clust6" class="cluster">
 <title>cluster_AuthModule_providers</title>
-<polygon fill="none" stroke="black" points="115,-78 115,-130 381,-130 381,-78 115,-78"/>
+<polygon fill="none" stroke="black" points="57,-78 57,-130 323,-130 323,-78 57,-78"/>
 </g>
-<!-- AuthService  -->
+<!-- RolesModule -->
 <g id="node1" class="node">
-<title>AuthService </title>
-<polygon fill="#fb8072" stroke="black" points="334.98,-252 245.02,-252 245.02,-216 334.98,-216 334.98,-252"/>
-<text text-anchor="middle" x="290" y="-229.8" font-family="Times,serif" font-size="14.00">AuthService </text>
-</g>
-<!-- JwtStrategy  -->
-<g id="node2" class="node">
-<title>JwtStrategy </title>
-<polygon fill="#fb8072" stroke="black" points="226.6,-252 141.4,-252 141.4,-216 226.6,-216 226.6,-252"/>
-<text text-anchor="middle" x="184" y="-229.8" font-family="Times,serif" font-size="14.00">JwtStrategy </text>
+<title>RolesModule</title>
+<polygon fill="#8dd3c7" stroke="black" points="430.94,-122 427.94,-126 406.94,-126 403.94,-122 339.06,-122 339.06,-86 430.94,-86 430.94,-122"/>
+<text text-anchor="middle" x="385" y="-99.8" font-family="Times,serif" font-size="14.00">RolesModule</text>
 </g>
 <!-- AuthModule -->
-<g id="node3" class="node">
+<g id="node2" class="node">
 <title>AuthModule</title>
-<polygon fill="#8dd3c7" stroke="black" points="244.55,-187 241.55,-191 220.55,-191 217.55,-187 157.45,-187 157.45,-151 244.55,-151 244.55,-187"/>
-<text text-anchor="middle" x="201" y="-164.8" font-family="Times,serif" font-size="14.00">AuthModule</text>
+<polygon fill="#8dd3c7" stroke="black" points="299.55,-187 296.55,-191 275.55,-191 272.55,-187 212.45,-187 212.45,-151 299.55,-151 299.55,-187"/>
+<text text-anchor="middle" x="256" y="-164.8" font-family="Times,serif" font-size="14.00">AuthModule</text>
+</g>
+<!-- RolesModule&#45;&gt;AuthModule -->
+<g id="edge1" class="edge">
+<title>RolesModule&#45;&gt;AuthModule</title>
+<path fill="none" stroke="black" d="M346.51,-122.11C346.51,-141.34 346.51,-169 346.51,-169 346.51,-169 309.66,-169 309.66,-169"/>
+<polygon fill="black" stroke="black" points="309.66,-165.5 299.66,-169 309.66,-172.5 309.66,-165.5"/>
+</g>
+<!-- AuthService  -->
+<g id="node3" class="node">
+<title>AuthService </title>
+<polygon fill="#fb8072" stroke="black" points="353.98,-252 264.02,-252 264.02,-216 353.98,-216 353.98,-252"/>
+<text text-anchor="middle" x="309" y="-229.8" font-family="Times,serif" font-size="14.00">AuthService </text>
 </g>
 <!-- AuthModule&#45;&gt;AuthService  -->
-<g id="edge1" class="edge">
+<g id="edge2" class="edge">
 <title>AuthModule&#45;&gt;AuthService </title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M244.74,-169C247.96,-169 249.98,-169 249.98,-169 249.98,-169 249.98,-205.89 249.98,-205.89"/>
-<polygon fill="black" stroke="black" points="246.48,-205.89 249.98,-215.89 253.48,-205.89 246.48,-205.89"/>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M282.02,-187.11C282.02,-187.11 282.02,-205.99 282.02,-205.99"/>
+<polygon fill="black" stroke="black" points="278.52,-205.99 282.02,-215.99 285.52,-205.99 278.52,-205.99"/>
+</g>
+<!-- JwtStrategy  -->
+<g id="node4" class="node">
+<title>JwtStrategy </title>
+<polygon fill="#fb8072" stroke="black" points="245.6,-252 160.4,-252 160.4,-216 245.6,-216 245.6,-252"/>
+<text text-anchor="middle" x="203" y="-229.8" font-family="Times,serif" font-size="14.00">JwtStrategy </text>
 </g>
 <!-- AuthModule&#45;&gt;JwtStrategy  -->
-<g id="edge2" class="edge">
+<g id="edge3" class="edge">
 <title>AuthModule&#45;&gt;JwtStrategy </title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M192.01,-187.11C192.01,-187.11 192.01,-205.99 192.01,-205.99"/>
-<polygon fill="black" stroke="black" points="188.51,-205.99 192.01,-215.99 195.51,-205.99 188.51,-205.99"/>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M229.01,-187.11C229.01,-187.11 229.01,-205.99 229.01,-205.99"/>
+<polygon fill="black" stroke="black" points="225.51,-205.99 229.01,-215.99 232.51,-205.99 225.51,-205.99"/>
 </g>
 <!-- AuthService -->
-<g id="node4" class="node">
+<g id="node5" class="node">
 <title>AuthService</title>
-<ellipse fill="#fdb462" stroke="black" cx="314" cy="-104" rx="59.11" ry="18"/>
-<text text-anchor="middle" x="314" y="-99.8" font-family="Times,serif" font-size="14.00">AuthService</text>
+<ellipse fill="#fdb462" stroke="black" cx="256" cy="-104" rx="59.11" ry="18"/>
+<text text-anchor="middle" x="256" y="-99.8" font-family="Times,serif" font-size="14.00">AuthService</text>
 </g>
 <!-- AuthService&#45;&gt;AuthModule -->
-<g id="edge3" class="edge">
+<g id="edge4" class="edge">
 <title>AuthService&#45;&gt;AuthModule</title>
-<path fill="none" stroke="black" d="M254.49,-104C246.34,-104 240.7,-104 240.7,-104 240.7,-104 240.7,-140.89 240.7,-140.89"/>
-<polygon fill="black" stroke="black" points="237.2,-140.89 240.7,-150.89 244.2,-140.89 237.2,-140.89"/>
+<path fill="none" stroke="black" d="M256,-122.11C256,-122.11 256,-140.99 256,-140.99"/>
+<polygon fill="black" stroke="black" points="252.5,-140.99 256,-150.99 259.5,-140.99 252.5,-140.99"/>
 </g>
 <!-- JwtStrategy -->
-<g id="node5" class="node">
+<g id="node6" class="node">
 <title>JwtStrategy</title>
-<ellipse fill="#fdb462" stroke="black" cx="180" cy="-104" rx="56.76" ry="18"/>
-<text text-anchor="middle" x="180" y="-99.8" font-family="Times,serif" font-size="14.00">JwtStrategy</text>
+<ellipse fill="#fdb462" stroke="black" cx="122" cy="-104" rx="56.76" ry="18"/>
+<text text-anchor="middle" x="122" y="-99.8" font-family="Times,serif" font-size="14.00">JwtStrategy</text>
 </g>
 <!-- JwtStrategy&#45;&gt;AuthModule -->
-<g id="edge4" class="edge">
+<g id="edge5" class="edge">
 <title>JwtStrategy&#45;&gt;AuthModule</title>
-<path fill="none" stroke="black" d="M196.93,-121.42C196.93,-121.42 196.93,-140.62 196.93,-140.62"/>
-<polygon fill="black" stroke="black" points="193.43,-140.62 196.93,-150.62 200.43,-140.62 193.43,-140.62"/>
+<path fill="none" stroke="black" d="M169.42,-113.87C169.42,-132.06 169.42,-169 169.42,-169 169.42,-169 202.2,-169 202.2,-169"/>
+<polygon fill="black" stroke="black" points="202.2,-172.5 212.2,-169 202.2,-165.5 202.2,-172.5"/>
 </g>
 </g>
 </svg>
@@ -247,6 +263,16 @@
                     </ul>
                 </div>
                 <div class="col-sm-3">
+                    <h3>Imports<a href="https://angular.io/api/core/NgModule#imports" target="_blank" rel="noopener noreferrer"
+                            title="Official documentation about module imports"><span
+                                class="icon ion-ios-information-circle-outline"></a></h3>
+                    <ul class="list-group">
+                        <li class="list-group-item">
+                            <a href="../modules/RolesModule.html">RolesModule</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-sm-3">
                     <h3>Exports<a href="https://angular.io/api/core/NgModule#exports" target="_blank" rel="noopener noreferrer"
                             title="Official documentation about module exports"><span
                                 class="icon ion-ios-information-circle-outline"></a></h3>
@@ -276,6 +302,7 @@ import { AuthService } from &#x27;./auth.service&#x27;;
 import { AuthController } from &#x27;./auth.controller&#x27;;
 import { JwtStrategy } from &#x27;./jwt.strategy&#x27;;
 import { ConfigService } from &#x27;@nestjs/config&#x27;;
+import { RolesModule } from &#x27;../roles/roles.module&#x27;;
 
 @Module({
   imports: [
@@ -290,13 +317,13 @@ import { ConfigService } from &#x27;@nestjs/config&#x27;;
       },
     }),
     TypeOrmModule.forFeature([User]),
+    RolesModule,
   ],
   providers: [AuthService, JwtStrategy],
   controllers: [AuthController],
   exports: [AuthService, JwtStrategy, PassportModule],
 })
-export class AuthModule {}
-</code></pre>
+export class AuthModule {}</code></pre>
     </div>
 </div>
 
