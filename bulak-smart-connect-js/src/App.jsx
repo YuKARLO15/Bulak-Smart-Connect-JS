@@ -44,6 +44,7 @@ import AdminAccountManagement from './AdminBulakSmartConnect/AccountManagementCo
 
 // Application  //
 import AdminApplicationDashboard from './AdminBulakSmartConnect/AdminApplicationComponents/ApplicationAdminDashboard';
+import AdminApplicationForm from './AdminBulakSmartConnect/AdminApplicationComponents/AdminApplicationDetails';
 import AppointmentDetailsCard from './AdminBulakSmartConnect/AppointmentDetailsComponents/AppointmentDetails';
 
 function App() {
@@ -83,6 +84,7 @@ function App() {
         <Route path="/WalkInForm" element={<WalkInForm />} />
         <Route path="/WalkInDetails" element={<WalkInQueueDetail />} />
         <Route path="/applicationAdmin" element={<AdminApplicationDashboard />} />
+        <Route path="/ApplicationDetails/:id" element={<AdminApplicationForm/>} />
       </Route>{' '}
       {/* Protected Route End */}
     </Routes>

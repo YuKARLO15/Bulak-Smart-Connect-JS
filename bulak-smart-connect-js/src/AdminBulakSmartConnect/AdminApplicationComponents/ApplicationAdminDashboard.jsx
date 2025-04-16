@@ -19,6 +19,7 @@ import {
 import FilterListIcon from '@mui/icons-material/FilterList';
 import './ApplicationAdminDashboard.css'; 
 import { getApplications } from '../../UserBulakSmartConnect/ApplicationComponents/ApplicationData';
+import { useNavigate } from 'react-router-dom'; 
 
 const AdminApplicationDashboard = () => {
   const [filter, setFilter] = useState('All');
@@ -26,6 +27,7 @@ const AdminApplicationDashboard = () => {
   const [filteredApplications, setFilteredApplications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate(); 
 
   useEffect(() => {
     try {
@@ -56,7 +58,7 @@ const AdminApplicationDashboard = () => {
 
   const pendingCount = applications.filter(app => app.status === "Pending").length;
   const approvedCount = applications.filter(app => app.status === "Approved").length;
-  const deniedCount = applications.filter(app => app.status === "Declined" || app.status === "Denied").length;
+  const deniedCount = applications.filter(app => app.status === "Decline" || app.status === "Decline").length;
  
   useEffect(() => {
     try {
@@ -65,8 +67,8 @@ const AdminApplicationDashboard = () => {
       } else {
         setFilteredApplications(applications.filter(app => 
           app.status === filter || 
-          (filter === 'Denied' && app.status === 'Declined') || 
-          (filter === 'Declined' && app.status === 'Denied')
+          (filter === 'Denied' && app.status === 'Decline') || 
+          (filter === 'Decline' && app.status === 'Denied')
         ));
       }
     } catch (err) {
@@ -82,18 +84,24 @@ const AdminApplicationDashboard = () => {
     console.log("Opening QR code scanner");
   };
 
+
   const handleReviewApplication = (application) => {
     console.log("Reviewing application:", application.id);
     
     if (application.type === "Birth Certificate") {
       try {
+       
         localStorage.setItem("currentApplicationId", application.id);
-        console.log("Navigating to birth certificate review");
+        
+        navigate('/ApplicationDetails/' + application.id);
       } catch (err) {
         console.error("Error preparing for review:", err);
       }
     } else {
+    
       console.log("Navigating to review for:", application.type);
+
+      navigate('/ApplicationDetails/' + application.id);
     }
   };
 
@@ -132,11 +140,9 @@ const AdminApplicationDashboard = () => {
     <Box className="ApplicationDashContainer">
       <Box className="ApplicationDashHeader">
         <Typography variant="h5" className="ApplicationDashTitle">Applications</Typography>
-   
       </Box>
 
       <Box className="ApplicationDashContent">
-   
         <Card className="ApplicationDashOverview">
           <CardContent>
             <Typography variant="h6" className="ApplicationDashSectionTitle" gutterBottom>
@@ -311,38 +317,38 @@ const AdminApplicationDashboard = () => {
       
      
       <Box className="ApplicationDashTableSection" sx={{ maxWidth: '80vw', overflowX: 'hidden' }}>
-  <Box className="ApplicationDashTableHeader">
-    <Typography variant="h6" className="ApplicationDashTableTitle">
-      Submitted Applications
-    </Typography>
-    <IconButton className="ApplicationDashFilterButton" size="small">
-      <FilterListIcon fontSize="small" />
-    </IconButton>
-  </Box>
-  
-  <Box className="ApplicationDashTableContent" sx={{ maxWidth: '80vw', overflowX: 'hidden' }}>
-    {filteredApplications.length === 0 ? (
-      <Box className="ApplicationDashNoData">
-        No applications found for the selected status.
-      </Box>
-    ) : (
-      <TableContainer 
-        component={Paper} 
-        elevation={0} 
-        sx={{ 
-          width: '100%', 
-          maxWidth: '80vw', 
-          overflowX: 'hidden'
-        }}
-      >
-        <Table 
-          stickyHeader 
-          sx={{ 
-            width: '100%', 
-            tableLayout: 'fixed',
-            maxWidth: '100%'
-          }}
-        >
+        <Box className="ApplicationDashTableHeader">
+          <Typography variant="h6" className="ApplicationDashTableTitle">
+            Submitted Applications
+          </Typography>
+          <IconButton className="ApplicationDashFilterButton" size="small">
+            <FilterListIcon fontSize="small" />
+          </IconButton>
+        </Box>
+        
+        <Box className="ApplicationDashTableContent" sx={{ maxWidth: '80vw', overflowX: 'hidden' }}>
+          {filteredApplications.length === 0 ? (
+            <Box className="ApplicationDashNoData">
+              No applications found for the selected status.
+            </Box>
+          ) : (
+            <TableContainer 
+              component={Paper} 
+              elevation={0} 
+              sx={{ 
+                width: '100%', 
+                maxWidth: '80vw', 
+                overflowX: 'hidden'
+              }}
+            >
+              <Table 
+                stickyHeader 
+                sx={{ 
+                  width: '100%', 
+                  tableLayout: 'fixed',
+                  maxWidth: '100%'
+                }}
+              >
                 <TableHead>
                   <TableRow>
                     <TableCell>Type</TableCell>
