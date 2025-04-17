@@ -28,7 +28,7 @@ const MarriageCertificateForm = () => {
       "husbandMotherLastName", "husbandStreet", "husbandCity", "husbandProvince", "husbandCivilStatus",
       "husbandCountry", "husbandReligion", "husbandCitizenship", "husbandBarangay", "husbandFatherCitizenship",
       "husbandMotherCitizenship", "waliFirstName", "waliLastName", "waliRelationship", 
-      "waliStreet", "waliCity", "waliProvince", "waliCountry", "waliBarangay"
+      "waliStreet", "waliCity", "waliProvince", "waliCountry", "waliBarangay", "husbandAge"
     ],
     2: [
       "wifeFirstName", "wifeLastName", "wifeBirthMonth", "wifeBirthDay",
@@ -37,7 +37,7 @@ const MarriageCertificateForm = () => {
       "wifeMotherLastName", "wifeStreet", "wifeCity", "wifeProvince", "wifeCivilStatus",
       "wifeCountry", "wifeReligion", "wifeCitizenship", "wifeBarangay", "wifeFatherCitizenship",
       "wifeMotherCitizenship", "wifewaliFirstName", "wifewaliLastName", "wifewaliRelationship",
-      "wifewaliStreet", "wifewaliCity", "wifewaliProvince", "wifewaliCountry", "wifewaliBarangay"
+      "wifewaliStreet", "wifewaliCity", "wifewaliProvince", "wifewaliCountry", "wifewaliBarangay", "wifeAge"
     ],
     3: [
       "marriageOffice", "marriageBarangay", "marriageCity", "marriageProvince",

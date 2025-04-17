@@ -49,40 +49,71 @@ const WifeForm = ({ formData, handleChange, errors }) => {
         </div>
       </div>
 
-      {/* Birth Date */}
-      <label>2a. BIRTH DATE (Kaarawan) *</label>
-      <div className="input-group">
-        <div className="input-container">
-          <input
-            type="text"
-            name="wifeBirthMonth"
-            placeholder="Month"
-            value={formData.wifeBirthMonth || ""}
-            onChange={handleChange}
-          />
-          {errors.wifeBirthMonth && <span className="error-message">{errors.wifeBirthMonth}</span>}
-        </div>
-        <div className="input-container">
-          <input
-            type="text"
-            name="wifeBirthDay"
-            placeholder="Day"
-            value={formData.wifeBirthDay || ""}
-            onChange={handleChange}
-          />
-          {errors.wifeBirthDay && <span className="error-message">{errors.wifeBirthDay}</span>}
-        </div>
-        <div className="input-container">
-          <input
-            type="text"
-            name="wifeBirthYear"
-            placeholder="Year"
-            value={formData.wifeBirthYear || ""}
-            onChange={handleChange}
-          />
-          {errors.wifeBirthYear && <span className="error-message">{errors.wifeBirthYear}</span>}
-        </div>
-      </div>
+     {/* Birth Date */}
+<label>2a. BIRTH DATE (Kaarawan) *</label>
+<div className="input-group">
+  <div className="input-container">
+    <select
+      name="wifeBirthMonth"
+      value={formData.wifeBirthMonth || ""}
+      onChange={handleChange}
+    >
+      <option value="" disabled>
+        Month
+      </option>
+      <option value="January">January</option>
+      <option value="February">February</option>
+      <option value="March">March</option>
+      <option value="April">April</option>
+      <option value="May">May</option>
+      <option value="June">June</option>
+      <option value="July">July</option>
+      <option value="August">August</option>
+      <option value="September">September</option>
+      <option value="October">October</option>
+      <option value="November">November</option>
+      <option value="December">December</option>
+    </select>
+    {errors.wifeBirthMonth && <span className="error-message">{errors.wifeBirthMonth}</span>}
+  </div>
+  <div className="input-container">
+    <select
+      name="wifeBirthDay"
+      value={formData.wifeBirthDay || ""}
+      onChange={handleChange}
+    >
+      <option value="" disabled>
+        Day
+      </option>
+      {Array.from({ length: 31 }, (_, i) => (
+        <option key={i + 1} value={i + 1}>
+          {i + 1}
+        </option>
+      ))}
+    </select>
+    {errors.wifeBirthDay && <span className="error-message">{errors.wifeBirthDay}</span>}
+  </div>
+  <div className="input-container">
+    <select
+      name="wifeBirthYear"
+      value={formData.wifeBirthYear || ""}
+      onChange={handleChange}
+    >
+      <option value="" disabled>
+        Year
+      </option>
+      {Array.from({ length: 100 }, (_, i) => {
+        const year = new Date().getFullYear() - i;
+        return (
+          <option key={year} value={year}>
+            {year}
+          </option>
+        );
+      })}
+    </select>
+    {errors.wifeBirthYear && <span className="error-message">{errors.wifeBirthYear}</span>}
+  </div>
+</div>
 
       {/* Age */}
       <label>2b. AGE *</label>
@@ -90,11 +121,12 @@ const WifeForm = ({ formData, handleChange, errors }) => {
         <div className="input-container">
           <input
             type="text"
-            name="husbandAge"
+            name="wifeAge"
             placeholder="Age"
-            value={formData.husbandAge || ""}
+            value={formData.wifeAge || ""}
             onChange={handleChange}
           />
+          {errors.wifeAge && <span className="error-message">{errors.wifeAge}</span>}
         </div>
       </div>
 
