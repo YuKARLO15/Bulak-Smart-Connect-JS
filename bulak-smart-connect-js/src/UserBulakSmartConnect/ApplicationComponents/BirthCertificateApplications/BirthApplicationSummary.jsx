@@ -17,6 +17,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import './BirthApplicationSummary.css';
 import AffidavitBirthForm from './BirthCertificateForm/BirthBackIdentifyingForm'; 
+import EditIcon from '@mui/icons-material/Edit';
 
 const BirthApplicationSummary = () => {
   const [formData, setFormData] = React.useState(null);
@@ -141,6 +142,16 @@ const BirthApplicationSummary = () => {
   const toggleAffidavitPage = () => {
     setShowAffidavit(!showAffidavit);
   };
+  const handleEditApplication = () => {
+    // Store the current application data in a temporary storage
+    localStorage.setItem('editingApplication', JSON.stringify({
+      id: applicationId,
+      formData: formData
+    }));
+    
+    // Navigate to the birth certificate form
+    navigate('/BirthCertificateForm');
+  };
 
   if (loading) {
     return (
@@ -245,16 +256,19 @@ const BirthApplicationSummary = () => {
                 <Typography variant="body2" className="fieldLabel">1. NAME</Typography>
                 <Grid container>
                   <Grid item xs={4} className="nameFieldContainer">
-                    <Typography variant="body1">{formData?.firstName || 'N/A'}</Typography>
                     <Typography variant="body2">(First)</Typography>
+                    <Typography variant="body1">{formData?.firstName || 'N/A'}</Typography>
+                    
                   </Grid>
                   <Grid item xs={4} className="nameFieldContainer">
+                  <Typography variant="body2">(Middle)</Typography>
                     <Typography variant="body1">{formData?.middleName || 'N/A'}</Typography>
-                    <Typography variant="body2">(Middle)</Typography>
+                   
                   </Grid>
                   <Grid item xs={4} className="nameFieldContainer">
+                  <Typography variant="body2">(Last)</Typography>
                     <Typography variant="body1">{formData?.lastName || 'N/A'}</Typography>
-                    <Typography variant="body2">(Last)</Typography>
+                   
                   </Grid>
                 </Grid>
               </Grid>
@@ -269,16 +283,19 @@ const BirthApplicationSummary = () => {
                 <Typography variant="body2" className="fieldLabel">3. DATE OF BIRTH</Typography>
                 <Grid container>
                   <Grid item xs={4} className="nameFieldContainer">
+                  <Typography variant="body2">(Day)</Typography>
                     <Typography variant="body1">{formData?.birthDay || 'N/A'}</Typography>
-                    <Typography variant="body2">(Day)</Typography>
+                    
                   </Grid>
                   <Grid item xs={4} className="nameFieldContainer">
+                  <Typography variant="body2">(Month)</Typography>
                     <Typography variant="body1">{formData?.birthMonth || 'N/A'}</Typography>
-                    <Typography variant="body2">(Month)</Typography>
+                   
                   </Grid>
                   <Grid item xs={4} className="nameFieldContainer">
+                  <Typography variant="body2">(Year)</Typography>
                     <Typography variant="body1">{formData?.birthYear || 'N/A'}</Typography>
-                    <Typography variant="body2">(Year)</Typography>
+                    
                   </Grid>
                 </Grid>
               </Grid>
@@ -289,16 +306,19 @@ const BirthApplicationSummary = () => {
                 <Typography variant="body2" className="fieldLabel">4. PLACE OF BIRTH</Typography>
                 <Grid container>
                   <Grid item xs={4} className="nameFieldContainer">
+                  <Typography variant="body2">(Name of Hospital/Clinic/Institution)</Typography>
                     <Typography variant="body1">{formData?.hospital || 'N/A'}</Typography>
-                    <Typography variant="body2">(Name of Hospital/Clinic/Institution)</Typography>
+                    
                   </Grid>
                   <Grid item xs={4} className="nameFieldContainer">
+                  <Typography variant="body2">(City/Municipality)</Typography>
                     <Typography variant="body1">{formData?.city || 'N/A'}</Typography>
-                    <Typography variant="body2">(City/Municipality)</Typography>
+                   
                   </Grid>
                   <Grid item xs={4} className="nameFieldContainer">
+                  <Typography variant="body2">(Province)</Typography>
                     <Typography variant="body1">{formData?.province || 'N/A'}</Typography>
-                    <Typography variant="body2">(Province)</Typography>
+                   
                   </Grid>
                 </Grid>
               </Grid>
@@ -338,16 +358,19 @@ const BirthApplicationSummary = () => {
                 <Typography variant="body2" className="fieldLabel">7. MAIDEN NAME</Typography>
                 <Grid container>
                   <Grid item xs={4} className="nameFieldContainer">
+                  <Typography variant="body2">(First)</Typography>
                     <Typography variant="body1">{formData?.motherFirstName || 'N/A'}</Typography>
-                    <Typography variant="body2">(First)</Typography>
+                   
                   </Grid>
                   <Grid item xs={4} className="nameFieldContainer">
+                  <Typography variant="body2">(Middle)</Typography>
                     <Typography variant="body1">{formData?.motherMiddleName || 'N/A'}</Typography>
-                    <Typography variant="body2">(Middle)</Typography>
+                   
                   </Grid>
                   <Grid item xs={4} className="nameFieldContainer">
+                  <Typography variant="body2">(Last)</Typography>
                     <Typography variant="body1">{formData?.motherLastName || 'N/A'}</Typography>
-                    <Typography variant="body2">(Last)</Typography>
+                    
                   </Grid>
                 </Grid>
               </Grid>
@@ -407,16 +430,19 @@ const BirthApplicationSummary = () => {
                 <Typography variant="body2" className="fieldLabel">14. NAME</Typography>
                 <Grid container>
                   <Grid item xs={4} className="nameFieldContainer">
+                  <Typography variant="body2">(First)</Typography>
                     <Typography variant="body1">{formData?.fatherFirstName || 'N/A'}</Typography>
-                    <Typography variant="body2">(First)</Typography>
+                 
                   </Grid>
                   <Grid item xs={4} className="nameFieldContainer">
+                  <Typography variant="body2">(Middle)</Typography>
                     <Typography variant="body1">{formData?.fatherMiddleName || 'N/A'}</Typography>
-                    <Typography variant="body2">(Middle)</Typography>
+                   
                   </Grid>
                   <Grid item xs={4} className="nameFieldContainer">
+                  <Typography variant="body2">(Last)</Typography>
                     <Typography variant="body1">{formData?.fatherLastName || 'N/A'}</Typography>
-                    <Typography variant="body2">(Last)</Typography>
+                  
                   </Grid>
                 </Grid>
               </Grid>
@@ -459,16 +485,19 @@ const BirthApplicationSummary = () => {
             <Typography variant="body2" className="fieldLabel">20a. DATE</Typography>
             <Grid container>
               <Grid item xs={4} className="nameFieldContainer">
+              <Typography variant="body2">(Month)</Typography>
                 <Typography variant="body1">{formData?.marriageMonth || 'N/A'}</Typography>
-                <Typography variant="body2">(Month)</Typography>
+               
               </Grid>
               <Grid item xs={4} className="nameFieldContainer">
+              <Typography variant="body2">(Day)</Typography>
                 <Typography variant="body1">{formData?.marriageDay || 'N/A'}</Typography>
-                <Typography variant="body2">(Day)</Typography>
+                
               </Grid>
               <Grid item xs={4} className="nameFieldContainer">
+              <Typography variant="body2">(Year)</Typography>
                 <Typography variant="body1">{formData?.marriageYear || 'N/A'}</Typography>
-                <Typography variant="body2">(Year)</Typography>
+               
               </Grid>
             </Grid>
           </Grid>
@@ -498,6 +527,15 @@ const BirthApplicationSummary = () => {
           >
             View Affidavit Forms
           </Button>
+          <Button
+    variant="contained"
+    color="secondary"
+    startIcon={<EditIcon />}
+    onClick={handleEditApplication}
+    className="EditButtonSummaryBirth"
+  >
+    Edit Application
+  </Button>
 
           <Button
             variant="contained"

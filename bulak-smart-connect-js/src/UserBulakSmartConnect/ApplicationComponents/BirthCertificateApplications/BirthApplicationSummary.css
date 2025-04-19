@@ -1,6 +1,6 @@
 .MainContainerSummaryBirth {
   padding: 2rem;
-  max-width: 70w;
+  width: 100vw;
   margin: 0 auto;
   justify-items: center !important;
   align-items: center;
@@ -9,6 +9,25 @@
 .SummaryPaperSummaryBirth {
   padding: 2rem;
   margin-bottom: 2rem;
+}
+/* Add this to your BirthApplicationSummary.css file */
+.EditButtonSummaryBirth {
+  background-color: #1C4D5A !important; /* Purple color */
+  margin: 0 10px !important;
+  color: white !important;
+}
+
+.EditButtonSummaryBirth:hover {
+  background-color: #5e35b1 !important;
+}
+
+.buttonsContainer {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+  padding: 10px;
+  flex-wrap: wrap;
 }
 
 .HeaderSummaryBirth {
