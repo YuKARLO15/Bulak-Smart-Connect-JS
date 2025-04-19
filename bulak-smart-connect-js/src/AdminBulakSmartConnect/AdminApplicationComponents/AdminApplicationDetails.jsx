@@ -21,6 +21,9 @@ import {
 } from "@mui/material";
 import { useParams, useNavigate } from "react-router-dom"; 
 import "./AdminApplicationDetails.css";
+import AttachFileIcon from "@mui/icons-material/AttachFile";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import FileUploadPreview from "./AdminFilePreview";
 
 const AdminBirthApplicationView = () => {
   const { id } = useParams(); 
@@ -33,28 +36,25 @@ const AdminBirthApplicationView = () => {
   const [newStatus, setNewStatus] = useState("");
   const [statusMessage, setStatusMessage] = useState("");
   const [filterStatus, setFilterStatus] = useState("All");
+  const [showDocumentsTab, setShowDocumentsTab] = useState(false);
 
   useEffect(() => {
     try {
-   
       const storedApplications = JSON.parse(localStorage.getItem("applications")) || [];
       const birthApplications = storedApplications.filter(app => app.type === "Birth Certificate");
       setApplications(birthApplications);
 
       let targetApp;
       
-
       if (id) {
         targetApp = birthApplications.find(app => app.id === id);
       } else {
-   
         const currentAppId = localStorage.getItem("currentApplicationId");
         if (currentAppId) {
           targetApp = birthApplications.find(app => app.id === currentAppId);
         }
       }
       
-    
       if (targetApp) {
         setSelectedApplication(targetApp);
       } else if (birthApplications.length > 0) {
@@ -67,7 +67,6 @@ const AdminBirthApplicationView = () => {
       setLoading(false);
     }
 
-   
     window.addEventListener('storage', handleStorageUpdate);
     
     return () => {
@@ -81,7 +80,6 @@ const AdminBirthApplicationView = () => {
       const birthApplications = storedApplications.filter(app => app.type === "Birth Certificate");
       setApplications(birthApplications);
       
-    
       if (selectedApplication) {
         const updatedSelectedApp = birthApplications.find(app => app.id === selectedApplication.id);
         if (updatedSelectedApp) {
@@ -95,7 +93,7 @@ const AdminBirthApplicationView = () => {
 
   const handleApplicationClick = (application) => {
     setSelectedApplication(application);
-
+    setShowDocumentsTab(false); 
     navigate(`/ApplicationDetails/${application.id}`, { replace: true });
   };
 
@@ -113,16 +111,18 @@ const AdminBirthApplicationView = () => {
     setStatusMessage(event.target.value);
   };
 
+  const toggleDocumentsTab = () => {
+    setShowDocumentsTab(!showDocumentsTab);
+  };
+
   const handleFilterChange = (event) => {
     setFilterStatus(event.target.value);
   };
 
   const handleUpdateStatus = () => {
     try {
-    
       const allApplications = JSON.parse(localStorage.getItem("applications")) || [];
       
-   
       const updatedApplications = allApplications.map(app => {
         if (app.id === selectedApplication.id) {
           return {
@@ -135,14 +135,11 @@ const AdminBirthApplicationView = () => {
         return app;
       });
       
-      
       localStorage.setItem("applications", JSON.stringify(updatedApplications));
       
-     
       const updatedBirthApplications = updatedApplications.filter(app => app.type === "Birth Certificate");
       setApplications(updatedBirthApplications);
       
-
       const updated = updatedBirthApplications.find(app => app.id === selectedApplication.id);
       setSelectedApplication(updated);
       
@@ -154,8 +151,6 @@ const AdminBirthApplicationView = () => {
       setError("Error updating application status: " + err.message);
     }
   };
-
-
 
   const formatDate = (month, day, year) => {
     if (!month || !day || !year) return "N/A";
@@ -183,9 +178,6 @@ const AdminBirthApplicationView = () => {
       </Box>
     );
   }
-
-
-
       
   return (
     <Box className="AdminMainContainerAdminAppForm">
@@ -196,7 +188,6 @@ const AdminBirthApplicationView = () => {
           </Typography>
         </Grid>
         
-      
         <Grid item xs={12} md={4}>
           <Paper elevation={3} className="ApplicationsListPaperAdminAppForm">
             <Box className="FilterContainerAdminAppForm">
@@ -253,303 +244,513 @@ const AdminBirthApplicationView = () => {
           </Paper>
         </Grid>
         
-       
         <Grid item xs={12} md={8}>
           {selectedApplication ? (
-            <Paper elevation={3} className="ApplicationDetailsPaperAdminAppForm">
-              <Box className="ApplicationHeaderAdminAppForm">
-                <Box>
-                  <Typography variant="h5" className="ApplicationDetailsTitleAdminAppForm">
-                    Birth Certificate Application Details
-                  </Typography>
-                  <Typography variant="subtitle1" className="ApplicationDetailsIdAdminAppForm">
-                    Application ID: {selectedApplication.id}
-                  </Typography>
-                </Box>
+            <Box className="DetailsSectionAdminAppForm">
+              <Paper elevation={3} className="ApplicationDetailsPaperAdminAppForm">
                 
+                <Box className="ToggleBarAdminAppForm">
+                  <Button
+                    variant="contained"
+                    color={!showDocumentsTab ? "primary" : "inherit"}
+                    onClick={() => setShowDocumentsTab(false)}
+                    className={!showDocumentsTab ? "ActiveToggleButtonAdminAppForm" : ""}
+                  >
+                    Application Form
+                  </Button>
+                  <Button
+                    variant="contained"
+                    color={showDocumentsTab ? "primary" : "inherit"}
+                    onClick={() => setShowDocumentsTab(true)}
+                    startIcon={<AttachFileIcon />}
+                    className={showDocumentsTab ? "ActiveToggleButtonAdminAppForm" : ""}
+                  >
+                    Uploaded Documents
+                  </Button>
+                </Box>
+
+                {!showDocumentsTab ? (
+                  // Birth Certificate Form View
+                  <>
+                    <Box className="certificateHeaderContainer">
+                      <Typography variant="body2" className="DetailsLabelAdminAppForm">
+                        Municipal Form No. 102
+                      </Typography>
+                      <Typography variant="body2" className="DetailsLabelAdminAppForm">
+                        (Revised January 2007)
+                      </Typography>
+                      <Typography variant="body1" className="DetailsLabelAdminAppForm">
+                        Republic of the Philippines
+                      </Typography>
+                      <Typography variant="body1" className="DetailsLabelAdminAppForm">
+                        OFFICE OF THE CIVIL REGISTRAR GENERAL
+                      </Typography>
+                      <Typography variant="h5" className="SectionTitleAdminAppForm">
+                        CERTIFICATE OF LIVE BIRTH
+                      </Typography>
+                    </Box>
+                    
+                   
+                    <Grid container className="DetailsGridAdminAppForm">
+                      <Grid item xs={8}>
+                        <Box className="DetailsSectionAdminAppForm" style={{ padding: '5px' }}>
+                          <Typography variant="body2" className="DetailsLabelAdminAppForm">Province</Typography>
+                          <Typography variant="body1" className="DetailsValueAdminAppForm">
+                            {selectedApplication.formData.province || "N/A"}
+                          </Typography>
+                        </Box>
+                        <Box className="DetailsSectionAdminAppForm" style={{ padding: '5px' }}>
+                          <Typography variant="body2" className="DetailsLabelAdminAppForm">City/Municipality</Typography>
+                          <Typography variant="body1" className="DetailsValueAdminAppForm">
+                            {selectedApplication.formData.city || "N/A"}
+                          </Typography>
+                        </Box>
+                      </Grid>
+                      <Grid item xs={4}>
+                        <Box className="DetailsSectionAdminAppForm" style={{ padding: '5px' }}>
+                          <Typography variant="body2" className="DetailsLabelAdminAppForm">Registry No.</Typography>
+                          <Typography variant="body1" className="DetailsValueAdminAppForm">_____________</Typography>
+                        </Box>
+                      </Grid>
+                    </Grid>
+                    
+                    {/* CHILD Section */}
+                    <Grid container className="DetailsGridAdminAppForm" style={{ border: '1px solid #ccc' }}>
+      <Grid item xs={1} style={{ backgroundColor: '#f5f5f5', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRight: '1px solid #ccc' }}>
+        <Typography variant="h6" style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}>
+          CHILD
+        </Typography>
+      </Grid>
+      <Grid item xs={11}>
+        <Grid container>
+          <Grid item xs={12} className="DetailsSectionAdminAppForm" style={{ borderBottom: '1px solid #ccc', padding: '5px' }}>
+            <Typography variant="body2" className="DetailsLabelAdminAppForm">1. NAME</Typography>
+            <Grid container>
+              <Grid item xs={4} style={{ borderRight: '1px solid #ccc', padding: '5px' }}>
+                <Typography variant="caption" className="DetailsLabelAdminAppForm">(First)</Typography>
+                <Typography variant="body1" className="DetailsValueAdminAppForm">
+                  {selectedApplication.formData.firstName || "N/A"}
+                </Typography>
+              </Grid>
+              <Grid item xs={4} style={{ borderRight: '1px solid #ccc', padding: '5px' }}>
+                <Typography variant="caption" className="DetailsLabelAdminAppForm">(Middle)</Typography>
+                <Typography variant="body1" className="DetailsValueAdminAppForm">
+                  {selectedApplication.formData.middleName || "N/A"}
+                </Typography>
+              </Grid>
+              <Grid item xs={4} style={{ padding: '5px' }}>
+                <Typography variant="caption" className="DetailsLabelAdminAppForm">(Last)</Typography>
+                <Typography variant="body1" className="DetailsValueAdminAppForm">
+                  {selectedApplication.formData.lastName || "N/A"}
+                </Typography>
+              </Grid>
+            </Grid>
+          </Grid>
+        </Grid>
+
+        <Grid container>
+          <Grid item xs={3} className="DetailsSectionAdminAppForm" style={{ borderRight: '1px solid #ccc', borderBottom: '1px solid #ccc', padding: '5px' }}>
+            <Typography variant="body2" className="DetailsLabelAdminAppForm">2. SEX</Typography>
+            <Typography variant="body1" className="DetailsValueAdminAppForm">
+              {selectedApplication.formData.sex || "N/A"}
+            </Typography>
+          </Grid>
+          <Grid item xs={9} className="DetailsSectionAdminAppForm" style={{ borderBottom: '1px solid #ccc', padding: '5px' }}>
+            <Typography variant="body2" className="DetailsLabelAdminAppForm">3. DATE OF BIRTH</Typography>
+            <Grid container>
+              <Grid item xs={4} style={{ borderRight: '1px solid #ccc', padding: '5px' }}>
+                <Typography variant="caption" className="DetailsLabelAdminAppForm">(Day)</Typography>
+                <Typography variant="body1" className="DetailsValueAdminAppForm">
+                  {selectedApplication.formData.birthDay || "N/A"}
+                </Typography>
+              </Grid>
+              <Grid item xs={4} style={{ borderRight: '1px solid #ccc', padding: '5px' }}>
+                <Typography variant="caption" className="DetailsLabelAdminAppForm">(Month)</Typography>
+                <Typography variant="body1" className="DetailsValueAdminAppForm">
+                  {selectedApplication.formData.birthMonth || "N/A"}
+                </Typography>
+              </Grid>
+              <Grid item xs={4} style={{ padding: '5px' }}>
+                <Typography variant="caption" className="DetailsLabelAdminAppForm">(Year)</Typography>
+                <Typography variant="body1" className="DetailsValueAdminAppForm">
+                  {selectedApplication.formData.birthYear || "N/A"}
+                </Typography>
+              </Grid>
+            </Grid>
+          </Grid>
+        </Grid>
+
+        <Grid container>
+          <Grid item xs={12} className="DetailsSectionAdminAppForm" style={{ borderBottom: '1px solid #ccc', padding: '5px' }}>
+            <Typography variant="body2" className="DetailsLabelAdminAppForm">4. PLACE OF BIRTH</Typography>
+            <Grid container>
+              <Grid item xs={4} style={{ borderRight: '1px solid #ccc', padding: '5px' }}>
+                <Typography variant="caption" className="DetailsLabelAdminAppForm">
+                  (Name of Hospital/Clinic/Institution, House No., St., Barangay)
+                </Typography>
+                <Typography variant="body1" className="DetailsValueAdminAppForm">
+                  {selectedApplication.formData.hospital || "N/A"}
+                </Typography>
+              </Grid>
+              <Grid item xs={4} style={{ borderRight: '1px solid #ccc', padding: '5px' }}>
+                <Typography variant="caption" className="DetailsLabelAdminAppForm">(City/Municipality)</Typography>
+                <Typography variant="body1" className="DetailsValueAdminAppForm">
+                  {selectedApplication.formData.city || "N/A"}
+                </Typography>
+              </Grid>
+              <Grid item xs={4} style={{ padding: '5px' }}>
+                <Typography variant="caption" className="DetailsLabelAdminAppForm">(Province)</Typography>
+                <Typography variant="body1" className="DetailsValueAdminAppForm">
+                  {selectedApplication.formData.province || "N/A"}
+                </Typography>
+              </Grid>
+            </Grid>
+          </Grid>
+        </Grid>
+
+        <Grid container>
+          <Grid item xs={4} className="DetailsSectionAdminAppForm" style={{ borderRight: '1px solid #ccc', padding: '5px' }}>
+            <Typography variant="body2" className="DetailsLabelAdminAppForm">5a. TYPE OF BIRTH</Typography>
+            <Typography variant="caption" className="DetailsLabelAdminAppForm">(Single, Twin, Triplet, etc.)</Typography>
+            <Typography variant="body1" className="DetailsValueAdminAppForm">
+              {selectedApplication.formData.typeOfBirth || "N/A"}
+            </Typography>
+          </Grid>
+          <Grid item xs={4} className="DetailsSectionAdminAppForm" style={{ borderRight: '1px solid #ccc', padding: '5px' }}>
+            <Typography variant="body2" className="DetailsLabelAdminAppForm">5b. IF MULTIPLE BIRTH, CHILD WAS</Typography>
+            <Typography variant="caption" className="DetailsLabelAdminAppForm">(First, Second, Third, etc.)</Typography>
+            <Typography variant="body1" className="DetailsValueAdminAppForm">
+              {selectedApplication.formData.multipleBirthOrder || "N/A"}
+            </Typography>
+          </Grid>
+          <Grid item xs={2} className="DetailsSectionAdminAppForm" style={{ borderRight: '1px solid #ccc', padding: '5px' }}>
+            <Typography variant="body2" className="DetailsLabelAdminAppForm">5c. BIRTH ORDER</Typography>
+            <Typography variant="caption" className="DetailsLabelAdminAppForm" style={{ fontSize: '0.65rem' }}>
+              (Order of this birth in relation to all children born alive)
+            </Typography>
+            <Typography variant="body1" className="DetailsValueAdminAppForm">
+              {selectedApplication.formData.birthOrder || "N/A"}
+            </Typography>
+          </Grid>
+          <Grid item xs={2} className="DetailsSectionAdminAppForm" style={{ padding: '5px' }}>
+            <Typography variant="body2" className="DetailsLabelAdminAppForm">6. WEIGHT AT BIRTH</Typography>
+            <Typography variant="body1" className="DetailsValueAdminAppForm">
+              {selectedApplication.formData.birthWeight ? `${selectedApplication.formData.birthWeight} grams` : "N/A"}
+            </Typography>
+          </Grid>
+        </Grid>
+      </Grid>
+    </Grid>
+
+                    {/* MOTHER Section */}
+                    <Grid container className="DetailsGridAdminAppForm" style={{ border: '1px solid #ccc', borderTop: 'none' }}>
+      <Grid item xs={1} style={{ backgroundColor: '#f5f5f5', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRight: '1px solid #ccc' }}>
+        <Typography variant="h6" style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}>
+          MOTHER
+        </Typography>
+      </Grid>
+      <Grid item xs={11}>
+        <Grid container>
+          <Grid item xs={12} className="DetailsSectionAdminAppForm" style={{ borderBottom: '1px solid #ccc', padding: '5px' }}>
+            <Typography variant="body2" className="DetailsLabelAdminAppForm">7. MAIDEN NAME</Typography>
+            <Grid container>
+              <Grid item xs={4} style={{ borderRight: '1px solid #ccc', padding: '5px' }}>
+                <Typography variant="caption" className="DetailsLabelAdminAppForm">(First)</Typography>
+                <Typography variant="body1" className="DetailsValueAdminAppForm">
+                  {selectedApplication.formData.motherFirstName || "N/A"}
+                </Typography>
+              </Grid>
+              <Grid item xs={4} style={{ borderRight: '1px solid #ccc', padding: '5px' }}>
+                <Typography variant="caption" className="DetailsLabelAdminAppForm">(Middle)</Typography>
+                <Typography variant="body1" className="DetailsValueAdminAppForm">
+                  {selectedApplication.formData.motherMiddleName || "N/A"}
+                </Typography>
+              </Grid>
+              <Grid item xs={4} style={{ padding: '5px' }}>
+                <Typography variant="caption" className="DetailsLabelAdminAppForm">(Last)</Typography>
+                <Typography variant="body1" className="DetailsValueAdminAppForm">
+                  {selectedApplication.formData.motherLastName || "N/A"}
+                </Typography>
+              </Grid>
+            </Grid>
+          </Grid>
+        </Grid>
+
+        <Grid container>
+          <Grid item xs={6} className="DetailsSectionAdminAppForm" style={{ borderRight: '1px solid #ccc', borderBottom: '1px solid #ccc', padding: '5px' }}>
+            <Typography variant="body2" className="DetailsLabelAdminAppForm">8. CITIZENSHIP</Typography>
+            <Typography variant="body1" className="DetailsValueAdminAppForm">
+              {selectedApplication.formData.motherCitizenship || "N/A"}
+            </Typography>
+          </Grid>
+          <Grid item xs={6} className="DetailsSectionAdminAppForm" style={{ borderBottom: '1px solid #ccc', padding: '5px' }}>
+            <Typography variant="body2" className="DetailsLabelAdminAppForm">9. RELIGION/RELIGIOUS SECT</Typography>
+            <Typography variant="body1" className="DetailsValueAdminAppForm">
+              {selectedApplication.formData.motherReligion || "N/A"}
+            </Typography>
+          </Grid>
+        </Grid>
+
+        <Grid container>
+          <Grid item xs={3} className="DetailsSectionAdminAppForm" style={{ borderRight: '1px solid #ccc', borderBottom: '1px solid #ccc', padding: '5px' }}>
+            <Typography variant="body2" className="DetailsLabelAdminAppForm">10a. Total number of children born alive</Typography>
+            <Typography variant="body1" className="DetailsValueAdminAppForm">
+              {selectedApplication.formData.motherTotalChildren || "N/A"}
+            </Typography>
+          </Grid>
+          <Grid item xs={3} className="DetailsSectionAdminAppForm" style={{ borderRight: '1px solid #ccc', borderBottom: '1px solid #ccc', padding: '5px' }}>
+            <Typography variant="body2" className="DetailsLabelAdminAppForm">10b. No. of children still living including this birth</Typography>
+            <Typography variant="body1" className="DetailsValueAdminAppForm">
+              {selectedApplication.formData.motherLivingChildren || "N/A"}
+            </Typography>
+          </Grid>
+          <Grid item xs={3} className="DetailsSectionAdminAppForm" style={{ borderRight: '1px solid #ccc', borderBottom: '1px solid #ccc', padding: '5px' }}>
+            <Typography variant="body2" className="DetailsLabelAdminAppForm">10c. No. of children born alive but are now dead</Typography>
+            <Typography variant="body1" className="DetailsValueAdminAppForm">
+              {selectedApplication.formData.motherDeceasedChildren || "N/A"}
+            </Typography>
+          </Grid>
+          <Grid item xs={3} className="DetailsSectionAdminAppForm" style={{ borderBottom: '1px solid #ccc', padding: '5px' }}>
+            <Typography variant="body2" className="DetailsLabelAdminAppForm">11. OCCUPATION</Typography>
+            <Typography variant="body1" className="DetailsValueAdminAppForm">
+              {selectedApplication.formData.motherOccupation || "N/A"}
+            </Typography>
+          </Grid>
+        </Grid>
+
+        <Grid container>
+          <Grid item xs={12} className="DetailsSectionAdminAppForm" style={{ padding: '5px' }}>
+            <Typography variant="body2" className="DetailsLabelAdminAppForm">13. RESIDENCE</Typography>
+            <Grid container>
+              <Grid item xs={3} style={{ borderRight: '1px solid #ccc', padding: '5px' }}>
+                <Typography variant="caption" className="DetailsLabelAdminAppForm">(House No., St., Barangay)</Typography>
+                <Typography variant="body1" className="DetailsValueAdminAppForm">
+                  {selectedApplication.formData.motherStreet || "N/A"}
+                </Typography>
+              </Grid>
+              <Grid item xs={3} style={{ borderRight: '1px solid #ccc', padding: '5px' }}>
+                <Typography variant="caption" className="DetailsLabelAdminAppForm">(City/Municipality)</Typography>
+                <Typography variant="body1" className="DetailsValueAdminAppForm">
+                  {selectedApplication.formData.motherCity || "N/A"}
+                </Typography>
+              </Grid>
+              <Grid item xs={3} style={{ borderRight: '1px solid #ccc', padding: '5px' }}>
+                <Typography variant="caption" className="DetailsLabelAdminAppForm">(Province)</Typography>
+                <Typography variant="body1" className="DetailsValueAdminAppForm">
+                  {selectedApplication.formData.motherProvince || "N/A"}
+                </Typography>
+              </Grid>
+              <Grid item xs={3} style={{ padding: '5px' }}>
+                <Typography variant="caption" className="DetailsLabelAdminAppForm">(Country)</Typography>
+                <Typography variant="body1" className="DetailsValueAdminAppForm">
+                  {selectedApplication.formData.motherCountry || "N/A"}
+                </Typography>
+              </Grid>
+            </Grid>
+          </Grid>
+        </Grid>
+      </Grid>
+    </Grid>
+
+                    {/* FATHER Section */}
+                    <Grid container className="DetailsGridAdminAppForm" style={{ border: '1px solid #ccc', borderTop: 'none' }}>
+      <Grid item xs={1} style={{ backgroundColor: '#f5f5f5', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRight: '1px solid #ccc' }}>
+        <Typography variant="h6" style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}>
+          FATHER
+        </Typography>
+      </Grid>
+      <Grid item xs={11}>
+        <Grid container>
+          <Grid item xs={12} className="DetailsSectionAdminAppForm" style={{ borderBottom: '1px solid #ccc', padding: '5px' }}>
+            <Typography variant="body2" className="DetailsLabelAdminAppForm">14. NAME</Typography>
+            <Grid container>
+              <Grid item xs={4} style={{ borderRight: '1px solid #ccc', padding: '5px' }}>
+                <Typography variant="caption" className="DetailsLabelAdminAppForm">(First)</Typography>
+                <Typography variant="body1" className="DetailsValueAdminAppForm">
+                  {selectedApplication.formData.fatherFirstName || "N/A"}
+                </Typography>
+              </Grid>
+              <Grid item xs={4} style={{ borderRight: '1px solid #ccc', padding: '5px' }}>
+                <Typography variant="caption" className="DetailsLabelAdminAppForm">(Middle)</Typography>
+                <Typography variant="body1" className="DetailsValueAdminAppForm">
+                  {selectedApplication.formData.fatherMiddleName || "N/A"}
+                </Typography>
+              </Grid>
+              <Grid item xs={4} style={{ padding: '5px' }}>
+                <Typography variant="caption" className="DetailsLabelAdminAppForm">(Last)</Typography>
+                <Typography variant="body1" className="DetailsValueAdminAppForm">
+                  {selectedApplication.formData.fatherLastName || "N/A"}
+                </Typography>
+              </Grid>
+            </Grid>
+          </Grid>
+        </Grid>
+
+        <Grid container>
+          <Grid item xs={4} className="DetailsSectionAdminAppForm" style={{ borderRight: '1px solid #ccc', borderBottom: '1px solid #ccc', padding: '5px' }}>
+            <Typography variant="body2" className="DetailsLabelAdminAppForm">15. CITIZENSHIP</Typography>
+            <Typography variant="body1" className="DetailsValueAdminAppForm">
+              {selectedApplication.formData.fatherCitizenship || "N/A"}
+            </Typography>
+          </Grid>
+          <Grid item xs={4} className="DetailsSectionAdminAppForm" style={{ borderRight: '1px solid #ccc', borderBottom: '1px solid #ccc', padding: '5px' }}>
+            <Typography variant="body2" className="DetailsLabelAdminAppForm">16. RELIGION/RELIGIOUS SECT</Typography>
+            <Typography variant="body1" className="DetailsValueAdminAppForm">
+              {selectedApplication.formData.fatherReligion || "N/A"}
+            </Typography>
+          </Grid>
+          <Grid item xs={4} className="DetailsSectionAdminAppForm" style={{ borderBottom: '1px solid #ccc', padding: '5px' }}>
+            <Typography variant="body2" className="DetailsLabelAdminAppForm">17. OCCUPATION</Typography>
+            <Typography variant="body1" className="DetailsValueAdminAppForm">
+              {selectedApplication.formData.fatherOccupation || "N/A"}
+            </Typography>
+          </Grid>
+        </Grid>
+
+        <Grid container>
+          <Grid item xs={12} className="DetailsSectionAdminAppForm" style={{ padding: '5px' }}>
+            <Typography variant="body2" className="DetailsLabelAdminAppForm">19. RESIDENCE</Typography>
+            <Grid container>
+              <Grid item xs={3} style={{ borderRight: '1px solid #ccc', padding: '5px' }}>
+                <Typography variant="caption" className="DetailsLabelAdminAppForm">(House No., St., Barangay)</Typography>
+                <Typography variant="body1" className="DetailsValueAdminAppForm">
+                  {selectedApplication.formData.fatherStreet || "N/A"}
+                </Typography>
+              </Grid>
+              <Grid item xs={3} style={{ borderRight: '1px solid #ccc', padding: '5px' }}>
+                <Typography variant="caption" className="DetailsLabelAdminAppForm">(City/Municipality)</Typography>
+                <Typography variant="body1" className="DetailsValueAdminAppForm">
+                  {selectedApplication.formData.fatherCity || "N/A"}
+                </Typography>
+              </Grid>
+              <Grid item xs={3} style={{ borderRight: '1px solid #ccc', padding: '5px' }}>
+                <Typography variant="caption" className="DetailsLabelAdminAppForm">(Province)</Typography>
+                <Typography variant="body1" className="DetailsValueAdminAppForm">
+                  {selectedApplication.formData.fatherProvince || "N/A"}
+                </Typography>
+              </Grid>
+              <Grid item xs={3} style={{ padding: '5px' }}>
+                <Typography variant="caption" className="DetailsLabelAdminAppForm">(Country)</Typography>
+                <Typography variant="body1" className="DetailsValueAdminAppForm">
+                  {selectedApplication.formData.fatherCountry || "N/A"}
+                </Typography>
+              </Grid>
+            </Grid>
+          </Grid>
+        </Grid>
+      </Grid>
+    </Grid>
+
+                    {/* MARRIAGE OF PARENTS Section */}
+                   <Grid container className="DetailsGridAdminAppForm" style={{ border: '1px solid #ccc', borderTop: 'none' }}>
+                         <Grid item xs={12} style={{ backgroundColor: '#f5f5f5', padding: '5px', borderBottom: '1px solid #ccc' }}>
+                           <Typography variant="body2" className="DetailsLabelAdminAppForm">
+                             MARRIAGE OF PARENTS (If not married, accomplish Affidavit of Acknowledgement/Admission of Paternity at the back)
+                           </Typography>
+                         </Grid>
+                         <Grid item xs={6} style={{ borderRight: '1px solid #ccc', padding: '5px' }}>
+                           <Typography variant="body2" className="DetailsLabelAdminAppForm">20a. DATE</Typography>
+                           <Grid container>
+                             <Grid item xs={4} style={{ borderRight: '1px solid #ccc', padding: '5px' }}>
+                               <Typography variant="caption" className="DetailsLabelAdminAppForm">(Month)</Typography>
+                               <Typography variant="body1" className="DetailsValueAdminAppForm">
+                                 {selectedApplication.formData.marriageMonth || "N/A"}
+                               </Typography>
+                             </Grid>
+                             <Grid item xs={4} style={{ borderRight: '1px solid #ccc', padding: '5px' }}>
+                               <Typography variant="caption" className="DetailsLabelAdminAppForm">(Day)</Typography>
+                               <Typography variant="body1" className="DetailsValueAdminAppForm">
+                                 {selectedApplication.formData.marriageDay || "N/A"}
+                               </Typography>
+                             </Grid>
+                             <Grid item xs={4} style={{ padding: '5px' }}>
+                               <Typography variant="caption" className="DetailsLabelAdminAppForm">(Year)</Typography>
+                               <Typography variant="body1" className="DetailsValueAdminAppForm">
+                                 {selectedApplication.formData.marriageYear || "N/A"}
+                               </Typography>
+                             </Grid>
+                           </Grid>
+                         </Grid>
+                         <Grid item xs={6} style={{ padding: '5px' }}>
+                           <Typography variant="body2" className="DetailsLabelAdminAppForm">20b. PLACE</Typography>
+                           <Grid container>
+                             <Grid item xs={4} style={{ borderRight: '1px solid #ccc', padding: '5px' }}>
+                               <Typography variant="caption" className="DetailsLabelAdminAppForm">(City/Municipality)</Typography>
+                               <Typography variant="body1" className="DetailsValueAdminAppForm">
+                                 {selectedApplication.formData.marriageCity || "N/A"}
+                               </Typography>
+                             </Grid>
+                             <Grid item xs={4} style={{ borderRight: '1px solid #ccc', padding: '5px' }}>
+                               <Typography variant="caption" className="DetailsLabelAdminAppForm">(Province)</Typography>
+                               <Typography variant="body1" className="DetailsValueAdminAppForm">
+                                 {selectedApplication.formData.marriageProvince || "N/A"}
+                               </Typography>
+                             </Grid>
+                             <Grid item xs={4} style={{ padding: '5px' }}>
+                               <Typography variant="caption" className="DetailsLabelAdminAppForm">(Country)</Typography>
+                               <Typography variant="body1" className="DetailsValueAdminAppForm">
+                                 {selectedApplication.formData.marriageCountry || "N/A"}
+                               </Typography>
+                             </Grid>
+                           </Grid>
+                         </Grid>
+                       </Grid>
+                  </>
+                ) : (
+                  // Document Preview View
+                  <Box className="DocumentPreviewContainerAdminAppForm">
+                    <Box className="DocumentPreviewHeaderAdminAppForm">
+                      <Typography variant="h5" className="SectionTitleAdminAppForm">
+                        Uploaded Documents
+                      </Typography>
+                      <Typography variant="body1" className="SubtitleAdminAppForm">
+                        Applicant: {selectedApplication.formData.firstName} {selectedApplication.formData.lastName}
+                      </Typography>
+                      <Typography variant="body2" className="SubtitleAdminAppForm">
+                        Application ID: {selectedApplication.id}
+                      </Typography>
+                    </Box>
+                    
+                    <Divider style={{ margin: '10px 0 20px' }} />
+                    
+                    <FileUploadPreview 
+                      formData={selectedApplication.formData} 
+                      applicationType={selectedApplication.applicationType || "Regular application"}
+                    />
+                  </Box>
+                )}
+
+                {/* Status section with update button */}
                 <Box className="StatusSectionAdminAppForm">
                   <Typography variant="subtitle1" className={`StatusDisplayAdminAppForm status-${selectedApplication.status.toLowerCase().replace(/\s+/g, '-')}AdminAppForm`}>
                     Status: {selectedApplication.status}
                   </Typography>
+                  
                   {selectedApplication.statusMessage && (
                     <Typography variant="body2" className="StatusMessageAdminAppForm">
                       {selectedApplication.statusMessage}
                     </Typography>
                   )}
+                  
                   {selectedApplication.lastUpdated && (
                     <Typography variant="body2" className="LastUpdatedAdminAppForm">
                       Last Updated: {selectedApplication.lastUpdated}
                     </Typography>
                   )}
-                  <Button 
-                    variant="contained" 
-                    color="primary" 
-                    onClick={handleOpenStatusDialog}
-                    className="UpdateStatusButtonAdminAppForm"
-                  >
-                    Update Status
-                  </Button>
+                  
+                  <Box className="ActionButtonsContainerAdminAppForm">
+                    <Button 
+                      variant="contained" 
+                      color="primary" 
+                      onClick={handleOpenStatusDialog}
+                      className="UpdateStatusButtonAdminAppForm"
+                    >
+                      Update Status
+                    </Button>
+                  </Box>
                 </Box>
-              </Box>
-              
-              <Divider className="DetailsDividerAdminAppForm" />
-              
-           
-              <Box className="DetailsSectionAdminAppForm">
-                <Typography variant="h6" className="SectionTitleAdminAppForm">
-                  I. CHILD IDENTIFYING INFORMATION
-                </Typography>
-                
-                <Grid container spacing={2} className="DetailsGridAdminAppForm">
-                  <Grid item xs={12} md={6}>
-                    <Typography variant="subtitle1" className="DetailsLabelAdminAppForm">
-                      Full Name:
-                    </Typography>
-                    <Typography variant="body1" className="DetailsValueAdminAppForm">
-                      {`${selectedApplication.formData.firstName || "N/A"} ${selectedApplication.formData.middleName || ""} ${selectedApplication.formData.lastName || ""} ${selectedApplication.formData.extension || ""}`}
-                    </Typography>
-                  </Grid>
-                  
-                  <Grid item xs={12} md={6}>
-                    <Typography variant="subtitle1" className="DetailsLabelAdminAppForm">
-                      Birth Date:
-                    </Typography>
-                    <Typography variant="body1" className="DetailsValueAdminAppForm">
-                      {formatDate(
-                        selectedApplication.formData.birthMonth, 
-                        selectedApplication.formData.birthDay, 
-                        selectedApplication.formData.birthYear
-                      )}
-                    </Typography>
-                  </Grid>
-                  
-                  <Grid item xs={12} md={6}>
-                    <Typography variant="subtitle1" className="DetailsLabelAdminAppForm">
-                      Sex:
-                    </Typography>
-                    <Typography variant="body1" className="DetailsValueAdminAppForm">
-                      {selectedApplication.formData.sex || "N/A"}
-                    </Typography>
-                  </Grid>
-                  
-                  <Grid item xs={12} md={6}>
-                    <Typography variant="subtitle1" className="DetailsLabelAdminAppForm">
-                      Place of Birth:
-                    </Typography>
-                    <Typography variant="body1" className="DetailsValueAdminAppForm">
-                      {`${selectedApplication.formData.hospital || "N/A"}, ${selectedApplication.formData.city || ""}, ${selectedApplication.formData.province || ""}`}
-                    </Typography>
-                  </Grid>
-                  
-                  <Grid item xs={12} md={6}>
-                    <Typography variant="subtitle1" className="DetailsLabelAdminAppForm">
-                      Type of Birth:
-                    </Typography>
-                    <Typography variant="body1" className="DetailsValueAdminAppForm">
-                      {selectedApplication.formData.typeOfBirth || "N/A"}
-                    </Typography>
-                  </Grid>
-                  
-                  <Grid item xs={12} md={6}>
-                    <Typography variant="subtitle1" className="DetailsLabelAdminAppForm">
-                      Birth Order:
-                    </Typography>
-                    <Typography variant="body1" className="DetailsValueAdminAppForm">
-                      {selectedApplication.formData.birthOrder || "N/A"}
-                    </Typography>
-                  </Grid>
-                  
-                  <Grid item xs={12} md={6}>
-                    <Typography variant="subtitle1" className="DetailsLabelAdminAppForm">
-                      Multiple Birth Order:
-                    </Typography>
-                    <Typography variant="body1" className="DetailsValueAdminAppForm">
-                      {selectedApplication.formData.multipleBirthOrder || "N/A"}
-                    </Typography>
-                  </Grid>
-                  
-                  <Grid item xs={12} md={6}>
-                    <Typography variant="subtitle1" className="DetailsLabelAdminAppForm">
-                      Weight at Birth:
-                    </Typography>
-                    <Typography variant="body1" className="DetailsValueAdminAppForm">
-                      {selectedApplication.formData.birthWeight ? `${selectedApplication.formData.birthWeight} grams` : "N/A"}
-                    </Typography>
-                  </Grid>
-                </Grid>
-              </Box>
-              
-              <Divider className="DetailsDividerAdminAppForm" />
-              
-              <Box className="DetailsSectionAdminAppForm">
-                <Typography variant="h6" className="SectionTitleAdminAppForm">
-                  II. MOTHER IDENTIFYING INFORMATION
-                </Typography>
-                
-                <Grid container spacing={2} className="DetailsGridAdminAppForm">
-                  <Grid item xs={12} md={6}>
-                    <Typography variant="subtitle1" className="DetailsLabelAdminAppForm">
-                      Full Maiden Name:
-                    </Typography>
-                    <Typography variant="body1" className="DetailsValueAdminAppForm">
-                      {`${selectedApplication.formData.motherFirstName || "N/A"} ${selectedApplication.formData.motherMiddleName || ""} ${selectedApplication.formData.motherLastName || ""} ${selectedApplication.formData.motherExtension || ""}`}
-                    </Typography>
-                  </Grid>
-                  
-                  <Grid item xs={12} md={6}>
-                    <Typography variant="subtitle1" className="DetailsLabelAdminAppForm">
-                      Citizenship:
-                    </Typography>
-                    <Typography variant="body1" className="DetailsValueAdminAppForm">
-                      {selectedApplication.formData.motherCitizenship || "N/A"}
-                    </Typography>
-                  </Grid>
-                  
-                  <Grid item xs={12} md={4}>
-                    <Typography variant="subtitle1" className="DetailsLabelAdminAppForm">
-                      Religion:
-                    </Typography>
-                    <Typography variant="body1" className="DetailsValueAdminAppForm">
-                      {selectedApplication.formData.motherReligion || "N/A"}
-                    </Typography>
-                  </Grid>
-                  
-                  <Grid item xs={12} md={4}>
-                    <Typography variant="subtitle1" className="DetailsLabelAdminAppForm">
-                      Occupation:
-                    </Typography>
-                    <Typography variant="body1" className="DetailsValueAdminAppForm">
-                      {selectedApplication.formData.motherOccupation || "N/A"}
-                    </Typography>
-                  </Grid>
-                  
-                  <Grid item xs={12} md={4}>
-                    <Typography variant="subtitle1" className="DetailsLabelAdminAppForm">
-                      Age at Time of Birth:
-                    </Typography>
-                    <Typography variant="body1" className="DetailsValueAdminAppForm">
-                      {selectedApplication.formData.motherAge || "N/A"}
-                    </Typography>
-                  </Grid>
-                  
-                  <Grid item xs={12}>
-                    <Typography variant="subtitle1" className="DetailsLabelAdminAppForm">
-                      Residence:
-                    </Typography>
-                    <Typography variant="body1" className="DetailsValueAdminAppForm">
-                      {`${selectedApplication.formData.motherStreet || "N/A"}, ${selectedApplication.formData.motherBarangay || ""}, ${selectedApplication.formData.motherCity || ""}, ${selectedApplication.formData.motherProvince || ""}, ${selectedApplication.formData.motherCountry || ""}`}
-                    </Typography>
-                  </Grid>
-                </Grid>
-              </Box>
-              
-              <Divider className="DetailsDividerAdminAppForm" />
-              
-              <Box className="DetailsSectionAdminAppForm">
-                <Typography variant="h6" className="SectionTitleAdminAppForm">
-                  III. FATHER IDENTIFYING INFORMATION
-                </Typography>
-                
-                <Grid container spacing={2} className="DetailsGridAdminAppForm">
-                  <Grid item xs={12} md={6}>
-                    <Typography variant="subtitle1" className="DetailsLabelAdminAppForm">
-                      Full Name:
-                    </Typography>
-                    <Typography variant="body1" className="DetailsValueAdminAppForm">
-                      {`${selectedApplication.formData.fatherFirstName || "N/A"} ${selectedApplication.formData.fatherMiddleName || ""} ${selectedApplication.formData.fatherLastName || ""} ${selectedApplication.formData.fatherExtension || ""}`}
-                    </Typography>
-                  </Grid>
-                  
-                  <Grid item xs={12} md={6}>
-                    <Typography variant="subtitle1" className="DetailsLabelAdminAppForm">
-                      Citizenship:
-                    </Typography>
-                    <Typography variant="body1" className="DetailsValueAdminAppForm">
-                      {selectedApplication.formData.fatherCitizenship || "N/A"}
-                    </Typography>
-                  </Grid>
-                  
-                  <Grid item xs={12} md={4}>
-                    <Typography variant="subtitle1" className="DetailsLabelAdminAppForm">
-                      Religion:
-                    </Typography>
-                    <Typography variant="body1" className="DetailsValueAdminAppForm">
-                      {selectedApplication.formData.fatherReligion || "N/A"}
-                    </Typography>
-                  </Grid>
-                  
-                  <Grid item xs={12} md={4}>
-                    <Typography variant="subtitle1" className="DetailsLabelAdminAppForm">
-                      Occupation:
-                    </Typography>
-                    <Typography variant="body1" className="DetailsValueAdminAppForm">
-                      {selectedApplication.formData.fatherOccupation || "N/A"}
-                    </Typography>
-                  </Grid>
-                  
-                  <Grid item xs={12} md={4}>
-                    <Typography variant="subtitle1" className="DetailsLabelAdminAppForm">
-                      Age at Time of Birth:
-                    </Typography>
-                    <Typography variant="body1" className="DetailsValueAdminAppForm">
-                      {selectedApplication.formData.fatherAge || "N/A"}
-                    </Typography>
-                  </Grid>
-                  
-                  <Grid item xs={12}>
-                    <Typography variant="subtitle1" className="DetailsLabelAdminAppForm">
-                      Residence:
-                    </Typography>
-                    <Typography variant="body1" className="DetailsValueAdminAppForm">
-                      {`${selectedApplication.formData.fatherStreet || "N/A"}, ${selectedApplication.formData.fatherBarangay || ""}, ${selectedApplication.formData.fatherCity || ""}, ${selectedApplication.formData.fatherProvince || ""}, ${selectedApplication.formData.fatherCountry || ""}`}
-                    </Typography>
-                  </Grid>
-                </Grid>
-              </Box>
-              
-              <Divider className="DetailsDividerAdminAppForm" />
-              
-    
-              <Box className="DetailsSectionAdminAppForm">
-                <Typography variant="h6" className="SectionTitleAdminAppForm">
-                  IV. MARRIAGE OF PARENTS
-                </Typography>
-                
-                <Grid container spacing={2} className="DetailsGridAdminAppForm">
-                  <Grid item xs={12} md={6}>
-                    <Typography variant="subtitle1" className="DetailsLabelAdminAppForm">
-                      Marriage Date:
-                    </Typography>
-                    <Typography variant="body1" className="DetailsValueAdminAppForm">
-                      {formatDate(
-                        selectedApplication.formData.marriageMonth, 
-                        selectedApplication.formData.marriageDay, 
-                        selectedApplication.formData.marriageYear
-                      )}
-                    </Typography>
-                  </Grid>
-                  
-                  <Grid item xs={12} md={6}>
-                    <Typography variant="subtitle1" className="DetailsLabelAdminAppForm">
-                      Marriage Place:
-                    </Typography>
-                    <Typography variant="body1" className="DetailsValueAdminAppForm">
-                      {`${selectedApplication.formData.marriageCity || "N/A"}, ${selectedApplication.formData.marriageProvince || ""}, ${selectedApplication.formData.marriageCountry || ""}`}
-                    </Typography>
-                  </Grid>
-                </Grid>
-              </Box>
-              
-              <Divider className="DetailsDividerAdminAppForm" />
-              
-
-            
-              
-              <Box className="AdminActionButtonsAdminAppForm">
-        
-             
-              </Box>
-            </Paper>
+              </Paper>
+            </Box>
           ) : (
             <Paper elevation={3} className="NoApplicationSelectedPaperAdminAppForm">
               <Typography variant="h6">

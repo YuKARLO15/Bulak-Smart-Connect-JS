@@ -161,6 +161,7 @@ const RecentApplicationsComponent = () => {
                                         <Typography className="ApplicationStatus" sx={{ color: StatusColor(app.status) }}>
                                             {app.status}
                                         </Typography>
+                                        <Typography className="ApplicationType">{app.applicationType}</Typography>
                                         <Typography className="ApplicationDescription">{app.message}</Typography>
                                     </div>
                                     <Box className="ApplicationCardActions">
