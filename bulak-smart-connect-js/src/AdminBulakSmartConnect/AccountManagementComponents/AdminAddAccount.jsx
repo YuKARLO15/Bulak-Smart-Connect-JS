@@ -47,24 +47,23 @@ const AdminAddUser = () => {
     e.preventDefault();
     let validationErrors = {};
 
-    // Check if all required fields are filled
+
     Object.entries(formData).forEach(([key, value]) => {
       if (!value) {
         validationErrors[key] = 'This field is required';
       }
     });
 
-    // Password match check
+
     if (formData.password !== formData.confirmPassword) {
       validationErrors.confirmPassword = 'Passwords do not match';
     }
 
-    // Contact number format check
+
     if (formData.contact && !/^\d{10}$/.test(formData.contact)) {
-      validationErrors.contact = 'Contact number must be exactly 10 digits';
+      validationErrors.contact = 'Contact number must be exactly 12 digits';
     }
 
-    // Email format check: must contain "@"
     if (formData.email && !formData.email.includes('@')) {
       validationErrors.email = 'Email must contain "@"';
     }
@@ -73,7 +72,7 @@ const AdminAddUser = () => {
 
     if (Object.keys(validationErrors).length === 0) {
       alert('User added successfully!');
-      // Submit logic here
+     
     }
   };
 
