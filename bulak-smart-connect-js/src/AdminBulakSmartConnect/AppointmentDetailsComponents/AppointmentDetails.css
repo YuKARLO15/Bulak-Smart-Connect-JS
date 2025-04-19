@@ -22,7 +22,7 @@
   .appointment-wrapper {
     width: 100%;
     max-width: 800px;
-    background-color: #ffffff;
+    background-color:#97b0b8;
     padding: 30px;
     border-radius: 16px;
     box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
@@ -30,14 +30,12 @@
 
   .content {
     width: 100%;
-    max-width: 800px;
+    max-width: 600px;
     background-color: #fff;
     padding: 40px;
     border-radius: 16px;
     box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
   }
-
-  
   
   .top-bar {
     display: flex;
@@ -67,4 +65,5 @@
   .scan-link:hover {
     background-color: #d1e7ed;
   }
+  
   

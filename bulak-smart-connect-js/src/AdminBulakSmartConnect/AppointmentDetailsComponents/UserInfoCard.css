@@ -11,7 +11,7 @@
     font-size: 24px;
     font-weight: 700;
     color: #1c4d5a;
-    margin-bottom: 20px;
+    margin-bottom: 60px;
   }
   
   .app-number {
@@ -20,21 +20,27 @@
   }
   
   .details-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-    margin-bottom: 30px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(200px, 1fr)); 
+      margin-bottom: 50px;
+  }
+  @media (max-width: 768px) {
+    .details-grid {
+      grid-template-columns: 1fr; 
+    }
   }
   
   .details-grid div {
     font-size: 16px;
     color: #34495e;
+    margin-left: 3px;
   }
   
   .details-grid strong {
     font-weight: 600;
     display: block;
-    margin-bottom: 4px;
+    margin-bottom: 7px;
+    margin-top: 8px;
   }
   
   .details-grid small {
@@ -65,11 +71,16 @@
   }
   
   .btn-group .next {
-    background-color: #2a5764;
+    background-color: #326471;
     color: #ffffff;
   }
   
-  .btn-group button:hover {
-    filter: brightness(1.05);
+  .btn-group .back:hover {
+    background-color: #779294; 
+    filter: brightness(1.05); 
   }
   
+  .btn-group .next:hover {
+    background-color: #1e404b; 
+    filter: brightness(1.05); 
+  }

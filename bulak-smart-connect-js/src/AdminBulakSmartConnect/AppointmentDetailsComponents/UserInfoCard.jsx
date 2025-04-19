@@ -11,6 +11,7 @@ const UserInfoCard = ({ data }) => {
         <div><strong>Middle Initial:</strong> {data.middleInitial}</div>
         <div><strong>Phone Number:</strong> {data.phone}</div>
         <div><strong>Email Address:</strong> {data.email}</div>
+        <div><strong></strong> {data.none}</div>        
         <div><strong>Application Type:</strong> {data.applicationType}<br/><small>{data.subType}</small></div>
         <div><strong>Submission Date:</strong> {data.submissionDate}</div>
       </div>
