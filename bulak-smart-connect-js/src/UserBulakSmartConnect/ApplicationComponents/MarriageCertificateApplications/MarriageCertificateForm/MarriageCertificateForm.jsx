@@ -5,6 +5,7 @@ import "./MarriageCertificateForm.css";
 import HusbandForm from "./HusbandForm";
 import WifeForm from "./WifeForm";
 import MarriageDetailsForm from "./MarriageDetailsForm";
+import MarriageAffidavitForm from "./MarriageAffidavitForm";
 
 const MarriageCertificateForm = () => {
   const [step, setStep] = useState(1);
@@ -135,7 +136,7 @@ const MarriageCertificateForm = () => {
 
         {step === 4 && (
           <>
-            <WitnessesForm formData={formData} handleChange={handleChange} errors={errors} />
+            <MarriageAffidavitForm formData={formData} handleChange={handleChange} errors={errors} />
             <Button variant="contained" onClick={handlePrevious} className="MarriageCertificateFormButton">
               Previous
             </Button>
