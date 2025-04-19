@@ -4,7 +4,7 @@ import "./LogIn.css";
 import LogInContent from "./LogInContent";
 import LogInCard from "./LogInCard";
 import NavBar from "../NavigationComponents/NavBar";
-import { useAuth } from "../AuthContext"; // Import useAuth
+import { useAuth } from "../context/AuthContext"; // Import useAuth
 
 function LogIn() {
   const { isAuthenticated, login } = useAuth(); // Use the login function from AuthContext

@@ -20,7 +20,7 @@ import NavBar from "../NavigationComponents/NavBar";
 import DeviceMockUp from "./LandingPageAssets/DeviceMockUp.png";
 import BulakLGULogo from "./LandingPageAssets/BulakLGULogo.png";
 import PhTimeComponent from "./PhTimeComponent";
-import { useAuth } from "../AuthContext"; 
+import { useAuth } from "../context/AuthContext"; 
 
 const LandingPage = () => {
   const { isAuthenticated } = useAuth();

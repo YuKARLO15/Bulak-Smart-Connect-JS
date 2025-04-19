@@ -28,7 +28,7 @@ import DelayedOutOfTownRegistration from './UserBulakSmartConnect/ApplicationCom
 import DelayedOneParentForeignerRegistration from './UserBulakSmartConnect/ApplicationComponents/BirthCertificateApplications/DelayedOneParentForeigner';
 import BirthCertificateForm from './UserBulakSmartConnect/ApplicationComponents/BirthCertificateApplications/BirthCertificateForm';
 
-import PrivateRoute from './PrivateRoute';
+import PrivateRoute from './components/PrivateRoute';
 import BirthApplicationSummary from './UserBulakSmartConnect/ApplicationComponents/BirthCertificateApplications/BirthApplicationSummary';
 import MarriageCertificateForm from './UserBulakSmartConnect/ApplicationComponents/MarriageCertificateApplications/MarriageCertificateForm/MarriageCertificateForm';
 

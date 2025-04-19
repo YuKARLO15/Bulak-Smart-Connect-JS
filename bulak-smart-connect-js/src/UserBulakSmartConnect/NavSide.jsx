@@ -3,7 +3,7 @@ import "./NavSide.css";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 import { Link } from "react-router-dom"; // Import Link from react-router-dom
-import { useAuth } from "../AuthContext"; // Import useAuth
+import { useAuth } from "../context/AuthContext"; // Import useAuth
 
 const NavBar = ({ isSidebarOpen, setIsSidebarOpen }) => {
   const { logout } = useAuth();
