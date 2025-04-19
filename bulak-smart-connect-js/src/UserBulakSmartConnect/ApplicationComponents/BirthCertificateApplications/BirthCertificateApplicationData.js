@@ -4,8 +4,9 @@ const BirthCertificateApplicationData = (formData) => {
     const randomString = Math.random().toString(8);
     const applicationId = `BA-${timestamp}-${randomString}`;
     localStorage.setItem("currentApplicationId", applicationId);
-    localStorage.setItem("birthCertificateApplication", JSON.stringify(formData));
-    
+  localStorage.setItem("birthCertificateApplication", JSON.stringify(formData));
+  const selectedOption = localStorage.getItem("selectedBirthCertificateOption");
+  
     const existingApplications = JSON.parse(localStorage.getItem("applications")) || [];
     
  
@@ -13,6 +14,7 @@ const BirthCertificateApplicationData = (formData) => {
       id: applicationId,
       type: "Birth Certificate",
       date: new Date().toLocaleDateString(),
+      applicationType: selectedOption,
       status: "Pending",
       message: `Birth certificate application for ${formData.firstName || ''} ${formData.lastName || ''}`,
       formData: formData
