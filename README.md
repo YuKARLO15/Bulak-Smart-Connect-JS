@@ -218,4 +218,30 @@ npm run start: to start NestJS normally </br>
 firebase emulators:start: to start Firebase emulator </br>
 To further see other options, just enter "npm run" to see options for NestJS or "firebase" to see options for Firebase. </br>
 
+# Authors
+
+<div align="center">
+    <table>
+        <tbody>
+            <tr>
+                <td><img src="https://github.com/YuKARLO15.png" alt="YuKARLO15 user profile" width="100px" height="auto" /></td>
+                <td><img src="https://github.com/dennissegailfrancisco.png" alt="dennissegailfrancisco user profile" width="100px" height="auto" /></td>
+                <td><img src="https://github.com/jhazminereigne.png" alt="jhazminereigne user profile" width="100px" height="auto" /></td>
+                <td><img src="https://github.com/Astriaaa.png" alt="Astriaaa user profile" width="100px" height="auto" /></td>
+            </tr>
+            <tr>
+                <td><p><b><a href="https://github.com/YuKARLO15">YuKARLO15</a></b></p></td>
+                <td><p><b><a href="https://github.com/dennissegailfrancisco">dennissegailfrancisco</a></b></p></td>
+                <td><p><b><a href="https://github.com/jhazminereigne">jhazminereigne</a></b></p></td>
+                <td><p><b><a href="https://github.com/Astriaaa">Astriaaa</a></b></p></td>
+            </tr>
+            <tr>
+                <td><p>BS Computer Science</p></td>
+                <td><p>BS Information Technology</p></td>
+                <td><p>BS Computer Science</p></td>
+                <td><p>BS Information Technology</p></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
 
