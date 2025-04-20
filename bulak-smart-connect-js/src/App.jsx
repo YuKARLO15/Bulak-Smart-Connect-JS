@@ -41,9 +41,12 @@ import WalkInQueueDetail from './UserBulakSmartConnect/WalkInComponents/WalkInDe
 
 // Account Management //
 import AdminAccountManagement from './AdminBulakSmartConnect/AccountManagementComponents/AccountManagement';
+import SearchAddUser from './AdminBulakSmartConnect/AccountManagementComponents/SearchAdd';
+import AdminAddUser from './AdminBulakSmartConnect/AccountManagementComponents/AdminAddAccount';
 
 // Application  //
 import AdminApplicationDashboard from './AdminBulakSmartConnect/AdminApplicationComponents/ApplicationAdminDashboard';
+import AdminApplicationForm from './AdminBulakSmartConnect/AdminApplicationComponents/AdminApplicationDetails';
 import AppointmentDetailsCard from './AdminBulakSmartConnect/AppointmentDetailsComponents/AppointmentDetails';
 
 function App() {
@@ -55,6 +58,8 @@ function App() {
       <Route path="/SignUpForm" element={<SignUpForm />} />
       <Route path="/AdminAccountManagement" element={<AdminAccountManagement />} />
       <Route path="AppointmentDetailsCard" element={<AppointmentDetailsCard/>} />
+      <Route path="/SearchAddUser" element={<SearchAddUser />} />
+      <Route path="/add-user" element={<AdminAddUser />} /> 
       <Route element={<PrivateRoute />}>
         {' '}
         {/* Protected Route Start */}
@@ -83,6 +88,7 @@ function App() {
         <Route path="/WalkInForm" element={<WalkInForm />} />
         <Route path="/WalkInDetails" element={<WalkInQueueDetail />} />
         <Route path="/applicationAdmin" element={<AdminApplicationDashboard />} />
+        <Route path="/ApplicationDetails/:id" element={<AdminApplicationForm/>} />
       </Route>{' '}
       {/* Protected Route End */}
     </Routes>

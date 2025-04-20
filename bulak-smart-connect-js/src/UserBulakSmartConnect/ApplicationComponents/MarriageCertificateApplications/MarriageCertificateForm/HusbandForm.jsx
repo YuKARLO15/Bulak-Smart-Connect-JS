@@ -51,44 +51,75 @@ const HusbandForm = ({ formData, handleChange, errors }) => {
         </div>
       </div>
 
-      {/* Birth Date */}
-      <label>2a. BIRTH DATE (Kaarawan) *</label>
-      <div className="input-group">
-        <div className="input-container">
-          <input
-            type="text"
-            name="husbandBirthMonth"
-            placeholder="Month"
-            value={formData.husbandBirthMonth || ""}
-            onChange={handleChange}
-          />
-          {errors.husbandBirthMonth && <span className="error-message">{errors.husbandBirthMonth}</span>}
-        </div>
-        <div className="input-container">
-          <input
-            type="text"
-            name="husbandBirthDay"
-            placeholder="Day"
-            value={formData.husbandBirthDay || ""}
-            onChange={handleChange}
-          />
-          {errors.husbandBirthDay && <span className="error-message">{errors.husbandBirthDay}</span>}
-        </div>
-        <div className="input-container">
-          <input
-            type="text"
-            name="husbandBirthYear"
-            placeholder="Year"
-            value={formData.husbandBirthYear || ""}
-            onChange={handleChange}
-          />
-          {errors.husbandBirthYear && <span className="error-message">{errors.husbandBirthYear}</span>}
-        </div>
-      </div>
+     {/* Birth Date */}
+<label>2a. BIRTH DATE (Kaarawan) *</label>
+<div className="input-group">
+  <div className="input-container">
+    <select
+      name="husbandBirthMonth"
+      value={formData.husbandBirthMonth || ""}
+      onChange={handleChange}
+    >
+      <option value="" disabled>
+        Month
+      </option>
+      <option value="January">January</option>
+      <option value="February">February</option>
+      <option value="March">March</option>
+      <option value="April">April</option>
+      <option value="May">May</option>
+      <option value="June">June</option>
+      <option value="July">July</option>
+      <option value="August">August</option>
+      <option value="September">September</option>
+      <option value="October">October</option>
+      <option value="November">November</option>
+      <option value="December">December</option>
+    </select>
+    {errors.husbandBirthMonth && <span className="error-message">{errors.husbandBirthMonth}</span>}
+  </div>
+  <div className="input-container">
+    <select
+      name="husbandBirthDay"
+      value={formData.husbandBirthDay || ""}
+      onChange={handleChange}
+    >
+      <option value="" disabled>
+        Day
+      </option>
+      {Array.from({ length: 31 }, (_, i) => (
+        <option key={i + 1} value={i + 1}>
+          {i + 1}
+        </option>
+      ))}
+    </select>
+    {errors.husbandBirthDay && <span className="error-message">{errors.husbandBirthDay}</span>}
+  </div>
+  <div className="input-container">
+    <select
+      name="husbandBirthYear"
+      value={formData.husbandBirthYear || ""}
+      onChange={handleChange}
+    >
+      <option value="" disabled>
+        Year
+      </option>
+      {Array.from({ length: 100 }, (_, i) => {
+        const year = new Date().getFullYear() - i;
+        return (
+          <option key={year} value={year}>
+            {year}
+          </option>
+        );
+      })}
+    </select>
+    {errors.husbandBirthYear && <span className="error-message">{errors.husbandBirthYear}</span>}
+  </div>
+</div>
 
       {/* Age */}
       <label>2b. AGE *</label>
-      <div className="input-group">
+      <div className="input-group ">
         <div className="input-container">
           <input
             type="text"
@@ -97,6 +128,7 @@ const HusbandForm = ({ formData, handleChange, errors }) => {
             value={formData.husbandAge || ""}
             onChange={handleChange}
           />
+          {errors.husbandAge && <span className="error-message">{errors.husbandAge}</span>}
         </div>
       </div>
 
@@ -137,8 +169,8 @@ const HusbandForm = ({ formData, handleChange, errors }) => {
 
       {/* Sex */}
       <label>4a. SEX (Kasarian) *</label>
-      <div className="input-group radio-group">
-        <div className="input-container">
+      <div className="radio-group">
+        <div className="input-radio-container">
           <input
             type="radio"
             name="husbandSex"

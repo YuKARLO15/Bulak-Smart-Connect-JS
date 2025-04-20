@@ -42,7 +42,7 @@ const AdminAccountManagement = () => {
   return (
     <div className="admin-container">
       <div className="header">User Management</div>
-      <SearchAddUser />
+      <SearchAddUser/>
       <UserTable users={users} handleUpload={handleUpload} />
     </div>
   );
