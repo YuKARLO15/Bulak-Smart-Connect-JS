@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import "./NavBar.css";
 import BulakLGULogo from "../LandingPageComponents/LandingPageAssets/BulakLGULogo.png";
-import { useAuth } from "../AuthContext";
+import { useAuth } from "../context/AuthContext";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import DirectionsWalkOutlinedIcon from "@mui/icons-material/DirectionsWalkOutlined";
 import DescriptionIcon from "@mui/icons-material/Description";

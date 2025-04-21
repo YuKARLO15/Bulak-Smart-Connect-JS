@@ -72,7 +72,7 @@ const SignUpForm = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log("Form submitted"); //Debugging Statement
+    console.log("Form submitted");
     console.log("Form data at submission:", formData); //Debugging Statement
     const formErrors = validate(formData);
     console.log("Validation errors:", formErrors); //Debugging Statement

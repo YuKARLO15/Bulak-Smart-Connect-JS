@@ -13,7 +13,7 @@ import Typography from "@mui/material/Typography";
 import ForgotPassword from "./ForgotPassword";
 import "./LogInCard.css";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
-import { useAuth } from "../AuthContext"; //Auth Context
+import { useAuth } from "../context/AuthContext"; //Auth Context
 import { authService } from "../services/api"; //API Service to NestJS
 
 export default function LogInCard({ onLogin }) {
