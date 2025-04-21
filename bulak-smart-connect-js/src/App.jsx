@@ -31,7 +31,7 @@ import BirthCertificateForm from './UserBulakSmartConnect/ApplicationComponents/
 import PrivateRoute from './components/PrivateRoute';
 import BirthApplicationSummary from './UserBulakSmartConnect/ApplicationComponents/BirthCertificateApplications/BirthApplicationSummary';
 import MarriageCertificateForm from './UserBulakSmartConnect/ApplicationComponents/MarriageCertificateApplications/MarriageCertificateForm/MarriageCertificateForm';
-
+import MarriageSummaryForm from './UserBulakSmartConnect/ApplicationComponents/MarriageCertificateApplications/MarriageCertificateForm/MarriageSummaryForm';
 //WalkIn//
 import WalkInQueueContainer from './UserBulakSmartConnect/WalkInComponents/WalkInDashBoard';
 import WalkInForm from './UserBulakSmartConnect/WalkInComponents/WalkInForm';
@@ -80,6 +80,7 @@ function App() {
           path="/DelayedOneParentForeignerRegistration"
           element={<DelayedOneParentForeignerRegistration />}
         />
+        <Route path="/MarriageSummaryForm" element={<MarriageSummaryForm />} />
         <Route path="/QrCodeAppointment/:id" element={<QRCodeAppointment />} />
         <Route path="/BirthCertificateForm" element={<BirthCertificateForm />} />
         <Route path="/BirthApplicationSummary" element={<BirthApplicationSummary />} />

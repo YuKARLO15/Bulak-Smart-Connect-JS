@@ -83,16 +83,7 @@ const MarriageCertificateForm = () => {
       return;
     }
     
-    const applicationId = MarriageCertificateApplicationData(formData);
-    localStorage.setItem("currentApplicationId", applicationId);
-    const selectedOption = localStorage.getItem("selectedMarriageCertificateOption");
-    const routeMap = {
-      "Regular application": "/MarriageRegularApplication",
-      "Request copy": "/MarriageRequestCopy",
-      "Late registration": "/MarriageLateRegistration",
-      "Correction": "/MarriageCorrectionApplication",
-    };
-    navigate(routeMap[selectedOption] || "/");
+    navigate( "/MarriageSummaryForm");
   };
 
   return (
