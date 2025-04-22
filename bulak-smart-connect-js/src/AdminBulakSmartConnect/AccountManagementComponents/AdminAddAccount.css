@@ -124,13 +124,13 @@ h1 {
   
   
 .country-code {
-    flex: 0 0 50px; 
-    padding: 5px;
+    flex: 0 0 70px; 
+    padding: 2px;
     background-color: #f0f0f0;
     font-weight: bold;
     border: 1px solid #ccc;
     text-align: center;
-    font-size: 14px;
+    font-size: 12px;
   }
   
 

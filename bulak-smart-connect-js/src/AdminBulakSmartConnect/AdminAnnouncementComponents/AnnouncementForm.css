@@ -18,8 +18,8 @@
     padding: 24px;
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    width: 100%;        /* Full width of parent */
-    max-width: 800px;   /* Or whatever size you want */
+    width: 100%;    
+    max-width: 800px;  
   }
   
   form input[type="text"],
