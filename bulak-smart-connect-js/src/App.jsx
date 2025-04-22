@@ -45,7 +45,6 @@ import SearchAddUser from './AdminBulakSmartConnect/AccountManagementComponents/
 import AdminAddUser from './AdminBulakSmartConnect/AccountManagementComponents/AdminAddAccount';
 
 // Admin Announcement //
-// import AdminAnnouncement from './AdminBulakSmartConnect/AnnouncementComponents/AdminAnnouncement';
 import AdminAnnouncement from './AdminBulakSmartConnect/AdminAnnouncementComponents/AdminAnnouncement';
 
 // Application  //
@@ -66,7 +65,6 @@ function App() {
       <Route path="/SearchAddUser" element={<SearchAddUser />} />
       <Route path="/add-user" element={<AdminAddUser />} /> 
       {/* Admin Announcement */}
-      {/* <Route path="/AdminAnnouncement" element={<AdminAnnouncement />} />  */}
       <Route path="/AdminAnnouncement" element={<AdminAnnouncement />} /> 
       <Route element={<PrivateRoute />}>
         {' '}
