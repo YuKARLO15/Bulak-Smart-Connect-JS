@@ -1,0 +1,22 @@
+/* AnnouncementFeed.css */
+
+.announcement-feed {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;        /* Increased gap between posts for better spacing */
+    width: 100%;      /* Full width of the parent container */
+    max-width: 1400px; /* Increased the max-width to make the feed larger */
+    margin: 0 auto;   /* Center it horizontally */
+    padding: 40px;    /* Increased padding around the feed */
+    box-sizing: border-box;
+  }
+  
+  @media (min-width: 900px) {
+    .announcement-feed {
+      flex-direction: row; /* Align posts side by side for larger screens */
+      flex-wrap: wrap;      /* Allow posts to wrap to next line */
+      justify-content: space-between; /* Distribute space evenly */
+      gap: 40px;           /* Increased space between posts */
+    }
+  }
+  
