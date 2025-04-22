@@ -1,6 +1,6 @@
 /* AnnouncementForm.css */
 
-/* form {
+form {
     display: flex;
     flex-direction: column;
     gap: 16px;
@@ -8,9 +8,9 @@
     padding: 24px;
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  } */
+  } 
 
-  form {
+  /* form {
     display: flex;
     flex-direction: column;
     gap: 16px;
@@ -20,7 +20,7 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     width: 100%;    
     max-width: 800px;  
-  }
+  } */
   
   form input[type="text"],
   form input[type="datetime-local"],
