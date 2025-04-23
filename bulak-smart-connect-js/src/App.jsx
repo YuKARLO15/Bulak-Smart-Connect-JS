@@ -27,11 +27,12 @@ import SexDobCorrection from './UserBulakSmartConnect/ApplicationComponents/Birt
 import DelayedOutOfTownRegistration from './UserBulakSmartConnect/ApplicationComponents/BirthCertificateApplications/DelayedOutOfTown';
 import DelayedOneParentForeignerRegistration from './UserBulakSmartConnect/ApplicationComponents/BirthCertificateApplications/DelayedOneParentForeigner';
 import BirthCertificateForm from './UserBulakSmartConnect/ApplicationComponents/BirthCertificateApplications/BirthCertificateForm';
-
+import CopyBirthCertificate from './UserBulakSmartConnect/ApplicationComponents/BirthCertificateApplications/BirthCertificateForm/CopyBirthCertificate';
 import PrivateRoute from './components/PrivateRoute';
 import BirthApplicationSummary from './UserBulakSmartConnect/ApplicationComponents/BirthCertificateApplications/BirthApplicationSummary';
 import MarriageCertificateForm from './UserBulakSmartConnect/ApplicationComponents/MarriageCertificateApplications/MarriageCertificateForm/MarriageCertificateForm';
 import MarriageSummaryForm from './UserBulakSmartConnect/ApplicationComponents/MarriageCertificateApplications/MarriageCertificateForm/MarriageSummaryForm';
+import CTCBirthCertificate from './UserBulakSmartConnect/ApplicationComponents/BirthCertificateApplications/CTCBirthCertificate';
 //WalkIn//
 import WalkInQueueContainer from './UserBulakSmartConnect/WalkInComponents/WalkInDashBoard';
 import WalkInForm from './UserBulakSmartConnect/WalkInComponents/WalkInForm';
@@ -85,7 +86,10 @@ function App() {
         <Route
           path="/DelayedOneParentForeignerRegistration"
           element={<DelayedOneParentForeignerRegistration />}
+          
         />
+        <Route path="/CTCBirthCertificate" element={<CTCBirthCertificate/>} />
+         <Route path="/RequestACopyBirthCertificate" element={<CopyBirthCertificate/>} />
         <Route path="/MarriageSummaryForm" element={<MarriageSummaryForm />} />
         <Route path="/QrCodeAppointment/:id" element={<QRCodeAppointment />} />
         <Route path="/BirthCertificateForm" element={<BirthCertificateForm />} />

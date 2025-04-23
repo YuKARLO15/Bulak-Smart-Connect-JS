@@ -10,7 +10,8 @@ const MarriageAffidavitForm = () => {
             <div className="section-title">20b. WITNESSES (Print Name and Sign):</div>
             <div className="witnesses-row">
               <div className="witness-input-container">
-                <input type="text" className="witness-input" />
+              <input type="text" className="witness-input" />
+              
               </div>
               <div className="witness-input-container">
                 <input type="text" className="witness-input" />
