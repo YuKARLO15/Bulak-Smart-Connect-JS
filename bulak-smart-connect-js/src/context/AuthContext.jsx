@@ -1,20 +1,73 @@
-import React, { createContext, useState, useContext, useEffect } from "react";
+import React, { createContext, useState, useContext, useEffect } from 'react';
+import axios from 'axios';
 
-const AuthContext = createContext();
+const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(() => {
-    // Check if token exists in localStorage on initial load
-    return localStorage.getItem("token") !== null;
-  });
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const login = () => {
-    setIsAuthenticated(true);
+  // Check if user is authenticated on mount
+  useEffect(() => {
+    const checkAuth = async () => {
+      const token = localStorage.getItem('token');
+      
+      if (!token) {
+        setLoading(false);
+        return;
+      }
+      
+      try {
+        // Get user profile with roles
+        const response = await axios.get('http://localhost:3000/auth/profile', {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        
+        setUser(response.data);
+        setIsAuthenticated(true);
+      } catch (err) {
+        console.error('Auth check failed:', err);
+        localStorage.removeItem('token');
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    checkAuth();
+  }, []);
+
+  const login = async (email, password) => {
+    try {
+      const response = await axios.post('http://localhost:3000/auth/login', {
+        email, password
+      });
+      
+      const { access_token, user } = response.data;
+      localStorage.setItem('token', access_token);
+      setUser(user);
+      setIsAuthenticated(true);
+      return true;
+    } catch (err) {
+      setError(err.response?.data?.message || 'Login failed');
+      return false;
+    }
   };
 
   const logout = () => {
-    localStorage.removeItem("token"); // Remove the token
+    localStorage.removeItem('token');
+    setUser(null);
     setIsAuthenticated(false);
+  };
+
+  // Role checking utilities
+  const hasRole = (roleName) => {
+    return user?.roles?.includes(roleName) || false;
+  };
+
+  const hasAnyRole = (roleNames) => {
+    return roleNames.some(role => hasRole(role));
   };
 
   // Auto-logout timer (optional)
@@ -25,6 +78,9 @@ export const AuthProvider = ({ children }) => {
     }, logoutTime);
   };
 
+  // Start logout timer if authenticated
+  // This is optional and can be adjusted based on your needs
+  // For example, you might want to start the timer when the user logs in
   useEffect(() => {
     if (isAuthenticated) {
       startLogoutTimer();
@@ -32,7 +88,19 @@ export const AuthProvider = ({ children }) => {
   }, [isAuthenticated]);
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
+    <AuthContext.Provider value={{ 
+      isAuthenticated, 
+      user, 
+      loading, 
+      error,
+      login, 
+      logout,
+      hasRole,
+      hasAnyRole,
+      isAdmin: hasRole('admin') || hasRole('super_admin'),
+      isStaff: hasRole('staff') || hasRole('admin') || hasRole('super_admin'),
+      isCitizen: hasRole('citizen')
+    }}>
       {children}
     </AuthContext.Provider>
   );

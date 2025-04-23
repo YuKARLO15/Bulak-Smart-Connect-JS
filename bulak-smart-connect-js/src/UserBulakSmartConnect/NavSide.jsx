@@ -6,7 +6,11 @@ import { Link } from "react-router-dom"; // Import Link from react-router-dom
 import { useAuth } from "../context/AuthContext"; // Import useAuth
 
 const NavBar = ({ isSidebarOpen, setIsSidebarOpen }) => {
-  const { logout } = useAuth();
+  const { logout, hasRole } = useAuth();
+
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
   
   return (
     <>
@@ -14,8 +18,13 @@ const NavBar = ({ isSidebarOpen, setIsSidebarOpen }) => {
       <button
         className="SidebarToggleBtn"
         style={{ backgroundColor: isSidebarOpen ? "#8AACB5" : "#184a5b" }}
-        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+        onClick={toggleSidebar}
       >
+        {/* Still determining para san 'to */}
+        <span className="line"></span>
+        <span className="line"></span>
+        <span className="line"></span>
+        {/* Still determining para san 'to */}
         {isSidebarOpen ? <CloseIcon /> : <MenuIcon />}
       </button>
 
@@ -26,14 +35,32 @@ const NavBar = ({ isSidebarOpen, setIsSidebarOpen }) => {
             <p className="UserEmail">User@gmail.com</p>
           </div>
           <div className="NavigationButtons">
+            {/* Common links for all users */}
             <a href="/UserDashboard">Dashboard</a>
             <a href="/Home">Home</a>
             <a href="/AppointmentForm">Appointments</a>
             <a href="/ApplicationForm">Document Application</a>
             <a href="/WalkInQueue"> Smart Walk - In</a>
+
+             {/* Staff+ links */}
+             {(hasRole('staff') || hasRole('admin') || hasRole('super_admin')) && (
+              <a href="/applicationAdmin">Application Admin</a>
+            )}
+            
+            {/* Admin+ links */}
+            {(hasRole('admin') || hasRole('super_admin')) && (
+              <a href="/AdminAccountManagement">User Management</a>
+            )}
+            
+            {/* Super admin only links */}
+            {hasRole('super_admin') && (
+              <a href="/system-settings">System Settings</a>
+            )}
+
+            {/* Common links for all users cont. */}
             <a href="/account">Account</a>
             <a href="/settings">Settings</a>
-            <a href="/applicationAdmin">Application Admin</a>
+
           </div>
           <div className="Logout">
           <Link to="/" onClick={logout}>Log Out</Link>
