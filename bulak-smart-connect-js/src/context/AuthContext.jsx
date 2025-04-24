@@ -63,10 +63,12 @@ export const AuthProvider = ({ children }) => {
 
   // Role checking utilities
   const hasRole = (roleName) => {
-    return user?.roles?.includes(roleName) || false;
+    if (!user || !user.roles) return false;
+    return user.roles.includes(roleName);
   };
 
   const hasAnyRole = (roleNames) => {
+    if (!roleNames || !roleNames.length) return true;
     return roleNames.some(role => hasRole(role));
   };
 

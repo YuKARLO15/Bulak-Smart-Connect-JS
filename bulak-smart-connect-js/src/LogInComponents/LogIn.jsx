@@ -7,13 +7,7 @@ import NavBar from "../NavigationComponents/NavBar";
 import { useAuth } from "../context/AuthContext"; // Import useAuth
 
 function LogIn() {
-  const { isAuthenticated, login } = useAuth(); // Use the login function from AuthContext
-
-  const handleLogin = (data) => {
-    // Handle the login data, e.g., save the user session
-    console.log("User logged in:", data);
-    login(); // Set the authentication state to true
-  };
+  const { isAuthenticated } = useAuth(); // Use the login function from AuthContext
 
   // Redirect to Home if already authenticated
   if (isAuthenticated) {
@@ -27,7 +21,7 @@ function LogIn() {
       </div>
       <div className="LogInContainer">
         <LogInContent />
-        <LogInCard onLogin={handleLogin} />
+        <LogInCard />
       </div>
     </div>
   );

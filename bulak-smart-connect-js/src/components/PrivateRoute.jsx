@@ -3,7 +3,7 @@ import { Navigate, Outlet } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 const PrivateRoute = ({ allowedRoles = [] }) => {
-  const { isAuthenticated, user, hasAnyRole, loading } = useAuth();
+  const { isAuthenticated, loading, hasAnyRole } = useAuth();
 
   if (loading) {
     return <div className="loading-screen">Loading...</div>;
@@ -13,7 +13,7 @@ const PrivateRoute = ({ allowedRoles = [] }) => {
     return <Navigate to="/" replace />;
   }
 
-  // If roles are specified, check if user has at least one of the roles
+  // If roles are specified and the user doesn't have any of these roles
   if (allowedRoles.length > 0 && !hasAnyRole(allowedRoles)) {
     return <Navigate to="/unauthorized" replace />;
   }
