@@ -27,11 +27,12 @@ import SexDobCorrection from './UserBulakSmartConnect/ApplicationComponents/Birt
 import DelayedOutOfTownRegistration from './UserBulakSmartConnect/ApplicationComponents/BirthCertificateApplications/DelayedOutOfTown';
 import DelayedOneParentForeignerRegistration from './UserBulakSmartConnect/ApplicationComponents/BirthCertificateApplications/DelayedOneParentForeigner';
 import BirthCertificateForm from './UserBulakSmartConnect/ApplicationComponents/BirthCertificateApplications/BirthCertificateForm';
-
+import CopyBirthCertificate from './UserBulakSmartConnect/ApplicationComponents/BirthCertificateApplications/BirthCertificateForm/CopyBirthCertificate';
 import PrivateRoute from './components/PrivateRoute';
 import BirthApplicationSummary from './UserBulakSmartConnect/ApplicationComponents/BirthCertificateApplications/BirthApplicationSummary';
 import MarriageCertificateForm from './UserBulakSmartConnect/ApplicationComponents/MarriageCertificateApplications/MarriageCertificateForm/MarriageCertificateForm';
 import MarriageSummaryForm from './UserBulakSmartConnect/ApplicationComponents/MarriageCertificateApplications/MarriageCertificateForm/MarriageSummaryForm';
+import CTCBirthCertificate from './UserBulakSmartConnect/ApplicationComponents/BirthCertificateApplications/CTCBirthCertificate';
 //WalkIn//
 import WalkInQueueContainer from './UserBulakSmartConnect/WalkInComponents/WalkInDashBoard';
 import WalkInForm from './UserBulakSmartConnect/WalkInComponents/WalkInForm';
@@ -39,10 +40,13 @@ import WalkInQueueDetail from './UserBulakSmartConnect/WalkInComponents/WalkInDe
 
 //-----------ADMIN SIDE --------------//
 
-// Account Management //
+// Admin Account Management //
 import AdminAccountManagement from './AdminBulakSmartConnect/AccountManagementComponents/AccountManagement';
 import SearchAddUser from './AdminBulakSmartConnect/AccountManagementComponents/SearchAdd';
 import AdminAddUser from './AdminBulakSmartConnect/AccountManagementComponents/AdminAddAccount';
+
+// Admin Announcement //
+import AdminAnnouncement from './AdminBulakSmartConnect/AdminAnnouncementComponents/AdminAnnouncement';
 
 // Application  //
 import AdminApplicationDashboard from './AdminBulakSmartConnect/AdminApplicationComponents/ApplicationAdminDashboard';
@@ -56,10 +60,13 @@ function App() {
       <Route path="/" element={<LandingPage />} />
       <Route path="/LogIn" element={<LogIn />} />
       <Route path="/SignUpForm" element={<SignUpForm />} />
+      {/* Admin Accountmanagement */}
       <Route path="/AdminAccountManagement" element={<AdminAccountManagement />} />
       <Route path="AppointmentDetailsCard" element={<AppointmentDetailsCard/>} />
       <Route path="/SearchAddUser" element={<SearchAddUser />} />
       <Route path="/add-user" element={<AdminAddUser />} /> 
+      {/* Admin Announcement */}
+      <Route path="/AdminAnnouncement" element={<AdminAnnouncement />} /> 
       <Route element={<PrivateRoute />}>
         {' '}
         {/* Protected Route Start */}
@@ -79,7 +86,10 @@ function App() {
         <Route
           path="/DelayedOneParentForeignerRegistration"
           element={<DelayedOneParentForeignerRegistration />}
+          
         />
+        <Route path="/CTCBirthCertificate" element={<CTCBirthCertificate/>} />
+         <Route path="/RequestACopyBirthCertificate" element={<CopyBirthCertificate/>} />
         <Route path="/MarriageSummaryForm" element={<MarriageSummaryForm />} />
         <Route path="/QrCodeAppointment/:id" element={<QRCodeAppointment />} />
         <Route path="/BirthCertificateForm" element={<BirthCertificateForm />} />

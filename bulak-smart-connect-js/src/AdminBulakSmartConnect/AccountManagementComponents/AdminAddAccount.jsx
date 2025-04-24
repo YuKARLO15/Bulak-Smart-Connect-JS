@@ -36,32 +36,27 @@ const AdminAddUser = () => {
   };
 
   const clearPhoto = () => {
-    setFormData(prevData => ({
-      ...prevData,
-      photo: null,
-    }));
+    setFormData(prev => ({ ...prev, photo: null }));
     setPhotoPreview(null);
+    document.getElementById('photo').value = null;
   };
 
   const handleSubmit = e => {
     e.preventDefault();
     let validationErrors = {};
 
-
     Object.entries(formData).forEach(([key, value]) => {
-      if (!value) {
+      if (!value || (typeof value === 'string' && value.trim() === '')) {
         validationErrors[key] = 'This field is required';
       }
     });
-
 
     if (formData.password !== formData.confirmPassword) {
       validationErrors.confirmPassword = 'Passwords do not match';
     }
 
-
     if (formData.contact && !/^\d{10}$/.test(formData.contact)) {
-      validationErrors.contact = 'Contact number must be exactly 12 digits';
+      validationErrors.contact = 'Contact number must be exactly 10 digits after +63';
     }
 
     if (formData.email && !formData.email.includes('@')) {
@@ -72,7 +67,7 @@ const AdminAddUser = () => {
 
     if (Object.keys(validationErrors).length === 0) {
       alert('User added successfully!');
-     
+      // TODO: Submit data to backend or Firebase
     }
   };
 
@@ -88,7 +83,7 @@ const AdminAddUser = () => {
                 <p>Upload Photo</p>
                 {photoPreview && (
                   <div className="photo-preview-container">
-                    <img src={photoPreview} alt="Photo Preview" className="photo-preview" />
+                    <img src={photoPreview} alt="Preview" className="photo-preview" />
                     <button type="button" className="clear-photo-btn" onClick={clearPhoto}>
                       <i className="fas fa-times"></i>
                     </button>
@@ -101,94 +96,29 @@ const AdminAddUser = () => {
           </div>
 
           <div className="form-grid">
-            <div className="form-group">
-              <label>
-                Username <span>*</span>
-              </label>
-              <input
-                type="text"
-                name="username"
-                placeholder="Enter Username"
-                value={formData.username}
-                onChange={handleChange}
-              />
-              {errors.username && <p className="error">{errors.username}</p>}
-            </div>
-
-            <div className="form-group">
-              <label>
-                Email <span>*</span>
-              </label>
-              <input
-                type="email"
-                name="email"
-                placeholder="Enter Email"
-                value={formData.email}
-                onChange={handleChange}
-              />
-              {errors.email && <p className="error">{errors.email}</p>}
-            </div>
-
-            <div className="form-group">
-              <label>
-                Password <span>*</span>
-              </label>
-              <input
-                type="password"
-                name="password"
-                placeholder="Enter Password"
-                value={formData.password}
-                onChange={handleChange}
-              />
-              {errors.password && <p className="error">{errors.password}</p>}
-            </div>
-
-            <div className="form-group">
-              <label>
-                Confirm Password <span>*</span>
-              </label>
-              <input
-                type="password"
-                name="confirmPassword"
-                placeholder="Confirm Password"
-                value={formData.confirmPassword}
-                onChange={handleChange}
-              />
-              {errors.confirmPassword && <p className="error">{errors.confirmPassword}</p>}
-            </div>
-
-            <div className="form-group">
-              <label>
-                First Name <span>*</span>
-              </label>
-              <input
-                type="text"
-                name="firstName"
-                placeholder="Enter First Name"
-                value={formData.firstName}
-                onChange={handleChange}
-              />
-              {errors.firstName && <p className="error">{errors.firstName}</p>}
-            </div>
-
-            <div className="form-group">
-              <label>
-                Last Name <span>*</span>
-              </label>
-              <input
-                type="text"
-                name="lastName"
-                placeholder="Enter Last Name"
-                value={formData.lastName}
-                onChange={handleChange}
-              />
-              {errors.lastName && <p className="error">{errors.lastName}</p>}
-            </div>
+            {[
+              { label: 'Username', name: 'username' },
+              { label: 'Email', name: 'email', type: 'email' },
+              { label: 'Password', name: 'password', type: 'password' },
+              { label: 'Confirm Password', name: 'confirmPassword', type: 'password' },
+              { label: 'First Name', name: 'firstName' },
+              { label: 'Last Name', name: 'lastName' }
+            ].map(({ label, name, type = 'text' }) => (
+              <div className="form-group" key={name}>
+                <label>{label} <span>*</span></label>
+                <input
+                  type={type}
+                  name={name}
+                  placeholder={`Enter ${label}`}
+                  value={formData[name]}
+                  onChange={handleChange}
+                />
+                {errors[name] && <p className="error">{errors[name]}</p>}
+              </div>
+            ))}
 
             <div className="form-group contact-split">
-              <label>
-                Contact Number <span>*</span>
-              </label>
+              <label>Contact Number <span>*</span></label>
               <div className="contact-input-wrapper">
                 <input type="text" value="+63" disabled className="country-code" />
                 <input
@@ -200,6 +130,7 @@ const AdminAddUser = () => {
                   onChange={e => {
                     const numbersOnly = e.target.value.replace(/\D/g, '').slice(0, 10);
                     setFormData(prev => ({ ...prev, contact: numbersOnly }));
+                    setErrors(prev => ({ ...prev, contact: '' }));
                   }}
                   className="phone-number"
                 />
@@ -208,9 +139,7 @@ const AdminAddUser = () => {
             </div>
 
             <div className="form-group">
-              <label>
-                User Role <span>*</span>
-              </label>
+              <label>User Role <span>*</span></label>
               <select name="role" value={formData.role} onChange={handleChange}>
                 <option value="">Select Role</option>
                 <option value="Admin">Admin</option>
@@ -221,9 +150,7 @@ const AdminAddUser = () => {
             </div>
           </div>
 
-          <button type="submit" className="submit-btn">
-            Add User
-          </button>
+          <button type="submit" className="submit-btn">Add User</button>
         </form>
       </div>
     </div>

@@ -16,9 +16,14 @@ const BirthCertificateDashboard = () => {
       alert('Please select an option before proceeding.');
       return;
     }
+    
     localStorage.setItem('selectedBirthCertificateOption', selectedOption);
-
-    navigate('/BirthCertificateForm');
+    
+    if (selectedOption === "Request copy") {
+      navigate('/RequestACopyBirthCertificate');
+    } else {
+      navigate('/BirthCertificateForm');
+    }
   };
 
   return (
