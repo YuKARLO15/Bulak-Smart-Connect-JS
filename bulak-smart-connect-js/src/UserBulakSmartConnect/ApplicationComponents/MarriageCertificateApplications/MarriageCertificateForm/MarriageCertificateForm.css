@@ -1,31 +1,24 @@
-
-.MarriageCertificateFormContainer {
-  width: 100vw;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  box-sizing: border-box;
-}
-.MarriageCertificateFormTitle {
+rtificateFormTitle {
   text-align: center;
   margin-bottom: 2rem;
   color: #fff;
 }
-.AffidavitCertificateForm{
+
+.AffidavitCertificateForm {
   width: 80vw !important;
   margin-top: 10px;
   justify-content: center;
   align-items: center;
   box-sizing: border-box;
 }
+
 .MarriageCertificateForm {
   margin-top: 10px;
   padding: 2.5rem;
   width: 80vw;
 }
 
-
+/* Generic section styling - applies to all sections */
 .section {
   margin-bottom: 2rem;
 }
@@ -38,10 +31,9 @@
   font-size: 1.5rem;
   font-weight: bold;
   text-align: center;
-  background-color: #1C4D5A; /* Light background for section headers */
+  background-color: #1C4D5A;
   padding: 1rem;
-  border-radius: 8px; /* Rounded corners for section headers */
-
+  border-radius: 8px;
 }
 
 .section h4 {
@@ -49,7 +41,171 @@
   margin: 1rem 0;
 } 
 
-/* Input group styling */
+/* Husband section specific styling */
+.husband-section {
+  margin-bottom: 2.5rem;
+  border-radius: 5px;
+}
+
+.husband-heading {
+  /* Inherits from .section h3 */
+}
+
+.husband-label {
+  display: block;
+  margin-bottom: 0.7rem;
+  font-weight: 500;
+  color: #333;
+}
+
+.husband-input-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.husband-input-container {
+  flex: 1;
+  min-width: 200px;
+  position: relative;
+}
+
+.husband-input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  background-color: #fff;
+  color: #333;
+}
+
+.husband-input:focus {
+  border-color: #3498db;
+  outline: none;
+}
+
+.husband-select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  background-color: #fff;
+  color: #333;
+}
+
+.husband-select:focus {
+  border-color: #3498db;
+  outline: none;
+}
+
+.husband-radio-group {
+  display: flex;
+  gap: 5rem;
+  align-items: left;
+  margin-left: 25px;
+  margin-bottom: 1rem;
+}
+
+.husband-radio {
+  margin-right: 6px;
+  cursor: pointer;
+  accent-color: #1C4D5A;
+}
+
+.husband-error {
+  color: #e74c3c;
+  font-size: 12px;
+  position: absolute;
+  bottom: -18px;
+  left: 0;
+}
+
+/* Wife section specific styling */
+.wife-section {
+  margin-bottom: 2.5rem;
+  border-radius: 5px;
+}
+
+.wife-heading {
+  /* Inherits from .section h3 */
+}
+
+.wife-label {
+  display: block;
+  margin-bottom: 0.7rem;
+  font-weight: 500;
+  color: #333;
+}
+
+.wife-input-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.wife-input-container {
+  flex: 1;
+  min-width: 200px;
+  position: relative;
+}
+
+.wife-input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  background-color: #fff;
+  color: #333;
+}
+
+.wife-input:focus {
+  border-color: #3498db;
+  outline: none;
+}
+
+.wife-select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  background-color: #fff;
+  color: #333;
+}
+
+.wife-select:focus {
+  border-color: #3498db;
+  outline: none;
+}
+
+.wife-radio-group {
+  display: flex;
+  gap: 5rem;
+  align-items: left;
+  margin-left: 25px;
+  margin-bottom: 1rem;
+}
+
+.wife-radio {
+  margin-right: 6px;
+  cursor: pointer;
+  accent-color: #1C4D5A;
+}
+
+.wife-error {
+  color: #e74c3c;
+  font-size: 12px;
+  position: absolute;
+  bottom: -18px;
+  left: 0;
+}
+
+/* Generic input group styling - kept for backward compatibility */
 .input-group {
   display: flex;
   flex-wrap: wrap;
@@ -67,7 +223,7 @@
   flex-basis: 100%;
 }
 
-/* Input field styling */
+/* Input field styling - kept for backward compatibility */
 .input-container input[type="text"],
 .input-container select {
   width: 100%;
@@ -75,18 +231,18 @@
   border: 1px solid #ccc;
   border-radius: 4px;
   font-size: 14px;
-  background-color: #fff; /* Set background to white */
-  color: #333; /* Set text color to dark for contrast */
+  background-color: #fff;
+  color: #333;
 }
 
 .input-container input[type="text"]:focus,
 .input-container select:focus {
   border-color: #3498db;
   outline: none;
-  background-color: #fff; /* Ensure background remains white on focus */
+  background-color: #fff;
 }
 
-/* Radio group styling */
+/* Radio group styling - kept for backward compatibility */
 .radio-group {
   display: flex;
   gap: 5rem;
@@ -98,7 +254,7 @@
 .radio-group input[type="radio"] {
   margin-right: 6px;
   cursor: pointer;
-  accent-color: #1C4D5A; /* Custom color for radio buttons */
+  accent-color: #1C4D5A;
 }
 
 /* Checkbox container styling */
@@ -108,7 +264,7 @@
   gap: 0.5rem;
 }
 
-/* Error message styling */
+/* Error message styling - kept for backward compatibility */
 .error-message {
   color: #e74c3c;
   font-size: 12px;
@@ -137,17 +293,6 @@
   margin-right: 1rem !important;
 }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .input-container {
-    min-width: 100%;
-  }
-
-  .MarriageCertificateForm {
-    padding: 1rem;
-  }
-}
-
 /* Style for required field indicators */
 label::after {
   content: " *";
@@ -159,22 +304,57 @@ label:not([data-required])::after {
   content: "";
 }
 
-/* Witness section styling - updated to match image */
-.witnesses-section {
-  margin-bottom: 2rem;
-  border: 1px solid #d33;  /* Red border around the section */
-  padding: 15px;
-  border-radius: 3px;
+/* Affidavit Form Specific Styling */
+.affidavit-form-container {
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
 }
 
-.section-title {
+.affidavit-certificate-form {
+  width: 80vw !important;
+  margin-top: 10px;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+  padding: 2rem;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.affidavit-heading {
+  color: #fff;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.5rem;
+  text-transform: uppercase;
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-align: center;
+  background-color: #1C4D5A;
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+.affidavit-witnesses-section {
+  margin: 2rem auto;
+  border: 1px solid #1C4D5A;
+  padding: 15px;
+  border-radius: 3px;
+  width: 90%;
+  max-width: 800px;
+}
+
+.affidavit-section-title {
   font-weight: bold;
   margin-bottom: 1.5rem;
   padding-left: 5px;
 }
 
-/* Witnesses row styling */
-.witnesses-row {
+.affidavit-witnesses-row {
   display: flex;
   justify-content: space-between;
   gap: 20px;
@@ -182,17 +362,15 @@ label:not([data-required])::after {
   width: 100%;
 }
 
-/* Witness input container */
-.witness-input-container {
+.affidavit-witness-input-container {
   flex: 1;
   margin-bottom: 10px;
 }
 
-/* Dotted line style for witness inputs */
-.witness-input {
+.affidavit-witness-input {
   width: 100%;
   border: none;
-  border-bottom: 1px dotted #000; /* Dotted line as shown in image */
+  border-bottom: 1px dotted #000;
   background-color: transparent;
   color: #000;
   padding: 10px 5px 5px 0;
@@ -201,80 +379,24 @@ label:not([data-required])::after {
   margin-bottom: 15px;
 }
 
-.witness-input:focus {
-  border-bottom: 1px solid #3498db;
+.affidavit-officer-section,
+.affidavit-delayed-section {
+  margin-bottom: 2.5rem;
 }
 
-/* Special styling to ensure the signature lines look like the image */
-.witness-signature-line {
-  width: 100%;
-  height: 1px;
-  border-bottom: 1px dotted #000;
-  margin: 25px 0;
+.affidavit-content {
+  margin: 1.5rem 0;
 }
 
-/* Make the witness section inputs align in two columns */
-.witnesses-section .input-group {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
-  margin-bottom: 15px;
-}
-
-.witnesses-section .input-container {
-  margin-bottom: 20px;
-}
-
-/* For mobile responsiveness */
-@media (max-width: 768px) {
-  .witnesses-section .input-group {
-    grid-template-columns: 1fr;
-  }
-}
-
-/* Numbered item styling */
-.numbered-item {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
+.affidavit-paragraph {
   margin-bottom: 1.5rem;
-  position: relative;
-}
-
-.numbered-item p {
-  margin: 0 0.5rem 0.5rem 0;
-  font-weight: 500;
-}
-
-/* Checkbox item styling */
-.checkbox-item {
+  line-height: 1.6;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  margin-bottom: 1rem;
-  margin-left: 1.5rem;
-  position: relative;
 }
 
-.checkbox-item input[type="checkbox"] {
-  margin-right: 0.5rem;
-  cursor: pointer;
-  accent-color: #1C4D5A;
-  min-width: 16px;
-  height: 16px;
-}
-
-.checkbox-item label {
-  margin-right: 0.5rem;
-  flex: 1;
-}
-
-.checkbox-item label::after {
-  content: "";  /* Override the asterisk for checkbox labels */
-}
-
-/* Inline input styling */
-.form-input, .inline-input {
+.affidavit-form-input {
   border: none;
   border-bottom: 1px solid #000;
   background-color: #fff;
@@ -284,29 +406,85 @@ label:not([data-required])::after {
   outline: none;
 }
 
-.form-input:focus, .inline-input:focus {
-  border-bottom: 1px solid #3498db;
+.affidavit-inline-input {
+  display: inline-block;
 }
 
-/* Signature sections */
-.signature-section {
+.affidavit-small-input {
+  width: 40px;
+}
+
+.affidavit-medium-input {
+  width: 120px;
+}
+
+.affidavit-large-input {
+  width: 250px;
+}
+
+.affidavit-numbered-items {
+  margin-left: 1rem;
+}
+
+.affidavit-numbered-item {
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+
+.affidavit-checkbox-item {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+  margin-left: 1.5rem;
+  position: relative;
+}
+
+.affidavit-indent {
+  margin-left: 1.5rem;
+}
+
+.affidavit-checkbox-container {
+  margin-right: 0.5rem;
+  min-width: 16px;
+}
+
+.affidavit-truth-statement, 
+.affidavit-sworn-statement {
+  margin-top: 2rem;
+  font-style: italic;
+}
+
+.affidavit-ceremony-types {
+  margin-top: 0.5rem;
+  margin-left: 1.5rem;
+}
+
+.affidavit-ceremony-type {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.affidavit-sub-items {
+  margin-left: 1.5rem;
+  margin-top: 0.5rem;
+}
+
+.affidavit-signature-section {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   margin: 2rem 0;
 }
 
-.signature-section p {
-  margin: 0 0.5rem;
-}
-
-.signature-line {
+.affidavit-signature-line {
   width: 100%;
   margin: 2rem 0;
   text-align: center;
 }
 
-.signature-input {
+.affidavit-signature-input {
   width: 60%;
   border: none;
   border-bottom: 1px solid #000;
@@ -319,66 +497,197 @@ label:not([data-required])::after {
   display: block;
 }
 
-.signature-label {
+.affidavit-signature-label {
   margin-top: 0.5rem;
   font-size: 0.9rem;
   color: #333;
   text-align: center;
 }
 
-.dual-signature-section {
+.affidavit-dual-signature-section {
   display: flex;
   justify-content: space-between;
   margin: 2rem 0;
   width: 100%;
 }
 
-.dual-signature-section .signature-line {
+.affidavit-dual-signature-section .affidavit-signature-line {
   width: 45%;
   margin: 1rem 0;
 }
 
-/* Input size variations */
-.input-container.small {
-  min-width: 60px;
-  width: 80px;
-  flex: none;
+/* For mobile responsiveness */
+@media (max-width: 768px) {
+  .affidavit-certificate-form {
+    padding: 1rem;
+    width: 95vw !important;
+  }
+  
+  .affidavit-witnesses-row {
+    flex-direction: column;
+  }
+  
+  .affidavit-dual-signature-section {
+    flex-direction: column;
+  }
+  
+  .affidavit-dual-signature-section .affidavit-signature-line {
+    width: 100%;
+  }
+  
+  .affidavit-large-input {
+    width: 150px;
+  }
 }
 
-.input-container.medium {
-  min-width: 120px;
-  width: 140px;
-  flex: none;
+.marriage-summary-container {
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  max-width: 900px;
+  margin: 0 auto;
+  font-family: 'Arial', sans-serif;
 }
 
-.input-container.large {
-  min-width: 200px;
-  flex: 2;
+.marriage-summary-title {
+  text-align: center;
+  color: #1C4D5A;
+  font-size: 24px;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #1C4D5A;
 }
 
-/* Affidavit paragraph*/
-.affidavit-paragraph {
-  margin-bottom: 1.5rem;
-  line-height: 1.6;
+.summary-note {
+  text-align: center;
+  color: #555;
+  font-style: italic;
+  margin-bottom: 2rem;
+}
+
+.summary-section {
+  margin-bottom: 2rem;
+}
+
+.summary-section-title {
+  background-color: #1C4D5A;
+  color: white;
+  padding: 10px;
+  margin-bottom: 1rem;
+  border-radius: 4px;
+  font-size: 18px;
+}
+
+.summary-subsection-title {
+  color: #1C4D5A;
+  border-bottom: 1px solid #1C4D5A;
+  padding-bottom: 5px;
+  margin: 1.5rem 0 1rem 0;
+}
+
+.summary-content {
+  padding: 0 1rem;
+}
+
+.summary-row {
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
+  margin-bottom: 0.8rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px dashed #eee;
 }
 
-.affidavit-content {
-  margin: 1.5rem 0;
+.summary-label {
+  flex: 0 0 200px;
+  font-weight: 600;
+  color: #333;
 }
 
-/* Truth statement styling */
-.truth-statement, .sworn-statement {
-  margin-top: 2rem;
+.summary-value {
+  flex: 1;
+  color: #444;
+}
+
+.witness-block {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #eee;
+}
+
+.witness-title {
+  color: #1C4D5A;
+  margin-bottom: 0.5rem;
+}
+
+.summary-declaration {
+  margin: 2rem 0;
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border-left: 4px solid #1C4D5A;
   font-style: italic;
 }
 
-/* Dashed lines for signature spaces */
-.dashed-line {
-  border-bottom: 1px dashed #000;
-  min-width: 150px;
-  display: inline-block;
-  margin: 0 5px;
+.summary-signatures {
+  display: flex;
+  justify-content: space-between;
+  margin: 2rem 0;
+}
+
+.signature-block {
+  flex: 0 0 45%;
+  text-align: center;
+}
+
+.signature-line {
+  border-bottom: 1px solid #000;
+  margin-bottom: 0.5rem;
+  width: 100%;
+  height: 40px;
+}
+
+.summary-date {
+  text-align: right;
+  margin-top: 2rem;
+  font-weight: 500;
+}
+
+/* Print-friendly styles */
+@media print {
+  .marriage-summary-container {
+      box-shadow: none;
+      padding: 0;
+  }
+  
+  .summary-section-title {
+      background-color: #f0f0f0;
+      color: #000;
+  }
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .marriage-summary-container {
+      padding: 1rem;
+  }
+  
+  .summary-row {
+      flex-direction: column;
+  }
+  
+  .summary-label {
+      flex: 0 0 100%;
+      margin-bottom: 0.3rem;
+  }
+  
+  .summary-value {
+      padding-left: 1rem;
+  }
+  
+  .summary-signatures {
+      flex-direction: column;
+  }
+  
+  .signature-block {
+      margin-bottom: 1.5rem;
+  }
 }
