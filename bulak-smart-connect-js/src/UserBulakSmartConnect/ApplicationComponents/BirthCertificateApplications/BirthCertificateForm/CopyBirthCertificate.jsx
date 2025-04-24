@@ -15,12 +15,32 @@ const CopyBirthCertificate = ({ formData = {}, handleChange }) => {
   const [localFormData, setLocalFormData] = useState(formData || {});
   const requiredField = <span className="RequiredFieldCopyBirth">*</span>;
 
- 
+  const [errors, setErrors] = useState({});
   const months = [
     "January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December"
   ];
-
+  
+  const validateForm = () => {
+    const newErrors = {};
+    if (!localFormData.firstName?.trim()) newErrors.firstName = "First name is required";
+    if (!localFormData.lastName?.trim()) newErrors.lastName = "Last name is required";
+    if (!localFormData.birthMonth) newErrors.birthMonth = "Month is required";
+    if (!localFormData.birthDay) newErrors.birthDay = "Day is required";
+    if (!localFormData.birthYear) newErrors.birthYear = "Year is required";
+    if (!localFormData.city?.trim()) newErrors.city = "City is required";
+    if (!localFormData.province?.trim()) newErrors.province = "Province is required";
+    if (!localFormData.motherFirstName?.trim()) newErrors.motherFirstName = "Mother's first name is required";
+    if (!localFormData.motherLastName?.trim()) newErrors.motherLastName = "Mother's last name is required";
+    
+    if (!localFormData.purpose) newErrors.purpose = "Purpose is required";
+    if (localFormData.purpose === "Others" && !localFormData.otherPurpose?.trim()) {
+      newErrors.otherPurpose = "Please specify purpose";
+    }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+  
   const days = Array.from({ length: 31 }, (_, i) => i + 1);
   const currentYear = new Date().getFullYear();
   const years = Array.from({ length: 100 }, (_, i) => currentYear - i);
@@ -33,6 +53,14 @@ const CopyBirthCertificate = ({ formData = {}, handleChange }) => {
       [name]: value
     }));
     
+    // Clear error for this field when user types
+    if (errors[name]) {
+      setErrors(prev => {
+        const newErrors = {...prev};
+        delete newErrors[name];
+        return newErrors;
+      });
+    }
 
     if (typeof handleChange === 'function') {
       handleChange(e);
@@ -52,12 +80,34 @@ const CopyBirthCertificate = ({ formData = {}, handleChange }) => {
   };
   
   const handleNextClick = () => {
-    
-    navigate("/CTCBirthCertificate");
+    if (validateForm()) {
+      localStorage.setItem("birthCertificateApplication", JSON.stringify(localFormData));
+      navigate("/CTCBirthCertificate");
+    } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   };
 
   return (  
     <Box className="CopyBirthCertificateContainer">
+      {Object.keys(errors).length > 0 && (
+        <div className="ErrorSummary" style={{ 
+          backgroundColor: '#ffebee', 
+          padding: '10px 15px', 
+          borderRadius: '4px', 
+          marginBottom: '20px',
+          border: '1px solid #f44336' 
+        }}>
+          <Typography variant="subtitle1" style={{ color: '#d32f2f', fontWeight: 'bold' }}>
+            Please correct the following errors:
+          </Typography>
+          <ul style={{ margin: '5px 0 0 20px', padding: 0 }}>
+            {Object.values(errors).map((error, index) => (
+              <li key={index} style={{ color: '#d32f2f' }}>{error}</li>
+            ))}
+          </ul>
+        </div>
+      )}
       <Typography variant="h5" className="FormTitleCopyBirth">
         Request a Copy of Birth Certificate
       </Typography>
@@ -72,8 +122,8 @@ const CopyBirthCertificate = ({ formData = {}, handleChange }) => {
               Personal Information
             </Typography>
             <Typography className="SubSectionTitleCopyBirth">
-                 FULL NAME  {requiredField}
-                </Typography>
+              FULL NAME {requiredField}
+            </Typography>
             <div className="FormRowChild">
               <div className="FormGroupChild">
                 <label className="FormLabelChild">
@@ -84,9 +134,14 @@ const CopyBirthCertificate = ({ formData = {}, handleChange }) => {
                   name="firstName"
                   value={localFormData.firstName || ""}
                   onChange={handleLocalChange}
-                  className="FormInputChild"
+                  className={`FormInputChild ${errors.firstName ? 'InputError' : ''}`}
                   required
                 />
+                {errors.firstName && (
+                  <span className="ErrorText" style={{ color: '#d32f2f', fontSize: '0.75rem' }}>
+                    {errors.firstName}
+                  </span>
+                )}
               </div>
 
               <div className="FormGroupChild">
@@ -111,9 +166,14 @@ const CopyBirthCertificate = ({ formData = {}, handleChange }) => {
                   name="lastName"
                   value={localFormData.lastName || ""}
                   onChange={handleLocalChange}
-                  className="FormInputChild"
+                  className={`FormInputChild ${errors.lastName ? 'InputError' : ''}`}
                   required
                 />
+                {errors.lastName && (
+                  <span className="ErrorText" style={{ color: '#d32f2f', fontSize: '0.75rem' }}>
+                    {errors.lastName}
+                  </span>
+                )}
               </div>
             </div>
 
@@ -171,7 +231,7 @@ const CopyBirthCertificate = ({ formData = {}, handleChange }) => {
                   name="birthMonth"
                   value={localFormData.birthMonth || ""}
                   onChange={handleLocalChange}
-                  className="SelectInputChild"
+                  className={`SelectInputChild ${errors.birthMonth ? 'InputError' : ''}`}
                   required
                 >
                   <option value="">Select</option>
@@ -179,6 +239,11 @@ const CopyBirthCertificate = ({ formData = {}, handleChange }) => {
                     <option key={month} value={month}>{month}</option>
                   ))}
                 </select>
+                {errors.birthMonth && (
+                  <span className="ErrorText" style={{ color: '#d32f2f', fontSize: '0.75rem' }}>
+                    {errors.birthMonth}
+                  </span>
+                )}
               </div>
               
               <div className="FormGroupChild">
@@ -187,7 +252,7 @@ const CopyBirthCertificate = ({ formData = {}, handleChange }) => {
                   name="birthDay"
                   value={localFormData.birthDay || ""}
                   onChange={handleLocalChange}
-                  className="SelectInputChild"
+                  className={`SelectInputChild ${errors.birthDay ? 'InputError' : ''}`}
                   required
                 >
                   <option value="">Select</option>
@@ -195,6 +260,11 @@ const CopyBirthCertificate = ({ formData = {}, handleChange }) => {
                     <option key={day} value={day}>{day}</option>
                   ))}
                 </select>
+                {errors.birthDay && (
+                  <span className="ErrorText" style={{ color: '#d32f2f', fontSize: '0.75rem' }}>
+                    {errors.birthDay}
+                  </span>
+                )}
               </div>
               
               <div className="FormGroupChild">
@@ -203,7 +273,7 @@ const CopyBirthCertificate = ({ formData = {}, handleChange }) => {
                   name="birthYear"
                   value={localFormData.birthYear || ""}
                   onChange={handleLocalChange}
-                  className="SelectInputChild"
+                  className={`SelectInputChild ${errors.birthYear ? 'InputError' : ''}`}
                   required
                 >
                   <option value="">Select</option>
@@ -211,25 +281,17 @@ const CopyBirthCertificate = ({ formData = {}, handleChange }) => {
                     <option key={year} value={year}>{year}</option>
                   ))}
                 </select>
+                {errors.birthYear && (
+                  <span className="ErrorText" style={{ color: '#d32f2f', fontSize: '0.75rem' }}>
+                    {errors.birthYear}
+                  </span>
+                )}
               </div>
             </div>
             
             <Typography variant="subtitle1" className="SubSectionTitleCopyBirth" style={{ marginTop: '20px' }}>
               Place of Birth {requiredField}
             </Typography>
-            
-            <div className="FormRowChild">
-              <div className="FormFullWidthGroupChild">
-                <label className="FormLabelChild">Hospital/Clinic/Institution</label>
-                <input
-                  type="text"
-                  name="hospital"
-                  value={localFormData.hospital || ""}
-                  onChange={handleLocalChange}
-                  className="FormInputChild"
-                />
-              </div>
-            </div>
             
             <div className="FormRowChild">
               <div className="FormGroupChild">
@@ -239,9 +301,14 @@ const CopyBirthCertificate = ({ formData = {}, handleChange }) => {
                   name="city"
                   value={localFormData.city || ""}
                   onChange={handleLocalChange}
-                  className="FormInputChild"
+                  className={`FormInputChild ${errors.city ? 'InputError' : ''}`}
                   required
                 />
+                {errors.city && (
+                  <span className="ErrorText" style={{ color: '#d32f2f', fontSize: '0.75rem' }}>
+                    {errors.city}
+                  </span>
+                )}
               </div>
               
               <div className="FormGroupChild">
@@ -251,9 +318,14 @@ const CopyBirthCertificate = ({ formData = {}, handleChange }) => {
                   name="province"
                   value={localFormData.province || ""}
                   onChange={handleLocalChange}
-                  className="FormInputChild"
+                  className={`FormInputChild ${errors.province ? 'InputError' : ''}`}
                   required
                 />
+                {errors.province && (
+                  <span className="ErrorText" style={{ color: '#d32f2f', fontSize: '0.75rem' }}>
+                    {errors.province}
+                  </span>
+                )}
               </div>
             </div>
           </Box>
@@ -277,9 +349,14 @@ const CopyBirthCertificate = ({ formData = {}, handleChange }) => {
                   name="motherFirstName"
                   value={localFormData.motherFirstName || ""}
                   onChange={handleLocalChange}
-                  className="FormInputChild"
+                  className={`FormInputChild ${errors.motherFirstName ? 'InputError' : ''}`}
                   required
                 />
+                {errors.motherFirstName && (
+                  <span className="ErrorText" style={{ color: '#d32f2f', fontSize: '0.75rem' }}>
+                    {errors.motherFirstName}
+                  </span>
+                )}
               </div>
               
               <div className="FormGroupChild">
@@ -300,9 +377,14 @@ const CopyBirthCertificate = ({ formData = {}, handleChange }) => {
                   name="motherLastName"
                   value={localFormData.motherLastName || ""}
                   onChange={handleLocalChange}
-                  className="FormInputChild"
+                  className={`FormInputChild ${errors.motherLastName ? 'InputError' : ''}`}
                   required
                 />
+                {errors.motherLastName && (
+                  <span className="ErrorText" style={{ color: '#d32f2f', fontSize: '0.75rem' }}>
+                    {errors.motherLastName}
+                  </span>
+                )}
               </div>
             </div>
             
@@ -355,13 +437,14 @@ const CopyBirthCertificate = ({ formData = {}, handleChange }) => {
             
             <div className="FormRowChild">
               <div className="FormGroupChild" style={{ width: '100%' }}>
-                <label className="FormLabelChild">Purpose</label>
+                <label className="FormLabelChild">Purpose {requiredField}</label>
                 <select
                   name="purpose"
                   value={localFormData.purpose || ""}
                   onChange={handleLocalChange}
-                  className="SelectInputChild"
+                  className={`SelectInputChild ${errors.purpose ? 'InputError' : ''}`}
                   style={{ width: '100%' }}
+                  required
                 >
                   <option value="">Select</option>
                   <option value="Passport Application">Passport Application</option>
@@ -373,20 +456,31 @@ const CopyBirthCertificate = ({ formData = {}, handleChange }) => {
                   <option value="Travel">Travel</option>
                   <option value="Others">Others</option>
                 </select>
+                {errors.purpose && (
+                  <span className="ErrorText" style={{ color: '#d32f2f', fontSize: '0.75rem' }}>
+                    {errors.purpose}
+                  </span>
+                )}
               </div>
             </div>
             
             {localFormData.purpose === "Others" && (
               <div className="FormRowChild">
                 <div className="FormGroupChild" style={{ width: '100%' }}>
-                  <label className="FormLabelChild">Specify Purpose</label>
+                  <label className="FormLabelChild">Specify Purpose {requiredField}</label>
                   <input
                     type="text"
                     name="otherPurpose"
                     value={localFormData.otherPurpose || ""}
                     onChange={handleLocalChange}
-                    className="FormInputChild"
+                    className={`FormInputChild ${errors.otherPurpose ? 'InputError' : ''}`}
+                    required
                   />
+                  {errors.otherPurpose && (
+                    <span className="ErrorText" style={{ color: '#d32f2f', fontSize: '0.75rem' }}>
+                      {errors.otherPurpose}
+                    </span>
+                  )}
                 </div>
               </div>
             )}

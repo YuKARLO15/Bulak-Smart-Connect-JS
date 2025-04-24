@@ -14,7 +14,7 @@ const CTCBirthCertificate = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Get form data from localStorage
+   
     try {
       const storedData = localStorage.getItem("birthCertificateApplication");
       if (storedData) {
@@ -139,7 +139,25 @@ const CTCBirthCertificate = () => {
           >
             Back
           </Button>
-      
+          <Box className="ButtonContainerCTCBirth">
+          <Button 
+            variant="outlined" 
+            color="primary" 
+            onClick={handleBack}
+            className="BackButtonCTCBirth"
+          >
+            Back
+          </Button>
+          <Button 
+            variant="contained" 
+            color="primary" 
+            onClick={handleSubmit}
+            className="SubmitButtonCTCBirth"
+            disabled={!isFormComplete || isSubmitted}
+          >
+            Submit Application
+            </Button>
+            </Box>
         </Box>
       </Paper>
     </Box>
