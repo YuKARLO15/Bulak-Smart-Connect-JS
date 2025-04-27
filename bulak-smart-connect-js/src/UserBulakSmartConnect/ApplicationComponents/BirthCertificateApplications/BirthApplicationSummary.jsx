@@ -161,6 +161,40 @@ const BirthApplicationSummary = () => {
       navigate('/BirthCertificateForm');
     }
   };
+  const renderReadOnlyAffidavit = () => {
+    return (
+      <Box className="MainContainerSummaryBirth">
+        <Paper elevation={3} className="SummaryPaperSummaryBirth">
+          <Box className="HeaderSummaryBirth">
+            <Typography variant="h4" className="TitleSummaryBirth">
+              Birth Certificate Affidavit Forms
+            </Typography>
+            <Typography variant="body1" className="SubtitleSummaryBirth">
+              Application ID: {applicationId}
+            </Typography>
+          </Box>
+
+          <Divider className="DividerSummaryBirth" />
+
+          <AffidavitBirthForm 
+            formData={formData} 
+            handleChange={() => {}} 
+            isReadOnly={true}
+          />
+
+          <Box className="ButtonsSectionSummaryBirth" style={{ marginTop: '20px' }}>
+            <Button
+              variant="contained"
+              onClick={toggleAffidavitPage}
+              className="BackButtonSummaryBirth"
+            >
+              Back to Summary
+            </Button>
+          </Box>
+        </Paper>
+      </Box>
+    );
+  };
 
   const renderCopyBirthSummary = () => {
     return (
@@ -368,34 +402,7 @@ const BirthApplicationSummary = () => {
   }
 
   if (showAffidavit) {
-    return (
-      <Box className="MainContainerSummaryBirth">
-        <Paper elevation={3} className="SummaryPaperSummaryBirth">
-          <Box className="HeaderSummaryBirth">
-            <Typography variant="h4" className="TitleSummaryBirth">
-              Birth Certificate Affidavit Forms
-            </Typography>
-            <Typography variant="body1" className="SubtitleSummaryBirth">
-              Application ID: {applicationId}
-            </Typography>
-          </Box>
-
-          <Divider className="DividerSummaryBirth" />
-
-          <AffidavitBirthForm formData={formData} handleChange={() => {}} />
-
-          <Box className="ButtonsSectionSummaryBirth" style={{ marginTop: '20px' }}>
-            <Button
-              variant="contained"
-              onClick={toggleAffidavitPage}
-              className="BackButtonSummaryBirth"
-            >
-              Back to Summary
-            </Button>
-          </Box>
-        </Paper>
-      </Box>
-    );
+      return renderReadOnlyAffidavit();
   }
 
   return isCopyRequest 
