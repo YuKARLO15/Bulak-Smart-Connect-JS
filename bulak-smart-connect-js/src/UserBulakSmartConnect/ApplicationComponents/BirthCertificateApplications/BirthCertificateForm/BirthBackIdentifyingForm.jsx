@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./BirthBackIdentifyingForm.css";
 
-const AffidavitBirthForm = ({ formData, handleChange }) => {
+const AffidavitBirthForm = ({ formData, handleChange, isReadOnly = false  }) => {
   const requiredField = <span className="RequiredFieldAffidavit">*</span>;
   
 
@@ -95,6 +95,7 @@ const AffidavitBirthForm = ({ formData, handleChange }) => {
                 value={formData?.affiantName1 || geFatherFullName()}
                 onChange={handleChange}
                 className="AffidavitUnderlineInput"
+                
               />
               and 
               <input
@@ -256,6 +257,7 @@ const AffidavitBirthForm = ({ formData, handleChange }) => {
                     checked={maritalStatus === "single"}
                     onChange={() => handleMaritalStatusChange("single")}
                     className="CheckboxInputAffidavit"
+                    disabled={isReadOnly}
                   />
                   <label htmlFor="singleCheckbox" className="CheckboxLabelAffidavit">single</label>
                 </span>
@@ -266,6 +268,7 @@ const AffidavitBirthForm = ({ formData, handleChange }) => {
                     checked={maritalStatus === "married"}
                     onChange={() => handleMaritalStatusChange("married")}
                     className="CheckboxInputAffidavit"
+                    disabled={isReadOnly}
                   />
                   <label htmlFor="marriedCheckbox" className="CheckboxLabelAffidavit">married</label>
                 </span>
@@ -276,6 +279,7 @@ const AffidavitBirthForm = ({ formData, handleChange }) => {
                     checked={maritalStatus === "divorced"}
                     onChange={() => handleMaritalStatusChange("divorced")}
                     className="CheckboxInputAffidavit"
+                    disabled={isReadOnly}
                   />
                   <label htmlFor="divorcedCheckbox" className="CheckboxLabelAffidavit">divorced</label>
                 </span>
@@ -286,6 +290,7 @@ const AffidavitBirthForm = ({ formData, handleChange }) => {
                     checked={maritalStatus === "widow"}
                     onChange={() => handleMaritalStatusChange("widow")}
                     className="CheckboxInputAffidavit"
+                    disabled={isReadOnly}
                   />
                   <label htmlFor="widowCheckbox" className="CheckboxLabelAffidavit">widow</label>
                 </span>
@@ -296,6 +301,7 @@ const AffidavitBirthForm = ({ formData, handleChange }) => {
                     checked={maritalStatus === "widower"}
                     onChange={() => handleMaritalStatusChange("widower")}
                     className="CheckboxInputAffidavit"
+                    disabled={isReadOnly}
                   />
                   <label htmlFor="widowerCheckbox" className="CheckboxLabelAffidavit">widower</label>
                 </span>
@@ -326,6 +332,7 @@ const AffidavitBirthForm = ({ formData, handleChange }) => {
                 checked={registrationType === "self"}
                 onChange={() => handleRegistrationTypeChange("self")}
                 className="CheckboxInputAffidavit"
+                disabled={isReadOnly}
               />
               <label htmlFor="selfBirthCheckbox" className="CheckboxLabelAffidavit">
                 my birth in
@@ -359,6 +366,7 @@ const AffidavitBirthForm = ({ formData, handleChange }) => {
                 checked={registrationType === "other"}
                 onChange={() => handleRegistrationTypeChange("other")}
                 className="CheckboxInputAffidavit"
+                disabled={isReadOnly}
               />
               <label htmlFor="otherBirthCheckbox" className="CheckboxLabelAffidavit">
                 the birth of
@@ -442,6 +450,7 @@ const AffidavitBirthForm = ({ formData, handleChange }) => {
                 checked={parentStatus === "married"}
                 onChange={() => handleParentStatusChange("married")}
                 className="CheckboxInputAffidavit"
+                disabled={isReadOnly}
               />
               <label htmlFor="marriedParentsCheckbox" className="CheckboxLabelAffidavit">
                 married on
@@ -483,6 +492,7 @@ const AffidavitBirthForm = ({ formData, handleChange }) => {
                 checked={parentStatus === "notMarried"}
                 onChange={() => handleParentStatusChange("notMarried")}
                 className="CheckboxInputAffidavit"
+                disabled={isReadOnly}
               />
               <label htmlFor="notMarriedParentsCheckbox" className="CheckboxLabelAffidavit">
                 not married but I/he/she was acknowledged/not acknowledged by my/his/her father whose name is
