@@ -10,9 +10,9 @@ const mandatoryDocuments = [
   'NBI Clearance',
   'PNP Clearance',
   'Employer’s Clearance (no pending case) OR business records or affidavid of unempployment with no pending case',
-  'Earliest church record/s or certificate of no church record/s available and affidavid of no church record/s available',
+  'Earliest church record/s or certificate of no church record/s available and affidavit of no church record/s available',
   'Eariest school record (form 137A) OR certificate of no school record/s available AND affidavid of no school record available',
-  'Medical record/s OR affidavid of no medical record/s available',
+  'Medical record/s OR affidavit of no medical record/s available',
 ];
 
 const supportingDocuments = [
