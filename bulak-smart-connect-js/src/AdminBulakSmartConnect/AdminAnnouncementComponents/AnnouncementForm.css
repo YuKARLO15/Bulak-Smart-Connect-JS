@@ -1,0 +1,64 @@
+/* AnnouncementForm.css */
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    background-color: #ffffff;
+    padding: 24px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  } 
+
+  /* form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    background-color: #ffffff;
+    padding: 24px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    width: 100%;    
+    max-width: 800px;  
+  } */
+  
+  form input[type="text"],
+  form input[type="datetime-local"],
+  form textarea {
+    padding: 12px 16px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-family: inherit;
+    background-color: #f9fafb;
+    transition: border-color 0.2s ease;
+  }
+  
+  form input:focus,
+  form textarea:focus {
+    border-color: #3b82f6;
+    outline: none;
+    background-color: #fff;
+  }
+  
+  form textarea {
+    min-height: 100px;
+    resize: vertical;
+  }
+  
+  form button {
+    background-color: #1C4D5A;
+    color: white;
+    padding: 12px 20px;
+    font-size: 1rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  
+  form button:hover {
+    background-color: #38626d;
+  }
+  

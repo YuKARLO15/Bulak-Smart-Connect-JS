@@ -77,22 +77,10 @@ const MarriageCertificateForm = () => {
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!validateStep()) {
-      alert("Please fill in all required fields before submitting.");
-      return;
-    }
-    
-    const applicationId = MarriageCertificateApplicationData(formData);
-    localStorage.setItem("currentApplicationId", applicationId);
-    const selectedOption = localStorage.getItem("selectedMarriageCertificateOption");
-    const routeMap = {
-      "Regular application": "/MarriageRegularApplication",
-      "Request copy": "/MarriageRequestCopy",
-      "Late registration": "/MarriageLateRegistration",
-      "Correction": "/MarriageCorrectionApplication",
-    };
-    navigate(routeMap[selectedOption] || "/");
+  // Store the form data in localStorage before navigation
+  localStorage.setItem('marriageFormData', JSON.stringify(formData));
+  
+  navigate("/MarriageSummaryForm");
   };
 
   return (
