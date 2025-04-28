@@ -72,6 +72,8 @@ function App() {
           <Route path="/AdminAccountManagement" element={<AdminAccountManagement />} />
           <Route path="/SearchAddUser" element={<SearchAddUser />} />
           <Route path="/add-user" element={<AdminAddUser />} />
+          {/* Admin Announcement */}
+          <Route path="/AdminAnnouncement" element={<AdminAnnouncement />} /> 
         </Route>
         
         {/* Staff routes - Protected for staff, admin and super_admin */}
@@ -104,6 +106,9 @@ function App() {
           <Route path="/WalkInQueue" element={<WalkInQueueContainer />} />
           <Route path="/WalkInForm" element={<WalkInForm />} />
           <Route path="/WalkInDetails" element={<WalkInQueueDetail />} />
+          <Route path="/CTCBirthCertificate" element={<CTCBirthCertificate/>} />
+          <Route path="/RequestACopyBirthCertificate" element={<CopyBirthCertificate/>} />
+          <Route path="/MarriageSummaryForm" element={<MarriageSummaryForm />} />
         </Route>
       </Routes>
     </AuthProvider>
