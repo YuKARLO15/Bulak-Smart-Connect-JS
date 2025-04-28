@@ -1,25 +1,78 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import "./MarriageCertificateForm.css";
 
-const MarriageSummaryForm = ({ formData, handleChange }) => {
-    // Format full name function
+const MarriageSummaryForm = () => {
+    const [formData, setFormData] = useState({});
+    const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
+
+    // Load form data from localStorage when component mounts
+    useEffect(() => {
+        try {
+            const savedCertificateData = localStorage.getItem('marriageFormData');
+            const savedAffidavitData = localStorage.getItem('marriageAffidavitData');
+            
+            if (savedCertificateData) {
+                // Combine both data sources if available
+                const certificateData = JSON.parse(savedCertificateData);
+                let combinedData = {...certificateData};
+                
+                if (savedAffidavitData) {
+                    const affidavitData = JSON.parse(savedAffidavitData);
+                    combinedData = {...combinedData, ...affidavitData};
+                }
+                
+                setFormData(combinedData);
+            }
+        } catch (err) {
+            console.error("Error loading form data:", err);
+        } finally {
+            setLoading(false);
+        }
+    }, []);
+
+    // Format full name function with null safety
     const formatFullName = (firstName, middleName, lastName, extension) => {
-        let fullName = `${firstName || ""} ${middleName || ""} ${lastName || ""}`;
+        if (!firstName && !middleName && !lastName) return "Not provided";
+        
+        let fullName = '';
+        if (firstName) fullName += firstName + ' ';
+        if (middleName) fullName += middleName + ' ';
+        if (lastName) fullName += lastName;
         if (extension) fullName += ` ${extension}`;
         return fullName.trim();
     };
 
-    // Format address function
+    // Format address function with null/undefined protection
     const formatAddress = (street, barangay, city, province, country) => {
         return [street, barangay, city, province, country]
             .filter(item => item)
-            .join(", ");
+            .join(", ") || "Not provided";
     };
 
-    // Format birth date
+    // Format birth date with null/undefined protection
     const formatBirthDate = (month, day, year) => {
         if (!month || !day || !year) return "Not provided";
         return `${month} ${day}, ${year}`;
     };
+
+    // Add a function to handle returning to the form
+    const handleBackToForm = () => {
+        navigate("/MarriageCertificateForm");
+    };
+
+    // Add a loading state while data is being retrieved
+    if (loading) {
+        return (
+            <div className="marriage-summary-container">
+                <h2 className="marriage-summary-title">Loading form data...</h2>
+                <button onClick={handleBackToForm} className="back-button">
+                    Back to Form
+                </button>
+            </div>
+        );
+    }
 
     return (
         <div className="marriage-summary-container">
