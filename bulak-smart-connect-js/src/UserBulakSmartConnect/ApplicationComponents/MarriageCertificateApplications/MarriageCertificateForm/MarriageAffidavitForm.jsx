@@ -56,8 +56,11 @@ const MarriageAffidavitForm = () => {
     if (validateForm()) {
       setError('');
       console.log('Form submitted successfully:', formData);
-      alert('Form submitted successfully!');
-      // Add navigation logic here if needed
+      
+      // Save affidavit data to localStorage
+      localStorage.setItem('marriageAffidavitData', JSON.stringify(formData));
+      
+      // Continue with your existing logic
     } else {
       setError('Please fill in all required fields before submitting.');
       console.log('Form validation failed - empty required fields detected');
@@ -70,10 +73,22 @@ const MarriageAffidavitForm = () => {
             <div className="affidavit-section-title">20b. WITNESSES (Print Name and Sign):</div>
             <div className="affidavit-witnesses-row">
               <div className="affidavit-witness-input-container">
-                <input type="text" className="affidavit-witness-input" />
+                <input 
+                  type="text" 
+                  name="witness1Name" 
+                  className="affidavit-witness-input" 
+                  onChange={handleInputChange}
+                  value={formData.witness1Name || ""}
+                />
               </div>
               <div className="affidavit-witness-input-container">
-                <input type="text" className="affidavit-witness-input" />
+                <input 
+                  type="text" 
+                  name="witness1Address" 
+                  className="affidavit-witness-input" 
+                  onChange={handleInputChange}
+                  value={formData.witness1Address || ""}
+                />
               </div>
               <div className="affidavit-witness-input-container">
                 <input type="text" className="affidavit-witness-input" />
@@ -98,7 +113,13 @@ const MarriageAffidavitForm = () => {
             
             <div className="affidavit-content">
               <p className="affidavit-paragraph">
-                I, <input type="text" className="affidavit-form-input affidavit-inline-input" />, of legal age, Solemnizing Officer of <input type="text" className="affidavit-form-input affidavit-inline-input" /> with address at <input type="text" className="affidavit-form-input affidavit-inline-input" />, after having sworn to in accordance with law, do hereby depose and say:
+                I, <input 
+                  type="text" 
+                  name="solemnizingOfficerName" 
+                  className="affidavit-form-input affidavit-inline-input" 
+                  onChange={handleInputChange}
+                  value={formData.solemnizingOfficerName || ""}
+                />, of legal age, Solemnizing Officer of <input type="text" className="affidavit-form-input affidavit-inline-input" /> with address at <input type="text" className="affidavit-form-input affidavit-inline-input" />, after having sworn to in accordance with law, do hereby depose and say:
               </p>
               
               <div className="affidavit-numbered-items">
