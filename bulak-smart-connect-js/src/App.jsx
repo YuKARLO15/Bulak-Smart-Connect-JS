@@ -33,6 +33,7 @@ import BirthApplicationSummary from './UserBulakSmartConnect/ApplicationComponen
 import MarriageCertificateForm from './UserBulakSmartConnect/ApplicationComponents/MarriageCertificateApplications/MarriageCertificateForm/MarriageCertificateForm';
 import MarriageSummaryForm from './UserBulakSmartConnect/ApplicationComponents/MarriageCertificateApplications/MarriageCertificateForm/MarriageSummaryForm';
 import CTCBirthCertificate from './UserBulakSmartConnect/ApplicationComponents/BirthCertificateApplications/CTCBirthCertificate';
+import RequirementBirthList from './UserBulakSmartConnect/ApplicationComponents/BirthCertificateApplications/RequirementBirthList';
 //WalkIn//
 import WalkInQueueContainer from './UserBulakSmartConnect/WalkInComponents/WalkInDashBoard';
 import WalkInForm from './UserBulakSmartConnect/WalkInComponents/WalkInForm';
@@ -83,7 +84,8 @@ function App() {
           
         />
         <Route path="/CTCBirthCertificate" element={<CTCBirthCertificate/>} />
-         <Route path="/RequestACopyBirthCertificate" element={<CopyBirthCertificate/>} />
+        <Route path="/RequestACopyBirthCertificate" element={<CopyBirthCertificate />} />
+        <Route path="/RequirementBirthList" element={<RequirementBirthList />} />
         <Route path="/MarriageSummaryForm" element={<MarriageSummaryForm />} />
         <Route path="/QrCodeAppointment/:id" element={<QRCodeAppointment />} />
         <Route path="/BirthCertificateForm" element={<BirthCertificateForm />} />
