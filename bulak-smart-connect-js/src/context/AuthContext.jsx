@@ -45,11 +45,22 @@ export const AuthProvider = ({ children }) => {
       });
       
       const { access_token, user } = response.data;
+      
+      // Store token in localStorage
       localStorage.setItem('token', access_token);
+      
+      // Process roles - ensure we extract role names correctly
+      if (user.roles) {
+        user.roleNames = user.roles.map(role => role.name);
+      } else {
+        user.roleNames = user.defaultRole ? [user.defaultRole.name] : [];
+      }
+      
       setUser(user);
       setIsAuthenticated(true);
       return true;
     } catch (err) {
+      console.error("Login error:", err);
       setError(err.response?.data?.message || 'Login failed');
       return false;
     }
