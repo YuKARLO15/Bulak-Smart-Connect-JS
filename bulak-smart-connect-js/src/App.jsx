@@ -34,6 +34,7 @@ import MarriageCertificateForm from './UserBulakSmartConnect/ApplicationComponen
 import MarriageSummaryForm from './UserBulakSmartConnect/ApplicationComponents/MarriageCertificateApplications/MarriageCertificateForm/MarriageSummaryForm';
 import CTCBirthCertificate from './UserBulakSmartConnect/ApplicationComponents/BirthCertificateApplications/CTCBirthCertificate';
 import RequirementBirthList from './UserBulakSmartConnect/ApplicationComponents/BirthCertificateApplications/RequirementBirthList';
+
 //WalkIn//
 import WalkInQueueContainer from './UserBulakSmartConnect/WalkInComponents/WalkInDashBoard';
 import WalkInForm from './UserBulakSmartConnect/WalkInComponents/WalkInForm';
@@ -78,9 +79,7 @@ function App() {
         <Route path="/Below18Registration" element={<Below18Registration />} />
         <Route path="/SexDobCorrection" element={<SexDobCorrection />} />
         <Route path="/DelayedOutOfTownRegistration" element={<DelayedOutOfTownRegistration />} />
-        <Route
-          path="/DelayedOneParentForeignerRegistration"
-          element={<DelayedOneParentForeignerRegistration />}
+        <Route path="/DelayedOneParentForeignerRegistration" element={<DelayedOneParentForeignerRegistration />}
           
         />
         <Route path="/CTCBirthCertificate" element={<CTCBirthCertificate/>} />
