@@ -109,6 +109,7 @@ function App() {
           <Route path="/WalkInDetails" element={<WalkInQueueDetail />} />
           <Route path="/CTCBirthCertificate" element={<CTCBirthCertificate/>} />
           <Route path="/RequestACopyBirthCertificate" element={<CopyBirthCertificate/>} />
+          <Route path="/RequirementBirthList" element={<RequirementBirthList />} />
           <Route path="/MarriageSummaryForm" element={<MarriageSummaryForm />} />
         </Route>
       </Routes>
