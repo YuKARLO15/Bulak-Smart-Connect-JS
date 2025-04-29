@@ -70,7 +70,7 @@ const RecentApplicationsComponent = () => {
                 navigate(id ? `/BirthApplicationSummary` : '/BirthCertificateDashboard');
                 break;
             case "Marriage Certificate":
-                navigate('/MarriageDashboard');
+                navigate(id ? '/MarriageSummaryForm' : '/MarriageLicenseDashboard');
                 break;
             case "Death Certificate":
                 navigate('/DeathDashboard');
@@ -97,6 +97,23 @@ const RecentApplicationsComponent = () => {
             } catch (err) {
                 console.error("Error preparing application summary:", err);
                 alert("An error occurred while loading the application summary.");
+            }
+        } else if (application.type === "Marriage Certificate") {
+            try {
+                const applicationData = applications.find(app => app.id === application.id);
+                
+                if (applicationData && applicationData.formData) {
+                    localStorage.setItem("marriageFormData", JSON.stringify(applicationData.formData));
+                    localStorage.setItem("currentMarriageApplicationId", application.id);
+                    
+                    navigate('/MarriageSummaryForm');
+                } else {
+                    console.error("Marriage application data not found for ID:", application.id);
+                    alert("Could not load marriage application data. Please try again.");
+                }
+            } catch (err) {
+                console.error("Error preparing marriage application summary:", err);
+                alert("An error occurred while loading the marriage application summary.");
             }
         } else {
             handleNavigation(application.type);
