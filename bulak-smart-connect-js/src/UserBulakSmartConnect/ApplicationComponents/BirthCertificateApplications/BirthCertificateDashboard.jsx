@@ -42,15 +42,11 @@ const BirthCertificateDashboard = () => {
             onChange={e => setSelectedOption(e.target.value)}
             className="BirthDashRadioGroup"
           >
-            <FormControlLabel
-              value="Regular application"
-              control={<Radio />}
-              label="Regular application for birth certificate (0 - 1 month after birth)"
-            />
+        
             <FormControlLabel
               value="Request copy"
               control={<Radio />}
-              label="Request a copy of birth certificate"
+              label="Regular application  (0 - 1 month after birth) or request a copy of birth certificate"
             />
             <Typography variant="subtitle1" className="SubTitleBirthCertificate">
               Delayed registration (More than 1 month after birth)

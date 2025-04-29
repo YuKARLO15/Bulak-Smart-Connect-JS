@@ -6,7 +6,7 @@ import HusbandForm from "./HusbandForm";
 import WifeForm from "./WifeForm";
 import MarriageDetailsForm from "./MarriageDetailsForm";
 import MarriageAffidavitForm from "./MarriageAffidavitForm";
-
+import { addApplication } from "../../ApplicationData";
 const MarriageCertificateForm = () => {
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({});
@@ -77,11 +77,52 @@ const MarriageCertificateForm = () => {
   };
 
   const handleSubmit = (e) => {
-  // Store the form data in localStorage before navigation
-  localStorage.setItem('marriageFormData', JSON.stringify(formData));
-  
-  navigate("/MarriageSummaryForm");
-  };
+    if (e && e.preventDefault) {
+      e.preventDefault();
+    }
+    try {
+    localStorage.setItem('marriageFormData', JSON.stringify(formData));
+    
+
+    const applicationId = 'MCA-' + Date.now().toString().slice(-6);
+    
+
+    const currentDate = new Date();
+    const formattedDate = currentDate.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'numeric',
+      day: 'numeric'
+    });
+
+    const applicationData = {
+      id: applicationId,
+      type: "Marriage Certificate",
+      applicationType: "New Application",
+      date: formattedDate,
+      status: "Pending",
+      message: `Application for marriage between ${formData.husbandFirstName || ''} ${formData.husbandLastName || ''} and ${formData.wifeFirstName || ''} ${formData.wifeLastName || ''}`,
+      formData: {...formData} 
+    };
+    
+    console.log("Creating new marriage application:", applicationData);
+    const result = addApplication(applicationData);
+    if (!result) {
+      console.error("Failed to add application to storage");
+      alert("There was an error submitting your application. Please try again.");
+      return;
+    }
+    window.dispatchEvent(new Event('storage'));
+    
+
+    navigate("/MarriageLicenseApplication");
+
+  } catch (error) {
+    console.error("Error submitting marriage application:", error);
+    alert("There was an error submitting your application. Please try again.");
+  }
+};
+
+
 
   return (
     <Box className="MarriageCertificateFormContainer">

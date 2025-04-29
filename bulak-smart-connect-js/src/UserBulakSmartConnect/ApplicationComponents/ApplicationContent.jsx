@@ -10,6 +10,8 @@ import DeathCertificateIcon from './ApplicationAssets/DeathCertificate.png';
 
 const ApplicationContent = () => {
   
+
+  
   const certificates = [
     { title: 'Birth Certificate', icon: BirthCertificateIcon, route: '/BirthCertificateDashboard' },
     { title: 'Marriage Certificate', icon: MarriageCertificateIcon, route: '/MarriageCertificateForm' },
@@ -41,7 +43,9 @@ const ApplicationContent = () => {
                       <li>Proin ipsum velit, placerat a</li>
                     </ul>
                     <div className="Actions">
-                      <Button variant="text" className="RequirementsBtn">Requirements</Button>
+                      <RouterLink to = '/RequirementBirthList'>
+                        <Button variant="text" className="RequirementsBtn" >Requirements</Button>
+                      </RouterLink>
                       <RouterLink to={cert.route} style={{ textDecoration: 'none' }}>
                         <Button variant="contained" className="RequestBtn">Request Now</Button>
                       </RouterLink>
