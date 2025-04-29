@@ -1,8 +1,7 @@
 const BirthCertificateApplicationData = (formData) => {
     
-    const timestamp = Date.now();
-    const randomString = Math.random().toString(8);
-    const applicationId = `BA-${timestamp}-${randomString}`;
+    const timestamp = Date.now().toString().slice(-6);
+    const applicationId = `BA-${timestamp}`;
     localStorage.setItem("currentApplicationId", applicationId);
   localStorage.setItem("birthCertificateApplication", JSON.stringify(formData));
   const selectedOption = localStorage.getItem("selectedBirthCertificateOption");

@@ -61,9 +61,10 @@ const BirthApplicationSummary = () => {
           setFormData(parsedData);
           setIsCopyRequest(!!parsedData.purpose);
 
-          const timestamp = Date.now();
-          const randomString = Math.random().toString(5).slice(2);
-          const generatedId = `BA-${timestamp}-${randomString}`;
+          const timestamp = Date.now().toString().slice(-6);
+       
+          const generatedId = `BA-${timestamp}`;
+         
 
           setApplicationId(generatedId);
           localStorage.setItem('currentApplicationId', generatedId);
