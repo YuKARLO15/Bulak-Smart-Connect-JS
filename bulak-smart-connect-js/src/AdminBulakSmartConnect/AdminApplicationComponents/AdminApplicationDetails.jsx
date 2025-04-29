@@ -24,8 +24,10 @@ import "./AdminApplicationDetails.css";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import FileUploadPreview from "./AdminFilePreview";
+import AdminMarriageApplicationView from "./AdminMarriageApplicationView";
 
-const AdminBirthApplicationView = () => {
+const AdminApplicationDetails= () => {
+ 
   const { id } = useParams(); 
   const navigate = useNavigate(); 
   const [applications, setApplications] = useState([]);
@@ -41,24 +43,22 @@ const AdminBirthApplicationView = () => {
   useEffect(() => {
     try {
       const storedApplications = JSON.parse(localStorage.getItem("applications")) || [];
-      const birthApplications = storedApplications.filter(app => app.type === "Birth Certificate");
-      setApplications(birthApplications);
-
+      setApplications(storedApplications);
       let targetApp;
       
       if (id) {
-        targetApp = birthApplications.find(app => app.id === id);
+        targetApp = storedApplications.find(app => app.id === id);
       } else {
         const currentAppId = localStorage.getItem("currentApplicationId");
         if (currentAppId) {
-          targetApp = birthApplications.find(app => app.id === currentAppId);
+          targetApp = storedApplications.find(app => app.id === currentAppId);
         }
       }
       
       if (targetApp) {
         setSelectedApplication(targetApp);
-      } else if (birthApplications.length > 0) {
-        setSelectedApplication(birthApplications[0]);
+      } else if (storedApplications.length > 0) {
+        setSelectedApplication(storedApplications[0]);
       }
     } catch (err) {
       console.error("Error loading applications:", err);
@@ -270,8 +270,12 @@ const AdminBirthApplicationView = () => {
                 </Box>
 
                 {!showDocumentsTab ? (
-                  // Birth Certificate Form View
-                  <>
+                <>
+                  {selectedApplication.type === "Marriage Certificate" ? (
+                 <AdminMarriageApplicationView applicationData={selectedApplication} />
+                 
+                    ) : selectedApplication.type === "Birth Certificate" ? (
+                      <>
                     <Box className="certificateHeaderContainer">
                       <Typography variant="body2" className="DetailsLabelAdminAppForm">
                         Municipal Form No. 102
@@ -314,7 +318,7 @@ const AdminBirthApplicationView = () => {
                       </Grid>
                     </Grid>
                     
-                    {/* CHILD Section */}
+           
                     <Grid container className="DetailsGridAdminAppForm" style={{ border: '1px solid #ccc' }}>
       <Grid item xs={1} style={{ backgroundColor: '#f5f5f5', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRight: '1px solid #ccc' }}>
         <Typography variant="h6" style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}>
@@ -442,7 +446,7 @@ const AdminBirthApplicationView = () => {
       </Grid>
     </Grid>
 
-                    {/* MOTHER Section */}
+               
                     <Grid container className="DetailsGridAdminAppForm" style={{ border: '1px solid #ccc', borderTop: 'none' }}>
       <Grid item xs={1} style={{ backgroundColor: '#f5f5f5', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRight: '1px solid #ccc' }}>
         <Typography variant="h6" style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}>
@@ -552,7 +556,6 @@ const AdminBirthApplicationView = () => {
       </Grid>
     </Grid>
 
-                    {/* FATHER Section */}
                     <Grid container className="DetailsGridAdminAppForm" style={{ border: '1px solid #ccc', borderTop: 'none' }}>
       <Grid item xs={1} style={{ backgroundColor: '#f5f5f5', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRight: '1px solid #ccc' }}>
         <Typography variant="h6" style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}>
@@ -641,7 +644,7 @@ const AdminBirthApplicationView = () => {
       </Grid>
     </Grid>
 
-                    {/* MARRIAGE OF PARENTS Section */}
+                    
                    <Grid container className="DetailsGridAdminAppForm" style={{ border: '1px solid #ccc', borderTop: 'none' }}>
                          <Grid item xs={12} style={{ backgroundColor: '#f5f5f5', padding: '5px', borderBottom: '1px solid #ccc' }}>
                            <Typography variant="body2" className="DetailsLabelAdminAppForm">
@@ -695,9 +698,19 @@ const AdminBirthApplicationView = () => {
                            </Grid>
                          </Grid>
                        </Grid>
+                        </>
+                        
+                      ) : (
+                          
+                        <Box className="NoFormViewAvailableAdminAppForm">
+                        <Typography variant="h6">
+                          No form view available for this application type
+                        </Typography>
+                      </Box>
+                    )}
                   </>
                 ) : (
-                  // Document Preview View
+                
                   <Box className="DocumentPreviewContainerAdminAppForm">
                     <Box className="DocumentPreviewHeaderAdminAppForm">
                       <Typography variant="h5" className="SectionTitleAdminAppForm">
@@ -720,7 +733,7 @@ const AdminBirthApplicationView = () => {
                   </Box>
                 )}
 
-                {/* Status section with update button */}
+              
                 <Box className="StatusSectionAdminAppForm">
                   <Typography variant="subtitle1" className={`StatusDisplayAdminAppForm status-${selectedApplication.status.toLowerCase().replace(/\s+/g, '-')}AdminAppForm`}>
                     Status: {selectedApplication.status}
@@ -806,5 +819,4 @@ const AdminBirthApplicationView = () => {
     </Box>
   );
 };
-
-export default AdminBirthApplicationView;
+export default AdminApplicationDetails; 
