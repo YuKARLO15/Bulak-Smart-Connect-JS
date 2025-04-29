@@ -42,10 +42,13 @@ import WalkInQueueDetail from './UserBulakSmartConnect/WalkInComponents/WalkInDe
 
 //-----------ADMIN SIDE --------------//
 
-// Account Management //
+// Admin Account Management //
 import AdminAccountManagement from './AdminBulakSmartConnect/AccountManagementComponents/AccountManagement';
 import SearchAddUser from './AdminBulakSmartConnect/AccountManagementComponents/SearchAdd';
 import AdminAddUser from './AdminBulakSmartConnect/AccountManagementComponents/AdminAddAccount';
+
+// Admin Announcement //
+import AdminAnnouncement from './AdminBulakSmartConnect/AdminAnnouncementComponents/AdminAnnouncement';
 
 // Application  //
 import AdminApplicationDashboard from './AdminBulakSmartConnect/AdminApplicationComponents/ApplicationAdminDashboard';
@@ -59,10 +62,13 @@ function App() {
       <Route path="/" element={<LandingPage />} />
       <Route path="/LogIn" element={<LogIn />} />
       <Route path="/SignUpForm" element={<SignUpForm />} />
+      {/* Admin Accountmanagement */}
       <Route path="/AdminAccountManagement" element={<AdminAccountManagement />} />
       <Route path="AppointmentDetailsCard" element={<AppointmentDetailsCard/>} />
       <Route path="/SearchAddUser" element={<SearchAddUser />} />
       <Route path="/add-user" element={<AdminAddUser />} /> 
+      {/* Admin Announcement */}
+      <Route path="/AdminAnnouncement" element={<AdminAnnouncement />} /> 
       <Route element={<PrivateRoute />}>
         {' '}
         {/* Protected Route Start */}

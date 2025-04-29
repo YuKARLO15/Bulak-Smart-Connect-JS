@@ -1,0 +1,22 @@
+/* AnnouncementFeed.css */
+
+.announcement-feed {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;      
+    width: 100%;      
+    max-width: 1400px; 
+    margin: 0 auto;   
+    padding: 40px;   
+    box-sizing: border-box;
+  }
+  
+  @media (min-width: 900px) {
+    .announcement-feed {
+      flex-direction: row; 
+      flex-wrap: wrap;     
+      justify-content: space-between; 
+      gap: 40px;          
+    }
+  }
+  

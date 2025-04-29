@@ -77,13 +77,10 @@ const MarriageCertificateForm = () => {
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!validateStep()) {
-      alert("Please fill in all required fields before submitting.");
-      return;
-    }
-    
-    navigate( "/MarriageSummaryForm");
+  // Store the form data in localStorage before navigation
+  localStorage.setItem('marriageFormData', JSON.stringify(formData));
+  
+  navigate("/MarriageSummaryForm");
   };
 
   return (
