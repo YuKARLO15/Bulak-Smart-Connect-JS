@@ -1,20 +1,15 @@
-import { render, screen } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import { describe, it, expect } from 'vitest';
 import App from '../App';
 
-// Create a wrapper since your App uses React Router
-const AppWithRouter = () => (
-  <BrowserRouter>
-    <App />
-  </BrowserRouter>
-);
-
-describe('App component', () => {
+describe('App', () => {
   it('renders without crashing', () => {
-    render(<AppWithRouter />);
-    // Basic smoke test - app renders without errors
+    const { container } = render(
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    );
+    expect(container).toBeTruthy();
   });
-  
-  // Add more specific tests as needed
 });
