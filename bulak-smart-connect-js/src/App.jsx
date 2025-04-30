@@ -38,13 +38,15 @@ import MarriageCertificateForm from './UserBulakSmartConnect/ApplicationComponen
 import MarriageSummaryForm from './UserBulakSmartConnect/ApplicationComponents/MarriageCertificateApplications/MarriageCertificateForm/MarriageSummaryForm';
 import CTCBirthCertificate from './UserBulakSmartConnect/ApplicationComponents/BirthCertificateApplications/CTCBirthcertificate';
 import RequirementBirthList from './UserBulakSmartConnect/ApplicationComponents/BirthCertificateApplications/RequirementBirthList';
+
 //WalkIn//
 import WalkInQueueContainer from './UserBulakSmartConnect/WalkInComponents/WalkInDashBoard';
 import WalkInForm from './UserBulakSmartConnect/WalkInComponents/WalkInForm';
 import WalkInQueueDetail from './UserBulakSmartConnect/WalkInComponents/WalkInDetails';
 
 //-----------ADMIN SIDE --------------//
-
+//Admin Dashboard//
+import AdminDashboard from './AdminBulakSmartConnect/AdminDashboard/AdminDashboard';
 // Admin Account Management //
 import AdminAccountManagement from './AdminBulakSmartConnect/AccountManagementComponents/AccountManagement';
 import SearchAddUser from './AdminBulakSmartConnect/AccountManagementComponents/SearchAdd';
@@ -57,6 +59,10 @@ import AdminAnnouncement from './AdminBulakSmartConnect/AdminAnnouncementCompone
 import AdminApplicationDashboard from './AdminBulakSmartConnect/AdminApplicationComponents/ApplicationAdminDashboard';
 import AdminApplicationForm from './AdminBulakSmartConnect/AdminApplicationComponents/AdminApplicationDetails';
 import AppointmentDetailsCard from './AdminBulakSmartConnect/AppointmentDetailsComponents/AppointmentDetails';
+
+// Admin WalkIn //
+import AdminWalkInQueue from './AdminBulakSmartConnect/AdminWalkInQueue/AdminWalkInQueue';
+
 
 function App() {
   return (
@@ -79,9 +85,12 @@ function App() {
 
         {/* Staff routes - Protected for staff, admin and super_admin */}
         <Route element={<PrivateRoute allowedRoles={['staff', 'admin', 'super_admin']} />}>
-          <Route path="/applicationAdmin" element={<AdminApplicationDashboard />} />
-          <Route path="/ApplicationDetails/:id" element={<AdminApplicationForm />} />
+          <Route path="/ApplicationAdmin" element={<AdminApplicationDashboard />} />
+          <Route path="/ApplicationDetails/:id" element={<AdminApplicationForm/>} />
           <Route path="AppointmentDetailsCard" element={<AppointmentDetailsCard />} />
+          <Route path="/AdminWalkInQueue" element={<AdminWalkInQueue />} />
+          <Route path = "/AdminHome" element={<AdminDashboard />} />
+          
         </Route>
 
         {/* User routes - Any authenticated user */}

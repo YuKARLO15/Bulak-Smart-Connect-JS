@@ -13,7 +13,7 @@ import Typography from '@mui/material/Typography';
 import ForgotPassword from './ForgotPassword';
 import './LogInCard.css';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext'; //Auth Context, updated with API service in code
+import { useAuth } from '../context/AuthContext'; 
 import { authService } from '../services/api'; //API Service to NestJS, initially used on early iteration of the login, without the roles
 
 export default function LogInCard({ onLogin }) {
@@ -26,17 +26,19 @@ export default function LogInCard({ onLogin }) {
   const [error, setError] = useState('');
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
-  const { login } = useAuth(); // login function from AuthContext
+  const { login, hasRole, isStaff } = useAuth(); 
+
 
   const handleClickOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   const handleSubmit = async event => {
     event.preventDefault();
+    
     if (validateInputs()) {
       try {
         console.log('Sending login request with:', { email, password });
-
+  
         //Old Logic to use the API service from api.js, now using the AuthContext
         //const data = await authService.login(email, password);
         //console.log('Login successful:', data);
@@ -48,9 +50,19 @@ export default function LogInCard({ onLogin }) {
         const success = await login(email, password);
 
         console.log('Login successful:', success);
-        // If login is successful, navigate to the home page
+       
         if (success) {
-          navigate('/Home');
+          
+          setTimeout(() => {
+           
+            if (isStaff|| hasRole('staff') || hasRole('admin') || hasRole('super_admin') ) {
+              console.log('User has admin role - navigating to AdminHome');
+              navigate("/AdminHome");
+            } else {
+              console.log('User is a regular user - navigating to Home');
+              navigate("/Home");
+            }
+          }, 100); 
         } else {
           setError('Login failed. Please check your credentials.');
         }
@@ -58,13 +70,11 @@ export default function LogInCard({ onLogin }) {
         console.error('Login error:', error);
 
         if (error.response) {
-          // Include more details for debugging
           console.log('Error status:', error.response.status);
           console.log('Error data:', error.response.data);
           setError(error.response.data.message || 'Invalid credentials');
         } else {
-          // Network error or other issue
-          setError('An error occurred during login. Please try again.');
+          setError("An error occurred during login. Please try again.");
         }
       }
     }

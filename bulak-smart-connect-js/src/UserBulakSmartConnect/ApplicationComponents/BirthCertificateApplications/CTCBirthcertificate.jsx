@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { Box, Typography, Button, Paper, Alert } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
-import FileUpload from '../FileUpload';
-import NavBar from '../../NavSide';
-import BirthCertificateApplicationData from './BirthCertificateApplicationData';
-import './CTCBirthCertificate.css';
+import React, { useState, useEffect } from "react";
+import { Box, Typography, Button, Paper, Alert } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import FileUpload from "../FileUpload";
+import NavBar from "../../NavSide";
+import BirthCertificateApplicationData from "./BirthCertificateApplicationData";
+import "./CTCBirthcertificate.css";
+import RequirementBirthList from "./RequirementBirthListSample";
 
 const CTCBirthCertificate = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -12,6 +13,7 @@ const CTCBirthCertificate = () => {
   const [formData, setFormData] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
   const navigate = useNavigate();
+  const [showRequirements, setShowRequirements] = useState(true);
 
   useEffect(() => {
     try {
@@ -107,6 +109,7 @@ const CTCBirthCertificate = () => {
             Please upload a clear copy of any valid government-issued ID (e.g., Driver's License,
             Passport, PhilSys ID)
           </Typography>
+       
 
           <FileUpload
             label="Authorization Letter (if applicable)"
@@ -128,34 +131,27 @@ const CTCBirthCertificate = () => {
         )}
 
         <Box className="ButtonContainerCTCBirth">
-          <Button
-            variant="outlined"
-            color="primary"
+    
+     
+          <Button 
+            variant="outlined" 
+            color="primary" 
             onClick={handleBack}
             className="BackButtonCTCBirth"
           >
             Back
           </Button>
-          <Box className="ButtonContainerCTCBirth">
-            <Button
-              variant="outlined"
-              color="primary"
-              onClick={handleBack}
-              className="BackButtonCTCBirth"
-            >
-              Back
+          <Button 
+            variant="contained" 
+            color="primary" 
+            onClick={handleSubmit}
+            className="SubmitButtonCTCBirth"
+            disabled={!isFormComplete || isSubmitted}
+          >
+            Submit Application
             </Button>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={handleSubmit}
-              className="SubmitButtonCTCBirth"
-              disabled={!isFormComplete || isSubmitted}
-            >
-              Submit Application
-            </Button>
-          </Box>
-        </Box>
+            </Box>
+  
       </Paper>
     </Box>
   );
