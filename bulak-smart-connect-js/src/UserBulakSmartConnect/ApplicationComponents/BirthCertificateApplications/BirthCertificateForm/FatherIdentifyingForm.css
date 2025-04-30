@@ -14,16 +14,15 @@
   text-transform: uppercase;
   text-align: center;
 }
-.NotAcknowledgedCheckboxContainer{
+.NotAcknowledgedCheckboxContainer {
   display: flex;
   align-items: center;
   margin-top: 10px;
   margin-left: 20px;
 }
-.CheckboxLabelFather{
-font-size: 15px !important;
- font-weight: bold;
- 
+.CheckboxLabelFather {
+  font-size: 15px !important;
+  font-weight: bold;
 }
 
 .FormContentFather {
@@ -83,8 +82,7 @@ font-size: 15px !important;
 .CheckboxInputFather {
   margin-right: 8px;
 }
-.CheckboxContainerFather input[type="checkbox"] {
-
+.CheckboxContainerFather input[type='checkbox'] {
   appearance: none;
   -webkit-appearance: none;
   margin-right: 10px;
@@ -96,12 +94,12 @@ font-size: 15px !important;
   position: relative;
 }
 
-.CheckboxContainerFather input[type="checkbox"]:checked {
+.CheckboxContainerFather input[type='checkbox']:checked {
   background-color: #1d4e5f;
   border-color: #1d4e5f;
 }
 
-.CheckboxContainerFather input[type="checkbox"]:checked::after {
+.CheckboxContainerFather input[type='checkbox']:checked::after {
   content: '';
   position: absolute;
   left: 5px;
@@ -111,7 +109,6 @@ font-size: 15px !important;
   border-width: 0 2px 2px 0;
   transform: rotate(45deg);
 }
-
 
 .CheckboxLabelFather {
   font-size: 14px;
@@ -151,16 +148,16 @@ font-size: 15px !important;
     flex-direction: column;
     gap: 10px;
   }
-  
+
   .FormGroupFather {
     width: 100%;
   }
-  
+
   .ExtensionContainerFather {
     margin-left: 0;
     margin-top: 10px;
   }
-  
+
   .SelectInputFather {
     width: 100%;
   }

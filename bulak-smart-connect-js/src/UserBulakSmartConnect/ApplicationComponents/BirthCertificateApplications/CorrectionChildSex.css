@@ -3,7 +3,7 @@
 }
 
 .CorrectionCB {
-  color: #1C4D5Ad2 !important;
+  color: #1c4d5ad2 !important;
 }
 
 .CorrectionContainer {
@@ -48,10 +48,10 @@
   color: #184a5b;
   margin-top: 5vh !important;
   font-size: 1.2vw;
-
 }
 
-.ImportantNotes h6, .SectionTitleDOBCorrection  {
+.ImportantNotes h6,
+.SectionTitleDOBCorrection {
   font-weight: bold;
   margin-bottom: 5px;
   color: white;
@@ -69,16 +69,16 @@
   color: #184a5b !important;
 }
 
-.MarriedCheckbox{
+.MarriedCheckbox {
   margin-top: 10px;
   color: #184a5b !important;
 }
-.CorrectionContainer{
-    transition: margin-left ease;
-    margin-left: 0;
+.CorrectionContainer {
+  transition: margin-left ease;
+  margin-left: 0;
 }
 
-.CorrectionContainer.sidebar-open{
-    margin-left: 250px;
-    width: 100vw;
+.CorrectionContainer.sidebar-open {
+  margin-left: 250px;
+  width: 100vw;
 }

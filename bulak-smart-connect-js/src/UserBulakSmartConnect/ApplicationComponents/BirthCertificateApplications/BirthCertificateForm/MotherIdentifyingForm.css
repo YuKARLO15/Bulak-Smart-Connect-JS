@@ -1,5 +1,3 @@
-
-
 .BirthFormContainerMother {
   width: 100%;
   border: 1px solid #ddd;
@@ -86,7 +84,6 @@
   margin-bottom: 12px;
 }
 
-
 .CheckboxLabelMother {
   font-size: 14px;
   color: #333;
@@ -101,7 +98,7 @@
 
 .ExtensionLabelMother {
   font-size: 14px;
- color: #1d4e5f;;
+  color: #1d4e5f;
 }
 
 .SelectInputMother {
@@ -165,8 +162,7 @@
   color: #666;
   font-style: italic;
 }
-.CheckboxContainerMother input[type="checkbox"] {
-
+.CheckboxContainerMother input[type='checkbox'] {
   appearance: none;
   -webkit-appearance: none;
   margin-right: 10px;
@@ -178,12 +174,12 @@
   position: relative;
 }
 
-.CheckboxContainerMother input[type="checkbox"]:checked {
+.CheckboxContainerMother input[type='checkbox']:checked {
   background-color: #1d4e5f;
   border-color: #1d4e5f;
 }
 
-.CheckboxContainerMother input[type="checkbox"]:checked::after {
+.CheckboxContainerMother input[type='checkbox']:checked::after {
   content: '';
   position: absolute;
   left: 5px;
@@ -194,18 +190,17 @@
   transform: rotate(45deg);
 }
 
-
 /* For better responsive behavior */
 @media screen and (max-width: 768px) {
   .FormRowMother {
     flex-direction: column;
     gap: 12px;
   }
-  
+
   .FormGroupMother {
     width: 100%;
   }
-  
+
   .ExtensionContainerMother {
     margin-left: 0;
     margin-top: 8px;

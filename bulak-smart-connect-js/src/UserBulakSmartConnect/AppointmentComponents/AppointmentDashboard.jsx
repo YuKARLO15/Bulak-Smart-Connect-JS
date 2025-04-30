@@ -1,10 +1,10 @@
-import React, { useState } from "react";
-import { Box, Typography, Button, Card, CardContent } from "@mui/material";
-import Calendar from "react-calendar";
-import "react-calendar/dist/Calendar.css";
-import "./AppointmentDashboard.css";
-import RecentAppointments from "./RecentAppointment";
-import AppointmentContainer from "./AppointmentContent";
+import React, { useState } from 'react';
+import { Box, Typography, Button, Card, CardContent } from '@mui/material';
+import Calendar from 'react-calendar';
+import 'react-calendar/dist/Calendar.css';
+import './AppointmentDashboard.css';
+import RecentAppointments from './RecentAppointment';
+import AppointmentContainer from './AppointmentContent';
 
 const AppointmentDashboard = () => {
   const [showAppointmentContent, setShowAppointmentContent] = useState(false);
@@ -14,8 +14,7 @@ const AppointmentDashboard = () => {
     setShowAppointmentContent(true);
   };
 
-  const handleDateClick = (date) => {
-   
+  const handleDateClick = date => {
     if (date.getDay() !== 0 && date.getDay() !== 6 && date >= new Date()) {
       setSelectedDate(date);
       setShowAppointmentContent(true);
@@ -25,8 +24,8 @@ const AppointmentDashboard = () => {
   return (
     <Box className="AppointmentDashboardContainer">
       {showAppointmentContent ? (
-        <AppointmentContainer 
-          onBack={() => setShowAppointmentContent(false)} 
+        <AppointmentContainer
+          onBack={() => setShowAppointmentContent(false)}
           preselectedDate={selectedDate}
         />
       ) : (
@@ -57,13 +56,11 @@ const AppointmentDashboard = () => {
                   <Typography variant="h6" className="SectionTitleAppointment">
                     AVAILABLE SLOTS
                   </Typography>
-                  <Calendar 
-                    className="CalendarAppointment" 
+                  <Calendar
+                    className="CalendarAppointment"
                     onChange={handleDateClick}
-                    tileDisabled={({ date }) => 
-                      date.getDay() === 0 || 
-                      date.getDay() === 6 || 
-                      date < new Date()
+                    tileDisabled={({ date }) =>
+                      date.getDay() === 0 || date.getDay() === 6 || date < new Date()
                     }
                   />
                   <Typography variant="body2" className="CalendarHelperText">

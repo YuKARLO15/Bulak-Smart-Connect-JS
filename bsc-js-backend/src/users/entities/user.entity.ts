@@ -6,7 +6,7 @@ import {
   ManyToOne,
   JoinColumn,
   ManyToMany,
-  JoinTable
+  JoinTable,
 } from 'typeorm';
 import { Role } from '../../roles/entities/role.entity';
 
@@ -26,25 +26,25 @@ export class User {
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
-  
+
   @ManyToOne(() => Role, { nullable: true })
   @JoinColumn({ name: 'default_role_id' })
   defaultRole: Role;
-  
+
   @Column({ name: 'default_role_id', nullable: true })
   defaultRoleId: number;
-  
+
   @ManyToMany(() => Role)
   @JoinTable({
-    name: "user_roles",
+    name: 'user_roles',
     joinColumn: {
-      name: "user_id",
-      referencedColumnName: "id"
+      name: 'user_id',
+      referencedColumnName: 'id',
     },
     inverseJoinColumn: {
-      name: "role_id",
-      referencedColumnName: "id"
-    }
+      name: 'role_id',
+      referencedColumnName: 'id',
+    },
   })
   roles: Role[];
 }

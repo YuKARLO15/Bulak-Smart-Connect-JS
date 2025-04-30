@@ -1,26 +1,26 @@
 import React from 'react';
 import { Box, Grid, Card, CardContent, Typography, Button } from '@mui/material';
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink } from 'react-router-dom';
 import './ApplicationContent.css';
-
 
 import BirthCertificateIcon from './ApplicationAssets/BirthCertificate.png';
 import MarriageCertificateIcon from './ApplicationAssets/MarriageCertificate.png';
 import DeathCertificateIcon from './ApplicationAssets/DeathCertificate.png';
 
 const ApplicationContent = () => {
-  
-
-  
   const certificates = [
     { title: 'Birth Certificate', icon: BirthCertificateIcon, route: '/BirthCertificateDashboard' },
-    { title: 'Marriage Certificate', icon: MarriageCertificateIcon, route: '/MarriageCertificateForm' },
+    {
+      title: 'Marriage Certificate',
+      icon: MarriageCertificateIcon,
+      route: '/MarriageCertificateForm',
+    },
     { title: 'Death Certificate', icon: DeathCertificateIcon, route: '/DeathDashboard' },
   ];
 
   return (
     <>
-      <div className='OnlineApplicationTitleContainer'>
+      <div className="OnlineApplicationTitleContainer">
         <Typography variant="h4" className="OnlineApplicationTitle">
           ONLINE APPLICATION
         </Typography>
@@ -43,11 +43,15 @@ const ApplicationContent = () => {
                       <li>Proin ipsum velit, placerat a</li>
                     </ul>
                     <div className="Actions">
-                      <RouterLink to = '/RequirementBirthList'>
-                        <Button variant="text" className="RequirementsBtn" >Requirements</Button>
+                      <RouterLink to="/RequirementBirthList">
+                        <Button variant="text" className="RequirementsBtn">
+                          Requirements
+                        </Button>
                       </RouterLink>
                       <RouterLink to={cert.route} style={{ textDecoration: 'none' }}>
-                        <Button variant="contained" className="RequestBtn">Request Now</Button>
+                        <Button variant="contained" className="RequestBtn">
+                          Request Now
+                        </Button>
                       </RouterLink>
                     </div>
                   </CardContent>

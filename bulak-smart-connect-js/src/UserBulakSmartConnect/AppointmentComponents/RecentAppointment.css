@@ -1,31 +1,31 @@
 .RecentAppointmentsAppointment {
-    display: flex;
-    flex-direction: column;
-    background-color: #FFFBFA !important;
-    padding: 15px;
-    border-radius: 8px;
-  }
-  
-  .AppointmentItemAppointment {
-    display: flex;
-    justify-content: space-between;
-    width: 20vw;
-    align-items: center;
-    background-color: #e0e0e0;
-    padding: 10px;
-    border-radius: 5px;
-    margin-top: 10px;
-  }
-  .AppointmentDivider{
-    display: flex;
-    flex-direction: column;
-  }
-  .SeeMoreAppointment {
-    text-decoration: underline !important;
-    color: #1b4d5b !important;
-  }
-  .AppointmentTypeAppointment {
-    font-size: 20px;
-    font-weight: 600 !important;
-    color: #1b4d5b;
-  }
+  display: flex;
+  flex-direction: column;
+  background-color: #fffbfa !important;
+  padding: 15px;
+  border-radius: 8px;
+}
+
+.AppointmentItemAppointment {
+  display: flex;
+  justify-content: space-between;
+  width: 20vw;
+  align-items: center;
+  background-color: #e0e0e0;
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: 10px;
+}
+.AppointmentDivider {
+  display: flex;
+  flex-direction: column;
+}
+.SeeMoreAppointment {
+  text-decoration: underline !important;
+  color: #1b4d5b !important;
+}
+.AppointmentTypeAppointment {
+  font-size: 20px;
+  font-weight: 600 !important;
+  color: #1b4d5b;
+}

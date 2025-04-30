@@ -15,7 +15,7 @@ const WalkInQueueList = ({ pendingQueues, userQueue }) => {
           </div>
         </div>
       ))}
-      
+
       {userQueue && (
         <div className="QueueItemWalkIn UserQueueWalkIn">
           <div className="QueueStatusWalkIn">

@@ -31,7 +31,7 @@ rtificateFormTitle {
   font-size: 1.5rem;
   font-weight: bold;
   text-align: center;
-  background-color: #1C4D5A;
+  background-color: #1c4d5a;
   padding: 1rem;
   border-radius: 8px;
 }
@@ -39,7 +39,7 @@ rtificateFormTitle {
 .section h4 {
   color: #34495e;
   margin: 1rem 0;
-} 
+}
 
 /* Husband section specific styling */
 .husband-section {
@@ -112,7 +112,7 @@ rtificateFormTitle {
 .husband-radio {
   margin-right: 6px;
   cursor: pointer;
-  accent-color: #1C4D5A;
+  accent-color: #1c4d5a;
 }
 
 .husband-error {
@@ -194,7 +194,7 @@ rtificateFormTitle {
 .wife-radio {
   margin-right: 6px;
   cursor: pointer;
-  accent-color: #1C4D5A;
+  accent-color: #1c4d5a;
 }
 
 .wife-error {
@@ -224,7 +224,7 @@ rtificateFormTitle {
 }
 
 /* Input field styling - kept for backward compatibility */
-.input-container input[type="text"],
+.input-container input[type='text'],
 .input-container select {
   width: 100%;
   padding: 10px;
@@ -235,7 +235,7 @@ rtificateFormTitle {
   color: #333;
 }
 
-.input-container input[type="text"]:focus,
+.input-container input[type='text']:focus,
 .input-container select:focus {
   border-color: #3498db;
   outline: none;
@@ -251,10 +251,10 @@ rtificateFormTitle {
   margin-bottom: 1rem;
 }
 
-.radio-group input[type="radio"] {
+.radio-group input[type='radio'] {
   margin-right: 6px;
   cursor: pointer;
-  accent-color: #1C4D5A;
+  accent-color: #1c4d5a;
 }
 
 /* Checkbox container styling */
@@ -295,13 +295,13 @@ rtificateFormTitle {
 
 /* Style for required field indicators */
 label::after {
-  content: " *";
+  content: ' *';
   color: #e74c3c;
 }
 
 /* Override for optional fields */
 label:not([data-required])::after {
-  content: "";
+  content: '';
 }
 
 /* Affidavit Form Specific Styling */
@@ -334,14 +334,14 @@ label:not([data-required])::after {
   font-size: 1.5rem;
   font-weight: bold;
   text-align: center;
-  background-color: #1C4D5A;
+  background-color: #1c4d5a;
   padding: 1rem;
   border-radius: 8px;
 }
 
 .affidavit-witnesses-section {
   margin: 2rem auto;
-  border: 1px solid #1C4D5A;
+  border: 1px solid #1c4d5a;
   padding: 15px;
   border-radius: 3px;
   width: 90%;
@@ -448,7 +448,7 @@ label:not([data-required])::after {
   min-width: 16px;
 }
 
-.affidavit-truth-statement, 
+.affidavit-truth-statement,
 .affidavit-sworn-statement {
   margin-top: 2rem;
   font-style: italic;
@@ -522,19 +522,19 @@ label:not([data-required])::after {
     padding: 1rem;
     width: 95vw !important;
   }
-  
+
   .affidavit-witnesses-row {
     flex-direction: column;
   }
-  
+
   .affidavit-dual-signature-section {
     flex-direction: column;
   }
-  
+
   .affidavit-dual-signature-section .affidavit-signature-line {
     width: 100%;
   }
-  
+
   .affidavit-large-input {
     width: 150px;
   }
@@ -552,11 +552,11 @@ label:not([data-required])::after {
 
 .marriage-summary-title {
   text-align: center;
-  color: #1C4D5A;
+  color: #1c4d5a;
   font-size: 24px;
   margin-bottom: 1rem;
   padding-bottom: 1rem;
-  border-bottom: 2px solid #1C4D5A;
+  border-bottom: 2px solid #1c4d5a;
 }
 
 .summary-note {
@@ -571,7 +571,7 @@ label:not([data-required])::after {
 }
 
 .summary-section-title {
-  background-color: #1C4D5A;
+  background-color: #1c4d5a;
   color: white;
   padding: 10px;
   margin-bottom: 1rem;
@@ -580,8 +580,8 @@ label:not([data-required])::after {
 }
 
 .summary-subsection-title {
-  color: #1C4D5A;
-  border-bottom: 1px solid #1C4D5A;
+  color: #1c4d5a;
+  border-bottom: 1px solid #1c4d5a;
   padding-bottom: 5px;
   margin: 1.5rem 0 1rem 0;
 }
@@ -615,7 +615,7 @@ label:not([data-required])::after {
 }
 
 .witness-title {
-  color: #1C4D5A;
+  color: #1c4d5a;
   margin-bottom: 0.5rem;
 }
 
@@ -623,7 +623,7 @@ label:not([data-required])::after {
   margin: 2rem 0;
   padding: 1rem;
   background-color: #f8f9fa;
-  border-left: 4px solid #1C4D5A;
+  border-left: 4px solid #1c4d5a;
   font-style: italic;
 }
 
@@ -654,40 +654,40 @@ label:not([data-required])::after {
 /* Print-friendly styles */
 @media print {
   .marriage-summary-container {
-      box-shadow: none;
-      padding: 0;
+    box-shadow: none;
+    padding: 0;
   }
-  
+
   .summary-section-title {
-      background-color: #f0f0f0;
-      color: #000;
+    background-color: #f0f0f0;
+    color: #000;
   }
 }
 
 /* Mobile responsiveness */
 @media (max-width: 768px) {
   .marriage-summary-container {
-      padding: 1rem;
+    padding: 1rem;
   }
-  
+
   .summary-row {
-      flex-direction: column;
+    flex-direction: column;
   }
-  
+
   .summary-label {
-      flex: 0 0 100%;
-      margin-bottom: 0.3rem;
+    flex: 0 0 100%;
+    margin-bottom: 0.3rem;
   }
-  
+
   .summary-value {
-      padding-left: 1rem;
+    padding-left: 1rem;
   }
-  
+
   .summary-signatures {
-      flex-direction: column;
+    flex-direction: column;
   }
-  
+
   .signature-block {
-      margin-bottom: 1.5rem;
+    margin-bottom: 1.5rem;
   }
 }

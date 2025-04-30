@@ -1,20 +1,20 @@
 // src/components/ProfileUpload.jsx
-import React, { useRef, useState } from "react";
-import { Box } from "@mui/material";
+import React, { useRef, useState } from 'react';
+import { Box } from '@mui/material';
 import '../AccountManagementComponents/ProfileUpload.css';
 
 const UploadProfile = ({ onUpload }) => {
   const fileInputRef = useRef(null);
-  const [imageSrc, setImageSrc] = useState(""); 
+  const [imageSrc, setImageSrc] = useState('');
 
-  const handleFileUpload = (event) => {
+  const handleFileUpload = event => {
     const file = event.target.files[0];
     if (file) {
-      if (file.type.startsWith("image/")) {
+      if (file.type.startsWith('image/')) {
         const url = URL.createObjectURL(file);
         setImageSrc(url);
       } else {
-        alert("Please upload a valid image file.");
+        alert('Please upload a valid image file.');
       }
       onUpload(file);
     }
@@ -29,7 +29,7 @@ const UploadProfile = ({ onUpload }) => {
       {imageSrc ? (
         <img src={imageSrc} alt="Profile" className="profile-image" />
       ) : (
-        <div className="upload-icon">+</div> 
+        <div className="upload-icon">+</div>
       )}
       <input
         type="file"
@@ -37,7 +37,7 @@ const UploadProfile = ({ onUpload }) => {
         ref={fileInputRef}
         className="hidden-input"
         onChange={handleFileUpload}
-        style={{ display: "none" }} // Hide the input
+        style={{ display: 'none' }} // Hide the input
       />
     </Box>
   );

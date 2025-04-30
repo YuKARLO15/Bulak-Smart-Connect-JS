@@ -16,10 +16,10 @@ const BirthCertificateDashboard = () => {
       alert('Please select an option before proceeding.');
       return;
     }
-    
+
     localStorage.setItem('selectedBirthCertificateOption', selectedOption);
-    
-    if (selectedOption === "Request copy") {
+
+    if (selectedOption === 'Request copy') {
       navigate('/RequestACopyBirthCertificate');
     } else {
       navigate('/BirthCertificateForm');
@@ -42,7 +42,6 @@ const BirthCertificateDashboard = () => {
             onChange={e => setSelectedOption(e.target.value)}
             className="BirthDashRadioGroup"
           >
-        
             <FormControlLabel
               value="Request copy"
               control={<Radio />}

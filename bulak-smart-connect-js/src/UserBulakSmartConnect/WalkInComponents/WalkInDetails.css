@@ -1,97 +1,92 @@
 .queue-detail-container {
-    display: flex;
-    width: 100vw;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    background-color: #f5f5f5;
-    padding: 20px;
-  }
-  
-  .queue-detail-card {
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 500px;
-    padding: 30px;
-    text-align: center;
-  }
-  
-  .queue-welcome {
-    margin-bottom: 30px;
-    color: #184a5b;
-    
-  }
-  
-  .queue-welcome h2 {
-    font-size: 24px;
-    margin-bottom: 10px;
-    font-weight: 500;
-  }
-  
-  .highlight {
-    font-weight: 700;
-  }
-  
-  .notification {
-    color: #184a5b;
-    font-size: 16px;
-    margin-top: 5px;
-  }
-  
-  .queue-number-section {
-    margin: 30px 0;
-  }
-  
-  .queue-number-section p {
-    margin-bottom: 10px;
-    font-size: 16px;
-  }
-  
-  .queue-number {
-    font-size: 72px;
-    font-weight: 700;
-    color: #184a5b;
-    line-height: 1;
-  }
-  
-  .requirements-link {
-    margin: 30px 0;
-  }
-  
-  .requirements-link a {
-    color: #184a5b;
-    text-decoration: underline;
-    font-size: 16px;
-  }
-  
-  .appointment-info {
-    text-align: left;
-    border-top: 1px solid #eee;
-    padding-top: 20px;
-    margin-top: 20px;
-    color: #184a5b;
+  display: flex;
+  width: 100vw;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f5f5f5;
+  padding: 20px;
+}
 
+.queue-detail-card {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 500px;
+  padding: 30px;
+  text-align: center;
+}
 
-    
-  }
-  
-  .appointment-info p {
-    margin: 10px 0;
-    font-size: 16px;
- 
-  }
-  
-  .label {
-    font-weight: 600;
-    margin-right: 5px;
-  }
-  
-  .loading {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    font-size: 18px;
-  }
+.queue-welcome {
+  margin-bottom: 30px;
+  color: #184a5b;
+}
+
+.queue-welcome h2 {
+  font-size: 24px;
+  margin-bottom: 10px;
+  font-weight: 500;
+}
+
+.highlight {
+  font-weight: 700;
+}
+
+.notification {
+  color: #184a5b;
+  font-size: 16px;
+  margin-top: 5px;
+}
+
+.queue-number-section {
+  margin: 30px 0;
+}
+
+.queue-number-section p {
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+
+.queue-number {
+  font-size: 72px;
+  font-weight: 700;
+  color: #184a5b;
+  line-height: 1;
+}
+
+.requirements-link {
+  margin: 30px 0;
+}
+
+.requirements-link a {
+  color: #184a5b;
+  text-decoration: underline;
+  font-size: 16px;
+}
+
+.appointment-info {
+  text-align: left;
+  border-top: 1px solid #eee;
+  padding-top: 20px;
+  margin-top: 20px;
+  color: #184a5b;
+}
+
+.appointment-info p {
+  margin: 10px 0;
+  font-size: 16px;
+}
+
+.label {
+  font-weight: 600;
+  margin-right: 5px;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-size: 18px;
+}

@@ -1,6 +1,6 @@
-import React from "react";
+import React from 'react';
 import '../AccountManagementComponents/UserTable.css';
-import UploadProfile from "./ProfileUpload"; 
+import UploadProfile from './ProfileUpload';
 
 const UserTable = ({ users, handleUpload }) => {
   return (
@@ -19,20 +19,19 @@ const UserTable = ({ users, handleUpload }) => {
             <tr key={index}>
               <td>
                 <div className="user-info">
-                  <UploadProfile
-                    label=""
-                    onUpload={(file) => handleUpload(index, file)}
-                  />
+                  <UploadProfile label="" onUpload={file => handleUpload(index, file)} />
                   <span className="user-name">{user.name}</span>
                 </div>
               </td>
-              <td className={user.status === "Logged In" ? "status-logged" : "status-not-logged"}>
+              <td className={user.status === 'Logged In' ? 'status-logged' : 'status-not-logged'}>
                 {user.status}
               </td>
               <td>
                 <div className="roles">
                   {user.roles.map((role, idx) => (
-                    <span key={idx} className={`role ${role.toLowerCase()}`}>{role}</span>
+                    <span key={idx} className={`role ${role.toLowerCase()}`}>
+                      {role}
+                    </span>
                   ))}
                 </div>
               </td>

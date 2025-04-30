@@ -4,24 +4,23 @@
   width: 80vw;
   margin-top: 5vw;
 }
-.OnlineApplicationTitleContainer{
-display: flex;
-width: 100vw;
-background-color: #184a5b;
-height: 10vh;
+.OnlineApplicationTitleContainer {
+  display: flex;
+  width: 100vw;
+  background-color: #184a5b;
+  height: 10vh;
 }
 .OnlineApplicationTitle {
   font-size: 30px !important;
   font-weight: 600 !important;
-  ;
   text-align: start !important;
   margin-bottom: 10vh !important;
-  color: #FFF6F6 !important;
+  color: #fff6f6 !important;
   padding: 20px;
   margin-left: 10vw !important;
 }
 .CertificateCard {
-  background-color: #FFF6F6 !important;
+  background-color: #fff6f6 !important;
   border-radius: 10px;
   width: 20vw;
   height: auto;
@@ -33,7 +32,7 @@ height: 10vh;
 }
 .CardTitle {
   display: flex;
-  flex-direction:column;
+  flex-direction: column;
   height: 4vh;
 }
 
@@ -42,12 +41,11 @@ height: 10vh;
   height: 20vh;
 
   align-self: center;
-  
 }
 
 .CardTitle {
   font-size: 20px !important;
-  color: #184a5b !important; 
+  color: #184a5b !important;
   font-weight: bold !important;
 }
 
@@ -60,7 +58,7 @@ height: 10vh;
 }
 
 .Actions {
-  display: flex;  
+  display: flex;
   flex-direction: column;
   align-items: center;
   gap: 1px;
@@ -79,90 +77,85 @@ height: 10vh;
   width: 13vw;
   height: 5vh;
   font-size: 12px !important;
-    color: white;
-    padding: 12px 16px;
-    border-radius: 8px;
-    font-weight: bold;
-    box-shadow: 0px 4px 10px rgba(58, 77, 139, 0.2);
-
+  color: white;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-weight: bold;
+  box-shadow: 0px 4px 10px rgba(58, 77, 139, 0.2);
 }
 .RequestBtn:hover {
-  background-color: #066D88 !important;
-
+  background-color: #066d88 !important;
 }
 .RequirementsBtn:hover {
-  color: #066D88 !important;
+  color: #066d88 !important;
 }
-
-
-
 
 @media (max-width: 768px) {
   .CertificateCard {
-      width: 50vw;
-      height: auto;
-      margin-left: 20vw;
-      flex-direction: column;
+    width: 50vw;
+    height: auto;
+    margin-left: 20vw;
+    flex-direction: column;
   }
-  
+
   .CardTitle {
-      font-size: 35px;
+    font-size: 35px;
   }
-  
+
   .OnlineApplicationTitle {
-      font-size: 14px;
-      margin-bottom: 20vh;
+    font-size: 14px;
+    margin-bottom: 20vh;
   }
-  
+
   .Title {
-      flex-direction: column;
-      height: auto;
+    flex-direction: column;
+    height: auto;
   }
-  
+
   .Title img {
-      width: 20vw;
-      height: auto;
-      margin-right: 0;
-      margin-bottom: 30px;
-      justify-content: center;
-      align-self: center;
+    width: 20vw;
+    height: auto;
+    margin-right: 0;
+    margin-bottom: 30px;
+    justify-content: center;
+    align-self: center;
   }
-  
+
   .Title h6 {
-      font-size: 12px !important;
+    font-size: 12px !important;
   }
-  
+
   .ApplicationContentContainer {
-      width: 100vw;
-      margin-left: 0;
+    width: 100vw;
+    margin-left: 0;
   }
-  
+
   .Details {
-      margin-left: 0;
-      font-size: 12px;
+    margin-left: 0;
+    font-size: 12px;
   }
-  
+
   .Actions {
-      flex-direction: column;
-      align-items: center;
+    flex-direction: column;
+    align-items: center;
   }
 }
 
 @media (max-width: 480px) {
   .CertificateCard {
-      width: 60vw;
-      margin-left: 15vw;
+    width: 60vw;
+    margin-left: 15vw;
   }
-  
+
   .OnlineApplicationTitle {
-      font-size: 14px;
+    font-size: 14px;
   }
-  
+
   .Title img {
-      width: 50vw;
+    width: 50vw;
   }
-  
+
   .Details {
-      font-size: 10px;
+    font-size: 10px;
   }
 }

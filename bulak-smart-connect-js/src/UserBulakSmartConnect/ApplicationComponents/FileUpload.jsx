@@ -1,13 +1,13 @@
-import React, { useRef, useState } from "react";
-import { Box, Button, Typography } from "@mui/material";
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import "./FileUpload.css";
+import React, { useRef, useState } from 'react';
+import { Box, Button, Typography } from '@mui/material';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import './FileUpload.css';
 
 const FileUpload = ({ label, onUpload }) => {
   const fileInputRef = useRef(null);
-  const [fileName, setFileName] = useState("");
+  const [fileName, setFileName] = useState('');
 
-  const handleFileUpload = (event) => {
+  const handleFileUpload = event => {
     const file = event.target.files[0];
     if (file) {
       setFileName(file.name);
@@ -27,7 +27,7 @@ const FileUpload = ({ label, onUpload }) => {
       <Box className="file-upload-box" onClick={openFileExplorer}>
         <CloudUploadIcon className="upload-icon" />
         <Typography variant="body2" className="file-uploaddesc">
-          {fileName ? fileName : "Drop a file, or Click to upload"}
+          {fileName ? fileName : 'Drop a file, or Click to upload'}
         </Typography>
       </Box>
       <input

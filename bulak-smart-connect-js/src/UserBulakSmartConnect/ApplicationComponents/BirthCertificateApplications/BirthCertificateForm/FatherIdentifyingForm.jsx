@@ -1,33 +1,35 @@
-import React, { useState } from "react";
-import "./FatherIdentifyingForm.css";
+import React, { useState } from 'react';
+import './FatherIdentifyingForm.css';
 
 const FatherIdentifyingForm = ({ formData, handleChange }) => {
   const [showExtension, setShowExtension] = useState(formData?.fatherHasExtension || false);
-  const [notAcknowledgedByFather, setNotAcknowledgedByFather] = useState(formData?.notAcknowledgedByFather || false);
-  
+  const [notAcknowledgedByFather, setNotAcknowledgedByFather] = useState(
+    formData?.notAcknowledgedByFather || false
+  );
+
   const requiredField = <span className="RequiredFieldFather">*</span>;
 
-  const validateNumberOnly = (e) => {
+  const validateNumberOnly = e => {
     if (!/^\d*$/.test(e.target.value)) {
       return;
     }
     handleChange(e);
   };
 
-  const handleNotAcknowledgedChange = (e) => {
+  const handleNotAcknowledgedChange = e => {
     setNotAcknowledgedByFather(e.target.checked);
     handleChange({
       target: {
-        name: "notAcknowledgedByFather",
-        value: e.target.checked
-      }
+        name: 'notAcknowledgedByFather',
+        value: e.target.checked,
+      },
     });
   };
 
   return (
     <div className="BirthFormContainerFather">
       <div className="FormHeaderFather">III. FATHER IDENTIFYING INFORMATION</div>
-      
+
       <div className="NotAcknowledgedCheckboxContainer CheckboxContainerFather">
         <input
           type="checkbox"
@@ -44,7 +46,9 @@ const FatherIdentifyingForm = ({ formData, handleChange }) => {
       <div className="FormContentFather">
         {/* Full Name Section */}
         <div className="FormSectionFather">
-          <div className="SectionTitleFather">14. FULL NAME (Buong Pangalan) {!notAcknowledgedByFather && requiredField}</div>
+          <div className="SectionTitleFather">
+            14. FULL NAME (Buong Pangalan) {!notAcknowledgedByFather && requiredField}
+          </div>
 
           <div className="FormRowFather">
             <div className="FormGroupFather">
@@ -54,7 +58,7 @@ const FatherIdentifyingForm = ({ formData, handleChange }) => {
               <input
                 type="text"
                 name="fatherFirstName"
-                value={formData?.fatherFirstName || ""}
+                value={formData?.fatherFirstName || ''}
                 onChange={handleChange}
                 className="FormInputFather"
                 required={!notAcknowledgedByFather}
@@ -62,13 +66,11 @@ const FatherIdentifyingForm = ({ formData, handleChange }) => {
             </div>
 
             <div className="FormGroupFather">
-              <label className="FormLabelFather">
-                Middle Name (Gitnang Pangalan) Optional
-              </label>
+              <label className="FormLabelFather">Middle Name (Gitnang Pangalan) Optional</label>
               <input
                 type="text"
                 name="fatherMiddleName"
-                value={formData?.fatherMiddleName || ""}
+                value={formData?.fatherMiddleName || ''}
                 onChange={handleChange}
                 className="FormInputFather"
               />
@@ -81,7 +83,7 @@ const FatherIdentifyingForm = ({ formData, handleChange }) => {
               <input
                 type="text"
                 name="fatherLastName"
-                value={formData?.fatherLastName || ""}
+                value={formData?.fatherLastName || ''}
                 onChange={handleChange}
                 className="FormInputFather"
                 required={!notAcknowledgedByFather}
@@ -108,7 +110,7 @@ const FatherIdentifyingForm = ({ formData, handleChange }) => {
                 <span className="ExtensionLabelFather">Extension</span>
                 <select
                   name="fatherExtension"
-                  value={formData?.fatherExtension || ""}
+                  value={formData?.fatherExtension || ''}
                   onChange={handleChange}
                   className="SelectInputFather"
                 >
@@ -133,7 +135,7 @@ const FatherIdentifyingForm = ({ formData, handleChange }) => {
               <input
                 type="text"
                 name="fatherCitizenship"
-                value={formData?.fatherCitizenship || ""}
+                value={formData?.fatherCitizenship || ''}
                 onChange={handleChange}
                 className="FormInputFather"
                 required={!notAcknowledgedByFather}
@@ -147,7 +149,7 @@ const FatherIdentifyingForm = ({ formData, handleChange }) => {
               <input
                 type="text"
                 name="fatherReligion"
-                value={formData?.fatherReligion || ""}
+                value={formData?.fatherReligion || ''}
                 onChange={handleChange}
                 className="FormInputFather"
                 required={!notAcknowledgedByFather}
@@ -166,7 +168,7 @@ const FatherIdentifyingForm = ({ formData, handleChange }) => {
               <input
                 type="text"
                 name="fatherOccupation"
-                value={formData?.fatherOccupation || ""}
+                value={formData?.fatherOccupation || ''}
                 onChange={handleChange}
                 className="FormInputFather"
                 required={!notAcknowledgedByFather}
@@ -180,7 +182,7 @@ const FatherIdentifyingForm = ({ formData, handleChange }) => {
               <input
                 type="text"
                 name="fatherAge"
-                value={formData?.fatherAge || ""}
+                value={formData?.fatherAge || ''}
                 onChange={validateNumberOnly}
                 className="FormInputFather"
                 placeholder="Enter number only"
@@ -192,15 +194,19 @@ const FatherIdentifyingForm = ({ formData, handleChange }) => {
 
         {/* Residence Section */}
         <div className="FormSectionFather">
-          <div className="SectionTitleFather">19. RESIDENCE {!notAcknowledgedByFather && requiredField}</div>
+          <div className="SectionTitleFather">
+            19. RESIDENCE {!notAcknowledgedByFather && requiredField}
+          </div>
 
           <div className="FormRowFather">
             <div className="FormGroupFather">
-              <label className="FormLabelFather">House NO., Street {!notAcknowledgedByFather && requiredField}</label>
+              <label className="FormLabelFather">
+                House NO., Street {!notAcknowledgedByFather && requiredField}
+              </label>
               <input
                 type="text"
                 name="fatherStreet"
-                value={formData?.fatherStreet || ""}
+                value={formData?.fatherStreet || ''}
                 onChange={handleChange}
                 className="FormInputFather"
                 required={!notAcknowledgedByFather}
@@ -208,11 +214,13 @@ const FatherIdentifyingForm = ({ formData, handleChange }) => {
             </div>
 
             <div className="FormGroupFather">
-              <label className="FormLabelFather">Barangay {!notAcknowledgedByFather && requiredField}</label>
+              <label className="FormLabelFather">
+                Barangay {!notAcknowledgedByFather && requiredField}
+              </label>
               <input
                 type="text"
                 name="fatherBarangay"
-                value={formData?.fatherBarangay || ""}
+                value={formData?.fatherBarangay || ''}
                 onChange={handleChange}
                 className="FormInputFather"
                 required={!notAcknowledgedByFather}
@@ -222,11 +230,13 @@ const FatherIdentifyingForm = ({ formData, handleChange }) => {
 
           <div className="FormRowFather">
             <div className="FormGroupFather">
-              <label className="FormLabelFather">City/Municipality {!notAcknowledgedByFather && requiredField}</label>
+              <label className="FormLabelFather">
+                City/Municipality {!notAcknowledgedByFather && requiredField}
+              </label>
               <input
                 type="text"
                 name="fatherCity"
-                value={formData?.fatherCity || ""}
+                value={formData?.fatherCity || ''}
                 onChange={handleChange}
                 className="FormInputFather"
                 required={!notAcknowledgedByFather}
@@ -234,11 +244,13 @@ const FatherIdentifyingForm = ({ formData, handleChange }) => {
             </div>
 
             <div className="FormGroupFather">
-              <label className="FormLabelFather">Province {!notAcknowledgedByFather && requiredField}</label>
+              <label className="FormLabelFather">
+                Province {!notAcknowledgedByFather && requiredField}
+              </label>
               <input
                 type="text"
                 name="fatherProvince"
-                value={formData?.fatherProvince || ""}
+                value={formData?.fatherProvince || ''}
                 onChange={handleChange}
                 className="FormInputFather"
                 required={!notAcknowledgedByFather}
@@ -248,11 +260,13 @@ const FatherIdentifyingForm = ({ formData, handleChange }) => {
 
           <div className="FormRowFather">
             <div className="FormGroupFather">
-              <label className="FormLabelFather">Country {!notAcknowledgedByFather && requiredField}</label>
+              <label className="FormLabelFather">
+                Country {!notAcknowledgedByFather && requiredField}
+              </label>
               <input
                 type="text"
                 name="fatherCountry"
-                value={formData?.fatherCountry || ""}
+                value={formData?.fatherCountry || ''}
                 onChange={handleChange}
                 className="FormInputFather"
                 required={!notAcknowledgedByFather}

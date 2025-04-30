@@ -1,13 +1,13 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { Button, Typography, Box, Paper } from "@mui/material";
-import BirthCertificateApplicationData from "./BirthCertificateApplicationData";
-import "./BirthCertificateForm.css";
-import ChildIdentifyingForm from "./BirthCertificateForm/ChildIdentifyingForm";
-import MotherInformationBirthForm from "./BirthCertificateForm/MotherIdentifyingForm";
-import FatherInformationBirthForm from "./BirthCertificateForm/FatherIdentifyingForm";
-import MarriageInformationBirthForm from "./BirthCertificateForm/MarriageIdentifyingForm";
-import AffidavitBirthForm from "./BirthCertificateForm/BirthBackIdentifyingForm";
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Button, Typography, Box, Paper } from '@mui/material';
+import BirthCertificateApplicationData from './BirthCertificateApplicationData';
+import './BirthCertificateForm.css';
+import ChildIdentifyingForm from './BirthCertificateForm/ChildIdentifyingForm';
+import MotherInformationBirthForm from './BirthCertificateForm/MotherIdentifyingForm';
+import FatherInformationBirthForm from './BirthCertificateForm/FatherIdentifyingForm';
+import MarriageInformationBirthForm from './BirthCertificateForm/MarriageIdentifyingForm';
+import AffidavitBirthForm from './BirthCertificateForm/BirthBackIdentifyingForm';
 
 const BirthCertificateForm = () => {
   const [step, setStep] = useState(1);
@@ -15,80 +15,110 @@ const BirthCertificateForm = () => {
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
 
-  const handleChange = (e) => {
+  const handleChange = e => {
     const { name, value, type, checked } = e.target;
-    setFormData((prevData) => ({
+    setFormData(prevData => ({
       ...prevData,
-      [name]: type === "checkbox" ? checked : value,
+      [name]: type === 'checkbox' ? checked : value,
     }));
   };
 
   const requiredFields = {
     1: [
-      "lastName", "firstName", "birthMonth", "birthDay", "birthYear", "sex",
-      "hospital", "city", "province", "barangay", "residence", "typeOfBirth",
-      "birthOrder", "birthWeight"
+      'lastName',
+      'firstName',
+      'birthMonth',
+      'birthDay',
+      'birthYear',
+      'sex',
+      'hospital',
+      'city',
+      'province',
+      'barangay',
+      'residence',
+      'typeOfBirth',
+      'birthOrder',
+      'birthWeight',
     ],
     2: [
-      "motherLastName", "motherFirstName", "motherCitizenship", "motherReligion",
-      "motherTotalChildren", "motherLivingChildren", "motherDeceasedChildren",
-      "motherOccupation", "motherAge", "motherStreet", "motherCity" 
+      'motherLastName',
+      'motherFirstName',
+      'motherCitizenship',
+      'motherReligion',
+      'motherTotalChildren',
+      'motherLivingChildren',
+      'motherDeceasedChildren',
+      'motherOccupation',
+      'motherAge',
+      'motherStreet',
+      'motherCity',
     ],
-    3: ["fatherLastName", "fatherFirstName", "fatherCitizenship", "fatherReligion", "fatherOccupation", "fatherAge", "fatherStreet", "fatherBarangay", "fatherCity", "fatherProvince", "fatherCountry"],
+    3: [
+      'fatherLastName',
+      'fatherFirstName',
+      'fatherCitizenship',
+      'fatherReligion',
+      'fatherOccupation',
+      'fatherAge',
+      'fatherStreet',
+      'fatherBarangay',
+      'fatherCity',
+      'fatherProvince',
+      'fatherCountry',
+    ],
     4: [],
-    5: [] 
+    5: [],
   };
 
   const validateStep = () => {
     const newErrors = {};
-    
 
     if (step === 3 && formData.notAcknowledgedByFather) {
       return true;
     }
-    
+
     requiredFields[step]?.forEach(field => {
-      if (!formData[field] || formData[field].toString().trim() === "") {
-        newErrors[field] = "This field is required";
+      if (!formData[field] || formData[field].toString().trim() === '') {
+        newErrors[field] = 'This field is required';
       }
     });
-    
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
   const handleNext = () => {
     if (validateStep()) {
-      setStep((prevStep) => prevStep + 1);
+      setStep(prevStep => prevStep + 1);
     }
   };
 
   const handlePrevious = () => {
-    setStep((prevStep) => prevStep - 1);
+    setStep(prevStep => prevStep - 1);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = e => {
     e.preventDefault();
     if (!validateStep()) {
-      alert("Please fill in all required fields before submitting.");
+      alert('Please fill in all required fields before submitting.');
       return;
     }
-    
+
     const applicationId = BirthCertificateApplicationData(formData);
-    localStorage.setItem("currentApplicationId", applicationId);
-    const selectedOption = localStorage.getItem("selectedBirthCertificateOption");
+    localStorage.setItem('currentApplicationId', applicationId);
+    const selectedOption = localStorage.getItem('selectedBirthCertificateOption');
     const routeMap = {
-      "Regular application": "/RegularApplication",
-      "Request copy": "/RequestCopy",
-      "Above 18": "/Above18Registration",
-      "Below 18": "/Below18Registration",
-      "Foreign Parent": "/DelayedOneParentForeignerRegistration",
-      "Out of town": "/DelayedOutOfTownRegistration",
-      "Clerical Error": "/ClericalErrorApplication",
-      "Sex DOB": "/SexDobCorrection",
-      "First Name": "/FirstNameCorrection",
+      'Regular application': '/RegularApplication',
+      'Request copy': '/RequestCopy',
+      'Above 18': '/Above18Registration',
+      'Below 18': '/Below18Registration',
+      'Foreign Parent': '/DelayedOneParentForeignerRegistration',
+      'Out of town': '/DelayedOutOfTownRegistration',
+      'Clerical Error': '/ClericalErrorApplication',
+      'Sex DOB': '/SexDobCorrection',
+      'First Name': '/FirstNameCorrection',
     };
-    navigate(routeMap[selectedOption] || "/");
+    navigate(routeMap[selectedOption] || '/');
   };
 
   return (
@@ -108,8 +138,16 @@ const BirthCertificateForm = () => {
 
         {step === 2 && (
           <>
-            <MotherInformationBirthForm formData={formData} handleChange={handleChange} errors={errors} />
-            <Button variant="contained" onClick={handlePrevious} className="BirthCertificateFormButton">
+            <MotherInformationBirthForm
+              formData={formData}
+              handleChange={handleChange}
+              errors={errors}
+            />
+            <Button
+              variant="contained"
+              onClick={handlePrevious}
+              className="BirthCertificateFormButton"
+            >
               Previous
             </Button>
             <Button variant="contained" onClick={handleNext} className="BirthCertificateFormButton">
@@ -120,8 +158,16 @@ const BirthCertificateForm = () => {
 
         {step === 3 && (
           <>
-            <FatherInformationBirthForm formData={formData} handleChange={handleChange} errors={errors} />
-            <Button variant="contained" onClick={handlePrevious} className="BirthCertificateFormButton">
+            <FatherInformationBirthForm
+              formData={formData}
+              handleChange={handleChange}
+              errors={errors}
+            />
+            <Button
+              variant="contained"
+              onClick={handlePrevious}
+              className="BirthCertificateFormButton"
+            >
               Previous
             </Button>
             <Button variant="contained" onClick={handleNext} className="BirthCertificateFormButton">
@@ -132,8 +178,16 @@ const BirthCertificateForm = () => {
 
         {step === 4 && (
           <>
-            <MarriageInformationBirthForm formData={formData} handleChange={handleChange} errors={errors} />
-            <Button variant="contained" onClick={handlePrevious} className="BirthCertificateFormButton">
+            <MarriageInformationBirthForm
+              formData={formData}
+              handleChange={handleChange}
+              errors={errors}
+            />
+            <Button
+              variant="contained"
+              onClick={handlePrevious}
+              className="BirthCertificateFormButton"
+            >
               Previous
             </Button>
             <Button variant="contained" onClick={handleNext} className="BirthCertificateFormButton">
@@ -145,10 +199,18 @@ const BirthCertificateForm = () => {
         {step === 5 && (
           <>
             <AffidavitBirthForm formData={formData} handleChange={handleChange} />
-            <Button variant="contained" onClick={handlePrevious} className="BirthCertificateFormButton">
+            <Button
+              variant="contained"
+              onClick={handlePrevious}
+              className="BirthCertificateFormButton"
+            >
               Previous
             </Button>
-            <Button variant="contained" onClick={handleSubmit} className="BirthCertificateFormButton">
+            <Button
+              variant="contained"
+              onClick={handleSubmit}
+              className="BirthCertificateFormButton"
+            >
               Submit
             </Button>
           </>

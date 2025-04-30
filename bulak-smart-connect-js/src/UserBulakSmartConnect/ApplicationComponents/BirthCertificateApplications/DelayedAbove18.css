@@ -21,12 +21,10 @@
 .SubtitleDelayedAbove18 {
   color: #184a5b;
   margin-top: 10px !important;
-
 }
-.CheckboxDelayedAbove18{
+.CheckboxDelayedAbove18 {
   color: #184a5b;
 }
-
 
 /* Sidebar Open State */
 .DelayedAbove18Container.sidebar-open {
@@ -92,7 +90,7 @@
   margin-bottom: 8px;
 }
 
-.FileUploadContainer input[type="file"] {
+.FileUploadContainer input[type='file'] {
   display: block;
   margin-bottom: 10px;
   padding: 5px;

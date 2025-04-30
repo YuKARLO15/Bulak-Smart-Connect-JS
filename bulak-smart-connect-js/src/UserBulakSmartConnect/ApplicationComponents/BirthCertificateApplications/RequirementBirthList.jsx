@@ -1,43 +1,50 @@
 import React from 'react';
-import { Box, Typography, Paper, Divider, List, ListItem, ListItemIcon, ListItemText, Button } from '@mui/material';
+import {
+  Box,
+  Typography,
+  Paper,
+  Divider,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Button,
+} from '@mui/material';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useNavigate } from 'react-router-dom';
 import './RequirementBirthList.css';
 
 const RequirementBirthList = () => {
-    const navigate = useNavigate();
-    const handleBack = () => {
-        navigate(-1);
-      };
+  const navigate = useNavigate();
+  const handleBack = () => {
+    navigate(-1);
+  };
   return (
     <Box className="requirement-container">
-    <Paper elevation={3} className="requirement-paper">
-      <Box className="requirement-main-title">
-        <Button 
-          variant="contained" 
-          startIcon={<ArrowBackIcon />} 
-          onClick={handleBack}
-          className="back-button"
-        >
-          Back
-        </Button>
-        <Typography variant="h5">
-          Requirements for Application of Birth Certificate
-        </Typography>
-      </Box>
-
-       
+      <Paper elevation={3} className="requirement-paper">
+        <Box className="requirement-main-title">
+          <Button
+            variant="contained"
+            startIcon={<ArrowBackIcon />}
+            onClick={handleBack}
+            className="back-button"
+          >
+            Back
+          </Button>
+          <Typography variant="h5">Requirements for Application of Birth Certificate</Typography>
+        </Box>
 
         {/* Regular Birth Certificate */}
         <Box className="requirement-section">
           <Typography variant="h6" className="requirement-section-title">
             Application for Regular Birth Certificate
           </Typography>
-      
+
           <Box className="requirement-subsection">
             <Typography variant="subtitle1" className="requirement-subsection-title">
-              I. Regular application (0 - 1 month after birth) or request a copy of birth certificate
+              I. Regular application (0 - 1 month after birth) or request a copy of birth
+              certificate
             </Typography>
             <List dense className="requirement-list">
               <ListItem>
@@ -457,7 +464,7 @@ const RequirementBirthList = () => {
             <Typography variant="subtitle1" className="requirement-subsection-title">
               I. Correction of First Name
             </Typography>
-            
+
             <Typography variant="subtitle2" className="requirement-subheading">
               MANDATORY DOCUMENTS:
             </Typography>
@@ -535,7 +542,7 @@ const RequirementBirthList = () => {
             <Typography variant="subtitle1" className="requirement-subsection-title">
               II. Correction of Child's Sex / Date of Birth-Day & Month
             </Typography>
-            
+
             <Typography variant="subtitle2" className="requirement-subheading">
               MANDATORY DOCUMENTS:
             </Typography>

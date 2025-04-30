@@ -32,13 +32,13 @@ async function seedDatabaseIfNeeded(dataSource: DataSource) {
   // This helps prevent sync issues with references
   const roleRepo = dataSource.getRepository(Role);
   const count = await roleRepo.count();
-  
+
   if (count === 0) {
     await roleRepo.save([
       { name: 'super_admin', description: 'Has all permissions' },
       { name: 'admin', description: 'Can manage staff and citizens' },
       { name: 'staff', description: 'Can process applications' },
-      { name: 'citizen', description: 'Regular user' }
+      { name: 'citizen', description: 'Regular user' },
     ]);
   }
 }

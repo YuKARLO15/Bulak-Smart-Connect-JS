@@ -27,11 +27,11 @@
   width: 100%;
 }
 
-.queue-info{
+.queue-info {
   max-width: 65vw;
 }
 
-.p{
+.p {
   margin-top: 10px;
 }
 
@@ -63,12 +63,11 @@
   color: #333;
 }
 
-p.Screenshot{
+p.Screenshot {
   font-size: 14px;
   color: #c41c1c;
   text-align: center;
   margin-top: 10px;
-
 }
 
 .requirements-link {
@@ -79,10 +78,9 @@ p.Screenshot{
   display: inline-block;
   text-decoration: underline;
 }
-p.requirement-label{
+p.requirement-label {
   font-size: 14px;
   margin-top: 20px;
-
 }
 
 .requirements-link:hover {

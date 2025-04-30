@@ -1,35 +1,32 @@
-import React, { useState, useEffect } from "react";
-import "../SignUpComponents/UserNamePassword.css";
-import "../SignUpComponents/SignUpForm";
+import React, { useState, useEffect } from 'react';
+import '../SignUpComponents/UserNamePassword.css';
+import '../SignUpComponents/SignUpForm';
 
 const UsernamePasswordSection = ({ formData, handleInputChange, errors, setErrors }) => {
-
-  const handlePasswordValidation = (e) => {
+  const handlePasswordValidation = e => {
     const { name, value } = e.target;
-    handleInputChange(e); 
+    handleInputChange(e);
 
-
-    if (name === "confirmpassword") {
+    if (name === 'confirmpassword') {
       if (formData.password !== value) {
         setErrors({
           ...errors,
-          confirmpassword: "Passwords do not match", 
+          confirmpassword: 'Passwords do not match',
         });
       } else {
         setErrors({
           ...errors,
-          confirmpassword: "", 
+          confirmpassword: '',
         });
       }
     }
   };
 
-  
   useEffect(() => {
     if (formData.password === formData.confirmpassword) {
-      setErrors((prevErrors) => ({
+      setErrors(prevErrors => ({
         ...prevErrors,
-        confirmpassword: "", 
+        confirmpassword: '',
       }));
     }
   }, [formData.password, formData.confirmpassword, setErrors]);
@@ -67,9 +64,9 @@ const UsernamePasswordSection = ({ formData, handleInputChange, errors, setError
       </div>
 
       <div className="form-control" id="password-container">
-        
         <label className="labels">
-          Confirm Password <span className="asterisk"> *</span>   <span className="error-message-password">{errors.confirmpassword}</span>
+          Confirm Password <span className="asterisk"> *</span>{' '}
+          <span className="error-message-password">{errors.confirmpassword}</span>
         </label>
         <input
           type="password"

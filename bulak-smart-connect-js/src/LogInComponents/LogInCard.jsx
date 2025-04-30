@@ -1,29 +1,29 @@
-import React, { useState } from "react"; //useState Here
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Card from "@mui/material/Card";
-import Checkbox from "@mui/material/Checkbox";
-import Divider from "@mui/material/Divider";
-import FormLabel from "@mui/material/FormLabel";
-import FormControl from "@mui/material/FormControl";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Link from "@mui/material/Link";
-import TextField from "@mui/material/TextField";
-import Typography from "@mui/material/Typography";
-import ForgotPassword from "./ForgotPassword";
-import "./LogInCard.css";
-import { Link as RouterLink, useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext"; //Auth Context, updated with API service in code
-import { authService } from "../services/api"; //API Service to NestJS, initially used on early iteration of the login, without the roles
+import React, { useState } from 'react'; //useState Here
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import Checkbox from '@mui/material/Checkbox';
+import Divider from '@mui/material/Divider';
+import FormLabel from '@mui/material/FormLabel';
+import FormControl from '@mui/material/FormControl';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Link from '@mui/material/Link';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
+import ForgotPassword from './ForgotPassword';
+import './LogInCard.css';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext'; //Auth Context, updated with API service in code
+import { authService } from '../services/api'; //API Service to NestJS, initially used on early iteration of the login, without the roles
 
 export default function LogInCard({ onLogin }) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState(false);
-  const [emailErrorMessage, setEmailErrorMessage] = useState("");
+  const [emailErrorMessage, setEmailErrorMessage] = useState('');
   const [passwordError, setPasswordError] = useState(false);
-  const [passwordErrorMessage, setPasswordErrorMessage] = useState("");
-  const [error, setError] = useState("");
+  const [passwordErrorMessage, setPasswordErrorMessage] = useState('');
+  const [error, setError] = useState('');
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   const { login, hasRole, isStaff } = useAuth(); 
@@ -32,13 +32,13 @@ export default function LogInCard({ onLogin }) {
   const handleClickOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async event => {
     event.preventDefault();
     
     if (validateInputs()) {
       try {
         console.log('Sending login request with:', { email, password });
-        
+
         //Old Logic to use the API service from api.js, now using the AuthContext
         //const data = await authService.login(email, password);
         //console.log('Login successful:', data);
@@ -48,7 +48,7 @@ export default function LogInCard({ onLogin }) {
 
         // Use the login function from AuthContext directly, eliminating the one used in api.js
         const success = await login(email, password);
-        
+
         console.log('Login successful:', success);
        
         if (success) {
@@ -64,15 +64,15 @@ export default function LogInCard({ onLogin }) {
             }
           }, 100); 
         } else {
-          setError("Login failed. Please check your credentials.");
+          setError('Login failed. Please check your credentials.');
         }
       } catch (error) {
-        console.error("Login error:", error);
-        
+        console.error('Login error:', error);
+
         if (error.response) {
           console.log('Error status:', error.response.status);
           console.log('Error data:', error.response.data);
-          setError(error.response.data.message || "Invalid credentials");
+          setError(error.response.data.message || 'Invalid credentials');
         } else {
           setError("An error occurred during login. Please try again.");
         }
@@ -85,20 +85,20 @@ export default function LogInCard({ onLogin }) {
 
     if (!email || !/\S+@\S+\.\S+/.test(email)) {
       setEmailError(true);
-      setEmailErrorMessage("Please enter a valid email address.");
+      setEmailErrorMessage('Please enter a valid email address.');
       isValid = false;
     } else {
       setEmailError(false);
-      setEmailErrorMessage("");
+      setEmailErrorMessage('');
     }
 
     if (!password || password.length < 6) {
       setPasswordError(true);
-      setPasswordErrorMessage("Password must be at least 6 characters long.");
+      setPasswordErrorMessage('Password must be at least 6 characters long.');
       isValid = false;
     } else {
       setPasswordError(false);
-      setPasswordErrorMessage("");
+      setPasswordErrorMessage('');
     }
 
     return isValid;
@@ -109,12 +109,7 @@ export default function LogInCard({ onLogin }) {
       <Typography variant="h4" className="LogInTitle">
         LOG IN
       </Typography>
-      <Box
-        component="form"
-        onSubmit={handleSubmit}
-        noValidate
-        className="LogInForm"
-      >
+      <Box component="form" onSubmit={handleSubmit} noValidate className="LogInForm">
         <FormControl>
           <FormLabel htmlFor="email" className="LogInLabel">
             Email
@@ -131,9 +126,9 @@ export default function LogInCard({ onLogin }) {
             required
             fullWidth
             variant="outlined"
-            className={`TextField ${emailError ? "error" : ""}`}
+            className={`TextField ${emailError ? 'error' : ''}`}
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={e => setEmail(e.target.value)}
           />
         </FormControl>
         <FormControl>
@@ -161,9 +156,9 @@ export default function LogInCard({ onLogin }) {
             autoComplete="current-password"
             required
             fullWidth
-            className={`TextField ${passwordError ? "error" : ""}`}
+            className={`TextField ${passwordError ? 'error' : ''}`}
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={e => setPassword(e.target.value)}
           />
         </FormControl>
         <FormControlLabel
@@ -172,12 +167,7 @@ export default function LogInCard({ onLogin }) {
           className="RememberMe"
         />
         <ForgotPassword open={open} handleClose={handleClose} />
-        <Button
-          type="submit"
-          fullWidth
-          variant="contained"
-          className="LoginButton"
-        >
+        <Button type="submit" fullWidth variant="contained" className="LoginButton">
           Log In
         </Button>
         {error && <Typography color="error">{error}</Typography>}

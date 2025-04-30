@@ -1,16 +1,14 @@
 .ApplicationFormContainer {
-    
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .ApplicationFormContainer {
-    transition: margin-left  ease;
-    margin-left: 0;
+  transition: margin-left ease;
+  margin-left: 0;
 }
 
-
 .ApplicationFormContainer.sidebar-open {
-    margin-left: 250px; }
+  margin-left: 250px;
+}

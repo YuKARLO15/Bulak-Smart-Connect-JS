@@ -1,35 +1,30 @@
-.NavBarContainer{
-    display: flex;
-   flex-direction: row;
-    padding: 10px 20px;
-    background-color: white;
-    position: fixed;
-    top: 0%;
-    width: 100vw;
-box-shadow: 0px 4px 2px -2px rgb(228, 228, 228);
-
-  
+.NavBarContainer {
+  display: flex;
+  flex-direction: row;
+  padding: 10px 20px;
+  background-color: white;
+  position: fixed;
+  top: 0%;
+  width: 100vw;
+  box-shadow: 0px 4px 2px -2px rgb(228, 228, 228);
 }
-.LogoNavBar{
-    width: 50px;
-    margin-left: 50px;
+.LogoNavBar {
+  width: 50px;
+  margin-left: 50px;
 }
 .NavBarContainer Button {
-    color: #184a5b ;
-    display: flex;
-
-
+  color: #184a5b;
+  display: flex;
 }
 .NavButtons {
-    display: flex;
-    align-items: center;
-    flex-direction: row;
-    justify-content: right;
-    margin-left: auto;
-    margin-right: 50px;
-
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  justify-content: right;
+  margin-left: auto;
+  margin-right: 50px;
 }
 .Logo {
-    font-size:2vw !important;
-    color: #184a5b;
+  font-size: 2vw !important;
+  color: #184a5b;
 }
