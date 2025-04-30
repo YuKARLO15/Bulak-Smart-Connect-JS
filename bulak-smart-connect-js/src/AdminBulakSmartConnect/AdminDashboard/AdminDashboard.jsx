@@ -16,7 +16,7 @@ import {
 
 const AdminDashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const { logout } = useAuth();
+  const { logout, user } = useAuth(); // Add 'user' here
   const navigate = useNavigate();
 
   // Empty data arrays
@@ -53,8 +53,9 @@ const AdminDashboard = () => {
         </div>
         <div className="sidebar-user">
           <div className="user-info">
-            <div className="user-name">[USERNAME]</div>
-            <div className="user-email">User@email.com</div>
+            <div className="user-name">{user?.name || '[USERNAME]'}</div>
+            <div className="user-email">{user?.email || 'User@email.com'}</div>
+            <div className="user-role">{user?.roles?.[0] || 'Unknown Role'}</div>
           </div>
         </div>
         <nav className="sidebar-nav">
