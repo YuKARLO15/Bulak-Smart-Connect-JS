@@ -13,7 +13,7 @@ import Typography from '@mui/material/Typography';
 import ForgotPassword from './ForgotPassword';
 import './LogInCard.css';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext'; 
+import { useAuth } from '../context/AuthContext'; //Current AuthContext to handle login and roles
 import { authService } from '../services/api'; //API Service to NestJS, initially used on early iteration of the login, without the roles
 
 export default function LogInCard({ onLogin }) {
@@ -26,7 +26,7 @@ export default function LogInCard({ onLogin }) {
   const [error, setError] = useState('');
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
-  const { login, hasRole, isStaff } = useAuth(); 
+  const { login, hasRole, isStaff } = useAuth(); // New AuthContext to handle login and roles
 
 
   const handleClickOpen = () => setOpen(true);
@@ -50,7 +50,7 @@ export default function LogInCard({ onLogin }) {
         const success = await login(email, password);
 
         console.log('Login successful:', success);
-       
+        //Auth Success Step
         if (success) {
           
           setTimeout(() => {
