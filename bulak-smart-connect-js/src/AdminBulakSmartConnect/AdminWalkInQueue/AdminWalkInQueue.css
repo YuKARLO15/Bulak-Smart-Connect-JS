@@ -3,36 +3,7 @@
     min-height: 100vh;
   }
   
-  /* Reuse sidebar styles from AdminDashboard */
-  .sidebar {
-    width: 240px;
-    background-color: #8DC3A7;
-    color: #fff;
-    padding: 20px 0;
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    transition: width 0.3s;
-  }
-  
-  .sidebar.closed {
-    width: 60px;
-  }
-  
-  .sidebar-toggle {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    cursor: pointer;
-    font-size: 24px;
-  }
-  
-  .sidebar-user {
-    display: flex;
-    align-items: center;
-    padding: 0 20px;
-    margin-bottom: 30px;
-  }
+ 
   
   .user-icon {
     width: 40px;

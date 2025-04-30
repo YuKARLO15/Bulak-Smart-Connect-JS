@@ -12,8 +12,6 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from 'recharts';
-import userIcon from '../../assets/user-icon.png';
-import { FaSearch } from 'react-icons/fa';
 
 const AdminDashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -45,7 +43,6 @@ const AdminDashboard = () => {
           {sidebarOpen ? '×' : '☰'}
         </div>
         <div className="sidebar-user">
-          <img src={userIcon} alt="User" className="user-icon" />
           <div className="user-info">
             <div className="user-name">[USERNAME]</div>
             <div className="user-email">User@email.com</div>
@@ -58,10 +55,10 @@ const AdminDashboard = () => {
           <Link to="/admin/appointments" className="nav-item">
             Appointments
           </Link>
-          <Link to="/admin/walkin" className="nav-item">
+          <Link to="/AdminWalkInQueue" className="nav-item">
             Walk - In Number
           </Link>
-          <Link to="/admin/documents" className="nav-item">
+          <Link to="/ApplicationAdmin" className="nav-item">
             Document Application
           </Link>
           <Link to="/admin/account" className="nav-item">
@@ -72,7 +69,9 @@ const AdminDashboard = () => {
           </Link>
         </nav>
         <div className="sidebar-footer">
-          <button className="logout-btn">Log Out</button>
+          <Link to="/LogIn" >
+            <button className="logout-btn" >Log Out</button>
+            </Link>
         </div>
       </div>
 
@@ -82,7 +81,7 @@ const AdminDashboard = () => {
           <h1>Dashboard</h1>
           <div className="search-bar">
             <input type="text" placeholder="Search" />
-            <FaSearch className="search-icon" />
+          
           </div>
         </div>
 

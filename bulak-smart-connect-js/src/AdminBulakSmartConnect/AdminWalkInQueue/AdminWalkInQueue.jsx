@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import './AdminWalkInQueue.css';
-import userIcon from '../../assets/user-icon.png';
+
 
 const AdminWalkInQueue = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -22,7 +22,7 @@ const AdminWalkInQueue = () => {
           {sidebarOpen ? '×' : '☰'}
         </div>
         <div className="sidebar-user">
-          <img src={userIcon} alt="User" className="user-icon" />
+       
           <div className="user-info">
             <div className="user-name">[USERNAME]</div>
             <div className="user-email">user@email.com</div>

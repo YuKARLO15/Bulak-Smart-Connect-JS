@@ -45,7 +45,8 @@ import WalkInForm from './UserBulakSmartConnect/WalkInComponents/WalkInForm';
 import WalkInQueueDetail from './UserBulakSmartConnect/WalkInComponents/WalkInDetails';
 
 //-----------ADMIN SIDE --------------//
-
+//Admin Dashboard//
+import AdminDashboard from './AdminBulakSmartConnect/AdminDashboard/AdminDashboard';
 // Admin Account Management //
 import AdminAccountManagement from './AdminBulakSmartConnect/AccountManagementComponents/AccountManagement';
 import SearchAddUser from './AdminBulakSmartConnect/AccountManagementComponents/SearchAdd';
@@ -59,57 +60,12 @@ import AdminApplicationDashboard from './AdminBulakSmartConnect/AdminApplication
 import AdminApplicationForm from './AdminBulakSmartConnect/AdminApplicationComponents/AdminApplicationDetails';
 import AppointmentDetailsCard from './AdminBulakSmartConnect/AppointmentDetailsComponents/AppointmentDetails';
 
+// Admin WalkIn //
+import AdminWalkInQueue from './AdminBulakSmartConnect/AdminWalkInQueue/AdminWalkInQueue';
+
+
 function App() {
   return (
-<<<<<<< HEAD
-    <Routes>
-      {/* Define Routes */}
-      <Route path="/" element={<LandingPage />} />
-      <Route path="/LogIn" element={<LogIn />} />
-      <Route path="/SignUpForm" element={<SignUpForm />} />
-      {/* Admin Accountmanagement */}
-      <Route path="/AdminAccountManagement" element={<AdminAccountManagement />} />
-      <Route path="AppointmentDetailsCard" element={<AppointmentDetailsCard/>} />
-      <Route path="/SearchAddUser" element={<SearchAddUser />} />
-      <Route path="/add-user" element={<AdminAddUser />} /> 
-      {/* Admin Announcement */}
-      <Route path="/AdminAnnouncement" element={<AdminAnnouncement />} /> 
-      <Route element={<PrivateRoute />}>
-        {' '}
-        {/* Protected Route Start */}
-        <Route path="/Home" element={<LandingPage />} />
-        <Route path="/UserDashboard" element={<UserDashboard />} />
-        <Route path="/AppointmentForm" element={<AppoionmentForm />} />
-        <Route path="/ApplicationForm" element={<ApplicationForm />} />
-        <Route path="/QR" element={<QRCodePage />} />
-        <Route path="/ClericalErrorApplication" element={<ClericalErrorApplication />} />
-        <Route path="/BirthCertificateDashboard" element={<BirthCertificateDashboard />} />
-        <Route path="/FirstNameCorrection" element={<FirstNameCorrection />} />
-        <Route path="/MarriageLicenseApplication" element={<MarriageLicenseApplication />} />
-        <Route path="/Above18Registration" element={<Above18Registration />} />
-        <Route path="/Below18Registration" element={<Below18Registration />} />
-        <Route path="/SexDobCorrection" element={<SexDobCorrection />} />
-        <Route path="/DelayedOutOfTownRegistration" element={<DelayedOutOfTownRegistration />} />
-        <Route path="/DelayedOneParentForeignerRegistration" element={<DelayedOneParentForeignerRegistration />}
-          
-        />
-        <Route path="/CTCBirthCertificate" element={<CTCBirthCertificate/>} />
-        <Route path="/RequestACopyBirthCertificate" element={<CopyBirthCertificate />} />
-        <Route path="/RequirementBirthList" element={<RequirementBirthList />} />
-        <Route path="/MarriageSummaryForm" element={<MarriageSummaryForm />} />
-        <Route path="/QrCodeAppointment/:id" element={<QRCodeAppointment />} />
-        <Route path="/BirthCertificateForm" element={<BirthCertificateForm />} />
-        <Route path="/BirthApplicationSummary" element={<BirthApplicationSummary />} />
-        <Route path="/MarriageCertificateForm" element={<MarriageCertificateForm />} />
-        <Route path="/WalkInQueue" element={<WalkInQueueContainer />} />
-        <Route path="/WalkInForm" element={<WalkInForm />} />
-        <Route path="/WalkInDetails" element={<WalkInQueueDetail />} />
-        <Route path="/applicationAdmin" element={<AdminApplicationDashboard />} />
-        <Route path="/ApplicationDetails/:id" element={<AdminApplicationForm/>} />
-      </Route>{' '}
-      {/* Protected Route End */}
-    </Routes>
-=======
     <AuthProvider>
       <Routes>
         {/* Public routes */}
@@ -129,9 +85,12 @@ function App() {
         
         {/* Staff routes - Protected for staff, admin and super_admin */}
         <Route element={<PrivateRoute allowedRoles={['staff', 'admin', 'super_admin']} />}>
-          <Route path="/applicationAdmin" element={<AdminApplicationDashboard />} />
+          <Route path="/ApplicationAdmin" element={<AdminApplicationDashboard />} />
           <Route path="/ApplicationDetails/:id" element={<AdminApplicationForm/>} />
-          <Route path="AppointmentDetailsCard" element={<AppointmentDetailsCard/>} />
+          <Route path="AppointmentDetailsCard" element={<AppointmentDetailsCard />} />
+          <Route path="/AdminWalkInQueue" element={<AdminWalkInQueue />} />
+          <Route path = "/AdminHome" element={<AdminDashboard />} />
+          
         </Route>
         
         {/* User routes - Any authenticated user */}
@@ -164,7 +123,6 @@ function App() {
         </Route>
       </Routes>
     </AuthProvider>
->>>>>>> faec42f38ebb2b0713b41e2aa95653dc9a8a6aea
   );
 }
 
