@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 import './AdminDashboard.css';
 import {
   LineChart,
@@ -15,6 +16,8 @@ import {
 
 const AdminDashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const { logout, user } = useAuth(); // Add 'user' here
+  const navigate = useNavigate();
 
   // Empty data arrays
   const walkInData = [];
@@ -35,6 +38,12 @@ const AdminDashboard = () => {
     }
   };
 
+  // Handle logout
+  const handleLogout = () => {
+    logout();
+    navigate('/LogIn');
+  };
+
   return (
     <div className="admin-dashboard">
       {/* Sidebar */}
@@ -44,8 +53,9 @@ const AdminDashboard = () => {
         </div>
         <div className="sidebar-user">
           <div className="user-info">
-            <div className="user-name">[USERNAME]</div>
-            <div className="user-email">User@email.com</div>
+            <div className="user-name">{user?.name || '[USERNAME]'}</div>
+            <div className="user-email">{user?.email || 'User@email.com'}</div>
+            <div className="user-role">{user?.roles?.[0] || 'Unknown Role'}</div>
           </div>
         </div>
         <nav className="sidebar-nav">
@@ -69,9 +79,7 @@ const AdminDashboard = () => {
           </Link>
         </nav>
         <div className="sidebar-footer">
-          <Link to="/LogIn" >
-            <button className="logout-btn" >Log Out</button>
-            </Link>
+          <button className="logout-btn" onClick={handleLogout}>Log Out</button>
         </div>
       </div>
 

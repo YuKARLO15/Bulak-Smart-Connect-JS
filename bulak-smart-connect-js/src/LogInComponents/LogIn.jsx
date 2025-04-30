@@ -7,11 +7,17 @@ import NavBar from '../NavigationComponents/NavBar';
 import { useAuth } from '../context/AuthContext'; // Import useAuth
 
 function LogIn() {
-  const { isAuthenticated } = useAuth(); // Use the login function from AuthContext
+  const { isAuthenticated, user } = useAuth(); // Use the login function from AuthContext
 
-  // Redirect to Home if already authenticated
+  // Redirect based on role if already authenticated
   if (isAuthenticated) {
-    return <Navigate to="/Home" />;
+    if (user && (user.roles?.includes('staff') || 
+        user.roles?.includes('admin') || 
+        user.roles?.includes('super_admin'))) {
+      return <Navigate to="/AdminHome" />;
+    } else {
+      return <Navigate to="/Home" />;
+    }
   }
 
   return (
