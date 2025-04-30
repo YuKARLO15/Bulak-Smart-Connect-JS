@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import '../AccountManagementComponents/AdminAddAccount.css';
+import { useNavigate } from 'react-router-dom';
 
-const AdminAddUser = () => {
+const AdminAddUser = ({ addUser }) => {
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     username: '',
     contact: '',
@@ -11,11 +14,10 @@ const AdminAddUser = () => {
     confirmPassword: '',
     firstName: '',
     lastName: '',
-    photo: null,
   });
 
   const [errors, setErrors] = useState({});
-  const [photoPreview, setPhotoPreview] = useState(null);
+  // const [photoPreview, setPhotoPreview] = useState(null);
 
   const handleChange = e => {
     const { name, value, files } = e.target;
@@ -24,21 +26,15 @@ const AdminAddUser = () => {
       [name]: files ? files[0] : value,
     }));
 
-    if (files) {
-      const file = files[0];
-      setPhotoPreview(URL.createObjectURL(file));
-    }
+    // if (files) {
+    //   const file = files[0];
+    //   setPhotoPreview(URL.createObjectURL(file));
+    // }
 
     setErrors(prevErrors => ({
       ...prevErrors,
       [name]: '',
     }));
-  };
-
-  const clearPhoto = () => {
-    setFormData(prev => ({ ...prev, photo: null }));
-    setPhotoPreview(null);
-    document.getElementById('photo').value = null;
   };
 
   const handleSubmit = e => {
@@ -66,8 +62,9 @@ const AdminAddUser = () => {
     setErrors(validationErrors);
 
     if (Object.keys(validationErrors).length === 0) {
+      addUser(formData);
       alert('User added successfully!');
-      // TODO: Submit data to backend or Firebase
+      navigate('/admin-user-management');
     }
   };
 
@@ -76,7 +73,7 @@ const AdminAddUser = () => {
       <h1>Add User</h1>
       <div className="admin-add-user">
         <form className="user-form" onSubmit={handleSubmit} noValidate>
-          <div className="photo-upload">
+          {/* <div className="photo-upload">
             <label htmlFor="photo">
               <div className="upload-box">
                 <i className="fas fa-upload"></i>
@@ -84,7 +81,11 @@ const AdminAddUser = () => {
                 {photoPreview && (
                   <div className="photo-preview-container">
                     <img src={photoPreview} alt="Preview" className="photo-preview" />
-                    <button type="button" className="clear-photo-btn" onClick={clearPhoto}>
+                    <button
+                      type="button"
+                      className="clear-photo-btn"
+                      onClick={() => setPhotoPreview(null)}
+                    >
                       <i className="fas fa-times"></i>
                     </button>
                   </div>
@@ -93,7 +94,7 @@ const AdminAddUser = () => {
             </label>
             <input type="file" id="photo" name="photo" accept="image/*" onChange={handleChange} />
             {errors.photo && <p className="error">{errors.photo}</p>}
-          </div>
+          </div> */}
 
           <div className="form-grid">
             {[
@@ -118,7 +119,6 @@ const AdminAddUser = () => {
                 {errors[name] && <p className="error">{errors[name]}</p>}
               </div>
             ))}
-
             <div className="form-group contact-split">
               <label>
                 Contact Number <span>*</span>
@@ -128,7 +128,7 @@ const AdminAddUser = () => {
                 <input
                   type="text"
                   name="contact"
-                  placeholder="Enter 12-digit number"
+                  placeholder="Enter 10-digit number"
                   value={formData.contact}
                   maxLength="10"
                   onChange={e => {
@@ -159,6 +159,14 @@ const AdminAddUser = () => {
           <button type="submit" className="submit-btn">
             Add User
           </button>
+          {/* 
+          <button
+            type="button"
+            className="submit-btn"
+            onClick={() => navigate('/admin-user-management')}
+          >
+            Add User
+          </button> */}
         </form>
       </div>
     </div>
