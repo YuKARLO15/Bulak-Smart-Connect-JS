@@ -13,7 +13,7 @@ import Typography from '@mui/material/Typography';
 import ForgotPassword from './ForgotPassword';
 import './LogInCard.css';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext'; //Auth Context, updated with API service in code
+import { useAuth } from '../context/AuthContext'; 
 import { authService } from '../services/api'; //API Service to NestJS, initially used on early iteration of the login, without the roles
 
 export default function LogInCard({ onLogin }) {
@@ -38,7 +38,7 @@ export default function LogInCard({ onLogin }) {
     if (validateInputs()) {
       try {
         console.log('Sending login request with:', { email, password });
-
+  
         //Old Logic to use the API service from api.js, now using the AuthContext
         //const data = await authService.login(email, password);
         //console.log('Login successful:', data);
@@ -55,7 +55,7 @@ export default function LogInCard({ onLogin }) {
           
           setTimeout(() => {
            
-            if (hasRole('staff') || hasRole('admin') || hasRole('super_admin')|| hasRole) {
+            if (isStaff|| hasRole('staff') || hasRole('admin') || hasRole('super_admin') ) {
               console.log('User has admin role - navigating to AdminHome');
               navigate("/AdminHome");
             } else {
