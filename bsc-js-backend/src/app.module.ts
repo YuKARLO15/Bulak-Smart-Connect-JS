@@ -41,7 +41,7 @@ import { RolesModule } from './roles/roles.module';
           if (process.env.NODE_ENV !== 'production') {
             connection.query('SET FOREIGN_KEY_CHECKS=1;');
           }
-        }
+        },
       }),
     }),
     UsersModule,

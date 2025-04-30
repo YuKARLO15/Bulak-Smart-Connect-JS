@@ -1,4 +1,9 @@
-import { Injectable, UnauthorizedException, ConflictException, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  UnauthorizedException,
+  ConflictException,
+  BadRequestException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -14,7 +19,7 @@ export class AuthService {
     @InjectRepository(User)
     private usersRepository: Repository<User>,
     private jwtService: JwtService,
-    private rolesService: RolesService, 
+    private rolesService: RolesService,
   ) {}
 
   async validateUser(loginDto: LoginDto): Promise<any> {
@@ -59,14 +64,14 @@ export class AuthService {
 
       // Get user roles
       const roles = await this.rolesService.getUserRoles(user.id);
-      const roleNames = roles.map(role => role.name);
+      const roleNames = roles.map((role) => role.name);
 
-      const payload = { 
-        sub: user.id, 
+      const payload = {
+        sub: user.id,
         email: user.email,
-        roles: roleNames
+        roles: roleNames,
       };
-      
+
       const token = this.jwtService.sign(payload);
       console.log('Generated token:', token ? 'Success' : 'Failed');
 
@@ -78,7 +83,7 @@ export class AuthService {
         user: {
           ...userWithoutPassword,
           roles: roleNames,
-          defaultRole: user.defaultRole?.name || 'citizen'
+          defaultRole: user.defaultRole?.name || 'citizen',
         },
       };
     } catch (error) {
@@ -89,27 +94,29 @@ export class AuthService {
 
   async register(registerDto: RegisterDto) {
     const { email, password, name } = registerDto;
-    
+
     // Validate email format
     if (!this.isValidEmail(email)) {
       throw new BadRequestException('Invalid email format');
     }
-    
+
     // Check if user exists
-    const existingUser = await this.usersRepository.findOne({ where: { email } });
+    const existingUser = await this.usersRepository.findOne({
+      where: { email },
+    });
     if (existingUser) {
       throw new ConflictException('Email already exists');
     }
-    
+
     // Validate password strength
     if (password.length < 6) {
       throw new BadRequestException('Password must be at least 6 characters');
     }
-    
+
     // Hash password
     const salt = await bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(password, salt);
-    
+
     try {
       // Create new user
       const user = this.usersRepository.create({
@@ -117,14 +124,14 @@ export class AuthService {
         password: hashedPassword,
         name,
       });
-      
+
       await this.usersRepository.save(user);
-      
+
       // Add citizen role to the user
       try {
         const citizenRole = await this.rolesService.findByName('citizen');
         await this.rolesService.assignRolesToUser(user.id, [citizenRole.id]);
-        
+
         // Set default role
         user.defaultRoleId = citizenRole.id;
         await this.usersRepository.save(user);
@@ -132,21 +139,23 @@ export class AuthService {
         console.error('Error assigning citizen role:', error);
         // Rollback: Delete the user to maintain a consistent state
         await this.usersRepository.delete(user.id);
-        throw new ConflictException('Failed to assign citizen role. Registration rolled back.');
+        throw new ConflictException(
+          'Failed to assign citizen role. Registration rolled back.',
+        );
       }
-      
+
       // Generate JWT token
       const payload = { sub: user.id, email: user.email, roles: ['citizen'] };
-      
+
       // Remove password from response
       const { password: _, ...userWithoutPassword } = user;
-      
+
       return {
         access_token: this.jwtService.sign(payload),
         user: {
           ...userWithoutPassword,
           roles: ['citizen'],
-          defaultRole: 'citizen'
+          defaultRole: 'citizen',
         },
       };
     } catch (error) {
@@ -154,16 +163,16 @@ export class AuthService {
       throw error;
     }
   }
-  
+
   private isValidEmail(email: string): boolean {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
   }
 
   async getProfile(userId: number) {
-    const user = await this.usersRepository.findOne({ 
+    const user = await this.usersRepository.findOne({
       where: { id: userId },
-      relations: ['defaultRole']
+      relations: ['defaultRole'],
     });
     if (!user) {
       throw new UnauthorizedException('User not found');
@@ -171,13 +180,13 @@ export class AuthService {
 
     // Get user roles
     const roles = await this.rolesService.getUserRoles(userId);
-    const roleNames = roles.map(role => role.name);
+    const roleNames = roles.map((role) => role.name);
 
     const { password, ...result } = user;
     return {
       ...result,
       roles: roleNames,
-      defaultRole: user.defaultRole?.name || 'citizen'
+      defaultRole: user.defaultRole?.name || 'citizen',
     };
   }
 }
