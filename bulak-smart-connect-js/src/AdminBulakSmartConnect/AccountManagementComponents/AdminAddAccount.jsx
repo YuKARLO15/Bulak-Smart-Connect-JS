@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import '../AccountManagementComponents/AdminAddAccount.css';
+import { useNavigate } from 'react-router-dom';
 
-const AdminAddUser = () => {
+const AdminAddUser = ({ addUser }) => {
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     username: '',
     contact: '',
@@ -11,15 +14,14 @@ const AdminAddUser = () => {
     confirmPassword: '',
     firstName: '',
     lastName: '',
-    photo: null,
   });
 
   const [errors, setErrors] = useState({});
   const [photoPreview, setPhotoPreview] = useState(null);
 
-  const handleChange = e => {
+  const handleChange = (e) => {
     const { name, value, files } = e.target;
-    setFormData(prevData => ({
+    setFormData((prevData) => ({
       ...prevData,
       [name]: files ? files[0] : value,
     }));
@@ -29,21 +31,16 @@ const AdminAddUser = () => {
       setPhotoPreview(URL.createObjectURL(file));
     }
 
-    setErrors(prevErrors => ({
+    setErrors((prevErrors) => ({
       ...prevErrors,
       [name]: '',
     }));
   };
 
-  const clearPhoto = () => {
-    setFormData(prev => ({ ...prev, photo: null }));
-    setPhotoPreview(null);
-    document.getElementById('photo').value = null;
-  };
-
-  const handleSubmit = e => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     let validationErrors = {};
+
 
     Object.entries(formData).forEach(([key, value]) => {
       if (!value || (typeof value === 'string' && value.trim() === '')) {
@@ -55,9 +52,11 @@ const AdminAddUser = () => {
       validationErrors.confirmPassword = 'Passwords do not match';
     }
 
+  
     if (formData.contact && !/^\d{10}$/.test(formData.contact)) {
       validationErrors.contact = 'Contact number must be exactly 10 digits after +63';
     }
+
 
     if (formData.email && !formData.email.includes('@')) {
       validationErrors.email = 'Email must contain "@"';
@@ -65,9 +64,22 @@ const AdminAddUser = () => {
 
     setErrors(validationErrors);
 
+    // If no errors, add the new user and navigate
     if (Object.keys(validationErrors).length === 0) {
-      alert('User added successfully!');
-      // TODO: Submit data to backend or Firebase
+      const newUser = {
+        name: `${formData.firstName} ${formData.lastName}`,
+        status: 'Not Logged In',
+        roles: [formData.role],
+        image: photoPreview || '',
+      };
+
+      // // Add the new user to the parent component's state using addUser
+      // addUser(newUser);
+
+      // alert('User added successfully!');
+
+      // // Navigate to admin user management
+      // navigate('/admin-user-management');
     }
   };
 
@@ -84,7 +96,11 @@ const AdminAddUser = () => {
                 {photoPreview && (
                   <div className="photo-preview-container">
                     <img src={photoPreview} alt="Preview" className="photo-preview" />
-                    <button type="button" className="clear-photo-btn" onClick={clearPhoto}>
+                    <button
+                      type="button"
+                      className="clear-photo-btn"
+                      onClick={() => setPhotoPreview(null)}
+                    >
                       <i className="fas fa-times"></i>
                     </button>
                   </div>
@@ -96,29 +112,22 @@ const AdminAddUser = () => {
           </div>
 
           <div className="form-grid">
-            {[
-              { label: 'Username', name: 'username' },
-              { label: 'Email', name: 'email', type: 'email' },
-              { label: 'Password', name: 'password', type: 'password' },
-              { label: 'Confirm Password', name: 'confirmPassword', type: 'password' },
-              { label: 'First Name', name: 'firstName' },
-              { label: 'Last Name', name: 'lastName' },
-            ].map(({ label, name, type = 'text' }) => (
-              <div className="form-group" key={name}>
-                <label>
-                  {label} <span>*</span>
-                </label>
-                <input
-                  type={type}
-                  name={name}
-                  placeholder={`Enter ${label}`}
-                  value={formData[name]}
-                  onChange={handleChange}
-                />
-                {errors[name] && <p className="error">{errors[name]}</p>}
-              </div>
-            ))}
-
+            {[{ label: 'Username', name: 'username' }, { label: 'Email', name: 'email', type: 'email' }, { label: 'Password', name: 'password', type: 'password' }, { label: 'Confirm Password', name: 'confirmPassword', type: 'password' }, { label: 'First Name', name: 'firstName' }, { label: 'Last Name', name: 'lastName' }]
+              .map(({ label, name, type = 'text' }) => (
+                <div className="form-group" key={name}>
+                  <label>
+                    {label} <span>*</span>
+                  </label>
+                  <input
+                    type={type}
+                    name={name}
+                    placeholder={`Enter ${label}`}
+                    value={formData[name]}
+                    onChange={handleChange}
+                  />
+                  {errors[name] && <p className="error">{errors[name]}</p>}
+                </div>
+              ))}
             <div className="form-group contact-split">
               <label>
                 Contact Number <span>*</span>
@@ -128,13 +137,13 @@ const AdminAddUser = () => {
                 <input
                   type="text"
                   name="contact"
-                  placeholder="Enter 12-digit number"
+                  placeholder="Enter 10-digit number"
                   value={formData.contact}
                   maxLength="10"
-                  onChange={e => {
+                  onChange={(e) => {
                     const numbersOnly = e.target.value.replace(/\D/g, '').slice(0, 10);
-                    setFormData(prev => ({ ...prev, contact: numbersOnly }));
-                    setErrors(prev => ({ ...prev, contact: '' }));
+                    setFormData((prev) => ({ ...prev, contact: numbersOnly }));
+                    setErrors((prev) => ({ ...prev, contact: '' }));
                   }}
                   className="phone-number"
                 />

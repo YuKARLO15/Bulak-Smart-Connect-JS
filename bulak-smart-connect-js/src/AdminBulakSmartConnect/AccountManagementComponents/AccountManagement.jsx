@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import SearchAddUser from './SearchAdd';
 import UserTable from './UserTable';
+// import { useNavigate } from 'react-router-dom';
+// import AdminAddUser from './AdminAddAccount';
 
 const AdminAccountManagement = () => {
   const [users, setUsers] = useState([
@@ -38,10 +40,19 @@ const AdminAccountManagement = () => {
     }
   };
 
+  const addUser = (newUser) => {
+    setUsers((prevUsers) => [...prevUsers, newUser]);
+  };
+
+
+  
+
+  
   return (
     <div className="admin-container">
       <div className="header">User Management</div>
       <SearchAddUser />
+      {/* <AdminAddUser addUser={addUser} /> */}
       <UserTable users={users} handleUpload={handleUpload} />
     </div>
   );
