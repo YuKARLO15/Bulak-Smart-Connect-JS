@@ -4,7 +4,7 @@ import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import ImageIcon from "@mui/icons-material/Image";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import "./AdminFilePreview.css";
+import "./AdminFIlePreview.css";
 
 const FileUploadPreview = ({ formData, applicationType }) => {
 
