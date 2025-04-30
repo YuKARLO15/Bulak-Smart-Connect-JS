@@ -11,14 +11,14 @@ const api = axios.create({
 
 // Add token to requests if available
 api.interceptors.request.use(
-  (config) => {
+  config => {
     const token = localStorage.getItem('token');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
   },
-  (error) => Promise.reject(error)
+  error => Promise.reject(error)
 );
 
 export const authService = {
@@ -27,17 +27,17 @@ export const authService = {
     localStorage.setItem('token', response.data.access_token);
     return response.data;
   },
-  
-  register: async (userData) => {
+
+  register: async userData => {
     const response = await api.post('/auth/register', userData);
     localStorage.setItem('token', response.data.access_token);
     return response.data;
   },
-  
+
   logout: () => {
     localStorage.removeItem('token');
   },
-  
+
   getProfile: async () => {
     return api.get('/auth/profile');
   },

@@ -1,5 +1,5 @@
 body {
-  font-family: "Roboto", sans-serif;
+  font-family: 'Roboto', sans-serif;
   margin: 0;
   min-height: 100vh;
 }
@@ -10,11 +10,7 @@ body {
   margin-top: 10vh;
   padding: 32px;
   color: #1c4d5a;
-  background: radial-gradient(
-    ellipse at center,
-    hsl(210, 100%, 97%),
-    hsl(0, 0%, 100%)
-  );
+  background: radial-gradient(ellipse at center, hsl(210, 100%, 97%), hsl(0, 0%, 100%));
   justify-content: center;
   align-items: center;
   text-align: center;

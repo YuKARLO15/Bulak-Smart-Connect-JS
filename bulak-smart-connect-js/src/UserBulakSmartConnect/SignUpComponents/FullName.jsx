@@ -1,5 +1,5 @@
-import React from "react";
-import "../SignUpComponents/FullName.css";
+import React from 'react';
+import '../SignUpComponents/FullName.css';
 
 const FullNameSection = ({ formData, handleInputChange, errors }) => {
   return (
@@ -7,7 +7,9 @@ const FullNameSection = ({ formData, handleInputChange, errors }) => {
       <div className="form-group">
         <div className="form-group fullname">
           <div className="textbox">
-            <label className="label-in">Last Name / Apelyido <span className="asterisk"> *</span></label>
+            <label className="label-in">
+              Last Name / Apelyido <span className="asterisk"> *</span>
+            </label>
             <input
               type="text"
               id="LastName"
@@ -19,9 +21,11 @@ const FullNameSection = ({ formData, handleInputChange, errors }) => {
             />
             {errors.lastname && <span className="error-message">{errors.lastname}</span>}
           </div>
-          
+
           <div className="textbox">
-            <label className="label-in">First Name / Pangalan <span className="asterisk"> *</span></label>
+            <label className="label-in">
+              First Name / Pangalan <span className="asterisk"> *</span>
+            </label>
             <input
               type="text"
               id="FirstName"
@@ -64,7 +68,7 @@ const FullNameSection = ({ formData, handleInputChange, errors }) => {
               <select
                 id="Extension"
                 name="extension"
-                value={formData.extension || ""}
+                value={formData.extension || ''}
                 onChange={handleInputChange}
               >
                 <option value="">Select Extension</option>

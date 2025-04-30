@@ -1,16 +1,16 @@
-
-.app{
+.app {
   background: linear-gradient(to bottom, rgb(255, 255, 255), rgb(255, 252, 249));
 }
-html, body {
+
+html,
+body {
   overflow-x: hidden;
   margin: 0;
   padding: 0;
   width: 100vw;
   height: 100vh;
 }
+
 body {
   display: flex;
 }
-
-

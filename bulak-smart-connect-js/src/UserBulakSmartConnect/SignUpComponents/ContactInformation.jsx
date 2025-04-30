@@ -1,10 +1,9 @@
-import React from "react";
-import "../SignUpComponents/ContactInformation.css";
-import "../SignUpComponents/SignUpForm.css";
+import React from 'react';
+import '../SignUpComponents/ContactInformation.css';
+import '../SignUpComponents/SignUpForm.css';
 
 const ContactInformationSection = ({ formData, handleInputChange, errors }) => (
   <div className="form-group">
-
     {/* Contact Number Input */}
     <div className="form-group contactinformation">
       <div className="textbox">
@@ -16,9 +15,9 @@ const ContactInformationSection = ({ formData, handleInputChange, errors }) => (
           name="contact"
           placeholder="Contact Number"
           value={formData.contact}
-          onChange={(event) => {
+          onChange={event => {
             const { name, value } = event.target;
-            const formattedValue = value.replace(/\D/g, "").slice(0, 11); // Only digits, max 11 chars
+            const formattedValue = value.replace(/\D/g, '').slice(0, 11); // Only digits, max 11 chars
             handleInputChange({ target: { name, value: formattedValue } });
           }}
           maxLength="13" // Allows space for hyphens in formatting

@@ -1,39 +1,40 @@
 /* AnnouncementPost.css */
 
 .announcement-post {
-    background-color: #ffffff;
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-  }
-  
-  .announcement-post:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
-  }
-  
-  .announcement-post h3 {
-    font-size: 1.25rem;
-    margin-bottom: 10px;
-    color: #1f2937;
-  }
-  
-  .announcement-post p {
-    color: #4b5563;
-    margin-bottom: 10px;
-    line-height: 1.5;
-  }
-  
-  .announcement-post small {
-    font-size: 0.85rem;
-    color: #9ca3af;
-  }
-  
-  .announcement-post img {
-    margin-top: 12px;
-    max-width: 100%;
-    border-radius: 8px;
-    object-fit: cover;
-  }
-  
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.announcement-post:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+}
+
+.announcement-post h3 {
+  font-size: 1.25rem;
+  margin-bottom: 10px;
+  color: #1f2937;
+}
+
+.announcement-post p {
+  color: #4b5563;
+  margin-bottom: 10px;
+  line-height: 1.5;
+}
+
+.announcement-post small {
+  font-size: 0.85rem;
+  color: #9ca3af;
+}
+
+.announcement-post img {
+  margin-top: 12px;
+  max-width: 100%;
+  border-radius: 8px;
+  object-fit: cover;
+}

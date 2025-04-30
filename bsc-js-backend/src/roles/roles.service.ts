@@ -9,7 +9,7 @@ export class RolesService {
   constructor(
     @InjectRepository(Role)
     private rolesRepository: Repository<Role>,
-    
+
     @InjectRepository(User)
     private usersRepository: Repository<User>,
   ) {}
@@ -48,14 +48,14 @@ export class RolesService {
       where: { id: userId },
       relations: ['roles'],
     });
-    
+
     if (!user) {
       throw new Error('User not found');
     }
-    
+
     // Find the roles
     const roles = await this.rolesRepository.findByIds(roleIds);
-    
+
     // Assign roles to user
     user.roles = roles;
     await this.usersRepository.save(user);

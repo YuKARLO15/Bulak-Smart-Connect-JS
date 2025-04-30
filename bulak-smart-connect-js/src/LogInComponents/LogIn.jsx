@@ -1,10 +1,10 @@
-import React from "react";
-import { Navigate } from "react-router-dom";
-import "./LogIn.css";
-import LogInContent from "./LogInContent";
-import LogInCard from "./LogInCard";
-import NavBar from "../NavigationComponents/NavBar";
-import { useAuth } from "../context/AuthContext"; // Import useAuth
+import React from 'react';
+import { Navigate } from 'react-router-dom';
+import './LogIn.css';
+import LogInContent from './LogInContent';
+import LogInCard from './LogInCard';
+import NavBar from '../NavigationComponents/NavBar';
+import { useAuth } from '../context/AuthContext'; // Import useAuth
 
 function LogIn() {
   const { isAuthenticated } = useAuth(); // Use the login function from AuthContext

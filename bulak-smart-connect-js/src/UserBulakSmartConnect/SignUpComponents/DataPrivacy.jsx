@@ -1,11 +1,11 @@
-import React, { useState } from "react";
-import "../SignUpComponents/DataPrivacy.css";
+import React, { useState } from 'react';
+import '../SignUpComponents/DataPrivacy.css';
 
 const DataPrivacy = ({ onAgreeChange }) => {
   const [agreed, setAgreed] = useState(null);
 
-  const handleAgreement = (e) => {
-    const value = e.target.value === "yes";
+  const handleAgreement = e => {
+    const value = e.target.value === 'yes';
     setAgreed(value);
     onAgreeChange(value);
   };
@@ -15,15 +15,14 @@ const DataPrivacy = ({ onAgreeChange }) => {
       <div className="privacy-text">
         <h2>Data Privacy & Terms and Conditions</h2>
         <p>
-          By signing up, you agree to our data privacy policy and terms of
-          service. Your personal information will be handled securely and used
-          solely for municipal civil registration purposes.
+          By signing up, you agree to our data privacy policy and terms of service. Your personal
+          information will be handled securely and used solely for municipal civil registration
+          purposes.
         </p>
         <p>
-          Sa pamamagitan ng pag sign-up, sumasang-ayon ka sa aming polisiya sa
-          privacy ng datos at mga termino ng serbisyo. Ang iyong personal na
-          impormasyon ay hahawakan nang ligtas at gagamitin lamang para sa mga
-          layunin ng rehistrasyong sibil ng munisipalidad.
+          Sa pamamagitan ng pag sign-up, sumasang-ayon ka sa aming polisiya sa privacy ng datos at
+          mga termino ng serbisyo. Ang iyong personal na impormasyon ay hahawakan nang ligtas at
+          gagamitin lamang para sa mga layunin ng rehistrasyong sibil ng munisipalidad.
         </p>
       </div>
 
@@ -37,7 +36,8 @@ const DataPrivacy = ({ onAgreeChange }) => {
             onChange={handleAgreement}
             required
           />
-          I agree to the Data Privacy Policy & Terms / Sumasang-ayon ako sa Data Privacy Policy & Terms.
+          I agree to the Data Privacy Policy & Terms / Sumasang-ayon ako sa Data Privacy Policy &
+          Terms.
         </label>
         <label>
           <input

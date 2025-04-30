@@ -1,15 +1,15 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
-import { Box, Typography, Card, CardContent, Button } from "@mui/material";
-import { getRecentAppointments } from "./RecentAppointmentData";
-import "./RecentAppointment.css";
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Box, Typography, Card, CardContent, Button } from '@mui/material';
+import { getRecentAppointments } from './RecentAppointmentData';
+import './RecentAppointment.css';
 
 const RecentAppointments = () => {
   const navigate = useNavigate();
   const appointmentsData = getRecentAppointments();
 
-  const handleSeeMore = (appointment) => {
-    console.log("Navigating to QRCodeAppointment with ID:", appointment.id);
+  const handleSeeMore = appointment => {
+    console.log('Navigating to QRCodeAppointment with ID:', appointment.id);
     navigate(`/QRCodeAppointment/${appointment.id}`, { state: { appointment } });
   };
 
@@ -32,9 +32,9 @@ const RecentAppointments = () => {
                 {appointment.time}
               </Typography>
             </div>
-            <Button 
-              size="small" 
-              className="SeeMoreAppointment" 
+            <Button
+              size="small"
+              className="SeeMoreAppointment"
               onClick={() => handleSeeMore(appointment)}
             >
               See More

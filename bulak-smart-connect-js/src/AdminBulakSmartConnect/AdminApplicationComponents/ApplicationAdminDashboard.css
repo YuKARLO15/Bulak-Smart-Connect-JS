@@ -248,7 +248,10 @@
   margin: 16px;
   background-color: white;
   border-radius: 4px;
-  box-shadow: 0 2px 1px -1px rgba(0,0,0,0.2), 0 1px 1px 0 rgba(0,0,0,0.14), 0 1px 3px 0 rgba(0,0,0,0.12);
+  box-shadow:
+    0 2px 1px -1px rgba(0, 0, 0, 0.2),
+    0 1px 1px 0 rgba(0, 0, 0, 0.14),
+    0 1px 3px 0 rgba(0, 0, 0, 0.12);
   width: 80vw;
   overflow-x: hidden;
   box-sizing: border-box;
@@ -259,7 +262,7 @@
   align-items: center;
   padding: 16px;
   border-bottom: 1px solid #e0e0e0;
-  width: 100% ;
+  width: 100%;
   box-sizing: border-box;
 }
 
@@ -275,8 +278,8 @@
 .ApplicationDashTableContent {
   max-height: 400px;
   overflow-y: auto;
-  overflow-x: hidden; 
-  width: 100%; 
+  overflow-x: hidden;
+  width: 100%;
   box-sizing: border-box;
 }
 
@@ -285,11 +288,11 @@
   text-align: center;
   color: rgba(0, 0, 0, 0.6);
 }
-.ApplicationDashTableRow{ 
-  width: 100%; 
+.ApplicationDashTableRow {
+  width: 100%;
   box-sizing: border-box;
-  display: flex; 
-  flex-wrap: nowrap; 
+  display: flex;
+  flex-wrap: nowrap;
 }
 .ApplicationDashTableRow:hover {
   background-color: #f9f9f9;
@@ -321,4 +324,3 @@
   align-items: center;
   height: 300px;
 }
-
