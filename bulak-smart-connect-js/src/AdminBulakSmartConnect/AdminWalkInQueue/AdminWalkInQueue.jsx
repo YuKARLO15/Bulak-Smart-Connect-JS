@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './AdminWalkInQueue.css';
 
 
 const AdminWalkInQueue = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
-
+const navigate = useNavigate();
   // Empty queues array
   const queues = [];
 
@@ -13,7 +13,11 @@ const AdminWalkInQueue = () => {
   const currentQueue = '';
   const nextQueue = '';
   const totalQueues = 0;
-
+  const getDetails = (queueId) => {
+   
+    console.log(`Fetching details for queue ID: ${queueId}`);
+    navigate("/AdminWalkInDetails");
+  };
   return (
     <div className="admin-walk-in">
       {/* Sidebar */}
@@ -86,9 +90,11 @@ const AdminWalkInQueue = () => {
                 </div>
                 <div className="queue-applicant">{queue.applicant}</div>
                 <div className="queue-id">{queue.id}</div>
+          
               </div>
             ))}
           </div>
+          <button className="queue-action-btn" onClick={getDetails} >View Details</button>
         </div>
       </div>
     </div>

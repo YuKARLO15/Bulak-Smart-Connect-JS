@@ -52,7 +52,7 @@ const AdminDashboard = () => {
           <Link to="/admin" className="nav-item active">
             Dashboard
           </Link>
-          <Link to="/admin/appointments" className="nav-item">
+          <Link to="/AdminWalkInDetails" className="nav-item">
             Appointments
           </Link>
           <Link to="/AdminWalkInQueue" className="nav-item">
