@@ -51,19 +51,19 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem('token', access_token);
 
       // Process roles - ensure we extract role names correctly
-      if (user.roles) {
-        user.roleNames = user.roles.map(role => role.name);
-      } else {
-        user.roleNames = user.defaultRole ? [user.defaultRole.name] : [];
-      }
+      //if (user.roles) {
+        //user.roleNames = user.roles.map(role => role.name);
+      //} else {
+        //user.roleNames = user.defaultRole ? [user.defaultRole.name] : [];
+      //} Tempoarily commented out to avoid errors
 
       setUser(user);
       setIsAuthenticated(true);
-      return true;
+      return { success: true, user }; // Return both success status and user data
     } catch (err) {
       console.error('Login error:', err);
       setError(err.response?.data?.message || 'Login failed');
-      return false;
+      return { success: false };
     }
   };
 
