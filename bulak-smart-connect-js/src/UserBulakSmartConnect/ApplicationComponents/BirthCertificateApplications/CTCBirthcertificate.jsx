@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import FileUpload from "../FileUpload";
 import NavBar from "../../NavSide";
 import BirthCertificateApplicationData from "./BirthCertificateApplicationData";
-import "./CTCBirthcertificate.css";
+import "./CTCBirthCertificate.css";
 
 const CTCBirthCertificate = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
