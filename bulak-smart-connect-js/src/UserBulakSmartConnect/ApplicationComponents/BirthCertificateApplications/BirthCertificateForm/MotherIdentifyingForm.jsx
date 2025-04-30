@@ -1,16 +1,14 @@
-import React, { useState } from "react";
-import "./MotherIdentifyingForm.css";
+import React, { useState } from 'react';
+import './MotherIdentifyingForm.css';
 
 const MotherInformationBirthForm = ({ formData, handleChange }) => {
   const [showExtension, setShowExtension] = useState(false);
   const requiredField = <span className="RequiredFieldMother">*</span>;
 
-  const validateNumberOnly = (e) => {
-
+  const validateNumberOnly = e => {
     if (!/^\d*$/.test(e.target.value)) {
       return;
     }
-    
 
     handleChange(e);
   };
@@ -25,13 +23,11 @@ const MotherInformationBirthForm = ({ formData, handleChange }) => {
 
           <div className="FormRowMother">
             <div className="FormGroupMother">
-              <label className="FormLabelMother">
-                First Name (Pangalan) {requiredField}
-              </label>
+              <label className="FormLabelMother">First Name (Pangalan) {requiredField}</label>
               <input
                 type="text"
                 name="motherFirstName"
-                value={formData?.motherFirstName || ""}
+                value={formData?.motherFirstName || ''}
                 onChange={handleChange}
                 className="FormInputMother"
                 required
@@ -39,13 +35,11 @@ const MotherInformationBirthForm = ({ formData, handleChange }) => {
             </div>
 
             <div className="FormGroupMother">
-              <label className="FormLabelMother">
-                Middle Name (Gitnang Pangalan) Optional
-              </label>
+              <label className="FormLabelMother">Middle Name (Gitnang Pangalan) Optional</label>
               <input
                 type="text"
                 name="motherMiddleName"
-                value={formData?.motherMiddleName || ""}
+                value={formData?.motherMiddleName || ''}
                 onChange={handleChange}
                 className="FormInputMother"
                 required
@@ -53,13 +47,11 @@ const MotherInformationBirthForm = ({ formData, handleChange }) => {
             </div>
 
             <div className="FormGroupMother">
-              <label className="FormLabelMother">
-                Last Name (Apelyido) {requiredField}
-              </label>
+              <label className="FormLabelMother">Last Name (Apelyido) {requiredField}</label>
               <input
                 type="text"
                 name="motherLastName"
-                value={formData?.motherLastName || ""}
+                value={formData?.motherLastName || ''}
                 onChange={handleChange}
                 className="FormInputMother"
                 required
@@ -86,7 +78,7 @@ const MotherInformationBirthForm = ({ formData, handleChange }) => {
                 <span className="ExtensionLabelMother">Extension</span>
                 <select
                   name="motherExtension"
-                  value={formData?.motherExtension || ""}
+                  value={formData?.motherExtension || ''}
                   onChange={handleChange}
                   className="SelectInputMother"
                 >
@@ -105,26 +97,22 @@ const MotherInformationBirthForm = ({ formData, handleChange }) => {
         <div className="FormSectionMother">
           <div className="FormRowMother">
             <div className="FormGroupMother" style={{ flex: 1 }}>
-              <div className="SectionTitleHalfMother">
-                8. CITIZENSHIP
-              </div>
+              <div className="SectionTitleHalfMother">8. CITIZENSHIP</div>
               <input
                 type="text"
                 name="motherCitizenship"
-                value={formData?.motherCitizenship || ""}
+                value={formData?.motherCitizenship || ''}
                 onChange={handleChange}
                 className="FormInputMother"
               />
             </div>
 
             <div className="FormGroupMother" style={{ flex: 1 }}>
-              <div className="SectionTitleHalfMother">
-                9. RELIGION/ RELIGIOUS SECT
-              </div>
+              <div className="SectionTitleHalfMother">9. RELIGION/ RELIGIOUS SECT</div>
               <input
                 type="text"
                 name="motherReligion"
-                value={formData?.motherReligion || ""}
+                value={formData?.motherReligion || ''}
                 onChange={handleChange}
                 className="FormInputMother"
               />
@@ -142,10 +130,10 @@ const MotherInformationBirthForm = ({ formData, handleChange }) => {
               <input
                 type="text"
                 name="motherTotalChildren"
-                value={formData?.motherTotalChildren || ""}
+                value={formData?.motherTotalChildren || ''}
                 onChange={validateNumberOnly}
                 className="FormInputMother"
-                   placeholder="Enter number only"
+                placeholder="Enter number only"
               />
             </div>
 
@@ -156,10 +144,10 @@ const MotherInformationBirthForm = ({ formData, handleChange }) => {
               <input
                 type="text"
                 name="motherLivingChildren"
-                value={formData?.motherLivingChildren || ""}
-                onChange={validateNumberOnly }
+                value={formData?.motherLivingChildren || ''}
+                onChange={validateNumberOnly}
                 className="FormInputMother"
-                   placeholder="Enter number only"
+                placeholder="Enter number only"
               />
             </div>
 
@@ -170,10 +158,10 @@ const MotherInformationBirthForm = ({ formData, handleChange }) => {
               <input
                 type="text"
                 name="motherDeceasedChildren"
-                value={formData?.motherDeceasedChildren || ""}
+                value={formData?.motherDeceasedChildren || ''}
                 onChange={validateNumberOnly}
                 className="FormInputMother"
-                   placeholder="Enter number only"
+                placeholder="Enter number only"
               />
             </div>
           </div>
@@ -183,29 +171,25 @@ const MotherInformationBirthForm = ({ formData, handleChange }) => {
         <div className="FormSectionMother">
           <div className="FormRowMother">
             <div className="FormGroupMother" style={{ flex: 1 }}>
-              <div className="SectionTitleHalfMother">
-                11. OCCUPATION
-              </div>
+              <div className="SectionTitleHalfMother">11. OCCUPATION</div>
               <input
                 type="text"
                 name="motherOccupation"
-                value={formData?.motherOccupation || ""}
+                value={formData?.motherOccupation || ''}
                 onChange={handleChange}
                 className="FormInputMother"
               />
             </div>
 
             <div className="FormGroupMother" style={{ flex: 1 }}>
-              <div className="SectionTitleHalfMother">
-                12. AGE at the time of this birth:
-              </div>
+              <div className="SectionTitleHalfMother">12. AGE at the time of this birth:</div>
               <input
                 type="text"
                 name="motherAge"
-                value={formData?.motherAge || ""}
+                value={formData?.motherAge || ''}
                 onChange={validateNumberOnly}
                 className="FormInputMother"
-                   placeholder="Enter number only"
+                placeholder="Enter number only"
               />
             </div>
           </div>
@@ -213,19 +197,15 @@ const MotherInformationBirthForm = ({ formData, handleChange }) => {
 
         {/* Residence Section */}
         <div className="FormSectionMother">
-          <div className="SectionTitleMother">
-            13. RESIDENCE
-          </div>
+          <div className="SectionTitleMother">13. RESIDENCE</div>
 
           <div className="FormRowMother">
             <div className="FormFullWidthGroupMother">
-              <label className="FormLabelMother">
-                House NO., Street
-              </label>
+              <label className="FormLabelMother">House NO., Street</label>
               <input
                 type="text"
                 name="motherStreet"
-                value={formData?.motherStreet || ""}
+                value={formData?.motherStreet || ''}
                 onChange={handleChange}
                 className="FormInputMother"
               />
@@ -238,7 +218,7 @@ const MotherInformationBirthForm = ({ formData, handleChange }) => {
               <input
                 type="text"
                 name="motherBarangay"
-                value={formData?.motherBarangay || ""}
+                value={formData?.motherBarangay || ''}
                 onChange={handleChange}
                 className="FormInputMother"
               />
@@ -249,7 +229,7 @@ const MotherInformationBirthForm = ({ formData, handleChange }) => {
               <input
                 type="text"
                 name="motherCity"
-                value={formData?.motherCity || ""}
+                value={formData?.motherCity || ''}
                 onChange={handleChange}
                 className="FormInputMother"
               />
@@ -262,7 +242,7 @@ const MotherInformationBirthForm = ({ formData, handleChange }) => {
               <input
                 type="text"
                 name="motherProvince"
-                value={formData?.motherProvince || ""}
+                value={formData?.motherProvince || ''}
                 onChange={handleChange}
                 className="FormInputMother"
               />
@@ -273,7 +253,7 @@ const MotherInformationBirthForm = ({ formData, handleChange }) => {
               <input
                 type="text"
                 name="motherCountry"
-                value={formData?.motherCountry || ""}
+                value={formData?.motherCountry || ''}
                 onChange={handleChange}
                 className="FormInputMother"
               />

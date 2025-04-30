@@ -8,15 +8,13 @@
   box-shadow: none !important;
   color: #184a5b;
   border-left: 2px solid #184a5b;
-
-
 }
 .LogIn {
   margin: 0vw;
 }
 
 @media (min-width: 600px) {
-  .LogInCardContainer{
+  .LogInCardContainer {
     width: 450px;
   }
 }
@@ -52,7 +50,7 @@
   align-self: baseline;
   color: #184a5b;
 }
-#email{
+#email {
   color: #ffffff;
 }
 #password {
@@ -66,24 +64,23 @@
   box-shadow: none !important;
 }
 
-.TextField.error{
+.TextField.error {
   border-color: whitesmoke !important;
   border-radius: 10px;
-  color: #ffffff !important; 
+  color: #ffffff !important;
 }
 
 .MuiFormHelperText-root.Mui-error {
   color: white !important;
 }
 
-
-.RemembeMe{
+.RemembeMe {
   color: #184a5b;
 }
 
 .LoginButton {
   color: #ffffff !important;
-  background-color: #184a5b !important;;
+  background-color: #184a5b !important;
   border-radius: 8px;
 }
 

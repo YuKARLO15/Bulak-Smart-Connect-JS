@@ -1,8 +1,7 @@
 /* Full Name Section */
 
-
 body {
-  font-family: "Roboto", sans-serif;
+  font-family: 'Roboto', sans-serif;
   margin: 0;
   min-height: 100vh;
 }
@@ -12,15 +11,10 @@ body {
   height: 100%;
   padding: 32px;
   color: #1c4d5a;
-  background: radial-gradient(
-    ellipse at center,
-    hsl(210, 100%, 97%),
-    hsl(0, 0%, 100%)
-  );
+  background: radial-gradient(ellipse at center, hsl(210, 100%, 97%), hsl(0, 0%, 100%));
   justify-content: center;
   align-items: center;
 }
-
 
 .CategoryDivider {
   margin-bottom: 20px;
@@ -35,7 +29,6 @@ body {
 
 .form-group {
   margin-bottom: 15px;
-  
 }
 
 .label-category {
@@ -53,8 +46,6 @@ body {
   grid-template-rows: auto;
   grid-column-gap: 60px;
   grid-row-gap: 10px;
-  
-
 }
 
 .form-group.fullname .textbox {
@@ -72,16 +63,15 @@ body {
   font-size: 14px;
 }
 
-input[name="lastname"], 
-input[name="firstname"], 
-input[name="middlename"] {
+input[name='lastname'],
+input[name='firstname'],
+input[name='middlename'] {
   width: 100%;
 }
 
 .asterisk {
   color: rgb(194, 45, 45);
 }
-
 
 .optional {
   color: rgb(168, 47, 47);
@@ -93,42 +83,36 @@ input[name="middlename"] {
   color: #ffffff;
 }
 
-
-
-
 /* checkbox */
 .checkbox-extension {
   display: flex;
   align-items: center;
   margin-left: 25px;
-  
 }
 
 .checkbox-extension label {
-  font-size: 12px; 
-  color: #1c4d5a !important; 
+  font-size: 12px;
+  color: #1c4d5a !important;
   margin-left: 5px;
 }
 .checkbox-extension .extension-text {
-  font-size: 5px; 
-
+  font-size: 5px;
 }
 
 #HasExtension {
-  background-color: #ffffff; 
-  border: 1px solid #ccc; 
-  width: 16px; 
-  height: 16px; 
+  background-color: #ffffff;
+  border: 1px solid #ccc;
+  width: 16px;
+  height: 16px;
   cursor: pointer;
- 
 }
 
 #Extension {
   width: 50%;
-  background-color: #fff; 
-  border: 2px solid #1c4d5a; 
+  background-color: #fff;
+  border: 2px solid #1c4d5a;
   display: flex;
-  font-size:15px;
+  font-size: 15px;
   color: #1c4d5a;
   margin-right: 21px;
   margin-left: 0px;

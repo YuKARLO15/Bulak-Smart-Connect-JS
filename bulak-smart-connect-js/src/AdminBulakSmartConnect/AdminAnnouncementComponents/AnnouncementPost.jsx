@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import '../AdminAnnouncementComponents/AnnouncementPost.css';
 
 const AnnouncementPost = ({ announcement }) => {

@@ -3,245 +3,245 @@
   flex-direction: column;
   width: 100vw;
   color: #333;
-  transition: margin-left  ease;
+  transition: margin-left ease;
   margin-left: 0;
-  }
-  .QueueContainerWalkIn.sidebar-open {
-    margin-left: 250px;
-   }
+}
+.QueueContainerWalkIn.sidebar-open {
+  margin-left: 250px;
+}
 
-  .WalkInDashboard{
+.WalkInDashboard {
   width: 80vw;
   min-width: 70vw;
   display: flex;
   flex-direction: column;
   margin-left: 10vw;
-  }
-  .HeaderWalkIn{
-    background-color: #184a5b;
-    width: 100vw;
-    margin-bottom: 8vh !important;
-  }
-  .HeaderWalkIn h1 {
-    font-size: 22px;
-    color: white;
-    padding: 20px;
-    margin-left: 10vw;
-  }
-  
-  .QueuePositionContainerWalkIn {
-    display: flex;
-    flex-direction: column;
-    background-color: #f0f0f0;
-    border-radius: 8px;
-    margin-bottom: 20px;
-    padding: 15px;
-    width: 30vw;
-  }
-  
-  .QueuePositionLabelWalkIn {
-    font-size: 14px;
-    font-weight: bold;
-    color: #24536a;
-    margin-bottom: 10px;
-  }
-  .HeadWalkIn {
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
-    justify-content: center;
-  }
-  
-  .QueuePositionNumberWalkIn {
-    font-size: 36px;
-    font-weight: bold;
-    color: #24536a;
-    margin: 10px 0;
-  }
-  
-  .QueuePositionMessageWalkIn {
-    font-size: 12px;
-    color: #666;
-  }
-  
-  .CurrentQueueContainerWalkIn {
-    background-color: #f0f0f0;
-    border-radius: 8px;
-    padding: 15px;
-    margin-bottom: 20px;
-    width: 30vw;
-  }
-  
-  .CurrentQueueLabelWalkIn {
-    font-size: 14px;
-    font-weight: bold;
-    color: #24536a;
-    margin-bottom: 15px;
-  }
-  
-  .CurrentQueueListWalkIn {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-  
-  .CurrentQueueItemWalkIn {
-    display: flex;
-    justify-content: space-between;
-  }
-  
-  .QueueIdWalkIn {
-    color: #24536a;
-    font-weight: bold;
-  }
-  
-  .CounterNumberWalkIn {
-    color: #24536a;
-  }
-  
-  .FooterWalkIn {
-    margin-top: 20px;
-  }
-  
-  .FooterTitleWalkIn {
-    font-size: 18px;
-    color: #24536a;
-    margin-bottom: 15px;
-  }
-  
-  .GetQueueButtonWalkIn {
-    background-color: #24536a;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 4px;
-    font-weight: bold;
-    cursor: pointer;
-    float: right;
-    margin-bottom: 15px;
-  }
-  
-  .QueueListWalkIn {
-    clear: both;
-    margin-top: 50px;
-  }
-  
-  .QueueItemWalkIn {
-    background-color: #f5f5f5;
-    border-radius: 8px;
-    padding: 15px;
-    margin-bottom: 10px;
-    display: flex;
-    justify-content: space-between;
-  }
-  
-  .QueueStatusWalkIn {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .StatusLabelWalkIn {
-    font-size: 12px;
-    font-weight: bold;
-    color: #666;
-    text-transform: uppercase;
-  }
-  
-  .QueueDateWalkIn {
-    font-size: 12px;
-    color: #666;
-    margin-top: 5px;
-  }
-  
-  .QueueIdContainerWalkIn {
-    display: flex;
-    align-items: center;
-  }
-  
-  .QueueListIdWalkIn {
-    font-size: 16px;
-    font-weight: bold;
-    color: #24536a;
-  }
-  
-  .UserQueueWalkIn {
-    background-color: #f0f5f7;
-  }
+}
+.HeaderWalkIn {
+  background-color: #184a5b;
+  width: 100vw;
+  margin-bottom: 8vh !important;
+}
+.HeaderWalkIn h1 {
+  font-size: 22px;
+  color: white;
+  padding: 20px;
+  margin-left: 10vw;
+}
 
-  .HeaderWalkIn {
-    margin-bottom: 20px;
-  }
-  
-  .QueuePositionLabelWalkIn {
-    font-size: 14px;
-    font-weight: bold;
-    color: #24536a;
-    margin-bottom: 10px;
-  }
-  
-  .QueuePositionNumberWalkIn {
-    font-size: 36px;
-    font-weight: bold;
-    color: #24536a;
-    margin: 10px 0;
-  }
-  
-  .QueuePositionMessageWalkIn {
-    font-size: 12px;
-    color: #666;
-  }
-  
-  .CurrentQueueContainerWalkIn {
-    background-color: #f0f0f0;
-    border-radius: 8px;
-    padding: 15px;
-    margin-bottom: 20px;
-  }
-  
-  .CurrentQueueLabelWalkIn {
-    font-size: 14px;
-    font-weight: bold;
-    color: #24536a;
-    margin-bottom: 15px;
-  }
-  
-  .CurrentQueueListWalkIn {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-  
-  .CurrentQueueItemWalkIn {
-    display: flex;
-    justify-content: space-between;
-  }
-  
-  .FooterWalkIn {
-    margin-top: 20px;
-  }
-  
-  .FooterTitleWalkIn {
-    font-size: 18px;
-    color: #24536a;
-    margin-bottom: 15px;
-  }
-  
-  .GetQueueButtonWalkIn {
-    background-color: #24536a;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 4px;
-    font-weight: bold;
-    cursor: pointer;
-    float: right;
-    margin-bottom: 15px;
-  }
-  
-  .PendingWalkIn {
-    background-color: #f5f5f5;
-  }
+.QueuePositionContainerWalkIn {
+  display: flex;
+  flex-direction: column;
+  background-color: #f0f0f0;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  padding: 15px;
+  width: 30vw;
+}
 
-  .InProgressWalkIn {
-    background-color: #e0f7fa;
-  }
+.QueuePositionLabelWalkIn {
+  font-size: 14px;
+  font-weight: bold;
+  color: #24536a;
+  margin-bottom: 10px;
+}
+.HeadWalkIn {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  justify-content: center;
+}
+
+.QueuePositionNumberWalkIn {
+  font-size: 36px;
+  font-weight: bold;
+  color: #24536a;
+  margin: 10px 0;
+}
+
+.QueuePositionMessageWalkIn {
+  font-size: 12px;
+  color: #666;
+}
+
+.CurrentQueueContainerWalkIn {
+  background-color: #f0f0f0;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 20px;
+  width: 30vw;
+}
+
+.CurrentQueueLabelWalkIn {
+  font-size: 14px;
+  font-weight: bold;
+  color: #24536a;
+  margin-bottom: 15px;
+}
+
+.CurrentQueueListWalkIn {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.CurrentQueueItemWalkIn {
+  display: flex;
+  justify-content: space-between;
+}
+
+.QueueIdWalkIn {
+  color: #24536a;
+  font-weight: bold;
+}
+
+.CounterNumberWalkIn {
+  color: #24536a;
+}
+
+.FooterWalkIn {
+  margin-top: 20px;
+}
+
+.FooterTitleWalkIn {
+  font-size: 18px;
+  color: #24536a;
+  margin-bottom: 15px;
+}
+
+.GetQueueButtonWalkIn {
+  background-color: #24536a;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  float: right;
+  margin-bottom: 15px;
+}
+
+.QueueListWalkIn {
+  clear: both;
+  margin-top: 50px;
+}
+
+.QueueItemWalkIn {
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.QueueStatusWalkIn {
+  display: flex;
+  flex-direction: column;
+}
+
+.StatusLabelWalkIn {
+  font-size: 12px;
+  font-weight: bold;
+  color: #666;
+  text-transform: uppercase;
+}
+
+.QueueDateWalkIn {
+  font-size: 12px;
+  color: #666;
+  margin-top: 5px;
+}
+
+.QueueIdContainerWalkIn {
+  display: flex;
+  align-items: center;
+}
+
+.QueueListIdWalkIn {
+  font-size: 16px;
+  font-weight: bold;
+  color: #24536a;
+}
+
+.UserQueueWalkIn {
+  background-color: #f0f5f7;
+}
+
+.HeaderWalkIn {
+  margin-bottom: 20px;
+}
+
+.QueuePositionLabelWalkIn {
+  font-size: 14px;
+  font-weight: bold;
+  color: #24536a;
+  margin-bottom: 10px;
+}
+
+.QueuePositionNumberWalkIn {
+  font-size: 36px;
+  font-weight: bold;
+  color: #24536a;
+  margin: 10px 0;
+}
+
+.QueuePositionMessageWalkIn {
+  font-size: 12px;
+  color: #666;
+}
+
+.CurrentQueueContainerWalkIn {
+  background-color: #f0f0f0;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 20px;
+}
+
+.CurrentQueueLabelWalkIn {
+  font-size: 14px;
+  font-weight: bold;
+  color: #24536a;
+  margin-bottom: 15px;
+}
+
+.CurrentQueueListWalkIn {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.CurrentQueueItemWalkIn {
+  display: flex;
+  justify-content: space-between;
+}
+
+.FooterWalkIn {
+  margin-top: 20px;
+}
+
+.FooterTitleWalkIn {
+  font-size: 18px;
+  color: #24536a;
+  margin-bottom: 15px;
+}
+
+.GetQueueButtonWalkIn {
+  background-color: #24536a;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  float: right;
+  margin-bottom: 15px;
+}
+
+.PendingWalkIn {
+  background-color: #f5f5f5;
+}
+
+.InProgressWalkIn {
+  background-color: #e0f7fa;
+}

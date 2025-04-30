@@ -1,27 +1,22 @@
 .DashboardContainer {
   border-radius: 10px;
   width: 100vw;
-  
-  
-
 }
 .DashboardHeader {
   display: flex;
   justify-content: space-between;
   margin-bottom: 16px;
   font-weight: bold;
-  color:#FFF6F6;
+  color: #fff6f6;
   background-color: #184a5b;
   width: 100vw;
   height: 10vh;
   text-align: left;
-  
 }
-.DashboardHeader h4{
+.DashboardHeader h4 {
   margin-left: 10vw !important;
   margin-top: 2vh;
-  color: #FFF6F6;
-
+  color: #fff6f6;
 }
 
 .SearchBox {
@@ -45,7 +40,7 @@
   outline: none;
   margin-left: 5px;
   background-color: white;
-  color: #1C4D5A;
+  color: #1c4d5a;
   padding: 4px;
 }
 
@@ -53,22 +48,21 @@
   display: flex;
   gap: 20px;
   flex-direction: row;
-  justify-content: center; 
+  justify-content: center;
   width: 80vw;
   margin: 0 auto;
   text-align: center;
   display: flex;
-  justify-content: center;  
+  justify-content: center;
   gap: 20px;
   flex-wrap: wrap;
-
 }
 
 .DashboardCard {
   flex: 1;
   padding: 15px;
-  background: #FFF6F6 !important;
-  border: 1px solid #1C4D5A;
+  background: #fff6f6 !important;
+  border: 1px solid #1c4d5a;
   border-radius: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   margin-bottom: 5vh;
@@ -84,14 +78,13 @@
 .DashboardCard h6 {
   color: #184a5b;
   font-weight: bold;
-  margin-bottom: 10px;  
+  margin-bottom: 10px;
 }
 
 /* Calendar Styling */
 .react-calendar {
-background-color: #FFF6F6;
+  background-color: #fff6f6;
 }
-
 
 .react-calendar__tile {
   border-radius: 6px;
@@ -105,14 +98,13 @@ background-color: #FFF6F6;
 }
 
 .react-calendar__tile--now {
-  background: #8AACB5 !important;
+  background: #8aacb5 !important;
   color: #184a5b;
 }
 .react-calendar__navigation {
   display: flex;
   justify-content: space-between;
   align-items: center;
-
 }
 
 .react-calendar__navigation button {

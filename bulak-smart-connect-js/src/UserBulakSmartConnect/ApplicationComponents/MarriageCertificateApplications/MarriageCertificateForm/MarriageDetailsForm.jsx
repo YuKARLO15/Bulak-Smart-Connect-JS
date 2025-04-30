@@ -1,5 +1,5 @@
-import React from "react";
-import "./MarriageCertificateForm.css";
+import React from 'react';
+import './MarriageCertificateForm.css';
 
 const MarriageDetailsForm = ({ formData, handleChange, errors }) => {
   return (
@@ -14,7 +14,7 @@ const MarriageDetailsForm = ({ formData, handleChange, errors }) => {
             type="text"
             name="marriageOffice"
             placeholder="Office of the/House of"
-            value={formData.marriageOffice || ""}
+            value={formData.marriageOffice || ''}
             onChange={handleChange}
           />
           {errors.marriageOffice && <span className="error-message">{errors.marriageOffice}</span>}
@@ -24,17 +24,19 @@ const MarriageDetailsForm = ({ formData, handleChange, errors }) => {
             type="text"
             name="marriageBarangay"
             placeholder="Barangay of/Church of/Mosque of"
-            value={formData.marriageBarangay || ""}
+            value={formData.marriageBarangay || ''}
             onChange={handleChange}
           />
-          {errors.marriageBarangay && <span className="error-message">{errors.marriageBarangay}</span>}
+          {errors.marriageBarangay && (
+            <span className="error-message">{errors.marriageBarangay}</span>
+          )}
         </div>
         <div className="input-container">
           <input
             type="text"
             name="marriageCity"
             placeholder="City/Municipality"
-            value={formData.marriageCity || ""}
+            value={formData.marriageCity || ''}
             onChange={handleChange}
           />
           {errors.marriageCity && <span className="error-message">{errors.marriageCity}</span>}
@@ -44,20 +46,24 @@ const MarriageDetailsForm = ({ formData, handleChange, errors }) => {
             type="text"
             name="marriageProvince"
             placeholder="Province"
-            value={formData.marriageProvince || ""}
+            value={formData.marriageProvince || ''}
             onChange={handleChange}
           />
-          {errors.marriageProvince && <span className="error-message">{errors.marriageProvince}</span>}
+          {errors.marriageProvince && (
+            <span className="error-message">{errors.marriageProvince}</span>
+          )}
         </div>
         <div className="input-container">
           <input
             type="text"
             name="marriageCountry"
             placeholder="Country"
-            value={formData.marriageCountry || ""}
+            value={formData.marriageCountry || ''}
             onChange={handleChange}
           />
-          {errors.marriageCountry && <span className="error-message">{errors.marriageCountry}</span>}
+          {errors.marriageCountry && (
+            <span className="error-message">{errors.marriageCountry}</span>
+          )}
         </div>
       </div>
 
@@ -69,7 +75,7 @@ const MarriageDetailsForm = ({ formData, handleChange, errors }) => {
             type="text"
             name="marriageMonth"
             placeholder="Month"
-            value={formData.marriageMonth || ""}
+            value={formData.marriageMonth || ''}
             onChange={handleChange}
           />
           {errors.marriageMonth && <span className="error-message">{errors.marriageMonth}</span>}
@@ -79,7 +85,7 @@ const MarriageDetailsForm = ({ formData, handleChange, errors }) => {
             type="text"
             name="marriageDay"
             placeholder="Day"
-            value={formData.marriageDay || ""}
+            value={formData.marriageDay || ''}
             onChange={handleChange}
           />
           {errors.marriageDay && <span className="error-message">{errors.marriageDay}</span>}
@@ -89,7 +95,7 @@ const MarriageDetailsForm = ({ formData, handleChange, errors }) => {
             type="text"
             name="marriageYear"
             placeholder="Year"
-            value={formData.marriageYear || ""}
+            value={formData.marriageYear || ''}
             onChange={handleChange}
           />
           {errors.marriageYear && <span className="error-message">{errors.marriageYear}</span>}
@@ -104,7 +110,7 @@ const MarriageDetailsForm = ({ formData, handleChange, errors }) => {
             type="text"
             name="marriageTime"
             placeholder="Time of Marriage"
-            value={formData.marriageTime || ""}
+            value={formData.marriageTime || ''}
             onChange={handleChange}
           />
           {errors.marriageTime && <span className="error-message">{errors.marriageTime}</span>}
@@ -123,7 +129,8 @@ const MarriageDetailsForm = ({ formData, handleChange, errors }) => {
       <p className="info-text">AFFIDAVIT FOR DELAYED REGISTRATION OF MARRIAGE</p>
 
       <p className="note-text">
-        NOTE: After submitting the documents online, all required documents for this field and other fields must also be submitted to the Office of the Civil Registrar.
+        NOTE: After submitting the documents online, all required documents for this field and other
+        fields must also be submitted to the Office of the Civil Registrar.
       </p>
     </section>
   );

@@ -1,5 +1,5 @@
-import React from "react";
-import "./MarriageCertificateForm.css";
+import React from 'react';
+import './MarriageCertificateForm.css';
 
 const WifeForm = ({ formData, handleChange, errors }) => {
   return (
@@ -15,10 +15,12 @@ const WifeForm = ({ formData, handleChange, errors }) => {
             name="wifeFirstName"
             className="wife-input"
             placeholder="First Name (Pangalan)"
-            value={formData.wifeFirstName || ""}
+            value={formData.wifeFirstName || ''}
             onChange={handleChange}
           />
-          {errors.wifeFirstName && <span className="wife-error error-message">{errors.wifeFirstName}</span>}
+          {errors.wifeFirstName && (
+            <span className="wife-error error-message">{errors.wifeFirstName}</span>
+          )}
         </div>
         <div className="wife-input-container input-container">
           <input
@@ -26,7 +28,7 @@ const WifeForm = ({ formData, handleChange, errors }) => {
             name="wifeMiddleName"
             className="wife-input"
             placeholder="Middle Name (Gitnang Pangalan)"
-            value={formData.wifeMiddleName || ""}
+            value={formData.wifeMiddleName || ''}
             onChange={handleChange}
           />
         </div>
@@ -36,10 +38,12 @@ const WifeForm = ({ formData, handleChange, errors }) => {
             name="wifeLastName"
             className="wife-input"
             placeholder="Last Name (Apelyido)"
-            value={formData.wifeLastName || ""}
+            value={formData.wifeLastName || ''}
             onChange={handleChange}
           />
-          {errors.wifeLastName && <span className="wife-error error-message">{errors.wifeLastName}</span>}
+          {errors.wifeLastName && (
+            <span className="wife-error error-message">{errors.wifeLastName}</span>
+          )}
         </div>
         <div className="wife-input-container input-container">
           <input
@@ -47,80 +51,86 @@ const WifeForm = ({ formData, handleChange, errors }) => {
             name="wifeExtension"
             className="wife-input"
             placeholder="Extension (e.g., Jr., Sr.)"
-            value={formData.wifeExtension || ""}
+            value={formData.wifeExtension || ''}
             onChange={handleChange}
           />
         </div>
       </div>
 
-     {/* Birth Date */}
-<label className="wife-label">2a. BIRTH DATE (Kaarawan) *</label>
-<div className="wife-input-group input-group">
-  <div className="wife-input-container input-container">
-    <select
-      name="wifeBirthMonth"
-      className="wife-select"
-      value={formData.wifeBirthMonth || ""}
-      onChange={handleChange}
-    >
-      <option value="" disabled>
-        Month
-      </option>
-      <option value="January">January</option>
-      <option value="February">February</option>
-      <option value="March">March</option>
-      <option value="April">April</option>
-      <option value="May">May</option>
-      <option value="June">June</option>
-      <option value="July">July</option>
-      <option value="August">August</option>
-      <option value="September">September</option>
-      <option value="October">October</option>
-      <option value="November">November</option>
-      <option value="December">December</option>
-    </select>
-    {errors.wifeBirthMonth && <span className="wife-error error-message">{errors.wifeBirthMonth}</span>}
-  </div>
-  <div className="wife-input-container input-container">
-    <select
-      name="wifeBirthDay"
-      className="wife-select"
-      value={formData.wifeBirthDay || ""}
-      onChange={handleChange}
-    >
-      <option value="" disabled>
-        Day
-      </option>
-      {Array.from({ length: 31 }, (_, i) => (
-        <option key={i + 1} value={i + 1}>
-          {i + 1}
-        </option>
-      ))}
-    </select>
-    {errors.wifeBirthDay && <span className="wife-error error-message">{errors.wifeBirthDay}</span>}
-  </div>
-  <div className="wife-input-container input-container">
-    <select
-      name="wifeBirthYear"
-      className="wife-select"
-      value={formData.wifeBirthYear || ""}
-      onChange={handleChange}
-    >
-      <option value="" disabled>
-        Year
-      </option>
-      {Array.from({ length: 100 }, (_, i) => {
-        const year = new Date().getFullYear() - i;
-        return (
-          <option key={year} value={year}>
-            {year}
-          </option>
-        );
-      })}
-    </select>
-    {errors.wifeBirthYear && <span className="wife-error error-message">{errors.wifeBirthYear}</span>}
-  </div>
-</div>
+      {/* Birth Date */}
+      <label className="wife-label">2a. BIRTH DATE (Kaarawan) *</label>
+      <div className="wife-input-group input-group">
+        <div className="wife-input-container input-container">
+          <select
+            name="wifeBirthMonth"
+            className="wife-select"
+            value={formData.wifeBirthMonth || ''}
+            onChange={handleChange}
+          >
+            <option value="" disabled>
+              Month
+            </option>
+            <option value="January">January</option>
+            <option value="February">February</option>
+            <option value="March">March</option>
+            <option value="April">April</option>
+            <option value="May">May</option>
+            <option value="June">June</option>
+            <option value="July">July</option>
+            <option value="August">August</option>
+            <option value="September">September</option>
+            <option value="October">October</option>
+            <option value="November">November</option>
+            <option value="December">December</option>
+          </select>
+          {errors.wifeBirthMonth && (
+            <span className="wife-error error-message">{errors.wifeBirthMonth}</span>
+          )}
+        </div>
+        <div className="wife-input-container input-container">
+          <select
+            name="wifeBirthDay"
+            className="wife-select"
+            value={formData.wifeBirthDay || ''}
+            onChange={handleChange}
+          >
+            <option value="" disabled>
+              Day
+            </option>
+            {Array.from({ length: 31 }, (_, i) => (
+              <option key={i + 1} value={i + 1}>
+                {i + 1}
+              </option>
+            ))}
+          </select>
+          {errors.wifeBirthDay && (
+            <span className="wife-error error-message">{errors.wifeBirthDay}</span>
+          )}
+        </div>
+        <div className="wife-input-container input-container">
+          <select
+            name="wifeBirthYear"
+            className="wife-select"
+            value={formData.wifeBirthYear || ''}
+            onChange={handleChange}
+          >
+            <option value="" disabled>
+              Year
+            </option>
+            {Array.from({ length: 100 }, (_, i) => {
+              const year = new Date().getFullYear() - i;
+              return (
+                <option key={year} value={year}>
+                  {year}
+                </option>
+              );
+            })}
+          </select>
+          {errors.wifeBirthYear && (
+            <span className="wife-error error-message">{errors.wifeBirthYear}</span>
+          )}
+        </div>
+      </div>
 
       {/* Age */}
       <label className="wife-label">2b. AGE *</label>
@@ -131,7 +141,7 @@ const WifeForm = ({ formData, handleChange, errors }) => {
             name="wifeAge"
             className="wife-input"
             placeholder="Age"
-            value={formData.wifeAge || ""}
+            value={formData.wifeAge || ''}
             onChange={handleChange}
           />
           {errors.wifeAge && <span className="wife-error error-message">{errors.wifeAge}</span>}
@@ -147,10 +157,12 @@ const WifeForm = ({ formData, handleChange, errors }) => {
             name="wifeBirthCity"
             className="wife-input"
             placeholder="City/Municipality"
-            value={formData.wifeBirthCity || ""}
+            value={formData.wifeBirthCity || ''}
             onChange={handleChange}
           />
-          {errors.wifeBirthCity && <span className="wife-error error-message">{errors.wifeBirthCity}</span>}
+          {errors.wifeBirthCity && (
+            <span className="wife-error error-message">{errors.wifeBirthCity}</span>
+          )}
         </div>
         <div className="wife-input-container input-container">
           <input
@@ -158,10 +170,12 @@ const WifeForm = ({ formData, handleChange, errors }) => {
             name="wifeBirthProvince"
             className="wife-input"
             placeholder="Province"
-            value={formData.wifeBirthProvince || ""}
+            value={formData.wifeBirthProvince || ''}
             onChange={handleChange}
           />
-          {errors.wifeBirthProvince && <span className="wife-error error-message">{errors.wifeBirthProvince}</span>}
+          {errors.wifeBirthProvince && (
+            <span className="wife-error error-message">{errors.wifeBirthProvince}</span>
+          )}
         </div>
         <div className="wife-input-container input-container">
           <input
@@ -169,10 +183,12 @@ const WifeForm = ({ formData, handleChange, errors }) => {
             name="wifeBirthCountry"
             className="wife-input"
             placeholder="Country"
-            value={formData.wifeBirthCountry || ""}
+            value={formData.wifeBirthCountry || ''}
             onChange={handleChange}
           />
-          {errors.wifeBirthCountry && <span className="wife-error error-message">{errors.wifeBirthCountry}</span>}
+          {errors.wifeBirthCountry && (
+            <span className="wife-error error-message">{errors.wifeBirthCountry}</span>
+          )}
         </div>
       </div>
 
@@ -185,18 +201,20 @@ const WifeForm = ({ formData, handleChange, errors }) => {
             name="wifeSex"
             className="wife-radio"
             value="Male"
-            checked={formData.wifeSex === "Male"}
+            checked={formData.wifeSex === 'Male'}
             onChange={handleChange}
-          /> Male
-        {errors.wifeSex && <span className="wife-error error-message">{errors.wifeSex}</span>}
+          />{' '}
+          Male
+          {errors.wifeSex && <span className="wife-error error-message">{errors.wifeSex}</span>}
           <input
             type="radio"
             name="wifeSex"
             className="wife-radio"
             value="Female"
-            checked={formData.wifeSex === "Female"}
+            checked={formData.wifeSex === 'Female'}
             onChange={handleChange}
-          /> Female
+          />{' '}
+          Female
         </div>
       </div>
 
@@ -209,10 +227,12 @@ const WifeForm = ({ formData, handleChange, errors }) => {
             name="wifeCitizenship"
             className="wife-input"
             placeholder="Citizenship"
-            value={formData.wifeCitizenship || ""}
+            value={formData.wifeCitizenship || ''}
             onChange={handleChange}
           />
-          {errors.wifeCitizenship && <span className="wife-error error-message">{errors.wifeCitizenship}</span>}
+          {errors.wifeCitizenship && (
+            <span className="wife-error error-message">{errors.wifeCitizenship}</span>
+          )}
         </div>
       </div>
 
@@ -225,10 +245,12 @@ const WifeForm = ({ formData, handleChange, errors }) => {
             name="wifeStreet"
             className="wife-input"
             placeholder="House No., Street"
-            value={formData.wifeStreet || ""}
+            value={formData.wifeStreet || ''}
             onChange={handleChange}
           />
-          {errors.wifeStreet && <span className="wife-error error-message">{errors.wifeStreet}</span>}
+          {errors.wifeStreet && (
+            <span className="wife-error error-message">{errors.wifeStreet}</span>
+          )}
         </div>
         <div className="wife-input-container input-container">
           <input
@@ -236,10 +258,12 @@ const WifeForm = ({ formData, handleChange, errors }) => {
             name="wifeBarangay"
             className="wife-input"
             placeholder="Barangay"
-            value={formData.wifeBarangay || ""}
+            value={formData.wifeBarangay || ''}
             onChange={handleChange}
           />
-          {errors.wifeBarangay && <span className="wife-error error-message">{errors.wifeBarangay}</span>}
+          {errors.wifeBarangay && (
+            <span className="wife-error error-message">{errors.wifeBarangay}</span>
+          )}
         </div>
         <div className="wife-input-container input-container">
           <input
@@ -247,7 +271,7 @@ const WifeForm = ({ formData, handleChange, errors }) => {
             name="wifeCity"
             className="wife-input"
             placeholder="City/Municipality"
-            value={formData.wifeCity || ""}
+            value={formData.wifeCity || ''}
             onChange={handleChange}
           />
           {errors.wifeCity && <span className="wife-error error-message">{errors.wifeCity}</span>}
@@ -258,10 +282,12 @@ const WifeForm = ({ formData, handleChange, errors }) => {
             name="wifeProvince"
             className="wife-input"
             placeholder="Province"
-            value={formData.wifeProvince || ""}
+            value={formData.wifeProvince || ''}
             onChange={handleChange}
           />
-          {errors.wifeProvince && <span className="wife-error error-message">{errors.wifeProvince}</span>}
+          {errors.wifeProvince && (
+            <span className="wife-error error-message">{errors.wifeProvince}</span>
+          )}
         </div>
         <div className="wife-input-container input-container">
           <input
@@ -269,10 +295,12 @@ const WifeForm = ({ formData, handleChange, errors }) => {
             name="wifeCountry"
             className="wife-input"
             placeholder="Country"
-            value={formData.wifeCountry || ""}
+            value={formData.wifeCountry || ''}
             onChange={handleChange}
           />
-          {errors.wifeCountry && <span className="wife-error error-message">{errors.wifeCountry}</span>}
+          {errors.wifeCountry && (
+            <span className="wife-error error-message">{errors.wifeCountry}</span>
+          )}
         </div>
       </div>
 
@@ -285,14 +313,16 @@ const WifeForm = ({ formData, handleChange, errors }) => {
             name="wifeReligion"
             className="wife-input"
             placeholder="Religion"
-            value={formData.wifeReligion || ""}
+            value={formData.wifeReligion || ''}
             onChange={handleChange}
           />
-          {errors.wifeReligion && <span className="wife-error error-message">{errors.wifeReligion}</span>}
+          {errors.wifeReligion && (
+            <span className="wife-error error-message">{errors.wifeReligion}</span>
+          )}
         </div>
       </div>
 
-       {/* Civil Status */}
+      {/* Civil Status */}
       <label className="wife-label">7. CIVIL STATUS *</label>
       <div className="wife-input-group input-group">
         <div className="wife-input-container input-container">
@@ -301,10 +331,12 @@ const WifeForm = ({ formData, handleChange, errors }) => {
             name="wifeCivilStatus"
             className="wife-input"
             placeholder="Civil Status"
-            value={formData.wifeCivilStatus || ""}
+            value={formData.wifeCivilStatus || ''}
             onChange={handleChange}
           />
-          {errors.wifeCivilStatus && <span className="wife-error error-message">{errors.wifeCivilStatus}</span>}
+          {errors.wifeCivilStatus && (
+            <span className="wife-error error-message">{errors.wifeCivilStatus}</span>
+          )}
         </div>
       </div>
 
@@ -317,10 +349,12 @@ const WifeForm = ({ formData, handleChange, errors }) => {
             name="wifeFatherFirstName"
             className="wife-input"
             placeholder="First Name"
-            value={formData.wifeFatherFirstName || ""}
+            value={formData.wifeFatherFirstName || ''}
             onChange={handleChange}
           />
-          {errors.wifeFatherFirstName && <span className="wife-error error-message">{errors.wifeFatherFirstName}</span>}
+          {errors.wifeFatherFirstName && (
+            <span className="wife-error error-message">{errors.wifeFatherFirstName}</span>
+          )}
         </div>
         <div className="wife-input-container input-container">
           <input
@@ -328,7 +362,7 @@ const WifeForm = ({ formData, handleChange, errors }) => {
             name="wifeFatherMiddleName"
             className="wife-input"
             placeholder="Middle Name"
-            value={formData.wifeFatherMiddleName || ""}
+            value={formData.wifeFatherMiddleName || ''}
             onChange={handleChange}
           />
         </div>
@@ -338,13 +372,15 @@ const WifeForm = ({ formData, handleChange, errors }) => {
             name="wifeFatherLastName"
             className="wife-input"
             placeholder="Last Name"
-            value={formData.wifeFatherLastName || ""}
+            value={formData.wifeFatherLastName || ''}
             onChange={handleChange}
           />
-          {errors.wifeFatherLastName && <span className="wife-error error-message">{errors.wifeFatherLastName}</span>}
+          {errors.wifeFatherLastName && (
+            <span className="wife-error error-message">{errors.wifeFatherLastName}</span>
+          )}
         </div>
       </div>
-      
+
       {/* Father's Citizenship */}
       <label className="wife-label">9. CITIZENSHIP OF FATHER *</label>
       <div className="wife-input-group input-group">
@@ -354,15 +390,19 @@ const WifeForm = ({ formData, handleChange, errors }) => {
             name="wifeFatherCitizenship"
             className="wife-input"
             placeholder="Citizenship"
-            value={formData.wifeFatherCitizenship || ""}
+            value={formData.wifeFatherCitizenship || ''}
             onChange={handleChange}
           />
-          {errors.wifeFatherCitizenship && <span className="wife-error error-message">{errors.wifeFatherCitizenship}</span>}
+          {errors.wifeFatherCitizenship && (
+            <span className="wife-error error-message">{errors.wifeFatherCitizenship}</span>
+          )}
         </div>
       </div>
 
       {/* Mother's Maiden Name */}
-      <label className="wife-label">10. MOTHER'S MAIDEN NAME (Pangalan ng Ina sa Pagkadalaga) *</label>
+      <label className="wife-label">
+        10. MOTHER'S MAIDEN NAME (Pangalan ng Ina sa Pagkadalaga) *
+      </label>
       <div className="wife-input-group input-group">
         <div className="wife-input-container input-container">
           <input
@@ -370,10 +410,12 @@ const WifeForm = ({ formData, handleChange, errors }) => {
             name="wifeMotherFirstName"
             className="wife-input"
             placeholder="First Name"
-            value={formData.wifeMotherFirstName || ""}
+            value={formData.wifeMotherFirstName || ''}
             onChange={handleChange}
           />
-          {errors.wifeMotherFirstName && <span className="wife-error error-message">{errors.wifeMotherFirstName}</span>}
+          {errors.wifeMotherFirstName && (
+            <span className="wife-error error-message">{errors.wifeMotherFirstName}</span>
+          )}
         </div>
         <div className="wife-input-container input-container">
           <input
@@ -381,7 +423,7 @@ const WifeForm = ({ formData, handleChange, errors }) => {
             name="wifeMotherMiddleName"
             className="wife-input"
             placeholder="Middle Name"
-            value={formData.wifeMotherMiddleName || ""}
+            value={formData.wifeMotherMiddleName || ''}
             onChange={handleChange}
           />
         </div>
@@ -391,10 +433,12 @@ const WifeForm = ({ formData, handleChange, errors }) => {
             name="wifeMotherLastName"
             className="wife-input"
             placeholder="Last Name"
-            value={formData.wifeMotherLastName || ""}
+            value={formData.wifeMotherLastName || ''}
             onChange={handleChange}
           />
-          {errors.wifeMotherLastName && <span className="wife-error error-message">{errors.wifeMotherLastName}</span>}
+          {errors.wifeMotherLastName && (
+            <span className="wife-error error-message">{errors.wifeMotherLastName}</span>
+          )}
         </div>
       </div>
 
@@ -407,10 +451,12 @@ const WifeForm = ({ formData, handleChange, errors }) => {
             name="wifeMotherCitizenship"
             className="wife-input"
             placeholder="Citizenship"
-            value={formData.wifeMotherCitizenship || ""}
+            value={formData.wifeMotherCitizenship || ''}
             onChange={handleChange}
           />
-          {errors.wifeMotherCitizenship && <span className="wife-error error-message">{errors.wifeMotherCitizenship}</span>}
+          {errors.wifeMotherCitizenship && (
+            <span className="wife-error error-message">{errors.wifeMotherCitizenship}</span>
+          )}
         </div>
       </div>
 
@@ -423,10 +469,12 @@ const WifeForm = ({ formData, handleChange, errors }) => {
             name="wifewaliFirstName"
             className="wife-input wife-wali-input"
             placeholder="First Name (Pangalan)"
-            value={formData.wifewaliFirstName || ""}
+            value={formData.wifewaliFirstName || ''}
             onChange={handleChange}
           />
-          {errors.wifewaliFirstName && <span className="wife-error error-message">{errors.wifewaliFirstName}</span>}
+          {errors.wifewaliFirstName && (
+            <span className="wife-error error-message">{errors.wifewaliFirstName}</span>
+          )}
         </div>
         <div className="wife-input-container input-container">
           <input
@@ -434,7 +482,7 @@ const WifeForm = ({ formData, handleChange, errors }) => {
             name="wifewaliMiddleName"
             className="wife-input wife-wali-input"
             placeholder="Middle Name (Gitnang Pangalan)"
-            value={formData.wifewaliMiddleName || ""}
+            value={formData.wifewaliMiddleName || ''}
             onChange={handleChange}
           />
         </div>
@@ -444,10 +492,12 @@ const WifeForm = ({ formData, handleChange, errors }) => {
             name="wifewaliLastName"
             className="wife-input wife-wali-input"
             placeholder="Last Name (Apelyido)"
-            value={formData.wifewaliLastName || ""}
+            value={formData.wifewaliLastName || ''}
             onChange={handleChange}
           />
-          {errors.wifewaliLastName && <span className="wife-error error-message">{errors.wifewaliLastName}</span>}
+          {errors.wifewaliLastName && (
+            <span className="wife-error error-message">{errors.wifewaliLastName}</span>
+          )}
         </div>
       </div>
 
@@ -460,10 +510,12 @@ const WifeForm = ({ formData, handleChange, errors }) => {
             name="wifewaliRelationship"
             className="wife-input wife-wali-input"
             placeholder="Relationship"
-            value={formData.wifewaliRelationship || ""}
+            value={formData.wifewaliRelationship || ''}
             onChange={handleChange}
           />
-          {errors.wifewaliRelationship && <span className="wife-error error-message">{errors.wifewaliRelationship}</span>}
+          {errors.wifewaliRelationship && (
+            <span className="wife-error error-message">{errors.wifewaliRelationship}</span>
+          )}
         </div>
       </div>
 
@@ -476,10 +528,12 @@ const WifeForm = ({ formData, handleChange, errors }) => {
             name="wifewaliStreet"
             className="wife-input wife-wali-input"
             placeholder="House No., Street"
-            value={formData.wifewaliStreet || ""}
+            value={formData.wifewaliStreet || ''}
             onChange={handleChange}
           />
-          {errors.wifewaliStreet && <span className="wife-error error-message">{errors.wifewaliStreet}</span>}
+          {errors.wifewaliStreet && (
+            <span className="wife-error error-message">{errors.wifewaliStreet}</span>
+          )}
         </div>
         <div className="wife-input-container input-container">
           <input
@@ -487,10 +541,12 @@ const WifeForm = ({ formData, handleChange, errors }) => {
             name="wifewaliBarangay"
             className="wife-input wife-wali-input"
             placeholder="Barangay"
-            value={formData.wifewaliBarangay || ""}
+            value={formData.wifewaliBarangay || ''}
             onChange={handleChange}
           />
-          {errors.wifewaliBarangay && <span className="wife-error error-message">{errors.wifewaliBarangay}</span>}
+          {errors.wifewaliBarangay && (
+            <span className="wife-error error-message">{errors.wifewaliBarangay}</span>
+          )}
         </div>
         <div className="wife-input-container input-container">
           <input
@@ -498,36 +554,42 @@ const WifeForm = ({ formData, handleChange, errors }) => {
             name="wifewaliCity"
             className="wife-input wife-wali-input"
             placeholder="City/Municipality"
-            value={formData.wifewaliCity || ""}
+            value={formData.wifewaliCity || ''}
             onChange={handleChange}
           />
-          {errors.wifewaliCity && <span className="wife-error error-message">{errors.wifewaliCity}</span>}
+          {errors.wifewaliCity && (
+            <span className="wife-error error-message">{errors.wifewaliCity}</span>
+          )}
         </div>
         <div className="wife-input-container input-container">
-            <input
-              type="text"
-              name="wifewaliProvince"
-              className="wife-input wife-wali-input"
-              placeholder="Province"
-              value={formData.wifewaliProvince || ""}
-              onChange={handleChange}
-            />
-            {errors.wifewaliProvince && <span className="wife-error error-message">{errors.wifewaliProvince}</span>}
-          </div>
-          <div className="wife-input-container input-container">
-            <input
-              type="text"
-              name="wifewaliCountry"
-              className="wife-input wife-wali-input"
-              placeholder="Country"
-              value={formData.wifewaliCountry || ""}
-              onChange={handleChange}
-            />
-            {errors.wifewaliCountry && <span className="wife-error error-message">{errors.wifewaliCountry}</span>}
-          </div>
+          <input
+            type="text"
+            name="wifewaliProvince"
+            className="wife-input wife-wali-input"
+            placeholder="Province"
+            value={formData.wifewaliProvince || ''}
+            onChange={handleChange}
+          />
+          {errors.wifewaliProvince && (
+            <span className="wife-error error-message">{errors.wifewaliProvince}</span>
+          )}
         </div>
-      </section>
-    );
-  };
+        <div className="wife-input-container input-container">
+          <input
+            type="text"
+            name="wifewaliCountry"
+            className="wife-input wife-wali-input"
+            placeholder="Country"
+            value={formData.wifewaliCountry || ''}
+            onChange={handleChange}
+          />
+          {errors.wifewaliCountry && (
+            <span className="wife-error error-message">{errors.wifewaliCountry}</span>
+          )}
+        </div>
+      </div>
+    </section>
+  );
+};
 
-  export default WifeForm;
+export default WifeForm;

@@ -1,33 +1,32 @@
-import React, { useState } from "react";
-import SearchAddUser from "./SearchAdd";
-import UserTable from "./UserTable";
-
+import React, { useState } from 'react';
+import SearchAddUser from './SearchAdd';
+import UserTable from './UserTable';
 
 const AdminAccountManagement = () => {
   const [users, setUsers] = useState([
     {
-      name: "Jhazmine Reigne Cruz",
-      status: "Logged In",
-      roles: ["Admin", "Manager"],
-      image: "",
+      name: 'Jhazmine Reigne Cruz',
+      status: 'Logged In',
+      roles: ['Admin', 'Manager'],
+      image: '',
     },
     {
-      name: "Manager",
-      status: "Logged In",
-      roles: ["Manager"],
-      image: "",
+      name: 'Manager',
+      status: 'Logged In',
+      roles: ['Manager'],
+      image: '',
     },
     {
-      name: "Staff 1",
-      status: "Not Logged In",
-      roles: ["Staff"],
-      image: "",
+      name: 'Staff 1',
+      status: 'Not Logged In',
+      roles: ['Staff'],
+      image: '',
     },
     {
-      name: "Staff 2",
-      status: "Logged In",
-      roles: ["Staff"],
-      image: "",
+      name: 'Staff 2',
+      status: 'Logged In',
+      roles: ['Staff'],
+      image: '',
     },
   ]);
 
@@ -42,7 +41,7 @@ const AdminAccountManagement = () => {
   return (
     <div className="admin-container">
       <div className="header">User Management</div>
-      <SearchAddUser/>
+      <SearchAddUser />
       <UserTable users={users} handleUpload={handleUpload} />
     </div>
   );

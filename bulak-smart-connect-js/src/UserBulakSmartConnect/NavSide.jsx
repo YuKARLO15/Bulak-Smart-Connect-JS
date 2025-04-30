@@ -1,9 +1,9 @@
-import React, { useState } from "react";
-import "./NavSide.css";
-import MenuIcon from "@mui/icons-material/Menu";
-import CloseIcon from "@mui/icons-material/Close";
-import { Link } from "react-router-dom"; // Import Link from react-router-dom
-import { useAuth } from "../context/AuthContext"; // Import useAuth
+import React, { useState } from 'react';
+import './NavSide.css';
+import MenuIcon from '@mui/icons-material/Menu';
+import CloseIcon from '@mui/icons-material/Close';
+import { Link } from 'react-router-dom'; // Import Link from react-router-dom
+import { useAuth } from '../context/AuthContext'; // Import useAuth
 
 const NavBar = ({ isSidebarOpen, setIsSidebarOpen }) => {
   const { logout, hasRole } = useAuth();
@@ -11,13 +11,12 @@ const NavBar = ({ isSidebarOpen, setIsSidebarOpen }) => {
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
-  
+
   return (
     <>
-   
       <button
         className="SidebarToggleBtn"
-        style={{ backgroundColor: isSidebarOpen ? "#8AACB5" : "#184a5b" }}
+        style={{ backgroundColor: isSidebarOpen ? '#8AACB5' : '#184a5b' }}
         onClick={toggleSidebar}
       >
         {/* Still determining para san 'to */}
@@ -28,7 +27,7 @@ const NavBar = ({ isSidebarOpen, setIsSidebarOpen }) => {
         {isSidebarOpen ? <CloseIcon /> : <MenuIcon />}
       </button>
 
-      <nav className={`sidebar ${isSidebarOpen ? "open" : "closed"}`}>
+      <nav className={`sidebar ${isSidebarOpen ? 'open' : 'closed'}`}>
         <div className="NavigationBar">
           <div className="Profile">
             <p className="Username">username</p>
@@ -42,28 +41,27 @@ const NavBar = ({ isSidebarOpen, setIsSidebarOpen }) => {
             <a href="/ApplicationForm">Document Application</a>
             <a href="/WalkInQueue"> Smart Walk - In</a>
 
-             {/* Staff+ links */}
-             {(hasRole('staff') || hasRole('admin') || hasRole('super_admin')) && (
+            {/* Staff+ links */}
+            {(hasRole('staff') || hasRole('admin') || hasRole('super_admin')) && (
               <a href="/applicationAdmin">Application Admin</a>
             )}
-            
+
             {/* Admin+ links */}
             {(hasRole('admin') || hasRole('super_admin')) && (
               <a href="/AdminAccountManagement">User Management</a>
             )}
-            
+
             {/* Super admin only links */}
-            {hasRole('super_admin') && (
-              <a href="/system-settings">System Settings</a>
-            )}
+            {hasRole('super_admin') && <a href="/system-settings">System Settings</a>}
 
             {/* Common links for all users cont. */}
             <a href="/account">Account</a>
             <a href="/settings">Settings</a>
-
           </div>
           <div className="Logout">
-          <Link to="/" onClick={logout}>Log Out</Link>
+            <Link to="/" onClick={logout}>
+              Log Out
+            </Link>
           </div>
         </div>
       </nav>

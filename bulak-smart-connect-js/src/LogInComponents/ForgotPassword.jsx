@@ -12,11 +12,11 @@ export default function ForgotPassword({ open, handleClose }) {
   return (
     <Dialog
       open={open}
-      className='DialogForgetPassword'
+      className="DialogForgetPassword"
       onClose={handleClose}
       PaperProps={{
         component: 'form',
-        onSubmit: (event) => {
+        onSubmit: event => {
           event.preventDefault();
           handleClose();
         },
@@ -25,7 +25,8 @@ export default function ForgotPassword({ open, handleClose }) {
       <DialogTitle className="DialogTitle">Reset password</DialogTitle>
       <DialogContent className="DialogContent">
         <DialogContentText className="DiallogContentText">
-          Enter your account&apos;s email address, and we&apos;ll send you a link to reset your password.
+          Enter your account&apos;s email address, and we&apos;ll send you a link to reset your
+          password.
         </DialogContentText>
         <OutlinedInput
           autoFocus
@@ -40,8 +41,10 @@ export default function ForgotPassword({ open, handleClose }) {
         />
       </DialogContent>
       <DialogActions className="DialogActions">
-        <Button onClick={handleClose} className='CancelButton'>Cancel</Button>
-        <Button variant="contained" className='ContinueButton' type="submit">
+        <Button onClick={handleClose} className="CancelButton">
+          Cancel
+        </Button>
+        <Button variant="contained" className="ContinueButton" type="submit">
           Continue
         </Button>
       </DialogActions>

@@ -5,13 +5,11 @@
   align-items: center;
   font-family: Arial, sans-serif;
   width: 70vw;
-
 }
 .AppointmentFContainer {
   width: 70vw;
   padding: 30px;
-  padding-top:1cap ;
-   
+  padding-top: 1cap;
 }
 .AppointmentTitle {
   font-size: 28px;
@@ -22,10 +20,8 @@
   margin-top: 0cm;
 }
 
-.MiddleInitial{
-width: 5vw !important;
-
-
+.MiddleInitial {
+  width: 5vw !important;
 }
 .ConfirmContainer {
   display: flex;
@@ -36,10 +32,9 @@ width: 5vw !important;
   margin-right: 50px;
 }
 
-
 .FormGroup {
   display: flex;
- flex-direction: row;
+  flex-direction: row;
   gap: 10px !important;
   margin-bottom: 30px;
 }
@@ -62,9 +57,8 @@ width: 5vw !important;
   border-radius: 5px;
   outline: none;
   color: #1e3a56;
-
 }
-.SelectedDateInfo{
+.SelectedDateInfo {
   font-size: 14px;
   color: #1e3a56;
   margin-top: 15px;
@@ -89,21 +83,21 @@ width: 5vw !important;
 .ConfirmButton {
   padding: 15px;
   font-size: 15px;
-  background: #1C4D5A;
+  background: #1c4d5a;
   color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   margin-top: 10px;
   width: 350px;
-  display:flex;
+  display: flex;
   justify-content: center;
 }
 
 .ConfirmButton:hover {
-  background: #1C4D5A;
+  background: #1c4d5a;
 }
-.ConfirmContainer{
+.ConfirmContainer {
   display: flex;
   justify-content: end;
   margin-top: 20px;
@@ -141,21 +135,16 @@ width: 5vw !important;
   color: #1e3a56;
 }
 
-
 .InputWrapper input::placeholder {
   font-style: italic;
-  color: #1C4D5A;
-
+  color: #1c4d5a;
 }
 .SmallInput input {
   width: 4vw !important;
- 
- 
 }
 
 .LargeInput input {
   width: 41vw !important;
-
 }
 
 .DialogOverlay {
@@ -193,18 +182,16 @@ width: 5vw !important;
   gap: 1rem;
 }
 
-.DialogBackButton{ 
-  color: #1C4D5A !important;
-  background-color: beige ;
+.DialogBackButton {
+  color: #1c4d5a !important;
+  background-color: beige;
   display: flex;
   font-weight: 700;
   font-size: 1.2rem;
-  
-  
-  }
-  .DialogText {
-  color: #1C4D5A;
-  }
+}
+.DialogText {
+  color: #1c4d5a;
+}
 .DialogButton {
   padding: 0.75rem 1.5rem;
   border: none;
@@ -215,22 +202,22 @@ width: 5vw !important;
 }
 
 .SelfButton {
-  background-color: #1C4D5A;
+  background-color: #1c4d5a;
   color: white;
 }
 
 .SelfButton:hover {
   background-color: #d3d3d3;
-  color: #1C4D5A;
+  color: #1c4d5a;
 }
 
 .OtherButton {
   background-color: #d3d3d3;
-  color: #1C4D5A;
+  color: #1c4d5a;
 }
 
 .OtherButton:hover {
-  background-color: #1C4D5A;
+  background-color: #1c4d5a;
   color: white;
 }
 
@@ -254,13 +241,12 @@ width: 5vw !important;
     margin-bottom: 50px;
     margin-left: 20px !important;
   }
-  .AppointTimeSelected{
+  .AppointTimeSelected {
     margin-top: 20px;
   }
-  
+
   .AppointTime select {
     width: 50vw !important;
-
   }
   .InputWrapper input {
     width: 50vw !important;
@@ -272,5 +258,4 @@ width: 5vw !important;
   .SmallInput Input {
     min-width: 40vw;
   }
-
 }

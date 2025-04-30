@@ -102,10 +102,12 @@ const AdminAddUser = () => {
               { label: 'Password', name: 'password', type: 'password' },
               { label: 'Confirm Password', name: 'confirmPassword', type: 'password' },
               { label: 'First Name', name: 'firstName' },
-              { label: 'Last Name', name: 'lastName' }
+              { label: 'Last Name', name: 'lastName' },
             ].map(({ label, name, type = 'text' }) => (
               <div className="form-group" key={name}>
-                <label>{label} <span>*</span></label>
+                <label>
+                  {label} <span>*</span>
+                </label>
                 <input
                   type={type}
                   name={name}
@@ -118,7 +120,9 @@ const AdminAddUser = () => {
             ))}
 
             <div className="form-group contact-split">
-              <label>Contact Number <span>*</span></label>
+              <label>
+                Contact Number <span>*</span>
+              </label>
               <div className="contact-input-wrapper">
                 <input type="text" value="+63" disabled className="country-code" />
                 <input
@@ -139,7 +143,9 @@ const AdminAddUser = () => {
             </div>
 
             <div className="form-group">
-              <label>User Role <span>*</span></label>
+              <label>
+                User Role <span>*</span>
+              </label>
               <select name="role" value={formData.role} onChange={handleChange}>
                 <option value="">Select Role</option>
                 <option value="Admin">Admin</option>
@@ -150,7 +156,9 @@ const AdminAddUser = () => {
             </div>
           </div>
 
-          <button type="submit" className="submit-btn">Add User</button>
+          <button type="submit" className="submit-btn">
+            Add User
+          </button>
         </form>
       </div>
     </div>

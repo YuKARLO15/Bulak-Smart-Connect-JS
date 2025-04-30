@@ -10,7 +10,7 @@ describe('LogInCard component', () => {
         <LogInCard />
       </BrowserRouter>
     );
-    
+
     // Check if key elements are present
     expect(screen.getByText(/LOG IN/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/Email/i)).toBeInTheDocument();
@@ -25,15 +25,15 @@ describe('LogInCard component', () => {
         <LogInCard />
       </BrowserRouter>
     );
-    
+
     // Enter invalid email
     const emailInput = screen.getByLabelText(/Email/i);
     fireEvent.change(emailInput, { target: { value: 'invalid-email' } });
-    
+
     // Trigger form submission
     const submitButton = screen.getByRole('button', { name: /Log In/i });
     fireEvent.click(submitButton);
-    
+
     // Check if validation error appears
     expect(await screen.findByText(/Please enter a valid email address/i)).toBeInTheDocument();
   });

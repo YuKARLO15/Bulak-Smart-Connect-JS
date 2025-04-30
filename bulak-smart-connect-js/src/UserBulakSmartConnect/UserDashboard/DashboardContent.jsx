@@ -1,9 +1,9 @@
-import React, { useState } from "react";
-import { Box, Typography, Card, CardContent } from "@mui/material";
-import Calendar from "react-calendar";
-import "react-calendar/dist/Calendar.css";
-import "./DashboardContent.css";
-import { Search } from "@mui/icons-material";
+import React, { useState } from 'react';
+import { Box, Typography, Card, CardContent } from '@mui/material';
+import Calendar from 'react-calendar';
+import 'react-calendar/dist/Calendar.css';
+import './DashboardContent.css';
+import { Search } from '@mui/icons-material';
 
 const DashboardContent = () => {
   const [tooltip, setTooltip] = useState({ show: false, x: 0, y: 0 });
@@ -32,47 +32,49 @@ const DashboardContent = () => {
           <input type="text" placeholder="Search" className="SearchInput" />
         </div>
       </div>
-    <div className="TopSection">
-      <Card className="DashboardCard">
-        <CardContent>
-          <Typography variant="h6">Appointments</Typography>
-          <div style={{ position: "relative" }}>
-            <Calendar
-              className="Calendar"
-              tileClassName={({ date }) => (date.getDay() === 0 || date.getDay() === 6 ? "weekend" : "")}
-              tileContent={({ date }) => (
-                <div
-                  onMouseEnter={(e) => handleHover(e, date)}
-                  onMouseLeave={handleMouseLeave}
-                  className="hover-area"
-                ></div>
-              )}
-            />
+      <div className="TopSection">
+        <Card className="DashboardCard">
+          <CardContent>
+            <Typography variant="h6">Appointments</Typography>
+            <div style={{ position: 'relative' }}>
+              <Calendar
+                className="Calendar"
+                tileClassName={({ date }) =>
+                  date.getDay() === 0 || date.getDay() === 6 ? 'weekend' : ''
+                }
+                tileContent={({ date }) => (
+                  <div
+                    onMouseEnter={e => handleHover(e, date)}
+                    onMouseLeave={handleMouseLeave}
+                    className="hover-area"
+                  ></div>
+                )}
+              />
+            </div>
+          </CardContent>
+        </Card>
+
+        {tooltip.show && (
+          <div
+            className="tooltip"
+            style={{
+              position: 'fixed',
+              top: tooltip.y + 10,
+              left: tooltip.x + 10,
+            }}
+          >
+            Office is closed
           </div>
-        </CardContent>
-      </Card>
+        )}
 
-      {tooltip.show && (
-        <div
-          className="tooltip"
-          style={{
-            position: "fixed",
-            top: tooltip.y + 10,
-            left: tooltip.x + 10,
-          }}
-        >
-          Office is closed
-        </div>
-      )}
-
-      <Card className="DashboardCard">
-        <CardContent>
-          <Typography variant="h6">Announcement</Typography>
+        <Card className="DashboardCard">
+          <CardContent>
+            <Typography variant="h6">Announcement</Typography>
             <Box className="AnnouncementBox"></Box>
             <Typography variant="body1" className="AnnouncementText">
-              There are no announcements at the moment. 
+              There are no announcements at the moment.
             </Typography>
-        </CardContent>
+          </CardContent>
         </Card>
       </div>
     </Box>
@@ -80,4 +82,3 @@ const DashboardContent = () => {
 };
 
 export default DashboardContent;
-

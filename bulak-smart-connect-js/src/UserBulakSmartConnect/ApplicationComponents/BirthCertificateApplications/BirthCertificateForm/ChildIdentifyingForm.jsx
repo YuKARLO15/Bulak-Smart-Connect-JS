@@ -1,17 +1,14 @@
-import React, { useState } from "react";
-import "./IdentifyingForm.css";
+import React, { useState } from 'react';
+import './IdentifyingForm.css';
 
 const ChildIdentifyingForm = ({ formData, handleChange }) => {
   const [showExtension, setShowExtension] = useState(false);
   const requiredField = <span className="RequiredFieldChild">*</span>;
 
-
-  const validateNumberOnly = (e) => {
-
+  const validateNumberOnly = e => {
     if (!/^\d*$/.test(e.target.value)) {
       return;
     }
-    
 
     handleChange(e);
   };
@@ -27,13 +24,11 @@ const ChildIdentifyingForm = ({ formData, handleChange }) => {
 
           <div className="FormRowChild">
             <div className="FormGroupChild">
-              <label className="FormLabelChild">
-                Last Name (Apelyido) {requiredField}
-              </label>
+              <label className="FormLabelChild">Last Name (Apelyido) {requiredField}</label>
               <input
                 type="text"
                 name="lastName"
-                value={formData?.lastName || ""}
+                value={formData?.lastName || ''}
                 onChange={handleChange}
                 className="FormInputChild"
                 required
@@ -41,13 +36,11 @@ const ChildIdentifyingForm = ({ formData, handleChange }) => {
             </div>
 
             <div className="FormGroupChild">
-              <label className="FormLabelChild">
-                First Name (Pangalan) {requiredField}
-              </label>
+              <label className="FormLabelChild">First Name (Pangalan) {requiredField}</label>
               <input
                 type="text"
                 name="firstName"
-                value={formData?.firstName || ""}
+                value={formData?.firstName || ''}
                 onChange={handleChange}
                 className="FormInputChild"
                 required
@@ -61,7 +54,7 @@ const ChildIdentifyingForm = ({ formData, handleChange }) => {
               <input
                 type="text"
                 name="middleName"
-                value={formData?.middleName || ""}
+                value={formData?.middleName || ''}
                 onChange={handleChange}
                 className="FormInputChild"
                 required
@@ -88,7 +81,7 @@ const ChildIdentifyingForm = ({ formData, handleChange }) => {
                 <span className="ExtensionLabelChild">Extension</span>
                 <select
                   name="extension"
-                  value={formData?.extension || ""}
+                  value={formData?.extension || ''}
                   onChange={handleChange}
                   className="SelectInputChild"
                 >
@@ -104,13 +97,11 @@ const ChildIdentifyingForm = ({ formData, handleChange }) => {
         </div>
 
         {/* Birth Date and Sex Section */}
-      
+
         <div className="FormSectionChild">
           <div className="FormRowChild">
-            <div className="FormGroupChild" style={{ flex: 1}}>
-              <div className="SectionTitleHalfChild">
-                2. BIRTH DATE (Kaarawan)
-              </div>
+            <div className="FormGroupChild" style={{ flex: 1 }}>
+              <div className="SectionTitleHalfChild">2. BIRTH DATE (Kaarawan)</div>
 
               <div className="DateSectionContainerChild">
                 <div className="DateRowChild">
@@ -121,26 +112,26 @@ const ChildIdentifyingForm = ({ formData, handleChange }) => {
                 <div className="DateInputsRowChild">
                   <select
                     name="birthMonth"
-                    value={formData?.birthMonth || ""}
+                    value={formData?.birthMonth || ''}
                     onChange={handleChange}
                     className="SelectInputChild DateSelectChild"
                     required
                   >
                     <option value="">Select</option>
                     {[
-                      "January",
-                      "February",
-                      "March",
-                      "April",
-                      "May",
-                      "June",
-                      "July",
-                      "August",
-                      "September",
-                      "October",
-                      "November",
-                      "December",
-                    ].map((month) => (
+                      'January',
+                      'February',
+                      'March',
+                      'April',
+                      'May',
+                      'June',
+                      'July',
+                      'August',
+                      'September',
+                      'October',
+                      'November',
+                      'December',
+                    ].map(month => (
                       <option key={month} value={month}>
                         {month}
                       </option>
@@ -149,7 +140,7 @@ const ChildIdentifyingForm = ({ formData, handleChange }) => {
 
                   <select
                     name="birthDay"
-                    value={formData?.birthDay || ""}
+                    value={formData?.birthDay || ''}
                     onChange={handleChange}
                     className="SelectInputChild DateSelectChild"
                     required
@@ -164,7 +155,7 @@ const ChildIdentifyingForm = ({ formData, handleChange }) => {
 
                   <select
                     name="birthYear"
-                    value={formData?.birthYear || ""}
+                    value={formData?.birthYear || ''}
                     onChange={handleChange}
                     className="SelectInputChild DateSelectChild"
                     required
@@ -183,11 +174,12 @@ const ChildIdentifyingForm = ({ formData, handleChange }) => {
               </div>
             </div>
 
-            <div className="FormGroupChild" style={{ flex: 1, alignSelf: 'flex-start', marginLeft: '140px' }}>
-              <div className="SectionTitleHalfChild">
-                3. SEX (Kasarian) {requiredField}
-              </div>
-              
+            <div
+              className="FormGroupChild"
+              style={{ flex: 1, alignSelf: 'flex-start', marginLeft: '140px' }}
+            >
+              <div className="SectionTitleHalfChild">3. SEX (Kasarian) {requiredField}</div>
+
               <div className="SexContainerChild">
                 <div className="RadioGroupChild" style={{ marginTop: '24px' }}>
                   <div className="RadioGroupChild">
@@ -196,7 +188,7 @@ const ChildIdentifyingForm = ({ formData, handleChange }) => {
                         type="radio"
                         name="sex"
                         value="Male"
-                        checked={formData?.sex === "Male"}
+                        checked={formData?.sex === 'Male'}
                         onChange={handleChange}
                         className="RadioInputChild"
                         required
@@ -208,7 +200,7 @@ const ChildIdentifyingForm = ({ formData, handleChange }) => {
                         type="radio"
                         name="sex"
                         value="Female"
-                        checked={formData?.sex === "Female"}
+                        checked={formData?.sex === 'Female'}
                         onChange={handleChange}
                         className="RadioInputChild"
                         required
@@ -223,19 +215,15 @@ const ChildIdentifyingForm = ({ formData, handleChange }) => {
         </div>
 
         <div className="FormSectionChild">
-          <div className="SectionTitleChild">
-            4. PLACE OF BIRTH (Lugar ng Kapanganakan)
-          </div>
+          <div className="SectionTitleChild">4. PLACE OF BIRTH (Lugar ng Kapanganakan)</div>
 
           <div className="FormRowChild">
             <div className="FormFullWidthGroupChild">
-              <label className="FormLabelChild">
-                Name of Hospital/Clinic/Institution
-              </label>
+              <label className="FormLabelChild">Name of Hospital/Clinic/Institution</label>
               <input
                 type="text"
                 name="hospital"
-                value={formData?.hospital || ""}
+                value={formData?.hospital || ''}
                 onChange={handleChange}
                 className="FormInputChild"
               />
@@ -248,7 +236,7 @@ const ChildIdentifyingForm = ({ formData, handleChange }) => {
               <input
                 type="text"
                 name="city"
-                value={formData?.city || ""}
+                value={formData?.city || ''}
                 onChange={handleChange}
                 className="FormInputChild"
               />
@@ -259,7 +247,7 @@ const ChildIdentifyingForm = ({ formData, handleChange }) => {
               <input
                 type="text"
                 name="province"
-                value={formData?.province || ""}
+                value={formData?.province || ''}
                 onChange={handleChange}
                 className="FormInputChild"
               />
@@ -270,7 +258,7 @@ const ChildIdentifyingForm = ({ formData, handleChange }) => {
               <input
                 type="text"
                 name="barangay"
-                value={formData?.barangay || ""}
+                value={formData?.barangay || ''}
                 onChange={handleChange}
                 className="FormInputChild"
               />
@@ -278,9 +266,7 @@ const ChildIdentifyingForm = ({ formData, handleChange }) => {
           </div>
 
           <div className="FormRowChild FormRowSpaceBetweenChild">
-            <label className="FormLabelChild">
-              Residence (House No. / Block / Lot / Street)
-            </label>
+            <label className="FormLabelChild">Residence (House No. / Block / Lot / Street)</label>
             <span className="NotRequiredLabelChild">Not Required</span>
           </div>
 
@@ -289,7 +275,7 @@ const ChildIdentifyingForm = ({ formData, handleChange }) => {
               <input
                 type="text"
                 name="residence"
-                value={formData?.residence || ""}
+                value={formData?.residence || ''}
                 onChange={handleChange}
                 className="FormInputChild"
               />
@@ -309,7 +295,7 @@ const ChildIdentifyingForm = ({ formData, handleChange }) => {
                       type="radio"
                       name="typeOfBirth"
                       value="Single"
-                      checked={formData?.typeOfBirth === "Single"}
+                      checked={formData?.typeOfBirth === 'Single'}
                       onChange={handleChange}
                       className="RadioInputChild"
                     />
@@ -320,7 +306,7 @@ const ChildIdentifyingForm = ({ formData, handleChange }) => {
                       type="radio"
                       name="typeOfBirth"
                       value="Twins"
-                      checked={formData?.typeOfBirth === "Twins"}
+                      checked={formData?.typeOfBirth === 'Twins'}
                       onChange={handleChange}
                       className="RadioInputChild"
                     />
@@ -331,7 +317,7 @@ const ChildIdentifyingForm = ({ formData, handleChange }) => {
                       type="radio"
                       name="typeOfBirth"
                       value="Triples, etc."
-                      checked={formData?.typeOfBirth === "Triples, etc."}
+                      checked={formData?.typeOfBirth === 'Triples, etc.'}
                       onChange={handleChange}
                       className="RadioInputChild"
                     />
@@ -348,7 +334,7 @@ const ChildIdentifyingForm = ({ formData, handleChange }) => {
                     type="radio"
                     name="multipleBirthOrder"
                     value="(1) FIRST"
-                    checked={formData?.multipleBirthOrder === "(1) FIRST"}
+                    checked={formData?.multipleBirthOrder === '(1) FIRST'}
                     onChange={handleChange}
                     className="RadioInputChild"
                   />
@@ -359,7 +345,7 @@ const ChildIdentifyingForm = ({ formData, handleChange }) => {
                     type="radio"
                     name="multipleBirthOrder"
                     value="(2) SECOND"
-                    checked={formData?.multipleBirthOrder === "(2) SECOND"}
+                    checked={formData?.multipleBirthOrder === '(2) SECOND'}
                     onChange={handleChange}
                     className="RadioInputChild"
                   />
@@ -370,17 +356,17 @@ const ChildIdentifyingForm = ({ formData, handleChange }) => {
                     type="radio"
                     name="multipleBirthOrder"
                     value="OTHERS, SPECIFY"
-                    checked={formData?.multipleBirthOrder === "OTHERS, SPECIFY"}
+                    checked={formData?.multipleBirthOrder === 'OTHERS, SPECIFY'}
                     onChange={handleChange}
                     className="RadioInputChild"
                   />
                   OTHERS, SPECIFY
                 </label>
-                {formData?.multipleBirthOrder === "OTHERS, SPECIFY" && (
+                {formData?.multipleBirthOrder === 'OTHERS, SPECIFY' && (
                   <input
                     type="text"
                     name="multipleBirthOrderSpecify"
-                    value={formData?.multipleBirthOrderSpecify || ""}
+                    value={formData?.multipleBirthOrderSpecify || ''}
                     onChange={handleChange}
                     className="SmallInputChild"
                   />
@@ -390,7 +376,6 @@ const ChildIdentifyingForm = ({ formData, handleChange }) => {
           </div>
         </div>
 
-
         <div className="FormSectionChild">
           <div className="SectionTitleChild">C. BIRTH ORDER</div>
           <div className="FormRowChild">
@@ -399,8 +384,8 @@ const ChildIdentifyingForm = ({ formData, handleChange }) => {
                 <input
                   type="text"
                   name="birthOrder"
-                  value={formData?.birthOrder || ""}
-                  onChange={validateNumberOnly} 
+                  value={formData?.birthOrder || ''}
+                  onChange={validateNumberOnly}
                   className="FormInputChild"
                   placeholder="Enter number only"
                 />
@@ -408,14 +393,11 @@ const ChildIdentifyingForm = ({ formData, handleChange }) => {
               <div className="BirthOrderNoteChild">
                 LIVE BIRTH AND FETAL DEATHS (INCLUDING THIS DELIVERY)
               </div>
-              <div className="BirthOrderNoteChild">
-                First, Second, Third, etc.
-              </div>
+              <div className="BirthOrderNoteChild">First, Second, Third, etc.</div>
             </div>
           </div>
         </div>
 
-     
         <div className="FormSectionChild">
           <div className="FormRowChild">
             <div className="WeightContainerChild">
@@ -423,8 +405,8 @@ const ChildIdentifyingForm = ({ formData, handleChange }) => {
               <input
                 type="text"
                 name="birthWeight"
-                value={formData?.birthWeight || ""}
-                onChange={validateNumberOnly}  // Use the number validation function here
+                value={formData?.birthWeight || ''}
+                onChange={validateNumberOnly} // Use the number validation function here
                 className="SmallInputChild"
                 placeholder="Enter Number only"
               />

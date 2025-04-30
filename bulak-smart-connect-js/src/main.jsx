@@ -7,10 +7,9 @@ import { AuthProvider } from './context/AuthContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root')); // Create the root
 root.render(
-  <BrowserRouter> 
+  <BrowserRouter>
     <AuthProvider>
       <App />
     </AuthProvider>
   </BrowserRouter>
-
 );
