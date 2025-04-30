@@ -322,15 +322,16 @@ export class Role {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ unique: true, nullable: false }) 
+  @Column({ unique: true, nullable: false })
   name: string;
 
   @Column({ nullable: true })
   description: string;
 
-  @ManyToMany(() &#x3D;&gt; User, user &#x3D;&gt; user.roles)
+  @ManyToMany(() &#x3D;&gt; User, (user) &#x3D;&gt; user.roles)
   users: User[];
-}</code></pre>
+}
+</code></pre>
     </div>
 </div>
 

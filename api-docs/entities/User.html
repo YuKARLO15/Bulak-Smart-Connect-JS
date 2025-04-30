@@ -486,7 +486,7 @@
   ManyToOne,
   JoinColumn,
   ManyToMany,
-  JoinTable
+  JoinTable,
 } from &#x27;typeorm&#x27;;
 import { Role } from &#x27;../../roles/entities/role.entity&#x27;;
 
@@ -506,25 +506,25 @@ export class User {
 
   @CreateDateColumn({ name: &#x27;created_at&#x27; })
   createdAt: Date;
-  
+
   @ManyToOne(() &#x3D;&gt; Role, { nullable: true })
   @JoinColumn({ name: &#x27;default_role_id&#x27; })
   defaultRole: Role;
-  
+
   @Column({ name: &#x27;default_role_id&#x27;, nullable: true })
   defaultRoleId: number;
-  
+
   @ManyToMany(() &#x3D;&gt; Role)
   @JoinTable({
-    name: &quot;user_roles&quot;,
+    name: &#x27;user_roles&#x27;,
     joinColumn: {
-      name: &quot;user_id&quot;,
-      referencedColumnName: &quot;id&quot;
+      name: &#x27;user_id&#x27;,
+      referencedColumnName: &#x27;id&#x27;,
     },
     inverseJoinColumn: {
-      name: &quot;role_id&quot;,
-      referencedColumnName: &quot;id&quot;
-    }
+      name: &#x27;role_id&#x27;,
+      referencedColumnName: &#x27;id&#x27;,
+    },
   })
   roles: Role[];
 }

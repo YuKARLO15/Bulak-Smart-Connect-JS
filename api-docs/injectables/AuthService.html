@@ -178,7 +178,7 @@
                 </tr>
                         <tr>
                             <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="12" class="link-to-prism">src/auth/auth.service.ts:12</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="17" class="link-to-prism">src/auth/auth.service.ts:17</a></div>
                             </td>
                         </tr>
 
@@ -267,8 +267,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="163"
-                                    class="link-to-prism">src/auth/auth.service.ts:163</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="172"
+                                    class="link-to-prism">src/auth/auth.service.ts:172</a></div>
                         </td>
                     </tr>
 
@@ -336,8 +336,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="158"
-                                    class="link-to-prism">src/auth/auth.service.ts:158</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="167"
+                                    class="link-to-prism">src/auth/auth.service.ts:167</a></div>
                         </td>
                     </tr>
 
@@ -405,8 +405,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="31"
-                                    class="link-to-prism">src/auth/auth.service.ts:31</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="36"
+                                    class="link-to-prism">src/auth/auth.service.ts:36</a></div>
                         </td>
                     </tr>
 
@@ -474,8 +474,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="90"
-                                    class="link-to-prism">src/auth/auth.service.ts:90</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="95"
+                                    class="link-to-prism">src/auth/auth.service.ts:95</a></div>
                         </td>
                     </tr>
 
@@ -543,8 +543,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="20"
-                                    class="link-to-prism">src/auth/auth.service.ts:20</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="25"
+                                    class="link-to-prism">src/auth/auth.service.ts:25</a></div>
                         </td>
                     </tr>
 
@@ -596,7 +596,12 @@
 
 
     <div class="tab-pane fade  tab-source-code" id="source">
-        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable, UnauthorizedException, ConflictException, BadRequestException } from &#x27;@nestjs/common&#x27;;
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import {
+  Injectable,
+  UnauthorizedException,
+  ConflictException,
+  BadRequestException,
+} from &#x27;@nestjs/common&#x27;;
 import { JwtService } from &#x27;@nestjs/jwt&#x27;;
 import { InjectRepository } from &#x27;@nestjs/typeorm&#x27;;
 import { Repository } from &#x27;typeorm&#x27;;
@@ -612,7 +617,7 @@ export class AuthService {
     @InjectRepository(User)
     private usersRepository: Repository&lt;User&gt;,
     private jwtService: JwtService,
-    private rolesService: RolesService, 
+    private rolesService: RolesService,
   ) {}
 
   async validateUser(loginDto: LoginDto): Promise&lt;any&gt; {
@@ -657,14 +662,14 @@ export class AuthService {
 
       // Get user roles
       const roles &#x3D; await this.rolesService.getUserRoles(user.id);
-      const roleNames &#x3D; roles.map(role &#x3D;&gt; role.name);
+      const roleNames &#x3D; roles.map((role) &#x3D;&gt; role.name);
 
-      const payload &#x3D; { 
-        sub: user.id, 
+      const payload &#x3D; {
+        sub: user.id,
         email: user.email,
-        roles: roleNames
+        roles: roleNames,
       };
-      
+
       const token &#x3D; this.jwtService.sign(payload);
       console.log(&#x27;Generated token:&#x27;, token ? &#x27;Success&#x27; : &#x27;Failed&#x27;);
 
@@ -676,7 +681,7 @@ export class AuthService {
         user: {
           ...userWithoutPassword,
           roles: roleNames,
-          defaultRole: user.defaultRole?.name || &#x27;citizen&#x27;
+          defaultRole: user.defaultRole?.name || &#x27;citizen&#x27;,
         },
       };
     } catch (error) {
@@ -687,27 +692,29 @@ export class AuthService {
 
   async register(registerDto: RegisterDto) {
     const { email, password, name } &#x3D; registerDto;
-    
+
     // Validate email format
     if (!this.isValidEmail(email)) {
       throw new BadRequestException(&#x27;Invalid email format&#x27;);
     }
-    
+
     // Check if user exists
-    const existingUser &#x3D; await this.usersRepository.findOne({ where: { email } });
+    const existingUser &#x3D; await this.usersRepository.findOne({
+      where: { email },
+    });
     if (existingUser) {
       throw new ConflictException(&#x27;Email already exists&#x27;);
     }
-    
+
     // Validate password strength
     if (password.length &lt; 6) {
       throw new BadRequestException(&#x27;Password must be at least 6 characters&#x27;);
     }
-    
+
     // Hash password
     const salt &#x3D; await bcrypt.genSalt();
     const hashedPassword &#x3D; await bcrypt.hash(password, salt);
-    
+
     try {
       // Create new user
       const user &#x3D; this.usersRepository.create({
@@ -715,14 +722,14 @@ export class AuthService {
         password: hashedPassword,
         name,
       });
-      
+
       await this.usersRepository.save(user);
-      
+
       // Add citizen role to the user
       try {
         const citizenRole &#x3D; await this.rolesService.findByName(&#x27;citizen&#x27;);
         await this.rolesService.assignRolesToUser(user.id, [citizenRole.id]);
-        
+
         // Set default role
         user.defaultRoleId &#x3D; citizenRole.id;
         await this.usersRepository.save(user);
@@ -730,21 +737,23 @@ export class AuthService {
         console.error(&#x27;Error assigning citizen role:&#x27;, error);
         // Rollback: Delete the user to maintain a consistent state
         await this.usersRepository.delete(user.id);
-        throw new ConflictException(&#x27;Failed to assign citizen role. Registration rolled back.&#x27;);
+        throw new ConflictException(
+          &#x27;Failed to assign citizen role. Registration rolled back.&#x27;,
+        );
       }
-      
+
       // Generate JWT token
       const payload &#x3D; { sub: user.id, email: user.email, roles: [&#x27;citizen&#x27;] };
-      
+
       // Remove password from response
       const { password: _, ...userWithoutPassword } &#x3D; user;
-      
+
       return {
         access_token: this.jwtService.sign(payload),
         user: {
           ...userWithoutPassword,
           roles: [&#x27;citizen&#x27;],
-          defaultRole: &#x27;citizen&#x27;
+          defaultRole: &#x27;citizen&#x27;,
         },
       };
     } catch (error) {
@@ -752,16 +761,16 @@ export class AuthService {
       throw error;
     }
   }
-  
+
   private isValidEmail(email: string): boolean {
     const emailRegex &#x3D; /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
   }
 
   async getProfile(userId: number) {
-    const user &#x3D; await this.usersRepository.findOne({ 
+    const user &#x3D; await this.usersRepository.findOne({
       where: { id: userId },
-      relations: [&#x27;defaultRole&#x27;]
+      relations: [&#x27;defaultRole&#x27;],
     });
     if (!user) {
       throw new UnauthorizedException(&#x27;User not found&#x27;);
@@ -769,13 +778,13 @@ export class AuthService {
 
     // Get user roles
     const roles &#x3D; await this.rolesService.getUserRoles(userId);
-    const roleNames &#x3D; roles.map(role &#x3D;&gt; role.name);
+    const roleNames &#x3D; roles.map((role) &#x3D;&gt; role.name);
 
     const { password, ...result } &#x3D; user;
     return {
       ...result,
       roles: roleNames,
-      defaultRole: user.defaultRole?.name || &#x27;citizen&#x27;
+      defaultRole: user.defaultRole?.name || &#x27;citizen&#x27;,
     };
   }
 }

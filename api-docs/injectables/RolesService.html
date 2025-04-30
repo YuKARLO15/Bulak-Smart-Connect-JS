@@ -577,7 +577,7 @@ export class RolesService {
   constructor(
     @InjectRepository(Role)
     private rolesRepository: Repository&lt;Role&gt;,
-    
+
     @InjectRepository(User)
     private usersRepository: Repository&lt;User&gt;,
   ) {}
@@ -616,19 +616,20 @@ export class RolesService {
       where: { id: userId },
       relations: [&#x27;roles&#x27;],
     });
-    
+
     if (!user) {
       throw new Error(&#x27;User not found&#x27;);
     }
-    
+
     // Find the roles
     const roles &#x3D; await this.rolesRepository.findByIds(roleIds);
-    
+
     // Assign roles to user
     user.roles &#x3D; roles;
     await this.usersRepository.save(user);
   }
-}</code></pre>
+}
+</code></pre>
     </div>
 
 </div>
