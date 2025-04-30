@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 import './AdminDashboard.css';
 import {
   LineChart,
@@ -15,6 +16,8 @@ import {
 
 const AdminDashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const { logout } = useAuth();
+  const navigate = useNavigate();
 
   // Empty data arrays
   const walkInData = [];
@@ -33,6 +36,12 @@ const AdminDashboard = () => {
       default:
         return '';
     }
+  };
+
+  // Handle logout
+  const handleLogout = () => {
+    logout();
+    navigate('/LogIn');
   };
 
   return (
@@ -69,9 +78,7 @@ const AdminDashboard = () => {
           </Link>
         </nav>
         <div className="sidebar-footer">
-          <Link to="/LogIn" >
-            <button className="logout-btn" >Log Out</button>
-            </Link>
+          <button className="logout-btn" onClick={handleLogout}>Log Out</button>
         </div>
       </div>
 

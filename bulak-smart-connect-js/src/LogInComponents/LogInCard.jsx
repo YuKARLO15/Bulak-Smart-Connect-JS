@@ -47,22 +47,20 @@ export default function LogInCard({ onLogin }) {
         //navigate("/UserDashboard");
 
         // Use the login function from AuthContext directly, eliminating the one used in api.js
-        const success = await login(email, password);
+        const { success, user } = await login(email, password);
 
         console.log('Login successful:', success);
         //Auth Success Step
         if (success) {
-          
-          setTimeout(() => {
-           
-            if (isStaff|| hasRole('staff') || hasRole('admin') || hasRole('super_admin') ) {
-              console.log('User has admin role - navigating to AdminHome');
-              navigate("/AdminHome");
-            } else {
-              console.log('User is a regular user - navigating to Home');
-              navigate("/Home");
-            }
-          }, 100); 
+          if (user && (user.roles?.includes('staff') || 
+              user.roles?.includes('admin') || 
+              user.roles?.includes('super_admin'))) {
+            console.log('User has admin role - navigating to AdminHome');
+            navigate("/AdminHome");
+          } else {
+            console.log('User is a regular user - navigating to Home');
+            navigate("/Home");
+          }
         } else {
           setError('Login failed. Please check your credentials.');
         }
