@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import '../AccountManagementComponents/AdminAddAccount.css';
 import { useNavigate } from 'react-router-dom';
+import { addUser } from './NewUserInfo'; // Import the addUser function
 
-const AdminAddUser = ({ addUser }) => {
+const AdminAddUser = () => {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -17,20 +18,17 @@ const AdminAddUser = ({ addUser }) => {
   });
 
   const [errors, setErrors] = useState({});
-  // const [photoPreview, setPhotoPreview] = useState(null);
+  const [submitting, setSubmitting] = useState(false);
 
   const handleChange = e => {
-    const { name, value, files } = e.target;
+    const { name, value } = e.target;
+    
     setFormData(prevData => ({
       ...prevData,
-      [name]: files ? files[0] : value,
+      [name]: value,
     }));
 
-    // if (files) {
-    //   const file = files[0];
-    //   setPhotoPreview(URL.createObjectURL(file));
-    // }
-
+    // Clear errors for this field when user starts typing
     setErrors(prevErrors => ({
       ...prevErrors,
       [name]: '',
@@ -39,32 +37,63 @@ const AdminAddUser = ({ addUser }) => {
 
   const handleSubmit = e => {
     e.preventDefault();
-    let validationErrors = {};
+    setSubmitting(true);
+    
+    try {
+      let validationErrors = {};
 
-    Object.entries(formData).forEach(([key, value]) => {
-      if (!value || (typeof value === 'string' && value.trim() === '')) {
-        validationErrors[key] = 'This field is required';
+      // Basic validation
+      Object.entries(formData).forEach(([key, value]) => {
+        if (!value || (typeof value === 'string' && value.trim() === '')) {
+          validationErrors[key] = 'This field is required';
+        }
+      });
+
+      // Password validation
+      if (formData.password !== formData.confirmPassword) {
+        validationErrors.confirmPassword = 'Passwords do not match';
       }
-    });
 
-    if (formData.password !== formData.confirmPassword) {
-      validationErrors.confirmPassword = 'Passwords do not match';
-    }
+      // Contact number validation
+      if (formData.contact && !/^\d{10}$/.test(formData.contact)) {
+        validationErrors.contact = 'Contact number must be exactly 10 digits after +63';
+      }
 
-    if (formData.contact && !/^\d{10}$/.test(formData.contact)) {
-      validationErrors.contact = 'Contact number must be exactly 10 digits after +63';
-    }
+      // Email validation
+      if (formData.email && !formData.email.includes('@')) {
+        validationErrors.email = 'Please enter a valid email address';
+      }
 
-    if (formData.email && !formData.email.includes('@')) {
-      validationErrors.email = 'Email must contain "@"';
-    }
+      setErrors(validationErrors);
 
-    setErrors(validationErrors);
-
-    if (Object.keys(validationErrors).length === 0) {
-      addUser(formData);
-      alert('User added successfully!');
-      navigate('/admin-user-management');
+      if (Object.keys(validationErrors).length === 0) {
+        // Use the imported addUser function from newuser.js
+        const success = addUser(formData);
+        
+        if (success) {
+          // Reset form
+          setFormData({
+            username: '',
+            contact: '',
+            email: '',
+            role: '',
+            password: '',
+            confirmPassword: '',
+            firstName: '',
+            lastName: '',
+          });
+          
+          alert('User added successfully!');
+          navigate('/admin-user-management');
+        } else {
+          alert('Failed to add user. Please try again.');
+        }
+      }
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      alert('An error occurred while adding the user. Please try again.');
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -72,30 +101,11 @@ const AdminAddUser = ({ addUser }) => {
     <div>
       <h1>Add User</h1>
       <div className="admin-add-user">
-        <form className="user-form" onSubmit={handleSubmit} noValidate>
-          {/* <div className="photo-upload">
-            <label htmlFor="photo">
-              <div className="upload-box">
-                <i className="fas fa-upload"></i>
-                <p>Upload Photo</p>
-                {photoPreview && (
-                  <div className="photo-preview-container">
-                    <img src={photoPreview} alt="Preview" className="photo-preview" />
-                    <button
-                      type="button"
-                      className="clear-photo-btn"
-                      onClick={() => setPhotoPreview(null)}
-                    >
-                      <i className="fas fa-times"></i>
-                    </button>
-                  </div>
-                )}
-              </div>
-            </label>
-            <input type="file" id="photo" name="photo" accept="image/*" onChange={handleChange} />
-            {errors.photo && <p className="error">{errors.photo}</p>}
-          </div> */}
-
+        <form 
+          className="user-form" 
+          onSubmit={handleSubmit} 
+          noValidate
+        >
           <div className="form-grid">
             {[
               { label: 'Username', name: 'username' },
@@ -107,7 +117,7 @@ const AdminAddUser = ({ addUser }) => {
             ].map(({ label, name, type = 'text' }) => (
               <div className="form-group" key={name}>
                 <label>
-                  {label} <span>*</span>
+                  {label} <span className="required">*</span>
                 </label>
                 <input
                   type={type}
@@ -115,13 +125,14 @@ const AdminAddUser = ({ addUser }) => {
                   placeholder={`Enter ${label}`}
                   value={formData[name]}
                   onChange={handleChange}
+                  className={errors[name] ? 'error-input' : ''}
                 />
                 {errors[name] && <p className="error">{errors[name]}</p>}
               </div>
             ))}
             <div className="form-group contact-split">
               <label>
-                Contact Number <span>*</span>
+                Contact Number <span className="required">*</span>
               </label>
               <div className="contact-input-wrapper">
                 <input type="text" value="+63" disabled className="country-code" />
@@ -136,7 +147,7 @@ const AdminAddUser = ({ addUser }) => {
                     setFormData(prev => ({ ...prev, contact: numbersOnly }));
                     setErrors(prev => ({ ...prev, contact: '' }));
                   }}
-                  className="phone-number"
+                  className={`phone-number ${errors.contact ? 'error-input' : ''}`}
                 />
               </div>
               {errors.contact && <p className="error">{errors.contact}</p>}
@@ -144,9 +155,14 @@ const AdminAddUser = ({ addUser }) => {
 
             <div className="form-group">
               <label>
-                User Role <span>*</span>
+                User Role <span className="required">*</span>
               </label>
-              <select name="role" value={formData.role} onChange={handleChange}>
+              <select 
+                name="role" 
+                value={formData.role} 
+                onChange={handleChange}
+                className={errors.role ? 'error-input' : ''}
+              >
                 <option value="">Select Role</option>
                 <option value="Admin">Admin</option>
                 <option value="Manager">Manager</option>
@@ -156,17 +172,23 @@ const AdminAddUser = ({ addUser }) => {
             </div>
           </div>
 
-          <button type="submit" className="submit-btn">
-            Add User
-          </button>
-          {/* 
-          <button
-            type="button"
-            className="submit-btn"
-            onClick={() => navigate('/admin-user-management')}
-          >
-            Add User
-          </button> */}
+          <div className="form-actions">
+            <button 
+              type="submit" 
+              className="submit-btn"
+              disabled={submitting}
+            >
+              {submitting ? 'Adding User...' : 'Add User'}
+            </button>
+            
+            <button 
+              type="button" 
+              className="cancel-btn"
+              onClick={() => navigate('/admin-user-management')}
+            >
+              Cancel
+            </button>
+          </div>
         </form>
       </div>
     </div>
