@@ -23,12 +23,12 @@
   max-width: 65vw;
 }
 .LabelAppointmentID {
-  color: #184a5b;
+  color:#fff !important;
 }
 .QueueNumberAppointment {
   font-size: 2.5rem;
   font-weight: bold;
-  color: #184a5b;
+  color: #fff !important;
   margin: 10px 0;
 }
 
