@@ -91,15 +91,15 @@ UPDATE `users` SET `default_role_id` = (SELECT id FROM roles WHERE name = 'citiz
 
 -- Create a test admin (password: admin123) </br>
 INSERT INTO users (email, password, name) </br>
-VALUES ('admin@example.com', '$2b$10$I6mQJSzXN4ReCGTuRzfAvOYVMJLvtmUZOZV1wZ9Tk3tJH2ASXZkhy', 'Admin User'); </br>
+VALUES ('admin@example.com', '$2b$10$oFpTU0U73YZPA.szNm2UHe22GtJY6k3yrGi2qa3txYzOD7EG2h.hq', 'Admin User'); </br>
 
 -- Create test super admin </br>
 INSERT INTO users (email, password, name)  </br>
-VALUES ('superadmin@example.com', '$2b$10$I6mQJSzXN4ReCGTuRzfAvOYVMJLvtmUZOZV1wZ9Tk3tJH2ASXZkhy', 'Super Admin User'); </br>
+VALUES ('superadmin@example.com', '$2b$10$oFpTU0U73YZPA.szNm2UHe22GtJY6k3yrGi2qa3txYzOD7EG2h.hq', 'Super Admin User'); </br>
 
 -- Create test staff </br>
 INSERT INTO users (email, password, name)  </br>
-VALUES ('staff@example.com', '$2b$10$I6mQJSzXN4ReCGTuRzfAvOYVMJLvtmUZOZV1wZ9Tk3tJH2ASXZkhy', 'Staff User'); </br>
+VALUES ('staff@example.com', '$2b$10$oFpTU0U73YZPA.szNm2UHe22GtJY6k3yrGi2qa3txYzOD7EG2h.hq', 'Staff User'); </br>
 
 -- Assign appropriate roles </br>
 INSERT INTO user_roles (user_id, role_id) </br>

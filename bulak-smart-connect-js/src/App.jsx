@@ -1,6 +1,11 @@
 import { Route, Routes } from 'react-router-dom'; 
 import './App.css';
 
+//-----------COMPONENTS --------------//
+import { AuthProvider } from './context/AuthContext';
+import PrivateRoute from './components/PrivateRoute';
+import Unauthorized from './components/Unauthorized';
+
 //-----------USER SIDE --------------//
 //Login and SignUp//
 import LogIn from './LogInComponents/LogIn';
@@ -28,7 +33,6 @@ import DelayedOutOfTownRegistration from './UserBulakSmartConnect/ApplicationCom
 import DelayedOneParentForeignerRegistration from './UserBulakSmartConnect/ApplicationComponents/BirthCertificateApplications/DelayedOneParentForeigner';
 import BirthCertificateForm from './UserBulakSmartConnect/ApplicationComponents/BirthCertificateApplications/BirthCertificateForm';
 import CopyBirthCertificate from './UserBulakSmartConnect/ApplicationComponents/BirthCertificateApplications/BirthCertificateForm/CopyBirthCertificate';
-import PrivateRoute from './components/PrivateRoute';
 import BirthApplicationSummary from './UserBulakSmartConnect/ApplicationComponents/BirthCertificateApplications/BirthApplicationSummary';
 import MarriageCertificateForm from './UserBulakSmartConnect/ApplicationComponents/MarriageCertificateApplications/MarriageCertificateForm/MarriageCertificateForm';
 import MarriageSummaryForm from './UserBulakSmartConnect/ApplicationComponents/MarriageCertificateApplications/MarriageCertificateForm/MarriageSummaryForm';
@@ -57,6 +61,7 @@ import AppointmentDetailsCard from './AdminBulakSmartConnect/AppointmentDetailsC
 
 function App() {
   return (
+<<<<<<< HEAD
     <Routes>
       {/* Define Routes */}
       <Route path="/" element={<LandingPage />} />
@@ -104,6 +109,62 @@ function App() {
       </Route>{' '}
       {/* Protected Route End */}
     </Routes>
+=======
+    <AuthProvider>
+      <Routes>
+        {/* Public routes */}
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/LogIn" element={<LogIn />} />
+        <Route path="/SignUpForm" element={<SignUpForm />} />
+        <Route path="/unauthorized" element={<Unauthorized />} />
+        
+        {/* Admin routes - Protected for admin and super_admin */}
+        <Route element={<PrivateRoute allowedRoles={['admin', 'super_admin']} />}>
+          <Route path="/AdminAccountManagement" element={<AdminAccountManagement />} />
+          <Route path="/SearchAddUser" element={<SearchAddUser />} />
+          <Route path="/add-user" element={<AdminAddUser />} />
+          {/* Admin Announcement */}
+          <Route path="/AdminAnnouncement" element={<AdminAnnouncement />} /> 
+        </Route>
+        
+        {/* Staff routes - Protected for staff, admin and super_admin */}
+        <Route element={<PrivateRoute allowedRoles={['staff', 'admin', 'super_admin']} />}>
+          <Route path="/applicationAdmin" element={<AdminApplicationDashboard />} />
+          <Route path="/ApplicationDetails/:id" element={<AdminApplicationForm/>} />
+          <Route path="AppointmentDetailsCard" element={<AppointmentDetailsCard/>} />
+        </Route>
+        
+        {/* User routes - Any authenticated user */}
+        <Route element={<PrivateRoute />}>
+          <Route path="/Home" element={<LandingPage />} />
+          <Route path="/UserDashboard" element={<UserDashboard />} />
+          <Route path="/AppointmentForm" element={<AppoionmentForm />} />
+          <Route path="/ApplicationForm" element={<ApplicationForm />} />
+          <Route path="/QR" element={<QRCodePage />} />
+          <Route path="/ClericalErrorApplication" element={<ClericalErrorApplication />} />
+          <Route path="/BirthCertificateDashboard" element={<BirthCertificateDashboard />} />
+          <Route path="/FirstNameCorrection" element={<FirstNameCorrection />} />
+          <Route path="/MarriageLicenseApplication" element={<MarriageLicenseApplication />} />
+          <Route path="/Above18Registration" element={<Above18Registration />} />
+          <Route path="/Below18Registration" element={<Below18Registration />} />
+          <Route path="/SexDobCorrection" element={<SexDobCorrection />} />
+          <Route path="/DelayedOutOfTownRegistration" element={<DelayedOutOfTownRegistration />} />
+          <Route path="/DelayedOneParentForeignerRegistration" element={<DelayedOneParentForeignerRegistration />} />
+          <Route path="/QrCodeAppointment/:id" element={<QRCodeAppointment />} />
+          <Route path="/BirthCertificateForm" element={<BirthCertificateForm />} />
+          <Route path="/BirthApplicationSummary" element={<BirthApplicationSummary />} />
+          <Route path="/MarriageCertificateForm" element={<MarriageCertificateForm />} />
+          <Route path="/WalkInQueue" element={<WalkInQueueContainer />} />
+          <Route path="/WalkInForm" element={<WalkInForm />} />
+          <Route path="/WalkInDetails" element={<WalkInQueueDetail />} />
+          <Route path="/CTCBirthCertificate" element={<CTCBirthCertificate/>} />
+          <Route path="/RequestACopyBirthCertificate" element={<CopyBirthCertificate/>} />
+          <Route path="/RequirementBirthList" element={<RequirementBirthList />} />
+          <Route path="/MarriageSummaryForm" element={<MarriageSummaryForm />} />
+        </Route>
+      </Routes>
+    </AuthProvider>
+>>>>>>> faec42f38ebb2b0713b41e2aa95653dc9a8a6aea
   );
 }
 

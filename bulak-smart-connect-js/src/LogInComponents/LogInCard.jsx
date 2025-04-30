@@ -13,8 +13,8 @@ import Typography from "@mui/material/Typography";
 import ForgotPassword from "./ForgotPassword";
 import "./LogInCard.css";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext"; //Auth Context
-import { authService } from "../services/api"; //API Service to NestJS
+import { useAuth } from "../context/AuthContext"; //Auth Context, updated with API service in code
+import { authService } from "../services/api"; //API Service to NestJS, initially used on early iteration of the login, without the roles
 
 export default function LogInCard({ onLogin }) {
   const [email, setEmail] = useState("");
@@ -36,11 +36,24 @@ export default function LogInCard({ onLogin }) {
     if (validateInputs()) {
       try {
         console.log('Sending login request with:', { email, password });
-        const data = await authService.login(email, password);
-        console.log('Login successful:', data);
-        onLogin(data.user);
-        login(); // Set auth context
-        navigate("/UserDashboard");
+        
+        //Old Logic to use the API service from api.js, now using the AuthContext
+        //const data = await authService.login(email, password);
+        //console.log('Login successful:', data);
+        //onLogin(data.user);
+        //login(); // Set auth context
+        //navigate("/UserDashboard");
+
+        // Use the login function from AuthContext directly, eliminating the one used in api.js
+        const success = await login(email, password);
+        
+        console.log('Login successful:', success);
+        // If login is successful, navigate to the home page
+        if (success) {
+          navigate("/Home");
+        } else {
+          setError("Login failed. Please check your credentials.");
+        }
       } catch (error) {
         console.error("Login error:", error);
         
