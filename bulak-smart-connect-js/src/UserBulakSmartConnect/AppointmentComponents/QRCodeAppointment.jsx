@@ -32,13 +32,11 @@ const QRCodeAppointment = () => {
         </h2>
         <p className="LabelAppointmentID">Your Appointment ID:</p>
         <h1 className="QueueNumberAppointment">{id}</h1>
-        <div className="QrSectionAppointment">
-          <QRCodeCanvas className="QrCodeAppointment" value={qrData} size={200} />
-          <p>Scan this QR Code</p>
+        
           <a href="#requirements" className="RequirementsLinkAppointment">
             Link for Requirements
           </a>
-        </div>
+       
         <div className="AppointmentDetailsSectionAppointment">
           <div className="AppointmentDetailsAppointment">
             <p>

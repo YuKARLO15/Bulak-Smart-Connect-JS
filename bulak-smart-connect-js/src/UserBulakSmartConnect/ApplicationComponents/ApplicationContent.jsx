@@ -14,8 +14,7 @@ const ApplicationContent = () => {
       title: 'Marriage Certificate',
       icon: MarriageCertificateIcon,
       route: '/MarriageCertificateForm',
-    },
-    { title: 'Death Certificate', icon: DeathCertificateIcon, route: '/DeathDashboard' },
+    }
   ];
 
   return (
@@ -26,11 +25,11 @@ const ApplicationContent = () => {
         </Typography>
       </div>
       <div className="ApplicationContentContainer">
-        <Box sx={{ padding: 1 }}>
-          <Grid container spacing={3}>
+        <Box sx={{ padding: 2}}>
+          <Grid container spacing={2}>
             {certificates.map((cert, index) => (
-              <Grid item xs={10} sm={4} key={index}>
-                <Card className="CertificateCard">
+              <Grid item xs={15} sm={6} key={index}>
+                <Card className="CertificateCard"> 
                   <CardContent>
                     <Typography variant="h5" className="CardTitle">
                       <img src={cert.icon} alt={`${cert.title} Icon`} className="Icon" />

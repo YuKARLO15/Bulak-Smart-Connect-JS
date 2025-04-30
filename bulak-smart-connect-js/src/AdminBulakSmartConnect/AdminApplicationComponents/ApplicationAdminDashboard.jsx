@@ -85,9 +85,7 @@ const AdminApplicationDashboard = () => {
     setFilter(status);
   };
 
-  const handleScanQrCode = () => {
-    console.log('Opening QR code scanner');
-  };
+
 
   const handleReviewApplication = application => {
     console.log('Reviewing application:', application.id);

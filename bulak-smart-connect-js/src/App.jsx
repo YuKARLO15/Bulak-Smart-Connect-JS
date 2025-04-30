@@ -56,13 +56,16 @@ import AdminAddUser from './AdminBulakSmartConnect/AccountManagementComponents/A
 // Admin Announcement //
 import AdminAnnouncement from './AdminBulakSmartConnect/AdminAnnouncementComponents/AdminAnnouncement';
 
-// Application  //
+// Admin Application  //
 import AdminApplicationDashboard from './AdminBulakSmartConnect/AdminApplicationComponents/ApplicationAdminDashboard';
 import AdminApplicationForm from './AdminBulakSmartConnect/AdminApplicationComponents/AdminApplicationDetails';
 import AppointmentDetailsCard from './AdminBulakSmartConnect/AppointmentDetailsComponents/AppointmentDetails';
+// Admin Appointment  //
+import AdminAppointmentDashboard from './AdminBulakSmartConnect/AdminAppointmentDashboard/AdminAppointmentDashboard';
 
 // Admin WalkIn //
 import AdminWalkInQueue from './AdminBulakSmartConnect/AdminWalkInQueue/AdminWalkInQueue';
+import AdminWalkInDetails from './AdminBulakSmartConnect/AdminWalkInDetails/AdminWalkInDetails';  
 
 
 function App() {
@@ -91,7 +94,9 @@ function App() {
           <Route path="/ApplicationDetails/:id" element={<AdminApplicationForm/>} />
           <Route path="AppointmentDetailsCard" element={<AppointmentDetailsCard />} />
           <Route path="/AdminWalkInQueue" element={<AdminWalkInQueue />} />
-          <Route path = "/AdminHome" element={<AdminDashboard />} />
+          <Route path="/AdminHome" element={<AdminDashboard />} />
+          <Route path="/AdminWalkInDetails" element={<AdminWalkInDetails />} />
+          <Route path="/AdminAppointmentDashboard" element={<AdminAppointmentDashboard />} />
           
         </Route>
 
