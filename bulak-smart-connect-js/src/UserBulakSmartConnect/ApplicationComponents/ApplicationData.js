@@ -13,16 +13,20 @@ export const getApplications = () => {
   }
 };
 
+
 export const updateApplication = (applicationId, updatedData) => {
   try {
-    const applications = getApplications();
-    const updatedApplications = applications.map(app =>
-      app.id === applicationId ? { ...app, ...updatedData } : app
-    );
-    localStorage.setItem('applications', JSON.stringify(updatedApplications));
-    return true;
-  } catch (err) {
-    console.error('Error updating application:', err.message);
+    const applications = JSON.parse(localStorage.getItem('applications') || '[]');
+    const index = applications.findIndex(app => app.id === applicationId);
+    
+    if (index !== -1) {
+      applications[index] = { ...applications[index], ...updatedData };
+      localStorage.setItem('applications', JSON.stringify(applications));
+      return true;
+    }
+    return false;
+  } catch (error) {
+    console.error('Error updating application:', error);
     return false;
   }
 };
@@ -38,7 +42,7 @@ export const addApplication = applicationData => {
     return false;
   }
 };
-// Get applications by type (new function)
+
 export const getApplicationsByType = (type) => {
   try {
     const applications = getApplications();

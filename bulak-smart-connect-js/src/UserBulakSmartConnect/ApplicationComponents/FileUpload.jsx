@@ -25,7 +25,7 @@ const FileUpload = ({ label, onUpload }) => {
         {label} <span className="sample-text">Sample</span>
       </Typography>
       <Box className="file-upload-box" onClick={openFileExplorer}>
-        <CloudUploadIcon className="upload-icon" />
+        
         <Typography variant="body2" className="file-uploaddesc">
           {fileName ? fileName : 'Drop a file, or Click to upload'}
         </Typography>
