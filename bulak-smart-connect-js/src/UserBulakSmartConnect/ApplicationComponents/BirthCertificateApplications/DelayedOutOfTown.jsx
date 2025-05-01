@@ -4,7 +4,7 @@ import { Router, Link as RouterLink } from 'react-router-dom';
 import { Box, Button, Typography, Alert } from '@mui/material';
 import FileUpload from '../FileUpload';
 import './DelayedOutOfTown.css';
-import NavBar from '../../NavSide';
+import NavBar from '../../../NavigationComponents/NavSide';
 
 const requiredDocuments = [
   'Negative Certification from PSA',

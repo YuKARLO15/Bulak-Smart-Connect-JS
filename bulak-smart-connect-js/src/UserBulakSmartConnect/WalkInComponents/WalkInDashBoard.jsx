@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import QueueListWalkIn from './WalkInQueueList';
 import './WalkInQueue.css';
-import NavBar from '../NavSide';
+import NavBar from '../../NavigationComponents/NavSide';
 
 const WalkInQueueContainer = () => {
   const [queuePosition, setQueuePosition] = useState(4);

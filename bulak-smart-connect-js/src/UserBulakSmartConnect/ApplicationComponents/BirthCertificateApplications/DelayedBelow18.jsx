@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Box, Button, Checkbox, FormControlLabel, Typography, Alert } from '@mui/material';
 import FileUpload from '../FileUpload';
 import './DelayedBelow18.css';
-import NavBar from '../../NavSide';
+import NavBar from '../../../NavigationComponents/NavSide';
 
 const mandatoryDocuments = [
   'Negative Certification from PSA',

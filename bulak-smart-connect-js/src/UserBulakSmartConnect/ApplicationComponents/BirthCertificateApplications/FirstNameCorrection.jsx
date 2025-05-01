@@ -16,7 +16,7 @@ import {
 } from '@mui/material';
 import FileUpload from '../FileUpload';
 import './FirstNameCorrection.css';
-import NavBar from '../../NavSide';
+import NavBar from '../../../NavigationComponents/NavSide';
 
 const mandatoryDocuments = [
   'NBI Clearance',
