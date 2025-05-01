@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, Inject, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, LessThanOrEqual } from 'typeorm';
 import { Queue, QueueStatus } from './entities/queue.entity';
@@ -17,7 +17,8 @@ export class QueueService {
     private queueDetailsRepository: Repository<QueueDetails>,
     @InjectRepository(Counter)
     private counterRepository: Repository<Counter>,
-    private queueGateway: QueueGateway, // Add this line
+    @Inject(forwardRef(() => QueueGateway))
+    private queueGateway: QueueGateway,
   ) {}
 
   async create(createQueueDto: CreateQueueDto) {

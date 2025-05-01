@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { QueueService } from './queue.service';
 import { QueueController } from './queue.controller';
@@ -13,6 +13,6 @@ import { Counter } from '../counter/entities/counter.entity';
   ],
   controllers: [QueueController],
   providers: [QueueService, QueueGateway],
-  exports: [QueueService],
+  exports: [QueueService, QueueGateway],
 })
 export class QueueModule {}
