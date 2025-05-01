@@ -1,4 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany, CreateDateColumn, OneToOne } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  OneToMany,
+  CreateDateColumn,
+  OneToOne,
+} from 'typeorm';
 import { QueueDetails } from './queue-details.entity';
 import { Counter } from '../../counter/entities/counter.entity';
 
@@ -20,7 +27,7 @@ export class Queue {
   @Column({
     type: 'enum',
     enum: QueueStatus,
-    default: QueueStatus.PENDING
+    default: QueueStatus.PENDING,
   })
   status: QueueStatus;
 
@@ -36,9 +43,11 @@ export class Queue {
   @Column({ name: 'estimated_wait_time', nullable: true })
   estimatedWaitTime: number;
 
-  @OneToMany(() => QueueDetails, details => details.queue)
+  @OneToMany(() => QueueDetails, (details) => details.queue)
   details: QueueDetails[];
 
-  @OneToOne(() => Counter, counter => counter.currentQueue, { nullable: true })
+  @OneToOne(() => Counter, (counter) => counter.currentQueue, {
+    nullable: true,
+  })
   counter: Counter;
 }
