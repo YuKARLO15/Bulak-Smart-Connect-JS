@@ -214,7 +214,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="34" class="link-to-prism">src/modules/queue/entities/queue.entity.ts:34</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="41" class="link-to-prism">src/modules/queue/entities/queue.entity.ts:41</a></div>
                         </td>
                     </tr>
 
@@ -250,7 +250,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="43" class="link-to-prism">src/modules/queue/entities/queue.entity.ts:43</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="52" class="link-to-prism">src/modules/queue/entities/queue.entity.ts:52</a></div>
                         </td>
                     </tr>
 
@@ -286,7 +286,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="28" class="link-to-prism">src/modules/queue/entities/queue.entity.ts:28</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="35" class="link-to-prism">src/modules/queue/entities/queue.entity.ts:35</a></div>
                         </td>
                     </tr>
 
@@ -322,7 +322,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="31" class="link-to-prism">src/modules/queue/entities/queue.entity.ts:31</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="38" class="link-to-prism">src/modules/queue/entities/queue.entity.ts:38</a></div>
                         </td>
                     </tr>
 
@@ -358,7 +358,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="40" class="link-to-prism">src/modules/queue/entities/queue.entity.ts:40</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="47" class="link-to-prism">src/modules/queue/entities/queue.entity.ts:47</a></div>
                         </td>
                     </tr>
 
@@ -394,7 +394,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="37" class="link-to-prism">src/modules/queue/entities/queue.entity.ts:37</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="44" class="link-to-prism">src/modules/queue/entities/queue.entity.ts:44</a></div>
                         </td>
                     </tr>
 
@@ -430,7 +430,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="15" class="link-to-prism">src/modules/queue/entities/queue.entity.ts:15</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="22" class="link-to-prism">src/modules/queue/entities/queue.entity.ts:22</a></div>
                         </td>
                     </tr>
 
@@ -466,7 +466,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="18" class="link-to-prism">src/modules/queue/entities/queue.entity.ts:18</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="25" class="link-to-prism">src/modules/queue/entities/queue.entity.ts:25</a></div>
                         </td>
                     </tr>
 
@@ -502,7 +502,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="25" class="link-to-prism">src/modules/queue/entities/queue.entity.ts:25</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="32" class="link-to-prism">src/modules/queue/entities/queue.entity.ts:32</a></div>
                         </td>
                     </tr>
 
@@ -514,7 +514,14 @@
 
 
     <div class="tab-pane fade  tab-source-code" id="source">
-        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Entity, PrimaryGeneratedColumn, Column, OneToMany, CreateDateColumn, OneToOne } from &#x27;typeorm&#x27;;
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  OneToMany,
+  CreateDateColumn,
+  OneToOne,
+} from &#x27;typeorm&#x27;;
 import { QueueDetails } from &#x27;./queue-details.entity&#x27;;
 import { Counter } from &#x27;../../counter/entities/counter.entity&#x27;;
 
@@ -536,7 +543,7 @@ export class Queue {
   @Column({
     type: &#x27;enum&#x27;,
     enum: QueueStatus,
-    default: QueueStatus.PENDING
+    default: QueueStatus.PENDING,
   })
   status: QueueStatus;
 
@@ -552,12 +559,15 @@ export class Queue {
   @Column({ name: &#x27;estimated_wait_time&#x27;, nullable: true })
   estimatedWaitTime: number;
 
-  @OneToMany(() &#x3D;&gt; QueueDetails, details &#x3D;&gt; details.queue)
+  @OneToMany(() &#x3D;&gt; QueueDetails, (details) &#x3D;&gt; details.queue)
   details: QueueDetails[];
 
-  @OneToOne(() &#x3D;&gt; Counter, counter &#x3D;&gt; counter.currentQueue, { nullable: true })
+  @OneToOne(() &#x3D;&gt; Counter, (counter) &#x3D;&gt; counter.currentQueue, {
+    nullable: true,
+  })
   counter: Counter;
-}</code></pre>
+}
+</code></pre>
     </div>
 </div>
 

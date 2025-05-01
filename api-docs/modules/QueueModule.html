@@ -262,14 +262,13 @@ import { QueueDetails } from &#x27;./entities/queue-details.entity&#x27;;
 import { Counter } from &#x27;../counter/entities/counter.entity&#x27;;
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([Queue, QueueDetails, Counter]),
-  ],
+  imports: [TypeOrmModule.forFeature([Queue, QueueDetails, Counter])],
   controllers: [QueueController],
   providers: [QueueService, QueueGateway],
   exports: [QueueService, QueueGateway],
 })
-export class QueueModule {}</code></pre>
+export class QueueModule {}
+</code></pre>
     </div>
 </div>
 

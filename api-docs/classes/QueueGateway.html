@@ -915,13 +915,13 @@ import { Logger, Inject, forwardRef } from &#x27;@nestjs/common&#x27;;
 })
 export class QueueGateway implements OnGatewayConnection, OnGatewayDisconnect {
   private readonly logger &#x3D; new Logger(QueueGateway.name);
-  
+
   @WebSocketServer()
   server: Server;
 
   constructor(
     @Inject(forwardRef(() &#x3D;&gt; QueueService))
-    private readonly queueService: QueueService
+    private readonly queueService: QueueService,
   ) {}
 
   handleConnection(client: Socket) {
@@ -961,7 +961,8 @@ export class QueueGateway implements OnGatewayConnection, OnGatewayDisconnect {
     this.server.to(&#x60;counter_${counterId}&#x60;).emit(&#x27;counterUpdate&#x27;, data);
     this.server.emit(&#x27;counterListUpdate&#x27;); // Global counter update
   }
-}</code></pre>
+}
+</code></pre>
     </div>
 </div>
 
