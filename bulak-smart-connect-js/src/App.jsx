@@ -39,7 +39,9 @@ import MarriageCertificateForm from './UserBulakSmartConnect/ApplicationComponen
 import MarriageSummaryForm from './UserBulakSmartConnect/ApplicationComponents/MarriageCertificateApplications/MarriageCertificateForm/MarriageSummaryForm';
 import CTCBirthCertificate from './UserBulakSmartConnect/ApplicationComponents/BirthCertificateApplications/CTCBirthcertificate';
 import RequirementBirthList from './UserBulakSmartConnect/ApplicationComponents/BirthCertificateApplications/RequirementBirthList';
-
+import MarriageDashboard from './UserBulakSmartConnect/ApplicationComponents/MarriageCertificateApplications/MarraiageDashboard';
+import MarriageCertificateApplication from './UserBulakSmartConnect/ApplicationComponents/MarriageCertificateApplications/MarriageCertificateApplication';
+import MarriageLicenseSummary from './UserBulakSmartConnect/ApplicationComponents/MarriageCertificateApplications/MarriageCertificateForm/MarriageLicenseSummary';
 //WalkIn//
 import WalkInQueueContainer from './UserBulakSmartConnect/WalkInComponents/WalkInDashBoard';
 import WalkInForm from './UserBulakSmartConnect/WalkInComponents/WalkInForm';
@@ -85,7 +87,7 @@ function App() {
           <Route path="/SearchAddUser" element={<SearchAddUser />} />
           <Route path="/add-user" element={<AdminAddUser />} />
           <Route path="/admin-user-management" element={<AdminAccountManagement />} />
-          
+
           {/* Admin Announcement */}
           <Route path="/AdminAnnouncement" element={<AdminAnnouncement />} />
         </Route>
@@ -121,11 +123,14 @@ function App() {
             path="/DelayedOneParentForeignerRegistration"
             element={<DelayedOneParentForeignerRegistration />}
           />
+          <Route path="/MarriageDashboard" element={<MarriageDashboard />} />
+          <Route path="/MarriageCertificateApplication" element={<MarriageCertificateApplication />} />
+          <Route path="/MarriageLicenseSummary" element={<MarriageLicenseSummary />} />
 
           <Route path="/QrCodeAppointment/:id" element={<QRCodeAppointment />} />
           <Route path="/BirthCertificateForm" element={<BirthCertificateForm />} />
           <Route path="/BirthApplicationSummary" element={<BirthApplicationSummary />} />
-          <Route path="/MarriageCertificateForm" element={<MarriageCertificateForm />} />
+          <Route path="/MarriageForm" element={<MarriageCertificateForm />} />
           <Route path="/WalkInQueue" element={<WalkInQueueContainer />} />
           <Route path="/WalkInForm" element={<WalkInForm />} />
           <Route path="/WalkInDetails" element={<WalkInQueueDetail />} />
@@ -133,6 +138,7 @@ function App() {
           <Route path="/RequestACopyBirthCertificate" element={<CopyBirthCertificate />} />
           <Route path="/RequirementBirthList" element={<RequirementBirthList />} />
           <Route path="/MarriageSummaryForm" element={<MarriageSummaryForm />} />
+
         </Route>
       </Routes>
     </AuthProvider>
