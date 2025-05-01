@@ -16,10 +16,10 @@ import {
 
 const AdminDashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const { logout, user } = useAuth(); // Add 'user' here
+  const { logout, user } = useAuth(); 
   const navigate = useNavigate();
 
-  // Empty data arrays
+
   const walkInData = [];
   const certificateData = [];
   const documentApplications = [];
