@@ -38,3 +38,13 @@ export const addApplication = applicationData => {
     return false;
   }
 };
+// Get applications by type (new function)
+export const getApplicationsByType = (type) => {
+  try {
+    const applications = getApplications();
+    return applications.filter(app => app.type === type);
+  } catch (error) {
+    console.error(`Error getting applications of type ${type}:`, error);
+    return [];
+  }
+};

@@ -49,12 +49,12 @@ const MarriageSummaryForm = () => {
         <tbody>
           <tr className="SummaryRowMSummary">
             <td className="SummaryLabelMSummary">Province</td>
-            <td className="SummaryValueMSummary">{formData.marriageProvince || ''}</td>
+            <td className="SummaryValueMSummary">{"Bulacan"|| ''}</td>
             <td className="SummaryLabelMSummary" style={{ borderLeft: '1px solid #d14747' }}>Registry No.</td>
           </tr>
           <tr className="SummaryRowMSummary">
             <td className="SummaryLabelMSummary">City/Municipality</td>
-            <td className="SummaryValueMSummary" colSpan="2">{formData.marriageCity || ''}</td>
+            <td className="SummaryValueMSummary" colSpan="2">{ "San Ildefonso" || ''}</td>
           </tr>
         </tbody>
       </table>
