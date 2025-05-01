@@ -11,6 +11,9 @@ const NavBar = ({ isSidebarOpen, setIsSidebarOpen }) => {
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
+  const getRoute = (regularRoute, adminRoute) => {
+    return (hasRole('staff') || hasRole("admin" ) || hasRole("admin" || "super_admin" )) ? adminRoute : regularRoute ;
+  };
 
   return (
     <>
@@ -34,12 +37,13 @@ const NavBar = ({ isSidebarOpen, setIsSidebarOpen }) => {
             <p className="UserEmail">User@gmail.com</p>
           </div>
           <div className="NavigationButtons">
-            {/* Common links for all users */}
-            <a href="/UserDashboard">Dashboard</a>
-            <a href="/Home">Home</a>
-            <a href="/AppointmentForm">Appointments</a>
-            <a href="/ApplicationForm">Document Application</a>
-            <a href="/WalkInQueue"> Smart Walk - In</a>
+   
+            {/* route links based on user role */}
+            <a href={getRoute('/UserDashboard', '/AdminDashboard')}>Dashboard</a>
+            <a href={getRoute('/Home', '/AdminHome')}>Home</a>
+            <a href={getRoute('/AppointmentForm', '/AdminAppointmentDashboard')}>Appointments</a>
+            <a href={getRoute('/ApplicationForm', '/ApplicationAdmin')}>Document Application</a>
+            <a href={getRoute('/WalkInQueue', '/AdminWalkInQueue')}>Smart Walk-In</a>
 
             {/* Staff+ links */}
             {(hasRole('staff') || hasRole('admin') || hasRole('super_admin')) && (
