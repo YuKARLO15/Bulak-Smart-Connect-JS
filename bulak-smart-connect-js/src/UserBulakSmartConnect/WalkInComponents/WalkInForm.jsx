@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './WalkInForm.css';
-import NavBar from '../NavSide';
+import NavBar from '../../NavigationComponents/NavSide';
 
 const WalkInForm = () => {
   const navigate = useNavigate();

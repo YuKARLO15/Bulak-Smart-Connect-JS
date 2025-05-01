@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import './WalkInDetails.css';
-import NavBar from '../NavSide';
+import NavBar from '../../NavigationComponents/NavSide';
 const WalkInQueueDetail = () => {
   const [queueData, setQueueData] = useState(null);
   const [queuePosition, setQueuePosition] = useState(5);

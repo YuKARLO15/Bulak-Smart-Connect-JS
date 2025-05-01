@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Box, Button, Checkbox, FormControlLabel, Typography, Alert } from '@mui/material';
 import FileUpload from '../FileUpload';
 import './DelayedAbove18.css';
-import NavBar from '../../NavSide';
+import NavBar from '../../../NavigationComponents/NavSide';
 
 const maritalDocuments = [
   'Negative Certification from PSA',

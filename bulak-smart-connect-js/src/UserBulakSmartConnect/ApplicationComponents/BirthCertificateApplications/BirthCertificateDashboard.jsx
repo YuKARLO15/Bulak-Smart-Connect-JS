@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Radio, RadioGroup, FormControlLabel, Typography, Box, Paper, Button } from '@mui/material';
 import './BirthCertificateDashboard.css';
-import NavBar from '../../NavSide';
+import NavBar from '../../../NavigationComponents/NavSide';
 
 const BirthCertificateDashboard = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);

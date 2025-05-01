@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
 import { QRCodeCanvas } from 'qrcode.react';
-import NavBar from '../NavSide';
+import NavBar from '../../NavigationComponents/NavSide';
 import './QrCodeAppointment.css';
 
 const QRCodeAppointment = () => {
@@ -32,11 +32,11 @@ const QRCodeAppointment = () => {
         </h2>
         <p className="LabelAppointmentID">Your Appointment ID:</p>
         <h1 className="QueueNumberAppointment">{id}</h1>
-        
-          <a href="#requirements" className="RequirementsLinkAppointment">
-            Link for Requirements
-          </a>
-       
+
+        <a href="#requirements" className="RequirementsLinkAppointment">
+          Link for Requirements
+        </a>
+
         <div className="AppointmentDetailsSectionAppointment">
           <div className="AppointmentDetailsAppointment">
             <p>

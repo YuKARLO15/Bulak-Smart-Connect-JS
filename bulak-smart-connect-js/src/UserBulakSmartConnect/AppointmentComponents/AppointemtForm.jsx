@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import NavBar from '../NavSide';
+import NavBar from '../../NavigationComponents/NavSide';
 import './AppoinmentForm.css';
 import { Box, Typography } from '@mui/material';
 import AppointmentDashboard from './AppointmentDashboard';

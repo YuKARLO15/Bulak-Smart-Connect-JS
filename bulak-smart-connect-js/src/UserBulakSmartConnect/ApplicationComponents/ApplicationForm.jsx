@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import NavBar from '../NavSide';
+import NavBar from '../../NavigationComponents/NavSide';
 import './ApplicationForm.css';
 import ApplicationContent from './ApplicationContent';
 import Steps from './HowItWorks';

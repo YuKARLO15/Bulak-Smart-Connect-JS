@@ -4,7 +4,7 @@ import { Router, Link as RouterLink } from 'react-router-dom';
 import { Box, Button, Checkbox, FormControlLabel, Grid, Typography, Alert } from '@mui/material';
 import FileUpload from '../FileUpload';
 import './CorrectionChildSex.css';
-import NavBar from '../../NavSide';
+import NavBar from '../../../NavigationComponents/NavSide';
 
 const mandatoryDocuments = [
   'NBI Clearance',

@@ -12,7 +12,7 @@ import {
   FormControl,
 } from '@mui/material';
 import FileUpload from '../FileUpload';
-import NavBar from '../../NavSide';
+import NavBar from '../../../NavigationComponents/NavSide';
 import './MarriageLicenseApplication.css';
 
 const mandatoryDocuments = [
