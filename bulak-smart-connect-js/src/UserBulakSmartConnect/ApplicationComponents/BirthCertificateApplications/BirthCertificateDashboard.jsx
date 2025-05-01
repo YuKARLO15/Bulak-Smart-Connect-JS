@@ -25,7 +25,7 @@ const BirthCertificateDashboard = () => {
         'Clerical Error': '/ClericalErrorApplication',
         'Sex DOB': '/SexDobCorrection',
         'First Name': '/FirstNameCorrection'
-      };A
+      };
       
    
       navigate(correctionRoutes[selectedOption]);
