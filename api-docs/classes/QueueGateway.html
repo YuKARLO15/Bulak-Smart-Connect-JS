@@ -349,8 +349,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="25"
-                                    class="link-to-prism">src/modules/queue/queue.gateway.ts:25</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="28"
+                                    class="link-to-prism">src/modules/queue/queue.gateway.ts:28</a></div>
                         </td>
                     </tr>
 
@@ -416,8 +416,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="29"
-                                    class="link-to-prism">src/modules/queue/queue.gateway.ts:29</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="32"
+                                    class="link-to-prism">src/modules/queue/queue.gateway.ts:32</a></div>
                         </td>
                     </tr>
 
@@ -493,8 +493,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="41"
-                                    class="link-to-prism">src/modules/queue/queue.gateway.ts:41</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="44"
+                                    class="link-to-prism">src/modules/queue/queue.gateway.ts:44</a></div>
                         </td>
                     </tr>
 
@@ -581,8 +581,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="47"
-                                    class="link-to-prism">src/modules/queue/queue.gateway.ts:47</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="50"
+                                    class="link-to-prism">src/modules/queue/queue.gateway.ts:50</a></div>
                         </td>
                     </tr>
 
@@ -670,8 +670,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="34"
-                                    class="link-to-prism">src/modules/queue/queue.gateway.ts:34</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="37"
+                                    class="link-to-prism">src/modules/queue/queue.gateway.ts:37</a></div>
                         </td>
                     </tr>
 
@@ -749,8 +749,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="58"
-                                    class="link-to-prism">src/modules/queue/queue.gateway.ts:58</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="61"
+                                    class="link-to-prism">src/modules/queue/queue.gateway.ts:61</a></div>
                         </td>
                     </tr>
 
@@ -828,8 +828,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="53"
-                                    class="link-to-prism">src/modules/queue/queue.gateway.ts:53</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="56"
+                                    class="link-to-prism">src/modules/queue/queue.gateway.ts:56</a></div>
                         </td>
                     </tr>
 
@@ -906,7 +906,7 @@
 } from &#x27;@nestjs/websockets&#x27;;
 import { Server, Socket } from &#x27;socket.io&#x27;;
 import { QueueService } from &#x27;./queue.service&#x27;;
-import { Logger } from &#x27;@nestjs/common&#x27;;
+import { Logger, Inject, forwardRef } from &#x27;@nestjs/common&#x27;;
 
 @WebSocketGateway({
   cors: {
@@ -919,7 +919,10 @@ export class QueueGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer()
   server: Server;
 
-  constructor(private readonly queueService: QueueService) {}
+  constructor(
+    @Inject(forwardRef(() &#x3D;&gt; QueueService))
+    private readonly queueService: QueueService
+  ) {}
 
   handleConnection(client: Socket) {
     this.logger.log(&#x60;Client connected: ${client.id}&#x60;);
