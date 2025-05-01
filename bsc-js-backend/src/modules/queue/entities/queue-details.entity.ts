@@ -1,4 +1,10 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  JoinColumn,
+} from 'typeorm';
 import { Queue } from './queue.entity';
 import { User } from '../../../users/entities/user.entity';
 
@@ -10,7 +16,7 @@ export class QueueDetails {
   @Column({ name: 'queue_id' })
   queueId: number;
 
-  @ManyToOne(() => Queue, queue => queue.details, { onDelete: 'CASCADE' })
+  @ManyToOne(() => Queue, (queue) => queue.details, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'queue_id', foreignKeyConstraintName: 'fk_queue_id' })
   queue: Queue;
 

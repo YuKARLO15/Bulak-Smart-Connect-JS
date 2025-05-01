@@ -8,9 +8,7 @@ import { QueueDetails } from './entities/queue-details.entity';
 import { Counter } from '../counter/entities/counter.entity';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([Queue, QueueDetails, Counter]),
-  ],
+  imports: [TypeOrmModule.forFeature([Queue, QueueDetails, Counter])],
   controllers: [QueueController],
   providers: [QueueService, QueueGateway],
   exports: [QueueService, QueueGateway],

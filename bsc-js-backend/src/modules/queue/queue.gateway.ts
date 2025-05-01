@@ -16,13 +16,13 @@ import { Logger, Inject, forwardRef } from '@nestjs/common';
 })
 export class QueueGateway implements OnGatewayConnection, OnGatewayDisconnect {
   private readonly logger = new Logger(QueueGateway.name);
-  
+
   @WebSocketServer()
   server: Server;
 
   constructor(
     @Inject(forwardRef(() => QueueService))
-    private readonly queueService: QueueService
+    private readonly queueService: QueueService,
   ) {}
 
   handleConnection(client: Socket) {
