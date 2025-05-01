@@ -1,0 +1,1426 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>bsc-js-backend documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="../" class="navbar-brand">bsc-js-backend documentation</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="d-none d-md-block menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content injectable">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Injectables</li>
+  <li class="breadcrumb-item" >QueueService</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" 
+                class="nav-link"
+                class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" 
+                class="nav-link"
+                
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info">
+        <p class="comment">
+            <h3>File</h3>
+        </p>
+        <p class="comment">
+            <code>src/modules/queue/queue.service.ts</code>
+        </p>
+
+
+
+
+
+            <section data-compodoc="block-index">
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#addCounter" >addCounter</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#callNext" >callNext</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#create" >create</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#findAll" >findAll</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#findByQueueNumber" >findByQueueNumber</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#findByStatus" >findByStatus</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#findOne" >findOne</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#getCounters" >getCounters</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#getQueueDetails" >getQueueDetails</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#getQueuePosition" >getQueuePosition</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#getStats" >getStats</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#update" >update</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+            <section data-compodoc="block-constructor">
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(queueRepository: <a href="../entitys/Queue.html" target="_self">Repository&lt;Queue&gt;</a>, queueDetailsRepository: Repository<QueueDetails>, counterRepository: <a href="../entitys/Counter.html" target="_self">Repository&lt;Counter&gt;</a>, queueGateway: <a href="../classes/QueueGateway.html" target="_self">QueueGateway</a>)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="12" class="link-to-prism">src/modules/queue/queue.service.ts:12</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div>
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>queueRepository</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../entitys/Queue.html" target="_self" >Repository&lt;Queue&gt;</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>queueDetailsRepository</td>
+                                                  
+                                                        <td>
+                                                                    <code>Repository&lt;QueueDetails&gt;</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>counterRepository</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../entitys/Counter.html" target="_self" >Repository&lt;Counter&gt;</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>queueGateway</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../classes/QueueGateway.html" target="_self" >QueueGateway</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+            <section data-compodoc="block-methods">
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="addCounter"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>addCounter</b></span>
+                        <a href="#addCounter"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>addCounter(name: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="285"
+                                    class="link-to-prism">src/modules/queue/queue.service.ts:285</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>name</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="callNext"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>callNext</b></span>
+                        <a href="#callNext"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>callNext(counterId: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="181"
+                                    class="link-to-prism">src/modules/queue/queue.service.ts:181</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>counterId</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="create"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>create</b></span>
+                        <a href="#create"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>create(createQueueDto: <a href="../classes/CreateQueueDto.html" target="_self">CreateQueueDto</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="23"
+                                    class="link-to-prism">src/modules/queue/queue.service.ts:23</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>createQueueDto</td>
+                                            <td>
+                                                            <code><a href="../classes/CreateQueueDto.html" target="_self" >CreateQueueDto</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="findAll"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>findAll</b></span>
+                        <a href="#findAll"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>findAll()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="80"
+                                    class="link-to-prism">src/modules/queue/queue.service.ts:80</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="findByQueueNumber"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>findByQueueNumber</b></span>
+                        <a href="#findByQueueNumber"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>findByQueueNumber(queueNumber: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="105"
+                                    class="link-to-prism">src/modules/queue/queue.service.ts:105</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>queueNumber</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="findByStatus"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>findByStatus</b></span>
+                        <a href="#findByStatus"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>findByStatus(status: <a href="../undefineds/QueueStatus.html" target="_self">QueueStatus</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="86"
+                                    class="link-to-prism">src/modules/queue/queue.service.ts:86</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>status</td>
+                                            <td>
+                                                            <code><a href="../miscellaneous/enumerations.html#QueueStatus" target="_self" >QueueStatus</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="findOne"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>findOne</b></span>
+                        <a href="#findOne"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>findOne(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="93"
+                                    class="link-to-prism">src/modules/queue/queue.service.ts:93</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>id</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getCounters"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>getCounters</b></span>
+                        <a href="#getCounters"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>getCounters()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="291"
+                                    class="link-to-prism">src/modules/queue/queue.service.ts:291</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getQueueDetails"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>getQueueDetails</b></span>
+                        <a href="#getQueueDetails"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>getQueueDetails(queueId: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="117"
+                                    class="link-to-prism">src/modules/queue/queue.service.ts:117</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>queueId</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getQueuePosition"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>getQueuePosition</b></span>
+                        <a href="#getQueuePosition"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>getQueuePosition(queueId: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="161"
+                                    class="link-to-prism">src/modules/queue/queue.service.ts:161</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>queueId</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getStats"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>getStats</b></span>
+                        <a href="#getStats"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>getStats()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="251"
+                                    class="link-to-prism">src/modules/queue/queue.service.ts:251</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="update"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>update</b></span>
+                        <a href="#update"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>update(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, updateQueueDto: <a href="../classes/UpdateQueueDto.html" target="_self">UpdateQueueDto</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="134"
+                                    class="link-to-prism">src/modules/queue/queue.service.ts:134</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>id</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>updateQueueDto</td>
+                                            <td>
+                                                            <code><a href="../classes/UpdateQueueDto.html" target="_self" >UpdateQueueDto</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+
+    </div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable, NotFoundException } from &#x27;@nestjs/common&#x27;;
+import { InjectRepository } from &#x27;@nestjs/typeorm&#x27;;
+import { Repository, LessThanOrEqual } from &#x27;typeorm&#x27;;
+import { Queue, QueueStatus } from &#x27;./entities/queue.entity&#x27;;
+import { QueueDetails } from &#x27;./entities/queue-details.entity&#x27;;
+import { Counter, CounterStatus } from &#x27;./entities/counter.entity&#x27;;
+import { CreateQueueDto } from &#x27;./dto/create-queue.dto&#x27;;
+import { UpdateQueueDto } from &#x27;./dto/update-queue.dto&#x27;;
+import { QueueGateway } from &#x27;./queue.gateway&#x27;;
+
+@Injectable()
+export class QueueService {
+  constructor(
+    @InjectRepository(Queue)
+    private queueRepository: Repository&lt;Queue&gt;,
+    @InjectRepository(QueueDetails)
+    private queueDetailsRepository: Repository&lt;QueueDetails&gt;,
+    @InjectRepository(Counter)
+    private counterRepository: Repository&lt;Counter&gt;,
+    private queueGateway: QueueGateway, // Add this line
+  ) {}
+
+  async create(createQueueDto: CreateQueueDto) {
+    // Generate a queue number based on date and sequence
+    const today &#x3D; new Date();
+    const dateStr &#x3D; &#x60;${today.getFullYear()}${String(today.getMonth() + 1).padStart(2, &#x27;0&#x27;)}${String(today.getDate()).padStart(2, &#x27;0&#x27;)}&#x60;;
+    
+    // Get the count of queues created today to determine the sequence number
+    const todayStart &#x3D; new Date(today);
+    todayStart.setHours(0, 0, 0, 0);
+    
+    const todayCount &#x3D; await this.queueRepository.count({
+      where: {
+        createdAt: LessThanOrEqual(today),
+      },
+    });
+    
+    // Format the queue number: YYYYMMDD-XXXX where XXXX is the sequence number
+    const queueNumber &#x3D; &#x60;${dateStr}-${String(todayCount + 1).padStart(4, &#x27;0&#x27;)}&#x60;;
+    
+    // Create and save the queue
+    const queue &#x3D; this.queueRepository.create({
+      queueNumber,
+      status: QueueStatus.PENDING,
+      estimatedWaitTime: 15 * (todayCount + 1), // Simple estimation: 15 minutes per person
+    });
+    
+    const savedQueue &#x3D; await this.queueRepository.save(queue);
+    
+    // Create queue details
+    const queueDetails &#x3D; this.queueDetailsRepository.create({
+      queue: savedQueue,
+      queueId: savedQueue.id,
+      userId: createQueueDto.userId,
+      firstName: createQueueDto.firstName,
+      lastName: createQueueDto.lastName,
+      middleInitial: createQueueDto.middleInitial,
+      address: createQueueDto.address,
+      phoneNumber: createQueueDto.phoneNumber,
+      reasonOfVisit: createQueueDto.reasonOfVisit,
+      appointmentType: createQueueDto.appointmentType,
+    });
+    
+    await this.queueDetailsRepository.save(queueDetails);
+    
+    // Get queue position
+    const position &#x3D; await this.getQueuePosition(savedQueue.id);
+    
+    const result &#x3D; { queue: savedQueue, details: queueDetails, position };
+    
+    // Notify all clients that a new queue has been created
+    this.queueGateway.server.emit(&#x27;queueListUpdate&#x27;, {
+      action: &#x27;created&#x27;,
+      queueId: savedQueue.id
+    });
+    
+    return result;
+  }
+
+  async findAll() {
+    return await this.queueRepository.find({
+      order: { createdAt: &#x27;ASC&#x27; }
+    });
+  }
+
+  async findByStatus(status: QueueStatus) {
+    return await this.queueRepository.find({
+      where: { status },
+      order: { createdAt: &#x27;ASC&#x27; }
+    });
+  }
+
+  async findOne(id: number) {
+    const queue &#x3D; await this.queueRepository.findOne({
+      where: { id }
+    });
+    
+    if (!queue) {
+      throw new NotFoundException(&#x60;Queue #${id} not found&#x60;);
+    }
+    
+    return queue;
+  }
+
+  async findByQueueNumber(queueNumber: string) {
+    const queue &#x3D; await this.queueRepository.findOne({
+      where: { queueNumber }
+    });
+    
+    if (!queue) {
+      throw new NotFoundException(&#x60;Queue #${queueNumber} not found&#x60;);
+    }
+    
+    return queue;
+  }
+
+  async getQueueDetails(queueId: number) {
+    const queue &#x3D; await this.findOne(queueId);
+    
+    const details &#x3D; await this.queueDetailsRepository.findOne({
+      where: { queueId },
+      relations: [&#x27;user&#x27;]
+    });
+    
+    if (!details) {
+      throw new NotFoundException(&#x60;Details for queue #${queueId} not found&#x60;);
+    }
+    
+    const position &#x3D; await this.getQueuePosition(queueId);
+    
+    return { queue, details, position };
+  }
+
+  async update(id: number, updateQueueDto: UpdateQueueDto) {
+    const queue &#x3D; await this.findOne(id);
+    
+    if (updateQueueDto.status) {
+      queue.status &#x3D; updateQueueDto.status;
+      
+      // If completed, set completion time
+      if (updateQueueDto.status &#x3D;&#x3D;&#x3D; QueueStatus.COMPLETED) {
+        queue.completedAt &#x3D; new Date();
+      }
+    }
+    
+    if (updateQueueDto.counterNumber) {
+      queue.counterNumber &#x3D; updateQueueDto.counterNumber;
+    }
+    
+    const updatedQueue &#x3D; await this.queueRepository.save(queue);
+    
+    // Notify clients about the queue update
+    this.queueGateway.notifyQueueUpdate(id, {
+      action: &#x27;updated&#x27;,
+      queue: updatedQueue
+    });
+    
+    return updatedQueue;
+  }
+
+  async getQueuePosition(queueId: number) {
+    const queue &#x3D; await this.findOne(queueId);
+    
+    // If the queue is not pending, it&#x27;s not in line
+    if (queue.status !&#x3D;&#x3D; QueueStatus.PENDING) {
+      return 0;
+    }
+    
+    // Count how many pending queues are ahead of this one
+    const position &#x3D; await this.queueRepository.count({
+      where: {
+        status: QueueStatus.PENDING,
+        createdAt: LessThanOrEqual(queue.createdAt),
+        id: LessThanOrEqual(queueId) // Break ties using ID
+      }
+    });
+    
+    return position;
+  }
+
+  async callNext(counterId: number) {
+    const counter &#x3D; await this.counterRepository.findOne({
+      where: { id: counterId },
+      relations: [&#x27;currentQueue&#x27;]
+    });
+    
+    if (!counter) {
+      throw new NotFoundException(&#x60;Counter #${counterId} not found&#x60;);
+    }
+    
+    // Mark current queue as completed if exists
+    if (counter.currentQueue) {
+      counter.currentQueue.status &#x3D; QueueStatus.COMPLETED;
+      counter.currentQueue.completedAt &#x3D; new Date();
+      await this.queueRepository.save(counter.currentQueue);
+    }
+    
+    // Find the next pending queue
+    const nextQueue &#x3D; await this.queueRepository.findOne({
+      where: { status: QueueStatus.PENDING },
+      order: { createdAt: &#x27;ASC&#x27; }
+    });
+    
+    if (!nextQueue) {
+      counter.currentQueueId &#x3D; null;
+      counter.currentQueue &#x3D; null;
+      await this.counterRepository.save(counter);
+      return { counter, message: &#x27;No more queues waiting&#x27; };
+    }
+    
+    // Update the next queue
+    nextQueue.status &#x3D; QueueStatus.SERVING;
+    nextQueue.counterNumber &#x3D; counter.name;
+    await this.queueRepository.save(nextQueue);
+    
+    // Update counter
+    counter.currentQueueId &#x3D; nextQueue.id;
+    counter.currentQueue &#x3D; nextQueue;
+    await this.counterRepository.save(counter);
+    
+    // Get associated details
+    const details &#x3D; await this.queueDetailsRepository.findOne({
+      where: { queueId: nextQueue.id }
+    });
+    
+    const result &#x3D; { 
+      counter, 
+      queue: nextQueue, 
+      details,
+      message: &#x27;Next queue called successfully&#x27; 
+    };
+    
+    if (nextQueue) {
+      // Notify the specific queue room that it&#x27;s their turn
+      this.queueGateway.notifyQueueUpdate(nextQueue.id, {
+        action: &#x27;called&#x27;,
+        counterName: counter.name,
+        counterId: counter.id
+      });
+    }
+    
+    // Notify counter clients
+    this.queueGateway.notifyCounterUpdate(counterId, {
+      action: &#x27;nextCalled&#x27;,
+      ...result
+    });
+    
+    return result;
+  }
+
+  async getStats() {
+    const [pendingCount, servingCount, completedCount, cancelledCount, totalCount] &#x3D; await Promise.all([
+      this.queueRepository.count({ where: { status: QueueStatus.PENDING } }),
+      this.queueRepository.count({ where: { status: QueueStatus.SERVING } }),
+      this.queueRepository.count({ where: { status: QueueStatus.COMPLETED } }),
+      this.queueRepository.count({ where: { status: QueueStatus.CANCELLED } }),
+      this.queueRepository.count(),
+    ]);
+    
+    // Calculate average wait time
+    const completedQueues &#x3D; await this.queueRepository.find({
+      where: { status: QueueStatus.COMPLETED, completedAt: LessThanOrEqual(new Date()) },
+      select: [&#x27;createdAt&#x27;, &#x27;completedAt&#x27;]
+    });
+    
+    let averageWaitTime &#x3D; 0;
+    if (completedQueues.length &gt; 0) {
+      const totalWaitTimeMs &#x3D; completedQueues.reduce((total, queue) &#x3D;&gt; {
+        return total + (queue.completedAt.getTime() - queue.createdAt.getTime());
+      }, 0);
+      averageWaitTime &#x3D; Math.floor(totalWaitTimeMs / completedQueues.length / 60000); // Convert to minutes
+    }
+    
+    return {
+      pending: pendingCount,
+      serving: servingCount,
+      completed: completedCount,
+      cancelled: cancelledCount,
+      total: totalCount,
+      averageWaitTime
+    };
+  }
+
+  // Add a counter
+  async addCounter(name: string) {
+    const counter &#x3D; this.counterRepository.create({ name });
+    return await this.counterRepository.save(counter);
+  }
+
+  // Get all counters
+  async getCounters() {
+    return await this.counterRepository.find({
+      relations: [&#x27;currentQueue&#x27;]
+    });
+  }
+}</code></pre>
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'injectable';
+            var COMPODOC_CURRENT_PAGE_URL = 'QueueService.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>
