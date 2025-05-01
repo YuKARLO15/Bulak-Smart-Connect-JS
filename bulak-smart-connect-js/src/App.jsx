@@ -7,6 +7,7 @@ import PrivateRoute from './components/PrivateRoute';
 import Unauthorized from './components/Unauthorized';
 
 //-----------USER SIDE --------------//
+
 //Login and SignUp//
 import LogIn from './LogInComponents/LogIn';
 import SignUpForm from './UserBulakSmartConnect/SignUpComponents/SignUpForm';
@@ -84,6 +85,7 @@ function App() {
           <Route path="/SearchAddUser" element={<SearchAddUser />} />
           <Route path="/add-user" element={<AdminAddUser />} />
           <Route path="/admin-user-management" element={<AdminAccountManagement />} />
+          
           {/* Admin Announcement */}
           <Route path="/AdminAnnouncement" element={<AdminAnnouncement />} />
         </Route>
@@ -119,6 +121,7 @@ function App() {
             path="/DelayedOneParentForeignerRegistration"
             element={<DelayedOneParentForeignerRegistration />}
           />
+
           <Route path="/QrCodeAppointment/:id" element={<QRCodeAppointment />} />
           <Route path="/BirthCertificateForm" element={<BirthCertificateForm />} />
           <Route path="/BirthApplicationSummary" element={<BirthApplicationSummary />} />

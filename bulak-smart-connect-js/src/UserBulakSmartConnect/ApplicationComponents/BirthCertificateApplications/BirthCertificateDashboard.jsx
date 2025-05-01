@@ -18,10 +18,25 @@ const BirthCertificateDashboard = () => {
     }
 
     localStorage.setItem('selectedBirthCertificateOption', selectedOption);
+    
+    if (['Clerical Error', 'Sex DOB', 'First Name'].includes(selectedOption)) {
+   
+      const correctionRoutes = {
+        'Clerical Error': '/ClericalErrorApplication',
+        'Sex DOB': '/SexDobCorrection',
+        'First Name': '/FirstNameCorrection'
+      };
+      
+   
+      navigate(correctionRoutes[selectedOption]);
+      console.log(`Navigating to correction route: ${correctionRoutes[selectedOption]}`);
+    } 
 
-    if (selectedOption === 'Request copy') {
+    else if (selectedOption === 'Request copy') {
       navigate('/RequestACopyBirthCertificate');
-    } else {
+    } 
+   
+    else {
       navigate('/BirthCertificateForm');
     }
   };
