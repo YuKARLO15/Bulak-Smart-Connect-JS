@@ -11,14 +11,14 @@ export class QueueDetails {
   queueId: number;
 
   @ManyToOne(() => Queue, queue => queue.details, { onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'queue_id' })
+  @JoinColumn({ name: 'queue_id', foreignKeyConstraintName: 'fk_queue_id' })
   queue: Queue;
 
   @Column({ name: 'user_id', nullable: true })
   userId: number;
 
   @ManyToOne(() => User, { onDelete: 'SET NULL', nullable: true })
-  @JoinColumn({ name: 'user_id' })
+  @JoinColumn({ name: 'user_id', foreignKeyConstraintName: 'fk_user_id' })
   user: User;
 
   @Column({ name: 'first_name' })

@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn } from 'typeorm';
 import { Queue } from '../../queue/entities/queue.entity';
 
 export enum CounterStatus {
@@ -24,7 +24,7 @@ export class Counter {
   @Column({ name: 'current_queue_id', nullable: true })
   currentQueueId: number | null;
 
-  @ManyToOne(() => Queue, { nullable: true, onDelete: 'SET NULL' })
-  @JoinColumn({ name: 'current_queue_id' })
+  @OneToOne(() => Queue, queue => queue.counter, { nullable: true })
+  @JoinColumn({ name: 'current_queue_id', foreignKeyConstraintName: 'fk_current_queue' })
   currentQueue: Queue | null;
 }
