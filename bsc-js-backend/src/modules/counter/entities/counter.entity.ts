@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
-import { Queue } from './queue.entity';
+import { Queue } from '../../queue/entities/queue.entity';
 
 export enum CounterStatus {
   ACTIVE = 'active',

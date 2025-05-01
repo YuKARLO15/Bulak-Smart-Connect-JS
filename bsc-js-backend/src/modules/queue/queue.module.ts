@@ -5,7 +5,7 @@ import { QueueController } from './queue.controller';
 import { QueueGateway } from './queue.gateway';
 import { Queue } from './entities/queue.entity';
 import { QueueDetails } from './entities/queue-details.entity';
-import { Counter } from './entities/counter.entity';
+import { Counter } from '../counter/entities/counter.entity';
 
 @Module({
   imports: [
