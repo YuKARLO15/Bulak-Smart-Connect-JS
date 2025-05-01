@@ -1,0 +1,67 @@
+.ContainerMDashboard {
+ 
+    transition: margin-left 0.3s;
+    margin-left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+  }
+  
+  .sidebar-openMDashboard {
+    margin-left: 250px;
+  }
+  
+  .TitleMDashboard {
+    background-color: #184a5b;
+    width: 100vw;
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 2vw !important;
+    font-weight: 600 !important;
+    padding: 15px;
+  }
+  
+  .PaperMDashboard {
+    padding: 24px;
+    margin-bottom: 20px;
+    width: 80vw !important;
+  }
+  
+  .SectionMDashboard {
+    margin-bottom: 24px;
+  }
+  
+  .SectionTitleMDashboard {
+    background-color: #184a5b;
+    color: white;
+    padding: 10px 16px;
+    margin-bottom: 16px;
+    border-radius: 4px;
+    font-weight: 500;
+  }
+  
+
+.RadioGroupMDashboard {
+    margin-left: 16px;
+  }
+  
+  .RadioMDashboard {
+    display: block;
+    margin: 10px 0;
+  }
+  .NextButtonMDashboard {
+    background-color: #184a5b !important;
+    color: white !important;
+    padding: 10px 20px !important;
+    font-weight: 500 !important;
+    width: 10vw !important;
+  }
+  
+  .NextButtonMDashboard:disabled {
+    background-color: #cccccc !important;
+    color: #666666 !important;
+    width: 10vw !important;
+  }

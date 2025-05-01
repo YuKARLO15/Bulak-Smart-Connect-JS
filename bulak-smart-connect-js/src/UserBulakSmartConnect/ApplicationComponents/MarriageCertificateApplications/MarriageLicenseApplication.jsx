@@ -56,7 +56,7 @@ const MarriageLicenseApplication = () => {
     if (isFormComplete) {
       setIsSubmitted(true);
       setTimeout(() => {
-        navigate('/ApplicationForm');
+        navigate('/MarriageLicenseSummary');
       }, 2000);
     }
   };

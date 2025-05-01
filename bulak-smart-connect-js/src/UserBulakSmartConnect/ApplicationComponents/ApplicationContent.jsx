@@ -13,7 +13,7 @@ const ApplicationContent = () => {
     {
       title: 'Marriage Certificate',
       icon: MarriageCertificateIcon,
-      route: '/MarriageCertificateForm',
+      route: '/MarriageDashboard',
     }
   ];
 

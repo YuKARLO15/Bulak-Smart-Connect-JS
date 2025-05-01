@@ -1,7 +1,9 @@
 import React from 'react';
 import './MarriageCertificateForm.css';
 
-const HusbandForm = ({ formData, handleChange, errors }) => {
+const HusbandForm = ({ formData, handleChange, errors, isMarriageLicense = false }) => {
+  const selectedOption = localStorage.getItem('selectedMarriageOption');
+  const isLicenseApplication = isMarriageLicense || selectedOption === 'Marriage License';
   return (
     <section className="husband-section section">
       <h3 className="husband-heading">I. HUSBAND</h3>
@@ -351,6 +353,164 @@ const HusbandForm = ({ formData, handleChange, errors }) => {
           )}
         </div>
       </div>
+      {isLicenseApplication && (
+        <>
+          <h4 className="husband-subheading">Previous Marriage Information (if applicable)</h4>
+          
+          <label className="husband-label">15. IF PREVIOUSLY MARRIED, HOW WAS IT DISSOLVED?</label>
+          <div className="husband-input-group input-group">
+            <div className="husband-input-container input-container">
+              <select
+                name="husbandPreviousMarriageStatus"
+                className="husband-select"
+                value={formData.husbandPreviousMarriageStatus || ''}
+                onChange={handleChange}
+              >
+                <option value="" disabled>Select</option>
+                <option value="Not Applicable">Not Applicable</option>
+                <option value="Death">Death</option>
+                <option value="Annulment">Annulment</option>
+                <option value="Divorce">Divorce</option>
+                <option value="Legal Separation">Legal Separation</option>
+              </select>
+              {errors.husbandPreviousMarriageStatus && (
+                <span className="husband-error error-message">
+                  {errors.husbandPreviousMarriageStatus}
+                </span>
+              )}
+            </div>
+          </div>
+
+          <label className="husband-label">16. PLACE WHERE DISSOLVED</label>
+          <div className="husband-input-group input-group">
+            <div className="husband-input-container input-container">
+              <input
+                type="text"
+                name="husbandDissolutionCity"
+                className="husband-input"
+                placeholder="City/Municipality"
+                value={formData.husbandDissolutionCity || ''}
+                onChange={handleChange}
+              />
+              {errors.husbandDissolutionCity && (
+                <span className="husband-error error-message">
+                  {errors.husbandDissolutionCity}
+                </span>
+              )}
+            </div>
+            <div className="husband-input-container input-container">
+              <input
+                type="text"
+                name="husbandDissolutionProvince"
+                className="husband-input"
+                placeholder="Province"
+                value={formData.husbandDissolutionProvince || ''}
+                onChange={handleChange}
+              />
+              {errors.husbandDissolutionProvince && (
+                <span className="husband-error error-message">
+                  {errors.husbandDissolutionProvince}
+                </span>
+              )}
+            </div>
+            <div className="husband-input-container input-container">
+              <input
+                type="text"
+                name="husbandDissolutionCountry"
+                className="husband-input"
+                placeholder="Country"
+                value={formData.husbandDissolutionCountry || ''}
+                onChange={handleChange}
+              />
+              {errors.husbandDissolutionCountry && (
+                <span className="husband-error error-message">
+                  {errors.husbandDissolutionCountry}
+                </span>
+              )}
+            </div>
+          </div>
+
+          <label className="husband-label">17. DATE WHEN DISSOLVED</label>
+          <div className="husband-input-group input-group">
+            <div className="husband-input-container input-container">
+              <select
+                name="husbandDissolutionDay"
+                className="husband-select"
+                value={formData.husbandDissolutionDay || ''}
+                onChange={handleChange}
+              >
+                <option value="" disabled>
+                  Day
+                </option>
+                {Array.from({ length: 31 }, (_, i) => (
+                  <option key={i + 1} value={i + 1}>
+                    {i + 1}
+                  </option>
+                ))}
+              </select>
+              {errors.husbandDissolutionDay && (
+                <span className="husband-error error-message">
+                  {errors.husbandDissolutionDay}
+                </span>
+              )}
+            </div>
+            <div className="husband-input-container input-container">
+              <select
+                name="husbandDissolutionMonth"
+                className="husband-select"
+                value={formData.husbandDissolutionMonth || ''}
+                onChange={handleChange}
+              >
+                <option value="" disabled>
+                  Month
+                </option>
+                <option value="January">January</option>
+                <option value="February">February</option>
+                <option value="March">March</option>
+                <option value="April">April</option>
+                <option value="May">May</option>
+                <option value="June">June</option>
+                <option value="July">July</option>
+                <option value="August">August</option>
+                <option value="September">September</option>
+                <option value="October">October</option>
+                <option value="November">November</option>
+                <option value="December">December</option>
+              </select>
+              {errors.husbandDissolutionMonth && (
+                <span className="husband-error error-message">
+                  {errors.husbandDissolutionMonth}
+                </span>
+              )}
+            </div>
+            <div className="husband-input-container input-container">
+              <select
+                name="husbandDissolutionYear"
+                className="husband-select"
+                value={formData.husbandDissolutionYear || ''}
+                onChange={handleChange}
+              >
+                <option value="" disabled>
+                  Year
+                </option>
+                {Array.from({ length: 100 }, (_, i) => {
+                  const year = new Date().getFullYear() - i;
+                  return (
+                    <option key={year} value={year}>
+                      {year}
+                    </option>
+                  );
+                })}
+              </select>
+              {errors.husbandDissolutionYear && (
+                <span className="husband-error error-message">
+                  {errors.husbandDissolutionYear}
+                </span>
+              )}
+            </div>
+          </div>
+        </>
+      )}
 
       {/* Father's Name */}
       <label className="husband-label">8. NAME OF FATHER (Buong Pangalan ng Ama) *</label>
@@ -413,6 +573,26 @@ const HusbandForm = ({ formData, handleChange, errors }) => {
           )}
         </div>
       </div>
+      {isLicenseApplication && (
+        <>
+          <label className="husband-label">9b. FATHER'S RESIDENCE *</label>
+          <div className="husband-input-group input-group">
+            <div className="husband-input-container input-container">
+              <textarea
+                name="husbandFatherAddress"
+                className="husband-input"
+                placeholder="Complete Address"
+                value={formData.husbandFatherAddress || ''}
+                onChange={handleChange}
+                rows={2}
+              ></textarea>
+              {errors.husbandFatherAddress && (
+                <span className="husband-error error-message">{errors.husbandFatherAddress}</span>
+              )}
+            </div>
+          </div>
+        </>
+      )}
 
       {/* Mother's Maiden Name */}
       <label className="husband-label">
@@ -477,6 +657,26 @@ const HusbandForm = ({ formData, handleChange, errors }) => {
           )}
         </div>
       </div>
+      {isLicenseApplication && (
+        <>
+          <label className="husband-label">11b. MOTHER'S RESIDENCE *</label>
+          <div className="husband-input-group input-group">
+            <div className="husband-input-container input-container">
+              <textarea
+                name="husbandMotherAddress"
+                className="husband-input"
+                placeholder="Complete Address"
+                value={formData.husbandMotherAddress || ''}
+                onChange={handleChange}
+                rows={2}
+              ></textarea>
+              {errors.husbandMotherAddress && (
+                <span className="husband-error error-message">{errors.husbandMotherAddress}</span>
+              )}
+            </div>
+          </div>
+        </>
+      )}
 
       {/* Name of Person/Wali Who Gave Consent or Advice */}
       <label className="husband-label">
@@ -541,6 +741,26 @@ const HusbandForm = ({ formData, handleChange, errors }) => {
           )}
         </div>
       </div>
+      {isLicenseApplication && (
+  <>
+    <label className="husband-label">13a. CITIZENSHIP</label>
+    <div className="husband-input-group input-group">
+      <div className="husband-input-container input-container">
+        <input
+          type="text"
+          name="waliCitizenship"
+          className="husband-input wali-input"
+          placeholder="Citizenship"
+          value={formData.waliCitizenship || ''}
+          onChange={handleChange}
+        />
+        {errors.waliCitizenship && (
+          <span className="husband-error error-message">{errors.waliCitizenship}</span>
+        )}
+      </div>
+    </div>
+  </>
+)}
 
       {/* Residence */}
       <label className="husband-label">14. RESIDENCE *</label>

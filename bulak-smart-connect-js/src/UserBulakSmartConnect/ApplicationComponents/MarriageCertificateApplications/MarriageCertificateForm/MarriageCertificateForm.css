@@ -1,4 +1,4 @@
-rtificateFormTitle {
+.CertificateFormTitle {
   text-align: center;
   margin-bottom: 2rem;
   color: #fff;
@@ -21,6 +21,25 @@ rtificateFormTitle {
 /* Generic section styling - applies to all sections */
 .section {
   margin-bottom: 2rem;
+}
+.FormProgressContainer {
+  margin-top: 30px;
+  text-align: center;
+}
+
+.FormProgressBar {
+  width: 100%;
+  height: 8px;
+  background-color: #e0e0e0;
+  border-radius: 4px;
+  margin-top: 8px;
+}
+
+.FormProgressFill {
+  height: 100%;
+  background-color: #184a5b;
+  border-radius: 4px;
+  transition: width 0.3s ease-in-out;
 }
 
 .section h3 {

@@ -72,8 +72,8 @@ const RecentApplicationsComponent = () => {
       case 'Marriage Certificate':
         navigate(id ? '/MarriageSummaryForm' : '/MarriageLicenseDashboard');
         break;
-      case 'Death Certificate':
-        navigate('/DeathDashboard');
+      case 'Marriage License':
+        navigate('/MarriageLicenseSummary');
         break;
       default:
         navigate('/');

@@ -1,7 +1,9 @@
 import React from 'react';
 import './MarriageCertificateForm.css';
 
-const WifeForm = ({ formData, handleChange, errors }) => {
+const WifeForm = ({ formData, handleChange, errors , isMarriageLicense = false }) => {
+  const selectedOption = localStorage.getItem('selectedMarriageOption');
+  const isLicenseApplication = isMarriageLicense || selectedOption === 'Marriage License';
   return (
     <section className="wife-section section">
       <h3 className="wife-heading">II. WIFE</h3>
@@ -339,6 +341,164 @@ const WifeForm = ({ formData, handleChange, errors }) => {
           )}
         </div>
       </div>
+      {isLicenseApplication && (
+        <>
+          <h4 className="wife-subheading">Previous Marriage Information (if applicable)</h4>
+          
+          <label className="wife-label">15. IF PREVIOUSLY MARRIED, HOW WAS IT DISSOLVED?</label>
+          <div className="wife-input-group input-group">
+            <div className="wife-input-container input-container">
+              <select
+                name="wifePreviousMarriageStatus"
+                className="wife-select"
+                value={formData.wifePreviousMarriageStatus || ''}
+                onChange={handleChange}
+              >
+                <option value="" disabled>Select</option>
+                <option value="Not Applicable">Not Applicable</option>
+                <option value="Death">Death</option>
+                <option value="Annulment">Annulment</option>
+                <option value="Divorce">Divorce</option>
+                <option value="Legal Separation">Legal Separation</option>
+              </select>
+              {errors.wifePreviousMarriageStatus && (
+                <span className="wife-error error-message">
+                  {errors.wifePreviousMarriageStatus}
+                </span>
+              )}
+            </div>
+          </div>
+
+          <label className="wife-label">16. PLACE WHERE DISSOLVED</label>
+          <div className="wife-input-group input-group">
+            <div className="wife-input-container input-container">
+              <input
+                type="text"
+                name="wifeDissolutionCity"
+                className="wife-input"
+                placeholder="City/Municipality"
+                value={formData.wifeDissolutionCity || ''}
+                onChange={handleChange}
+              />
+              {errors.wifeDissolutionCity && (
+                <span className="wife-error error-message">
+                  {errors.wifeDissolutionCity}
+                </span>
+              )}
+            </div>
+            <div className="wife-input-container input-container">
+              <input
+                type="text"
+                name="wifeDissolutionProvince"
+                className="wife-input"
+                placeholder="Province"
+                value={formData.wifeDissolutionProvince || ''}
+                onChange={handleChange}
+              />
+              {errors.wifeDissolutionProvince && (
+                <span className="wife-error error-message">
+                  {errors.wifeDissolutionProvince}
+                </span>
+              )}
+            </div>
+            <div className="wife-input-container input-container">
+              <input
+                type="text"
+                name="wifeDissolutionCountry"
+                className="wife-input"
+                placeholder="Country"
+                value={formData.wifeDissolutionCountry || ''}
+                onChange={handleChange}
+              />
+              {errors.wifeDissolutionCountry && (
+                <span className="wife-error error-message">
+                  {errors.wifeDissolutionCountry}
+                </span>
+              )}
+            </div>
+          </div>
+
+          <label className="wife-label">17. DATE WHEN DISSOLVED</label>
+          <div className="wife-input-group input-group">
+            <div className="wife-input-container input-container">
+              <select
+                name="wifeDissolutionDay"
+                className="wife-select"
+                value={formData.wifeDissolutionDay || ''}
+                onChange={handleChange}
+              >
+                <option value="" disabled>
+                  Day
+                </option>
+                {Array.from({ length: 31 }, (_, i) => (
+                  <option key={i + 1} value={i + 1}>
+                    {i + 1}
+                  </option>
+                ))}
+              </select>
+              {errors.wifeDissolutionDay && (
+                <span className="wife-error error-message">
+                  {errors.wifeDissolutionDay}
+                </span>
+              )}
+            </div>
+            <div className="wife-input-container input-container">
+              <select
+                name="wifeDissolutionMonth"
+                className="wife-select"
+                value={formData.wifeDissolutionMonth || ''}
+                onChange={handleChange}
+              >
+                <option value="" disabled>
+                  Month
+                </option>
+                <option value="January">January</option>
+                <option value="February">February</option>
+                <option value="March">March</option>
+                <option value="April">April</option>
+                <option value="May">May</option>
+                <option value="June">June</option>
+                <option value="July">July</option>
+                <option value="August">August</option>
+                <option value="September">September</option>
+                <option value="October">October</option>
+                <option value="November">November</option>
+                <option value="December">December</option>
+              </select>
+              {errors.wifeDissolutionMonth && (
+                <span className="wife-error error-message">
+                  {errors.wifeDissolutionMonth}
+                </span>
+              )}
+            </div>
+            <div className="wife-input-container input-container">
+              <select
+                name="wifeDissolutionYear"
+                className="wife-select"
+                value={formData.wifeDissolutionYear || ''}
+                onChange={handleChange}
+              >
+                <option value="" disabled>
+                  Year
+                </option>
+                {Array.from({ length: 100 }, (_, i) => {
+                  const year = new Date().getFullYear() - i;
+                  return (
+                    <option key={year} value={year}>
+                      {year}
+                    </option>
+                  );
+                })}
+              </select>
+              {errors.wifeDissolutionYear && (
+                <span className="wife-error error-message">
+                  {errors.wifeDissolutionYear}
+                </span>
+              )}
+            </div>
+          </div>
+        </>
+      )}
 
       {/* Father's Name */}
       <label className="wife-label">8. NAME OF FATHER (Buong Pangalan ng Ama) *</label>
@@ -398,6 +558,27 @@ const WifeForm = ({ formData, handleChange, errors }) => {
           )}
         </div>
       </div>
+      {isLicenseApplication && (
+        <>
+          <label className="wife-label">9b. FATHER'S RESIDENCE *</label>
+          <div className="wife-input-group input-group">
+            <div className="wife-input-container input-container">
+              <textarea
+                name="wifeFatherAddress"
+                className="wife-input"
+                placeholder="Complete Address"
+                value={formData.wifeFatherAddress || ''}
+                onChange={handleChange}
+                rows={2}
+              ></textarea>
+              {errors.wifeFatherAddress && (
+                <span className="wife-error error-message">{errors.wifeFatherAddress}</span>
+              )}
+            </div>
+          </div>
+        </>
+      )}
+
 
       {/* Mother's Maiden Name */}
       <label className="wife-label">
@@ -459,6 +640,27 @@ const WifeForm = ({ formData, handleChange, errors }) => {
           )}
         </div>
       </div>
+      {isLicenseApplication && (
+        <>
+          <label className="wife-label">11b. MOTHER'S RESIDENCE *</label>
+          <div className="wife-input-group input-group">
+            <div className="wife-input-container input-container">
+              <textarea
+                name="wifeMotherAddress"
+                className="wife-input"
+                placeholder="Complete Address"
+                value={formData.wifeMotherAddress || ''}
+                onChange={handleChange}
+                rows={2}
+              ></textarea>
+              {errors.wifeMotherAddress && (
+                <span className="wife-error error-message">{errors.wifeMotherAddress}</span>
+              )}
+            </div>
+          </div>
+        </>
+      )}
+
 
       {/* Name of Person/Wali Who Gave Consent or Advice */}
       <label className="wife-label">12. NAME OF PERSON / WALI WHO GAVE CONSENT OR ADVICE *</label>
@@ -518,6 +720,26 @@ const WifeForm = ({ formData, handleChange, errors }) => {
           )}
         </div>
       </div>
+      {isLicenseApplication && (
+        <>
+          <label className="wife-label">13a. WALI'S CITIZENSHIP</label>
+          <div className="wife-input-group input-group">
+            <div className="wife-input-container input-container">
+              <input
+                type="text"
+                name="wifewaliCitizenship"
+                className="wife-input wife-wali-input"
+                placeholder="Citizenship"
+                value={formData.wifewaliCitizenship || ''}
+                onChange={handleChange}
+              />
+              {errors.wifewaliCitizenship && (
+                <span className="wife-error error-message">{errors.wifewaliCitizenship}</span>
+              )}
+            </div>
+          </div>
+        </>
+      )}
 
       {/* Residence */}
       <label className="wife-label">14. RESIDENCE *</label>
