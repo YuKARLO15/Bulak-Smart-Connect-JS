@@ -194,7 +194,7 @@
                         <b>Decorators : </b>
                         <br />
                         <code>
-                            @ManyToOne(undefined, {nullable: true, onDelete: &#x27;SET NULL&#x27;})<br />@JoinColumn({name: &#x27;current_queue_id&#x27;})<br />
+                            @OneToOne(undefined, queue &#x3D;&gt; queue.counter, {nullable: true})<br />@JoinColumn({name: &#x27;current_queue_id&#x27;, foreignKeyConstraintName: &#x27;fk_current_queue&#x27;})<br />
                         </code>
                     </td>
                 </tr>
@@ -356,7 +356,7 @@
 
 
     <div class="tab-pane fade  tab-source-code" id="source">
-        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from &#x27;typeorm&#x27;;
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn } from &#x27;typeorm&#x27;;
 import { Queue } from &#x27;../../queue/entities/queue.entity&#x27;;
 
 export enum CounterStatus {
@@ -382,8 +382,8 @@ export class Counter {
   @Column({ name: &#x27;current_queue_id&#x27;, nullable: true })
   currentQueueId: number | null;
 
-  @ManyToOne(() &#x3D;&gt; Queue, { nullable: true, onDelete: &#x27;SET NULL&#x27; })
-  @JoinColumn({ name: &#x27;current_queue_id&#x27; })
+  @OneToOne(() &#x3D;&gt; Queue, queue &#x3D;&gt; queue.counter, { nullable: true })
+  @JoinColumn({ name: &#x27;current_queue_id&#x27;, foreignKeyConstraintName: &#x27;fk_current_queue&#x27; })
   currentQueue: Queue | null;
 }</code></pre>
     </div>

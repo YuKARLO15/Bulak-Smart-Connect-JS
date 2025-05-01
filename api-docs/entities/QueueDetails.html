@@ -475,7 +475,7 @@
                         <b>Decorators : </b>
                         <br />
                         <code>
-                            @ManyToOne(undefined, queue &#x3D;&gt; queue.details, {onDelete: &#x27;CASCADE&#x27;})<br />@JoinColumn({name: &#x27;queue_id&#x27;})<br />
+                            @ManyToOne(undefined, queue &#x3D;&gt; queue.details, {onDelete: &#x27;CASCADE&#x27;})<br />@JoinColumn({name: &#x27;queue_id&#x27;, foreignKeyConstraintName: &#x27;fk_queue_id&#x27;})<br />
                         </code>
                     </td>
                 </tr>
@@ -584,7 +584,7 @@
                         <b>Decorators : </b>
                         <br />
                         <code>
-                            @ManyToOne(undefined, {onDelete: &#x27;SET NULL&#x27;, nullable: true})<br />@JoinColumn({name: &#x27;user_id&#x27;})<br />
+                            @ManyToOne(undefined, {onDelete: &#x27;SET NULL&#x27;, nullable: true})<br />@JoinColumn({name: &#x27;user_id&#x27;, foreignKeyConstraintName: &#x27;fk_user_id&#x27;})<br />
                         </code>
                     </td>
                 </tr>
@@ -651,14 +651,14 @@ export class QueueDetails {
   queueId: number;
 
   @ManyToOne(() &#x3D;&gt; Queue, queue &#x3D;&gt; queue.details, { onDelete: &#x27;CASCADE&#x27; })
-  @JoinColumn({ name: &#x27;queue_id&#x27; })
+  @JoinColumn({ name: &#x27;queue_id&#x27;, foreignKeyConstraintName: &#x27;fk_queue_id&#x27; })
   queue: Queue;
 
   @Column({ name: &#x27;user_id&#x27;, nullable: true })
   userId: number;
 
   @ManyToOne(() &#x3D;&gt; User, { onDelete: &#x27;SET NULL&#x27;, nullable: true })
-  @JoinColumn({ name: &#x27;user_id&#x27; })
+  @JoinColumn({ name: &#x27;user_id&#x27;, foreignKeyConstraintName: &#x27;fk_user_id&#x27; })
   user: User;
 
   @Column({ name: &#x27;first_name&#x27; })
