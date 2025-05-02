@@ -62,7 +62,7 @@ jobs:
           cd bulak-smart-connect-js
           mkdir -p tests
           
-          # Create a minimal test that avoids CSS/React complexities - FIX THE SYNTAX ERROR HERE
+          # Create a minimal test that avoids CSS/React complexities
           cat > tests/server-up.spec.js << 'EOF'
           import { test, expect } from '@playwright/test';
           
