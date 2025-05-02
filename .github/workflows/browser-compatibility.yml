@@ -62,24 +62,28 @@ jobs:
           cd bulak-smart-connect-js
           mkdir -p tests
           
-          # Create a minimal test that avoids CSS/React complexities
-          echo "import { test, expect } from '@playwright/test';
+          # Create a minimal test that avoids CSS/React complexities - FIX THE SYNTAX ERROR HERE
+          cat > tests/server-up.spec.js << 'EOF'
+          import { test, expect } from '@playwright/test';
           
           test('server is running', async ({ page }) => {
             await page.goto('http://localhost:3000');
             // Just check that page loaded something
             const body = await page.$('body');
             expect(body).not.toBeNull();
-          });" > tests/server-up.spec.js
+          });
+          EOF
           
           # Create a basic playwright config
-          echo "export default { 
+          cat > playwright.config.js << 'EOF'
+          export default { 
             projects: [
               { name: 'chromium', use: { browserName: 'chromium' } },
               { name: 'firefox', use: { browserName: 'firefox' } },
               { name: 'webkit', use: { browserName: 'webkit' } }
             ] 
-          };" > playwright.config.js
+          };
+          EOF
           
           # Run without additional browser flags
           npx playwright test tests/server-up.spec.js || echo "Tests completed with issues"
