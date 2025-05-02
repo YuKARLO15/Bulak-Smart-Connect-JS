@@ -45,8 +45,15 @@ jobs:
           cd bsc-js-backend
           npm ci
           npm run build
-          # Add environment variable for JWT
-          export JWT_SECRET="ci-test-jwt-secret-key"
+          
+          # Configure for testing without database
+          echo "
+          DB_TYPE=mysql2
+          DB_NAME=:memory:
+          JWT_SECRET=ci-test-jwt-secret-key
+          " > .env
+          
+          # Start backend
           npm run start:prod &
           sleep 10
       
@@ -61,19 +68,21 @@ jobs:
           test('server is running', async ({ page }) => {
             await page.goto('http://localhost:3000');
             // Just check that page loaded something
-            const body = await.page.$('body');
+            const body = await page.$('body');
             expect(body).not.toBeNull();
           });" > tests/server-up.spec.js
           
           # Create a basic playwright config
-          echo "export default { projects: [
-            { name: 'chromium', use: { browserName: 'chromium' } },
-            { name: 'firefox', use: { browserName: 'firefox' } },
-            { name: 'webkit', use: { browserName: 'webkit' } }
-          ] };" > playwright.config.js
+          echo "export default { 
+            projects: [
+              { name: 'chromium', use: { browserName: 'chromium' } },
+              { name: 'firefox', use: { browserName: 'firefox' } },
+              { name: 'webkit', use: { browserName: 'webkit' } }
+            ] 
+          };" > playwright.config.js
           
-          # Run with all three browsers
-          npx playwright test tests/server-up.spec.js --browser=chromium --browser=firefox --browser=webkit || echo "Tests completed with issues"
+          # Run without additional browser flags
+          npx playwright test tests/server-up.spec.js || echo "Tests completed with issues"
       
       - name: Upload Playwright report
         if: always()
