@@ -85,7 +85,7 @@ jobs:
             echo "Creating basic Cypress configuration"
             echo "export default {
               e2e: {
-                baseUrl: 'http://localhost:3000',
+                baseUrl: 'http://localhost:5173',
                 supportFile: false
               },
             }" > cypress.config.js
@@ -119,8 +119,8 @@ jobs:
             cat frontend.log
             exit 1
           fi
-          echo "Frontend started successfully at http://localhost:3000"
-          curl -s http://localhost:3000 | grep -q "<!DOCTYPE html>" || (echo "Frontend not responding properly" && exit 1)
+          echo "Frontend started successfully at http://localhost:5173"
+          curl -s http://localhost:5173 | grep -q "<!DOCTYPE html>" || (echo "Frontend not responding properly" && exit 1)
       
       # Create Cypress directories if they don't exist
       - name: Prepare Cypress directories
