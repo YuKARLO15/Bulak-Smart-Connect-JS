@@ -133,7 +133,7 @@ jobs:
         run: |
           cd bulak-smart-connect-js
           echo "Running Cypress tests..."
-          npm run cypress:run || (echo "Cypress tests failed" && exit 1)
+          npx run cypress:run || (echo "Cypress tests failed" && exit 1)
       
       # Upload screenshots with updated action
       - name: Upload screenshots on failure
