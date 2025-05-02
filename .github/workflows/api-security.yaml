@@ -29,9 +29,9 @@ jobs:
           # Create a minimal .env file with required variables
           echo "JWT_SECRET=test-security-scan-secret" > .env
           
-          # Modify main.ts temporarily if it doesn't bind to all interfaces
+          # Modify main.ts properly by replacing the entire listen call
           if grep -q "await app.listen" src/main.ts; then
-            sed -i 's/await app.listen(/await app.listen(process.env.PORT ?? 3000, "0.0.0.0"/g' src/main.ts
+            sed -i 's/await app.listen([^)]*)/await app.listen(process.env.PORT ?? 3000, "0.0.0.0")/g' src/main.ts
           fi
           
           npm run start:dev > api.log 2>&1 &
