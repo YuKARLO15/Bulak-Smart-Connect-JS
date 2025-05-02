@@ -39,7 +39,7 @@ import MarriageCertificateForm from './UserBulakSmartConnect/ApplicationComponen
 import MarriageSummaryForm from './UserBulakSmartConnect/ApplicationComponents/MarriageCertificateApplications/MarriageCertificateForm/MarriageSummaryForm';
 import CTCBirthCertificate from './UserBulakSmartConnect/ApplicationComponents/BirthCertificateApplications/CTCBirthcertificate';
 import RequirementBirthList from './UserBulakSmartConnect/ApplicationComponents/BirthCertificateApplications/RequirementBirthList';
-import MarriageDashboard from './UserBulakSmartConnect/ApplicationComponents/MarriageCertificateApplications/MarraiageDashboard';
+import MarriageDashboard from './UserBulakSmartConnect/ApplicationComponents/MarriageCertificateApplications/MarriageDashboard';
 import MarriageCertificateApplication from './UserBulakSmartConnect/ApplicationComponents/MarriageCertificateApplications/MarriageCertificateApplication';
 import MarriageLicenseSummary from './UserBulakSmartConnect/ApplicationComponents/MarriageCertificateApplications/MarriageCertificateForm/MarriageLicenseSummary';
 //WalkIn//
