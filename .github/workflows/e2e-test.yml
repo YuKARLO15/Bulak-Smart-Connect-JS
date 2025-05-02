@@ -111,7 +111,7 @@ jobs:
         run: |
           cd bulak-smart-connect-js
           npm run build
-          npx serve -s build > frontend.log 2>&1 &
+          npx serve -s dist -l 5173 > frontend.log 2>&1 &
           echo $! > frontend.pid
           sleep 10
           if ! ps -p $(cat frontend.pid) > /dev/null; then
