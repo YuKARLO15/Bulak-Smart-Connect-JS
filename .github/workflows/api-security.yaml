@@ -26,15 +26,31 @@ jobs:
       - name: Start API server for scanning
         run: |
           cd bsc-js-backend
+          # Create a minimal .env file with required variables
+          echo "JWT_SECRET=test-security-scan-secret" > .env
+          
+          # Modify main.ts properly by replacing the entire listen call
+          if grep -q "await app.listen" src/main.ts; then
+            sed -i 's/await app.listen([^)]*)/await app.listen(process.env.PORT ?? 3000, "0.0.0.0")/g' src/main.ts
+          fi
+          
           npm run start:dev > api.log 2>&1 &
           echo $! > api.pid
-          sleep 20
-          if ! ps -p $(cat api.pid) > /dev/null; then
-            echo "API server failed to start"
-            cat api.log
-            exit 1
-          fi
-          echo "API server started successfully"
+          
+          # Wait for API to be available with timeout
+          echo "Waiting for API server to be ready..."
+          timeout=60
+          while ! curl -s http://localhost:3000 > /dev/null; do
+            if [ "$timeout" -le 0 ]; then
+              echo "API server failed to start or is not accessible"
+              cat api.log
+              exit 1
+            fi
+            timeout=$((timeout-1))
+            sleep 1
+          done
+          
+          echo "API server started successfully and is accessible"
       
       # Using direct command approach to avoid artifact conflict
       - name: Run ZAP Full Scan
@@ -47,13 +63,14 @@ jobs:
           touch reports/report.html reports/report.json reports/report.md
           chmod 777 reports/report.html reports/report.json reports/report.md
           
-          # Run ZAP scan
-          docker run --rm -v "$(pwd)/reports:/zap/wrk/reports:rw" --network=host \
+          # Run ZAP scan using host.docker.internal instead of localhost
+          docker run --rm -v "$(pwd)/reports:/zap/wrk/reports:rw" \
             ghcr.io/zaproxy/zaproxy:stable zap-full-scan.py \
-            -t http://localhost:3000 \
+            -t http://host.docker.internal:3000 \
             -r /zap/wrk/reports/report.html \
             -J /zap/wrk/reports/report.json \
-            -w /zap/wrk/reports/report.md
+            -w /zap/wrk/reports/report.md \
+            --info
       
       - name: List report files
         if: always()
