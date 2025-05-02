@@ -42,6 +42,7 @@ import RequirementBirthList from './UserBulakSmartConnect/ApplicationComponents/
 import MarriageDashboard from './UserBulakSmartConnect/ApplicationComponents/MarriageCertificateApplications/MarriageDashboard';
 import MarriageCertificateApplication from './UserBulakSmartConnect/ApplicationComponents/MarriageCertificateApplications/MarriageCertificateApplication';
 import MarriageLicenseSummary from './UserBulakSmartConnect/ApplicationComponents/MarriageCertificateApplications/MarriageCertificateForm/MarriageLicenseSummary';
+import RequirementMarriageList from './UserBulakSmartConnect/ApplicationComponents/MarriageCertificateApplications/RequirementMarriageList';
 //WalkIn//
 import WalkInQueueContainer from './UserBulakSmartConnect/WalkInComponents/WalkInDashBoard';
 import WalkInForm from './UserBulakSmartConnect/WalkInComponents/WalkInForm';
@@ -138,6 +139,7 @@ function App() {
           <Route path="/RequestACopyBirthCertificate" element={<CopyBirthCertificate />} />
           <Route path="/RequirementBirthList" element={<RequirementBirthList />} />
           <Route path="/MarriageSummaryForm" element={<MarriageSummaryForm />} />
+          <Route path="/RequirementMarriageList" element={<RequirementMarriageList />} />
 
         </Route>
       </Routes>
