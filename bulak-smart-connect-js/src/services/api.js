@@ -36,6 +36,15 @@ export const authService = {
 
   logout: () => {
     localStorage.removeItem('token');
+
+    const userId = getCurrentUserId();
+  
+    // Clear user specific data but leave generic data for backward compatibility
+    localStorage.removeItem(`userQueue_${userId}`);
+    localStorage.removeItem(`userQueues_${userId}`);
+
+    // Then clear user data
+    localStorage.removeItem('currentUser');
   },
 
   getProfile: async () => {

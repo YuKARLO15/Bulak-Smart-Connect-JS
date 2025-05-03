@@ -71,6 +71,15 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem('token');
     setUser(null);
     setIsAuthenticated(false);
+
+    const userId = getCurrentUserId();
+  
+    // Clear user specific data but leave generic data for backward compatibility
+    localStorage.removeItem(`userQueue_${userId}`);
+    localStorage.removeItem(`userQueues_${userId}`);
+
+    // Then clear user data
+    localStorage.removeItem('currentUser');
   };
 
   // Role checking utilities

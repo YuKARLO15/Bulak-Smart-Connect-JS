@@ -21,6 +21,17 @@ const formatWKNumber = (queueNumber) => {
   return `WK${String(num).padStart(3, '0')}`;
 };
 
+// Add this function to get current user ID
+const getCurrentUserId = () => {
+  try {
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    return currentUser?.id || currentUser?.email || 'guest';
+  } catch (e) {
+    console.error('Error getting current user:', e);
+    return 'guest';
+  }
+};
+
 const WalkInQueueContainer = () => {
   const [queuePosition, setQueuePosition] = useState(null); 
   const [currentQueue, setCurrentQueue] = useState([]); 
@@ -61,37 +72,61 @@ const WalkInQueueContainer = () => {
     validateUserQueue();
   }, []);
 
-  // Add this function inside your component
-  const getAllUserQueues = () => {
-    try {
-      // Try to get user queues from localStorage - could be a single queue or an array
-      const storedUserQueue = localStorage.getItem('userQueue');
-      const storedUserQueues = localStorage.getItem('userQueues');
-      
-      let userQueues = [];
-      
-      // Parse the stored queue(s)
-      if (storedUserQueues) {
-        const parsedQueues = JSON.parse(storedUserQueues);
-        if (Array.isArray(parsedQueues)) {
-          userQueues = parsedQueues;
-        } else if (parsedQueues) {
-          userQueues = [parsedQueues];
-        }
-      } else if (storedUserQueue) {
-        const parsedQueue = JSON.parse(storedUserQueue);
-        if (parsedQueue) {
-          userQueues = [parsedQueue];
+  // Update your getAllUserQueues function
+const getAllUserQueues = () => {
+  try {
+    const userId = getCurrentUserId();
+    console.log('Getting queues for user:', userId);
+    
+    // Try user-specific storage first
+    const userSpecificQueueKey = `userQueue_${userId}`;
+    const userSpecificQueuesKey = `userQueues_${userId}`;
+    
+    const storedUserQueue = localStorage.getItem(userSpecificQueueKey);
+    const storedUserQueues = localStorage.getItem(userSpecificQueuesKey);
+    
+    let userQueues = [];
+    
+    // Parse the stored queue(s)
+    if (storedUserQueues) {
+      const parsedQueues = JSON.parse(storedUserQueues);
+      if (Array.isArray(parsedQueues)) {
+        userQueues = parsedQueues;
+      } else if (parsedQueues) {
+        userQueues = [parsedQueues];
+      }
+    } else if (storedUserQueue) {
+      const parsedQueue = JSON.parse(storedUserQueue);
+      if (parsedQueue) {
+        userQueues = [parsedQueue];
+      }
+    } else {
+      // Fallback to generic keys for backward compatibility
+      const genericQueue = localStorage.getItem('userQueue');
+      if (genericQueue) {
+        try {
+          const parsedQueue = JSON.parse(genericQueue);
+          // Check if this queue belongs to current user or doesn't have user info
+          if (!parsedQueue.userId || parsedQueue.userId === userId) {
+            userQueues = [parsedQueue];
+          }
+        } catch (e) {
+          console.error('Error parsing generic queue:', e);
         }
       }
-      
-      // Return all found queues
-      return userQueues;
-    } catch (err) {
-      console.error('Error getting user queues:', err);
-      return [];
     }
-  };
+    
+    // Check if these queues belong to current user
+    userQueues = userQueues.filter(queue => 
+      !queue.userId || queue.userId === userId
+    );
+    
+    return userQueues;
+  } catch (err) {
+    console.error('Error getting user queues:', err);
+    return [];
+  }
+};
 
   // Update your fetchQueueData function to clear localStorage when API returns empty
 
@@ -228,12 +263,33 @@ const WalkInQueueContainer = () => {
           
           console.log('Valid user queues:', validUserQueues);
           
+          // In your fetchQueueData function, modify where you save user queues:
+
           if (validUserQueues.length > 0) {
-            setUserQueue(validUserQueues); // Set all valid user queues
-            localStorage.setItem('userQueue', JSON.stringify(validUserQueues[0])); // For backward compatibility
+            const userId = getCurrentUserId();
+            
+            // Update state
+            setUserQueue(validUserQueues);
+            
+            // Add userId to queue objects
+            const userQueuesWithId = validUserQueues.map(q => ({
+              ...q,
+              userId: userId,
+              isUserQueue: true
+            }));
+            
+            // Store with user-specific keys
+            localStorage.setItem(`userQueue_${userId}`, JSON.stringify(userQueuesWithId[0]));
+            localStorage.setItem(`userQueues_${userId}`, JSON.stringify(userQueuesWithId));
+            
+            // For backward compatibility
+            localStorage.setItem('userQueue', JSON.stringify(userQueuesWithId[0]));
           } else {
+            const userId = getCurrentUserId();
             setUserQueue(null);
-            localStorage.removeItem('userQueue');
+            localStorage.removeItem(`userQueue_${userId}`);
+            localStorage.removeItem(`userQueues_${userId}`);
+            localStorage.removeItem('userQueue'); // Clean up legacy storage
           }
         }
         

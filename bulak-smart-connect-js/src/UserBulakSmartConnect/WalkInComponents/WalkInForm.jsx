@@ -82,6 +82,10 @@ const WalkInForm = () => {
     e.preventDefault();
     
     try {
+      // Get current user ID
+      const currentUser = JSON.parse(localStorage.getItem('currentUser')) || {};
+      const userId = currentUser.id || currentUser.email || 'guest';
+      
       // Call API to create queue
       const response = await queueService.createQueue({
         firstName: formData.firstName,
@@ -96,21 +100,7 @@ const WalkInForm = () => {
       // Format the queue number to WK format for display
       const queueNumber = formatWKNumber(response.queue.queueNumber);
       
-      // Save both backend ID and formatted WK number
-      const userQueueData = {
-        id: queueNumber,
-        dbId: response.queue.id,
-        queueNumber: queueNumber,
-        date: new Date().toLocaleDateString('en-US', {
-          month: '2-digit', 
-          day: '2-digit', 
-          year: '2-digit'
-        }),
-        userData: formData,
-        appointmentType: formData.reasonOfVisit
-      };
-      
-      // In your handleSubmit function, after creating the queue
+      // Create the new queue with user ID
       const newQueue = {
         id: queueNumber,
         dbId: response.queue.id,
@@ -122,30 +112,33 @@ const WalkInForm = () => {
         }),
         userData: formData,
         appointmentType: formData.reasonOfVisit,
-        isUserQueue: true // Add this flag
+        isUserQueue: true,
+        userId: userId // Store user ID with queue
       };
 
-      // Store this queue in localStorage
-      localStorage.setItem('userQueue', JSON.stringify(newQueue));
-
-      // Also add to any existing queues
+      // Store with user-specific keys
+      localStorage.setItem(`userQueue_${userId}`, JSON.stringify(newQueue));
+      
+      // Also add to user-specific queues array
       try {
-        const storedQueues = localStorage.getItem('userQueues');
+        const storedQueues = localStorage.getItem(`userQueues_${userId}`);
         let userQueues = storedQueues ? JSON.parse(storedQueues) : [];
         if (!Array.isArray(userQueues)) userQueues = [];
         
         userQueues.push(newQueue);
-        localStorage.setItem('userQueues', JSON.stringify(userQueues));
+        localStorage.setItem(`userQueues_${userId}`, JSON.stringify(userQueues));
+        
+        // For backward compatibility
+        localStorage.setItem('userQueue', JSON.stringify(newQueue));
       } catch (e) {
         console.error('Error updating user queues:', e);
-        // If there's an error, make sure at least this one is saved
-        localStorage.setItem('userQueues', JSON.stringify([newQueue]));
+        localStorage.setItem(`userQueues_${userId}`, JSON.stringify([newQueue]));
       }
       
       window.location.href = '/WalkInDetails';
     } catch (error) {
       console.error('Error creating queue:', error);
-      // Show error
+      // Handle error display
     }
   };
 
