@@ -10,7 +10,7 @@ import FileUpload from '../FileUpload';
 import NavBar from '../../../NavigationComponents/NavSide';
 import './MarriageCertificateApplication.css';
 
-// Import your function for storing application data
+
 import { addApplication, updateApplication } from '../ApplicationData';
 
 const requiredDocuments = [
@@ -27,7 +27,7 @@ const MarriageCertificateApplication = () => {
   const [formData, setFormData] = useState({});
   const navigate = useNavigate();
   
-  // Load form data when component mounts
+
   useEffect(() => {
     const storedFormData = JSON.parse(localStorage.getItem('marriageFormData') || '{}');
     setFormData(storedFormData);
@@ -45,46 +45,28 @@ const MarriageCertificateApplication = () => {
   const handleSubmit = () => {
     if (isFormComplete) {
       try {
-        // Get the existing application ID from formData or localStorage
-        const existingApplicationId = formData.applicationId || localStorage.getItem('lastMarriageApplicationId');
+        const applicationId = formData.applicationId || localStorage.getItem('currentApplicationId');
         
-        // Update the form data with uploaded files
+        if (!applicationId) {
+          console.error('No application ID found');
+          alert('Error submitting application: No application ID found. Please start over.');
+          navigate('/MarriageDashboard');
+          return;
+        }
+        
         const updatedFormData = {
           ...formData,
           uploadedFiles: uploadedFiles,
         };
         
-        let applicationId;
+        updateApplication(applicationId, {
+          documents: Object.keys(uploadedFiles).filter(key => uploadedFiles[key]),
+          status: 'Pending',
+          formData: updatedFormData
+        });
         
-        // If we found an existing application, update it
-        if (existingApplicationId) {
-          // Update the existing application with documents
-          updateApplication(existingApplicationId, {
-            documents: Object.keys(uploadedFiles).filter(key => uploadedFiles[key]),
-            status: 'Pending',
-            formData: updatedFormData
-          });
-          applicationId = existingApplicationId;
-        } else {
-          // Create a new application
-          applicationId = 'MC-' + Date.now().toString();
-          
-          const applicationData = {
-            id: applicationId,
-            type: 'Marriage Certificate',
-            documents: Object.keys(uploadedFiles).filter(key => uploadedFiles[key]),
-            dateSubmitted: new Date().toISOString(),
-            status: 'Pending',
-            formData: updatedFormData
-          };
-          
-          addApplication(applicationData);
-        }
-        
-        // Store the application ID for the summary page
         localStorage.setItem('currentApplicationId', applicationId);
         
-        // Remove the separate marriage form data since it's now part of the application
         localStorage.removeItem('marriageFormData');
         
         setIsSubmitted(true);

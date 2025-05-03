@@ -25,6 +25,7 @@ import AttachFileIcon from '@mui/icons-material/AttachFile';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import FileUploadPreview from './AdminFilePreview';
 import AdminMarriageApplicationView from './AdminMarriageApplicationView';
+import AdminMarriageLicensePreview from './AdminMarriageLicensePreview';
 
 const AdminApplicationDetails = () => {
   const { id } = useParams();
@@ -270,10 +271,15 @@ const AdminApplicationDetails = () => {
 
                 {!showDocumentsTab ? (
                   <>
-                    {selectedApplication.type === 'Marriage Certificate' ? (
+                     {selectedApplication.type === 'Marriage Certificate' ? (
                       <AdminMarriageApplicationView applicationData={selectedApplication} />
-                    ) : selectedApplication.type === 'Birth Certificate' ? (
-                      <>
+                    ) : selectedApplication.type === 'Marriage License' ? (
+                        <AdminMarriageLicensePreview applicationData={selectedApplication} />
+                          
+  
+  ) : selectedApplication.type === 'Birth Certificate' ? (
+    <>
+                          
                         <Box className="certificateHeaderContainer">
                           <Typography variant="body2" className="DetailsLabelAdminAppForm">
                             Municipal Form No. 102
