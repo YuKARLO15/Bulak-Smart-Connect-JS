@@ -21,6 +21,17 @@ const formatWKNumber = (queueNumber) => {
   return `WK${String(num).padStart(3, '0')}`;
 };
 
+// Add this function to get current user ID
+const getCurrentUserId = () => {
+  try {
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    return currentUser?.id || currentUser?.email || 'guest';
+  } catch (e) {
+    console.error('Error getting current user:', e);
+    return 'guest';
+  }
+};
+
 const WalkInQueueContainer = () => {
   const [queuePosition, setQueuePosition] = useState(null); 
   const [currentQueue, setCurrentQueue] = useState([]); 
@@ -60,6 +71,62 @@ const WalkInQueueContainer = () => {
     
     validateUserQueue();
   }, []);
+
+  // Update your getAllUserQueues function
+const getAllUserQueues = () => {
+  try {
+    const userId = getCurrentUserId();
+    console.log('Getting queues for user:', userId);
+    
+    // Try user-specific storage first
+    const userSpecificQueueKey = `userQueue_${userId}`;
+    const userSpecificQueuesKey = `userQueues_${userId}`;
+    
+    const storedUserQueue = localStorage.getItem(userSpecificQueueKey);
+    const storedUserQueues = localStorage.getItem(userSpecificQueuesKey);
+    
+    let userQueues = [];
+    
+    // Parse the stored queue(s)
+    if (storedUserQueues) {
+      const parsedQueues = JSON.parse(storedUserQueues);
+      if (Array.isArray(parsedQueues)) {
+        userQueues = parsedQueues;
+      } else if (parsedQueues) {
+        userQueues = [parsedQueues];
+      }
+    } else if (storedUserQueue) {
+      const parsedQueue = JSON.parse(storedUserQueue);
+      if (parsedQueue) {
+        userQueues = [parsedQueue];
+      }
+    } else {
+      // Fallback to generic keys for backward compatibility
+      const genericQueue = localStorage.getItem('userQueue');
+      if (genericQueue) {
+        try {
+          const parsedQueue = JSON.parse(genericQueue);
+          // Check if this queue belongs to current user or doesn't have user info
+          if (!parsedQueue.userId || parsedQueue.userId === userId) {
+            userQueues = [parsedQueue];
+          }
+        } catch (e) {
+          console.error('Error parsing generic queue:', e);
+        }
+      }
+    }
+    
+    // Check if these queues belong to current user
+    userQueues = userQueues.filter(queue => 
+      !queue.userId || queue.userId === userId
+    );
+    
+    return userQueues;
+  } catch (err) {
+    console.error('Error getting user queues:', err);
+    return [];
+  }
+};
 
   // Update your fetchQueueData function to clear localStorage when API returns empty
 
@@ -168,47 +235,70 @@ const WalkInQueueContainer = () => {
         
         console.log('All pending queues before filtering:', formattedPendingQueues);
         
-        // Check if we have a valid userQueue
-        let validUserQueue = null;
+        // Get all user queues from localStorage
+        const userQueuesData = getAllUserQueues();
+        let validUserQueues = [];
         
-        if (userQueueData) {
-          // Check if this user queue actually exists in the pending queues
-          const matchingQueue = formattedPendingQueues.find(queue => 
-            queue.id === userQueueData.id || 
-            queue.rawId === userQueueData.dbId
-          );
+        // Validate which user queues still exist in the system
+        if (userQueuesData.length > 0) {
+          validUserQueues = userQueuesData.filter(userQ => {
+            return formattedPendingQueues.some(pendingQ => 
+              pendingQ.id === userQ.id || 
+              pendingQ.rawId === userQ.dbId
+            );
+          });
           
-          if (matchingQueue) {
-            console.log('Found matching user queue in pending queues:', matchingQueue);
-            validUserQueue = {
-              ...userQueueData,
-              date: matchingQueue.date // Use the latest date from the API
-            };
-            setUserQueue(validUserQueue);
+          // Update dates from API data
+          validUserQueues = validUserQueues.map(userQ => {
+            const matchingQueue = formattedPendingQueues.find(pendingQ => 
+              pendingQ.id === userQ.id || 
+              pendingQ.rawId === userQ.dbId
+            );
             
-            // Save updated user queue to localStorage
-            localStorage.setItem('userQueue', JSON.stringify(validUserQueue));
+            return {
+              ...userQ,
+              date: matchingQueue ? matchingQueue.date : userQ.date
+            };
+          });
+          
+          console.log('Valid user queues:', validUserQueues);
+          
+          // In your fetchQueueData function, modify where you save user queues:
+
+          if (validUserQueues.length > 0) {
+            const userId = getCurrentUserId();
+            
+            // Update state
+            setUserQueue(validUserQueues);
+            
+            // Add userId to queue objects
+            const userQueuesWithId = validUserQueues.map(q => ({
+              ...q,
+              userId: userId,
+              isUserQueue: true
+            }));
+            
+            // Store with user-specific keys
+            localStorage.setItem(`userQueue_${userId}`, JSON.stringify(userQueuesWithId[0]));
+            localStorage.setItem(`userQueues_${userId}`, JSON.stringify(userQueuesWithId));
+            
+            // For backward compatibility
+            localStorage.setItem('userQueue', JSON.stringify(userQueuesWithId[0]));
           } else {
-            console.log('User queue not found in pending queues - clearing user queue');
+            const userId = getCurrentUserId();
             setUserQueue(null);
-            localStorage.removeItem('userQueue');
+            localStorage.removeItem(`userQueue_${userId}`);
+            localStorage.removeItem(`userQueues_${userId}`);
+            localStorage.removeItem('userQueue'); // Clean up legacy storage
           }
         }
         
-        // Now filter out the user's queue from pending queues
-        const filteredPendingQueues = formattedPendingQueues.filter(queue => {
-          if (!validUserQueue) return true;
-          
-          return queue.id !== validUserQueue.id && 
-                 queue.rawId !== validUserQueue.dbId;
-        });
+        // Set all pending queues (will be filtered by the WalkInQueueList component)
+        setPendingQueues(formattedPendingQueues);
         
-        console.log('Filtered pending queues (without user queue):', filteredPendingQueues);
-        setPendingQueues(filteredPendingQueues);
-        
-        // Only store if we have data
-        if (filteredPendingQueues.length > 0) {
-          localStorage.setItem('pendingQueues', JSON.stringify(filteredPendingQueues));
+        // Store in localStorage
+        if (formattedPendingQueues.length > 0) {
+          localStorage.setItem('pendingQueues', JSON.stringify(formattedPendingQueues));
         } else {
           localStorage.removeItem('pendingQueues');
         }

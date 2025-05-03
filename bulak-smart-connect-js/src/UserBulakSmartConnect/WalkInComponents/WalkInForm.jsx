@@ -82,6 +82,10 @@ const WalkInForm = () => {
     e.preventDefault();
     
     try {
+      // Get current user ID
+      const currentUser = JSON.parse(localStorage.getItem('currentUser')) || {};
+      const userId = currentUser.id || currentUser.email || 'guest';
+      
       // Call API to create queue
       const response = await queueService.createQueue({
         firstName: formData.firstName,
@@ -96,8 +100,8 @@ const WalkInForm = () => {
       // Format the queue number to WK format for display
       const queueNumber = formatWKNumber(response.queue.queueNumber);
       
-      // Save both backend ID and formatted WK number
-      const userQueueData = {
+      // Create the new queue with user ID
+      const newQueue = {
         id: queueNumber,
         dbId: response.queue.id,
         queueNumber: queueNumber,
@@ -107,15 +111,34 @@ const WalkInForm = () => {
           year: '2-digit'
         }),
         userData: formData,
-        appointmentType: formData.reasonOfVisit
+        appointmentType: formData.reasonOfVisit,
+        isUserQueue: true,
+        userId: userId // Store user ID with queue
       };
+
+      // Store with user-specific keys
+      localStorage.setItem(`userQueue_${userId}`, JSON.stringify(newQueue));
       
-      localStorage.setItem('userQueue', JSON.stringify(userQueueData));
+      // Also add to user-specific queues array
+      try {
+        const storedQueues = localStorage.getItem(`userQueues_${userId}`);
+        let userQueues = storedQueues ? JSON.parse(storedQueues) : [];
+        if (!Array.isArray(userQueues)) userQueues = [];
+        
+        userQueues.push(newQueue);
+        localStorage.setItem(`userQueues_${userId}`, JSON.stringify(userQueues));
+        
+        // For backward compatibility
+        localStorage.setItem('userQueue', JSON.stringify(newQueue));
+      } catch (e) {
+        console.error('Error updating user queues:', e);
+        localStorage.setItem(`userQueues_${userId}`, JSON.stringify([newQueue]));
+      }
       
       window.location.href = '/WalkInDetails';
     } catch (error) {
       console.error('Error creating queue:', error);
-      // Show error
+      // Handle error display
     }
   };
 
