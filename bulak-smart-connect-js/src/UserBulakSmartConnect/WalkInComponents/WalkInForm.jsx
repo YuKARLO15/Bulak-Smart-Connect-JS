@@ -2,6 +2,18 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './WalkInForm.css';
 import NavBar from '../../NavigationComponents/NavSide';
+import { queueService } from '../../services/queueService'; // Add this import
+
+// Helper function to format backend queue numbers to WK format
+const formatWKNumber = (queueNumber) => {
+  if (typeof queueNumber === 'string' && queueNumber.startsWith('WK')) {
+    return queueNumber;
+  }
+  
+  const numberPart = queueNumber?.includes('-') ? queueNumber.split('-')[1] : queueNumber;
+  const num = parseInt(numberPart, 10) || 0;
+  return `WK${String(num).padStart(3, '0')}`;
+};
 
 const WalkInForm = () => {
   const navigate = useNavigate();
@@ -66,31 +78,45 @@ const WalkInForm = () => {
     setAppointmentType(isOwner ? 'self' : 'other');
   };
 
-  const handleSubmit = e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
-    const lastQueueId = localStorage.getItem('lastQueueId') || '  WK000';
-    const queueNumber = parseInt(lastQueueId.replace('WK', '')) + 1;
-    const newQueueId = `WK${queueNumber.toString().padStart(3, '0')}`;
-
-    const today = new Date();
-    const dateStr = `${(today.getMonth() + 1).toString().padStart(2, '0')}/${today.getDate().toString().padStart(2, '0')}/${today.getFullYear().toString().slice(2)}`;
-
-    const queueEntry = {
-      id: newQueueId,
-      date: dateStr,
-      userData: formData,
-      appointmentType,
-      isAccountOwner,
-    };
-
-    localStorage.setItem('lastQueueId', newQueueId);
-    localStorage.setItem('userQueue', JSON.stringify(queueEntry));
-
-    const pendingQueues = JSON.parse(localStorage.getItem('pendingQueues') || '[]');
-    localStorage.setItem('pendingQueues', JSON.stringify([...pendingQueues, queueEntry]));
-
-    navigate('/WalkInDetails');
+    
+    try {
+      // Call API to create queue
+      const response = await queueService.createQueue({
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        middleInitial: formData.middleInitial || '',
+        address: formData.address || '',
+        phoneNumber: formData.phoneNumber || '',
+        reasonOfVisit: formData.reasonOfVisit,
+        appointmentType: formData.reasonOfVisit
+      });
+      
+      // Format the queue number to WK format for display
+      const queueNumber = formatWKNumber(response.queue.queueNumber);
+      
+      // Save both backend ID and formatted WK number
+      const userQueueData = {
+        id: queueNumber,
+        dbId: response.queue.id,
+        queueNumber: queueNumber,
+        date: new Date().toLocaleDateString('en-US', {
+          month: '2-digit', 
+          day: '2-digit', 
+          year: '2-digit'
+        }),
+        userData: formData,
+        appointmentType: formData.reasonOfVisit
+      };
+      
+      localStorage.setItem('userQueue', JSON.stringify(userQueueData));
+      
+      window.location.href = '/WalkInDetails';
+    } catch (error) {
+      console.error('Error creating queue:', error);
+      // Show error
+    }
   };
 
   // Initial dialog screen
