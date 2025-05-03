@@ -2,9 +2,14 @@ import React from 'react';
 import './WalkInQueue.css';
 
 const WalkInQueueList = ({ pendingQueues, userQueue }) => {
+  // Filter out any potential duplicate between pendingQueues and userQueue
+  const filteredPendingQueues = userQueue 
+    ? pendingQueues.filter(queue => queue.id !== userQueue.id)
+    : pendingQueues;
+  
   return (
     <div className="QueueListWalkIn">
-      {pendingQueues.map((queue, index) => (
+      {filteredPendingQueues.map((queue, index) => (
         <div key={index} className="QueueItemWalkIn PendingWalkIn">
           <div className="QueueStatusWalkIn">
             <span className="StatusLabelWalkIn">PENDING QUEUE</span>
