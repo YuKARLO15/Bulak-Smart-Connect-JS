@@ -1,15 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './MarriageSummaryForm.css';
+import { 
+  Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, 
+  Button, TextField, Typography, Box
+} from '@mui/material';
 
 const MarriageSummaryForm = () => {
   const [formData, setFormData] = useState({});
   const [loading, setLoading] = useState(true);
+  const [applicationId, setApplicationId] = useState('');
+  const [confirmCancelDialog, setConfirmCancelDialog] = useState(false);
+  const [statusMessage, setStatusMessage] = useState('');
   const navigate = useNavigate();
 
-  // Load form data from localStorage when component mounts
+  // Load form data and application ID from localStorage when component mounts
   useEffect(() => {
     try {
+      // Get the current application ID
+      const currentApplicationId = localStorage.getItem('currentApplicationId');
+      if (currentApplicationId) {
+        setApplicationId(currentApplicationId);
+      }
+      
+      // Get the marriage form data
       const savedCertificateData = localStorage.getItem('marriageFormData');
       if (savedCertificateData) {
         setFormData(JSON.parse(savedCertificateData));
@@ -19,8 +33,12 @@ const MarriageSummaryForm = () => {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, []);`MC-924447`
 
+  const handleMessageChange = (e) => {
+    setStatusMessage(e.target.value);
+  };
+ 
   const handleBackToForm = () => {
     navigate('/MarriageCertificateForm');
   };
@@ -32,7 +50,6 @@ const MarriageSummaryForm = () => {
   if (loading) {
     return <div className="MarriageSummaryContainerMSummary">Loading...</div>;
   }
-
   return (
     <div className="MarriageSummaryContainer">
     <div className="MarriageSummaryContainerMSummary">
@@ -276,10 +293,50 @@ const MarriageSummaryForm = () => {
         </button>
         <button onClick={handleSubmit} className="BackButtonMSummary" >
          Done
-        </button>
+          </button>
+          <Button
+    variant="contained"
+    color="error"
+    onClick={() => setConfirmCancelDialog(true)}
+    className="CancelApplicationButtonAdminAppForm"
+  >
+    Cancel Application
+          </Button>
+          </div>
+          
+          <Dialog open={confirmCancelDialog} onClose={() => setConfirmCancelDialog(false)}>
+          <DialogTitle>Cancel Application</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              Are you sure you want to cancel this application? 
+              This action cannot be undone.
+            </DialogContentText>
+            <TextField
+              margin="normal"
+              label="Reason for Cancellation"
+              fullWidth
+              multiline
+              rows={4}
+              value={statusMessage}
+              onChange={handleMessageChange}
+              placeholder="Please provide a reason for cancellation..."
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setConfirmCancelDialog(false)} color="primary">
+              No, Keep Application
+            </Button>
+            <Button 
+              onClick={handleCancelApplication} 
+              color="error" 
+              variant="contained"
+            >
+              Yes, Cancel Application
+            </Button>
+          </DialogActions>
+        </Dialog>
       </div>
-      </div>
-      </div>
+    </div>
   );
 };
 

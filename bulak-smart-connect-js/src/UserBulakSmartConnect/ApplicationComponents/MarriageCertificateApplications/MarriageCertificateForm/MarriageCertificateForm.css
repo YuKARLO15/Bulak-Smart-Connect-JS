@@ -18,7 +18,6 @@
   width: 80vw;
 }
 
-/* Generic section styling - applies to all sections */
 .section {
   margin-bottom: 2rem;
 }
@@ -60,7 +59,7 @@
   margin: 1rem 0;
 }
 
-/* Husband section specific styling */
+
 .husband-section {
   margin-bottom: 2.5rem;
   border-radius: 5px;
@@ -142,14 +141,14 @@
   left: 0;
 }
 
-/* Wife section specific styling */
+
 .wife-section {
   margin-bottom: 2.5rem;
   border-radius: 5px;
 }
 
 .wife-heading {
-  /* Inherits from .section h3 */
+  
 }
 
 .wife-label {
@@ -224,7 +223,7 @@
   left: 0;
 }
 
-/* Generic input group styling - kept for backward compatibility */
+
 .input-group {
   display: flex;
   flex-wrap: wrap;
@@ -242,7 +241,7 @@
   flex-basis: 100%;
 }
 
-/* Input field styling - kept for backward compatibility */
+
 .input-container input[type='text'],
 .input-container select {
   width: 100%;
@@ -261,7 +260,7 @@
   background-color: #fff;
 }
 
-/* Radio group styling - kept for backward compatibility */
+
 .radio-group {
   display: flex;
   gap: 5rem;
@@ -276,14 +275,13 @@
   accent-color: #1c4d5a;
 }
 
-/* Checkbox container styling */
+
 .checkbox-container {
   display: flex;
   align-items: center;
   gap: 0.5rem;
 }
 
-/* Error message styling - kept for backward compatibility */
 .error-message {
   color: #e74c3c;
   font-size: 12px;
@@ -292,7 +290,7 @@
   left: 0;
 }
 
-/* Info text styling */
+
 .info-text {
   font-size: 14px;
   color: #7f8c8d;
@@ -306,24 +304,23 @@
   margin-top: 1rem;
 }
 
-/* Button styling */
+
 .MarriageCertificateFormButton {
   margin-top: 1rem !important;
   margin-right: 1rem !important;
 }
 
-/* Style for required field indicators */
+
 label::after {
   content: ' *';
   color: #e74c3c;
 }
 
-/* Override for optional fields */
+
 label:not([data-required])::after {
   content: '';
 }
 
-/* Affidavit Form Specific Styling */
 .affidavit-form-container {
   width: 100vw;
   display: flex;
