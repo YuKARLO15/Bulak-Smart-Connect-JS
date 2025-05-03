@@ -1,6 +1,6 @@
 /* AnnouncementForm.css */
 
-form {
+form.announcementform {
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -8,23 +8,26 @@ form {
   padding: 24px;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+
+  /* new */
+  max-width: 1100px;
 }
 
-/* form {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    background-color: #ffffff;
-    padding: 24px;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    width: 100%;    
-    max-width: 800px;  
-  } */
+  /* form {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      background-color: #ffffff;
+      padding: 24px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      width: 100%;    
+      max-width: 800px;  
+    } */
 
-form input[type='text'],
-form input[type='datetime-local'],
-form textarea {
+form.announcementform input[type='text'],
+form.announcementform input[type='datetime-local'],
+form.announcementform textarea {
   padding: 12px 16px;
   border: 1px solid #d1d5db;
   border-radius: 8px;
@@ -34,19 +37,19 @@ form textarea {
   transition: border-color 0.2s ease;
 }
 
-form input:focus,
-form textarea:focus {
+form.announcementform input:focus,
+form.announcementform textarea:focus {
   border-color: #3b82f6;
   outline: none;
   background-color: #fff;
 }
 
-form textarea {
+form.announcementform textarea {
   min-height: 100px;
   resize: vertical;
 }
 
-form button {
+form.announcementform button {
   background-color: #1c4d5a;
   color: white;
   padding: 12px 20px;
@@ -58,6 +61,6 @@ form button {
   transition: background-color 0.2s ease;
 }
 
-form button:hover {
+form.announcementform button:hover {
   background-color: #38626d;
 }

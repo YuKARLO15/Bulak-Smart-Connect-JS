@@ -1,7 +1,7 @@
 .announcement-container {
   width: 100vw;
   height: 100vh;
-  display: flex;
+  display: 100%;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
@@ -33,19 +33,3 @@
     top: 20px;
   }
 }
-/* 
-
-   .announcement-main {
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    gap: 32px;
-  }
-  
-  .announcement-feed {
-    flex: 1;
-  }
-  
-  .announcement-form {
-    flex: 1; /* Allow both to grow equally or adjust ratio 
-  } */

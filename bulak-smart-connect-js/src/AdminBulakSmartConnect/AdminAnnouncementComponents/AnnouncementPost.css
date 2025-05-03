@@ -8,6 +8,10 @@
   transition:
     transform 0.2s ease,
     box-shadow 0.2s ease;
+  width: 100%;
+
+  /* new */
+  overflow: hidden;
 }
 
 .announcement-post:hover {
@@ -19,12 +23,27 @@
   font-size: 1.25rem;
   margin-bottom: 10px;
   color: #1f2937;
+
+  /* new */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+
 }
 
 .announcement-post p {
   color: #4b5563;
   margin-bottom: 10px;
   line-height: 1.5;
+
+  /* new */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* Show only 3 lines */
+  -webkit-box-orient: vertical;
+
 }
 
 .announcement-post small {
