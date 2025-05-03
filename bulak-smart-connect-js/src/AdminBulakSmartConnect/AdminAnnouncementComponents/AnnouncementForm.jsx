@@ -20,7 +20,7 @@ const AnnouncementForm = ({ addAnnouncement }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form name="announcementform" className="announcementform" onSubmit={handleSubmit}>
       <input type="text" name="title" placeholder="Title" onChange={handleChange} required />
       <textarea
         name="description"
