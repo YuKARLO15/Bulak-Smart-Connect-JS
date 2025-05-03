@@ -110,7 +110,37 @@ const WalkInForm = () => {
         appointmentType: formData.reasonOfVisit
       };
       
-      localStorage.setItem('userQueue', JSON.stringify(userQueueData));
+      // In your handleSubmit function, after creating the queue
+      const newQueue = {
+        id: queueNumber,
+        dbId: response.queue.id,
+        queueNumber: queueNumber,
+        date: new Date().toLocaleDateString('en-US', {
+          month: '2-digit', 
+          day: '2-digit', 
+          year: '2-digit'
+        }),
+        userData: formData,
+        appointmentType: formData.reasonOfVisit,
+        isUserQueue: true // Add this flag
+      };
+
+      // Store this queue in localStorage
+      localStorage.setItem('userQueue', JSON.stringify(newQueue));
+
+      // Also add to any existing queues
+      try {
+        const storedQueues = localStorage.getItem('userQueues');
+        let userQueues = storedQueues ? JSON.parse(storedQueues) : [];
+        if (!Array.isArray(userQueues)) userQueues = [];
+        
+        userQueues.push(newQueue);
+        localStorage.setItem('userQueues', JSON.stringify(userQueues));
+      } catch (e) {
+        console.error('Error updating user queues:', e);
+        // If there's an error, make sure at least this one is saved
+        localStorage.setItem('userQueues', JSON.stringify([newQueue]));
+      }
       
       window.location.href = '/WalkInDetails';
     } catch (error) {

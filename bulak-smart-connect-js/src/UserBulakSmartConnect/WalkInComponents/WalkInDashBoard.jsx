@@ -61,6 +61,38 @@ const WalkInQueueContainer = () => {
     validateUserQueue();
   }, []);
 
+  // Add this function inside your component
+  const getAllUserQueues = () => {
+    try {
+      // Try to get user queues from localStorage - could be a single queue or an array
+      const storedUserQueue = localStorage.getItem('userQueue');
+      const storedUserQueues = localStorage.getItem('userQueues');
+      
+      let userQueues = [];
+      
+      // Parse the stored queue(s)
+      if (storedUserQueues) {
+        const parsedQueues = JSON.parse(storedUserQueues);
+        if (Array.isArray(parsedQueues)) {
+          userQueues = parsedQueues;
+        } else if (parsedQueues) {
+          userQueues = [parsedQueues];
+        }
+      } else if (storedUserQueue) {
+        const parsedQueue = JSON.parse(storedUserQueue);
+        if (parsedQueue) {
+          userQueues = [parsedQueue];
+        }
+      }
+      
+      // Return all found queues
+      return userQueues;
+    } catch (err) {
+      console.error('Error getting user queues:', err);
+      return [];
+    }
+  };
+
   // Update your fetchQueueData function to clear localStorage when API returns empty
 
   const fetchQueueData = useCallback(async () => {
@@ -168,47 +200,49 @@ const WalkInQueueContainer = () => {
         
         console.log('All pending queues before filtering:', formattedPendingQueues);
         
-        // Check if we have a valid userQueue
-        let validUserQueue = null;
+        // Get all user queues from localStorage
+        const userQueuesData = getAllUserQueues();
+        let validUserQueues = [];
         
-        if (userQueueData) {
-          // Check if this user queue actually exists in the pending queues
-          const matchingQueue = formattedPendingQueues.find(queue => 
-            queue.id === userQueueData.id || 
-            queue.rawId === userQueueData.dbId
-          );
+        // Validate which user queues still exist in the system
+        if (userQueuesData.length > 0) {
+          validUserQueues = userQueuesData.filter(userQ => {
+            return formattedPendingQueues.some(pendingQ => 
+              pendingQ.id === userQ.id || 
+              pendingQ.rawId === userQ.dbId
+            );
+          });
           
-          if (matchingQueue) {
-            console.log('Found matching user queue in pending queues:', matchingQueue);
-            validUserQueue = {
-              ...userQueueData,
-              date: matchingQueue.date // Use the latest date from the API
-            };
-            setUserQueue(validUserQueue);
+          // Update dates from API data
+          validUserQueues = validUserQueues.map(userQ => {
+            const matchingQueue = formattedPendingQueues.find(pendingQ => 
+              pendingQ.id === userQ.id || 
+              pendingQ.rawId === userQ.dbId
+            );
             
-            // Save updated user queue to localStorage
-            localStorage.setItem('userQueue', JSON.stringify(validUserQueue));
+            return {
+              ...userQ,
+              date: matchingQueue ? matchingQueue.date : userQ.date
+            };
+          });
+          
+          console.log('Valid user queues:', validUserQueues);
+          
+          if (validUserQueues.length > 0) {
+            setUserQueue(validUserQueues); // Set all valid user queues
+            localStorage.setItem('userQueue', JSON.stringify(validUserQueues[0])); // For backward compatibility
           } else {
-            console.log('User queue not found in pending queues - clearing user queue');
             setUserQueue(null);
             localStorage.removeItem('userQueue');
           }
         }
         
-        // Now filter out the user's queue from pending queues
-        const filteredPendingQueues = formattedPendingQueues.filter(queue => {
-          if (!validUserQueue) return true;
-          
-          return queue.id !== validUserQueue.id && 
-                 queue.rawId !== validUserQueue.dbId;
-        });
+        // Set all pending queues (will be filtered by the WalkInQueueList component)
+        setPendingQueues(formattedPendingQueues);
         
-        console.log('Filtered pending queues (without user queue):', filteredPendingQueues);
-        setPendingQueues(filteredPendingQueues);
-        
-        // Only store if we have data
-        if (filteredPendingQueues.length > 0) {
-          localStorage.setItem('pendingQueues', JSON.stringify(filteredPendingQueues));
+        // Store in localStorage
+        if (formattedPendingQueues.length > 0) {
+          localStorage.setItem('pendingQueues', JSON.stringify(formattedPendingQueues));
         } else {
           localStorage.removeItem('pendingQueues');
         }
