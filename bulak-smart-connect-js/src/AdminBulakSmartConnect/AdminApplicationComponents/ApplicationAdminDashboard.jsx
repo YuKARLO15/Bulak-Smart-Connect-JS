@@ -20,6 +20,7 @@ import FilterListIcon from '@mui/icons-material/FilterList';
 import './ApplicationAdminDashboard.css';
 import { getApplications } from '../../UserBulakSmartConnect/ApplicationComponents/ApplicationData';
 import { useNavigate } from 'react-router-dom';
+import NavBar from '../../NavigationComponents/NavSide';
 
 const AdminApplicationDashboard = () => {
   const [filter, setFilter] = useState('All');
@@ -28,6 +29,7 @@ const AdminApplicationDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   useEffect(() => {
     try {
@@ -137,7 +139,10 @@ const AdminApplicationDashboard = () => {
   }
 
   return (
-    <Box className="ApplicationDashContainer">
+    
+          <Box className={`ApplicationDashContainer ${isSidebarOpen ? 'sidebar-open' : ''}`}>
+            <NavBar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
+   
       <Box className="ApplicationDashHeader">
         <Typography variant="h5" className="ApplicationDashTitle">
           Applications

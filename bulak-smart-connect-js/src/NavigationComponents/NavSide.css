@@ -17,17 +17,29 @@
 .Profile {
   display: flex;
   flex-direction: column;
-  height: 10vh;
+  width: 20vw;
+ 
+  margin-top: 5vh;
   padding: 20px;
   margin-bottom: 5vh;
 }
-.Username {
+.NavUserName {
   color: white;
-  font-size: 20px;
-  font-weight: bold;
-  margin-top: 5vh;
+  font-weight: 600;
+  display: flex;
+  flex-direction: row;
+  width: 20vw;
 }
+.NavUserEmail {
+  color: white;
+  font-weight: 400;
+}
+.NavUserRole {
+  color: #184a5b;
+  font-weight: 400;
+  font-size: smaller;
 
+}
 .sidebar a {
   padding: 10px 15px;
   text-decoration: none;
