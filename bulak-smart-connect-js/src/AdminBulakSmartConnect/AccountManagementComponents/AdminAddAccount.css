@@ -165,3 +165,21 @@ input[type='file'] {
 .submit-btn:hover:not(:disabled) {
   background-color: #0b3e44;
 }
+
+.cancel-btn{
+  margin-top: 30px;
+  padding: 12px 15px;
+  background-color: #971a1a;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 12px;
+  cursor: pointer;
+  width: 100px;
+  margin-right: 250px;
+}
+
+.cancel-btn:hover {
+  background-color: #7e3131; /* Or your desired hover shade */
+}
