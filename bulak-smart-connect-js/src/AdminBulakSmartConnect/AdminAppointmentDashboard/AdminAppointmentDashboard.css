@@ -1,5 +1,6 @@
 .admin-appointment-dashboard {
   min-height: 100vh;
+  width: 100vw;
   background: linear-gradient(120deg, #fff 60%, #fcf8f6 100%);
   font-family: 'Segoe UI', Arial, sans-serif;
 }

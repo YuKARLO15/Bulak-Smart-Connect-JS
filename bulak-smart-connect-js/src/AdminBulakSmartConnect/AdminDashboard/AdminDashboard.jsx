@@ -12,6 +12,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from 'recharts';
+import NavBar from '../../NavigationComponents/NavSide';
 
 const AdminDashboard = () => {
   // Empty data arrays
@@ -19,67 +20,15 @@ const AdminDashboard = () => {
   const certificateData = [];
   const documentApplications = [];
   const preAppointments = [];
-
-  // State for nav visibility
   const [navOpen, setNavOpen] = useState(false);
-
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   return (
-    <div className="admin-dashboard">
-      {/* Side Nav */}
-      <div className={`admin-dashboard-side-nav${navOpen ? ' open' : ''}`}>
-        <button className="admin-dashboard-close-nav" onClick={() => setNavOpen(false)}>
-          &times;
-        </button>
-        <nav>
-          <ul>
-            <li>
-              <Link to="/admin" onClick={() => setNavOpen(false)}>
-                Dashboard
-              </Link>
-            </li>
-            <li>
-              <Link to="/AdminAppointmentDashboard" onClick={() => setNavOpen(false)}>
-                Appointments
-              </Link>
-            </li>
-            <li>
-              <Link to="/AdminWalkInQueue" onClick={() => setNavOpen(false)}>
-                Walk-In Number
-              </Link>
-            </li>
-            <li>
-              <Link to="/ApplicationAdmin" onClick={() => setNavOpen(false)}>
-                Document Application
-              </Link>
-            </li>
-            <li>
-              <Link to="/admin/account" onClick={() => setNavOpen(false)}>
-                Account
-              </Link>
-            </li>
-            <li>
-              <Link to="/admin/settings" onClick={() => setNavOpen(false)}>
-                Settings
-              </Link>
-            </li>
-            <li>
-              <Link to="/logout" onClick={() => setNavOpen(false)}>
-                Log Out
-              </Link>
-            </li>
-          </ul>
-        </nav>
-      </div>
-
+      <div className={`admin-dashboard ${isSidebarOpen ? 'sidebar-open' : ''}`}>
+      <NavBar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
+      
       {/* Top Navigation Bar */}
       <div className="admin-dashboard-top-nav">
-        <button
-          className="admin-dashboard-menu-icon"
-          onClick={() => setNavOpen(true)}
-          aria-label="Open navigation"
-        >
-          &#9776;
-        </button>
+     
         <h1 className="admin-dashboard-title">Dashboard</h1>
         <div className="admin-dashboard-search-bar">
           <input type="text" placeholder="Search" />

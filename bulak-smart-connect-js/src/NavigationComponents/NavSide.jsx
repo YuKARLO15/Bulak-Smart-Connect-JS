@@ -24,11 +24,6 @@ const NavBar = ({ isSidebarOpen, setIsSidebarOpen }) => {
         style={{ backgroundColor: isSidebarOpen ? '#8AACB5' : '#184a5b' }}
         onClick={toggleSidebar}
       >
-        {/* Still determining para san 'to */}
-        <span className="line"></span>
-        <span className="line"></span>
-        <span className="line"></span>
-        {/* Still determining para san 'to */}
         {isSidebarOpen ? <CloseIcon /> : <MenuIcon />}
       </button>
 
@@ -66,7 +61,8 @@ const NavBar = ({ isSidebarOpen, setIsSidebarOpen }) => {
             {hasRole('super_admin') && <a href="/system-settings">System Settings</a>}
 
             {/* Common links for all users cont. */}
-            <a href="/account">Account</a>
+
+            <a href={getRoute('/account', '/AdminAccountManagement')}>Account</a>
             <a href="/settings">Settings</a>
           </div>
           <div className="Logout">
