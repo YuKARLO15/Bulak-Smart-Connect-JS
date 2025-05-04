@@ -1,234 +1,448 @@
-.admin-walk-in {
-    display: flex;
-    min-height: 100vh;
-  }
-  
- 
-  
-  .user-icon {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    margin-right: 10px;
-  }
-  
-  .user-info {
-    overflow: hidden;
-  }
-  
-  .user-name {
-    font-weight: 600;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  
-  .user-email {
-    font-size: 0.8rem;
-    opacity: 0.8;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  
-  .sidebar-nav {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .nav-item {
-    padding: 12px 20px;
-    color: #fff;
-    text-decoration: none;
-    transition: background-color 0.3s;
-    margin: 2px 0;
-  }
-  
-  .nav-item:hover, .nav-item.active {
-    background-color: rgba(255, 255, 255, 0.2);
-  }
-  
-  .sidebar-footer {
-    padding: 20px;
-  }
-  
-  .logout-btn {
+/* Layout and background */
+.admin-walkin-queue {
+  min-height: 100vh;
+  background: #fff;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  width: 100vw;
+}
+
+  /* Sidebar (keep your existing sidebar styles, or adjust as needed) */
+.admin-walkin-queue-sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 260px;
+  height: 100%;
+  background: #1C4D5A;
+  color: #fff;
+  z-index: 1000;
+  transition: transform 0.3s;
+  transform: translateX(-100%);
+}
+.admin-walkin-queue-sidebar.open {
+  transform: translateX(0);
+}
+.admin-walkin-queue-sidebar.closed {
+  transform: translateX(-100%);
+}
+.admin-walkin-queue-sidebar-toggle {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 2rem;
+  cursor: pointer;
+}
+.admin-walkin-queue-sidebar-user {
+  margin-top: 56px;
+  padding: 16px;
+}
+.admin-walkin-queue-user-info {
+  text-align: left;
+}
+.admin-walkin-queue-user-name {
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+.admin-walkin-queue-user-email {
+  font-size: 0.95rem;
+  color: #b0c4ce;
+}
+.admin-walkin-queue-sidebar-nav {
+  margin-top: 32px;
+  display: flex;
+  flex-direction: column;
+}
+.admin-walkin-queue-nav-item {
+  color: #fff;
+  text-decoration: none;
+  padding: 12px 24px;
+  font-size: 1.1rem;
+  border-radius: 8px;
+  margin-bottom: 4px;
+  transition: background 0.2s;
+}
+.admin-walkin-queue-nav-item.active,
+.admin-walkin-queue-nav-item:hover {
+  background: #163944;
+}
+.admin-walkin-queue-sidebar-footer {
+  position: absolute;
+  bottom: 24px;
+  width: 100%;
+  text-align: center;
+}
+.admin-walkin-queue-logout-btn {
+  background: #e74c3c;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 24px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+/* Main content area */
+.admin-walkin-queue-main-content {
+  margin-left: 0;
+  padding: 32px 0 0 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Header */
+.admin-walkin-queue-header {
+  width: 100%;
+  text-align: center;
+  margin-bottom: 32px;
+}
+.admin-walkin-queue-header h1 {
+  color: #1C4D5A;
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.admin-walkin-queue-header-bar {
+  width: 100%;
+  background: #1C4D5A;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 56px;
+  position: relative;
+}
+.admin-walkin-queue-menu-btn {
+  position: absolute;
+  left: 24px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  height: 40px;
+}
+.admin-walkin-queue-menu-icon {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: 32px;
+  height: 24px;
+  justify-content: center;
+}
+.admin-walkin-queue-menu-bar {
+  width: 100%;
+  height: 4px;
+  background: #fff;
+  border-radius: 2px;
+  display: block;
+}
+.admin-walkin-queue-header-title {
+  color: #fff;
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin: 0;
+}
+
+/* Summary cards row */
+.admin-walkin-queue-summary {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  gap: 40px;
+  width: 100%;
+  max-width: 800px;
+  margin-bottom: 32px;
+}
+.admin-walkin-queue-current-queue-card,
+.admin-walkin-queue-total-queue-card {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(44,62,80,0.10);
+  padding: 32px 36px 24px 36px;
+  min-width: 320px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.admin-walkin-queue-total-queue-card {
+  background: #e9ecef;
+}
+.admin-walkin-queue-current-queue-card h2,
+.admin-walkin-queue-total-queue-card h2 {
+  color: #1C4D5A;
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+  text-align: center;
+}
+.admin-walkin-queue-current-queue-number,
+.admin-walkin-queue-total-queue-number {
+  font-size: 2.8rem;
+  font-weight: 700;
+  color: #1C4D5A;
+  margin-bottom: 10px;
+  text-align: center;
+}
+.admin-walkin-queue-next-queue {
+  font-size: 1.1rem;
+  color: #444;
+  font-weight: 600;
+  text-align: center;
+}
+.admin-walkin-queue-next-queue-number {
+  color: #888;
+  font-weight: 700;
+  margin-left: 8px;
+}
+
+/* List section */
+.admin-walkin-queue-list-container {
+  background: #fcf8f6;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(44,62,80,0.10);
+  padding: 32px 24px 28px 24px;
+  margin-top: 24px;
+  width: 100%;
+  max-width: 800px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.admin-walkin-queue-list-container h2 {
+  color: #1C4D5A;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 18px;
+  width: 100%;
+  text-align: left;
+}
+.admin-walkin-queue-list {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+}
+.admin-walkin-queue-item {
+  background: #e9ecef;
+  border-radius: 14px;
+  padding: 18px 24px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 1.1rem;
+  font-weight: 500;
+  box-shadow: none;
+}
+.admin-walkin-queue-item:first-child {
+  background: #1C4D5A;
+  color: #fff;
+}
+.admin-walkin-queue-status-section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.admin-walkin-queue-status {
+  font-weight: 700;
+  font-size: 1rem;
+  color: inherit;
+}
+.admin-walkin-queue-date {
+  font-size: 0.95rem;
+  color: inherit;
+}
+.admin-walkin-queue-applicant {
+  flex: 1;
+  text-align: center;
+  color: inherit;
+  font-weight: 600;
+}
+.admin-walkin-queue-id {
+  min-width: 80px;
+  text-align: right;
+  font-weight: 700;
+  color: inherit;
+}
+.admin-walkin-queue-action-btn {
+  margin-top: 24px;
+  background: #1C4D5A;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 24px;
+  font-size: 1rem;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+/* Main content center */
+.admin-walkin-queue-main {
+  max-width: 900px;
+  margin: 40px auto 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Summary Row */
+.admin-walkin-queue-summary-row {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  gap: 40px;
+  width: 100%;
+  margin-bottom: 32px;
+}
+.admin-walkin-queue-summary-card {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(44,62,80,0.10);
+  padding: 32px 36px 24px 36px;
+  min-width: 320px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.admin-walkin-queue-summary-card.gray {
+  background: #e9ecef;
+}
+.admin-walkin-queue-summary-title {
+  color: #1C4D5A;
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+  text-align: center;
+}
+.admin-walkin-queue-summary-number {
+  font-size: 2.8rem;
+  font-weight: 700;
+  color: #1C4D5A;
+  margin-bottom: 10px;
+  text-align: center;
+}
+.admin-walkin-queue-summary-next {
+  font-size: 1.1rem;
+  color: #444;
+  font-weight: 600;
+  text-align: center;
+}
+.admin-walkin-queue-summary-next-number {
+  color: #888;
+  font-weight: 700;
+  margin-left: 8px;
+}
+
+/* List Section */
+.admin-walkin-queue-list-section {
+  background: #fcf8f6;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(44,62,80,0.10);
+  padding: 32px 24px 28px 24px;
+  margin-top: 24px;
+  width: 100%;
+  max-width: 900px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.admin-walkin-queue-list-title {
+  color: #1C4D5A;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 18px;
+  width: 100%;
+  text-align: left;
+}
+.admin-walkin-queue-list {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+}
+.admin-walkin-queue-list-item {
+  background: #e9ecef;
+  border-radius: 14px;
+  padding: 18px 24px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 1.1rem;
+  font-weight: 500;
+  box-shadow: none;
+}
+.admin-walkin-queue-list-item:first-child {
+  background: #1C4D5A;
+  color: #fff;
+}
+.admin-walkin-queue-list-status {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.admin-walkin-queue-list-status-label {
+  font-weight: 700;
+  font-size: 1rem;
+  color: inherit;
+}
+.admin-walkin-queue-list-date {
+  font-size: 0.95rem;
+  color: inherit;
+}
+.admin-walkin-queue-list-applicant {
+  flex: 1;
+  text-align: center;
+  color: inherit;
+  font-weight: 600;
+}
+.admin-walkin-queue-list-id {
+  min-width: 80px;
+  text-align: right;
+  font-weight: 700;
+  color: inherit;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .admin-walkin-queue-main-content,
+  .admin-walkin-queue-list-container {
+    max-width: 100%;
     width: 100%;
-    padding: 8px;
-    background: none;
-    border: 1px solid #fff;
-    color: #fff;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s;
+    padding: 16px 4px;
   }
-  
-  .logout-btn:hover {
-    background-color: rgba(255, 255, 255, 0.2);
-  }
-  
-  /* Main content styles */
-  .main-content {
-    flex: 1;
-    padding: 30px;
-    background-color: #f5f7fa;
-    overflow-y: auto;
-  }
-  
-  .walk-in-header {
-    margin-bottom: 30px;
-  }
-  
-  .walk-in-header h1 {
-    color: #1C4D5A;
-    margin: 0;
-    font-size: 1.8rem;
-  }
-  
-  /* Queue Summary Section */
-  .queue-summary {
-    display: flex;
-    gap: 20px;
-    margin-bottom: 30px;
-  }
-  
-  .current-queue-card, .total-queue-card {
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-  }
-  
-  .current-queue-card {
-    background-color: #fff;
-    flex: 3;
-    position: relative;
-    display: flex;
+  .admin-walkin-queue-summary {
     flex-direction: column;
-  }
-  
-  .total-queue-card {
-    background-color: #e9ecef;
-    flex: 2;
-    display: flex;
-    flex-direction: column;
+    gap: 24px;
     align-items: center;
-    justify-content: center;
-    text-align: center;
   }
-  
-  .current-queue-card h2, .total-queue-card h2 {
-    color: #1C4D5A;
-    margin: 0 0 15px 0;
-    font-size: 1.2rem;
+  .admin-walkin-queue-current-queue-card,
+  .admin-walkin-queue-total-queue-card {
+    min-width: 0;
+    width: 100%;
   }
-  
-  .current-queue-number {
-    color: #1C4D5A;
-    font-size: 3rem;
-    font-weight: bold;
-    margin: auto 0;
-    text-align: center;
-    padding: 20px 0;
+  .admin-walkin-queue-main,
+  .admin-walkin-queue-list-section {
+    max-width: 100%;
+    width: 100%;
+    padding: 16px 4px;
   }
-  
-  .next-queue {
-    margin-top: auto;
-    padding-top: 10px;
-    text-align: center;
-    font-size: 0.9rem;
-    color: #6c757d;
-    border-top: 1px solid #dee2e6;
-  }
-  
-  .next-queue-number {
-    color: #1C4D5A;
-    font-size: 1.2rem;
-    font-weight: bold;
-    margin-top: 5px;
-  }
-  
-  .total-queue-number {
-    color: #1C4D5A;
-    font-size: 4rem;
-    font-weight: bold;
-    margin: auto;
-  }
-  
-  /* Queue List Section */
-  .queue-list-container {
-    background-color: #fff;
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-  }
-  
-  .queue-list-container h2 {
-    color: #1C4D5A;
-    margin: 0 0 20px 0;
-    font-size: 1.2rem;
-  }
-  
-  .queue-list {
-    display: flex;
+  .admin-walkin-queue-summary-row {
     flex-direction: column;
-    gap: 10px;
-  }
-  
-  .queue-item {
-    display: flex;
+    gap: 24px;
     align-items: center;
-    justify-content: space-between;
-    background-color: #f1f3f5;
-    border-radius: 8px;
-    padding: 15px 20px;
   }
-  
-  .queue-status-section {
-    display: flex;
-    flex-direction: column;
-    min-width: 150px;
+  .admin-walkin-queue-summary-card {
+    min-width: 0;
+    width: 100%;
   }
-  
-  .queue-status {
-    font-weight: bold;
-    color: #1C4D5A;
-    font-size: 0.9rem;
-  }
-  
-  .queue-date {
-    font-size: 0.8rem;
-    color: #6c757d;
-    margin-top: 5px;
-  }
-  
-  .queue-applicant {
-    flex: 1;
-    text-align: center;
-    color: #1C4D5A;
-  }
-  
-  .queue-id {
-    font-weight: bold;
-    color: #1C4D5A;
-    min-width: 70px;
-    text-align: right;
-  }
-  
-  /* Responsive Styles */
-  @media (max-width: 768px) {
-    .queue-summary {
-      flex-direction: column;
-    }
-    
-    .sidebar.open {
-      position: fixed;
-      z-index: 100;
-      height: 100vh;
-    }
-    
-    .sidebar.closed {
-      width: 0;
-      padding: 0;
-    }
-  }
+}
