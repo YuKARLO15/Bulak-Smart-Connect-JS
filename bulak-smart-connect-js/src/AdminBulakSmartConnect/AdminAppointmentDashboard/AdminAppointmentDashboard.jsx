@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import './AdminAppointmentDashboard.css';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
@@ -9,6 +10,9 @@ const AdminAppointmentDashboard = () => {
 
   // Calendar state
   const [currentMonth, setCurrentMonth] = useState(new Date());
+
+  // Sidebar state
+  const [navOpen, setNavOpen] = useState(false);
 
   // Calendar navigation functions
   const nextMonth = () => {
@@ -32,13 +36,15 @@ const AdminAppointmentDashboard = () => {
 
     // Empty cells for days before first of month
     for (let i = 0; i < firstDay; i++) {
-      days.push(<div key={`empty-${i}`} className="calendar-day empty"></div>);
+      days.push(
+        <div key={`empty-${i}`} className="admin-appointment-dashboard-calendar-day empty"></div>
+      );
     }
 
     // Days of the month
     for (let i = 1; i <= daysInMonth; i++) {
       days.push(
-        <div key={`day-${i}`} className="calendar-day">
+        <div key={`day-${i}`} className="admin-appointment-dashboard-calendar-day">
           {i}
         </div>
       );
@@ -67,39 +73,85 @@ const AdminAppointmentDashboard = () => {
 
   return (
     <div className="admin-appointment-dashboard">
-      <div className="appointment-header">
-        <h1>APPOINTMENT</h1>
-        <button className="qr-code-button">
-          <FaQrcode /> Scan QR Code
+      {/* Side Nav */}
+      <div className={`admin-appointment-dashboard-side-nav${navOpen ? ' open' : ''}`}>
+        <button
+          className="admin-appointment-dashboard-close-nav"
+          onClick={() => setNavOpen(false)}
+        >
+          &times;
         </button>
+        <nav>
+          <ul>
+            <li>
+              <Link to="/admin" onClick={() => setNavOpen(false)}>Dashboard</Link>
+            </li>
+            <li>
+              <Link to="/AdminAppointmentDashboard" onClick={() => setNavOpen(false)}>Appointments</Link>
+            </li>
+            <li>
+              <Link to="/AdminWalkInQueue" onClick={() => setNavOpen(false)}>Walk-In Number</Link>
+            </li>
+            <li>
+              <Link to="/ApplicationAdmin" onClick={() => setNavOpen(false)}>Document Application</Link>
+            </li>
+            <li>
+              <Link to="/admin/account" onClick={() => setNavOpen(false)}>Account</Link>
+            </li>
+            <li>
+              <Link to="/admin/settings" onClick={() => setNavOpen(false)}>Settings</Link>
+            </li>
+            <li>
+              <Link to="/logout" onClick={() => setNavOpen(false)}>Log Out</Link>
+            </li>
+          </ul>
+        </nav>
       </div>
 
-      <div className="appointment-content">
-        <div className="top-row">
+      {/* Top Navigation Bar */}
+      <div className="admin-appointment-dashboard-header">
+        <button
+          className="admin-appointment-dashboard-menu-icon"
+          onClick={() => setNavOpen(true)}
+          aria-label="Open navigation"
+        >
+          <span>&#9776;</span>
+        </button>
+        <h1 className="admin-appointment-dashboard-title">APPOINTMENT</h1>
+      </div>
+
+      <div className="admin-appointment-dashboard-content">
+        <div className="admin-appointment-dashboard-top-row">
           {/* Current Queue Card */}
-          <div className="current-queue-card">
-            <h2>CURRENT QUEUE</h2>
-            <div className="current-queue-number"></div>
-            <div className="next-queue">
+          <div className="admin-appointment-dashboard-current-queue-card">
+            <h2 className="admin-appointment-dashboard-card-title">CURRENT QUEUE</h2>
+            <div className="admin-appointment-dashboard-current-queue-number"></div>
+            <div className="admin-appointment-dashboard-next-queue">
               Next on Queue
-              <div className="next-queue-number"></div>
+              <div className="admin-appointment-dashboard-next-queue-number"></div>
             </div>
           </div>
 
           {/* Available Slots Card */}
-          <div className="available-slots-card">
-            <h2>AVAILABLE SLOTS</h2>
-            <div className="calendar-container">
-              <div className="calendar-header">
-                <button onClick={prevMonth} className="calendar-nav-btn">
+          <div className="admin-appointment-dashboard-available-slots-card">
+            <h2 className="admin-appointment-dashboard-card-title">AVAILABLE SLOTS</h2>
+            <div className="admin-appointment-dashboard-calendar-container">
+              <div className="admin-appointment-dashboard-calendar-header">
+                <button
+                  onClick={prevMonth}
+                  className="admin-appointment-dashboard-calendar-nav-btn"
+                >
                   &lt;
                 </button>
-                <div className="calendar-title">{`${monthName} ${year}`}</div>
-                <button onClick={nextMonth} className="calendar-nav-btn">
+                <div className="admin-appointment-dashboard-calendar-title">{`${monthName} ${year}`}</div>
+                <button
+                  onClick={nextMonth}
+                  className="admin-appointment-dashboard-calendar-nav-btn"
+                >
                   &gt;
                 </button>
               </div>
-              <div className="calendar-weekdays">
+              <div className="admin-appointment-dashboard-calendar-weekdays">
                 <div>Su</div>
                 <div>Mo</div>
                 <div>Tu</div>
@@ -108,18 +160,18 @@ const AdminAppointmentDashboard = () => {
                 <div>Fr</div>
                 <div>Sa</div>
               </div>
-              <div className="calendar-days">{generateCalendar()}</div>
+              <div className="admin-appointment-dashboard-calendar-days">{generateCalendar()}</div>
             </div>
           </div>
 
           {/* Chart Card */}
-          <div className="appointment-chart-card">
-            <div className="chart-legend">
-              <div className="legend-item">
-                <span className="walk-in-dot"></span> Walk In
+          <div className="admin-appointment-dashboard-chart-card">
+            <div className="admin-appointment-dashboard-chart-legend">
+              <div className="admin-appointment-dashboard-legend-item">
+                <span className="admin-appointment-dashboard-walk-in-dot"></span> Walk In
               </div>
-              <div className="legend-item">
-                <span className="appointment-dot"></span> Appointment
+              <div className="admin-appointment-dashboard-legend-item">
+                <span className="admin-appointment-dashboard-appointment-dot"></span> Appointment
               </div>
             </div>
             <ResponsiveContainer width="100%" height={180}>
@@ -136,30 +188,40 @@ const AdminAppointmentDashboard = () => {
         </div>
 
         {/* Booked Appointments Section */}
-        <div className="booked-appointments-section">
-          <div className="section-header">
-            <h2>Booked Appointments</h2>
-            <div className="filter-control">
-              <button className="filter-button">
-                <span className="filter-icon">⌄</span>
+        <div className="admin-appointment-dashboard-booked-appointments-section">
+          <div className="admin-appointment-dashboard-section-header">
+            <h2 className="admin-appointment-dashboard-section-title">Booked Appointments</h2>
+            <div className="admin-appointment-dashboard-filter-control">
+              <button className="admin-appointment-dashboard-filter-button">
+                <span className="admin-appointment-dashboard-filter-icon">⌄</span>
               </button>
             </div>
           </div>
 
-          <div className="appointments-list">
+          <div className="admin-appointment-dashboard-appointments-list">
             {appointmentsData.length === 0 ? (
-              <div className="no-appointments">No appointments available</div>
+              <div className="admin-appointment-dashboard-no-appointments">
+                No appointments available
+              </div>
             ) : (
               appointmentsData.map((appointment, index) => (
-                <div key={index} className="appointment-card">
-                  <div className="appointment-type-container">
-                    <div className="appointment-type">{appointment.type}</div>
-                    <div className="appointment-date">{appointment.date}</div>
+                <div key={index} className="admin-appointment-dashboard-appointment-card">
+                  <div className="admin-appointment-dashboard-appointment-type-container">
+                    <div className="admin-appointment-dashboard-appointment-type">
+                      {appointment.type}
+                    </div>
+                    <div className="admin-appointment-dashboard-appointment-date">
+                      {appointment.date}
+                    </div>
                   </div>
-                  <div className="appointment-client">{appointment.clientName}</div>
-                  <div className="appointment-actions">
-                    <div className="appointment-id">{appointment.id}</div>
-                    <button className="see-more-btn">See More</button>
+                  <div className="admin-appointment-dashboard-appointment-client">
+                    {appointment.clientName}
+                  </div>
+                  <div className="admin-appointment-dashboard-appointment-actions">
+                    <div className="admin-appointment-dashboard-appointment-id">
+                      {appointment.id}
+                    </div>
+                    <button className="admin-appointment-dashboard-see-more-btn">See More</button>
                   </div>
                 </div>
               ))
