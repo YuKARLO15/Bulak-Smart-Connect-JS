@@ -64,19 +64,27 @@ export const updateUser = (index, updatedData) => {
 };
 
 // Delete a user by index
-export const deleteUser = (index) => {
-  try {
-    const users = getUsers();
-    if (index >= 0 && index < users.length) {
-      users.splice(index, 1);
-      localStorage.setItem('users', JSON.stringify(users));
-      return true;
-    }
-    return false;
-  } catch (error) {
-    console.error("Error deleting user:", error);
-    return false;
-  }
+// export const deleteUser = (index) => {
+//   try {
+//     const users = getUsers();
+//     if (index >= 0 && index < users.length) {
+//       users.splice(index, 1);
+//       localStorage.setItem('users', JSON.stringify(users));
+//       return true;
+//     }
+//     return false;
+//   } catch (error) {
+//     console.error("Error deleting user:", error);
+//     return false;
+//   }
+// };
+
+// Delete a user by index
+export const removeUser = (index) => {
+  const users = JSON.parse(localStorage.getItem('users')) || [];
+  users.splice(index, 1);
+  localStorage.setItem('users', JSON.stringify(users));
+  return true;
 };
 
 // Update user profile image

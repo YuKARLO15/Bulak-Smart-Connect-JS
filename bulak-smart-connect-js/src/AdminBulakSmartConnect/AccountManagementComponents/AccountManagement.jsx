@@ -39,12 +39,31 @@ const AdminAccountManagement = () => {
     }
   };
 
+  const handleRemoveUser = (index) => {
+    const updatedUsers = [...users];
+    updatedUsers.splice(index, 1);
+    localStorage.setItem('users', JSON.stringify(updatedUsers));
+    setUsers(updatedUsers);
+  };
+
+  // const handleRemoveUser = (index) => {
+  //   const success = deleteUser(index);
+  //   if (success) {
+  //     setUsers(getUsers()); // Refresh state after deletion
+  //   }
+  // };
+  
+
   return (
     <div className="admin-account-management">
       <h1>User Management</h1>
       
       <SearchAddUser />
-      <UserTable users={users} handleUpload={handleUpload} />
+      <UserTable 
+      users={users} 
+      handleUpload={handleUpload}
+      removeUser={handleRemoveUser}
+      />
     </div>
   );
 };
