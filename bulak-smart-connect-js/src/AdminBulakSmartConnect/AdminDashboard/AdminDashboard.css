@@ -1,15 +1,15 @@
 .admin-dashboard {
   min-height: 100vh;
+ width: 100vw;
   background: linear-gradient(180deg, #fff 70%, #f9f6f3 100%);
   display: flex;
   flex-direction: column;
   align-items: center;
-  
 }
 
 /* Center and constrain the dashboard content */
 .admin-dashboard-content-wrapper {
-  max-width: 1200px;
+  max-width: 100vw;
   margin: 0 auto;
   padding: 32px 16px 32px 16px;
   display: flex;
@@ -69,7 +69,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 32px;
+  padding: 15px;
   height: 56px;
   box-sizing: border-box;
 }
@@ -117,7 +117,9 @@
   width: 100%;
   gap: 32px;
 }
-
+.admin-dashboard-container.sidebar-open {
+  margin-left: 240px;
+}
 .admin-dashboard-main {
   flex: 2;
   min-width: 0;
@@ -672,31 +674,4 @@ h2 {
   transition: left 0.3s;
   padding-top: 56px;
   box-shadow: 2px 0 8px rgba(0,0,0,0.08);
-}
-.admin-dashboard-side-nav.open {
-  left: 0;
-}
-.admin-dashboard-close-nav {
-  position: absolute;
-  top: 12px;
-  right: 16px;
-  background: none;
-  border: none;
-  color: #fff;
-  font-size: 2rem;
-  cursor: pointer;
-}
-.admin-dashboard-side-nav ul {
-  list-style: none;
-  padding: 0;
-  margin: 32px 0 0 0;
-}
-.admin-dashboard-side-nav li {
-  padding: 16px 32px;
-  cursor: pointer;
-  font-size: 1.1rem;
-  transition: background 0.2s;
-}
-.admin-dashboard-side-nav li:hover {
-  background: rgba(255,255,255,0.08);
 }

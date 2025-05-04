@@ -39,21 +39,21 @@ useEffect(() => {
     if (currentId) {
       setApplicationId(currentId);
       
-      // Use getApplications() to get application data
+    
       const applications = getApplications();
       const application = applications.find(app => app.id === currentId);
 
       if (application) {
-        // Set application status and message
+    
         setApplicationStatus(application.status || 'Pending');
         setStatusMessage(application.statusMessage || '');
         
-        // Set form data
+        
         setFormData(application.formData);
         setIsCopyRequest(!!application.formData.purpose);
         console.log('Found application in applications list:', currentId);
       } else {
-        // Fallback to localStorage if not found in applications
+        
         const storedData = localStorage.getItem('birthCertificateApplication');
         if (storedData) {
           const parsedData = JSON.parse(storedData);
@@ -65,7 +65,7 @@ useEffect(() => {
         }
       }
     } else {
-      // Rest of your existing code for creating a new application...
+   
     }
   } catch (err) {
     console.error('Error loading application data:', err);
@@ -129,8 +129,6 @@ const getStatusColor = (status) => {
       return '#184a5b';
   }
 };
-
-
 
   const cancelDeleteApplication = () => {
     setDeleteDialogOpen(false);
