@@ -1,10 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../AccountManagementComponents/AdminAddAccount.css';
-import { useNavigate } from 'react-router-dom';
-import { addUser } from './NewUserInfo'; // Import the addUser function
+import { useNavigate, useLocation } from 'react-router-dom';
+import { addUser, updateUser } from './NewUserInfo';
 
 const AdminAddUser = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const isModifying = location.state?.isModifying || false;
+  const userToEdit = location.state?.userData || null;
+  const userIndex = location.state?.userIndex;
 
   const [formData, setFormData] = useState({
     username: '',
@@ -20,6 +24,33 @@ const AdminAddUser = () => {
   const [errors, setErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
 
+  // Populate form data if editing an existing user
+  useEffect(() => {
+    if (isModifying && userToEdit) {
+      // Extract first and last name from full name
+      const nameParts = userToEdit.name.split(' ');
+      const firstName = nameParts[0] || '';
+      const lastName = nameParts.slice(1).join(' ') || '';
+      
+      // Extract contact number without country code
+      const contact = userToEdit.contact?.replace('+63', '') || '';
+      
+      setFormData({
+        username: userToEdit.username || '',
+        contact,
+        email: userToEdit.email || '',
+        role: userToEdit.roles?.[0] || '',
+        // Don't prefill password fields for security
+        password: '',
+        confirmPassword: '',
+        firstName,
+        lastName,
+      });
+    }
+  }, [isModifying, userToEdit]);
+
+  // Rest of the component remains similar, but handle form submission differently
+  
   const handleChange = e => {
     const { name, value } = e.target;
     
@@ -28,7 +59,6 @@ const AdminAddUser = () => {
       [name]: value,
     }));
 
-    // Clear errors for this field when user starts typing
     setErrors(prevErrors => ({
       ...prevErrors,
       [name]: '',
@@ -44,14 +74,21 @@ const AdminAddUser = () => {
 
       // Basic validation
       Object.entries(formData).forEach(([key, value]) => {
+        // Skip password validation if modifying a user
+        if (isModifying && (key === 'password' || key === 'confirmPassword')) {
+          return;
+        }
+        
         if (!value || (typeof value === 'string' && value.trim() === '')) {
           validationErrors[key] = 'This field is required';
         }
       });
 
-      // Password validation
-      if (formData.password !== formData.confirmPassword) {
-        validationErrors.confirmPassword = 'Passwords do not match';
+      // Password validation only if adding or if passwords were provided
+      if (!isModifying || (formData.password || formData.confirmPassword)) {
+        if (formData.password !== formData.confirmPassword) {
+          validationErrors.confirmPassword = 'Passwords do not match';
+        }
       }
 
       // Contact number validation
@@ -67,31 +104,45 @@ const AdminAddUser = () => {
       setErrors(validationErrors);
 
       if (Object.keys(validationErrors).length === 0) {
-        // Use the imported addUser function from newuser.js
-        const success = addUser(formData);
+        let success;
         
-        if (success) {
-          // Reset form
-          setFormData({
-            username: '',
-            contact: '',
-            email: '',
-            role: '',
-            password: '',
-            confirmPassword: '',
-            firstName: '',
-            lastName: '',
+        if (isModifying) {
+          // Update existing user
+          success = updateUser(userIndex, {
+            name: `${formData.firstName} ${formData.lastName}`,
+            status: userToEdit.status,
+            roles: [formData.role],
+            image: userToEdit.image || '',
+            username: formData.username,
+            email: formData.email,
+            contact: `+63${formData.contact}`,
+            // Only update password if provided
+            ...(formData.password ? { password: formData.password } : {})
           });
           
-          alert('User added successfully!');
-          navigate('/admin-user-management');
+          if (success) {
+            alert('User updated successfully!');
+          } else {
+            alert('Failed to update user. Please try again.');
+          }
         } else {
-          alert('Failed to add user. Please try again.');
+          // Add new user
+          success = addUser(formData);
+          
+          if (success) {
+            alert('User added successfully!');
+          } else {
+            alert('Failed to add user. Please try again.');
+          }
+        }
+        
+        if (success) {
+          navigate('/admin-user-management');
         }
       }
     } catch (error) {
       console.error("Error submitting form:", error);
-      alert('An error occurred while adding the user. Please try again.');
+      alert('An error occurred. Please try again.');
     } finally {
       setSubmitting(false);
     }
@@ -99,7 +150,7 @@ const AdminAddUser = () => {
 
   return (
     <div>
-      <h1>Add User</h1>
+      <h1>{isModifying ? 'Modify User' : 'Add User'}</h1>
       <div className="admin-add-user">
         <form 
           className="user-form" 
@@ -110,8 +161,11 @@ const AdminAddUser = () => {
             {[
               { label: 'Username', name: 'username' },
               { label: 'Email', name: 'email', type: 'email' },
-              { label: 'Password', name: 'password', type: 'password' },
-              { label: 'Confirm Password', name: 'confirmPassword', type: 'password' },
+              // Only show password fields if adding a new user or conditionally later
+              ...(isModifying ? [] : [
+                { label: 'Password', name: 'password', type: 'password' },
+                { label: 'Confirm Password', name: 'confirmPassword', type: 'password' }
+              ]),
               { label: 'First Name', name: 'firstName' },
               { label: 'Last Name', name: 'lastName' },
             ].map(({ label, name, type = 'text' }) => (
@@ -130,6 +184,37 @@ const AdminAddUser = () => {
                 {errors[name] && <p className="error">{errors[name]}</p>}
               </div>
             ))}
+
+            {/* Password section for modifying users - optional */}
+            {isModifying && (
+              <>
+                <div className="form-group">
+                  <label>Password (leave blank to keep current)</label>
+                  <input
+                    type="password"
+                    name="password"
+                    placeholder="Enter new password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    className={errors.password ? 'error-input' : ''}
+                  />
+                  {errors.password && <p className="error">{errors.password}</p>}
+                </div>
+                <div className="form-group">
+                  <label>Confirm Password</label>
+                  <input
+                    type="password"
+                    name="confirmPassword"
+                    placeholder="Confirm new password"
+                    value={formData.confirmPassword}
+                    onChange={handleChange}
+                    className={errors.confirmPassword ? 'error-input' : ''}
+                  />
+                  {errors.confirmPassword && <p className="error">{errors.confirmPassword}</p>}
+                </div>
+              </>
+            )}
+
             <div className="form-group contact-split">
               <label>
                 Contact Number <span className="required">*</span>
@@ -178,7 +263,9 @@ const AdminAddUser = () => {
               className="submit-btn"
               disabled={submitting}
             >
-              {submitting ? 'Adding User...' : 'Add User'}
+              {submitting 
+                ? (isModifying ? 'Updating User...' : 'Adding User...') 
+                : (isModifying ? 'Update User' : 'Add User')}
             </button>
             
             <button 

@@ -42,6 +42,7 @@
   text-overflow: ellipsis;
   display: -webkit-box;
   -webkit-line-clamp: 3; /* Show only 3 lines */
+  line-clamp: 3; /* Standard property for future compatibility */
   -webkit-box-orient: vertical;
 
 }
