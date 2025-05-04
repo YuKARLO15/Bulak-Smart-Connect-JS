@@ -5,6 +5,10 @@
   align-items: center;
   justify-content: center;
 }
+.ApplicationDashContainer.sidebar-open {
+  margin-left: 240px;
+}
+
 
 .ApplicationDashHeader {
   display: flex;

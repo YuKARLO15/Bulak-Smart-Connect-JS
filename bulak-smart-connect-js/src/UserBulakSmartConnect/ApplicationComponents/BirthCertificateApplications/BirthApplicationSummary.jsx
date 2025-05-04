@@ -18,6 +18,7 @@ import { useNavigate } from 'react-router-dom';
 import './BirthApplicationSummary.css';
 import AffidavitBirthForm from './BirthCertificateForm/BirthBackIdentifyingForm';
 import EditIcon from '@mui/icons-material/Edit';
+import { getApplications } from '../ApplicationData';
 
 const BirthApplicationSummary = () => {
   const [formData, setFormData] = useState(null);
@@ -28,78 +29,51 @@ const BirthApplicationSummary = () => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [showAffidavit, setShowAffidavit] = useState(false);
   const [isCopyRequest, setIsCopyRequest] = useState(false);
+  const [applicationStatus, setApplicationStatus] = useState('Pending');
+const [statusMessage, setStatusMessage] = useState('');
 
-  useEffect(() => {
-    try {
-      const currentId = localStorage.getItem('currentApplicationId');
+useEffect(() => {
+  try {
+    const currentId = localStorage.getItem('currentApplicationId');
 
-      if (currentId) {
-        setApplicationId(currentId);
+    if (currentId) {
+      setApplicationId(currentId);
+      
+      // Use getApplications() to get application data
+      const applications = getApplications();
+      const application = applications.find(app => app.id === currentId);
 
-        const applications = JSON.parse(localStorage.getItem('applications')) || [];
-        const application = applications.find(app => app.id === currentId);
-
-        if (application && application.formData) {
-          setFormData(application.formData);
-          setIsCopyRequest(!!application.formData.purpose);
-          console.log('Found application in applications list:', currentId);
-        } else {
-          const storedData = localStorage.getItem('birthCertificateApplication');
-          if (storedData) {
-            const parsedData = JSON.parse(storedData);
-            setFormData(parsedData);
-            setIsCopyRequest(!!parsedData.purpose);
-            console.log('Using fallback data for ID:', currentId);
-          } else {
-            setError('No application data found. Please complete the application form.');
-          }
-        }
+      if (application) {
+        // Set application status and message
+        setApplicationStatus(application.status || 'Pending');
+        setStatusMessage(application.statusMessage || '');
+        
+        // Set form data
+        setFormData(application.formData);
+        setIsCopyRequest(!!application.formData.purpose);
+        console.log('Found application in applications list:', currentId);
       } else {
+        // Fallback to localStorage if not found in applications
         const storedData = localStorage.getItem('birthCertificateApplication');
         if (storedData) {
           const parsedData = JSON.parse(storedData);
           setFormData(parsedData);
           setIsCopyRequest(!!parsedData.purpose);
-
-          const timestamp = Date.now().toString().slice(-6);
-
-          const generatedId = `BA-${timestamp}`;
-
-          setApplicationId(generatedId);
-          localStorage.setItem('currentApplicationId', generatedId);
-
-          const existingApplications = JSON.parse(localStorage.getItem('applications')) || [];
-
-          const applicationType = parsedData.purpose
-            ? 'Birth Certificate Copy'
-            : 'Birth Certificate';
-          const applicationMessage = parsedData.purpose
-            ? `Request for copy of birth certificate for ${parsedData.firstName || ''} ${parsedData.lastName || ''}`
-            : `Birth certificate application for ${parsedData.firstName || ''} ${parsedData.lastName || ''}`;
-
-          const applicationData = {
-            id: generatedId,
-            type: applicationType,
-            date: new Date().toLocaleDateString(),
-            status: 'Pending',
-            message: applicationMessage,
-            formData: parsedData,
-          };
-
-          existingApplications.unshift(applicationData);
-          localStorage.setItem('applications', JSON.stringify(existingApplications));
-          console.log('Created new application entry with ID:', generatedId);
+          console.log('Using fallback data for ID:', currentId);
         } else {
           setError('No application data found. Please complete the application form.');
         }
       }
-    } catch (err) {
-      console.error('Error loading application data:', err);
-      setError('Error loading application data: ' + err.message);
-    } finally {
-      setLoading(false);
+    } else {
+      // Rest of your existing code for creating a new application...
     }
-  }, []);
+  } catch (err) {
+    console.error('Error loading application data:', err);
+    setError('Error loading application data: ' + err.message);
+  } finally {
+    setLoading(false);
+  }
+}, []);
 
   const handleBackToApplications = () => {
     navigate('/ApplicationForm');
@@ -137,6 +111,26 @@ const BirthApplicationSummary = () => {
       setDeleteDialogOpen(false);
     }
   };
+  
+const getStatusColor = (status) => {
+  switch (status?.toLowerCase()) {
+    case 'approved':
+      return 'green';
+    case 'pending':
+      return '#ff9800';
+    case 'declined':
+    case 'decline':
+      return 'red';
+    case 'requires additional info':
+      return '#ff8c00';
+    case 'cancelled':
+      return '#d32f2f';
+    default:
+      return '#184a5b';
+  }
+};
+
+
 
   const cancelDeleteApplication = () => {
     setDeleteDialogOpen(false);
@@ -200,15 +194,46 @@ const BirthApplicationSummary = () => {
   const renderCopyBirthSummary = () => {
     return (
       <Box className="MainContainerSummaryBirth">
+             <div className="ApplicationDetails">
+  {(applicationStatus !== 'Pending' || statusMessage) && (
+    <Box className="StatusSection" sx={{ marginTop: '15px', marginBottom: '15px' }}>
+      <Typography 
+        className="ApplicationStatus"
+        sx={{ 
+          fontWeight: 'bold',
+          color: getStatusColor(applicationStatus)
+        }}
+      >
+        Status: {applicationStatus}
+      </Typography>
+      
+      {statusMessage && (
+        <Typography 
+          className="ApplicationStatusMessage"
+          sx={{ 
+            fontSize: '0.9rem',
+            marginTop: '8px', 
+            padding: '8px',
+            backgroundColor: '#f5f5f5',
+            borderLeft: '3px solid #1c4d5a'
+          }}
+        >
+          Message from Administrator: {statusMessage}
+        </Typography>
+      )}
+    </Box>
+  )}
+</div>
         <Paper elevation={3} className="SummaryPaperSummaryBirth">
           <Box className="HeaderSummaryBirth">
             <Typography variant="h4" className="TitleSummaryBirth">
               Copy of Birth Certificate Request
             </Typography>
             <Typography variant="body1" className="SubtitleSummaryBirth">
-              Application ID: {applicationId} | Status: Pending
+              Application ID: {applicationId} | Status: {applicationStatus}
             </Typography>
           </Box>
+     
 
           <Divider className="DividerSummaryBirth" />
 
@@ -423,7 +448,38 @@ const BirthApplicationSummary = () => {
   return isCopyRequest ? (
     renderCopyBirthSummary()
   ) : (
-    <Box className="MainContainerSummaryBirth">
+      <Box className="MainContainerSummaryBirth">
+<div className="ApplicationDetails">
+  {/* Application Status Section - Only show when status is updated or has a message */}
+  {(applicationStatus !== 'Pending' || statusMessage) && (
+    <Box className="StatusSection" sx={{ marginTop: '15px', marginBottom: '15px' }}>
+      <Typography 
+        className="ApplicationStatus"
+        sx={{ 
+          fontWeight: 'bold',
+          color: getStatusColor(applicationStatus)
+        }}
+      >
+        Status: {applicationStatus}
+      </Typography>
+      
+      {statusMessage && (
+        <Typography 
+          className="ApplicationStatusMessage"
+          sx={{ 
+            fontSize: '0.9rem',
+            marginTop: '8px', 
+            padding: '8px',
+            backgroundColor: '#f5f5f5',
+            borderLeft: '3px solid #1c4d5a'
+          }}
+        >
+          Message from Administrator: {statusMessage}
+        </Typography>
+      )}
+    </Box>
+  )}
+</div>
       <Paper elevation={3} className="SummaryPaperSummaryBirth">
         <Box className="certificateHeaderContainer">
           <Typography variant="body2" className="headerInfoText">
@@ -439,7 +495,7 @@ const BirthApplicationSummary = () => {
             CERTIFICATE OF LIVE BIRTH
           </Typography>
           <Typography variant="body2" className="headerInfoText">
-            Application ID: {applicationId} | Status: Pending
+            Application ID: {applicationId} | Status: {applicationStatus}
           </Typography>
         </Box>
 
@@ -748,8 +804,8 @@ const BirthApplicationSummary = () => {
               {`${formData?.marriageCity || 'N/A'}, ${formData?.marriageProvince || 'N/A'}`}
             </Typography>
           </Grid>
-        </Grid>
-
+          </Grid>
+          
         <Box className="buttonsContainer">
           <Button
             variant="contained"

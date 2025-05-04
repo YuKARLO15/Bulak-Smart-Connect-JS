@@ -34,7 +34,67 @@ const MarriageSummaryForm = () => {
       setLoading(false);
     }
   }, []);`MC-924447`
+  const handleCancelApplication = () => {
+    try {
+ 
+      setConfirmCancelDialog(false);
+      
+      if (!applicationId) {
+        alert('No application ID found. Cannot cancel application.');
+        return;
+      }
+      
+      console.log("Attempting to cancel application with ID:", applicationId);
 
+      const applications = JSON.parse(localStorage.getItem('applications') || '[]');
+      console.log("Current applications:", applications);
+      
+     
+      const applicationExists = applications.some(app => app.id === applicationId);
+      
+      if (!applicationExists) {
+        console.log("Application not found with ID:", applicationId);
+        alert('Application not found. Cannot cancel application.');
+        return;
+      }
+      
+  
+      const filteredApplications = applications.filter(app => app.id !== applicationId);
+      console.log("Applications after filtering:", filteredApplications);
+      
+   
+      localStorage.setItem('applications', JSON.stringify(filteredApplications));
+      
+      
+      localStorage.removeItem('marriageFormData');
+      localStorage.removeItem('currentApplicationId');
+      localStorage.removeItem(`uploadedFiles_${applicationId}`);
+      
+  
+      const cancelEvent = new CustomEvent('applicationCancelled', { 
+        detail: { id: applicationId } 
+      });
+      
+      
+      window.dispatchEvent(new Event('storage'));
+      window.dispatchEvent(cancelEvent);
+      
+      console.log("Application cancelled event dispatched for ID:", applicationId);
+      
+
+      setStatusMessage('');
+      
+
+      alert('Your application has been cancelled and removed successfully.');
+      
+      
+      navigate('/ApplicationForm');
+      
+    } catch (error) {
+      console.error('Error cancelling application:', error);
+      alert('An error occurred while cancelling the application. Please try again.');
+    }
+  };
   const handleMessageChange = (e) => {
     setStatusMessage(e.target.value);
   };

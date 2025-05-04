@@ -5,12 +5,14 @@ import CloseIcon from '@mui/icons-material/Close';
 import { Link } from 'react-router-dom'; // Import Link from react-router-dom
 import { useAuth } from '../context/AuthContext'; // Import useAuth
 
+
 const NavBar = ({ isSidebarOpen, setIsSidebarOpen }) => {
-  const { logout, hasRole } = useAuth();
+  const { logout, hasRole, user} = useAuth();
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
+  
   const getRoute = (regularRoute, adminRoute) => {
     return (hasRole('staff') || hasRole("admin" ) || hasRole("admin" || "super_admin" )) ? adminRoute : regularRoute ;
   };
@@ -33,9 +35,14 @@ const NavBar = ({ isSidebarOpen, setIsSidebarOpen }) => {
       <nav className={`sidebar ${isSidebarOpen ? 'open' : 'closed'}`}>
         <div className="NavigationBar">
           <div className="Profile">
-            <p className="Username">username</p>
-            <p className="UserEmail">User@gmail.com</p>
+        
+  
+            <div className="NavUserName">{user?.name || '[USERNAME]'}</div>
+            <div className="NavUserEmail">{user?.email || 'User@email.com'}</div>
+            <div className="NavUserRole"> {user?.roles?.[0] || 'Unknown Role'}</div>
           </div>
+    
+    
           <div className="NavigationButtons">
    
             {/* route links based on user role */}
