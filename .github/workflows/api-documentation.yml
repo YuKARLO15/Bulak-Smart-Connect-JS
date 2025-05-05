@@ -88,3 +88,22 @@ jobs:
           clean-exclude: |   # Don't delete important files at the root
             .nojekyll
           branch: gh-pages
+
+      - name: Ensure root .nojekyll exists
+        run: |
+          # Create a temporary directory
+          mkdir -p temp_root
+          
+          # Create a .nojekyll file
+          touch temp_root/.nojekyll
+          
+          # Create a simple index.html that redirects to the API docs
+          echo '<!DOCTYPE html>
+          <html>
+            <head>
+              <meta http-equiv="refresh" content="0; url=api-docs/">
+            </head>
+          </html>' > temp_root/index.html
+          
+          # Deploy to root of gh-pages branch without cleaning existing files
+          npx gh-pages -d temp_root -t true -a
