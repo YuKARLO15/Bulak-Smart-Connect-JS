@@ -78,7 +78,7 @@ jobs:
           npx cypress verify
       
       - name: Cache Cypress Binary
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ~/.cache/Cypress
           key: cypress-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
