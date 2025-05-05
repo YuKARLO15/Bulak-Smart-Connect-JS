@@ -105,5 +105,8 @@ jobs:
             </head>
           </html>' > temp_root/index.html
           
+          # Install gh-pages explicitly first
+          npm install -g gh-pages
+          
           # Deploy to root of gh-pages branch without cleaning existing files
-          npx gh-pages -d temp_root -t true -a
+          gh-pages -d temp_root -t --dotfiles
