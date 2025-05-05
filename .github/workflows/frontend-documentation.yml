@@ -42,7 +42,6 @@ jobs:
           cat > .storybook/main.js << 'EOF'
           import { mergeConfig } from 'vite';
           import swc from '@vitejs/plugin-react-swc';
-          import tsconfigPaths from 'vite-tsconfig-paths';
           
           /** @type {import('@storybook/react-vite').StorybookConfig} */
           const config = {
@@ -65,7 +64,6 @@ jobs:
                   swc({
                     jsxImportSource: 'react',
                   }),
-                  tsconfigPaths(),
                 ],
               });
             },
