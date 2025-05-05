@@ -92,15 +92,16 @@ jobs:
           export default preview;
           EOF
           
-          # Create story generator script for JSX
+          # Create story generator script for JSX with correct ES module imports
           cat > generate-stories.mjs << 'EOF'
           import fs from 'fs/promises';
           import path from 'path';
           import { fileURLToPath } from 'url';
           import { dirname } from 'path';
-          import glob from 'glob';
+          import * as globModule from 'glob';  // Import the entire module, not as default
           import { promisify } from 'util';
           
+          const glob = globModule.default || globModule.glob || globModule;  // Handle different versions
           const globAsync = promisify(glob);
           const __filename = fileURLToPath(import.meta.url);
           const __dirname = dirname(__filename);
