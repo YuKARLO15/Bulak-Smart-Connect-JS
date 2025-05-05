@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import AnnouncementForm from './AnnouncementForm';
 import AnnouncementFeed from './AnnouncementFeed';
 import '../AdminAnnouncementComponents/AdminAnnouncement.css';
+import NavBar from '../../NavigationComponents/NavSide';
 
 const AdminAnnouncement = () => {
   const [announcements, setAnnouncements] = useState([
@@ -25,9 +26,13 @@ const AdminAnnouncement = () => {
     setAnnouncements([newAnnouncement, ...announcements]);
   };
 
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
   return (
+    
     <div className="announcement-container">
       <h2>Bulak LGU Smart Announcements </h2>
+      <NavBar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
       <div className="announcement-main">
         <AnnouncementFeed announcements={announcements} />
         <AnnouncementForm addAnnouncement={addAnnouncement} />

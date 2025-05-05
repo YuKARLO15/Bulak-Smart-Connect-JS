@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import '../AccountManagementComponents/AdminAddAccount.css';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { addUser, updateUser } from './NewUserInfo';
+import NavBar from '../../NavigationComponents/NavSide';
 
 const AdminAddUser = () => {
   const navigate = useNavigate();
@@ -148,8 +149,12 @@ const AdminAddUser = () => {
     }
   };
 
+   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
   return (
     <div>
+       <NavBar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
+       
       <h1>{isModifying ? 'Modify User' : 'Add User'}</h1>
       <div className="admin-add-user">
         <form 
