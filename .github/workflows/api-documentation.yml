@@ -89,24 +89,9 @@ jobs:
             .nojekyll
           branch: gh-pages
 
-      - name: Ensure root .nojekyll exists
-        run: |
-          # Create a temporary directory
-          mkdir -p temp_root
-          
-          # Create a .nojekyll file
-          touch temp_root/.nojekyll
-          
-          # Create a simple index.html that redirects to the API docs
-          echo '<!DOCTYPE html>
-          <html>
-            <head>
-              <meta http-equiv="refresh" content="0; url=api-docs/">
-            </head>
-          </html>' > temp_root/index.html
-          
-          # Install gh-pages explicitly first
-          npm install -g gh-pages
-          
-          # Deploy to root of gh-pages branch without cleaning existing files
-          gh-pages -d temp_root -t --dotfiles
+      - name: Deploy root files
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: temp_root
+          branch: gh-pages
+          clean: false  # Don't remove existing files
