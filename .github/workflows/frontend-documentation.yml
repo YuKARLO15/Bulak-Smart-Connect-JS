@@ -28,18 +28,8 @@ jobs:
           cd bulak-smart-connect-js
           npm ci
           
-          # Create package.json entries for Storybook
-          npm pkg set devDependencies.storybook="^8.0.0"
-          npm pkg set devDependencies.@storybook/react="^8.0.0"
-          npm pkg set devDependencies.@storybook/addon-essentials="^8.0.0"
-          npm pkg set devDependencies.@storybook/addon-links="^8.0.0"
-          npm pkg set devDependencies.@storybook/addon-docs="^8.0.0"
-          
-          # Install Storybook and dependencies (this will respect the package.json entries)
-          npm install --no-save
-          
-          # Initialize Storybook (creates proper config files)
-          npx storybook init --skip-install
+          # Install all Storybook dependencies explicitly (instead of just modifying package.json)
+          npm install --no-save storybook@latest @storybook/react @storybook/addon-links @storybook/addon-essentials @storybook/addon-docs
           
           # Fix vulnerabilities that don't break functionality
           npm audit fix --production || true
