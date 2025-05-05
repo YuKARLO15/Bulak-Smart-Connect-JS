@@ -27,16 +27,16 @@ jobs:
         run: |
           cd bulak-smart-connect-js
           npm ci
-          # For React: npm install --save-dev react-styleguidist
-          # For Angular: npm install --save-dev @compodoc/compodoc
+          npm install --save-dev react-styleguidist
       
       - name: Generate frontend documentation
         run: |
           cd bulak-smart-connect-js
-          # For React: npx styleguidist build
-          # For Angular: npx @compodoc/compodoc -p tsconfig.json -d ../docs/frontend
+          npx styleguidist build --config styleguide.config.js
+          # Ensure output directory exists
           mkdir -p docs/frontend
-          # Replace with actual documentation generation command
+          # Move the generated docs to our target directory
+          mv styleguide/* docs/frontend/
       
       - name: Create documentation hub
         run: |
@@ -72,16 +72,20 @@ jobs:
             </body>
           </html>' > doc_hub/index.html
       
-      - name: Deploy to GitHub Pages
+      - name: Deploy frontend docs
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           folder: bulak-smart-connect-js/docs/frontend
           target-folder: frontend-docs
+          branch: gh-pages
           clean: true
+          clean-exclude: |
+            .nojekyll
+            api-docs/**
 
       - name: Deploy documentation hub
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           folder: doc_hub
           branch: gh-pages
-          clean: false  # Important: don't clean existing files, keep api-docs and frontend-docs
+          clean: false
