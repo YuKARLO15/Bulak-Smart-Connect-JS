@@ -28,13 +28,8 @@ jobs:
           cd bulak-smart-connect-js
           npm ci
           
-          # Install Storybook and all required dependencies directly
-          npm install --no-save storybook@latest @storybook/react@latest @storybook/addon-links@latest @storybook/addon-essentials@latest @storybook/addon-docs@latest @storybook/builder-webpack5@latest @storybook/manager-webpack5@latest webpack style-loader css-loader babel-loader @babel/preset-env @babel/preset-react
-          
-          # Create a .babelrc file for Storybook
-          echo '{
-            "presets": ["@babel/preset-env", "@babel/preset-react"]
-          }' > .babelrc
+          # Install Storybook with Vite builder instead of webpack
+          npm install --no-save storybook@latest @storybook/react @storybook/addon-links @storybook/addon-essentials @storybook/addon-docs @storybook/builder-vite
           
       - name: Fix CSS image references before build
         run: |
@@ -67,26 +62,23 @@ jobs:
               '@storybook/addon-essentials',
               '@storybook/addon-docs'
             ],
-            framework: '@storybook/react',
+            framework: {
+              name: '@storybook/react-vite',
+              options: {
+                // Vite specific options
+                builder: {
+                  viteConfigPath: 'vite.config.js'
+                }
+              }
+            },
             core: {
-              builder: '@storybook/builder-webpack5',
+              disableTelemetry: true
             },
             features: {
               storyStoreV7: false, // For better compatibility
             },
-            webpackFinal: async (config) => {
-              // Handle CSS files
-              config.module.rules.push({
-                test: /\.css$/,
-                use: ['style-loader', 'css-loader'],
-              });
-              
-              // Handle image files
-              config.module.rules.push({
-                test: /\.(png|jpg|gif|svg)$/i,
-                type: 'asset/resource'
-              });
-              
+            viteFinal: async (config) => {
+              // Any Vite-specific config adjustments
               return config;
             },
           };
