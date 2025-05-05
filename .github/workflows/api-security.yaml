@@ -30,7 +30,15 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: 'bsc-js-backend/package-lock.json'
       
+      - name: Cache ZAP
+        uses: actions/cache@v3
+        with:
+          path: ~/.ZAP
+          key: zap-${{ runner.os }}-${{ hashFiles('.github/workflows/api-security.yaml') }}
+
       - name: Install backend dependencies
         run: cd bsc-js-backend && npm ci
       
