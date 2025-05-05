@@ -50,8 +50,8 @@ jobs:
           cd bulak-smart-connect-js
           
           # Install Babel plugins needed for Styleguidist to parse modern React
-          npm install --no-save @babel/core @babel/preset-env @babel/preset-react babel-loader
-
+          npm install --no-save @babel/core @babel/preset-env @babel/preset-react babel-loader react-styleguidist
+          
           # Create .babelrc for Styleguidist
           cat > .babelrc << 'EOF'
           {
@@ -173,12 +173,19 @@ jobs:
           
           # Generate both Styleguidist and fallback documentation
           echo "Building with Styleguidist..."
-          npx styleguidist build --config styleguide.config.cjs || echo "Styleguidist build failed, using fallback"
+          npx react-styleguidist build --config styleguide.config.cjs || echo "Styleguidist build failed, using fallback"
           
           # Ensure output directory exists
           mkdir -p docs/frontend
           
-          # Generate component tree visualization
+          # Create component list file directly (without sed)
+          echo "Creating component list..."
+          COMPONENT_LIST=$(find src -name "*.jsx" | sort | jq -R . | jq -s . || echo "[]")
+          cat > docs/frontend/component-list.js << EOF
+          const componentFiles = ${COMPONENT_LIST};
+          EOF
+          
+          # Generate component tree with external script reference
           cat > docs/frontend/component-tree.html << 'EOF'
           <!DOCTYPE html>
           <html>
@@ -204,10 +211,8 @@ jobs:
                 <div id="component-tree">Loading component tree...</div>
               </div>
               
+              <script src="component-list.js"></script>
               <script>
-                // Component tree will be inserted here during build
-                const componentFiles = COMPONENT_LIST_PLACEHOLDER;
-                
                 document.addEventListener('DOMContentLoaded', function() {
                   const treeContainer = document.getElementById('component-tree');
                   
@@ -271,11 +276,6 @@ jobs:
             </body>
           </html>
           EOF
-          
-          # Insert component list into the HTML
-          COMPONENT_JSON=$(find src -name "*.jsx" | sort | jq -R . | jq -s .)
-          sed "s/COMPONENT_LIST_PLACEHOLDER/$COMPONENT_JSON/g" docs/frontend/component-tree.html > docs/frontend/component-tree.html.tmp
-          mv docs/frontend/component-tree.html.tmp docs/frontend/component-tree.html
           
           # If Styleguidist build succeeded, copy its output
           if [ -d "styleguide" ] && [ -f "styleguide/index.html" ]; then
