@@ -1,88 +1,174 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <meta charset="utf-8">
-    <title>Bulak Smart Connect Component Tree</title>
+    <meta charset="utf-8" />
+
+    <title>@storybook/core - Storybook</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+    
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+    
     <style>
-      body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 1200px; margin: 0 auto; padding: 20px; }
-      h1, h2 { color: #1976d2; }
-      .folder { margin-left: 20px; }
-      .file { margin-left: 40px; color: #333; }
-      .component { font-weight: bold; color: #2e7d32; }
-      .non-component { color: #757575; }
-      .tree-container { border: 1px solid #e0e0e0; border-radius: 4px; padding: 20px; background: #fafafa; }
+      @font-face {
+        font-family: 'Nunito Sans';
+        font-style: normal;
+        font-weight: 400;
+        font-display: swap;
+        src: url('./sb-common-assets/nunito-sans-regular.woff2') format('woff2');
+      }
+
+      @font-face {
+        font-family: 'Nunito Sans';
+        font-style: italic;
+        font-weight: 400;
+        font-display: swap;
+        src: url('./sb-common-assets/nunito-sans-italic.woff2') format('woff2');
+      }
+
+      @font-face {
+        font-family: 'Nunito Sans';
+        font-style: normal;
+        font-weight: 700;
+        font-display: swap;
+        src: url('./sb-common-assets/nunito-sans-bold.woff2') format('woff2');
+      }
+
+      @font-face {
+        font-family: 'Nunito Sans';
+        font-style: italic;
+        font-weight: 700;
+        font-display: swap;
+        src: url('./sb-common-assets/nunito-sans-bold-italic.woff2') format('woff2');
+      }
     </style>
+
+    <link href="./sb-manager/runtime.js" rel="modulepreload" />
+
+    
+    <link href="./sb-addons/storybook-core-core-server-presets-0/common-manager-bundle.js" rel="modulepreload" />
+    
+    <link href="./sb-addons/links-1/manager-bundle.js" rel="modulepreload" />
+    
+    <link href="./sb-addons/essentials-controls-2/manager-bundle.js" rel="modulepreload" />
+    
+    <link href="./sb-addons/essentials-actions-3/manager-bundle.js" rel="modulepreload" />
+    
+    <link href="./sb-addons/essentials-backgrounds-4/manager-bundle.js" rel="modulepreload" />
+    
+    <link href="./sb-addons/essentials-viewport-5/manager-bundle.js" rel="modulepreload" />
+    
+    <link href="./sb-addons/essentials-toolbars-6/manager-bundle.js" rel="modulepreload" />
+    
+    <link href="./sb-addons/essentials-measure-7/manager-bundle.js" rel="modulepreload" />
+    
+    <link href="./sb-addons/essentials-outline-8/manager-bundle.js" rel="modulepreload" />
+    
+    <link href="./sb-addons/docs-9/manager-bundle.js" rel="modulepreload" />
+       
+
+    <style>
+      #storybook-root[hidden] {
+        display: none !important;
+      }
+    </style>
+
+    
   </head>
   <body>
-    <h1>Bulak Smart Connect Component Structure</h1>
-    <p>This page shows the structure of React components in the application.</p>
+    <div id="root"></div>
+
     
-    <div class="tree-container">
-      <h2>Component Tree</h2>
-      <div id="component-tree">Loading component tree...</div>
-    </div>
-    
-    <script src="component-list.js"></script>
     <script>
-      document.addEventListener('DOMContentLoaded', function() {
-        const treeContainer = document.getElementById('component-tree');
+      
         
-        // Organize files by directory
-        const tree = {};
-        componentFiles.forEach(file => {
-          const parts = file.split('/');
-          let current = tree;
-          
-          // Build the tree structure
-          for (let i = 0; i < parts.length - 1; i++) {
-            if (!current[parts[i]]) {
-              current[parts[i]] = {};
-            }
-            current = current[parts[i]];
-          }
-          
-          // Add the file as a leaf node
-          const fileName = parts[parts.length - 1];
-          current[fileName] = true;
-        });
+          window['FEATURES'] = {
+  "argTypeTargetsV7": true,
+  "legacyDecoratorFileOrder": false,
+  "disallowImplicitActionsInRenderV8": true,
+  "storyStoreV7": false
+};
         
-        // Function to render the tree
-        function renderTree(node, element, path = '') {
-          const entries = Object.entries(node);
-          entries.sort((a, b) => {
-            // Sort directories first, then files
-            const aIsDir = typeof a[1] === 'object';
-            const bIsDir = typeof b[1] === 'object';
-            if (aIsDir && !bIsDir) return -1;
-            if (!aIsDir && bIsDir) return 1;
-            return a[0].localeCompare(b[0]);
-          });
-          
-          entries.forEach(([key, value]) => {
-            if (typeof value === 'object') {
-              // Directory
-              const folderDiv = document.createElement('div');
-              folderDiv.className = 'folder';
-              folderDiv.textContent = `📁 ${key}/`;
-              element.appendChild(folderDiv);
-              
-              const childrenDiv = document.createElement('div');
-              renderTree(value, childrenDiv, path + key + '/');
-              element.appendChild(childrenDiv);
-            } else {
-              // File
-              const fileDiv = document.createElement('div');
-              const isComponent = /^[A-Z].*\.jsx$/.test(key);
-              fileDiv.className = isComponent ? 'file component' : 'file non-component';
-              fileDiv.textContent = isComponent ? `🔹 ${key}` : `📄 ${key}`;
-              element.appendChild(fileDiv);
-            }
-          });
-        }
+      
         
-        treeContainer.innerHTML = '';
-        renderTree(tree, treeContainer);
-      });
+          window['REFS'] = {};
+        
+      
+        
+          window['LOGLEVEL'] = "info";
+        
+      
+        
+          window['DOCS_OPTIONS'] = {
+  "defaultName": "Docs",
+  "autodocs": "tag"
+};
+        
+      
+        
+          window['CONFIG_TYPE'] = "PRODUCTION";
+        
+      
+        
+      
+        
+      
+        
+          window['TAGS_OPTIONS'] = {
+  "dev-only": {
+    "excludeFromDocsStories": true
+  },
+  "docs-only": {
+    "excludeFromSidebar": true
+  },
+  "test-only": {
+    "excludeFromSidebar": true,
+    "excludeFromDocsStories": true
+  }
+};
+        
+      
+        
+          window['STORYBOOK_RENDERER'] = "react";
+        
+      
+        
+          window['STORYBOOK_BUILDER'] = "@storybook/builder-vite";
+        
+      
+        
+          window['STORYBOOK_FRAMEWORK'] = "@storybook/react-vite";
+        
+      
+    </script>
+    
+
+    <script type="module">
+      import './sb-manager/globals-runtime.js';
+      
+      
+        import './sb-addons/storybook-core-core-server-presets-0/common-manager-bundle.js';
+      
+        import './sb-addons/links-1/manager-bundle.js';
+      
+        import './sb-addons/essentials-controls-2/manager-bundle.js';
+      
+        import './sb-addons/essentials-actions-3/manager-bundle.js';
+      
+        import './sb-addons/essentials-backgrounds-4/manager-bundle.js';
+      
+        import './sb-addons/essentials-viewport-5/manager-bundle.js';
+      
+        import './sb-addons/essentials-toolbars-6/manager-bundle.js';
+      
+        import './sb-addons/essentials-measure-7/manager-bundle.js';
+      
+        import './sb-addons/essentials-outline-8/manager-bundle.js';
+      
+        import './sb-addons/docs-9/manager-bundle.js';
+      
+      
+      import './sb-manager/runtime.js';
     </script>
   </body>
 </html>
