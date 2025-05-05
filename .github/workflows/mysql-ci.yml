@@ -190,7 +190,23 @@ jobs:
         cd bsc-js-backend
         npm run start:dev > backend.log 2>&1 &
         echo $! > backend.pid
-        sleep 10
+        
+        # Wait for server to be ready with timeout
+        echo "Waiting for backend to be ready..."
+        max_retries=30
+        count=0
+        while ! curl -s http://localhost:3000/health > /dev/null; do
+          if [ $count -ge $max_retries ]; then
+            echo "Backend failed to start properly. Server logs:"
+            cat backend.log
+            exit 1
+          fi
+          count=$((count+1))
+          echo "Waiting for backend (attempt $count/$max_retries)..."
+          sleep 2
+        done
+        
+        echo "Backend is ready!"
       env:
         DB_HOST: 127.0.0.1
         DB_PORT: 3306
