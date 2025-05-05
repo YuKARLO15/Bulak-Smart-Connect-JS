@@ -39,7 +39,7 @@ jobs:
           npm install --no-save
           
           # Initialize Storybook (creates proper config files)
-          npx storybook init --skip-install --parser-babel
+          npx storybook init --skip-install
           
           # Fix vulnerabilities that don't break functionality
           npm audit fix --production || true
