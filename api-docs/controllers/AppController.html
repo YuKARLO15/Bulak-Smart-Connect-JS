@@ -138,6 +138,10 @@
                                     <span class="modifier"></span>
                                 <a href="#getHello" >getHello</a>
                             </li>
+                            <li>
+                                    <span class="modifier"></span>
+                                <a href="#healthCheck" >healthCheck</a>
+                            </li>
                         </ul>
                     </td>
                 </tr>
@@ -201,6 +205,52 @@
             </tr>
         </tbody>
     </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="healthCheck"></a>
+                    <span class="name">
+                            <span class="modifier"></span>
+                        <span ><b>healthCheck</b></span>
+                        <a href="#healthCheck"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>healthCheck()</code>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <b>Decorators : </b>
+                    <br />
+                    <code>@Get(&#x27;health&#x27;)<br /></code>
+                </td>
+            </tr>
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="14"
+                                    class="link-to-prism">src/app.controller.ts:14</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>{ status: string; }</code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 </section>    </div>
 
 
@@ -215,6 +265,11 @@ export class AppController {
   @Get()
   getHello(): string {
     return this.appService.getHello();
+  }
+
+  @Get(&#x27;health&#x27;)
+  healthCheck() {
+    return { status: &#x27;ok&#x27; };
   }
 }
 </code></pre>
