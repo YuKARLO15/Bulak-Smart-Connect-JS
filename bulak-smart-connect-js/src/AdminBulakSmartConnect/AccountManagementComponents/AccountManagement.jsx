@@ -3,6 +3,8 @@ import './AccountManagement.css';
 import SearchAddUser from './SearchAdd';
 import UserTable from './UserTable';
 import { getUsers, updateUserImage } from './NewUserInfo'; // Import functions from newuser.js
+import NavBar from '../../NavigationComponents/NavSide';
+
 
 const AdminAccountManagement = () => {
   const [users, setUsers] = useState([]);
@@ -46,18 +48,13 @@ const AdminAccountManagement = () => {
     setUsers(updatedUsers);
   };
 
-  // const handleRemoveUser = (index) => {
-  //   const success = deleteUser(index);
-  //   if (success) {
-  //     setUsers(getUsers()); // Refresh state after deletion
-  //   }
-  // };
-  
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   return (
     <div className="admin-account-management">
       <h1>User Management</h1>
-      
+
+      <NavBar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
       <SearchAddUser />
       <UserTable 
       users={users} 
