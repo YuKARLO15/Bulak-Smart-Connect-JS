@@ -87,7 +87,7 @@ jobs:
         
         -- Insert test user with known password hash for 'password123'
         INSERT INTO users (email, password, name, default_role_id) 
-        VALUES ('test@example.com', '$2b$10$LOhmHJ5Dgx7Gc6C1J6sgdunQQpx/6H1i8OgKobJaMvsZECywVLQJK', 'Test User', 
+        VALUES ('test@example.com', '$2b$10$Fv79BPbJ3qNpwM427v7hYuXrYTCZfGbcEGm2iFgiYVCV0vKxXGsm2', 'Test User', 
                (SELECT id FROM roles WHERE name = 'citizen'));
         
         -- Assign citizen role to test user
@@ -186,7 +186,7 @@ jobs:
         
         -- Insert test user with known password hash for 'password123'
         INSERT INTO users (email, password, name, default_role_id) 
-        VALUES ('test@example.com', '$2b$10$LOhmHJ5Dgx7Gc6C1J6sgdunQQpx/6H1i8OgKobJaMvsZECywVLQJK', 'Test User', 
+        VALUES ('test@example.com', '$2b$10$Fv79BPbJ3qNpwM427v7hYuXrYTCZfGbcEGm2iFgiYVCV0vKxXGsm2', 'Test User', 
                (SELECT id FROM roles WHERE name = 'citizen'));
         
         -- Assign citizen role to test user
