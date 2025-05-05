@@ -90,5 +90,7 @@ const componentFiles = [
   "src/components/Unauthorized.jsx",
   "src/context/AuthContext.jsx",
   "src/footer.jsx",
-  "src/main.jsx"
+  "src/main.jsx",
+  "src/stories/NavBar.stories.jsx",
+  "src/stories/NavSide.stories.jsx"
 ];
