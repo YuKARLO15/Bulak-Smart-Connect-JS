@@ -47,31 +47,35 @@ jobs:
         mysql -h 127.0.0.1 -uroot -proot -e "
         USE bulak_smart_connect_test;
         
-        -- Create roles table
+        -- Create roles table with the SAME column order as TypeORM entity
         CREATE TABLE IF NOT EXISTS roles (
           id INT AUTO_INCREMENT PRIMARY KEY,
-          name VARCHAR(50) NOT NULL UNIQUE,
-          description VARCHAR(255)
+          name VARCHAR(255) NOT NULL,
+          description VARCHAR(255) DEFAULT NULL,
+          UNIQUE KEY IDX_648e3f5447f725579d7d4ffdfb (name)
         );
         
         -- Create users table with default_role_id
         CREATE TABLE IF NOT EXISTS users (
           id INT AUTO_INCREMENT PRIMARY KEY,
-          email VARCHAR(255) NOT NULL UNIQUE,
+          email VARCHAR(255) NOT NULL,
           password VARCHAR(255) NOT NULL,
           name VARCHAR(255) NOT NULL,
-          default_role_id INT,
-          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-          FOREIGN KEY (default_role_id) REFERENCES roles(id)
+          created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+          default_role_id INT DEFAULT NULL,
+          UNIQUE KEY IDX_97672ac88f789774dd47f7c8be (email),
+          FOREIGN KEY FK_2fb360b97dd407361f763e9c463 (default_role_id) REFERENCES roles(id)
         );
         
-        -- Create junction table for many-to-many relationship with snake_case column names
+        -- Create junction table with SAME indices as TypeORM entity
         CREATE TABLE IF NOT EXISTS user_roles (
-          user_id INT,
-          role_id INT,
+          user_id INT NOT NULL,
+          role_id INT NOT NULL,
           PRIMARY KEY (user_id, role_id),
-          FOREIGN KEY (user_id) REFERENCES users(id),
-          FOREIGN KEY (role_id) REFERENCES roles(id)
+          KEY IDX_87b8888186ca9769c960e92687 (user_id),
+          KEY IDX_b23c65e50a758245a33ee35fda (role_id),
+          CONSTRAINT FK_87b8888186ca9769c960e926870 FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+          CONSTRAINT FK_b23c65e50a758245a33ee35fda1 FOREIGN KEY (role_id) REFERENCES roles(id) ON DELETE CASCADE
         );
         
         -- Insert roles from your seed function
@@ -142,31 +146,35 @@ jobs:
         mysql -h 127.0.0.1 -uroot -proot -e "
         USE bulak_smart_connect_test;
         
-        -- Create roles table
+        -- Create roles table with the SAME column order as TypeORM entity
         CREATE TABLE IF NOT EXISTS roles (
           id INT AUTO_INCREMENT PRIMARY KEY,
-          name VARCHAR(50) NOT NULL UNIQUE,
-          description VARCHAR(255)
+          name VARCHAR(255) NOT NULL,
+          description VARCHAR(255) DEFAULT NULL,
+          UNIQUE KEY IDX_648e3f5447f725579d7d4ffdfb (name)
         );
         
         -- Create users table with default_role_id
         CREATE TABLE IF NOT EXISTS users (
           id INT AUTO_INCREMENT PRIMARY KEY,
-          email VARCHAR(255) NOT NULL UNIQUE,
+          email VARCHAR(255) NOT NULL,
           password VARCHAR(255) NOT NULL,
           name VARCHAR(255) NOT NULL,
-          default_role_id INT,
-          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-          FOREIGN KEY (default_role_id) REFERENCES roles(id)
+          created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+          default_role_id INT DEFAULT NULL,
+          UNIQUE KEY IDX_97672ac88f789774dd47f7c8be (email),
+          FOREIGN KEY FK_2fb360b97dd407361f763e9c463 (default_role_id) REFERENCES roles(id)
         );
         
-        -- Create junction table for many-to-many relationship with snake_case column names
+        -- Create junction table with SAME indices as TypeORM entity
         CREATE TABLE IF NOT EXISTS user_roles (
-          user_id INT,
-          role_id INT,
+          user_id INT NOT NULL,
+          role_id INT NOT NULL,
           PRIMARY KEY (user_id, role_id),
-          FOREIGN KEY (user_id) REFERENCES users(id),
-          FOREIGN KEY (role_id) REFERENCES roles(id)
+          KEY IDX_87b8888186ca9769c960e92687 (user_id),
+          KEY IDX_b23c65e50a758245a33ee35fda (role_id),
+          CONSTRAINT FK_87b8888186ca9769c960e926870 FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+          CONSTRAINT FK_b23c65e50a758245a33ee35fda1 FOREIGN KEY (role_id) REFERENCES roles(id) ON DELETE CASCADE
         );
         
         -- Insert roles from your seed function
