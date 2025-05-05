@@ -1,0 +1,48 @@
+# .github/workflows/frontend-documentation.yml
+name: Frontend Documentation
+
+on:
+  push:
+    branches: [ '*']
+    paths:
+      - 'bulak-smart-connect-js/src/**'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-frontend-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: 'bulak-smart-connect-js/package-lock.json'
+      
+      - name: Install dependencies
+        run: |
+          cd bulak-smart-connect-js
+          npm ci
+          # For React: npm install --save-dev react-styleguidist
+          # For Angular: npm install --save-dev @compodoc/compodoc
+      
+      - name: Generate frontend documentation
+        run: |
+          cd bulak-smart-connect-js
+          # For React: npx styleguidist build
+          # For Angular: npx @compodoc/compodoc -p tsconfig.json -d ../docs/frontend
+          mkdir -p docs/frontend
+          # Replace with actual documentation generation command
+      
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: bulak-smart-connect-js/docs/frontend
+          target-folder: frontend-docs
+          clean: true
+          branch: gh-pages
