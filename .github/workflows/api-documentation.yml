@@ -22,6 +22,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: 'bsc-js-backend/package-lock.json'
       
       - name: Install dependencies
         run: |
@@ -60,6 +62,19 @@ jobs:
           cd bsc-js-backend
           npx @compodoc/compodoc -p tsconfig.json -d docs/api
       
+      - name: Add root .nojekyll file
+        run: |
+          # Create a .nojekyll file to tell GitHub not to process with Jekyll
+          touch bsc-js-backend/docs/api/.nojekyll
+          
+          # Create a README.md to explain the docs site
+          echo "# API Documentation for Bulak Smart Connect JS
+          
+          This branch contains automatically generated API documentation using Compodoc.
+          
+          [View the documentation site](https://yukarlo15.github.io/Bulak-Smart-Connect-JS/api-docs/)
+          " > bsc-js-backend/docs/api/README.md
+
       - name: Debug docs output
         run: |
           ls -la bsc-js-backend/docs/api || echo "API docs directory not found"
@@ -69,4 +84,7 @@ jobs:
         with:
           folder: bsc-js-backend/docs/api
           target-folder: api-docs
+          clean: true        # Important: clean old files
+          clean-exclude: |   # Don't delete important files at the root
+            .nojekyll
           branch: gh-pages

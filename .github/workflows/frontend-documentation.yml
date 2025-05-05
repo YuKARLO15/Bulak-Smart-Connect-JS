@@ -1,0 +1,91 @@
+name: Frontend Documentation
+
+on:
+  push:
+    branches: [ '*']
+    paths:
+      - 'bulak-smart-connect-js/src/**'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-frontend-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: 'bulak-smart-connect-js/package-lock.json'
+      
+      - name: Install dependencies
+        run: |
+          cd bulak-smart-connect-js
+          npm ci
+          npm install --save-dev react-styleguidist
+      
+      - name: Generate frontend documentation
+        run: |
+          cd bulak-smart-connect-js
+          npx styleguidist build --config styleguide.config.js
+          # Ensure output directory exists
+          mkdir -p docs/frontend
+          # Move the generated docs to our target directory
+          mv styleguide/* docs/frontend/
+      
+      - name: Create documentation hub
+        run: |
+          mkdir -p doc_hub
+          touch doc_hub/.nojekyll
+          
+          echo '<!DOCTYPE html>
+          <html>
+            <head>
+              <meta charset="utf-8">
+              <title>Bulak Smart Connect Documentation Hub</title>
+              <style>
+                body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+                .card { border: 1px solid #ddd; border-radius: 8px; padding: 16px; margin: 16px 0; }
+                .button { display: inline-block; background-color: #4CAF50; color: white; padding: 10px 20px; 
+                          text-decoration: none; border-radius: 4px; }
+              </style>
+            </head>
+            <body>
+              <h1>Bulak Smart Connect Documentation</h1>
+              
+              <div class="card">
+                <h2>API Documentation</h2>
+                <p>Backend API documentation generated with Compodoc.</p>
+                <a href="api-docs/" class="button">View API Docs</a>
+              </div>
+              
+              <div class="card">
+                <h2>Frontend Documentation</h2>
+                <p>Frontend component and service documentation.</p>
+                <a href="frontend-docs/" class="button">View Frontend Docs</a>
+              </div>
+            </body>
+          </html>' > doc_hub/index.html
+      
+      - name: Deploy frontend docs
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: bulak-smart-connect-js/docs/frontend
+          target-folder: frontend-docs
+          branch: gh-pages
+          clean: true
+          clean-exclude: |
+            .nojekyll
+            api-docs/**
+
+      - name: Deploy documentation hub
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: doc_hub
+          branch: gh-pages
+          clean: false
