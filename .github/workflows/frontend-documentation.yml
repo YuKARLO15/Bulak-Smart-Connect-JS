@@ -47,7 +47,7 @@ jobs:
           mkdir -p docusaurus/docs/components
           
           # Create component documentation extractor script
-          cat > extract-components.js << 'EOF'
+          cat > extract-components.cjs << 'EOF'
           const reactDocgen = require('react-docgen');
           const fs = require('fs-extra');
           const path = require('path');
