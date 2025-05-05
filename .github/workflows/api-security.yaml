@@ -12,6 +12,17 @@ on:
 jobs:
   api-security-scan:
     runs-on: ubuntu-latest
+    
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: bulak_smart_connect
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+    
     steps:
       - uses: actions/checkout@v4
       
@@ -27,7 +38,15 @@ jobs:
         run: |
           cd bsc-js-backend
           # Create a minimal .env file with required variables
-          echo "JWT_SECRET=test-security-scan-secret" > .env
+          echo "
+          DB_TYPE=mysql
+          DB_HOST=127.0.0.1
+          DB_PORT=3306
+          DB_USERNAME=root
+          DB_PASSWORD=root
+          DB_NAME=bulak_smart_connect
+          JWT_SECRET=test-security-scan-secret
+          " > .env
           
           # Modify main.ts properly by replacing the entire listen call
           if grep -q "await app.listen" src/main.ts; then
