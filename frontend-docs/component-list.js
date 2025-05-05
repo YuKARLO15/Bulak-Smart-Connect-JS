@@ -91,9 +91,6 @@ const componentFiles = [
   "src/context/AuthContext.jsx",
   "src/footer.jsx",
   "src/main.jsx",
-  "src/stories/Button.jsx",
-  "src/stories/Header.jsx",
   "src/stories/NavBar.stories.jsx",
-  "src/stories/NavSide.stories.jsx",
-  "src/stories/Page.jsx"
+  "src/stories/NavSide.stories.jsx"
 ];
