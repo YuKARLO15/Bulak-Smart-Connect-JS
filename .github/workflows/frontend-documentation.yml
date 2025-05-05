@@ -369,7 +369,7 @@ jobs:
           EOF
           
           # Run the component documentation extraction script
-          node extract-components.js
+          node extract-components.cjs
           
           # Build the Docusaurus site
           cd docusaurus
