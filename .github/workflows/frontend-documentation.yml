@@ -28,9 +28,9 @@ jobs:
           cd bulak-smart-connect-js
           npm ci
           
-          # Install Storybook and supporting packages
-          npm install --no-save --save-dev @storybook/react @storybook/addon-essentials @storybook/addon-links @storybook/blocks @storybook/builder-vite @vitejs/plugin-react-swc vite-tsconfig-paths
-      
+          # Install Storybook and all required packages permanently (without --no-save flag)
+          npm install --save-dev @storybook/react @storybook/vite @storybook/addon-essentials @storybook/addon-links @storybook/addon-interactions @storybook/blocks @vitejs/plugin-react-swc
+          
       - name: Setup Storybook
         run: |
           cd bulak-smart-connect-js
@@ -38,13 +38,10 @@ jobs:
           # Create .storybook directory if it doesn't exist
           mkdir -p .storybook
           
-          # Create main.js configuration - using JS not TS
+          # Create main.js configuration using CommonJS module syntax
           cat > .storybook/main.js << 'EOF'
-          import { mergeConfig } from 'vite';
-          import swc from '@vitejs/plugin-react-swc';
-          
           /** @type {import('@storybook/react-vite').StorybookConfig} */
-          const config = {
+          module.exports = {
             stories: ['../src/**/*.mdx', '../src/**/*.stories.@(js|jsx)'],
             addons: [
               '@storybook/addon-links',
@@ -58,18 +55,18 @@ jobs:
             docs: {
               autodocs: true,
             },
-            viteFinal: (config) => {
-              return mergeConfig(config, {
-                plugins: [
-                  swc({
-                    jsxImportSource: 'react',
-                  }),
-                ],
-              });
+            core: {
+              disableTelemetry: true
             },
+            async viteFinal(config) {
+              const { mergeConfig } = await import('vite');
+              const { default: react } = await import('@vitejs/plugin-react-swc');
+              
+              return mergeConfig(config, {
+                plugins: [react()]
+              });
+            }
           };
-          
-          export default config;
           EOF
           
           # Create preview.js configuration - using JS not TS
