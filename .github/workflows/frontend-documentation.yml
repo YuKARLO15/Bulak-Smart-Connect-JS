@@ -33,12 +33,28 @@ jobs:
         run: |
           cd bulak-smart-connect-js
           
-          # Create styleguide.config.cjs file (note the .cjs extension)
-          cat > styleguide.config.cjs << 'EOF'
+          # Create a more specific styleguide.config.js file
+          cat > styleguide.config.js << 'EOF'
+          const path = require('path');
+          
           module.exports = {
-            components: 'src/**/*.{jsx,js}',
-            ignore: ['src/**/*.test.{jsx,js}', 'src/**/*.spec.{jsx,js}', 'src/**/index.{jsx,js}'],
             title: 'Bulak Smart Connect React Components',
+            components: [
+              'src/**/UserBulakSmartConnect/**/*.jsx',
+              'src/**/AdminBulakSmartConnect/**/*.jsx',
+              'src/**/LandingPageComponents/**/*.jsx',
+              'src/**/LogInComponents/**/*.jsx',
+              'src/**/NavigationComponents/**/*.jsx',
+              'src/**/components/**/*.jsx',
+            ],
+            ignore: [
+              '**/__tests__/**',
+              '**/*.test.jsx',
+              '**/*.spec.jsx',
+              '**/node_modules/**',
+              '**/*.js',
+              '**/index.jsx'
+            ],
             template: {
               head: {
                 links: [
@@ -48,18 +64,51 @@ jobs:
                   }
                 ]
               }
+            },
+            webpackConfig: {
+              module: {
+                rules: [
+                  {
+                    test: /\.(js|jsx)$/,
+                    exclude: /node_modules/,
+                    use: {
+                      loader: 'babel-loader',
+                      options: {
+                        presets: ['@babel/preset-env', '@babel/preset-react']
+                      }
+                    }
+                  },
+                  {
+                    test: /\.css$/,
+                    use: ['style-loader', 'css-loader']
+                  },
+                  {
+                    test: /\.(png|jpg|gif|svg)$/,
+                    use: [
+                      {
+                        loader: 'file-loader',
+                        options: {
+                          name: '[name].[ext]',
+                          outputPath: 'images/'
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
             }
           };
           EOF
           
-          # Run with explicit path to the cjs file
-          npx styleguidist build --config styleguide.config.cjs
+          # Install necessary dependencies for webpack config
+          npm install --save-dev babel-loader @babel/preset-env @babel/preset-react style-loader css-loader file-loader
           
-          # Ensure output directory exists
+          # Run Styleguidist build with the new config
+          npx styleguidist build
+          
+          # Ensure output directory exists and copy files
           mkdir -p docs/frontend
-          
-          # Move the generated docs to our target directory
-          mv styleguide/* docs/frontend/ || echo "No styleguide directory found"
+          cp -r styleguide/* docs/frontend/ || echo "No styleguide directory found"
       
       - name: Create documentation hub
         run: |
