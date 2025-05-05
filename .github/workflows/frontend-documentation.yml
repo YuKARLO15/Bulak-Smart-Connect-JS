@@ -55,26 +55,18 @@ jobs:
           
           module.exports = {
             title: 'Bulak Smart Connect React Components',
-            // More specific component matching to avoid files that aren't components
-            components: [
-              'src/**/UserBulakSmartConnect/**/*([A-Z]*)*.jsx',
-              'src/**/AdminBulakSmartConnect/**/*([A-Z]*)*.jsx',
-              'src/**/LandingPageComponents/**/*([A-Z]*)*.jsx',
-              'src/**/LogInComponents/**/*([A-Z]*)*.jsx',
-              'src/**/NavigationComponents/**/*([A-Z]*)*.jsx',
-              'src/**/components/**/*([A-Z]*)*.jsx',
-            ],
+            // More lenient component matching
+            components: 'src/**/*.jsx',
             ignore: [
               '**/__tests__/**',
               '**/*.test.jsx',
               '**/*.spec.jsx',
               '**/node_modules/**',
-              '**/*.js',
-              '**/index.jsx',
-              '**/*([a-z]*)*.jsx', // Likely not a component if it starts lowercase
-              '**/RegularBirth.jsx', // Explicitly ignore the problematic file
+              '**/index.jsx'
             ],
-            skipComponentsWithoutExample: true, // Skip components that have no examples
+            skipComponentsWithoutExample: false, // IMPORTANT: Changed to false
+            exampleMode: 'expand',
+            usageMode: 'expand',
             template: {
               head: {
                 links: [
@@ -85,58 +77,6 @@ jobs:
                 ]
               }
             },
-            webpackConfig: {
-              module: {
-                rules: [
-                  {
-                    test: /\.(js|jsx)$/,
-                    exclude: /node_modules/,
-                    use: {
-                      loader: 'babel-loader',
-                      options: {
-                        presets: ['@babel/preset-env', '@babel/preset-react']
-                      }
-                    }
-                  },
-                  {
-                    test: /\.css$/,
-                    use: ['style-loader', 'css-loader']
-                  },
-                  {
-                    test: /\.(png|jpg|gif|svg)$/,
-                    use: [
-                      {
-                        loader: 'file-loader',
-                        options: {
-                          name: '[name].[ext]',
-                          outputPath: 'images/',
-                          emitFile: true
-                        }
-                      }
-                    ]
-                  }
-                ]
-              },
-              resolve: {
-                // Provide fallbacks for missing assets
-                fallback: {
-                  path: false,
-                  fs: false
-                }
-              }
-            },
-            // Handle errors more gracefully
-            dangerouslyUpdateWebpackConfig: (webpackConfig) => {
-              webpackConfig.plugins = webpackConfig.plugins || [];
-              webpackConfig.plugins.push(
-                new (require('webpack').DefinePlugin)({
-                  'process.env': {
-                    NODE_ENV: JSON.stringify('production')
-                  }
-                })
-              );
-              return webpackConfig;
-            }
           };
           EOF
           
