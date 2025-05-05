@@ -63,7 +63,7 @@ export const updateUser = (index, updatedData) => {
   }
 };
 
-// Delete a user by index
+// Delete a user by index BEFOREEEEEEEEEEEEEEE
 // export const deleteUser = (index) => {
 //   try {
 //     const users = getUsers();
@@ -79,7 +79,8 @@ export const updateUser = (index, updatedData) => {
 //   }
 // };
 
-// Delete a user by index
+
+// Delete a user by index NEW and Working
 export const removeUser = (index) => {
   const users = JSON.parse(localStorage.getItem('users')) || [];
   users.splice(index, 1);

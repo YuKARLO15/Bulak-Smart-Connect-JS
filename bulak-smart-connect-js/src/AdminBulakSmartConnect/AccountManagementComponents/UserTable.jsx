@@ -1,34 +1,45 @@
-import React from 'react';
+import React, { useState } from 'react';
 import '../AccountManagementComponents/UserTable.css';
 import UploadProfile from './ProfileUpload';
 import { useNavigate } from 'react-router-dom';
 
 const UserTable = ({ users, handleUpload, removeUser }) => {
   const navigate = useNavigate();
+  const [showDetails, setShowDetails] = useState(false);
 
   const handleModifyClick = (user, index) => {
-    navigate('/add-user', { 
-      state: { 
+    navigate('/add-user', {
+      state: {
         isModifying: true,
         userData: user,
-        userIndex: index 
-      } 
+        userIndex: index
+      }
     });
   };
-  
+
   const handleRemoveClick = (index) => {
     if (window.confirm('Are you sure you want to remove this user?')) {
-      removeUser(index); // This function must be passed via props from parent
+      removeUser(index);
     }
   };
-  
+
+  const toggleViewDetails = () => {
+    setShowDetails(prev => !prev);
+  };
 
   return (
-    <div className="user-table-container">
+    <div className="user-table-container compact">
       <table>
         <thead>
           <tr>
             <th>Name</th>
+            {showDetails && (
+              <>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Phone Number</th>
+              </>
+            )}
             <th>Status</th>
             <th>User Role</th>
             <th>Actions</th>
@@ -43,6 +54,15 @@ const UserTable = ({ users, handleUpload, removeUser }) => {
                   <span className="user-name">{user.name}</span>
                 </div>
               </td>
+
+              {showDetails && (
+                <>
+                  <td>{user.username}</td>
+                  <td>{user.email}</td>
+                  <td>{user.contact}</td>
+                </>
+              )}
+
               <td className={user.status === 'Logged In' ? 'status-logged' : 'status-not-logged'}>
                 {user.status}
               </td>
@@ -56,6 +76,9 @@ const UserTable = ({ users, handleUpload, removeUser }) => {
                 </div>
               </td>
               <td className="actions">
+                <button className="view" onClick={toggleViewDetails}>
+                  {showDetails ? 'Hide' : 'View'}
+                </button>
                 <button className="modify" onClick={() => handleModifyClick(user, index)}>Modify</button>
                 <button className="remove" onClick={() => handleRemoveClick(index)}>Remove</button>
               </td>

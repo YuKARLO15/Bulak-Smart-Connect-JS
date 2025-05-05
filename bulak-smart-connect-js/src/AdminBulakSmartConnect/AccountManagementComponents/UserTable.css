@@ -108,7 +108,7 @@ td {
 }
 
 .actions button {
-  margin-right: 10px;
+  margin-right: 5px;
   padding: 8px 12px;
   border: none;
   border-radius: 5px;
@@ -131,4 +131,75 @@ td {
 
 .actions .remove:hover {
   background-color: #8c1e1e;
+}
+
+
+.expanded-row td {
+  background-color: #f9f9f9;
+  padding: 20px;
+  max-width: 100vh;
+  height: 100vh;
+  width: 100%;
+}
+
+.expanded-content p {
+  margin: 6px 0;
+  font-size: 14px;
+  color: #333;
+}
+
+.actions .view {
+  background-color: #f1c40f; /* bright yellow */
+  color: black;
+}
+
+.actions .view:hover {
+  background-color: #d4ac0d; /* darker yellow on hover */
+}
+
+
+.user-table-container table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.user-table-container th,
+.user-table-container td {
+  padding: 8px 12px; /* Reduce padding to minimize whitespace */
+  vertical-align: middle; /* Vertically center all content */
+  text-align: left;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+/* Make the rows more compact */
+.user-table-container tr {
+  height: 48px; /* Set a fixed height for rows */
+}
+
+/* Style for the user info container to align image and name */
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* Ensure the user image is properly sized */
+.user-info img {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* Style for action buttons to be more compact */
+/* .actions button {
+  padding: 4px 8px;
+  margin-right: 5px;
+  font-size: 0.85em;
+} */
+
+/* If you need even less vertical space */
+.user-table-container.compact td {
+  padding-top: 4px;
+  padding-bottom: 4px;
 }
