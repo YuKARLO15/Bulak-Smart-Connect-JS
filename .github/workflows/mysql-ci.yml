@@ -82,12 +82,12 @@ jobs:
           ('citizen', 'Regular user');
         
         -- Insert test user with known password hash for 'password123'
-        INSERT INTO users (email, password, name, defaultRoleId) 
+        INSERT INTO users (email, password, name, default_role_id) 
         VALUES ('test@example.com', '$2b$10$3iXRBKLQZ.Pxc/SfxO1mEOzRqsLD2dSbbK5hDnE/HgDrnULvWutsy', 'Test User', 
                (SELECT id FROM roles WHERE name = 'citizen'));
         
         -- Assign citizen role to test user
-        INSERT INTO user_roles (userId, roleId)
+        INSERT INTO user_roles (user_id, role_id)
         VALUES (1, (SELECT id FROM roles WHERE name = 'citizen'));"
     
     - name: Test authentication system
@@ -177,12 +177,12 @@ jobs:
           ('citizen', 'Regular user');
         
         -- Insert test user with known password hash for 'password123'
-        INSERT INTO users (email, password, name, defaultRoleId) 
+        INSERT INTO users (email, password, name, default_role_id) 
         VALUES ('test@example.com', '$2b$10$3iXRBKLQZ.Pxc/SfxO1mEOzRqsLD2dSbbK5hDnE/HgDrnULvWutsy', 'Test User', 
                (SELECT id FROM roles WHERE name = 'citizen'));
         
         -- Assign citizen role to test user
-        INSERT INTO user_roles (userId, roleId)
+        INSERT INTO user_roles (user_id, role_id)
         VALUES (1, (SELECT id FROM roles WHERE name = 'citizen'));"
     
     - name: Start backend server
