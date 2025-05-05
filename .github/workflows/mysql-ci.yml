@@ -25,12 +25,12 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     
-    - name: Use Node.js
+    - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: '20.x'
+        node-version: '20'
         cache: 'npm'
-        cache-dependency-path: 'bsc-js-backend/package-lock.json'
+        cache-dependency-path: '**/package-lock.json'
     
     - name: Install dependencies
       run: |
@@ -46,13 +46,49 @@ jobs:
       run: |
         mysql -h 127.0.0.1 -uroot -proot -e "
         USE bulak_smart_connect_test;
+        
+        -- Create roles table
+        CREATE TABLE IF NOT EXISTS roles (
+          id INT AUTO_INCREMENT PRIMARY KEY,
+          name VARCHAR(50) NOT NULL UNIQUE,
+          description VARCHAR(255)
+        );
+        
+        -- Create users table with defaultRoleId
         CREATE TABLE IF NOT EXISTS users (
           id INT AUTO_INCREMENT PRIMARY KEY,
           email VARCHAR(255) NOT NULL UNIQUE,
           password VARCHAR(255) NOT NULL,
           name VARCHAR(255) NOT NULL,
-          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        );"
+          defaultRoleId INT,
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+          FOREIGN KEY (defaultRoleId) REFERENCES roles(id)
+        );
+        
+        -- Create junction table for many-to-many relationship
+        CREATE TABLE IF NOT EXISTS user_roles (
+          userId INT,
+          roleId INT,
+          PRIMARY KEY (userId, roleId),
+          FOREIGN KEY (userId) REFERENCES users(id),
+          FOREIGN KEY (roleId) REFERENCES roles(id)
+        );
+        
+        -- Insert roles from your seed function
+        INSERT INTO roles (name, description) VALUES 
+          ('super_admin', 'Has all permissions'),
+          ('admin', 'Can manage staff and citizens'),
+          ('staff', 'Can process applications'),
+          ('citizen', 'Regular user');
+        
+        -- Insert test user with known password hash for 'password123'
+        INSERT INTO users (email, password, name, defaultRoleId) 
+        VALUES ('test@example.com', '$2b$10$3iXRBKLQZ.Pxc/SfxO1mEOzRqsLD2dSbbK5hDnE/HgDrnULvWutsy', 'Test User', 
+               (SELECT id FROM roles WHERE name = 'citizen'));
+        
+        -- Assign citizen role to test user
+        INSERT INTO user_roles (userId, roleId)
+        VALUES (1, (SELECT id FROM roles WHERE name = 'citizen'));"
     
     - name: Test authentication system
       run: |
@@ -84,10 +120,12 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     
-    - name: Set up Node.js
+    - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: '20.x'
+        node-version: '20'
+        cache: 'npm'
+        cache-dependency-path: '**/package-lock.json'
     
     - name: Install backend dependencies
       run: |
@@ -103,17 +141,49 @@ jobs:
       run: |
         mysql -h 127.0.0.1 -uroot -proot -e "
         USE bulak_smart_connect_test;
+        
+        -- Create roles table
+        CREATE TABLE IF NOT EXISTS roles (
+          id INT AUTO_INCREMENT PRIMARY KEY,
+          name VARCHAR(50) NOT NULL UNIQUE,
+          description VARCHAR(255)
+        );
+        
+        -- Create users table with defaultRoleId
         CREATE TABLE IF NOT EXISTS users (
           id INT AUTO_INCREMENT PRIMARY KEY,
           email VARCHAR(255) NOT NULL UNIQUE,
           password VARCHAR(255) NOT NULL,
           name VARCHAR(255) NOT NULL,
-          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+          defaultRoleId INT,
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+          FOREIGN KEY (defaultRoleId) REFERENCES roles(id)
         );
         
+        -- Create junction table for many-to-many relationship
+        CREATE TABLE IF NOT EXISTS user_roles (
+          userId INT,
+          roleId INT,
+          PRIMARY KEY (userId, roleId),
+          FOREIGN KEY (userId) REFERENCES users(id),
+          FOREIGN KEY (roleId) REFERENCES roles(id)
+        );
+        
+        -- Insert roles from your seed function
+        INSERT INTO roles (name, description) VALUES 
+          ('super_admin', 'Has all permissions'),
+          ('admin', 'Can manage staff and citizens'),
+          ('staff', 'Can process applications'),
+          ('citizen', 'Regular user');
+        
         -- Insert test user with known password hash for 'password123'
-        INSERT INTO users (email, password, name) 
-        VALUES ('test@example.com', '$2b$10$3iXRBKLQZ.Pxc/SfxO1mEOzRqsLD2dSbbK5hDnE/HgDrnULvWutsy', 'Test User');"
+        INSERT INTO users (email, password, name, defaultRoleId) 
+        VALUES ('test@example.com', '$2b$10$3iXRBKLQZ.Pxc/SfxO1mEOzRqsLD2dSbbK5hDnE/HgDrnULvWutsy', 'Test User', 
+               (SELECT id FROM roles WHERE name = 'citizen'));
+        
+        -- Assign citizen role to test user
+        INSERT INTO user_roles (userId, roleId)
+        VALUES (1, (SELECT id FROM roles WHERE name = 'citizen'));"
     
     - name: Start backend server
       run: |
