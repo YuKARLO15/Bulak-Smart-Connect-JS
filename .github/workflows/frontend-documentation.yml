@@ -1,4 +1,3 @@
-# .github/workflows/frontend-documentation.yml
 name: Frontend Documentation
 
 on:
