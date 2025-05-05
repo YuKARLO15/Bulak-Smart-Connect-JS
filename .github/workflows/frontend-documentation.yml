@@ -49,14 +49,30 @@ jobs:
         run: |
           cd bulak-smart-connect-js
           
-          # Create a more robust styleguide configuration
+          # Create a more robust styleguide configuration with proper webpack config
           cat > styleguide.config.cjs << 'EOF'
           const path = require('path');
           
           module.exports = {
             title: 'Bulak Smart Connect React Components',
-            // More lenient component matching
-            components: 'src/**/*.jsx',
+            components: 'src/**/[A-Z]*.jsx',  // Target components with uppercase names
+            sections: [
+              {
+                name: 'User Interface',
+                components: 'src/UserBulakSmartConnect/**/*.jsx',
+                description: 'Components for the user-facing interface'
+              },
+              {
+                name: 'Admin Interface',
+                components: 'src/AdminBulakSmartConnect/**/*.jsx',
+                description: 'Components for the admin interface'
+              },
+              {
+                name: 'Shared Components',
+                components: 'src/components/**/*.jsx',
+                description: 'Reusable components across the application'
+              }
+            ],
             ignore: [
               '**/__tests__/**',
               '**/*.test.jsx',
@@ -64,45 +80,138 @@ jobs:
               '**/node_modules/**',
               '**/index.jsx'
             ],
-            skipComponentsWithoutExample: false, // IMPORTANT: Changed to false
+            skipComponentsWithoutExample: false,
             exampleMode: 'expand',
             usageMode: 'expand',
-            template: {
-              head: {
-                links: [
+            webpackConfig: {
+              module: {
+                rules: [
                   {
-                    rel: 'stylesheet',
-                    href: 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap'
+                    test: /\.(js|jsx)$/,
+                    exclude: /node_modules/,
+                    use: { loader: 'babel-loader', options: { presets: ['@babel/preset-env', '@babel/preset-react'] } }
+                  },
+                  {
+                    test: /\.css$/,
+                    use: ['style-loader', 'css-loader']
+                  },
+                  {
+                    test: /\.(png|jpg|gif|svg)$/,
+                    use: ['file-loader']
                   }
                 ]
+              },
+              resolve: {
+                extensions: ['.js', '.jsx']
               }
             },
+            // For debugging - log all detected components
+            dangerouslyUpdateWebpackConfig: (webpackConfig) => {
+              console.log('Detected components:', require('fs').readdirSync('src')
+                .filter(file => file.endsWith('.jsx'))
+                .map(file => 'src/' + file));
+              return webpackConfig;
+            }
           };
           EOF
           
-          # Create empty placeholder files for any missing files that might be referenced
-          mkdir -p src/assets/images
-          touch src/assets/images/placeholder.jpg
+          # Create a simple component file to debug Styleguidist
+          mkdir -p src/debug
+          cat > src/debug/TestComponent.jsx << 'EOF'
+          import React from 'react';
           
-          # Run with error handling
-          npx styleguidist build --config styleguide.config.cjs || (echo "Build failed but continuing with available files" && mkdir -p styleguide && touch styleguide/index.html)
+          /**
+           * Test component to verify Styleguidist is working
+           * @component
+           * @example
+           * return <TestComponent message="Hello" />
+           */
+          const TestComponent = ({ message }) => <div>{message}</div>;
           
-          # Ensure output directory exists and copy files
+          export default TestComponent;
+          EOF
+          
+          # Create fallback components manifest
           mkdir -p docs/frontend
-          cp -r styleguide/* docs/frontend/ 2>/dev/null || echo "Warning: No styleguide files generated"
           
-          # Create a fallback page if build failed completely
-          if [ ! -f "docs/frontend/index.html" ]; then
-            echo "Creating fallback documentation page"
-            echo '<!DOCTYPE html>
-            <html>
-              <head><title>Frontend Documentation</title></head>
-              <body>
-                <h1>Documentation Generation Failed</h1>
-                <p>Please check the GitHub Actions logs for details on why the documentation build failed.</p>
-                <p>You can manually explore the component structure in the repository.</p>
-              </body>
-            </html>' > docs/frontend/index.html
+          echo "Running component detection..."
+          COMPONENTS=$(find src -name "*.jsx" | sort)
+          echo "Found components: $COMPONENTS"
+          
+          # Generate comprehensive component listing HTML
+          cat > component-list.html << 'EOF'
+          <!DOCTYPE html>
+          <html>
+            <head>
+              <title>Bulak Smart Connect Components</title>
+              <style>
+                body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+                .component-section { margin-bottom: 30px; }
+                .component-item { margin-bottom: 10px; padding: 10px; border: 1px solid #eee; }
+                h3 { margin-top: 5px; }
+                pre { background: #f4f4f4; padding: 10px; overflow: auto; }
+              </style>
+            </head>
+            <body>
+              <h1>Bulak Smart Connect Component Listing</h1>
+              <p>This is a static listing of components in the codebase. Full documentation with Styleguidist failed to generate.</p>
+              <div id="component-list">Loading component list...</div>
+              
+              <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                  const componentList = document.getElementById('component-list');
+                  componentList.innerHTML = '';
+                  
+                  // Components are inserted here by the shell script
+                  const components = COMPONENT_LIST_PLACEHOLDER;
+                  
+                  // Group by directory
+                  const groupedComponents = {};
+                  components.forEach(comp => {
+                    const parts = comp.split('/');
+                    const group = parts.length > 2 ? parts[1] : 'Other';
+                    if (!groupedComponents[group]) {
+                      groupedComponents[group] = [];
+                    }
+                    groupedComponents[group].push(comp);
+                  });
+                  
+                  // Generate HTML
+                  Object.keys(groupedComponents).sort().forEach(group => {
+                    const section = document.createElement('div');
+                    section.className = 'component-section';
+                    section.innerHTML = `<h2>${group}</h2>`;
+                    
+                    groupedComponents[group].forEach(comp => {
+                      const item = document.createElement('div');
+                      item.className = 'component-item';
+                      item.innerHTML = `
+                        <h3>${comp.split('/').pop().replace('.jsx', '')}</h3>
+                        <pre>${comp}</pre>
+                      `;
+                      section.appendChild(item);
+                    });
+                    
+                    componentList.appendChild(section);
+                  });
+                });
+              </script>
+            </body>
+          </html>
+          EOF
+          
+          # Insert component list into the HTML
+          COMPONENT_JSON=$(find src -name "*.jsx" | sort | jq -R . | jq -s .)
+          sed "s/COMPONENT_LIST_PLACEHOLDER/$COMPONENT_JSON/g" component-list.html > docs/frontend/index.html
+          
+          # Try to build with Styleguidist
+          echo "Building with Styleguidist..."
+          npx styleguidist build --config styleguide.config.cjs || echo "Styleguidist build failed, using fallback"
+          
+          # If Styleguidist build succeeded, copy its output
+          if [ -d "styleguide" ] && [ -f "styleguide/index.html" ]; then
+            echo "Styleguidist build succeeded, using its output"
+            cp -r styleguide/* docs/frontend/
           fi
       
       - name: Create documentation hub
