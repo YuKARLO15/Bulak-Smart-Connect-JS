@@ -222,7 +222,7 @@ jobs:
           
           # Build Storybook
           echo "Building with Storybook..."
-          npx build-storybook -o docs/frontend --quiet || echo "Storybook build failed, using fallback"
+          npx storybook build -o docs/frontend --quiet || echo "Storybook build failed, using fallback"
           
           # Ensure output directory exists
           mkdir -p docs/frontend
