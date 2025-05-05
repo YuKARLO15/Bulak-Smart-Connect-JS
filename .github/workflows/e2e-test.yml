@@ -77,6 +77,12 @@ jobs:
           npx cypress install
           npx cypress verify
       
+      - name: Cache Cypress Binary
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/Cypress
+          key: cypress-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
+      
       # Check if cypress.config.js exists
       - name: Verify Cypress configuration
         run: |
