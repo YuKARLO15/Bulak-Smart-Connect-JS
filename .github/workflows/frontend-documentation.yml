@@ -28,22 +28,14 @@ jobs:
           cd bulak-smart-connect-js
           npm ci
           
-          # Create package.json entries for Storybook with fixed versions
-          npm pkg set devDependencies.storybook="^8.0.0"
-          npm pkg set devDependencies.@storybook/react="^8.0.0"
-          npm pkg set devDependencies.@storybook/addon-links="^8.0.0"
-          npm pkg set devDependencies.@storybook/addon-essentials="^8.0.0"
-          npm pkg set devDependencies.@storybook/addon-docs="^8.0.0"
+          # Install Storybook and all required dependencies directly
+          npm install --no-save storybook@latest @storybook/react@latest @storybook/addon-links@latest @storybook/addon-essentials@latest @storybook/addon-docs@latest @storybook/builder-webpack5@latest @storybook/manager-webpack5@latest webpack style-loader css-loader babel-loader @babel/preset-env @babel/preset-react
           
-          # Install Storybook and dependencies from package.json (no --no-save flag)
-          npm install
+          # Create a .babelrc file for Storybook
+          echo '{
+            "presets": ["@babel/preset-env", "@babel/preset-react"]
+          }' > .babelrc
           
-          # Initialize Storybook to create proper configuration
-          npx storybook init --skip-install --yes
-          
-          # Fix vulnerabilities that don't break functionality
-          npm audit fix --production || true
-      
       - name: Fix CSS image references before build
         run: |
           cd bulak-smart-connect-js
