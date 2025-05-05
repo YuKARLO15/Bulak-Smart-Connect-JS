@@ -49,12 +49,11 @@ jobs:
           # Create Storybook configuration files
           mkdir -p .storybook
           
-          # Main configuration file - keeping Vite + SWC
+          # Main configuration file - optimized for Vite + SWC
           cat > .storybook/main.js << 'EOF'
           module.exports = {
             stories: [
-              "../src/stories/**/*.stories.jsx",
-              "../src/stories/**/*.stories.mdx"
+              "../src/stories/**/*.stories.jsx"
             ],
             addons: [
               '@storybook/addon-links',
@@ -76,10 +75,7 @@ jobs:
               storyStoreV7: false
             },
             viteFinal: async (config) => {
-              // Use React SWC plugin
-              config.plugins = config.plugins || [];
-              
-              // Force use of SWC
+              // Ensure SWC is used for JSX
               config.optimizeDeps = {
                 ...config.optimizeDeps,
                 esbuildOptions: {
@@ -105,6 +101,7 @@ jobs:
                 date: /Date$/,
               },
             },
+            layout: 'fullscreen',
           };
           
           export const decorators = [
@@ -121,35 +118,44 @@ jobs:
           # Create directory for manually defined stories
           mkdir -p src/stories
           
-          # Create component documentation stories WITHOUT component imports
-          # This avoids the indexer errors by not trying to import actual components
-          cat > src/stories/Introduction.stories.mdx << 'EOF'
-          import { Meta } from '@storybook/addon-docs';
-          
-          <Meta title="Introduction" />
-          
-          # Bulak Smart Connect Frontend Documentation
-          
-          This documentation provides an overview of the components used in the Bulak Smart Connect frontend application.
-          
-          ## Project Structure
-          
-          The application is organized into several main sections:
-          
-          - **User Interface**: Components for regular citizens to access services
-          - **Admin Interface**: Components for administrators to manage the system
-          - **Navigation**: Shared navigation components across the application
-          - **Authentication**: Login and user management components
-          
-          ## Technology Stack
-          
-          - React 18 with Vite + SWC for fast development and builds
-          - Material UI for component library
-          - React Router for navigation
-          - Context API for state management
+          # Create Introduction as JSX instead of MDX to avoid indexing issues
+          cat > src/stories/Introduction.stories.jsx << 'EOF'
+          import React from 'react';
+
+          export default {
+            title: 'Introduction',
+          };
+
+          export const Introduction = () => (
+            <div style={{ fontFamily: 'sans-serif', maxWidth: '800px', margin: '0 auto', padding: '20px' }}>
+              <h1 style={{ color: '#184a5b' }}>Bulak Smart Connect Frontend Documentation</h1>
+              
+              <p>This documentation provides an overview of the components used in the Bulak Smart Connect frontend application.</p>
+              
+              <h2 style={{ marginTop: '30px', color: '#184a5b' }}>Project Structure</h2>
+              
+              <p>The application is organized into several main sections:</p>
+              
+              <ul>
+                <li><strong>User Interface</strong>: Components for regular citizens to access services</li>
+                <li><strong>Admin Interface</strong>: Components for administrators to manage the system</li>
+                <li><strong>Navigation</strong>: Shared navigation components across the application</li>
+                <li><strong>Authentication</strong>: Login and user management components</li>
+              </ul>
+              
+              <h2 style={{ marginTop: '30px', color: '#184a5b' }}>Technology Stack</h2>
+              
+              <ul>
+                <li><strong>React 18</strong> with Vite + SWC for fast development and builds</li>
+                <li><strong>Material UI</strong> for component library</li>
+                <li><strong>React Router</strong> for navigation</li>
+                <li><strong>Context API</strong> for state management</li>
+              </ul>
+            </div>
+          );
           EOF
           
-          # Create a component tree explorer story that doesn't import components
+          # Create component tree explorer story
           cat > src/stories/ComponentTree.stories.jsx << 'EOF'
           import React from 'react';
           
@@ -192,14 +198,14 @@ jobs:
             
             return (
               <div style={{ fontFamily: "sans-serif", maxWidth: "800px", margin: "0 auto", padding: "20px" }}>
-                <h1>Component Structure</h1>
+                <h1 style={{ color: "#184a5b" }}>Component Structure</h1>
                 <p>
                   The Bulak Smart Connect application is organized into logical sections based on user roles and functionality.
                 </p>
                 
                 {mainSections.map(section => (
                   <div key={section.name} style={{ marginBottom: "30px" }}>
-                    <h2>{section.name}</h2>
+                    <h2 style={{ color: "#184a5b" }}>{section.name}</h2>
                     <ul>
                       {section.components.map(component => (
                         <li key={component} style={{ marginBottom: "10px" }}>
@@ -214,7 +220,7 @@ jobs:
           };
           EOF
           
-          # Create documentation for key components WITHOUT importing them
+          # Create documentation for key components
           cat > src/stories/KeyComponents.stories.jsx << 'EOF'
           import React from 'react';
           
@@ -224,7 +230,7 @@ jobs:
           
           export const NavigationComponents = () => (
             <div style={{ fontFamily: "sans-serif", padding: "20px" }}>
-              <h2>Navigation Components</h2>
+              <h2 style={{ color: "#184a5b" }}>Navigation Components</h2>
               <div style={{ marginBottom: "20px", padding: "15px", border: "1px solid #ddd", borderRadius: "4px" }}>
                 <h3>NavBar</h3>
                 <p>Top navigation bar component used throughout the application.</p>
@@ -249,7 +255,7 @@ jobs:
           
           export const UserInterfaceComponents = () => (
             <div style={{ fontFamily: "sans-serif", padding: "20px" }}>
-              <h2>User Interface Components</h2>
+              <h2 style={{ color: "#184a5b" }}>User Interface Components</h2>
               <div style={{ marginBottom: "20px", padding: "15px", border: "1px solid #ddd", borderRadius: "4px" }}>
                 <h3>UserDashboard</h3>
                 <p>Main dashboard for regular users.</p>
@@ -273,13 +279,166 @@ jobs:
           );
           EOF
           
-          # Build Storybook with enhanced error handling
+          # Create a static assets directory for Storybook
+          mkdir -p public/assets
+          
+          # Build Storybook
           echo "Building Storybook with Vite + SWC..."
-          npx storybook build -o docs/frontend --quiet || {
-            echo "Storybook build failed, using enhanced fallback..."
+          
+          # Important: We need to fix the issue with failing MDX files
+          # Install required additional packages
+          npm install --no-save @storybook/builder-vite
+          
+          # Build Storybook with proper error handling
+          npx storybook build -o docs/frontend || {
+            echo "Storybook build encountered issues, creating basic documentation..."
             
-            # Use the same enhanced fallback as before
-            # [fallback code remains the same]
+            mkdir -p docs/frontend
+            
+            # Create a basic HTML page with component information
+            cat > docs/frontend/index.html << 'EOF'
+            <!DOCTYPE html>
+            <html>
+              <head>
+                <meta charset="utf-8">
+                <title>Bulak Smart Connect Components</title>
+                <style>
+                  body { font-family: 'Segoe UI', sans-serif; max-width: 1200px; margin: 0 auto; padding: 20px; color: #333; }
+                  h1, h2, h3 { color: #184a5b; }
+                  .container { display: flex; flex-wrap: wrap; gap: 20px; }
+                  .section { border: 1px solid #ddd; border-radius: 8px; padding: 20px; flex: 1; min-width: 300px; }
+                  .component { margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #eee; }
+                  .component h3 { margin-bottom: 5px; }
+                </style>
+              </head>
+              <body>
+                <h1>Bulak Smart Connect Components</h1>
+                <p>This documentation provides an overview of the main components used in the application.</p>
+                
+                <div class="container">
+                  <div class="section">
+                    <h2>User Interface Components</h2>
+                    
+                    <div class="component">
+                      <h3>UserDashboard</h3>
+                      <p>Main dashboard for regular users.</p>
+                      <ul>
+                        <li>Displays user's applications and appointments</li>
+                        <li>Quick access to common services</li>
+                        <li>Status updates for submitted documents</li>
+                      </ul>
+                    </div>
+                    
+                    <div class="component">
+                      <h3>ApplicationForm</h3>
+                      <p>Form for document application submission.</p>
+                      <ul>
+                        <li>Multi-step form process</li>
+                        <li>Document upload capability</li>
+                        <li>Form validation and error handling</li>
+                      </ul>
+                    </div>
+                    
+                    <div class="component">
+                      <h3>AppointmentForm</h3>
+                      <p>Interface for booking appointments.</p>
+                    </div>
+                    
+                    <div class="component">
+                      <h3>BirthCertificateForm</h3>
+                      <p>Form for birth certificate applications.</p>
+                    </div>
+                    
+                    <div class="component">
+                      <h3>MarriageCertificateForm</h3>
+                      <p>Form for marriage certificate applications.</p>
+                    </div>
+                    
+                    <div class="component">
+                      <h3>WalkInQueue</h3>
+                      <p>Queue management for walk-in visitors.</p>
+                    </div>
+                  </div>
+                  
+                  <div class="section">
+                    <h2>Admin Interface Components</h2>
+                    
+                    <div class="component">
+                      <h3>AdminDashboard</h3>
+                      <p>Main dashboard for administrators.</p>
+                    </div>
+                    
+                    <div class="component">
+                      <h3>AdminApplicationDetails</h3>
+                      <p>Detailed view of user applications.</p>
+                    </div>
+                    
+                    <div class="component">
+                      <h3>AccountManagement</h3>
+                      <p>User account administration.</p>
+                    </div>
+                    
+                    <div class="component">
+                      <h3>AdminWalkInQueue</h3>
+                      <p>Walk-in queue management for admins.</p>
+                    </div>
+                    
+                    <div class="component">
+                      <h3>ApplicationAdminDashboard</h3>
+                      <p>Dashboard for application processing.</p>
+                    </div>
+                  </div>
+                  
+                  <div class="section">
+                    <h2>Navigation Components</h2>
+                    
+                    <div class="component">
+                      <h3>NavBar</h3>
+                      <p>Top navigation bar component used throughout the application.</p>
+                      <ul>
+                        <li>Provides navigation links to primary sections</li>
+                        <li>Displays user authentication status</li>
+                        <li>Adapts to responsive layouts</li>
+                      </ul>
+                    </div>
+                    
+                    <div class="component">
+                      <h3>NavSide</h3>
+                      <p>Side navigation component for detailed menu options.</p>
+                      <ul>
+                        <li>Used for more detailed navigation options</li>
+                        <li>Role-based menu display</li>
+                        <li>Collapsible for mobile views</li>
+                      </ul>
+                    </div>
+                  </div>
+                  
+                  <div class="section">
+                    <h2>Authentication Components</h2>
+                    
+                    <div class="component">
+                      <h3>LogIn</h3>
+                      <p>Login screen component.</p>
+                    </div>
+                    
+                    <div class="component">
+                      <h3>LogInCard</h3>
+                      <p>Card component for login form.</p>
+                    </div>
+                    
+                    <div class="component">
+                      <h3>SignUpForm</h3>
+                      <p>Form for user registration.</p>
+                    </div>
+                  </div>
+                </div>
+                
+                <footer style="margin-top: 40px; text-align: center; color: #666;">
+                  <p>Bulak Smart Connect - Frontend Documentation</p>
+                </footer>
+              </body>
+            </html>
+            EOF
           }
 
       - name: Create documentation hub
