@@ -88,10 +88,3 @@ jobs:
           clean-exclude: |   # Don't delete important files at the root
             .nojekyll
           branch: gh-pages
-
-      - name: Deploy root files
-        uses: JamesIves/github-pages-deploy-action@v4
-        with:
-          folder: temp_root
-          branch: gh-pages
-          clean: false  # Don't remove existing files
