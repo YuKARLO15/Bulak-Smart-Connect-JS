@@ -89,7 +89,7 @@ jobs:
             -r /zap/wrk/reports/report.html \
             -J /zap/wrk/reports/report.json \
             -w /zap/wrk/reports/report.md \
-            --i
+            -i
       
       - name: List report files
         if: always()
