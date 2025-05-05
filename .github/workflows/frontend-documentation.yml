@@ -110,6 +110,12 @@ jobs:
           mkdir -p docs/frontend
           cp -r styleguide/* docs/frontend/ || echo "No styleguide directory found"
       
+      - name: Fix placeholder image paths
+        run: |
+          cd bulak-smart-connect-js
+          # Use sed to replace the placeholder path with a solid background color
+          sed -i 's|background-image: url('"'"'path/to/your/background-image.jpg'"'"');|background-color: #f0f0f0;|g' src/AdminBulakSmartConnect/AccountManagementComponents/ProfileUpload.css
+      
       - name: Create documentation hub
         run: |
           mkdir -p doc_hub
