@@ -33,8 +33,8 @@ jobs:
         run: |
           cd bulak-smart-connect-js
           
-          # Create a more specific styleguide.config.js file
-          cat > styleguide.config.js << 'EOF'
+          # Create styleguide.config.cjs instead of .js
+          cat > styleguide.config.cjs << 'EOF'
           const path = require('path');
           
           module.exports = {
@@ -100,11 +100,11 @@ jobs:
           };
           EOF
           
-          # Install necessary dependencies for webpack config
+          # Install dependencies (unchanged)
           npm install --save-dev babel-loader @babel/preset-env @babel/preset-react style-loader css-loader file-loader
           
-          # Run Styleguidist build with the new config
-          npx styleguidist build
+          # Run with the .cjs extension
+          npx styleguidist build --config styleguide.config.cjs
           
           # Ensure output directory exists and copy files
           mkdir -p docs/frontend
