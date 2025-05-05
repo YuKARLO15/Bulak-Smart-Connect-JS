@@ -11,7 +11,7 @@ permissions:
   contents: write
 
 jobs:
-  build-frontend-docs:
+  build-storybook:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -28,358 +28,200 @@ jobs:
           cd bulak-smart-connect-js
           npm ci
           
-          # Install Docusaurus and supporting packages
-          npm install --no-save @docusaurus/core @docusaurus/preset-classic react-docgen jsdoc-to-markdown glob fs-extra
+          # Install Storybook and supporting packages
+          npm install --no-save --save-dev @storybook/react @storybook/addon-essentials @storybook/addon-links @storybook/blocks @storybook/builder-vite @vitejs/plugin-react-swc vite-tsconfig-paths
       
-      - name: Generate frontend documentation
+      - name: Setup Storybook
         run: |
           cd bulak-smart-connect-js
           
-          # Check if Docusaurus needs to be initialized
-          if [ -d "docusaurus" ]; then
-            echo "Docusaurus directory already exists, skipping initialization"
-          else
-            # Initialize Docusaurus
-            npx @docusaurus/init@latest init docusaurus classic
-          fi
+          # Create .storybook directory if it doesn't exist
+          mkdir -p .storybook
           
-          # Make sure the components docs directory exists
-          mkdir -p docusaurus/docs/components
+          # Create main.js configuration - using JS not TS
+          cat > .storybook/main.js << 'EOF'
+          import { mergeConfig } from 'vite';
+          import swc from '@vitejs/plugin-react-swc';
+          import tsconfigPaths from 'vite-tsconfig-paths';
           
-          # Create component documentation extractor script
-          cat > extract-components.cjs << 'EOF'
-          const reactDocgen = require('react-docgen');
-          const fs = require('fs-extra');
-          const path = require('path');
-          const glob = require('glob');
+          /** @type {import('@storybook/react-vite').StorybookConfig} */
+          const config = {
+            stories: ['../src/**/*.mdx', '../src/**/*.stories.@(js|jsx)'],
+            addons: [
+              '@storybook/addon-links',
+              '@storybook/addon-essentials',
+              '@storybook/addon-interactions',
+            ],
+            framework: {
+              name: '@storybook/react-vite',
+              options: {},
+            },
+            docs: {
+              autodocs: true,
+            },
+            viteFinal: (config) => {
+              return mergeConfig(config, {
+                plugins: [
+                  swc({
+                    jsxImportSource: 'react',
+                  }),
+                  tsconfigPaths(),
+                ],
+              });
+            },
+          };
+          
+          export default config;
+          EOF
+          
+          # Create preview.js configuration - using JS not TS
+          cat > .storybook/preview.js << 'EOF'
+          /** @type {import('@storybook/react').Preview} */
+          const preview = {
+            parameters: {
+              actions: { argTypesRegex: "^on[A-Z].*" },
+              controls: {
+                matchers: {
+                  color: /(background|color)$/i,
+                  date: /Date$/,
+                },
+              },
+            },
+          };
+          
+          export default preview;
+          EOF
+          
+          # Create story generator script for JSX
+          cat > generate-stories.mjs << 'EOF'
+          import fs from 'fs/promises';
+          import path from 'path';
+          import { fileURLToPath } from 'url';
+          import { dirname } from 'path';
+          import glob from 'glob';
+          import { promisify } from 'util';
+          
+          const globAsync = promisify(glob);
+          const __filename = fileURLToPath(import.meta.url);
+          const __dirname = dirname(__filename);
           
           // Configuration
           const SRC_DIR = './src';
-          const DOCS_DIR = './docusaurus/docs/components';
-          const COMPONENT_EXTENSIONS = ['.jsx', '.tsx'];
+          const COMPONENT_EXTENSIONS = ['.jsx', '.js']; // JSX only, no TS
           
-          // Ensure docs directory exists
-          fs.ensureDirSync(DOCS_DIR);
-          
-          // Create component categories from folder structure
-          const categories = {};
-          
-          // Find all component files
-          const componentFiles = glob.sync(`${SRC_DIR}/**/*{${COMPONENT_EXTENSIONS.join(',')}}`, {
-            ignore: ['**/node_modules/**', '**/stories/**']
-          });
-          
-          console.log(`Found ${componentFiles.length} potential component files`);
-          
-          // Process each component file
-          componentFiles.forEach(filePath => {
+          async function generateStories() {
             try {
-              const content = fs.readFileSync(filePath, 'utf8');
-              
-              // Basic check if this is likely a React component
-              if (!content.includes('export') || 
-                  (!content.includes('React') && !content.includes('react'))) {
-                return;
-              }
-              
-              try {
-                // Try to parse the component
-                const componentInfo = reactDocgen.parse(content, null, null, {
-                  filename: filePath
-                });
-                
-                // Get component name and path
-                const fileName = path.basename(filePath, path.extname(filePath));
-                const relativePath = path.relative(SRC_DIR, path.dirname(filePath));
-                const category = relativePath.split(path.sep)[0] || 'General';
-                
-                if (!categories[category]) {
-                  categories[category] = [];
-                }
-                
-                // Add to category
-                categories[category].push({
-                  name: fileName,
-                  path: filePath,
-                  description: componentInfo.description || 'No description available',
-                  props: componentInfo.props || {}
-                });
-                
-                // Create markdown without indentation in template string
-                let frontMatter = [
-                  '---',
-                  `id: ${fileName.toLowerCase()}`,
-                  `title: ${fileName}`,
-                  '---',
-                  ''
-                ].join('\n');
-                
-                let content = [
-                  `# ${fileName}`,
-                  '',
-                  `${componentInfo.description || 'No description available'}`,
-                  '',
-                  '```jsx',
-                  `import { ${fileName} } from '${relativePath}/${fileName}';`,
-                  '```',
-                  '',
-                  '## Component Location',
-                  '',
-                  `\`${relativePath}/${fileName}.jsx\``,
-                  ''
-                ].join('\n');
-                
-                let propsContent = '';
-                if (componentInfo.props && Object.keys(componentInfo.props).length > 0) {
-                  propsContent = [
-                    '',
-                    '## Props',
-                    '',
-                    '| Name | Type | Default | Description |',
-                    '|------|------|---------|-------------|'
-                  ].join('\n');
-                  
-                  Object.entries(componentInfo.props).forEach(([propName, propInfo]) => {
-                    const type = propInfo.type ? propInfo.type.name : 'unknown';
-                    const defaultValue = propInfo.defaultValue ? propInfo.defaultValue.value : '-';
-                    const description = propInfo.description || 'No description';
-                    
-                    propsContent += `\n| ${propName} | \`${type}\` | ${defaultValue} | ${description} |`;
-                  });
-                }
-                
-                // Combine all parts
-                let markdown = frontMatter + content + propsContent;
-                
-                // Write component documentation
-                fs.writeFileSync(
-                  path.join(DOCS_DIR, `${fileName.toLowerCase()}.md`),
-                  markdown
-                );
-                
-                console.log(`✓ Generated docs for ${fileName}`);
-              } catch (parseError) {
-                // This might not be a component or might use syntax react-docgen can't handle
-                console.log(`Could not parse component in ${filePath}: ${parseError.message}`);
-              }
-            } catch (readError) {
-              console.error(`Error reading ${filePath}: ${readError}`);
-            }
-          });
-          
-          // Generate category index files
-          Object.entries(categories).forEach(([category, components]) => {
-            if (components.length > 0) {
-              const categoryDir = path.join(DOCS_DIR, category.toLowerCase());
-              fs.ensureDirSync(categoryDir);
-              
-              // Create category index without template string indentation issues
-              const categoryFrontMatter = [
-                '---',
-                `id: ${category.toLowerCase()}-index`,
-                `title: ${category} Components`,
-                '---',
-                '',
-                `# ${category} Components`,
-                '',
-                `This section contains components from the \`${category}\` module.`,
-                ''
-              ].join('\n');
-              
-              let categoryLinks = '';
-              components.forEach(component => {
-                categoryLinks += `- [${component.name}](${component.name.toLowerCase()})\n`;
-                
-                // Move component doc to category folder
-                try {
-                  fs.moveSync(
-                    path.join(DOCS_DIR, `${component.name.toLowerCase()}.md`),
-                    path.join(categoryDir, `${component.name.toLowerCase()}.md`),
-                    { overwrite: true }
-                  );
-                } catch (err) {
-                  console.error(`Error moving ${component.name} docs: ${err}`);
-                }
+              // Find component files
+              const componentFiles = await globAsync(`${SRC_DIR}/**/*{${COMPONENT_EXTENSIONS.join(',')}}`, {
+                ignore: ['**/node_modules/**', '**/stories/**', '**/*.stories.*', '**/*.test.*', '**/*.spec.*']
               });
               
-              fs.writeFileSync(
-                path.join(categoryDir, 'index.md'),
-                categoryFrontMatter + categoryLinks
-              );
+              console.log(`Found ${componentFiles.length} potential component files`);
+              
+              for (const filePath of componentFiles) {
+                try {
+                  const content = await fs.readFile(filePath, 'utf8');
+                  
+                  // Basic React component check
+                  if (!content.includes('export') || 
+                      (!content.includes('React') && !content.includes('react'))) {
+                    continue;
+                  }
+                  
+                  // Get component info
+                  const fileName = path.basename(filePath, path.extname(filePath));
+                  const fileExt = path.extname(filePath);
+                  const relativePath = path.relative(SRC_DIR, path.dirname(filePath));
+                  const category = relativePath.split(path.sep)[0] || 'General';
+                  
+                  // Create story path
+                  const storyFilePath = path.join(
+                    path.dirname(filePath),
+                    `${fileName}.stories${fileExt}`
+                  );
+                  
+                  // Skip if exists
+                  try {
+                    await fs.access(storyFilePath);
+                    console.log(`Story already exists for ${fileName}, skipping`);
+                    continue;
+                  } catch (error) {
+                    // File doesn't exist, continue
+                  }
+                  
+                  // Determine export type
+                  const isDefaultExport = content.includes(`export default ${fileName}`) || 
+                                         content.includes('export default function') ||
+                                         content.includes('export default class');
+                  
+                  const importStatement = isDefaultExport
+                    ? `import ${fileName} from './${fileName}';`
+                    : `import { ${fileName} } from './${fileName}';`;
+                  
+                  // Create JSX-friendly story template (no TypeScript)
+                  const storyTemplate = `import React from 'react';
+                  ${importStatement}
+
+                  /**
+                  * ${fileName} component from ${relativePath}
+                  */
+                  export default {
+                  title: '${category}/${fileName}',
+                  component: ${fileName},
+                  tags: ['autodocs'],
+                  parameters: {
+                  componentSubtitle: 'Component from ${relativePath}',
+                     },
+                  };              
+
+
+                   // Story template
+                   const Template = (args) => <${fileName} {...args} />;
+
+                  // Default story
+                  export const Default = Template.bind({});
+                  Default.args = {
+                  // Add default props here
+                  };`;
+                  
+                  await fs.writeFile(storyFilePath, storyTemplate);
+                  console.log(`✓ Created story for ${fileName}`);
+                  
+                } catch (error) {
+                  console.log(`Could not process component ${filePath}: ${error.message}`);
+                }
+              }
+              
+              console.log('✅ Story generation complete!');
+            } catch (error) {
+              console.error('Error generating stories:', error);
+              process.exit(1);
             }
-          });
+          }
           
-          // Create main components index without template string indentation issues
-          const indexFrontMatter = [
-            '---',
-            'id: components-overview',
-            'title: Components Overview',
-            'slug: /components',
-            '---',
-            '',
-            '# Components Overview',
-            '',
-            'Bulak Smart Connect is built with a modular component architecture, organized by functional area.',
-            ''
-          ].join('\n');
-          
-          let categoryLinks = '';
-          Object.keys(categories).sort().forEach(category => {
-            categoryLinks += `## ${category} Components\n\n`;
-            categoryLinks += `[Browse ${category} components](${category.toLowerCase()}/index)\n\n`;
-          });
-          
-          fs.writeFileSync(
-            path.join(DOCS_DIR, 'components-overview.md'),
-            indexFrontMatter + categoryLinks
-          );
-          
-          console.log('✅ Component documentation generation complete!');
+          generateStories();
           EOF
           
-          # Update Docusaurus configuration
-          cat > docusaurus/docusaurus.config.js << 'EOF'
-          /** @type {import('@docusaurus/types').DocusaurusConfig} */
-          module.exports = {
-            title: 'Bulak Smart Connect',
-            tagline: 'Frontend Component Documentation',
-            url: 'https://yukarlo15.github.io',
-            baseUrl: '/Bulak-Smart-Connect-JS/frontend-docs/',
-            onBrokenLinks: 'warn',
-            onBrokenMarkdownLinks: 'warn',
-            favicon: 'img/favicon.ico',
-            organizationName: 'yukarlo15',
-            projectName: 'Bulak-Smart-Connect-JS',
-            themeConfig: {
-              colorMode: {
-                defaultMode: 'light',
-                disableSwitch: false,
-                respectPrefersColorScheme: true,
-              },
-              navbar: {
-                title: 'Bulak Smart Connect',
-                items: [
-                  {
-                    type: 'doc',
-                    docId: 'intro',
-                    position: 'left',
-                    label: 'Documentation',
-                  },
-                  {
-                    type: 'doc',
-                    docId: 'components/components-overview',
-                    position: 'left',
-                    label: 'Components',
-                  },
-                  {
-                    href: 'https://github.com/YuKARLO15/Bulak-Smart-Connect-JS',
-                    label: 'GitHub',
-                    position: 'right',
-                  },
-                ],
-              },
-              footer: {
-                style: 'dark',
-                links: [
-                  {
-                    title: 'Docs',
-                    items: [
-                      {
-                        label: 'Documentation',
-                        to: '/docs/intro',
-                      },
-                      {
-                        label: 'Components',
-                        to: '/docs/components',
-                      },
-                    ],
-                  },
-                  {
-                    title: 'More',
-                    items: [
-                      {
-                        label: 'GitHub',
-                        href: 'https://github.com/YuKARLO15/Bulak-Smart-Connect-JS',
-                      },
-                    ],
-                  },
-                ],
-                copyright: `Copyright © ${new Date().getFullYear()} Bulak Smart Connect. Built with Docusaurus.`,
-              },
-            },
-            presets: [
-              [
-                '@docusaurus/preset-classic',
-                {
-                  docs: {
-                    sidebarPath: require.resolve('./sidebars.js'),
-                    editUrl:
-                      'https://github.com/YuKARLO15/Bulak-Smart-Connect-JS/edit/main/',
-                  },
-                  theme: {
-                    customCss: require.resolve('./src/css/custom.css'),
-                  },
-                },
-              ],
-            ],
-          };
-          EOF
+          # Install necessary packages for story generation
+          npm install --no-save glob
           
-          # Create a custom intro document
-          cat > docusaurus/docs/intro.md << 'EOF'
-          ---
-          sidebar_position: 1
-          slug: /
-          ---
-          
-          # Bulak Smart Connect Documentation
-          
-          Welcome to the Bulak Smart Connect Frontend Documentation.
-          
-          ## Project Overview
-          
-          Bulak Smart Connect is a modern web application that streamlines document processing for citizens. It provides an intuitive interface for citizens to submit applications, schedule appointments, and track the status of their requests.
-          
-          ## Key Features
-          
-          - User dashboard for citizens
-          - Application submission for various certificate types
-          - Appointment scheduling system
-          - Admin interface for document processing
-          - Realtime notification system
-          - Mobile-responsive design
-          
-          ## Technology Stack
-          
-          - **Frontend**: React with Vite + SWC
-          - **UI Library**: Material UI
-          - **Routing**: React Router
-          - **State Management**: Context API
-          
-          ## Component Structure
-          
-          The application is organized into logical modules:
-          
-          1. **User Interface** - Components for regular citizens to access services
-          2. **Admin Interface** - Components for administrators to manage the system
-          3. **Navigation** - Shared navigation components across the application
-          4. **Authentication** - Login and user management components
-          
-          Browse the [Components section](./components) for detailed documentation.
-          EOF
-          
-          # Run the component documentation extraction script
-          node extract-components.cjs
-          
-          # Build the Docusaurus site
-          cd docusaurus
-          npm install
-          npm run build
+          # Run story generator
+          node generate-stories.mjs
       
-      - name: Deploy documentation
+      - name: Build Storybook
+        run: |
+          cd bulak-smart-connect-js
+          npx storybook build --output-dir storybook-static
+      
+      - name: Add .nojekyll file
+        run: |
+          cd bulak-smart-connect-js
+          touch storybook-static/.nojekyll
+      
+      - name: Deploy Storybook
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          folder: bulak-smart-connect-js/docusaurus/build
+          folder: bulak-smart-connect-js/storybook-static
           target-folder: frontend-docs
           branch: gh-pages
           clean: true
@@ -387,7 +229,7 @@ jobs:
             .nojekyll
             api-docs/**
 
-      - name: Create and deploy documentation hub
+      - name: Update documentation hub
         run: |
           mkdir -p doc_hub
           touch doc_hub/.nojekyll
@@ -469,9 +311,9 @@ jobs:
               </div>
               
               <div class="card">
-                <h2>Frontend Documentation</h2>
-                <p>Frontend component and service documentation built with Docusaurus, including component properties, usage examples, and architecture overview.</p>
-                <a href="frontend-docs/" class="button">View Frontend Docs</a>
+                <h2>Component Documentation</h2>
+                <p>Frontend component documentation built with Storybook, including live examples, props documentation, and usage guides.</p>
+                <a href="frontend-docs/" class="button">View Components</a>
               </div>
               
               <div class="footer">
