@@ -35,11 +35,16 @@ jobs:
         run: |
           cd bulak-smart-connect-js
           
-          # Create a docs directory for the Docusaurus site
-          mkdir -p docusaurus
+          # Check if Docusaurus needs to be initialized
+          if [ -d "docusaurus" ]; then
+            echo "Docusaurus directory already exists, skipping initialization"
+          else
+            # Initialize Docusaurus
+            npx @docusaurus/init@latest init docusaurus classic
+          fi
           
-          # Initialize Docusaurus
-          npx @docusaurus/init@latest init docusaurus classic
+          # Make sure the components docs directory exists
+          mkdir -p docusaurus/docs/components
           
           # Create component documentation extractor script
           cat > extract-components.js << 'EOF'
