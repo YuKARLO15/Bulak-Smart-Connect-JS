@@ -54,24 +54,24 @@ jobs:
           description VARCHAR(255)
         );
         
-        -- Create users table with defaultRoleId
+        -- Create users table with default_role_id
         CREATE TABLE IF NOT EXISTS users (
           id INT AUTO_INCREMENT PRIMARY KEY,
           email VARCHAR(255) NOT NULL UNIQUE,
           password VARCHAR(255) NOT NULL,
           name VARCHAR(255) NOT NULL,
-          defaultRoleId INT,
+          default_role_id INT,
           created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-          FOREIGN KEY (defaultRoleId) REFERENCES roles(id)
+          FOREIGN KEY (default_role_id) REFERENCES roles(id)
         );
         
-        -- Create junction table for many-to-many relationship
+        -- Create junction table for many-to-many relationship with snake_case column names
         CREATE TABLE IF NOT EXISTS user_roles (
-          userId INT,
-          roleId INT,
-          PRIMARY KEY (userId, roleId),
-          FOREIGN KEY (userId) REFERENCES users(id),
-          FOREIGN KEY (roleId) REFERENCES roles(id)
+          user_id INT,
+          role_id INT,
+          PRIMARY KEY (user_id, role_id),
+          FOREIGN KEY (user_id) REFERENCES users(id),
+          FOREIGN KEY (role_id) REFERENCES roles(id)
         );
         
         -- Insert roles from your seed function
@@ -149,24 +149,24 @@ jobs:
           description VARCHAR(255)
         );
         
-        -- Create users table with defaultRoleId
+        -- Create users table with default_role_id
         CREATE TABLE IF NOT EXISTS users (
           id INT AUTO_INCREMENT PRIMARY KEY,
           email VARCHAR(255) NOT NULL UNIQUE,
           password VARCHAR(255) NOT NULL,
           name VARCHAR(255) NOT NULL,
-          defaultRoleId INT,
+          default_role_id INT,
           created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-          FOREIGN KEY (defaultRoleId) REFERENCES roles(id)
+          FOREIGN KEY (default_role_id) REFERENCES roles(id)
         );
         
-        -- Create junction table for many-to-many relationship
+        -- Create junction table for many-to-many relationship with snake_case column names
         CREATE TABLE IF NOT EXISTS user_roles (
-          userId INT,
-          roleId INT,
-          PRIMARY KEY (userId, roleId),
-          FOREIGN KEY (userId) REFERENCES users(id),
-          FOREIGN KEY (roleId) REFERENCES roles(id)
+          user_id INT,
+          role_id INT,
+          PRIMARY KEY (user_id, role_id),
+          FOREIGN KEY (user_id) REFERENCES users(id),
+          FOREIGN KEY (role_id) REFERENCES roles(id)
         );
         
         -- Insert roles from your seed function
