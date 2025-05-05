@@ -28,457 +28,353 @@ jobs:
           cd bulak-smart-connect-js
           npm ci
           
-          # Install Storybook with Vite builder - explicitly include react-vite package
-          npm install --no-save storybook@latest @storybook/react @storybook/react-vite @storybook/addon-links @storybook/addon-essentials @storybook/addon-docs
-          
-      - name: Fix CSS image references before build
-        run: |
-          cd bulak-smart-connect-js
-          
-          # Find all CSS files with background-image URLs that might cause issues
-          find src -name "*.css" -exec grep -l "background-image: url" {} \; | while read file; do
-            echo "Fixing image paths in $file"
-            # Replace image paths with CSS gradients
-            sed -i 's|background-image: url([^)]*);|background-image: linear-gradient(to bottom, #f8f9fa, #e9ecef);|g' "$file"
-          done
-
+          # Install Docusaurus and supporting packages
+          npm install --no-save @docusaurus/core @docusaurus/preset-classic react-docgen jsdoc-to-markdown glob fs-extra
+      
       - name: Generate frontend documentation
         run: |
           cd bulak-smart-connect-js
           
-          # Create Storybook configuration files
-          mkdir -p .storybook
+          # Create a docs directory for the Docusaurus site
+          mkdir -p docusaurus
           
-          # Main configuration file - optimized for Vite + SWC
-          cat > .storybook/main.js << 'EOF'
-          module.exports = {
-            stories: [
-              "../src/stories/**/*.stories.jsx"
-            ],
-            addons: [
-              '@storybook/addon-links',
-              '@storybook/addon-essentials',
-              '@storybook/addon-docs'
-            ],
-            framework: {
-              name: '@storybook/react-vite',
-              options: {
-                builder: {
-                  viteConfigPath: 'vite.config.js'
-                }
+          # Initialize Docusaurus
+          npx @docusaurus/init@latest init docusaurus classic
+          
+          # Create component documentation extractor script
+          cat > extract-components.js << 'EOF'
+          const reactDocgen = require('react-docgen');
+          const fs = require('fs-extra');
+          const path = require('path');
+          const glob = require('glob');
+          
+          // Configuration
+          const SRC_DIR = './src';
+          const DOCS_DIR = './docusaurus/docs/components';
+          const COMPONENT_EXTENSIONS = ['.jsx', '.tsx'];
+          
+          // Ensure docs directory exists
+          fs.ensureDirSync(DOCS_DIR);
+          
+          // Create component categories from folder structure
+          const categories = {};
+          
+          // Find all component files
+          const componentFiles = glob.sync(`${SRC_DIR}/**/*{${COMPONENT_EXTENSIONS.join(',')}}`, {
+            ignore: ['**/node_modules/**', '**/stories/**']
+          });
+          
+          console.log(`Found ${componentFiles.length} potential component files`);
+          
+          // Process each component file
+          componentFiles.forEach(filePath => {
+            try {
+              const content = fs.readFileSync(filePath, 'utf8');
+              
+              // Basic check if this is likely a React component
+              if (!content.includes('export') || 
+                  (!content.includes('React') && !content.includes('react'))) {
+                return;
               }
-            },
-            core: {
-              disableTelemetry: true
-            },
-            features: {
-              storyStoreV7: false
-            },
-            viteFinal: async (config) => {
-              // Ensure SWC is used for JSX
-              config.optimizeDeps = {
-                ...config.optimizeDeps,
-                esbuildOptions: {
-                  jsx: 'automatic'
+              
+              try {
+                // Try to parse the component
+                const componentInfo = reactDocgen.parse(content, null, null, {
+                  filename: filePath
+                });
+                
+                // Get component name and path
+                const fileName = path.basename(filePath, path.extname(filePath));
+                const relativePath = path.relative(SRC_DIR, path.dirname(filePath));
+                const category = relativePath.split(path.sep)[0] || 'General';
+                
+                if (!categories[category]) {
+                  categories[category] = [];
                 }
-              };
-              
-              return config;
+                
+                // Add to category
+                categories[category].push({
+                  name: fileName,
+                  path: filePath,
+                  description: componentInfo.description || 'No description available',
+                  props: componentInfo.props || {}
+                });
+                
+                // Create markdown without indentation in template string
+                let frontMatter = [
+                  '---',
+                  `id: ${fileName.toLowerCase()}`,
+                  `title: ${fileName}`,
+                  '---',
+                  ''
+                ].join('\n');
+                
+                let content = [
+                  `# ${fileName}`,
+                  '',
+                  `${componentInfo.description || 'No description available'}`,
+                  '',
+                  '```jsx',
+                  `import { ${fileName} } from '${relativePath}/${fileName}';`,
+                  '```',
+                  '',
+                  '## Component Location',
+                  '',
+                  `\`${relativePath}/${fileName}.jsx\``,
+                  ''
+                ].join('\n');
+                
+                let propsContent = '';
+                if (componentInfo.props && Object.keys(componentInfo.props).length > 0) {
+                  propsContent = [
+                    '',
+                    '## Props',
+                    '',
+                    '| Name | Type | Default | Description |',
+                    '|------|------|---------|-------------|'
+                  ].join('\n');
+                  
+                  Object.entries(componentInfo.props).forEach(([propName, propInfo]) => {
+                    const type = propInfo.type ? propInfo.type.name : 'unknown';
+                    const defaultValue = propInfo.defaultValue ? propInfo.defaultValue.value : '-';
+                    const description = propInfo.description || 'No description';
+                    
+                    propsContent += `\n| ${propName} | \`${type}\` | ${defaultValue} | ${description} |`;
+                  });
+                }
+                
+                // Combine all parts
+                let markdown = frontMatter + content + propsContent;
+                
+                // Write component documentation
+                fs.writeFileSync(
+                  path.join(DOCS_DIR, `${fileName.toLowerCase()}.md`),
+                  markdown
+                );
+                
+                console.log(`✓ Generated docs for ${fileName}`);
+              } catch (parseError) {
+                // This might not be a component or might use syntax react-docgen can't handle
+                console.log(`Could not parse component in ${filePath}: ${parseError.message}`);
+              }
+            } catch (readError) {
+              console.error(`Error reading ${filePath}: ${readError}`);
             }
-          };
+          });
+          
+          // Generate category index files
+          Object.entries(categories).forEach(([category, components]) => {
+            if (components.length > 0) {
+              const categoryDir = path.join(DOCS_DIR, category.toLowerCase());
+              fs.ensureDirSync(categoryDir);
+              
+              // Create category index without template string indentation issues
+              const categoryFrontMatter = [
+                '---',
+                `id: ${category.toLowerCase()}-index`,
+                `title: ${category} Components`,
+                '---',
+                '',
+                `# ${category} Components`,
+                '',
+                `This section contains components from the \`${category}\` module.`,
+                ''
+              ].join('\n');
+              
+              let categoryLinks = '';
+              components.forEach(component => {
+                categoryLinks += `- [${component.name}](${component.name.toLowerCase()})\n`;
+                
+                // Move component doc to category folder
+                try {
+                  fs.moveSync(
+                    path.join(DOCS_DIR, `${component.name.toLowerCase()}.md`),
+                    path.join(categoryDir, `${component.name.toLowerCase()}.md`),
+                    { overwrite: true }
+                  );
+                } catch (err) {
+                  console.error(`Error moving ${component.name} docs: ${err}`);
+                }
+              });
+              
+              fs.writeFileSync(
+                path.join(categoryDir, 'index.md'),
+                categoryFrontMatter + categoryLinks
+              );
+            }
+          });
+          
+          // Create main components index without template string indentation issues
+          const indexFrontMatter = [
+            '---',
+            'id: components-overview',
+            'title: Components Overview',
+            'slug: /components',
+            '---',
+            '',
+            '# Components Overview',
+            '',
+            'Bulak Smart Connect is built with a modular component architecture, organized by functional area.',
+            ''
+          ].join('\n');
+          
+          let categoryLinks = '';
+          Object.keys(categories).sort().forEach(category => {
+            categoryLinks += `## ${category} Components\n\n`;
+            categoryLinks += `[Browse ${category} components](${category.toLowerCase()}/index)\n\n`;
+          });
+          
+          fs.writeFileSync(
+            path.join(DOCS_DIR, 'components-overview.md'),
+            indexFrontMatter + categoryLinks
+          );
+          
+          console.log('✅ Component documentation generation complete!');
           EOF
           
-          # Preview configuration with React Router wrapper
-          cat > .storybook/preview.js << 'EOF'
-          import React from 'react';
-          import { BrowserRouter } from 'react-router-dom';
-          
-          export const parameters = {
-            actions: { argTypesRegex: "^on[A-Z].*" },
-            controls: {
-              matchers: {
-                color: /(background|color)$/i,
-                date: /Date$/,
+          # Update Docusaurus configuration
+          cat > docusaurus/docusaurus.config.js << 'EOF'
+          /** @type {import('@docusaurus/types').DocusaurusConfig} */
+          module.exports = {
+            title: 'Bulak Smart Connect',
+            tagline: 'Frontend Component Documentation',
+            url: 'https://yukarlo15.github.io',
+            baseUrl: '/Bulak-Smart-Connect-JS/frontend-docs/',
+            onBrokenLinks: 'warn',
+            onBrokenMarkdownLinks: 'warn',
+            favicon: 'img/favicon.ico',
+            organizationName: 'yukarlo15',
+            projectName: 'Bulak-Smart-Connect-JS',
+            themeConfig: {
+              colorMode: {
+                defaultMode: 'light',
+                disableSwitch: false,
+                respectPrefersColorScheme: true,
+              },
+              navbar: {
+                title: 'Bulak Smart Connect',
+                items: [
+                  {
+                    type: 'doc',
+                    docId: 'intro',
+                    position: 'left',
+                    label: 'Documentation',
+                  },
+                  {
+                    type: 'doc',
+                    docId: 'components/components-overview',
+                    position: 'left',
+                    label: 'Components',
+                  },
+                  {
+                    href: 'https://github.com/YuKARLO15/Bulak-Smart-Connect-JS',
+                    label: 'GitHub',
+                    position: 'right',
+                  },
+                ],
+              },
+              footer: {
+                style: 'dark',
+                links: [
+                  {
+                    title: 'Docs',
+                    items: [
+                      {
+                        label: 'Documentation',
+                        to: '/docs/intro',
+                      },
+                      {
+                        label: 'Components',
+                        to: '/docs/components',
+                      },
+                    ],
+                  },
+                  {
+                    title: 'More',
+                    items: [
+                      {
+                        label: 'GitHub',
+                        href: 'https://github.com/YuKARLO15/Bulak-Smart-Connect-JS',
+                      },
+                    ],
+                  },
+                ],
+                copyright: `Copyright © ${new Date().getFullYear()} Bulak Smart Connect. Built with Docusaurus.`,
               },
             },
-            layout: 'fullscreen',
-          };
-          
-          export const decorators = [
-            (Story) => (
-              <BrowserRouter>
-                <div style={{ margin: '2rem' }}>
-                  <Story />
-                </div>
-              </BrowserRouter>
-            ),
-          ];
-          EOF
-          
-          # Create directory for manually defined stories
-          mkdir -p src/stories
-          
-          # Create Introduction as JSX instead of MDX to avoid indexing issues
-          cat > src/stories/Introduction.stories.jsx << 'EOF'
-          import React from 'react';
-
-          export default {
-            title: 'Introduction',
-          };
-
-          export const Introduction = () => (
-            <div style={{ fontFamily: 'sans-serif', maxWidth: '800px', margin: '0 auto', padding: '20px' }}>
-              <h1 style={{ color: '#184a5b' }}>Bulak Smart Connect Frontend Documentation</h1>
-              
-              <p>This documentation provides an overview of the components used in the Bulak Smart Connect frontend application.</p>
-              
-              <h2 style={{ marginTop: '30px', color: '#184a5b' }}>Project Structure</h2>
-              
-              <p>The application is organized into several main sections:</p>
-              
-              <ul>
-                <li><strong>User Interface</strong>: Components for regular citizens to access services</li>
-                <li><strong>Admin Interface</strong>: Components for administrators to manage the system</li>
-                <li><strong>Navigation</strong>: Shared navigation components across the application</li>
-                <li><strong>Authentication</strong>: Login and user management components</li>
-              </ul>
-              
-              <h2 style={{ marginTop: '30px', color: '#184a5b' }}>Technology Stack</h2>
-              
-              <ul>
-                <li><strong>React 18</strong> with Vite + SWC for fast development and builds</li>
-                <li><strong>Material UI</strong> for component library</li>
-                <li><strong>React Router</strong> for navigation</li>
-                <li><strong>Context API</strong> for state management</li>
-              </ul>
-            </div>
-          );
-          EOF
-          
-          # Create component tree explorer story
-          cat > src/stories/ComponentTree.stories.jsx << 'EOF'
-          import React from 'react';
-          
-          export default {
-            title: 'Documentation/Component Tree',
-          };
-          
-          export const ComponentTree = () => {
-            const mainSections = [
-              { 
-                name: "User Interface", 
-                components: [
-                  "UserDashboard", 
-                  "ApplicationForm", 
-                  "AppointmentForm",
-                  "BirthCertificateForm",
-                  "MarriageCertificateForm",
-                  "WalkInQueue"
-                ] 
-              },
-              { 
-                name: "Admin Interface", 
-                components: [
-                  "AdminDashboard", 
-                  "AdminApplicationDetails", 
-                  "AccountManagement",
-                  "AdminWalkInQueue",
-                  "ApplicationAdminDashboard"
-                ] 
-              },
-              { 
-                name: "Navigation", 
-                components: ["NavBar", "NavSide"] 
-              },
-              { 
-                name: "Authentication", 
-                components: ["LogIn", "LogInCard", "SignUpForm"] 
-              },
-            ];
-            
-            return (
-              <div style={{ fontFamily: "sans-serif", maxWidth: "800px", margin: "0 auto", padding: "20px" }}>
-                <h1 style={{ color: "#184a5b" }}>Component Structure</h1>
-                <p>
-                  The Bulak Smart Connect application is organized into logical sections based on user roles and functionality.
-                </p>
-                
-                {mainSections.map(section => (
-                  <div key={section.name} style={{ marginBottom: "30px" }}>
-                    <h2 style={{ color: "#184a5b" }}>{section.name}</h2>
-                    <ul>
-                      {section.components.map(component => (
-                        <li key={component} style={{ marginBottom: "10px" }}>
-                          <strong>{component}</strong> - <em>A component for {section.name} functionality</em>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                ))}
-              </div>
-            );
+            presets: [
+              [
+                '@docusaurus/preset-classic',
+                {
+                  docs: {
+                    sidebarPath: require.resolve('./sidebars.js'),
+                    editUrl:
+                      'https://github.com/YuKARLO15/Bulak-Smart-Connect-JS/edit/main/',
+                  },
+                  theme: {
+                    customCss: require.resolve('./src/css/custom.css'),
+                  },
+                },
+              ],
+            ],
           };
           EOF
           
-          # Create documentation for key components
-          cat > src/stories/KeyComponents.stories.jsx << 'EOF'
-          import React from 'react';
+          # Create a custom intro document
+          cat > docusaurus/docs/intro.md << 'EOF'
+          ---
+          sidebar_position: 1
+          slug: /
+          ---
           
-          export default {
-            title: 'Documentation/Key Components',
-          };
+          # Bulak Smart Connect Documentation
           
-          export const NavigationComponents = () => (
-            <div style={{ fontFamily: "sans-serif", padding: "20px" }}>
-              <h2 style={{ color: "#184a5b" }}>Navigation Components</h2>
-              <div style={{ marginBottom: "20px", padding: "15px", border: "1px solid #ddd", borderRadius: "4px" }}>
-                <h3>NavBar</h3>
-                <p>Top navigation bar component used throughout the application.</p>
-                <ul>
-                  <li>Provides navigation links to primary sections</li>
-                  <li>Displays user authentication status</li>
-                  <li>Adapts to responsive layouts</li>
-                </ul>
-              </div>
-              
-              <div style={{ marginBottom: "20px", padding: "15px", border: "1px solid #ddd", borderRadius: "4px" }}>
-                <h3>NavSide</h3>
-                <p>Side navigation component for detailed menu options.</p>
-                <ul>
-                  <li>Used for more detailed navigation options</li>
-                  <li>Role-based menu display</li>
-                  <li>Collapsible for mobile views</li>
-                </ul>
-              </div>
-            </div>
-          );
+          Welcome to the Bulak Smart Connect Frontend Documentation.
           
-          export const UserInterfaceComponents = () => (
-            <div style={{ fontFamily: "sans-serif", padding: "20px" }}>
-              <h2 style={{ color: "#184a5b" }}>User Interface Components</h2>
-              <div style={{ marginBottom: "20px", padding: "15px", border: "1px solid #ddd", borderRadius: "4px" }}>
-                <h3>UserDashboard</h3>
-                <p>Main dashboard for regular users.</p>
-                <ul>
-                  <li>Displays user's applications and appointments</li>
-                  <li>Quick access to common services</li>
-                  <li>Status updates for submitted documents</li>
-                </ul>
-              </div>
-              
-              <div style={{ marginBottom: "20px", padding: "15px", border: "1px solid #ddd", borderRadius: "4px" }}>
-                <h3>ApplicationForm</h3>
-                <p>Form for document application submission.</p>
-                <ul>
-                  <li>Multi-step form process</li>
-                  <li>Document upload capability</li>
-                  <li>Form validation and error handling</li>
-                </ul>
-              </div>
-            </div>
-          );
+          ## Project Overview
+          
+          Bulak Smart Connect is a modern web application that streamlines document processing for citizens. It provides an intuitive interface for citizens to submit applications, schedule appointments, and track the status of their requests.
+          
+          ## Key Features
+          
+          - User dashboard for citizens
+          - Application submission for various certificate types
+          - Appointment scheduling system
+          - Admin interface for document processing
+          - Realtime notification system
+          - Mobile-responsive design
+          
+          ## Technology Stack
+          
+          - **Frontend**: React with Vite + SWC
+          - **UI Library**: Material UI
+          - **Routing**: React Router
+          - **State Management**: Context API
+          
+          ## Component Structure
+          
+          The application is organized into logical modules:
+          
+          1. **User Interface** - Components for regular citizens to access services
+          2. **Admin Interface** - Components for administrators to manage the system
+          3. **Navigation** - Shared navigation components across the application
+          4. **Authentication** - Login and user management components
+          
+          Browse the [Components section](./components) for detailed documentation.
           EOF
           
-          # Create a static assets directory for Storybook
-          mkdir -p public/assets
+          # Run the component documentation extraction script
+          node extract-components.js
           
-          # Build Storybook
-          echo "Building Storybook with Vite + SWC..."
-          
-          # Important: We need to fix the issue with failing MDX files
-          # Install required additional packages
-          npm install --no-save @storybook/builder-vite
-          
-          # Build Storybook with proper error handling
-          npx storybook build -o docs/frontend || {
-            echo "Storybook build encountered issues, creating basic documentation..."
-            
-            mkdir -p docs/frontend
-            
-            # Create a basic HTML page with component information
-            cat > docs/frontend/index.html << 'EOF'
-            <!DOCTYPE html>
-            <html>
-              <head>
-                <meta charset="utf-8">
-                <title>Bulak Smart Connect Components</title>
-                <style>
-                  body { font-family: 'Segoe UI', sans-serif; max-width: 1200px; margin: 0 auto; padding: 20px; color: #333; }
-                  h1, h2, h3 { color: #184a5b; }
-                  .container { display: flex; flex-wrap: wrap; gap: 20px; }
-                  .section { border: 1px solid #ddd; border-radius: 8px; padding: 20px; flex: 1; min-width: 300px; }
-                  .component { margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #eee; }
-                  .component h3 { margin-bottom: 5px; }
-                </style>
-              </head>
-              <body>
-                <h1>Bulak Smart Connect Components</h1>
-                <p>This documentation provides an overview of the main components used in the application.</p>
-                
-                <div class="container">
-                  <div class="section">
-                    <h2>User Interface Components</h2>
-                    
-                    <div class="component">
-                      <h3>UserDashboard</h3>
-                      <p>Main dashboard for regular users.</p>
-                      <ul>
-                        <li>Displays user's applications and appointments</li>
-                        <li>Quick access to common services</li>
-                        <li>Status updates for submitted documents</li>
-                      </ul>
-                    </div>
-                    
-                    <div class="component">
-                      <h3>ApplicationForm</h3>
-                      <p>Form for document application submission.</p>
-                      <ul>
-                        <li>Multi-step form process</li>
-                        <li>Document upload capability</li>
-                        <li>Form validation and error handling</li>
-                      </ul>
-                    </div>
-                    
-                    <div class="component">
-                      <h3>AppointmentForm</h3>
-                      <p>Interface for booking appointments.</p>
-                    </div>
-                    
-                    <div class="component">
-                      <h3>BirthCertificateForm</h3>
-                      <p>Form for birth certificate applications.</p>
-                    </div>
-                    
-                    <div class="component">
-                      <h3>MarriageCertificateForm</h3>
-                      <p>Form for marriage certificate applications.</p>
-                    </div>
-                    
-                    <div class="component">
-                      <h3>WalkInQueue</h3>
-                      <p>Queue management for walk-in visitors.</p>
-                    </div>
-                  </div>
-                  
-                  <div class="section">
-                    <h2>Admin Interface Components</h2>
-                    
-                    <div class="component">
-                      <h3>AdminDashboard</h3>
-                      <p>Main dashboard for administrators.</p>
-                    </div>
-                    
-                    <div class="component">
-                      <h3>AdminApplicationDetails</h3>
-                      <p>Detailed view of user applications.</p>
-                    </div>
-                    
-                    <div class="component">
-                      <h3>AccountManagement</h3>
-                      <p>User account administration.</p>
-                    </div>
-                    
-                    <div class="component">
-                      <h3>AdminWalkInQueue</h3>
-                      <p>Walk-in queue management for admins.</p>
-                    </div>
-                    
-                    <div class="component">
-                      <h3>ApplicationAdminDashboard</h3>
-                      <p>Dashboard for application processing.</p>
-                    </div>
-                  </div>
-                  
-                  <div class="section">
-                    <h2>Navigation Components</h2>
-                    
-                    <div class="component">
-                      <h3>NavBar</h3>
-                      <p>Top navigation bar component used throughout the application.</p>
-                      <ul>
-                        <li>Provides navigation links to primary sections</li>
-                        <li>Displays user authentication status</li>
-                        <li>Adapts to responsive layouts</li>
-                      </ul>
-                    </div>
-                    
-                    <div class="component">
-                      <h3>NavSide</h3>
-                      <p>Side navigation component for detailed menu options.</p>
-                      <ul>
-                        <li>Used for more detailed navigation options</li>
-                        <li>Role-based menu display</li>
-                        <li>Collapsible for mobile views</li>
-                      </ul>
-                    </div>
-                  </div>
-                  
-                  <div class="section">
-                    <h2>Authentication Components</h2>
-                    
-                    <div class="component">
-                      <h3>LogIn</h3>
-                      <p>Login screen component.</p>
-                    </div>
-                    
-                    <div class="component">
-                      <h3>LogInCard</h3>
-                      <p>Card component for login form.</p>
-                    </div>
-                    
-                    <div class="component">
-                      <h3>SignUpForm</h3>
-                      <p>Form for user registration.</p>
-                    </div>
-                  </div>
-                </div>
-                
-                <footer style="margin-top: 40px; text-align: center; color: #666;">
-                  <p>Bulak Smart Connect - Frontend Documentation</p>
-                </footer>
-              </body>
-            </html>
-            EOF
-          }
-
-      - name: Create documentation hub
-        run: |
-          mkdir -p doc_hub
-          touch doc_hub/.nojekyll
-          
-          echo '<!DOCTYPE html>
-          <html>
-            <head>
-              <meta charset="utf-8">
-              <title>Bulak Smart Connect Documentation Hub</title>
-              <style>
-                body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
-                .card { border: 1px solid #ddd; border-radius: 8px; padding: 16px; margin: 16px 0; }
-                .button { display: inline-block; background-color: #4CAF50; color: white; padding: 10px 20px; 
-                          text-decoration: none; border-radius: 4px; }
-              </style>
-            </head>
-            <body>
-              <h1>Bulak Smart Connect Documentation</h1>
-              
-              <div class="card">
-                <h2>API Documentation</h2>
-                <p>Backend API documentation generated with Compodoc.</p>
-                <a href="api-docs/" class="button">View API Docs</a>
-              </div>
-              
-              <div class="card">
-                <h2>Frontend Documentation</h2>
-                <p>Frontend component and service documentation.</p>
-                <a href="frontend-docs/" class="button">View Frontend Docs</a>
-              </div>
-            </body>
-          </html>' > doc_hub/index.html
+          # Build the Docusaurus site
+          cd docusaurus
+          npm install
+          npm run build
       
-      - name: Deploy frontend docs
+      - name: Deploy documentation
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          folder: bulak-smart-connect-js/docs/frontend
+          folder: bulak-smart-connect-js/docusaurus/build
           target-folder: frontend-docs
           branch: gh-pages
           clean: true
@@ -486,6 +382,100 @@ jobs:
             .nojekyll
             api-docs/**
 
+      - name: Create and deploy documentation hub
+        run: |
+          mkdir -p doc_hub
+          touch doc_hub/.nojekyll
+          
+          cat > doc_hub/index.html << 'EOF'
+          <!DOCTYPE html>
+          <html>
+            <head>
+              <meta charset="utf-8">
+              <title>Bulak Smart Connect Documentation Hub</title>
+              <style>
+                body { 
+                  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+                  max-width: 800px;
+                  margin: 0 auto;
+                  padding: 20px;
+                  line-height: 1.6;
+                }
+                .header {
+                  text-align: center;
+                  padding: 20px 0;
+                  margin-bottom: 40px;
+                  border-bottom: 1px solid #eaeaea;
+                }
+                .header h1 {
+                  color: #184a5b;
+                  margin-bottom: 10px;
+                }
+                .card {
+                  border: 1px solid #e0e0e0;
+                  border-radius: 8px;
+                  padding: 24px;
+                  margin-bottom: 24px;
+                  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                  transition: transform 0.2s, box-shadow 0.2s;
+                }
+                .card:hover {
+                  transform: translateY(-2px);
+                  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+                }
+                .card h2 {
+                  margin-top: 0;
+                  color: #184a5b;
+                }
+                .button {
+                  display: inline-block;
+                  background-color: #184a5b;
+                  color: white;
+                  padding: 10px 20px;
+                  text-decoration: none;
+                  border-radius: 4px;
+                  margin-top: 10px;
+                  font-weight: 500;
+                  transition: background-color 0.2s;
+                }
+                .button:hover {
+                  background-color: #0d3446;
+                }
+                .footer {
+                  text-align: center;
+                  color: #666;
+                  margin-top: 40px;
+                  padding-top: 20px;
+                  border-top: 1px solid #eaeaea;
+                  font-size: 0.9em;
+                }
+              </style>
+            </head>
+            <body>
+              <div class="header">
+                <h1>Bulak Smart Connect</h1>
+                <p>Comprehensive Documentation Hub</p>
+              </div>
+              
+              <div class="card">
+                <h2>API Documentation</h2>
+                <p>Backend API documentation generated with Compodoc, providing detailed information about endpoints, services, and models.</p>
+                <a href="api-docs/" class="button">View API Docs</a>
+              </div>
+              
+              <div class="card">
+                <h2>Frontend Documentation</h2>
+                <p>Frontend component and service documentation built with Docusaurus, including component properties, usage examples, and architecture overview.</p>
+                <a href="frontend-docs/" class="button">View Frontend Docs</a>
+              </div>
+              
+              <div class="footer">
+                <p>© $(date +%Y) Bulak Smart Connect</p>
+              </div>
+            </body>
+          </html>
+          EOF
+          
       - name: Deploy documentation hub
         uses: JamesIves/github-pages-deploy-action@v4
         with:
