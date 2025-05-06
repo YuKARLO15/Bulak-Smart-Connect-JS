@@ -1,13 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, Typography, Paper, Button, Divider } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import './CopyBirthCertificate.css';
 
 const CopyBirthCertificate = ({ formData = {}, handleChange }) => {
   const navigate = useNavigate();
   const [showExtension, setShowExtension] = useState(formData.hasExtension || false);
+
   const [localFormData, setLocalFormData] = useState(formData || {});
   const requiredField = <span className="RequiredFieldCopyBirth">*</span>;
+  const location = useLocation();
 
   const [errors, setErrors] = useState({});
   const months = [
@@ -51,6 +53,53 @@ const CopyBirthCertificate = ({ formData = {}, handleChange }) => {
   const currentYear = new Date().getFullYear();
   const years = Array.from({ length: 100 }, (_, i) => currentYear - i);
 
+    const isEditing = location.state?.isEditing || 
+                      localStorage.getItem('isEditingBirthApplication') === 'true';
+  
+                      useEffect(() => {
+                        // Only load data if we're in editing mode
+                        if (isEditing) {
+                          try {
+                            console.log("Loading data for editing...");
+                            const editingId = localStorage.getItem('editingApplicationId');
+                            console.log("Editing application ID:", editingId);
+                            
+                            // Get applications from localStorage
+                            const applications = JSON.parse(localStorage.getItem('applications') || '[]');
+                            const applicationToEdit = applications.find(app => app.id === editingId);
+                            
+                            if (applicationToEdit && applicationToEdit.formData) {
+                              console.log("Found application to edit:", applicationToEdit);
+                              setLocalFormData(applicationToEdit.formData);
+                            } else {
+                              // Fallback to direct form data if available
+                              const savedFormData = localStorage.getItem('birthCertificateApplication');
+                              if (savedFormData) {
+                                setLocalFormData(JSON.parse(savedFormData));
+                                console.log("Loaded form data from birthCertificateApplication");
+                              } else {
+                                console.warn("No application data found for editing");
+                              }
+                            }
+                          } catch (error) {
+                            console.error("Error loading data for editing:", error);
+                          }
+                        } else {
+                          // If not editing, always start with empty form
+                          console.log("Starting with new application - clearing form data");
+                          setLocalFormData({});
+                          localStorage.removeItem('birthCertificateApplication');
+                        }
+                        
+                        // Cleanup function
+                        return () => {
+                          if (!isEditing) {
+                            // Save draft data when leaving form
+                            localStorage.setItem('birthCertificateApplication', JSON.stringify(formData));
+                          }
+                        };
+                      }, [isEditing]);
+                    
   const handleLocalChange = e => {
     const { name, value } = e.target;
 
@@ -86,11 +135,107 @@ const CopyBirthCertificate = ({ formData = {}, handleChange }) => {
   };
 
   const handleNextClick = () => {
-    if (validateForm()) {
-      localStorage.setItem('birthCertificateApplication', JSON.stringify(localFormData));
-      navigate('/CTCBirthCertificate');
-    } else {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (!validateForm()) {
+      console.log("Form validation failed");
+ 
+      window.scrollTo(0, 0);
+      return;
+    }
+  
+    try {
+      console.log("Processing next button click...");
+      
+      let applicationId;
+      
+      if (isEditing) {
+        applicationId = localStorage.getItem('editingApplicationId');
+        console.log("Editing existing application:", applicationId);
+      } else {
+
+        applicationId = 'BC-' + Date.now().toString().slice(-6);
+        console.log("Creating new application:", applicationId);
+      }
+      
+ 
+      const dataToSave = { 
+        ...localFormData,
+        purpose: localFormData.purpose || '',
+    
+        isCopyRequest: true 
+      };
+
+      const applicationData = {
+        id: applicationId,
+        type: 'Copy of Birth Certificate',
+        applicationType: 'Request copy',
+        date: new Date().toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'numeric',
+          day: 'numeric',
+        }),
+        status: isEditing ? localStorage.getItem('currentApplicationStatus') || 'Pending' : 'Pending',
+        message: `Copy of Birth Certificate request for ${dataToSave.firstName || ''} ${dataToSave.lastName || ''}`,
+        formData: dataToSave,
+        lastUpdated: new Date().toISOString()
+      };
+      
+    
+      const existingApplications = JSON.parse(localStorage.getItem('applications') || '[]');
+      
+  
+      if (isEditing) {
+   
+        const appIndex = existingApplications.findIndex(app => app.id === applicationId);
+        
+        if (appIndex >= 0) {
+  
+          existingApplications[appIndex] = applicationData;
+          console.log('Updated existing application at index:', appIndex);
+        } else {
+   
+          existingApplications.push(applicationData);
+          console.log('Added new application (was editing but not found):', applicationId);
+        }
+      } else {
+        
+        existingApplications.push(applicationData);
+        console.log('Added new application:', applicationId);
+      }
+      
+  
+      localStorage.setItem('applications', JSON.stringify(existingApplications));
+      
+   
+      localStorage.setItem('currentApplicationId', applicationId);
+      localStorage.setItem('birthCertificateApplication', JSON.stringify(dataToSave));
+      
+  
+      localStorage.removeItem('isEditingBirthApplication');
+      localStorage.removeItem('editingApplicationId');
+      localStorage.removeItem('editingApplication');
+      
+   
+      window.dispatchEvent(new Event('storage'));
+      
+      const customEvent = new CustomEvent('customStorageUpdate', { 
+        detail: { 
+          id: applicationId,
+          type: 'Copy of Birth Certificate', 
+          action: isEditing ? 'updated' : 'created' 
+        }
+      });
+      window.dispatchEvent(customEvent);
+      
+      // Navigate to appropriate page
+      if (isEditing) {
+    
+        window.location.href = '/CTCBirthCertificate';
+      } else {
+        window.location.href = '/CTCBirthCertificate';
+      }
+    } catch (err) {
+      console.error('Error processing form:', err);
+      alert('There was a problem with your request. Please try again.');
     }
   };
 
