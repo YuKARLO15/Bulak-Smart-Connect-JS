@@ -37,7 +37,7 @@ jobs:
       - name: Generate Stories Automatically
         run: |
           cd bulak-smart-connect-js
-          npx storybook@latest init --generate-stories
+          node scripts/generateStories.js
       
       - name: Check if build-storybook script exists
         run: |
