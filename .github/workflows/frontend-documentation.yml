@@ -91,10 +91,9 @@ jobs:
               error: null
             };
             
-            return (
-              <MockAuthContext.Provider value={authValue}>
-                {children}
-              </MockAuthContext.Provider>
+            return React.createElement(MockAuthContext.Provider, 
+              { value: authValue }, 
+              children
             );
           };
 
