@@ -22,289 +22,302 @@ jobs:
         with:
           node-version: '20'
           cache: 'npm'
-          cache-dependency-path: 'bulak-smart-connect-js/package-lock.json'
       
-      - name: Install dependencies
-        run: |
-          cd bulak-smart-connect-js
-          npm ci
-          npm install --save-dev react-styleguidist webpack webpack-cli babel-loader @babel/core @babel/preset-env @babel/preset-react style-loader css-loader file-loader prop-types
-
-      - name: Setup Babel configuration
-        run: |
-          cd bulak-smart-connect-js
-          
-          # Create .babelrc file
-          cat > .babelrc << 'EOF'
-          {
-            "presets": ["@babel/preset-env", "@babel/preset-react"]
-          }
-          EOF
+      - name: Install Gatsby CLI
+        run: npm install -g gatsby-cli
       
-      - name: Setup Styleguidist configuration
+      - name: Create Gatsby Documentation Site
         run: |
-          cd bulak-smart-connect-js
+          # Create a new Gatsby site using the documentation starter
+          gatsby new docs-site https://github.com/gatsbyjs/gatsby-starter-documentation
           
-          # Create webpack.config.js for Styleguidist
-          cat > webpack.config.js << 'EOF'
-          const path = require('path');
+          cd docs-site
+          
+          # Install additional dependencies for component documentation
+          npm install --save gatsby-plugin-mdx @mdx-js/react @mdx-js/mdx gatsby-source-filesystem prism-react-renderer react-live
 
+      - name: Configure Gatsby Site
+        run: |
+          cd docs-site
+          
+          # Create gatsby-config.js with component documentation setup
+          cat > gatsby-config.js << 'EOF'
           module.exports = {
-            module: {
-              rules: [
-                {
-                  test: /\.jsx?$/,
-                  exclude: /node_modules/,
-                  use: {
-                    loader: 'babel-loader',
-                    options: {
-                      presets: ['@babel/preset-env', '@babel/preset-react']
-                    }
-                  }
-                },
-                {
-                  test: /\.css$/,
-                  use: ['style-loader', 'css-loader']
-                },
-                {
-                  test: /\.(png|jpg|gif|svg)$/,
-                  use: ['file-loader']
-                }
-              ]
+            siteMetadata: {
+              title: 'Bulak Smart Connect Documentation',
+              description: 'Component documentation for Bulak Smart Connect',
+              author: 'Bulak LGU Smart Connect Team',
             },
-            resolve: {
-              extensions: ['.js', '.jsx']
-            }
-          };
-          EOF
-          
-          # Create Styleguidist config file with .cjs extension
-          cat > styleguide.config.cjs << 'EOF'
-          const path = require('path');
-
-          module.exports = {
-            title: 'Bulak Smart Connect Component Library',
-            defaultExample: false,
-            components: 'src/**/[A-Z]*.jsx',
-            usageMode: 'expand',
-            exampleMode: 'expand',
-            pagePerSection: true,
-            skipComponentsWithoutExample: false,
-            template: {
-              head: {
-                links: [
-                  {
-                    rel: 'stylesheet',
-                    href: 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap',
+            plugins: [
+              'gatsby-plugin-react-helmet',
+              {
+                resolve: 'gatsby-source-filesystem',
+                options: {
+                  name: 'components',
+                  path: `${__dirname}/src/components`,
+                },
+              },
+              {
+                resolve: 'gatsby-source-filesystem',
+                options: {
+                  name: 'project-components',
+                  path: `${__dirname}/../bulak-smart-connect-js/src`,
+                },
+              },
+              {
+                resolve: 'gatsby-source-filesystem',
+                options: {
+                  name: 'pages',
+                  path: `${__dirname}/src/pages`,
+                },
+              },
+              {
+                resolve: 'gatsby-plugin-mdx',
+                options: {
+                  defaultLayouts: {
+                    default: require.resolve('./src/components/layout.js'),
                   },
-                ],
+                  gatsbyRemarkPlugins: [
+                    {
+                      resolve: 'gatsby-remark-prismjs',
+                      options: {
+                        classPrefix: 'language-',
+                        inlineCodeMarker: null,
+                        aliases: {},
+                        showLineNumbers: true,
+                      },
+                    },
+                  ],
+                },
               },
-            },
-            styles: {
-              StyleGuide: {
-                '@global body': {
-                  fontFamily: '"Roboto", sans-serif'
-                }
-              }
-            },
-            sections: [
-              {
-                name: 'Introduction',
-                content: 'docs/introduction.md',
-              },
-              {
-                name: 'Landing Page',
-                components: 'src/LandingPageComponents/[A-Z]*.jsx',
-                sectionDepth: 1,
-              },
-              {
-                name: 'Navigation',
-                components: 'src/NavigationComponents/[A-Z]*.jsx',
-                sectionDepth: 1,
-              },
-              {
-                name: 'User Components',
-                components: 'src/UserBulakSmartConnect/**/[A-Z]*.jsx',
-                sectionDepth: 2,
-              },
-              {
-                name: 'Admin Components',
-                components: 'src/AdminBulakSmartConnect/**/[A-Z]*.jsx',
-                sectionDepth: 2,
-              },
-              {
-                name: 'Login Components',
-                components: 'src/LogInComponents/[A-Z]*.jsx',
-                sectionDepth: 1,
-              },
+              'gatsby-plugin-catch-links',
             ],
-            require: ['./src/setupProxy.js'],
-            webpackConfig: require('./webpack.config.js'),
-            propsParser: require('react-docgen').parse,
-            getExampleFilename(componentPath) {
-              return componentPath.replace(/\.jsx?$/, '.examples.md');
-            },
-            getComponentPathLine(componentPath) {
-              const name = path.basename(componentPath, path.extname(componentPath));
-              const dir = path.dirname(componentPath);
-              const packageDir = dir.split(path.sep).includes('src') ? path.resolve(dir, '../') : '';
-              return `import { ${name} } from '${packageDir ? path.relative(packageDir, dir) : ''}';`;
-            },
           };
           EOF
-      
-      - name: Create setup files
+
+      - name: Create Component Documentation
         run: |
-          cd bulak-smart-connect-js
+          cd docs-site
           
-          # Create a setupProxy.js file to load global styles and mocks
-          cat > src/setupProxy.js << 'EOF'
-          import './index.css';
-
-          // Mock AuthContext
-          window.useAuth = () => ({
-            isAuthenticated: true,
-            user: { 
-              name: 'John Doe', 
-              email: 'john@example.com', 
-              roles: ['admin']
-            },
-            login: () => Promise.resolve({ success: true }),
-            logout: () => {},
-            hasRole: () => true,
-            isAdmin: true,
-            isStaff: true,
-            isCitizen: true
-          });
-
-          // Mock BrowserRouter and other contexts
-          const mockComponent = (name) => ({ children }) => children;
-          window.BrowserRouter = mockComponent('BrowserRouter');
-          EOF
-
-      - name: Create documentation files
-        run: |
-          cd bulak-smart-connect-js
-          mkdir -p docs
+          # Create documentation structure
+          mkdir -p src/pages/components
+          mkdir -p src/components
           
-          # Create introduction file
-          cat > docs/introduction.md << 'EOF'
-          # Bulak Smart Connect Component Library
-
-          This documentation provides an overview of the components used in the Bulak Smart Connect application,
+          # Create Introduction page
+          cat > src/pages/index.mdx << 'EOF'
+          # Bulak Smart Connect Documentation
+          
+          Welcome to the Bulak Smart Connect component library documentation.
+          
+          This site provides documentation for the React components used in the Bulak Smart Connect application,
           which serves as the official queuing and information system for the Municipal Civil Registrar
           of San Ildefonso, Bulacan.
-
+          
           ## Design Principles
-
+          
           - **User-Centered**: Components focus on ease of use for citizens
           - **Consistency**: Uniform styling and behavior across the application
-          - **Accessibility**: Components follow WCAG guidelines where possible
+          - **Accessibility**: Components follow WCAG guidelines
           - **Responsiveness**: Works on desktop and mobile devices
-
-          ## Color Palette
-
+          
+          ## Main Component Categories
+          
+          - [Landing Page Components](/components/landing-page)
+          - [Navigation Components](/components/navigation)
+          - [User Dashboard Components](/components/user-dashboard)
+          - [Admin Components](/components/admin)
+          - [Authentication Components](/components/auth)
+          EOF
+          
+          # Create component categories pages
+          cat > src/pages/components/landing-page.mdx << 'EOF'
+          # Landing Page Components
+          
+          Components used on the public-facing landing page.
+          
+          ## Color Scheme
+          
+          The landing page uses the primary color scheme:
+          
           - Primary: #184a5b
           - Secondary: #8DC3A7
           - Accent: #e2e381
-          - Background: #ffffff
-          - Text: #333333
-          EOF
-
-          # Create auth context mock
-          mkdir -p src/__mocks__
-          cat > src/__mocks__/authContext.js << 'EOF'
-          export const useAuth = () => ({
-            isAuthenticated: true,
-            user: { 
-              name: 'John Doe', 
-              email: 'john@example.com', 
-              roles: ['admin']
-            },
-            login: () => Promise.resolve({ success: true }),
-            logout: () => {},
-            hasRole: () => true,
-            isAdmin: true
-          });
-          EOF
-
-          # Create automatic example for a component
-          mkdir -p src/components
           
-          # Create a sample button component
-          cat > src/components/Button.jsx << 'EOF'
+          ## Components
+          
+          ### HeroSection
+          
+          The main banner section at the top of the landing page.
+          
+          ### FeatureCard
+          
+          Cards displaying the key features of the application.
+          EOF
+          
+          # Create a simple layout component
+          cat > src/components/layout.js << 'EOF'
           import React from 'react';
-          import PropTypes from 'prop-types';
-
-          /**
-           * Basic button component with customizable styling
-           */
-          const Button = ({ label, primary, onClick }) => {
-            const baseStyle = {
-              padding: '8px 16px',
-              cursor: 'pointer',
-              borderRadius: '4px',
-              border: 'none',
-              backgroundColor: primary ? '#184a5b' : '#e0e0e0',
-              color: primary ? 'white' : '#333',
-            };
-
+          import { Link } from 'gatsby';
+          import './layout.css';
+          
+          const Layout = ({ children }) => {
             return (
-              <button style={baseStyle} onClick={onClick}>
-                {label}
-              </button>
+              <div className="main-container">
+                <header>
+                  <nav>
+                    <Link to="/" className="site-title">Bulak Smart Connect Docs</Link>
+                    <div className="nav-links">
+                      <Link to="/components/landing-page">Landing Page</Link>
+                      <Link to="/components/navigation">Navigation</Link>
+                      <Link to="/components/user-dashboard">User Dashboard</Link>
+                      <Link to="/components/admin">Admin</Link>
+                      <Link to="/components/auth">Auth</Link>
+                    </div>
+                  </nav>
+                </header>
+                <main>{children}</main>
+                <footer>
+                  <p>© {new Date().getFullYear()} Bulak Smart Connect</p>
+                </footer>
+              </div>
             );
           };
-
-          Button.propTypes = {
-            /** Text to display inside the button */
-            label: PropTypes.string.isRequired,
-            /** Whether the button should have primary styling */
-            primary: PropTypes.bool,
-            /** Function to call when button is clicked */
-            onClick: PropTypes.func,
-          };
-
-          Button.defaultProps = {
-            primary: false,
-            onClick: () => {},
-          };
-
-          export default Button;
+          
+          export default Layout;
           EOF
-
-          # Create example file for Button
-          cat > src/components/Button.examples.md << 'EOF'
-          Basic button example:
-
-          ```jsx
-          <Button label="Click Me" />
-          ```
-
-          Primary button example:
-
-          ```jsx
-          <Button label="Primary Button" primary />
-          ```
+          
+          # Create layout CSS
+          cat > src/components/layout.css << 'EOF'
+          :root {
+            --primary-color: #184a5b;
+            --secondary-color: #8DC3A7;
+            --accent-color: #e2e381;
+            --text-color: #333333;
+            --background-color: #ffffff;
+            --sidebar-width: 250px;
+          }
+          
+          * {
+            box-sizing: border-box;
+          }
+          
+          body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+              Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            margin: 0;
+            padding: 0;
+            color: var(--text-color);
+            background-color: var(--background-color);
+          }
+          
+          .main-container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+          }
+          
+          header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1rem;
+          }
+          
+          nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+          }
+          
+          .site-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+          }
+          
+          .nav-links {
+            display: flex;
+            gap: 1.5rem;
+          }
+          
+          .nav-links a {
+            color: white;
+            text-decoration: none;
+          }
+          
+          .nav-links a:hover {
+            text-decoration: underline;
+          }
+          
+          main {
+            flex-grow: 1;
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 2rem;
+          }
+          
+          footer {
+            background-color: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 1rem;
+          }
           EOF
-
-      - name: Add script to package.json
+          
+          # Create a Button component example
+          cat > src/pages/components/button.mdx << 'EOF'
+          # Button Component
+          
+          A customizable button component for user interactions.
+          
+          ## Usage
+          
+          ```jsx
+          import Button from '../components/Button';
+          
+          <Button 
+            primary 
+            label="Click Me" 
+            onClick={() => alert('Button clicked!')} 
+          />
+          ```
+          
+          ## Props
+          
+          | Prop | Type | Default | Description |
+          | ---- | ---- | ------- | ----------- |
+          | `label` | string | required | Text to display inside the button |
+          | `primary` | boolean | false | Whether the button should use primary styling |
+          | `onClick` | function | () => {} | Function called when button is clicked |
+          | `disabled` | boolean | false | Whether the button is disabled |
+          EOF
+          
+      - name: Copy Project Components for Documentation
         run: |
-          cd bulak-smart-connect-js
-          npx json -I -f package.json -e 'this.scripts.styleguidist = "styleguidist build"'
-          npx json -I -f package.json -e 'if (!this.resolutions) this.resolutions = {}; this.resolutions["react-docgen"] = "^5.4.3"'
-          npm install --save-dev react-docgen@5.4.3
+          cd docs-site
+          
+          # Create directory for component examples
+          mkdir -p src/components/examples
+          
+          # Copy a sample of your project components
+          cp -r ../bulak-smart-connect-js/src/components/* src/components/examples/ 2>/dev/null || :
+          cp -r ../bulak-smart-connect-js/src/LandingPageComponents/* src/components/examples/ 2>/dev/null || :
+          cp -r ../bulak-smart-connect-js/src/NavigationComponents/* src/components/examples/ 2>/dev/null || :
       
-      - name: Build Styleguidist
+      - name: Build Gatsby Site
         run: |
-          cd bulak-smart-connect-js
-          npx react-styleguidist build
-          touch styleguide/.nojekyll
-        
+          cd docs-site
+          gatsby build --prefix-paths
+          touch public/.nojekyll
+      
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          folder: bulak-smart-connect-js/styleguide
+          folder: docs-site/public
           target-folder: frontend-docs
           branch: gh-pages
           clean: true
@@ -312,13 +325,12 @@ jobs:
             .nojekyll
             api-docs/**
 
-      - name: Deploy documentation hub
+      - name: Create Documentation Hub
         run: |
-          cd bulak-smart-connect-js
-          mkdir -p ../doc_hub
-          touch ../doc_hub/.nojekyll
+          mkdir -p doc_hub
+          touch doc_hub/.nojekyll
           
-          cat > ../doc_hub/index.html << 'EOF'
+          cat > doc_hub/index.html << 'EOF'
           <!DOCTYPE html>
           <html>
             <head>
@@ -396,7 +408,7 @@ jobs:
               
               <div class="card">
                 <h2>Component Documentation</h2>
-                <p>Frontend component documentation built with Styleguidist, showing components, props, and examples.</p>
+                <p>Frontend component documentation built with Gatsby, showing components, props, and usage examples.</p>
                 <a href="frontend-docs/" class="button">View Components</a>
               </div>
               
@@ -407,7 +419,7 @@ jobs:
           </html>
           EOF
 
-      - name: Deploy documentation hub
+      - name: Deploy Documentation Hub
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           folder: doc_hub
