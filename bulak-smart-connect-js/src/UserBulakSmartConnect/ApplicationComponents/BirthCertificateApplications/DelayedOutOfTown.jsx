@@ -47,11 +47,57 @@ const DelayedOutOfTownRegistration = () => {
   const isMandatoryComplete = requiredDocuments.every(doc => uploadedFiles[doc]);
 
   const handleSubmit = () => {
-    if (isMandatoryComplete) {
-      setIsSubmitted(true);
-      setTimeout(() => {
-        navigate('/BirthApplicationSummary');
-      }, 2000);
+    if (isMandatoryComplete()) {
+      try {
+  
+        const currentId = localStorage.getItem('currentApplicationId');
+        if (!currentId) {
+          console.error('No application ID found');
+          return;
+        }
+        
+ 
+        const applications = JSON.parse(localStorage.getItem('applications') || '[]');
+        const applicationIndex = applications.findIndex(app => app.id === currentId);
+        
+        if (applicationIndex === -1) {
+          console.error('Application not found:', currentId);
+          return;
+        }
+        
+      
+        applications[applicationIndex] = {
+          ...applications[applicationIndex],
+          uploadedFiles: uploadedFiles,
+          documentStatus: status,
+          lastUpdated: new Date().toISOString()
+        };
+        
+   
+        const currentFormData = JSON.parse(localStorage.getItem('birthCertificateApplication') || '{}');
+        const updatedFormData = {
+          ...currentFormData,
+          uploadedFiles: uploadedFiles,
+          documentStatus: status
+        };
+        
+  
+        localStorage.setItem('applications', JSON.stringify(applications));
+        localStorage.setItem('birthCertificateApplication', JSON.stringify(updatedFormData));
+        
+
+        window.dispatchEvent(new Event('storage'));
+        window.dispatchEvent(new CustomEvent('customStorageUpdate'));
+        
+ 
+        setIsSubmitted(true);
+        setTimeout(() => {
+          navigate('/BirthApplicationSummary');
+        }, 2000);
+      } catch (err) {
+        console.error('Error saving uploaded documents:', err);
+        alert('There was a problem saving your documents. Please try again.');
+      }
     }
   };
 

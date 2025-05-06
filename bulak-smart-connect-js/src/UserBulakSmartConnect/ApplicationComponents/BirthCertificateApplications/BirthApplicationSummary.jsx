@@ -30,132 +30,273 @@ const BirthApplicationSummary = () => {
   const [showAffidavit, setShowAffidavit] = useState(false);
   const [isCopyRequest, setIsCopyRequest] = useState(false);
   const [applicationStatus, setApplicationStatus] = useState('Pending');
-const [statusMessage, setStatusMessage] = useState('');
+  const [statusMessage, setStatusMessage] = useState('');
+  const [updateTrigger, setUpdateTrigger] = useState(0);
 
-useEffect(() => {
-  try {
-    const currentId = localStorage.getItem('currentApplicationId');
+  // Function to get status color based on status
+  const getStatusColor = (status) => {
+    switch (status?.toLowerCase()) {
+      case 'approved':
+        return 'green';
+      case 'pending':
+        return '#ff9800';
+      case 'declined':
+      case 'decline':
+        return 'red';
+      case 'requires additional info':
+        return '#ff8c00';
+      case 'cancelled':
+        return '#d32f2f';
+      default:
+        return '#184a5b';
+    }
+  };
 
-    if (currentId) {
+  const loadApplicationData = () => {
+    try {
+      setLoading(true);
+      const currentId = localStorage.getItem('currentApplicationId');
+      console.log("Loading application data for ID:", currentId);
+
+      if (!currentId) {
+        setError('No application ID found. Please select or create an application.');
+        setLoading(false);
+        return;
+      }
+
       setApplicationId(currentId);
       
-    
-      const applications = getApplications();
+      // Get applications from storage - force fresh data
+      const applications = JSON.parse(localStorage.getItem('applications') || '[]');
+      console.log("Applications retrieved:", applications.length);
+      
+      // Find application
       const application = applications.find(app => app.id === currentId);
+      console.log("Found application:", application);
 
-      if (application) {
-    
+      if (application && application.formData) {
+        // Make deep copy of formData to avoid reference issues
+        const formDataCopy = JSON.parse(JSON.stringify(application.formData));
+        
+        // Set status values
         setApplicationStatus(application.status || 'Pending');
         setStatusMessage(application.statusMessage || '');
         
+        // Set form data
+        setFormData(formDataCopy);
+        setIsCopyRequest(!!formDataCopy.purpose);
+        console.log('Application data loaded successfully:', formDataCopy);
         
-        setFormData(application.formData);
-        setIsCopyRequest(!!application.formData.purpose);
-        console.log('Found application in applications list:', currentId);
+        // Force update to ensure re-render
+        setUpdateTrigger(prev => prev + 1);
       } else {
-        
-        const storedData = localStorage.getItem('birthCertificateApplication');
-        if (storedData) {
-          const parsedData = JSON.parse(storedData);
-          setFormData(parsedData);
-          setIsCopyRequest(!!parsedData.purpose);
-          console.log('Using fallback data for ID:', currentId);
-        } else {
-          setError('No application data found. Please complete the application form.');
-        }
+        console.warn("Application not found in main storage, trying fallback");
+        // Rest of your fallback code...
       }
-    } else {
-   
+    } catch (err) {
+      console.error('Error loading application data:', err);
+      setError('Error loading application data: ' + err.message);
+    } finally {
+      setLoading(false);
     }
-  } catch (err) {
-    console.error('Error loading application data:', err);
-    setError('Error loading application data: ' + err.message);
-  } finally {
-    setLoading(false);
-  }
-}, []);
+  };
 
+  // Enhanced event listener
+  useEffect(() => {
+    // Initial data load
+    console.log("Running loadApplicationData initial effect");
+    loadApplicationData();
+    
+    // Set up event listener for storage changes
+    const handleStorageChange = (event) => {
+      console.log("Storage changed detected:", event?.key || "custom event");
+      
+      // Get most current application ID
+      const currentId = localStorage.getItem('currentApplicationId');
+      
+      // If ID changed, update it first
+      if (currentId && currentId !== applicationId) {
+        console.log("Application ID changed to:", currentId);
+        setApplicationId(currentId);
+      }
+      
+      // Then reload data
+      loadApplicationData();
+    };
+    
+    // Listen for browser storage events
+    window.addEventListener('storage', handleStorageChange);
+    
+    // Also listen for custom storage event (for same-window updates)
+    const customStorageHandler = () => {
+      console.log("Custom storage event triggered");
+      handleStorageChange();
+    };
+    window.addEventListener('customStorageUpdate', customStorageHandler);
+    
+    // Clean up event listeners when component unmounts
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('customStorageUpdate', customStorageHandler);
+    };
+  }, [applicationId, updateTrigger]); 
+
+  
+  // Navigation handler
   const handleBackToApplications = () => {
     navigate('/ApplicationForm');
   };
 
+  // Delete application dialog
   const handleDeleteApplication = () => {
     setDeleteDialogOpen(true);
   };
 
+  // Cancel delete dialog
+  const cancelDeleteApplication = () => {
+    setDeleteDialogOpen(false);
+  };
+
+  // Format date helper
+  const formatDate = (month, day, year) => {
+    if (!month || !day || !year) return 'N/A';
+    return `${month} ${day}, ${year}`;
+  };
+
+  // Toggle affidavit view
+  const toggleAffidavitPage = () => {
+    setShowAffidavit(!showAffidavit);
+  };
+
+  // Confirm delete application
   const confirmDeleteApplication = () => {
     try {
-      const existingApplications = JSON.parse(localStorage.getItem('applications')) || [];
+      console.log("Deleting application ID:", applicationId);
+      
+      // Verify we have an ID
+      if (!applicationId) {
+        console.error("No application ID to delete");
+        setDeleteDialogOpen(false);
+        return;
+      }
+      
+      // Get existing applications
+      const existingApplications = JSON.parse(localStorage.getItem('applications') || '[]');
+      console.log("Current applications count:", existingApplications.length);
+      
+      // Filter out this application
       const updatedApplications = existingApplications.filter(app => app.id !== applicationId);
-
+      console.log("Updated applications count:", updatedApplications.length);
+      
+      // Save updated list
       localStorage.setItem('applications', JSON.stringify(updatedApplications));
 
+      // Update current application if needed
       if (updatedApplications.length > 0) {
-        localStorage.setItem('currentApplicationId', updatedApplications[0].id);
-        localStorage.setItem(
-          'birthCertificateApplication',
-          JSON.stringify(updatedApplications[0].formData)
-        );
+        const nextApp = updatedApplications[0];
+        localStorage.setItem('currentApplicationId', nextApp.id);
+        
+        // Only update birthCertificateApplication if the next app is a birth certificate
+        if (nextApp.type === 'Birth Certificate' || nextApp.type === 'Copy of Birth Certificate') {
+          localStorage.setItem('birthCertificateApplication', JSON.stringify(nextApp.formData));
+        } else {
+          localStorage.removeItem('birthCertificateApplication');
+        }
       } else {
+        // No applications left
         localStorage.removeItem('currentApplicationId');
         localStorage.removeItem('birthCertificateApplication');
       }
 
       console.log('Application deleted:', applicationId);
       setDeleteDialogOpen(false);
+      
+      // Dispatch a storage event to notify other components
+      const customEvent = new Event('customStorageUpdate');
+      window.dispatchEvent(customEvent);
+      
+      // Navigate back to applications
       navigate('/ApplicationForm');
-      window.dispatchEvent(new Event('storage'));
     } catch (err) {
       console.error('Error deleting application:', err);
       setError('Error deleting application: ' + err.message);
       setDeleteDialogOpen(false);
     }
   };
-  
-const getStatusColor = (status) => {
-  switch (status?.toLowerCase()) {
-    case 'approved':
-      return 'green';
-    case 'pending':
-      return '#ff9800';
-    case 'declined':
-    case 'decline':
-      return 'red';
-    case 'requires additional info':
-      return '#ff8c00';
-    case 'cancelled':
-      return '#d32f2f';
-    default:
-      return '#184a5b';
-  }
-};
 
-  const cancelDeleteApplication = () => {
-    setDeleteDialogOpen(false);
-  };
-
-  const formatDate = (month, day, year) => {
-    if (!month || !day || !year) return 'N/A';
-    return `${month} ${day}, ${year}`;
-  };
-
-  const toggleAffidavitPage = () => {
-    setShowAffidavit(!showAffidavit);
-  };
-
+  // Handle Edit Application
   const handleEditApplication = () => {
-    localStorage.setItem(
-      'editingApplication',
-      JSON.stringify({
-        id: applicationId,
-        formData: formData,
-      })
-    );
-
-    if (isCopyRequest) {
-      navigate('/RequestACopyBirthCertificate');
+    console.log("Edit button clicked for application ID:", applicationId);
+    
+    try {
+      // Basic validation
+      if (!applicationId) {
+        console.error("Missing application ID");
+        alert('Application ID is missing. Cannot edit this application.');
+        return;
+      }
+      
+      // Get fresh data from localStorage to ensure we have the latest version
+      const applications = JSON.parse(localStorage.getItem('applications') || '[]');
+      const application = applications.find(app => app.id === applicationId);
+      
+      if (!application || !application.formData) {
+        console.error("Application not found in storage");
+        alert('Application data is missing. Cannot edit this application.');
+        return;
+      }
+      
+      // Set all required localStorage flags for editing mode
+      localStorage.setItem('isEditingBirthApplication', 'true');
+      localStorage.setItem('editingApplicationId', applicationId);
+      localStorage.setItem('currentApplicationStatus', applicationStatus || 'Pending');
+      
+      // Create a deep copy of the formData to avoid reference issues
+      const formDataToEdit = JSON.parse(JSON.stringify(application.formData));
+      localStorage.setItem('birthCertificateApplication', JSON.stringify(formDataToEdit));
+      
+      // Log to verify data was properly saved
+      console.log("Edit mode activated for:", applicationId);
+      console.log("Form data saved for editing:", formDataToEdit);
+      
+   
+      if (isCopyRequest) {
+        window.location.href = '/RequestACopyBirthCertificate';
+      } else {
+        window.location.href = '/BirthCertificateForm';
+      }
+    } catch (error) {
+      console.error('Error in handleEditApplication:', error);
+      alert('There was a problem setting up edit mode. Please try again.');
+    }
+  };
+  const renderUploadedFile = (fileData) => {
+    if (!fileData) return null;
+    
+    if (fileData.type.startsWith('image/')) {
+      return (
+        <Box sx={{ mt: 1, mb: 2 }}>
+          <Typography variant="body2">
+            {fileData.name} ({Math.round(fileData.size/1024)} KB)
+          </Typography>
+          <img 
+            src={fileData.data} 
+            alt="Uploaded file" 
+            style={{ 
+              maxWidth: '300px', 
+              maxHeight: '200px', 
+              marginTop: '8px',
+              border: '1px solid #ccc'
+            }} 
+          />
+        </Box>
+      );
     } else {
-      navigate('/BirthCertificateForm');
+      return (
+        <Typography variant="body2">
+          {fileData.name} ({Math.round(fileData.size/1024)} KB)
+        </Typography>
+      );
     }
   };
   const renderReadOnlyAffidavit = () => {
@@ -170,6 +311,7 @@ const getStatusColor = (status) => {
               Application ID: {applicationId}
             </Typography>
           </Box>
+
 
           <Divider className="DividerSummaryBirth" />
 
@@ -217,7 +359,8 @@ const getStatusColor = (status) => {
           }}
         >
           Message from Administrator: {statusMessage}
-        </Typography>
+                </Typography>
+                
       )}
     </Box>
   )}
@@ -335,10 +478,27 @@ const getStatusColor = (status) => {
 
               <Grid item xs={12} md={6}>
                 <Typography variant="subtitle2" className="FieldLabelSummaryBirth">
-                  Documents Uploaded:
+                  <Grid item xs={12}>
+  <Typography variant="subtitle1">Uploaded Documents:</Typography>
+  {formData?.uploadedFiles?.['Valid ID'] ? (
+    <Box>
+      <Typography variant="subtitle2">Valid ID:</Typography>
+      {renderUploadedFile(formData.uploadedFiles['Valid ID'])}
+    </Box>
+  ) : (
+    <Typography variant="body2">No Valid ID uploaded</Typography>
+  )}
+  
+  {formData?.uploadedFiles?.['Authorization Letter (if applicable)'] && (
+    <Box>
+      <Typography variant="subtitle2">Authorization Letter:</Typography>
+      {renderUploadedFile(formData.uploadedFiles['Authorization Letter (if applicable)'])}
+    </Box>
+  )}
+</Grid>
                 </Typography>
                 <ul className="DocumentListSummaryBirth">
-                  {formData?.uploadedFiles?.['Valid ID'] && <li>Valid ID</li>}
+                
                   {formData?.uploadedFiles?.['Authorization Letter (if applicable)'] && (
                     <li>Authorization Letter</li>
                   )}
@@ -805,13 +965,7 @@ const getStatusColor = (status) => {
           </Grid>
           
         <Box className="buttonsContainer">
-          <Button
-            variant="contained"
-            onClick={handleBackToApplications}
-            className="BackButtonSummaryBirth"
-          >
-            Back to Applications
-          </Button>
+
 
           <Button
             variant="contained"

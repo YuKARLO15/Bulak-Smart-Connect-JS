@@ -33,10 +33,20 @@ const BirthCertificateDashboard = () => {
     } 
 
     else if (selectedOption === 'Request copy') {
+      localStorage.removeItem('isEditingBirthApplication');
+      localStorage.removeItem('editingApplicationId');
+      localStorage.removeItem('birthCertificateApplication');
+      localStorage.removeItem('editingApplication');
+      localStorage.removeItem('currentApplicationStatus');
       navigate('/RequestACopyBirthCertificate');
     } 
    
     else {
+      localStorage.removeItem('isEditingBirthApplication');
+      localStorage.removeItem('editingApplicationId');
+      localStorage.removeItem('birthCertificateApplication');
+      localStorage.removeItem('editingApplication');
+      localStorage.removeItem('currentApplicationStatus');
       navigate('/BirthCertificateForm');
     }
   };
