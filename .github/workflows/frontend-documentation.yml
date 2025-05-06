@@ -27,22 +27,20 @@ jobs:
         run: |
           cd bulak-smart-connect-js
           npm ci
-          
-          # Install Storybook with the specific framework integration package
-          npm install --save-dev @storybook/react @storybook/react-vite @storybook/addon-essentials @storybook/addon-links @storybook/addon-interactions @storybook/blocks @vitejs/plugin-react-swc
-          
-      - name: Setup Storybook with enhanced component detection
+          npm install --save-dev @storybook/react @storybook/react-vite @storybook/addon-essentials @storybook/addon-links @storybook/addon-interactions @storybook/blocks @vitejs/plugin-react-swc glob
+      
+      - name: Configure Storybook
         run: |
           cd bulak-smart-connect-js
           
-          # Create .storybook directory if it doesn't exist
+          # Create .storybook directory
           mkdir -p .storybook
           
-          # Create main.js configuration using CommonJS module syntax
+          # Create main.js configuration
           cat > .storybook/main.js << 'EOF'
           /** @type {import('@storybook/react-vite').StorybookConfig} */
           const config = {
-            stories: ['../src/**/*.stories.@(js|jsx)'],
+            stories: ['../src/**/*.mdx', '../src/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
             addons: [
               '@storybook/addon-links',
               '@storybook/addon-essentials',
@@ -53,21 +51,22 @@ jobs:
               options: {},
             },
             docs: {
-              autodocs: true,
+              autodocs: 'tag',
             },
             core: {
               disableTelemetry: true
             },
+            staticDirs: ['../public'],
           };
           
-          module.exports = config;
+          export default config;
           EOF
           
-          # Create preview.js WITHOUT JSX syntax
+          # Create preview.js
           cat > .storybook/preview.js << 'EOF'
           import React from 'react';
           import { BrowserRouter } from 'react-router-dom';
-          
+
           /** @type {import('@storybook/react').Preview} */
           const preview = {
             parameters: {
@@ -80,228 +79,22 @@ jobs:
               },
             },
             decorators: [
-              (Story) => {
-                return React.createElement(
-                  BrowserRouter,
-                  null,
-                  React.createElement(Story, null)
-                );
-              }
+              (Story) => (
+                <BrowserRouter>
+                  <Story />
+                </BrowserRouter>
+              ),
             ],
           };
           
-          module.exports = preview;
+          export default preview;
           EOF
-          
-      - name: Setup Storybook with better debugging
-        run: |
-          cd bulak-smart-connect-js
-          
-          # Create story generator script with better debug logging
-          cat > generate-stories.mjs << 'EOF'
-          import fs from 'fs/promises';
-          import path from 'path';
-          import { fileURLToPath } from 'url';
-          import { dirname } from 'path';
-          import * as globModule from 'glob';
-          import { promisify } from 'util';
-          
-          const glob = globModule.default || globModule.glob || globModule;
-          const globAsync = promisify(glob);
-          const __filename = fileURLToPath(import.meta.url);
-          const __dirname = dirname(__filename);
-          
-          // Configuration
-          const SRC_DIR = './src';
-          
-          async function generateStories() {
-            try {
-              console.log(`Looking for components in ${path.resolve(SRC_DIR)}`);
-              
-              // Debug directory structure
-              try {
-                const dirs = await fs.readdir(SRC_DIR);
-                console.log(`Found directories in src: ${dirs.join(', ')}`);
-              } catch (error) {
-                console.error(`Error reading src directory: ${error.message}`);
-              }
-              
-              // More comprehensive component search
-              const ALL_EXTENSIONS = ['.jsx', '.js'];
-              const allFiles = await globAsync(`${SRC_DIR}/**/*{${ALL_EXTENSIONS.join(',')}}`, {
-                ignore: ['**/node_modules/**', '**/*.stories.*', '**/*.test.*', '**/*.spec.*']
-              });
-              
-              console.log(`Found ${allFiles.length} total JS/JSX files`);
-              
-              // Create mocks directory if it doesn't exist
-              const mocksDir = path.join(SRC_DIR, '__mocks__');
-              await fs.mkdir(mocksDir, { recursive: true });
-              
-              // Create AuthContext mock
-              const authContextMockPath = path.join(mocksDir, 'authContext.js');
-              const authContextMock = `
-          // Mock AuthContext for Storybook
-          export const useAuth = () => ({
-            isAuthenticated: true,
-            user: {
-              name: 'John Doe',
-              email: 'john.doe@example.com',
-              roles: ['admin'],
-              defaultRole: 'admin'
-            },
-            loading: false,
-            error: null,
-            login: () => Promise.resolve({ success: true }),
-            logout: () => {},
-            hasRole: (role) => ['admin', 'staff', 'citizen'].includes(role),
-            hasAnyRole: (roles) => roles.some(role => ['admin', 'staff', 'citizen'].includes(role)),
-            isAdmin: true,
-            isStaff: true,
-            isCitizen: true
-          });
-          `;
-              await fs.writeFile(authContextMockPath, authContextMock);
-              
-              let componentsFound = 0;
-              let storiesGenerated = 0;
-              
-              // Process 100 files at a time for better manageability
-              const filesToProcess = allFiles.slice(0, 100);
-              console.log(`Processing first ${filesToProcess.length} files`);
-              
-              // Loop through files
-              for (const filePath of filesToProcess) {
-                try {
-                  const content = await fs.readFile(filePath, 'utf8');
-                  const fileName = path.basename(filePath, path.extname(filePath));
-                  
-                  // Improved component detection - more lenient
-                  const hasExport = content.includes('export ') || content.includes('export default');
-                  const hasReactImport = content.includes('import React') || content.includes('from "react"') || content.includes("from 'react");
-                  const hasJSXSyntax = content.includes('<') && content.includes('/>') || content.includes('</');
-                  
-                  if ((hasExport && hasReactImport) || (hasExport && hasJSXSyntax)) {
-                    componentsFound++;
-                    const relativePath = path.relative(SRC_DIR, path.dirname(filePath));
-                    console.log(`Found component: ${fileName} in ${relativePath}`);
-                    
-                    // Skip context files
-                    if (content.includes('createContext') || 
-                        fileName.toLowerCase().includes('context') || 
-                        fileName.toLowerCase().includes('provider')) {
-                      console.log(`Skipping context file: ${fileName}`);
-                      continue;
-                    }
-                    
-                    // Create story path
-                    const storyFilePath = path.join(
-                      path.dirname(filePath),
-                      `${fileName}.stories.jsx`
-                    );
-                    
-                    // Skip if exists
-                    try {
-                      await fs.access(storyFilePath);
-                      console.log(`Story already exists for ${fileName}, skipping`);
-                      continue;
-                    } catch (error) {
-                      // File doesn't exist, continue
-                    }
-                    
-                    // Determine category
-                    const category = relativePath.split(path.sep)[0] || 'General';
-                    
-                    // Generate story file
-                    const isDefaultExport = content.includes(`export default ${fileName}`) || 
-                                          content.includes('export default function') ||
-                                          content.includes('export default class');
-                    
-                    const importStatement = isDefaultExport
-                      ? `import ${fileName} from './${fileName}';`
-                      : `import { ${fileName} } from './${fileName}';`;
-                    
-                    const storyTemplate = `import React from 'react';
-          ${importStatement}
-          
-          // Optional: import mock auth context if needed
-          // import { useAuth } from '../__mocks__/authContext';
-          
-          export default {
-            title: '${category}/${fileName}',
-            component: ${fileName},
-            parameters: {
-              componentSubtitle: 'Component from ${relativePath}'
-            },
-            decorators: [
-              (Story) => React.createElement('div', 
-                { style: { padding: '1rem', maxWidth: '800px', margin: '0 auto' } },
-                React.createElement(Story, null)
-              )
-            ]
-          };
-          
-          export const Default = {
-            args: {
-              // Add default props here
-            }
-          };`;
-                    
-                    await fs.writeFile(storyFilePath, storyTemplate);
-                    console.log(`✓ Created story for ${fileName}`);
-                    storiesGenerated++;
-                    
-                  }
-                } catch (error) {
-                  console.log(`Error processing ${filePath}: ${error.message}`);
-                }
-              }
-              
-              // Always create a dummy story as fallback
-              if (storiesGenerated === 0) {
-                const dummyStoryPath = path.join(SRC_DIR, 'dummy.stories.jsx');
-                const dummyStory = `
-          import React from 'react';
-          
-          const Dummy = () => <div>This is a placeholder component to ensure Storybook loads correctly</div>;
-          
-          export default {
-            title: 'Placeholder/Dummy',
-            component: Dummy,
-          };
-          
-          export const Default = {};
-          `;
-                await fs.writeFile(dummyStoryPath, dummyStory);
-                console.log('Created dummy story for fallback');
-                storiesGenerated = 1;
-              }
-              
-              console.log(`✅ Story generation complete!`);
-              console.log(`Found ${componentsFound} components`);
-              console.log(`Generated ${storiesGenerated} stories`);
-              
-            } catch (error) {
-              console.error(`Error in story generation: ${error.message}`);
-              console.error(error.stack);
-              process.exit(1);
-            }
-          }
-          
-          generateStories();
-          EOF
-          
-          # Install necessary packages
-          npm install --no-save glob
-          
-          # Run generator with better debugging
-          node generate-stories.mjs
 
-      - name: Setup Storybook with more aggressive component detection
+      - name: Generate Component Stories
         run: |
           cd bulak-smart-connect-js
           
-          # Create a more aggressive story generator script
+          # Create comprehensive story generator with modern CSF3 format
           cat > generate-stories.mjs << 'EOF'
           import fs from 'fs/promises';
           import path from 'path';
@@ -317,514 +110,123 @@ jobs:
           
           // Configuration
           const SRC_DIR = './src';
+          const COMPONENT_EXTENSIONS = ['.jsx', '.js'];
           
-          // Function to recursively find files with given extensions
-          async function findFiles(dir, extensions) {
-            let results = [];
-            try {
-              const items = await fs.readdir(dir, { withFileTypes: true });
-              
-              for (const item of items) {
-                const fullPath = path.join(dir, item.name);
-                
-                if (item.isDirectory()) {
-                  // Skip node_modules and test directories
-                  if (item.name === 'node_modules' || item.name === '__tests__') continue;
-                  results = results.concat(await findFiles(fullPath, extensions));
-                } else if (extensions.some(ext => item.name.endsWith(ext)) && 
-                          !item.name.includes('.stories.') && 
-                          !item.name.includes('.test.') && 
-                          !item.name.includes('.spec.')) {
-                  results.push(fullPath);
-                }
-              }
-            } catch (err) {
-              console.error(`Error reading directory ${dir}: ${err.message}`);
-            }
-            
-            return results;
-          }
-          
-          async function generateStories() {
-            try {
-              console.log(`Looking for components in ${path.resolve(SRC_DIR)}`);
-              
-              // Find JS/JSX files using recursive function instead of glob
-              console.log("Finding JS/JSX files recursively...");
-              const ALL_EXTENSIONS = ['.jsx', '.js'];
-              const allFiles = await findFiles(SRC_DIR, ALL_EXTENSIONS);
-              
-              console.log(`Found ${allFiles.length} total JS/JSX files`);
-              if (allFiles.length > 0) {
-                console.log("Sample files found:");
-                allFiles.slice(0, 5).forEach(file => console.log(` - ${file}`));
-              }
-              
-              // Create mocks directory if it doesn't exist
-              const mocksDir = path.join(SRC_DIR, '__mocks__');
-              await fs.mkdir(mocksDir, { recursive: true });
-              
-              // Create AuthContext mock
-              const authContextMockPath = path.join(mocksDir, 'authContext.js');
-              const authContextMock = `
-          // Mock AuthContext for Storybook
-          export const useAuth = () => ({
-            isAuthenticated: true,
-            user: { name: 'John Doe', email: 'john.doe@example.com', roles: ['admin'] },
-            login: () => Promise.resolve({ success: true }),
-            logout: () => {},
-            hasRole: () => true,
-            isAdmin: true
-          });
-          `;
-              await fs.writeFile(authContextMockPath, authContextMock);
-              
-              let componentsFound = 0;
-              let storiesGenerated = 0;
-              
-              // Target specific component directories first
-              const targetDirs = [
-                'AdminBulakSmartConnect',
-                'LandingPageComponents',
-                'LogInComponents',
-                'NavigationComponents',
-                'UserBulakSmartConnect',
-                'components'
-              ];
-              
-              // Proceed with component identification - prioritize specific files
-              const priorityFiles = allFiles.filter(file => {
-                const relativePath = path.relative(SRC_DIR, file);
-                return targetDirs.some(dir => relativePath.startsWith(dir)) || 
-                       path.basename(file) === 'App.jsx';
-              });
-              
-              console.log(`Found ${priorityFiles.length} priority component files to process`);
-              
-              // Process priority files first
-              for (const filePath of priorityFiles) {
-                try {
-                  const content = await fs.readFile(filePath, 'utf8');
-                  const fileName = path.basename(filePath, path.extname(filePath));
-                  
-                  // Skip obvious non-components
-                  if (fileName.toLowerCase().includes('context') || 
-                      fileName.toLowerCase().includes('provider') ||
-                      fileName.toLowerCase().includes('service') ||
-                      fileName.toLowerCase().includes('utils') ||
-                      fileName.toLowerCase().includes('constants')) {
-                    console.log(`Skipping utility file: ${fileName}`);
-                    continue;
-                  }
-                  
-                  componentsFound++;
-                  const relativePath = path.relative(SRC_DIR, path.dirname(filePath));
-                  console.log(`Processing component: ${fileName} in ${relativePath}`);
-                  
-                  // Create story path
-                  const storyFilePath = path.join(
-                    path.dirname(filePath),
-                    `${fileName}.stories.jsx`
-                  );
-                  
-                  // Skip if exists
-                  try {
-                    await fs.access(storyFilePath);
-                    console.log(`Story already exists for ${fileName}, skipping`);
-                    continue;
-                  } catch (error) {
-                    // File doesn't exist, continue
-                  }
-                  
-                  // Determine category
-                  let category = relativePath.split(path.sep)[0] || 'General';
-                  
-                  // Generate story file
-                  const storyTemplate = `import React from 'react';
-          import ${fileName} from './${fileName}';
-          
-          export default {
-            title: '${category}/${fileName}',
-            component: ${fileName},
-            parameters: {
-              componentSubtitle: 'Component from ${relativePath}'
-            }
-          };
-          
-          export const Default = {
-            args: {}
-          };`;
-                  
-                  await fs.writeFile(storyFilePath, storyTemplate);
-                  console.log(`✓ Created story for ${fileName}`);
-                  storiesGenerated++;
-                } catch (error) {
-                  console.log(`Error processing ${filePath}: ${error.message}`);
-                }
-              }
-              
-              // Always create a dummy story as fallback
-              if (storiesGenerated === 0) {
-                const dummyStoryPath = path.join(SRC_DIR, 'dummy.stories.jsx');
-                const dummyStory = `
-          import React from 'react';
-          
-          const Dummy = () => <div>This is a placeholder component to ensure Storybook loads correctly</div>;
-          
-          export default {
-            title: 'Placeholder/Dummy',
-            component: Dummy,
-          };
-          
-          export const Default = {};
-          `;
-                await fs.writeFile(dummyStoryPath, dummyStory);
-                console.log('Created dummy story for fallback');
-                storiesGenerated = 1;
-              }
-              
-              console.log(`✅ Story generation complete!`);
-              console.log(`Found ${componentsFound} components`);
-              console.log(`Generated ${storiesGenerated} stories`);
-              
-            } catch (error) {
-              console.error(`Error in story generation: ${error.message}`);
-              console.error(error.stack);
-              process.exit(1);
-            }
-          }
-          
-          generateStories();
-          EOF
-          
-          # Install necessary packages
-          npm install --no-save glob
-          
-          # Run generator with better debugging
-          node generate-stories.mjs
-
-      - name: Setup Storybook with improved component detection
-        run: |
-          cd bulak-smart-connect-js
-          
-          # Create story generator script that properly filters utility files
-          cat > generate-stories.mjs << 'EOF'
-          import fs from 'fs/promises';
-          import path from 'path';
-          import { fileURLToPath } from 'url';
-          import { dirname } from 'path';
-          import * as globModule from 'glob';
-          import { promisify } from 'util';
-          
-          const glob = globModule.default || globModule.glob || globModule;
-          const globAsync = promisify(glob);
-          const __filename = fileURLToPath(import.meta.url);
-          const __dirname = dirname(__filename);
-          
-          // Configuration
-          const SRC_DIR = './src';
-          
-          async function generateStories() {
-            try {
-              console.log(`Looking for components in ${path.resolve(SRC_DIR)}`);
-              
-              // Find files with JSX/JS extensions
-              const ALL_EXTENSIONS = ['.jsx', '.js'];
-              const allFiles = await globAsync(`${SRC_DIR}/**/*{${ALL_EXTENSIONS.join(',')}}`, {
-                ignore: ['**/node_modules/**', '**/*.stories.*', '**/*.test.*', '**/*.spec.*']
-              });
-              
-              console.log(`Found ${allFiles.length} total JS/JSX files`);
-              
-              // Filter files that are likely to be components
-              const componentFiles = allFiles.filter(file => {
-                // Prefer .jsx files which are almost always components
-                const ext = path.extname(file);
-                const fileName = path.basename(file, ext);
-                
-                // Skip utility files, services, and helper files
-                if (ext === '.js' && (
-                  fileName.includes('Service') || 
-                  fileName.includes('Utils') || 
-                  fileName.includes('Helper') ||
-                  fileName.includes('Info') ||
-                  fileName.includes('Data') ||
-                  fileName === 'api' ||
-                  fileName === 'context'
-                )) {
-                  return false;
-                }
-                
-                return true;
-              });
-              
-              console.log(`Filtered to ${componentFiles.length} potential component files`);
-              
-              // Create mocks directory if it doesn't exist
-              const mocksDir = path.join(SRC_DIR, '__mocks__');
-              await fs.mkdir(mocksDir, { recursive: true });
-              
-              // Create AuthContext mock (same as before)
-              const authContextMockPath = path.join(mocksDir, 'authContext.js');
-              const authContextMock = `
-          // Mock AuthContext for Storybook
-          export const useAuth = () => ({
-            isAuthenticated: true,
-            user: { name: 'John Doe', email: 'john.doe@example.com', roles: ['admin'] },
-            login: () => Promise.resolve({ success: true }),
-            logout: () => {},
-            hasRole: () => true,
-            isAdmin: true
-          });
-          `;
-              await fs.writeFile(authContextMockPath, authContextMock);
-              
-              let componentsFound = 0;
-              let storiesGenerated = 0;
-              
-              // Process each potential component file
-              for (const filePath of componentFiles) {
-                try {
-                  // Read file content
-                  const content = await fs.readFile(filePath, 'utf8');
-                  const fileExt = path.extname(filePath);
-                  const fileName = path.basename(filePath, fileExt);
-                  
-                  // More aggressive component detection for JS files
-                  if (fileExt === '.js') {
-                    // For .js files, only create stories if they look like React components
-                    const hasReactComponent = (
-                      content.includes('import React') || 
-                      content.includes('from "react"') || 
-                      content.includes("from 'react'")
-                    ) && (
-                      content.includes('function') && content.includes('return') && 
-                      (content.includes('<') && content.includes('/>') || content.includes('</'))
-                    );
-                    
-                    if (!hasReactComponent) {
-                      console.log(`Skipping non-component JS file: ${fileName}`);
-                      continue;
-                    }
-                  }
-                  
-                  // Skip obvious non-components
-                  if (fileName.toLowerCase().includes('context') || 
-                      fileName.toLowerCase().includes('provider') ||
-                      fileName.toLowerCase().includes('service') ||
-                      fileName.toLowerCase().includes('utils') ||
-                      fileName.toLowerCase().includes('constants')) {
-                    console.log(`Skipping utility file: ${fileName}`);
-                    continue;
-                  }
-                  
-                  // Check if the file has a React component signature
-                  const isComponent = (
-                    content.includes('export default') && (
-                      content.includes('function') ||
-                      content.includes('class') ||
-                      content.includes('const')
-                    ) && (
-                      content.includes('return') || content.includes('render')
-                    )
-                  );
-                  
-                  if (!isComponent && fileExt === '.js') {
-                    console.log(`Skipping non-component file: ${fileName}`);
-                    continue;
-                  }
-                  
-                  componentsFound++;
-                  const relativePath = path.relative(SRC_DIR, path.dirname(filePath));
-                  console.log(`Processing component: ${fileName} in ${relativePath}`);
-                  
-                  // Create story path
-                  const storyFilePath = path.join(
-                    path.dirname(filePath),
-                    `${fileName}.stories.jsx`
-                  );
-                  
-                  // Skip if exists (as before)
-                  try {
-                    await fs.access(storyFilePath);
-                    console.log(`Story already exists for ${fileName}, skipping`);
-                    continue;
-                  } catch (error) {
-                    // File doesn't exist, continue
-                  }
-                  
-                  // Determine import type
-                  const hasDefaultExport = content.includes(`export default ${fileName}`) || 
-                                         content.includes('export default function') ||
-                                         content.includes('export default class') ||
-                                         content.includes('export default (') ||
-                                         content.includes('export default const');
-                  
-                  // For .js files, use a different import approach that works with both named and default exports
-                  let importStatement;
-                  if (fileExt === '.js') {
-                    importStatement = `// For JS files, dynamically import the component\nconst ${fileName} = () => null; // Placeholder to prevent errors`;
-                  } else {
-                    importStatement = hasDefaultExport
-                      ? `import ${fileName} from './${fileName}';`
-                      : `import { ${fileName} } from './${fileName}';`;
-                  }
-                  
-                  // Generate story file with safe imports
-                  const storyTemplate = `import React from 'react';
-          ${importStatement}
-          
-          export default {
-            title: '${relativePath}/${fileName}',
-            component: ${fileName},
-            parameters: {
-              componentSubtitle: 'Component from ${relativePath}'
-            }
-          };
-          
-          export const Default = {
-            args: {},
-            parameters: {
-              docs: {
-                description: {
-                  component: 'This component is from ${relativePath}/${fileName}'
-                }
-              }
-            }
-          };`;
-                  
-                  await fs.writeFile(storyFilePath, storyTemplate);
-                  console.log(`✓ Created story for ${fileName}`);
-                  storiesGenerated++;
-                  
-                } catch (error) {
-                  console.log(`Error processing ${filePath}: ${error.message}`);
-                }
-              }
-              
-              // Always create a dummy story as fallback
-              if (storiesGenerated === 0) {
-                const dummyStoryPath = path.join(SRC_DIR, 'dummy.stories.jsx');
-                const dummyStory = `
-          import React from 'react';
-          
-          const Dummy = () => <div>This is a placeholder component to ensure Storybook loads correctly</div>;
-          
-          export default {
-            title: 'Placeholder/Dummy',
-            component: Dummy,
-          };
-          
-          export const Default = {};
-          `;
-                await fs.writeFile(dummyStoryPath, dummyStory);
-                console.log('Created dummy story for fallback');
-                storiesGenerated = 1;
-              }
-              
-              console.log(`✅ Story generation complete!`);
-              console.log(`Found ${componentsFound} components`);
-              console.log(`Generated ${storiesGenerated} stories`);
-              
-            } catch (error) {
-              console.error(`Error in story generation: ${error.message}`);
-              console.error(error.stack);
-              process.exit(1);
-            }
-          }
-          
-          generateStories();
-          EOF
-          
-          # Install necessary packages
-          npm install --no-save glob
-          
-          # Run generator with better debugging
-          node generate-stories.mjs
-
-      - name: Setup Storybook with utility file handling
-        run: |
-          cd bulak-smart-connect-js
-          
-          # Create story generator script with better utility file filtering
-          cat > generate-stories.mjs << 'EOF'
-          import fs from 'fs/promises';
-          import path from 'path';
-          import { fileURLToPath } from 'url';
-          import { dirname } from 'path';
-          import * as globModule from 'glob';
-          import { promisify } from 'util';
-          
-          const glob = globModule.default || globModule.glob || globModule;
-          const globAsync = promisify(glob);
-          const __filename = fileURLToPath(import.meta.url);
-          const __dirname = dirname(__filename);
-          
-          // Configuration
-          const SRC_DIR = './src';
-          
-          // Lists of patterns to identify utility files (not components)
+          // Patterns that help identify component files vs utility files
+          const COMPONENT_MARKERS = ['function', 'return', 'render', 'React', '<', '/>'];
           const UTILITY_PATTERNS = [
-            'api.js', 'service', 'util', 'helper', 'context', 'provider', 
+            'api', 'service', 'util', 'helper', 'context', 'provider', 
             'store', 'reducer', 'action', 'constant', 'config', 'hook',
-            'data.js', '.data.js', 'mock', 'Info.js', 'manager'
+            'data', 'mock', 'info', 'manager'
           ];
           
-          // Function to check if a file is likely a utility file
-          const isUtilityFile = (filePath, content) => {
+          // Known component directories
+          const COMPONENT_DIRS = [
+            'AdminBulakSmartConnect',
+            'LandingPageComponents',
+            'LogInComponents',
+            'NavigationComponents',
+            'UserBulakSmartConnect/ApplicationComponents',
+            'UserBulakSmartConnect/AppointmentComponents',
+            'UserBulakSmartConnect/SignUpComponents',
+            'UserBulakSmartConnect/UserDashboard',
+            'UserBulakSmartConnect/WalkInComponents',
+            'UserBulakSmartConnect/QRCodeComponents',
+            'components'
+          ];
+          
+          // File analysis helpers
+          function isUtilityFile(filePath, content) {
             const fileName = path.basename(filePath).toLowerCase();
-            const ext = path.extname(filePath).toLowerCase();
             
-            // Check filename patterns for utility files
+            // Check if filename contains utility patterns
             if (UTILITY_PATTERNS.some(pattern => fileName.includes(pattern.toLowerCase()))) {
               return true;
             }
             
-            // For JS files, check if they look like modules rather than components
-            if (ext === '.js') {
-              // If it has multiple exports but no JSX, it's likely a utility file
-              const hasMultipleExports = (content.match(/export\s+(const|function|let|var|class)/g) || []).length > 1;
-              const hasJSX = content.includes('<') && (content.includes('/>') || content.includes('</'));
+            // For JS files, check content patterns
+            if (path.extname(filePath) === '.js') {
+              // If it has multiple exports but no JSX, likely utility
+              const hasMultipleExports = (content.match(/export\s+/g) || []).length > 1;
+              const hasJSX = content.includes('<') && 
+                            (content.includes('/>') || content.includes('</'));
               
               if (hasMultipleExports && !hasJSX) {
                 return true;
               }
               
-              // Check for common utility exports
-              if (content.includes('export function') || 
-                  content.includes('export const') && !content.includes('return (') && !content.includes('return <')) {
-                return true;
+              // If it's just exporting functions/variables without JSX returns
+              if (content.includes('export function') || content.includes('export const')) {
+                if (!content.includes('return <') && !content.includes('return (')) {
+                  return true;
+                }
               }
             }
             
             return false;
-          };
+          }
+          
+          function isLikelyComponent(filePath, content) {
+            // JSX files are almost always components
+            if (path.extname(filePath) === '.jsx') {
+              return true;
+            }
+            
+            // Check if it has component markers
+            const markerCount = COMPONENT_MARKERS.filter(marker => 
+              content.includes(marker)).length;
+              
+            // If it has at least 4 component markers, likely a component
+            return markerCount >= 4;
+          }
+          
+          function analyzeExports(content, fileName) {
+            // Check for default export
+            const hasDefaultExport = content.includes(`export default ${fileName}`) || 
+                                    content.includes(`export default function ${fileName}`) ||
+                                    content.includes(`export default class ${fileName}`) ||
+                                    content.includes('export default (') ||
+                                    content.includes('export default ') && !content.includes(`export default ${fileName}`);
+            
+            // Check for named export of the same name as the file
+            const hasNamedExport = content.includes(`export function ${fileName}`) || 
+                                  content.includes(`export const ${fileName}`) || 
+                                  content.includes(`export class ${fileName}`);
+            
+            return {
+              hasDefaultExport,
+              hasNamedExport
+            };
+          }
           
           async function generateStories() {
             try {
               console.log(`Looking for components in ${path.resolve(SRC_DIR)}`);
               
-              // Debug directory structure
-              try {
-                const dirs = await fs.readdir(SRC_DIR);
-                console.log(`Found directories in src: ${dirs.join(', ')}`);
-              } catch (error) {
-                console.error(`Error reading src directory: ${error.message}`);
-              }
+              // Create mocks for context providers
+              await setupMocks();
               
-              // Find all potential files
-              const ALL_EXTENSIONS = ['.jsx', '.js'];
-              const allFiles = await globAsync(`${SRC_DIR}/**/*{${ALL_EXTENSIONS.join(',')}}`, {
+              // Get all JS/JSX files
+              const allFiles = await globAsync(`${SRC_DIR}/**/*{${COMPONENT_EXTENSIONS.join(',')}}`, {
                 ignore: ['**/node_modules/**', '**/*.stories.*', '**/*.test.*', '**/*.spec.*']
               });
               
-              console.log(`Found ${allFiles.length} total JS/JSX files before filtering`);
+              console.log(`Found ${allFiles.length} total JS/JSX files`);
               
-              // Filter files more aggressively
+              // Prioritize files in known component directories
+              const priorityFiles = allFiles.filter(file => {
+                const relativePath = path.relative(SRC_DIR, file);
+                return COMPONENT_DIRS.some(dir => relativePath.startsWith(dir)) ||
+                      path.basename(file) === 'App.jsx';
+              });
+              
+              console.log(`Found ${priorityFiles.length} files in priority component directories`);
+              
+              // Process and filter components
               const componentFiles = [];
               const skippedFiles = [];
               
-              for (const file of allFiles) {
+              for (const file of priorityFiles) {
                 try {
                   const content = await fs.readFile(file, 'utf8');
                   
@@ -834,33 +236,110 @@ jobs:
                     continue;
                   }
                   
-                  // Check for component characteristics
-                  const hasExport = content.includes('export default') || content.includes('export ');
-                  const hasJSX = content.includes('<') && (content.includes('/>') || content.includes('</'));
-                  const hasReactImport = content.includes('import React') || 
-                                        content.includes('from "react"') || 
-                                        content.includes("from 'react");
-                  
-                  // Only include files that look like React components
-                  if (hasExport && (hasJSX || hasReactImport)) {
-                    componentFiles.push(file);
+                  // Check if it's likely a component
+                  if (isLikelyComponent(file, content)) {
+                    componentFiles.push({ path: file, content });
                   } else {
                     skippedFiles.push(path.basename(file));
                   }
                 } catch (err) {
-                  console.log(`Error reading file ${file}: ${err.message}`);
+                  console.log(`Error reading ${file}: ${err.message}`);
                 }
               }
               
-              console.log(`Filtered to ${componentFiles.length} component files`);
-              console.log(`Skipped ${skippedFiles.length} non-component files including: ${skippedFiles.slice(0, 10).join(', ')}${skippedFiles.length > 10 ? '...' : ''}`);
+              console.log(`Identified ${componentFiles.length} component files`);
+              console.log(`Skipped ${skippedFiles.length} non-component files`);
               
-              // Create mocks directory and AuthContext mock (as before)
-              const mocksDir = path.join(SRC_DIR, '__mocks__');
-              await fs.mkdir(mocksDir, { recursive: true });
+              // Generate stories for components
+              let storiesGenerated = 0;
               
-              const authContextMockPath = path.join(mocksDir, 'authContext.js');
-              const authContextMock = `
+              for (const { path: filePath, content } of componentFiles) {
+                try {
+                  const fileName = path.basename(filePath, path.extname(filePath));
+                  const relativePath = path.relative(SRC_DIR, path.dirname(filePath));
+                  const category = relativePath.split(path.sep)[0] || 'General';
+                  
+                  console.log(`Generating story for ${fileName} in ${category}`);
+                  
+                  // Check if story already exists
+                  const storyPath = path.join(path.dirname(filePath), `${fileName}.stories.jsx`);
+                  try {
+                    await fs.access(storyPath);
+                    console.log(`Story already exists for ${fileName}, skipping`);
+                    continue;
+                  } catch (error) {
+                    // File doesn't exist, continue
+                  }
+                  
+                  // Analyze exports to determine import statement
+                  const { hasDefaultExport, hasNamedExport } = analyzeExports(content, fileName);
+                  
+                  // Create import statement based on export analysis
+                  const importStatement = hasDefaultExport
+                    ? `import ${fileName} from './${fileName}';`
+                    : hasNamedExport
+                      ? `import { ${fileName} } from './${fileName}';`
+                      : `// Failed to determine export type\nimport ${fileName} from './${fileName}';`;
+                  
+                  // Generate story with CSF3 format
+                  const storyTemplate = `import React from 'react';
+          ${importStatement}
+          
+          /**
+           * ${fileName} component from ${relativePath}
+           */
+          export default {
+            title: '${category}/${fileName}',
+            component: ${fileName},
+            parameters: {
+              layout: 'padded',
+              componentSubtitle: 'Component from ${relativePath}'
+            },
+            tags: ['autodocs'],
+          };
+          
+          /**
+           * Default example of the ${fileName} component
+           */
+          export const Default = {
+            args: {
+              // Default props here
+            }
+          };
+          `;
+                  
+                  await fs.writeFile(storyPath, storyTemplate);
+                  console.log(`✓ Created story for ${fileName}`);
+                  storiesGenerated++;
+                  
+                } catch (error) {
+                  console.log(`Error processing ${filePath}: ${error.message}`);
+                }
+              }
+              
+              // Create a fallback story if needed
+              if (storiesGenerated === 0) {
+                await createFallbackStory();
+              }
+              
+              console.log(`✅ Story generation complete!`);
+              console.log(`Generated ${storiesGenerated} stories`);
+              
+            } catch (error) {
+              console.error(`Error in story generation: ${error.message}`);
+              console.error(error.stack);
+              process.exit(1);
+            }
+          }
+          
+          async function setupMocks() {
+            // Create mocks directory
+            const mocksDir = path.join(SRC_DIR, '__mocks__');
+            await fs.mkdir(mocksDir, { recursive: true });
+            
+            // Create AuthContext mock
+            const authMockPath = path.join(mocksDir, 'authContext.js');
+            const authMock = `
           // Mock AuthContext for Storybook
           export const useAuth = () => ({
             isAuthenticated: true,
@@ -874,85 +353,37 @@ jobs:
             error: null,
             login: () => Promise.resolve({ success: true }),
             logout: () => {},
-            hasRole: (role) => ['admin', 'staff', 'citizen'].includes(role),
-            hasAnyRole: (roles) => roles.some(role => ['admin', 'staff', 'citizen'].includes(role)),
+            hasRole: () => true,
+            hasAnyRole: () => true,
             isAdmin: true,
             isStaff: true,
             isCitizen: true
           });
           `;
-              await fs.writeFile(authContextMockPath, authContextMock);
-              
-              let storiesGenerated = 0;
-              
-              // Process component files
-              for (const filePath of componentFiles) {
-                try {
-                  const content = await fs.readFile(filePath, 'utf8');
-                  const fileName = path.basename(filePath, path.extname(filePath));
-                  const relativePath = path.relative(SRC_DIR, path.dirname(filePath));
-                  
-                  console.log(`Creating story for: ${fileName} in ${relativePath}`);
-                  
-                  // Create story path with .jsx extension for all stories
-                  const storyFilePath = path.join(
-                    path.dirname(filePath),
-                    `${fileName}.stories.jsx`
-                  );
-                  
-                  // Skip if exists
-                  try {
-                    await fs.access(storyFilePath);
-                    console.log(`Story already exists for ${fileName}, skipping`);
-                    continue;
-                  } catch (error) {
-                    // File doesn't exist, continue
-                  }
-                  
-                  // Determine import type
-                  const hasDefaultExport = content.includes(`export default ${fileName}`) || 
-                                        content.includes('export default function') ||
-                                        content.includes('export default class') ||
-                                        content.includes('export default (') ||
-                                        content.includes('export default const');
-                  
-                  const importStatement = hasDefaultExport
-                    ? `import ${fileName} from './${fileName}';`
-                    : `import { ${fileName} } from './${fileName}';`;
-                  
-                  const category = relativePath.split(path.sep)[0] || 'General';
-                  
-                  const storyTemplate = `import React from 'react';
-          ${importStatement}
+            await fs.writeFile(authMockPath, authMock);
+            
+            // Add other mocks as needed
+          }
           
-          export default {
-            title: '${category}/${fileName}',
-            component: ${fileName},
-            parameters: {
-              componentSubtitle: 'Component from ${relativePath}'
-            }
-          };
-          
-          export const Default = {
-            args: {}
-          };`;
-                  
-                  await fs.writeFile(storyFilePath, storyTemplate);
-                  console.log(`✓ Created story for ${fileName}`);
-                  storiesGenerated++;
-                  
-                } catch (error) {
-                  console.log(`Error processing ${filePath}: ${error.message}`);
-                }
-              }
-              
-              // Create dummy story if needed
-              if (storiesGenerated === 0) {
-                const dummyStoryPath = path.join(SRC_DIR, 'dummy.stories.jsx');
-                const dummyStory = `
+          async function createFallbackStory() {
+            const dummyPath = path.join(SRC_DIR, 'dummy.stories.jsx');
+            const dummyStory = `
           import React from 'react';
           
-          const Dummy = () => <div>This is a placeholder component to ensure Storybook loads correctly</div>;
+          /**
+           * This is a placeholder component to ensure Storybook has at least one story to display.
+           */
+          const Dummy = () => (
+            <div style={{ 
+              padding: '2rem', 
+              backgroundColor: '#f5f5f5',
+              borderRadius: '8px',
+              textAlign: 'center' 
+            }}>
+              <h2>Bulak Smart Connect Components</h2>
+              <p>This is a placeholder component. No actual component stories were generated.</p>
+            </div>
+          );
           
           export default {
             title: 'Placeholder/Dummy',
@@ -961,55 +392,58 @@ jobs:
           
           export const Default = {};
           `;
-                await fs.writeFile(dummyStoryPath, dummyStory);
-                console.log('Created dummy story for fallback');
-                storiesGenerated = 1;
-              }
-              
-              console.log(`✅ Story generation complete!`);
-              console.log(`Generated ${storiesGenerated} stories`);
-              
-            } catch (error) {
-              console.error(`Error in story generation: ${error.message}`);
-              console.error(error.stack);
-              process.exit(1);
-            }
+            await fs.writeFile(dummyPath, dummyStory);
+            console.log('Created fallback story');
+            return 1;
           }
           
+          // Run the story generator
           generateStories();
           EOF
           
-          # Delete the problematic story files
-          rm -f src/AdminBulakSmartConnect/AccountManagementComponents/NewUserInfo.stories.jsx
-          rm -f src/UserBulakSmartConnect/ApplicationComponents/ApplicationData.stories.jsx
-          rm -f src/UserBulakSmartConnect/ApplicationComponents/BirthCertificateApplications/BirthCertificateApplicationData.stories.jsx
-          
-          # Install necessary packages
-          npm install --no-save glob
-          
-          # Run the improved generator
+          # Run the generator
           node generate-stories.mjs
 
-      - name: Check for generated stories
+      - name: Validate stories
         run: |
           cd bulak-smart-connect-js
           echo "=== Story files in project ==="
           find src -name "*.stories.*" | sort
           echo "=== Number of story files: $(find src -name "*.stories.*" | wc -l) ==="
           
-          # Show content of a sample story file if any exist
+          # Show sample story content
           SAMPLE=$(find src -name "*.stories.*" | head -n 1)
           if [ -n "$SAMPLE" ]; then
             echo "=== Sample story file content ==="
             cat "$SAMPLE"
           else
             echo "No story files found!"
+            # Create fallback story if none exists
+            cat > src/fallback.stories.jsx << 'EOF'
+          import React from 'react';
+          
+          const Fallback = () => (
+            <div style={{ padding: '20px', textAlign: 'center' }}>
+              <h2>No component stories were generated</h2>
+              <p>This is a fallback component to ensure Storybook can build properly.</p>
+            </div>
+          );
+          
+          export default {
+            title: 'Fallback/NoStories',
+            component: Fallback
+          };
+          
+          export const Default = {};
+          EOF
+            echo "Created fallback story"
           fi
 
       - name: Build Storybook
         run: |
           cd bulak-smart-connect-js
           npx storybook build --output-dir storybook-static
+        continue-on-error: false
       
       - name: Add .nojekyll file
         run: |
