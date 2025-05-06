@@ -12,7 +12,7 @@ const componentsDir = path.join(__dirname, '../src/');
 async function generateStory(componentName, componentPath) {
   const storyContent = `
 import React from 'react';
-import ${componentName} from './${componentName}';
+import ${componentName} from '${componentPath}';
 
 export default {
   title: 'Components/${componentName}',
@@ -42,6 +42,7 @@ async function processDirectory(directory) {
       if (['.jsx', '.tsx', '.js', '.ts'].includes(ext)) {
         const componentName = path.basename(file, ext);
         const storyPath = path.join(directory, `${componentName}.stories.jsx`);
+        const relativeImportPath = `./${path.basename(file)}`;
 
         try {
           // Check if the story file already exists
@@ -49,7 +50,7 @@ async function processDirectory(directory) {
           console.log(`Story already exists for ${componentName}`);
         } catch {
           // Generate and write the story file
-          const storyContent = await generateStory(componentName, `./${componentName}`);
+          const storyContent = await generateStory(componentName, relativeImportPath);
           await fs.writeFile(storyPath, storyContent);
           console.log(`Generated story for ${componentName}`);
         }
