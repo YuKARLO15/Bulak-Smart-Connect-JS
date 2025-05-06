@@ -42,7 +42,7 @@ jobs:
           cat > .storybook/main.js << 'EOF'
           /** @type {import('@storybook/react-vite').StorybookConfig} */
           const config = {
-            stories: ['../src/**/*.mdx', '../src/**/*.stories.@(js|jsx)'],
+            stories: ['../src/**/*.mdx', '../src/**/*.stories.@(js|jsx|ts|tsx)'],
             addons: [
               '@storybook/addon-links',
               '@storybook/addon-essentials',
@@ -95,7 +95,7 @@ jobs:
           export default preview;
           EOF
           
-          # Create story generator script with proper context mocking
+          # Create story generator script with proper JSX handling
           cat > generate-stories.mjs << 'EOF'
           import fs from 'fs/promises';
           import path from 'path';
@@ -178,7 +178,7 @@ jobs:
                   // Create story path
                   const storyFilePath = path.join(
                     path.dirname(filePath),
-                    `${fileName}.stories${fileExt}`
+                    `${fileName}.stories.jsx` // Always use .jsx extension for stories
                   );
                   
                   // Skip if exists
@@ -205,7 +205,7 @@ jobs:
                                         content.includes('AuthProvider');
                   
                   const authContextImport = usesAuthContext 
-                    ? "import { useAuth } from '../__mocks__/authContext';\n// Mock the module\njest.mock('../context/AuthContext', () => ({\n  useAuth: () => useAuth()\n}));\n"
+                    ? `import { useAuth } from '../__mocks__/authContext';\n\n// Override the real context with our mock\nimport * as AuthContextModule from '../context/AuthContext';\nObject.defineProperty(AuthContextModule, 'useAuth', { value: useAuth, writable: true });\n\n`
                     : '';
                   
                   // Create story template with proper indentation
@@ -221,17 +221,14 @@ jobs:
             tags: ['autodocs'],
             parameters: {
               componentSubtitle: 'Component from ${relativePath}',
-              // Disable controls for props that would cause errors
               controls: {
                 exclude: ['navigate', 'location', 'params']
               }
             },
-            // Add component-specific decorators if needed
             decorators: [
-              (Story) => (
-                <div style={{ padding: '1rem', maxWidth: '800px', margin: '0 auto' }}>
-                  <Story />
-                </div>
+              (Story) => React.createElement('div', 
+                { style: { padding: '1rem', maxWidth: '800px', margin: '0 auto' } },
+                React.createElement(Story, null)
               )
             ]
           };
@@ -239,9 +236,8 @@ jobs:
           // Simple story with minimal props
           export const Default = {
             args: {
-              // Add simple props here that won't cause errors
+              // Add default props here
             },
-            // Add parameters like viewport or backgrounds if needed
             parameters: {
               backgrounds: {
                 default: 'light',
@@ -277,6 +273,22 @@ jobs:
           # Run story generator
           node generate-stories.mjs
       
+      - name: Check for generated stories
+        run: |
+          cd bulak-smart-connect-js
+          echo "=== Story files in project ==="
+          find src -name "*.stories.*" | sort
+          echo "=== Number of story files: $(find src -name "*.stories.*" | wc -l) ==="
+          
+          # Show content of a sample story file if any exist
+          SAMPLE=$(find src -name "*.stories.*" | head -n 1)
+          if [ -n "$SAMPLE" ]; then
+            echo "=== Sample story file content ==="
+            cat "$SAMPLE"
+          else
+            echo "No story files found!"
+          fi
+
       - name: Build Storybook
         run: |
           cd bulak-smart-connect-js
