@@ -1,7 +1,7 @@
 import React from 'react';
 import './AppointmentDetails.css';
 import UserInfoCard from './UserInfoCard';
-// import NavBar from "../../NavigationComponents";  DI KO MAKUHA NAVBAR HUHU
+// import NavBar from '../../NavigationComponents/NavSide';
 
 const AppointmentDetailsCard = () => {
   const applicationData = {
@@ -16,9 +16,11 @@ const AppointmentDetailsCard = () => {
     submissionDate: 'January 20, 2025',
   };
 
+  // const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
   return (
     <div className="main-container">
-      {/* <NavBar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} /> */}
+   {/* <NavBar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} /> */}
       {/*DI PA TAPOS <h2 className="document-title">Document Application</h2> */}
       <div className="appointment-wrapper">
         <UserInfoCard data={applicationData} />
