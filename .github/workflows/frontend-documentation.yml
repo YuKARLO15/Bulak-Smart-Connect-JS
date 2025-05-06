@@ -28,8 +28,8 @@ jobs:
           cd bulak-smart-connect-js
           npm ci
           
-          # Install Storybook with correct package names
-          npm install --save-dev @storybook/react @storybook/builder-vite @storybook/addon-essentials @storybook/addon-links @storybook/addon-interactions @storybook/blocks @vitejs/plugin-react-swc
+          # Install Storybook with the specific framework integration package
+          npm install --save-dev @storybook/react @storybook/react-vite @storybook/addon-essentials @storybook/addon-links @storybook/addon-interactions @storybook/blocks @vitejs/plugin-react-swc
           
       - name: Setup Storybook
         run: |
@@ -41,7 +41,7 @@ jobs:
           # Create main.js configuration using CommonJS module syntax
           cat > .storybook/main.js << 'EOF'
           /** @type {import('@storybook/react-vite').StorybookConfig} */
-          module.exports = {
+          const config = {
             stories: ['../src/**/*.mdx', '../src/**/*.stories.@(js|jsx)'],
             addons: [
               '@storybook/addon-links',
@@ -58,15 +58,9 @@ jobs:
             core: {
               disableTelemetry: true
             },
-            async viteFinal(config) {
-              const { mergeConfig } = await import('vite');
-              const { default: react } = await import('@vitejs/plugin-react-swc');
-              
-              return mergeConfig(config, {
-                plugins: [react()]
-              });
-            }
           };
+          
+          export default config;
           EOF
           
           # Create preview.js configuration - using JS not TS
