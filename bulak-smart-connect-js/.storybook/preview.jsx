@@ -2,17 +2,23 @@ import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { AuthProvider } from '../src/context/AuthContext';
 
+// Create a mock of react-router-dom's useNavigate
+import * as router from 'react-router-dom';
+
 // Global decorator to wrap all stories in a Router
 export const decorators = [
   (Story) => {
-    // Create a mock navigate function for Storybook
-    const mockNavigate = () => console.log('Navigation triggered in Storybook');
-    
-    // Create a wrapper that provides both Router context and the navigate mock
+    // Create a mock navigate function that will be available in stories
+    const navigate = jest.fn();
+
+    // Override the useNavigate hook before rendering
+    // This needs to be done before rendering the component
+    jest.spyOn(router, 'useNavigate').mockImplementation(() => navigate);
+
     return (
       <MemoryRouter>
         <AuthProvider>
-          <Story navigate={mockNavigate} />
+          <Story />
         </AuthProvider>
       </MemoryRouter>
     );
