@@ -29,6 +29,19 @@ jobs:
           cd bulak-smart-connect-js
           npm install
       
+      - name: Initialize Storybook
+        run: |
+          cd bulak-smart-connect-js
+          npx storybook@latest init
+      
+      - name: Check if build-storybook script exists
+        run: |
+          cd bulak-smart-connect-js
+          if ! npm run | grep -q "build-storybook"; then
+            echo "Error: build-storybook script not found in package.json"
+            exit 1
+          fi
+      
       - name: Build Storybook
         run: |
           cd bulak-smart-connect-js
@@ -122,7 +135,7 @@ jobs:
               <div class="card">
                 <h2>Storybook</h2>
                 <p>Interactive frontend component documentation generated with Storybook.</p>
-                <a href="storybook-static/" class="button">View Storybook</a>
+                <a href="frontend-docs/" class="button">View Storybook</a>
               </div>
               
               <div class="footer">
