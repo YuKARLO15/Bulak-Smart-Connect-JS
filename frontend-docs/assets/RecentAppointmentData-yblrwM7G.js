@@ -1,0 +1,1 @@
+const s=()=>{const t=localStorage.getItem("recentAppointments");return t?JSON.parse(t):[]},o=t=>{const e=s(),n=[t,...e].slice(0,5);localStorage.setItem("recentAppointments",JSON.stringify(n))};export{s as g,o as s};
