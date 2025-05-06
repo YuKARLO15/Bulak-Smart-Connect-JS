@@ -1,1 +1,1 @@
-{"v":5,"entries":{}}
+{"v":5,"entries":{"fallback-nostories--default":{"type":"story","id":"fallback-nostories--default","name":"Default","title":"Fallback/NoStories","importPath":"./src/fallback.stories.jsx","tags":["dev","test"]}}}
