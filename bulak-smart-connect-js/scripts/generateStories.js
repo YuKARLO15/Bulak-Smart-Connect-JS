@@ -8,6 +8,22 @@ const __dirname = path.dirname(__filename);
 
 const componentsDir = path.join(__dirname, '../src/');
 
+// List of directories or files that contain utility functions, not components
+const skipPatterns = [
+  'services',
+  'utils',
+  'helpers',
+  'context',
+  'hooks',
+  '.test.',
+  '.spec.',
+];
+
+// List of filenames to skip
+const skipFiles = [
+  'NewUserInfo.js'
+];
+
 // Function to generate the story content
 async function generateStory(componentName, componentPath) {
   const storyContent = `
@@ -25,6 +41,17 @@ export const Default = () => <${componentName} />;
   return storyContent.trim();
 }
 
+// Check if a file should be skipped
+function shouldSkipFile(filePath, fileName) {
+  // Skip files in the skip list
+  if (skipFiles.includes(fileName)) {
+    return true;
+  }
+  
+  // Skip files matching patterns
+  return skipPatterns.some(pattern => filePath.includes(pattern));
+}
+
 // Recursive function to process directories
 async function processDirectory(directory) {
   const files = await fs.readdir(directory);
@@ -34,8 +61,8 @@ async function processDirectory(directory) {
     const stats = await fs.stat(filePath);
 
     if (stats.isDirectory()) {
-      // Skip the __tests__ directory
-      if (file === '__tests__') {
+      // Skip the __tests__ directory and other utility directories
+      if (file === '__tests__' || skipPatterns.some(pattern => file === pattern)) {
         console.log(`Skipping directory: ${filePath}`);
         continue;
       }
@@ -51,6 +78,12 @@ async function processDirectory(directory) {
         // Skip files that are already stories
         if (componentName.includes('.stories')) {
           console.log(`Skipping story file: ${filePath}`);
+          continue;
+        }
+        
+        // Skip utility files and non-component files
+        if (shouldSkipFile(filePath, file)) {
+          console.log(`Skipping utility file: ${filePath}`);
           continue;
         }
         
