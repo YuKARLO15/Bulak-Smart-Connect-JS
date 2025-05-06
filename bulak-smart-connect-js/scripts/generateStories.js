@@ -47,6 +47,13 @@ async function processDirectory(directory) {
       const ext = path.extname(file);
       if (['.jsx', '.tsx', '.js', '.ts'].includes(ext)) {
         const componentName = path.basename(file, ext);
+        
+        // Skip files that are already stories
+        if (componentName.includes('.stories')) {
+          console.log(`Skipping story file: ${filePath}`);
+          continue;
+        }
+        
         const storyPath = path.join(directory, `${componentName}.stories.jsx`);
         const relativeImportPath = `./${path.basename(file)}`;
 
