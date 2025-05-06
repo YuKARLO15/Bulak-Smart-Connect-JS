@@ -34,8 +34,8 @@ jobs:
         run: |
           cd bulak-smart-connect-js
           
-          # Create Styleguidist config file
-          cat > styleguide.config.js << 'EOF'
+          # Create Styleguidist config file with .cjs extension to indicate CommonJS format
+          cat > styleguide.config.cjs << 'EOF'
           const path = require('path');
 
           module.exports = {
