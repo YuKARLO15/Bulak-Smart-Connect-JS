@@ -1,0 +1,1 @@
+.AppoinmentFormContainer{display:flex;flex-direction:column;align-items:center;width:100vw}.TitleNavAppointment{background-color:#184a5b;font-size:25px!important;justify-content:center;font-weight:600!important;display:flex;padding:3vh;width:100vw}.AppoinmentFormContainer{transition:margin-left ease;margin-left:0}.AppoinmentFormContainer.sidebar-open{margin-left:250px}
