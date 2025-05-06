@@ -1,0 +1,1 @@
+import{R as e}from"./index-D4H_InIO.js";import{B as o}from"./chunk-AYJ5UCUI-BPXtEJBT.js";const c={parameters:{actions:{argTypesRegex:"^on[A-Z].*"},controls:{matchers:{color:/(background|color)$/i,date:/Date$/}}},decorators:[r=>e.createElement(o,null,e.createElement(r,null))]};export{c as default};
