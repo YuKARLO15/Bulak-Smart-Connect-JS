@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkdocusaurus=self.webpackChunkdocusaurus||[]).push([[397],{3840:a=>{a.exports=JSON.parse('{"allTagsPath":"/Bulak-Smart-Connect-JS/frontend-docs/blog/tags","slug":"/Bulak-Smart-Connect-JS/frontend-docs/blog/tags/hola","name":"hola","count":1,"permalink":"/Bulak-Smart-Connect-JS/frontend-docs/blog/tags/hola"}')}}]);
