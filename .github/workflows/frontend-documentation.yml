@@ -28,23 +28,68 @@ jobs:
         run: |
           cd bulak-smart-connect-js
           npm ci
-          npm install --save-dev react-styleguidist webpack prop-types
+          npm install --save-dev react-styleguidist webpack webpack-cli babel-loader @babel/core @babel/preset-env @babel/preset-react style-loader css-loader file-loader prop-types
 
+      - name: Setup Babel configuration
+        run: |
+          cd bulak-smart-connect-js
+          
+          # Create .babelrc file
+          cat > .babelrc << 'EOF'
+          {
+            "presets": ["@babel/preset-env", "@babel/preset-react"]
+          }
+          EOF
+      
       - name: Setup Styleguidist configuration
         run: |
           cd bulak-smart-connect-js
           
-          # Create Styleguidist config file with .cjs extension to indicate CommonJS format
-          cat > styleguide.config.cjs << 'EOF'
+          # Create webpack.config.js for Styleguidist
+          cat > webpack.config.js << 'EOF'
+          const path = require('path');
+
+          module.exports = {
+            module: {
+              rules: [
+                {
+                  test: /\.jsx?$/,
+                  exclude: /node_modules/,
+                  use: {
+                    loader: 'babel-loader',
+                    options: {
+                      presets: ['@babel/preset-env', '@babel/preset-react']
+                    }
+                  }
+                },
+                {
+                  test: /\.css$/,
+                  use: ['style-loader', 'css-loader']
+                },
+                {
+                  test: /\.(png|jpg|gif|svg)$/,
+                  use: ['file-loader']
+                }
+              ]
+            },
+            resolve: {
+              extensions: ['.js', '.jsx']
+            }
+          };
+          EOF
+          
+          # Create Styleguidist config file with .cjs extension
+          cat > styleguide.config.js << 'EOF'
           const path = require('path');
 
           module.exports = {
             title: 'Bulak Smart Connect Component Library',
-            defaultExample: true,
+            defaultExample: false,
             components: 'src/**/[A-Z]*.jsx',
             usageMode: 'expand',
             exampleMode: 'expand',
             pagePerSection: true,
+            skipComponentsWithoutExample: false,
             template: {
               head: {
                 links: [
@@ -55,15 +100,12 @@ jobs:
                 ],
               },
             },
-            theme: {
-              color: {
-                link: '#184a5b',
-                linkHover: '#0d3446',
-                sidebarBackground: '#f5f5f5',
-              },
-              fontFamily: {
-                base: '"Roboto", "Segoe UI", sans-serif',
-              },
+            styles: {
+              StyleGuide: {
+                '@global body': {
+                  fontFamily: '"Roboto", sans-serif'
+                }
+              }
             },
             sections: [
               {
@@ -96,29 +138,50 @@ jobs:
                 sectionDepth: 1,
               },
             ],
-            require: [path.resolve(__dirname, 'src/index.css')],
-            webpackConfig: {
-              module: {
-                rules: [
-                  {
-                    test: /\.jsx?$/,
-                    exclude: /node_modules/,
-                    loader: 'babel-loader',
-                  },
-                  {
-                    test: /\.css$/,
-                    use: ['style-loader', 'css-loader'],
-                  },
-                  {
-                    test: /\.(png|jpg|gif|svg)$/,
-                    use: ['file-loader'],
-                  },
-                ],
-              },
+            require: ['./src/setupProxy.js'],
+            webpackConfig: require('./webpack.config.js'),
+            propsParser: require('react-docgen').parse,
+            getExampleFilename(componentPath) {
+              return componentPath.replace(/\.jsx?$/, '.examples.md');
+            },
+            getComponentPathLine(componentPath) {
+              const name = path.basename(componentPath, path.extname(componentPath));
+              const dir = path.dirname(componentPath);
+              const packageDir = dir.split(path.sep).includes('src') ? path.resolve(dir, '../') : '';
+              return `import { ${name} } from '${packageDir ? path.relative(packageDir, dir) : ''}';`;
             },
           };
           EOF
       
+      - name: Create setup files
+        run: |
+          cd bulak-smart-connect-js
+          
+          # Create a setupProxy.js file to load global styles and mocks
+          cat > src/setupProxy.js << 'EOF'
+          import './index.css';
+
+          // Mock AuthContext
+          window.useAuth = () => ({
+            isAuthenticated: true,
+            user: { 
+              name: 'John Doe', 
+              email: 'john@example.com', 
+              roles: ['admin']
+            },
+            login: () => Promise.resolve({ success: true }),
+            logout: () => {},
+            hasRole: () => true,
+            isAdmin: true,
+            isStaff: true,
+            isCitizen: true
+          });
+
+          // Mock BrowserRouter and other contexts
+          const mockComponent = (name) => ({ children }) => children;
+          window.BrowserRouter = mockComponent('BrowserRouter');
+          EOF
+
       - name: Create documentation files
         run: |
           cd bulak-smart-connect-js
@@ -165,8 +228,72 @@ jobs:
           });
           EOF
 
-          # Add script to package.json
+          # Create automatic example for a component
+          mkdir -p src/components
+          
+          # Create a sample button component
+          cat > src/components/Button.jsx << 'EOF'
+          import React from 'react';
+          import PropTypes from 'prop-types';
+
+          /**
+           * Basic button component with customizable styling
+           */
+          const Button = ({ label, primary, onClick }) => {
+            const baseStyle = {
+              padding: '8px 16px',
+              cursor: 'pointer',
+              borderRadius: '4px',
+              border: 'none',
+              backgroundColor: primary ? '#184a5b' : '#e0e0e0',
+              color: primary ? 'white' : '#333',
+            };
+
+            return (
+              <button style={baseStyle} onClick={onClick}>
+                {label}
+              </button>
+            );
+          };
+
+          Button.propTypes = {
+            /** Text to display inside the button */
+            label: PropTypes.string.isRequired,
+            /** Whether the button should have primary styling */
+            primary: PropTypes.bool,
+            /** Function to call when button is clicked */
+            onClick: PropTypes.func,
+          };
+
+          Button.defaultProps = {
+            primary: false,
+            onClick: () => {},
+          };
+
+          export default Button;
+          EOF
+
+          # Create example file for Button
+          cat > src/components/Button.examples.md << 'EOF'
+          Basic button example:
+
+          ```jsx
+          <Button label="Click Me" />
+          ```
+
+          Primary button example:
+
+          ```jsx
+          <Button label="Primary Button" primary />
+          ```
+          EOF
+
+      - name: Add script to package.json
+        run: |
+          cd bulak-smart-connect-js
           npx json -I -f package.json -e 'this.scripts.styleguidist = "styleguidist build"'
+          npx json -I -f package.json -e 'if (!this.resolutions) this.resolutions = {}; this.resolutions["react-docgen"] = "^5.4.3"'
+          npm install --save-dev react-docgen@5.4.3
       
       - name: Build Styleguidist
         run: |
@@ -186,7 +313,6 @@ jobs:
             api-docs/**
 
       - name: Deploy documentation hub
-        # Same documentation hub code as your current workflow
         run: |
           cd bulak-smart-connect-js
           mkdir -p ../doc_hub
