@@ -38,7 +38,19 @@ for (const file of files) {
     continue;
   }
 
+  // Find the component file (e.g., .jsx or .tsx)
+  const componentFiles = await fs.readdir(componentPath);
+  const componentFile = componentFiles.find((f) =>
+    ['.jsx', '.tsx', '.js', '.ts'].includes(path.extname(f))
+  );
+
+  if (!componentFile) {
+    console.log(`No component file found for ${componentName}`);
+    continue;
+  }
+
   const storyPath = path.join(componentPath, `${componentName}.stories.jsx`);
+  const relativeImportPath = `./${componentFile}`;
 
   try {
     // Check if the story file already exists
@@ -46,7 +58,18 @@ for (const file of files) {
     console.log(`Story already exists for ${componentName}`);
   } catch {
     // Generate and write the story file
-    const storyContent = await generateStory(componentName, componentPath);
+    const storyContent = `
+import React from 'react';
+import ${componentName} from '${relativeImportPath}';
+
+export default {
+  title: 'Components/${componentName}',
+  component: ${componentName},
+};
+
+export const Default = () => <${componentName} />;
+    `.trim();
+
     await fs.writeFile(storyPath, storyContent);
     console.log(`Generated story for ${componentName}`);
   }
