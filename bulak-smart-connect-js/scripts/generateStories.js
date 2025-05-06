@@ -74,7 +74,7 @@ async function processDirectory(directory) {
     } else {
       // Process component files
       const ext = path.extname(file);
-      if (['.jsx', '.tsx', '.js', '.ts'].includes(ext)) {
+      if (['.jsx', '.tsx'].includes(ext)) {
         const componentName = path.basename(file, ext);
         
         // Skip files that are already stories
