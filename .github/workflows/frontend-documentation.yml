@@ -2,7 +2,7 @@ name: Frontend Documentation
 
 on:
   push:
-    branches: [ '*']
+    branches: ['*']
     paths:
       - 'bulak-smart-connect-js/src/**'
   workflow_dispatch:
@@ -11,12 +11,13 @@ permissions:
   contents: write
 
 jobs:
-  build-storybook:
+  build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
       
-      - name: Set up Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
@@ -27,16 +28,16 @@ jobs:
         run: |
           cd bulak-smart-connect-js
           npm ci
-          npm install --save-dev @storybook/react @storybook/react-vite @storybook/addon-essentials @storybook/addon-links @storybook/addon-interactions @storybook/blocks @vitejs/plugin-react-swc glob prop-types
-      
-      - name: Configure Storybook
+          npm install --save-dev @storybook/react @storybook/react-vite @storybook/addon-essentials \
+            @storybook/addon-links @storybook/addon-interactions @storybook/blocks \
+            @vitejs/plugin-react-swc glob prop-types
+
+      - name: Setup Storybook configuration
         run: |
           cd bulak-smart-connect-js
-          
-          # Create .storybook directory
           mkdir -p .storybook
           
-          # Create main.js configuration
+          # Main configuration
           cat > .storybook/main.js << 'EOF'
           /** @type {import('@storybook/react-vite').StorybookConfig} */
           const config = {
@@ -62,11 +63,44 @@ jobs:
           export default config;
           EOF
           
-          # Create preview.js
+          # Mock authentication for components
           cat > .storybook/preview.js << 'EOF'
           import React from 'react';
           import { BrowserRouter } from 'react-router-dom';
 
+          // Create mock auth context for Storybook
+          const MockAuthContext = React.createContext(null);
+          
+          const MockAuthProvider = ({ children }) => {
+            const authValue = {
+              isAuthenticated: true,
+              user: {
+                name: 'John Doe',
+                email: 'john@example.com',
+                roles: ['admin', 'citizen'],
+                defaultRole: 'admin'
+              },
+              login: () => Promise.resolve({ success: true }),
+              logout: () => {},
+              hasRole: (role) => ['admin', 'staff', 'citizen'].includes(role),
+              hasAnyRole: () => true,
+              isAdmin: true,
+              isStaff: true,
+              isCitizen: true,
+              loading: false,
+              error: null
+            };
+            
+            return (
+              <MockAuthContext.Provider value={authValue}>
+                {children}
+              </MockAuthContext.Provider>
+            );
+          };
+
+          // Export the hook as global for components to use
+          window.useAuth = () => React.useContext(MockAuthContext);
+          
           const preview = {
             parameters: {
               actions: { argTypesRegex: "^on[A-Z].*" },
@@ -79,9 +113,13 @@ jobs:
             },
             decorators: [
               (Story) => React.createElement(
-                BrowserRouter,
+                MockAuthProvider, 
                 null,
-                React.createElement(Story, null)
+                React.createElement(
+                  BrowserRouter,
+                  null,
+                  React.createElement(Story, null)
+                )
               ),
             ],
           };
@@ -89,14 +127,29 @@ jobs:
           export default preview;
           EOF
 
-      - name: Create guaranteed stories
+      - name: Create sample components and mocks
         run: |
           cd bulak-smart-connect-js
           
-          # Create directory for custom stories
-          mkdir -p src/stories
+          # Create mocks directory and auth context mock
+          mkdir -p src/__mocks__
+          cat > src/__mocks__/authContext.js << 'EOF'
+          export const useAuth = () => ({
+            isAuthenticated: true,
+            user: { 
+              name: 'John Doe', 
+              email: 'john@example.com', 
+              roles: ['admin']
+            },
+            login: () => Promise.resolve({ success: true }),
+            logout: () => {},
+            hasRole: () => true,
+            isAdmin: true
+          });
+          EOF
           
-          # Create Button component (guaranteed to work)
+          # Create guaranteed Button component and story
+          mkdir -p src/stories
           cat > src/stories/Button.jsx << 'EOF'
           import React from 'react';
           import PropTypes from 'prop-types';
@@ -135,7 +188,6 @@ jobs:
           export default Button;
           EOF
 
-          # Create Button story
           cat > src/stories/Button.stories.jsx << 'EOF'
           import React from 'react';
           import Button from './Button';
@@ -178,7 +230,7 @@ jobs:
           };
           EOF
 
-          # Create a direct story for NavBar component (which exists in the codebase)
+          # Create example component stories
           cat > src/NavigationComponents/NavBar.stories.jsx << 'EOF'
           import React from 'react';
           import NavBar from './NavBar';
@@ -191,22 +243,21 @@ jobs:
             }
           };
 
-          export const Default = {
-            args: {
-              isSidebarOpen: false,
-              setIsSidebarOpen: () => {},
-            }
+          const Template = (args) => <NavBar {...args} />;
+
+          export const Default = Template.bind({});
+          Default.args = {
+            isSidebarOpen: false,
+            setIsSidebarOpen: () => {},
           };
 
-          export const WithOpenSidebar = {
-            args: {
-              isSidebarOpen: true,
-              setIsSidebarOpen: () => {},
-            }
+          export const WithOpenSidebar = Template.bind({});
+          WithOpenSidebar.args = {
+            isSidebarOpen: true,
+            setIsSidebarOpen: () => {},
           };
           EOF
 
-          # Create another direct story for LandingPage component
           cat > src/LandingPageComponents/LandingPage.stories.jsx << 'EOF'
           import React from 'react';
           import LandingPage from './LandingPage';
@@ -221,49 +272,181 @@ jobs:
 
           export const Default = {};
           EOF
-
-          # Create a mock for authentication
-          mkdir -p src/__mocks__
-          cat > src/__mocks__/authContext.js << 'EOF'
-          export const useAuth = () => ({
-            isAuthenticated: true,
-            user: { 
-              name: 'John Doe', 
-              email: 'john@example.com', 
-              roles: ['admin']
+      
+      - name: Generate AI-assisted component stories
+        run: |
+          cd bulak-smart-connect-js
+          
+          # Create AI story generator
+          cat > generate-ai-stories.mjs << 'EOF'
+          import fs from 'fs/promises';
+          import path from 'path';
+          import { fileURLToPath } from 'url';
+          import { dirname } from 'path';
+          import * as globModule from 'glob';
+          import { promisify } from 'util';
+          
+          const glob = globModule.default || globModule.glob || globModule;
+          const globAsync = promisify(glob);
+          const __filename = fileURLToPath(import.meta.url);
+          const __dirname = dirname(__filename);
+          
+          // Configuration
+          const SRC_DIR = './src';
+          
+          // Known component directories
+          const COMPONENT_DIRS = [
+            'AdminBulakSmartConnect',
+            'LandingPageComponents',
+            'LogInComponents',
+            'NavigationComponents',
+            'UserBulakSmartConnect',
+            'components'
+          ];
+          
+          async function generateAIStories() {
+            try {
+              console.log('Starting AI-assisted story generation...');
+              
+              // Get all JSX files in component directories
+              const allComponentFiles = [];
+              
+              for (const dir of COMPONENT_DIRS) {
+                const dirPath = path.join(SRC_DIR, dir);
+                try {
+                  const files = await globAsync(`${dirPath}/**/*.jsx`, {
+                    ignore: ['**/node_modules/**', '**/*.stories.*', '**/*.test.*', '**/*.spec.*']
+                  });
+                  allComponentFiles.push(...files);
+                } catch (error) {
+                  console.log(`Directory not found: ${dirPath}`);
+                }
+              }
+              
+              console.log(`Found ${allComponentFiles.length} potential components`);
+              
+              let storiesGenerated = 0;
+              
+              // Analyze and generate stories for components
+              for (const filePath of allComponentFiles) {
+                try {
+                  const relativePath = path.relative(SRC_DIR, path.dirname(filePath));
+                  const fileName = path.basename(filePath, path.extname(filePath));
+                  
+                  // Skip existing stories
+                  const storyPath = path.join(path.dirname(filePath), `${fileName}.stories.jsx`);
+                  try {
+                    await fs.access(storyPath);
+                    console.log(`Story already exists for ${fileName}, skipping`);
+                    continue;
+                  } catch (error) {
+                    // File doesn't exist, continue
+                  }
+                  
+                  console.log(`Processing component: ${fileName} in ${relativePath}`);
+                  
+                  const content = await fs.readFile(filePath, 'utf8');
+                  const hasDefaultExport = content.includes(`export default ${fileName}`) || 
+                                          content.includes('export default function') ||
+                                          content.includes('export default class') ||
+                                          content.includes('export default (') ||
+                                          content.includes('export default');
+                                      
+                  const importStatement = hasDefaultExport
+                    ? `import ${fileName} from './${fileName}';`
+                    : `import { ${fileName} } from './${fileName}';`;
+                  
+                  // Extract props from function parameters or PropTypes (simplified)
+                  let props = [];
+                  const propsMatch = content.match(/(?:function|const)\s+\w+\s*=?\s*\(\s*\{([^}]*)\}\s*\)/);
+                  if (propsMatch && propsMatch[1]) {
+                    props = propsMatch[1]
+                      .split(',')
+                      .map(p => p.trim())
+                      .filter(p => p && !p.includes('...'));
+                  }
+                  
+                  // Create a simple story template
+                  const storyTemplate = `import React from 'react';
+          ${importStatement}
+          
+          export default {
+            title: '${relativePath}/${fileName}',
+            component: ${fileName},
+            parameters: {
+              componentSubtitle: 'Component from ${relativePath}'
             },
-            login: () => Promise.resolve({ success: true }),
-            logout: () => {},
-            hasRole: () => true,
-            isAdmin: true
-          });
+            tags: ['autodocs'],
+          };
+          
+          export const Default = {
+            args: {
+              ${props.map(prop => `${prop}: undefined`).join(',\n              ')}
+            }
+          };`;
+                  
+                  await fs.writeFile(storyPath, storyTemplate);
+                  console.log(`✓ Created story for ${fileName}`);
+                  storiesGenerated++;
+                  
+                } catch (error) {
+                  console.log(`Error processing ${filePath}: ${error.message}`);
+                }
+              }
+              
+              console.log(`✅ Story generation complete!`);
+              console.log(`Generated ${storiesGenerated} stories`);
+              
+            } catch (error) {
+              console.error(`Error in story generation: ${error.message}`);
+            }
+          }
+          
+          generateAIStories();
           EOF
-
-      - name: Validate stories
+          
+          # Run the story generator
+          node generate-ai-stories.mjs
+      
+      - name: Validate generated stories
         run: |
           cd bulak-smart-connect-js
           echo "=== Story files in project ==="
           find src -name "*.stories.*" | sort
           echo "=== Number of story files: $(find src -name "*.stories.*" | wc -l) ==="
           
-          # Show sample story content
-          SAMPLE=$(find src -name "*.stories.*" | head -n 1)
-          if [ -n "$SAMPLE" ]; then
-            echo "=== Sample story file content ==="
-            cat "$SAMPLE"
+          # Ensure at least one story exists
+          if [ $(find src -name "*.stories.*" | wc -l) -eq 0 ]; then
+            echo "No story files found! Creating fallback story."
+            cat > src/fallback.stories.jsx << 'EOF'
+          import React from 'react';
+          
+          const Fallback = () => (
+            <div style={{ padding: '20px', textAlign: 'center' }}>
+              <h2>No component stories were generated</h2>
+              <p>This is a fallback component to ensure Storybook can build properly.</p>
+            </div>
+          );
+          
+          export default {
+            title: 'Fallback/NoStories',
+            component: Fallback
+          };
+          
+          export const Default = {};
+          EOF
           fi
 
-      - name: Build Storybook
+      - name: Build and deploy Storybook
         run: |
           cd bulak-smart-connect-js
+          # Build Storybook
           npx storybook build --output-dir storybook-static
-      
-      - name: Add .nojekyll file
-        run: |
-          cd bulak-smart-connect-js
+          
+          # Add .nojekyll to prevent GitHub Pages from ignoring files that start with underscore
           touch storybook-static/.nojekyll
-      
-      - name: Deploy Storybook
+        
+      - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           folder: bulak-smart-connect-js/storybook-static
@@ -274,7 +457,7 @@ jobs:
             .nojekyll
             api-docs/**
 
-      - name: Update documentation hub
+      - name: Create and deploy documentation hub
         run: |
           mkdir -p doc_hub
           touch doc_hub/.nojekyll
@@ -368,9 +551,5 @@ jobs:
           </html>
           EOF
           
-      - name: Deploy documentation hub
-        uses: JamesIves/github-pages-deploy-action@v4
-        with:
-          folder: doc_hub
-          branch: gh-pages
-          clean: false
+          # Deploy documentation hub to GitHub Pages
+          npx gh-pages -d doc_hub -b gh-pages -a
