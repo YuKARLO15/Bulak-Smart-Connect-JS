@@ -22,25 +22,22 @@ jobs:
         with:
           node-version: '20'
           cache: 'npm'
+          cache-dependency-path: 'bulak-smart-connect-js/package-lock.json'
       
-      - name: Install Gatsby CLI
-        run: npm install -g gatsby-cli
-      
-      - name: Create Gatsby Documentation Site
+      - name: Create simple documentation site
         run: |
-          # Create a new Gatsby site using the documentation starter
-          gatsby new docs-site https://github.com/gatsbyjs/gatsby-starter-documentation
-          
+          # Create a basic site structure instead of using a problematic starter
+          mkdir -p docs-site
           cd docs-site
           
-          # Install additional dependencies for component documentation
-          npm install --save gatsby-plugin-mdx @mdx-js/react @mdx-js/mdx gatsby-source-filesystem prism-react-renderer react-live
+          # Initialize a new Gatsby site without using the starter
+          npm init -y
+          npm install --save gatsby react react-dom gatsby-plugin-mdx @mdx-js/react @mdx-js/mdx gatsby-source-filesystem
 
-      - name: Configure Gatsby Site
-        run: |
-          cd docs-site
+          # Create minimal Gatsby structure
+          mkdir -p src/pages src/components
           
-          # Create gatsby-config.js with component documentation setup
+          # Create gatsby-config.js
           cat > gatsby-config.js << 'EOF'
           module.exports = {
             siteMetadata: {
@@ -49,21 +46,6 @@ jobs:
               author: 'Bulak LGU Smart Connect Team',
             },
             plugins: [
-              'gatsby-plugin-react-helmet',
-              {
-                resolve: 'gatsby-source-filesystem',
-                options: {
-                  name: 'components',
-                  path: `${__dirname}/src/components`,
-                },
-              },
-              {
-                resolve: 'gatsby-source-filesystem',
-                options: {
-                  name: 'project-components',
-                  path: `${__dirname}/../bulak-smart-connect-js/src`,
-                },
-              },
               {
                 resolve: 'gatsby-source-filesystem',
                 options: {
@@ -74,244 +56,178 @@ jobs:
               {
                 resolve: 'gatsby-plugin-mdx',
                 options: {
-                  defaultLayouts: {
-                    default: require.resolve('./src/components/layout.js'),
-                  },
-                  gatsbyRemarkPlugins: [
-                    {
-                      resolve: 'gatsby-remark-prismjs',
-                      options: {
-                        classPrefix: 'language-',
-                        inlineCodeMarker: null,
-                        aliases: {},
-                        showLineNumbers: true,
-                      },
-                    },
-                  ],
-                },
+                  extensions: ['.mdx', '.md'],
+                }
               },
-              'gatsby-plugin-catch-links',
             ],
           };
           EOF
 
-      - name: Create Component Documentation
+          # Add scripts to package.json
+          npm pkg set scripts.build="gatsby build"
+          npm pkg set scripts.develop="gatsby develop"
+          npm pkg set scripts.serve="gatsby serve"
+          npm pkg set scripts.clean="gatsby clean"
+      
+      - name: Create documentation content
         run: |
           cd docs-site
           
-          # Create documentation structure
-          mkdir -p src/pages/components
-          mkdir -p src/components
-          
-          # Create Introduction page
-          cat > src/pages/index.mdx << 'EOF'
-          # Bulak Smart Connect Documentation
-          
-          Welcome to the Bulak Smart Connect component library documentation.
-          
-          This site provides documentation for the React components used in the Bulak Smart Connect application,
-          which serves as the official queuing and information system for the Municipal Civil Registrar
-          of San Ildefonso, Bulacan.
-          
-          ## Design Principles
-          
-          - **User-Centered**: Components focus on ease of use for citizens
-          - **Consistency**: Uniform styling and behavior across the application
-          - **Accessibility**: Components follow WCAG guidelines
-          - **Responsiveness**: Works on desktop and mobile devices
-          
-          ## Main Component Categories
-          
-          - [Landing Page Components](/components/landing-page)
-          - [Navigation Components](/components/navigation)
-          - [User Dashboard Components](/components/user-dashboard)
-          - [Admin Components](/components/admin)
-          - [Authentication Components](/components/auth)
-          EOF
-          
-          # Create component categories pages
-          cat > src/pages/components/landing-page.mdx << 'EOF'
-          # Landing Page Components
-          
-          Components used on the public-facing landing page.
-          
-          ## Color Scheme
-          
-          The landing page uses the primary color scheme:
-          
-          - Primary: #184a5b
-          - Secondary: #8DC3A7
-          - Accent: #e2e381
-          
-          ## Components
-          
-          ### HeroSection
-          
-          The main banner section at the top of the landing page.
-          
-          ### FeatureCard
-          
-          Cards displaying the key features of the application.
-          EOF
-          
-          # Create a simple layout component
+          # Create layout component
           cat > src/components/layout.js << 'EOF'
           import React from 'react';
-          import { Link } from 'gatsby';
-          import './layout.css';
-          
+
           const Layout = ({ children }) => {
             return (
-              <div className="main-container">
-                <header>
-                  <nav>
-                    <Link to="/" className="site-title">Bulak Smart Connect Docs</Link>
-                    <div className="nav-links">
-                      <Link to="/components/landing-page">Landing Page</Link>
-                      <Link to="/components/navigation">Navigation</Link>
-                      <Link to="/components/user-dashboard">User Dashboard</Link>
-                      <Link to="/components/admin">Admin</Link>
-                      <Link to="/components/auth">Auth</Link>
-                    </div>
+              <div style={{
+                maxWidth: '1200px',
+                margin: '0 auto',
+                padding: '20px',
+                fontFamily: 'system-ui, sans-serif',
+              }}>
+                <header style={{ 
+                  backgroundColor: '#184a5b',
+                  padding: '20px',
+                  marginBottom: '20px',
+                  color: 'white',
+                  borderRadius: '5px'
+                }}>
+                  <h1>Bulak Smart Connect Docs</h1>
+                  <nav style={{ 
+                    display: 'flex',
+                    gap: '20px'
+                  }}>
+                    <a href="/" style={{ color: 'white' }}>Home</a>
+                    <a href="/components" style={{ color: 'white' }}>Components</a>
                   </nav>
                 </header>
-                <main>{children}</main>
-                <footer>
+                <main>
+                  {children}
+                </main>
+                <footer style={{ 
+                  marginTop: '40px',
+                  borderTop: '1px solid #eaeaea',
+                  paddingTop: '20px',
+                  textAlign: 'center',
+                  color: '#666'
+                }}>
                   <p>© {new Date().getFullYear()} Bulak Smart Connect</p>
                 </footer>
               </div>
             );
           };
-          
+
           export default Layout;
           EOF
           
-          # Create layout CSS
-          cat > src/components/layout.css << 'EOF'
-          :root {
-            --primary-color: #184a5b;
-            --secondary-color: #8DC3A7;
-            --accent-color: #e2e381;
-            --text-color: #333333;
-            --background-color: #ffffff;
-            --sidebar-width: 250px;
-          }
-          
-          * {
-            box-sizing: border-box;
-          }
-          
-          body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
-              Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-            margin: 0;
-            padding: 0;
-            color: var(--text-color);
-            background-color: var(--background-color);
-          }
-          
-          .main-container {
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-          }
-          
-          header {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 1rem;
-          }
-          
-          nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            max-width: 1200px;
-            margin: 0 auto;
-            width: 100%;
-          }
-          
-          .site-title {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: white;
-            text-decoration: none;
-          }
-          
-          .nav-links {
-            display: flex;
-            gap: 1.5rem;
-          }
-          
-          .nav-links a {
-            color: white;
-            text-decoration: none;
-          }
-          
-          .nav-links a:hover {
-            text-decoration: underline;
-          }
-          
-          main {
-            flex-grow: 1;
-            max-width: 1200px;
-            width: 100%;
-            margin: 0 auto;
-            padding: 2rem;
-          }
-          
-          footer {
-            background-color: var(--primary-color);
-            color: white;
-            text-align: center;
-            padding: 1rem;
-          }
+          # Create index page
+          cat > src/pages/index.js << 'EOF'
+          import React from 'react';
+          import Layout from '../components/layout';
+
+          const IndexPage = () => {
+            return (
+              <Layout>
+                <h1>Bulak Smart Connect Documentation</h1>
+                <p>
+                  Welcome to the Bulak Smart Connect component library documentation.
+                  This site provides documentation for the React components used in the Bulak Smart Connect application,
+                  which serves as the official queuing and information system for the Municipal Civil Registrar
+                  of San Ildefonso, Bulacan.
+                </p>
+
+                <h2>Design Principles</h2>
+                <ul>
+                  <li><strong>User-Centered</strong>: Components focus on ease of use for citizens</li>
+                  <li><strong>Consistency</strong>: Uniform styling and behavior across the application</li>
+                  <li><strong>Accessibility</strong>: Components follow WCAG guidelines</li>
+                  <li><strong>Responsiveness</strong>: Works on desktop and mobile devices</li>
+                </ul>
+
+                <h2>Component Categories</h2>
+                <ul>
+                  <li><a href="/components#landing">Landing Page Components</a></li>
+                  <li><a href="/components#navigation">Navigation Components</a></li>
+                  <li><a href="/components#user">User Dashboard Components</a></li>
+                  <li><a href="/components#admin">Admin Components</a></li>
+                  <li><a href="/components#auth">Authentication Components</a></li>
+                </ul>
+              </Layout>
+            );
+          };
+
+          export default IndexPage;
           EOF
-          
-          # Create a Button component example
-          cat > src/pages/components/button.mdx << 'EOF'
-          # Button Component
-          
-          A customizable button component for user interactions.
-          
-          ## Usage
-          
-          ```jsx
-          import Button from '../components/Button';
-          
-          <Button 
-            primary 
-            label="Click Me" 
-            onClick={() => alert('Button clicked!')} 
-          />
-          ```
-          
-          ## Props
-          
-          | Prop | Type | Default | Description |
-          | ---- | ---- | ------- | ----------- |
-          | `label` | string | required | Text to display inside the button |
-          | `primary` | boolean | false | Whether the button should use primary styling |
-          | `onClick` | function | () => {} | Function called when button is clicked |
-          | `disabled` | boolean | false | Whether the button is disabled |
+
+          # Create components page
+          cat > src/pages/components.js << 'EOF'
+          import React from 'react';
+          import Layout from '../components/layout';
+
+          const ComponentsPage = () => {
+            return (
+              <Layout>
+                <h1>Component Documentation</h1>
+                
+                <section id="landing">
+                  <h2>Landing Page Components</h2>
+                  <p>Components used on the public-facing landing page.</p>
+                  
+                  <h3>Color Scheme</h3>
+                  <ul>
+                    <li>Primary: #184a5b</li>
+                    <li>Secondary: #8DC3A7</li>
+                    <li>Accent: #e2e381</li>
+                  </ul>
+                  
+                  <h3>Components</h3>
+                  <div>
+                    <h4>HeroSection</h4>
+                    <p>The main banner section at the top of the landing page.</p>
+                    
+                    <h4>FeatureCard</h4>
+                    <p>Cards displaying the key features of the application.</p>
+                  </div>
+                </section>
+                
+                <section id="navigation">
+                  <h2>Navigation Components</h2>
+                  <p>Components used for navigation throughout the application.</p>
+                  
+                  <div>
+                    <h4>NavBar</h4>
+                    <p>The main navigation bar displayed at the top of every page.</p>
+                    
+                    <h4>Sidebar</h4>
+                    <p>Collapsible sidebar navigation for internal application pages.</p>
+                  </div>
+                </section>
+
+                <section id="user">
+                  <h2>User Dashboard Components</h2>
+                  <p>Components used in the citizen user dashboard.</p>
+                </section>
+
+                <section id="admin">
+                  <h2>Admin Components</h2>
+                  <p>Components used in the administrative interface.</p>
+                </section>
+
+                <section id="auth">
+                  <h2>Authentication Components</h2>
+                  <p>Components for login, registration and authentication.</p>
+                </section>
+              </Layout>
+            );
+          };
+
+          export default ComponentsPage;
           EOF
-          
-      - name: Copy Project Components for Documentation
+
+      - name: Build Gatsby site
         run: |
           cd docs-site
-          
-          # Create directory for component examples
-          mkdir -p src/components/examples
-          
-          # Copy a sample of your project components
-          cp -r ../bulak-smart-connect-js/src/components/* src/components/examples/ 2>/dev/null || :
-          cp -r ../bulak-smart-connect-js/src/LandingPageComponents/* src/components/examples/ 2>/dev/null || :
-          cp -r ../bulak-smart-connect-js/src/NavigationComponents/* src/components/examples/ 2>/dev/null || :
-      
-      - name: Build Gatsby Site
-        run: |
-          cd docs-site
-          gatsby build --prefix-paths
+          npx gatsby build
           touch public/.nojekyll
       
       - name: Deploy to GitHub Pages
