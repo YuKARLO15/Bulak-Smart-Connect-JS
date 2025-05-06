@@ -1,4 +1,31 @@
 # Bulak LGU Smart Connect: Information and Queuing Management System
+
+## Technology Stack
+
+### Frontend
+- **React** - UI library for building component-based interfaces
+- **Vite** - Fast build tool and development environment
+- **Storybook** - Component documentation and UI development environment
+- **React Router** - For application routing
+- **Axios** - For API requests
+
+### Backend
+- **NestJS** - Progressive Node.js framework for server-side applications
+- **TypeORM** - ORM for database interactions
+- **JWT** - For secure authentication
+- **MySQL** - Primary database
+
+### DevOps & Documentation
+- **GitHub Actions** - CI/CD workflows for testing and deployment
+- **Storybook** - Component documentation
+- **Compodoc** - API documentation
+
+## Site Accessibility
+
+- **Documentation Hub**: https://yukarlo15.github.io/Bulak-Smart-Connect-JS/
+- **Component Documentation**: https://yukarlo15.github.io/Bulak-Smart-Connect-JS/frontend-docs/
+- **API Documentation**: https://yukarlo15.github.io/Bulak-Smart-Connect-JS/api-docs/
+
 ## How to Install (Frontend)
 
 cd bulak-smart-connect-js </br>
