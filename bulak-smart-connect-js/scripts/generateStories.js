@@ -21,7 +21,8 @@ const skipPatterns = [
 
 // List of filenames to skip
 const skipFiles = [
-  'NewUserInfo.js'
+  'NewUserInfo.js',
+  'ApplicationData.js'
 ];
 
 // Function to generate the story content
