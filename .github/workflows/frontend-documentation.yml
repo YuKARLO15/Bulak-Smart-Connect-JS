@@ -93,7 +93,11 @@ jobs:
           module.exports = preview;
           EOF
           
-          # Create fixed story generator script
+      - name: Setup Storybook with better debugging
+        run: |
+          cd bulak-smart-connect-js
+          
+          # Create story generator script with better debug logging
           cat > generate-stories.mjs << 'EOF'
           import fs from 'fs/promises';
           import path from 'path';
@@ -109,53 +113,26 @@ jobs:
           
           // Configuration
           const SRC_DIR = './src';
-          const COMPONENT_EXTENSIONS = ['.jsx', '.js'];
           
           async function generateStories() {
             try {
               console.log(`Looking for components in ${path.resolve(SRC_DIR)}`);
               
-              // Find specific component directories that are known to contain UI components
-              const componentDirs = [
-                'AdminBulakSmartConnect/AccountManagementComponents',
-                'AdminBulakSmartConnect/AdminAnnouncementComponents',
-                'AdminBulakSmartConnect/AdminApplicationComponents',
-                'AdminBulakSmartConnect/AdminDashboard',
-                'AdminBulakSmartConnect/AdminWalkInDetails',
-                'LogInComponents',
-                'LandingPageComponents',
-                'NavigationComponents',
-                'UserBulakSmartConnect/ApplicationComponents',
-              ];
-              
-              let allComponentFiles = [];
-              
-              // Gather files from each known component directory
-              for (const compDir of componentDirs) {
-                const dirPath = path.join(SRC_DIR, compDir);
-                try {
-                  const compFiles = await globAsync(`${dirPath}/**/*{${COMPONENT_EXTENSIONS.join(',')}}`, {
-                    ignore: ['**/node_modules/**', '**/*.stories.*', '**/*.test.*', '**/*.spec.*']
-                  });
-                  console.log(`Found ${compFiles.length} potential files in ${compDir}`);
-                  allComponentFiles.push(...compFiles);
-                } catch (err) {
-                  console.log(`Error scanning ${compDir}: ${err.message}`);
-                }
-              }
-              
-              // Also add App.jsx, it's a good candidate
+              // Debug directory structure
               try {
-                const appFile = path.join(SRC_DIR, 'App.jsx');
-                const appStat = await fs.stat(appFile);
-                if (appStat.isFile()) {
-                  allComponentFiles.push(appFile);
-                }
-              } catch (err) {
-                console.log('App.jsx not found or not accessible');
+                const dirs = await fs.readdir(SRC_DIR);
+                console.log(`Found directories in src: ${dirs.join(', ')}`);
+              } catch (error) {
+                console.error(`Error reading src directory: ${error.message}`);
               }
               
-              console.log(`Found ${allComponentFiles.length} potential component files`);
+              // More comprehensive component search
+              const ALL_EXTENSIONS = ['.jsx', '.js'];
+              const allFiles = await globAsync(`${SRC_DIR}/**/*{${ALL_EXTENSIONS.join(',')}}`, {
+                ignore: ['**/node_modules/**', '**/*.stories.*', '**/*.test.*', '**/*.spec.*']
+              });
+              
+              console.log(`Found ${allFiles.length} total JS/JSX files`);
               
               // Create mocks directory if it doesn't exist
               const mocksDir = path.join(SRC_DIR, '__mocks__');
@@ -189,21 +166,25 @@ jobs:
               let componentsFound = 0;
               let storiesGenerated = 0;
               
-              // Create a simple story for each component file
-              for (const filePath of allComponentFiles) {
+              // Process 100 files at a time for better manageability
+              const filesToProcess = allFiles.slice(0, 100);
+              console.log(`Processing first ${filesToProcess.length} files`);
+              
+              // Loop through files
+              for (const filePath of filesToProcess) {
                 try {
                   const content = await fs.readFile(filePath, 'utf8');
                   const fileName = path.basename(filePath, path.extname(filePath));
                   
-                  // More reliable component detection
-                  if (content.includes('export default') || content.match(/export\s+(?:const|function|class)\s+/)) {
+                  // Improved component detection - more lenient
+                  const hasExport = content.includes('export ') || content.includes('export default');
+                  const hasReactImport = content.includes('import React') || content.includes('from "react"') || content.includes("from 'react");
+                  const hasJSXSyntax = content.includes('<') && content.includes('/>') || content.includes('</');
+                  
+                  if ((hasExport && hasReactImport) || (hasExport && hasJSXSyntax)) {
                     componentsFound++;
-                    console.log(`Found component: ${fileName} at ${filePath}`);
-                    
-                    // Get component info
-                    const fileExt = path.extname(filePath);
                     const relativePath = path.relative(SRC_DIR, path.dirname(filePath));
-                    const category = relativePath.split(path.sep)[0] || 'General';
+                    console.log(`Found component: ${fileName} in ${relativePath}`);
                     
                     // Skip context files
                     if (content.includes('createContext') || 
@@ -213,7 +194,7 @@ jobs:
                       continue;
                     }
                     
-                    // Create story path with .jsx extension for all stories
+                    // Create story path
                     const storyFilePath = path.join(
                       path.dirname(filePath),
                       `${fileName}.stories.jsx`
@@ -228,28 +209,23 @@ jobs:
                       // File doesn't exist, continue
                     }
                     
-                    // Determine export type
+                    // Determine category
+                    const category = relativePath.split(path.sep)[0] || 'General';
+                    
+                    // Generate story file
                     const isDefaultExport = content.includes(`export default ${fileName}`) || 
-                                           content.includes('export default function') ||
-                                           content.includes('export default class');
+                                          content.includes('export default function') ||
+                                          content.includes('export default class');
                     
                     const importStatement = isDefaultExport
                       ? `import ${fileName} from './${fileName}';`
                       : `import { ${fileName} } from './${fileName}';`;
                     
-                    // Create simple story with CommonJS module exports for better compatibility
                     const storyTemplate = `import React from 'react';
-          import { useAuth } from '../__mocks__/authContext';
           ${importStatement}
           
-          // Mock context if needed
-          try {
-            if (require('../context/AuthContext')) {
-              require('../context/AuthContext').useAuth = useAuth;
-            }
-          } catch (e) {
-            // Context not found, ignore
-          }
+          // Optional: import mock auth context if needed
+          // import { useAuth } from '../__mocks__/authContext';
           
           export default {
             title: '${category}/${fileName}',
@@ -267,7 +243,7 @@ jobs:
           
           export const Default = {
             args: {
-              // Default props
+              // Add default props here
             }
           };`;
                     
@@ -275,15 +251,13 @@ jobs:
                     console.log(`✓ Created story for ${fileName}`);
                     storiesGenerated++;
                     
-                  } else {
-                    console.log(`Skipping non-component file: ${fileName}`);
                   }
                 } catch (error) {
-                  console.log(`Could not process file ${filePath}: ${error.message}`);
+                  console.log(`Error processing ${filePath}: ${error.message}`);
                 }
               }
               
-              // Create a dummy story to ensure there's always at least one story file
+              // Always create a dummy story as fallback
               if (storiesGenerated === 0) {
                 const dummyStoryPath = path.join(SRC_DIR, 'dummy.stories.jsx');
                 const dummyStory = `
@@ -299,7 +273,7 @@ jobs:
           export const Default = {};
           `;
                 await fs.writeFile(dummyStoryPath, dummyStory);
-                console.log('Created dummy story to ensure Storybook has at least one story file');
+                console.log('Created dummy story for fallback');
                 storiesGenerated = 1;
               }
               
@@ -308,7 +282,8 @@ jobs:
               console.log(`Generated ${storiesGenerated} stories`);
               
             } catch (error) {
-              console.error('Error generating stories:', error);
+              console.error(`Error in story generation: ${error.message}`);
+              console.error(error.stack);
               process.exit(1);
             }
           }
@@ -316,12 +291,12 @@ jobs:
           generateStories();
           EOF
           
-          # Install necessary packages for story generation
+          # Install necessary packages
           npm install --no-save glob
           
-          # Run story generator
+          # Run generator with better debugging
           node generate-stories.mjs
-      
+
       - name: Check for generated stories
         run: |
           cd bulak-smart-connect-js
