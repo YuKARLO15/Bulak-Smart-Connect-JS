@@ -297,6 +297,212 @@ jobs:
           # Run generator with better debugging
           node generate-stories.mjs
 
+      - name: Setup Storybook with more aggressive component detection
+        run: |
+          cd bulak-smart-connect-js
+          
+          # Create a more aggressive story generator script
+          cat > generate-stories.mjs << 'EOF'
+          import fs from 'fs/promises';
+          import path from 'path';
+          import { fileURLToPath } from 'url';
+          import { dirname } from 'path';
+          import * as globModule from 'glob';
+          import { promisify } from 'util';
+          
+          const glob = globModule.default || globModule.glob || globModule;
+          const globAsync = promisify(glob);
+          const __filename = fileURLToPath(import.meta.url);
+          const __dirname = dirname(__filename);
+          
+          // Configuration
+          const SRC_DIR = './src';
+          
+          // Function to recursively find files with given extensions
+          async function findFiles(dir, extensions) {
+            let results = [];
+            try {
+              const items = await fs.readdir(dir, { withFileTypes: true });
+              
+              for (const item of items) {
+                const fullPath = path.join(dir, item.name);
+                
+                if (item.isDirectory()) {
+                  // Skip node_modules and test directories
+                  if (item.name === 'node_modules' || item.name === '__tests__') continue;
+                  results = results.concat(await findFiles(fullPath, extensions));
+                } else if (extensions.some(ext => item.name.endsWith(ext)) && 
+                          !item.name.includes('.stories.') && 
+                          !item.name.includes('.test.') && 
+                          !item.name.includes('.spec.')) {
+                  results.push(fullPath);
+                }
+              }
+            } catch (err) {
+              console.error(`Error reading directory ${dir}: ${err.message}`);
+            }
+            
+            return results;
+          }
+          
+          async function generateStories() {
+            try {
+              console.log(`Looking for components in ${path.resolve(SRC_DIR)}`);
+              
+              // Find JS/JSX files using recursive function instead of glob
+              console.log("Finding JS/JSX files recursively...");
+              const ALL_EXTENSIONS = ['.jsx', '.js'];
+              const allFiles = await findFiles(SRC_DIR, ALL_EXTENSIONS);
+              
+              console.log(`Found ${allFiles.length} total JS/JSX files`);
+              if (allFiles.length > 0) {
+                console.log("Sample files found:");
+                allFiles.slice(0, 5).forEach(file => console.log(` - ${file}`));
+              }
+              
+              // Create mocks directory if it doesn't exist
+              const mocksDir = path.join(SRC_DIR, '__mocks__');
+              await fs.mkdir(mocksDir, { recursive: true });
+              
+              // Create AuthContext mock
+              const authContextMockPath = path.join(mocksDir, 'authContext.js');
+              const authContextMock = `
+          // Mock AuthContext for Storybook
+          export const useAuth = () => ({
+            isAuthenticated: true,
+            user: { name: 'John Doe', email: 'john.doe@example.com', roles: ['admin'] },
+            login: () => Promise.resolve({ success: true }),
+            logout: () => {},
+            hasRole: () => true,
+            isAdmin: true
+          });
+          `;
+              await fs.writeFile(authContextMockPath, authContextMock);
+              
+              let componentsFound = 0;
+              let storiesGenerated = 0;
+              
+              // Target specific component directories first
+              const targetDirs = [
+                'AdminBulakSmartConnect',
+                'LandingPageComponents',
+                'LogInComponents',
+                'NavigationComponents',
+                'UserBulakSmartConnect',
+                'components'
+              ];
+              
+              // Proceed with component identification - prioritize specific files
+              const priorityFiles = allFiles.filter(file => {
+                const relativePath = path.relative(SRC_DIR, file);
+                return targetDirs.some(dir => relativePath.startsWith(dir)) || 
+                       path.basename(file) === 'App.jsx';
+              });
+              
+              console.log(`Found ${priorityFiles.length} priority component files to process`);
+              
+              // Process priority files first
+              for (const filePath of priorityFiles) {
+                try {
+                  const content = await fs.readFile(filePath, 'utf8');
+                  const fileName = path.basename(filePath, path.extname(filePath));
+                  
+                  // Skip obvious non-components
+                  if (fileName.toLowerCase().includes('context') || 
+                      fileName.toLowerCase().includes('provider') ||
+                      fileName.toLowerCase().includes('service') ||
+                      fileName.toLowerCase().includes('utils') ||
+                      fileName.toLowerCase().includes('constants')) {
+                    console.log(`Skipping utility file: ${fileName}`);
+                    continue;
+                  }
+                  
+                  componentsFound++;
+                  const relativePath = path.relative(SRC_DIR, path.dirname(filePath));
+                  console.log(`Processing component: ${fileName} in ${relativePath}`);
+                  
+                  // Create story path
+                  const storyFilePath = path.join(
+                    path.dirname(filePath),
+                    `${fileName}.stories.jsx`
+                  );
+                  
+                  // Skip if exists
+                  try {
+                    await fs.access(storyFilePath);
+                    console.log(`Story already exists for ${fileName}, skipping`);
+                    continue;
+                  } catch (error) {
+                    // File doesn't exist, continue
+                  }
+                  
+                  // Determine category
+                  let category = relativePath.split(path.sep)[0] || 'General';
+                  
+                  // Generate story file
+                  const storyTemplate = `import React from 'react';
+          import ${fileName} from './${fileName}';
+          
+          export default {
+            title: '${category}/${fileName}',
+            component: ${fileName},
+            parameters: {
+              componentSubtitle: 'Component from ${relativePath}'
+            }
+          };
+          
+          export const Default = {
+            args: {}
+          };`;
+                  
+                  await fs.writeFile(storyFilePath, storyTemplate);
+                  console.log(`✓ Created story for ${fileName}`);
+                  storiesGenerated++;
+                } catch (error) {
+                  console.log(`Error processing ${filePath}: ${error.message}`);
+                }
+              }
+              
+              // Always create a dummy story as fallback
+              if (storiesGenerated === 0) {
+                const dummyStoryPath = path.join(SRC_DIR, 'dummy.stories.jsx');
+                const dummyStory = `
+          import React from 'react';
+          
+          const Dummy = () => <div>This is a placeholder component to ensure Storybook loads correctly</div>;
+          
+          export default {
+            title: 'Placeholder/Dummy',
+            component: Dummy,
+          };
+          
+          export const Default = {};
+          `;
+                await fs.writeFile(dummyStoryPath, dummyStory);
+                console.log('Created dummy story for fallback');
+                storiesGenerated = 1;
+              }
+              
+              console.log(`✅ Story generation complete!`);
+              console.log(`Found ${componentsFound} components`);
+              console.log(`Generated ${storiesGenerated} stories`);
+              
+            } catch (error) {
+              console.error(`Error in story generation: ${error.message}`);
+              console.error(error.stack);
+              process.exit(1);
+            }
+          }
+          
+          generateStories();
+          EOF
+          
+          # Install necessary packages
+          npm install --no-save glob
+          
+          # Run generator with better debugging
+          node generate-stories.mjs
+
       - name: Check for generated stories
         run: |
           cd bulak-smart-connect-js
