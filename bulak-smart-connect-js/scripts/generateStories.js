@@ -23,7 +23,13 @@ const skipPatterns = [
 const skipFiles = [
   'NewUserInfo.js',
   'ApplicationData.js',
-  'RegularBirth.jsx'
+  'RegularBirth.jsx',
+  'main.jsx',
+  'App.jsx',         // Main app component
+  'index.js',        // Entry point
+  'index.jsx',       // Entry point
+  'vite.config.js',  // Configuration
+  'setupTests.js'    // Test configuration
 ];
 
 // Function to generate the story content
