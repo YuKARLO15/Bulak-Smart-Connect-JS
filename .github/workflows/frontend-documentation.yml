@@ -24,152 +24,20 @@ jobs:
           cache: 'npm'
           cache-dependency-path: 'bulak-smart-connect-js/package-lock.json'
       
-      - name: Install Compodoc
+      - name: Install dependencies
         run: |
           cd bulak-smart-connect-js
-          npm install --save-dev @compodoc/compodoc
+          npm install
       
-      - name: Configure JSDoc comments
+      - name: Build Storybook
         run: |
           cd bulak-smart-connect-js
-          
-          # Create a tsconfig.json file for Compodoc to use with JSX files
-          cat > tsconfig.doc.json << 'EOF'
-          {
-            "compilerOptions": {
-              "outDir": "./dist",
-              "sourceMap": true,
-              "declaration": false,
-              "moduleResolution": "node",
-              "emitDecoratorMetadata": true,
-              "experimentalDecorators": true,
-              "target": "es5",
-              "jsx": "react",
-              "typeRoots": [
-                "node_modules/@types"
-              ],
-              "lib": [
-                "es2017",
-                "dom"
-              ],
-              "allowJs": true
-            },
-            "include": [
-              "src/**/*.js",
-              "src/**/*.jsx"
-            ],
-            "exclude": [
-              "node_modules"
-            ]
-          }
-          EOF
-          
-          # Create theme configuration
-          mkdir -p .compodoc
-          
-          cat > .compodoc/custom-theme.scss << 'EOF'
-          .menu {
-            background: #184a5b;
-          }
-          
-          .menu-item-link.active {
-            background-color: #8DC3A7;
-          }
-          
-          .menu-item-link:hover {
-            background-color: #0d3446;
-          }
-          
-          .navbar-default {
-            background: #184a5b;
-          }
-          
-          .navbar-default .navbar-brand {
-            color: white;
-          }
-          EOF
+          npm run build-storybook -- --output-dir ./frontend-docs
       
-      - name: Generate documentation
-        run: |
-          cd bulak-smart-connect-js
-          npx compodoc -p tsconfig.doc.json \
-            --name="Bulak Smart Connect Components" \
-            --output="./documentation" \
-            --theme="material" \
-            --extTheme="./.compodoc/custom-theme.scss" \
-            --includes="./docs" \
-            --includesName="Guides" \
-            --hideGenerator \
-            --disableSourceCode \
-            --disableCoverage \
-            --disablePrivate \
-            --disableProtected \
-            --disableInternal
-            
-          # Create .nojekyll file to prevent GitHub Pages from ignoring underscore files
-          touch documentation/.nojekyll
-      
-      - name: Create additional documentation
-        run: |
-          cd bulak-smart-connect-js
-          
-          # Create documentation directory for guides
-          mkdir -p docs
-          
-          # Create a welcome page
-          cat > docs/overview.md << 'EOF'
-          # Bulak Smart Connect
-          
-          Welcome to the Bulak Smart Connect component documentation. This documentation site provides information about the React components used in the Bulak Smart Connect application, which serves as the official queuing and information system for the Municipal Civil Registrar of San Ildefonso, Bulacan.
-          
-          ## Design Principles
-          
-          - **User-Centered**: Components focus on ease of use for citizens
-          - **Consistency**: Uniform styling and behavior across the application
-          - **Accessibility**: Components follow WCAG guidelines where possible
-          - **Responsiveness**: Works on desktop and mobile devices
-          
-          ## Color Palette
-          
-          - Primary: #184a5b
-          - Secondary: #8DC3A7
-          - Accent: #e2e381
-          - Background: #ffffff
-          - Text: #333333
-          EOF
-          
-          # Create a components overview page
-          cat > docs/components.md << 'EOF'
-          # Component Overview
-          
-          Bulak Smart Connect is built using a component-based architecture with React. The components are organized into several categories:
-          
-          ## Landing Page Components
-          
-          Components used on the public-facing landing page.
-          
-          ## Navigation Components
-          
-          Components used for navigation throughout the application, including the NavBar and Sidebar.
-          
-          ## User Dashboard Components
-          
-          Components used in the citizen user dashboard.
-          
-          ## Admin Components
-          
-          Components used in the administrative interface.
-          
-          ## Authentication Components
-          
-          Components for login, registration, and authentication.
-          EOF
-      
-      - name: Deploy to GitHub Pages
+      - name: Deploy Storybook to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          folder: bulak-smart-connect-js/documentation
-          target-folder: frontend-docs
+          folder: bulak-smart-connect-js/frontend-docs
           branch: gh-pages
           clean: true
           clean-exclude: |
@@ -252,15 +120,9 @@ jobs:
               </div>
               
               <div class="card">
-                <h2>API Documentation</h2>
-                <p>Backend API documentation generated with Compodoc, providing detailed information about endpoints, services, and models.</p>
-                <a href="api-docs/" class="button">View API Docs</a>
-              </div>
-              
-              <div class="card">
-                <h2>Component Documentation</h2>
-                <p>Frontend component documentation generated with Compodoc, showing components, props, and usage examples.</p>
-                <a href="frontend-docs/" class="button">View Components</a>
+                <h2>Storybook</h2>
+                <p>Interactive frontend component documentation generated with Storybook.</p>
+                <a href="storybook-static/" class="button">View Storybook</a>
               </div>
               
               <div class="footer">
