@@ -96,7 +96,7 @@ jobs:
             --name="Bulak Smart Connect Components" \
             --output="./documentation" \
             --theme="material" \
-            --customTheme="./.compodoc/custom-theme.scss" \
+            --extTheme="./.compodoc/custom-theme.scss" \
             --includes="./docs" \
             --includesName="Guides" \
             --hideGenerator \
