@@ -63,8 +63,11 @@ jobs:
           export default config;
           EOF
           
-          # Create preview.js configuration - using JS not TS
+          # Create preview.js with global decorators for context providers
           cat > .storybook/preview.js << 'EOF'
+          import React from 'react';
+          import { BrowserRouter } from 'react-router-dom';
+
           /** @type {import('@storybook/react').Preview} */
           const preview = {
             parameters: {
@@ -76,12 +79,20 @@ jobs:
                 },
               },
             },
+            // Add global decorators to wrap all stories with necessary providers
+            decorators: [
+              (Story) => (
+                <BrowserRouter>
+                  <Story />
+                </BrowserRouter>
+              ),
+            ],
           };
-          
+
           export default preview;
           EOF
           
-          # Create story generator script with proper indentation
+          # Create story generator script with proper context mocking
           cat > generate-stories.mjs << 'EOF'
           import fs from 'fs/promises';
           import path from 'path';
@@ -103,10 +114,39 @@ jobs:
             try {
               // Find component files
               const componentFiles = await globAsync(`${SRC_DIR}/**/*{${COMPONENT_EXTENSIONS.join(',')}}`, {
-                ignore: ['**/node_modules/**', '**/stories/**', '**/*.stories.*', '**/*.test.*', '**/*.spec.*']
+                ignore: ['**/node_modules/**', '**/stories/**', '**/*.stories.*', '**/*.test.*', '**/*.spec.*', '**/context/**']
               });
               
               console.log(`Found ${componentFiles.length} potential component files`);
+              
+              // Create mocks directory if it doesn't exist
+              const mocksDir = path.join(SRC_DIR, '__mocks__');
+              await fs.mkdir(mocksDir, { recursive: true });
+              
+              // Create AuthContext mock
+              const authContextMockPath = path.join(mocksDir, 'authContext.js');
+              const authContextMock = `
+          // Mock AuthContext for Storybook
+          export const useAuth = () => ({
+            isAuthenticated: true,
+            user: {
+              name: 'John Doe',
+              email: 'john.doe@example.com',
+              roles: ['admin'],
+              defaultRole: 'admin'
+            },
+            loading: false,
+            error: null,
+            login: () => Promise.resolve({ success: true }),
+            logout: () => {},
+            hasRole: (role) => ['admin', 'staff', 'citizen'].includes(role),
+            hasAnyRole: (roles) => roles.some(role => ['admin', 'staff', 'citizen'].includes(role)),
+            isAdmin: true,
+            isStaff: true,
+            isCitizen: true
+          });
+          `;
+              await fs.writeFile(authContextMockPath, authContextMock);
               
               for (const filePath of componentFiles) {
                 try {
@@ -123,6 +163,14 @@ jobs:
                   const fileExt = path.extname(filePath);
                   const relativePath = path.relative(SRC_DIR, path.dirname(filePath));
                   const category = relativePath.split(path.sep)[0] || 'General';
+                  
+                  // Skip non-component files and context files
+                  if (content.includes('createContext') || 
+                      fileName.toLowerCase().includes('context') || 
+                      fileName.toLowerCase().includes('provider')) {
+                    console.log(`Skipping context file: ${fileName}`);
+                    continue;
+                  }
                   
                   // Create story path
                   const storyFilePath = path.join(
@@ -148,9 +196,18 @@ jobs:
                     ? `import ${fileName} from './${fileName}';`
                     : `import { ${fileName} } from './${fileName}';`;
                   
-                  // Create JSX-friendly story template WITHOUT indentation issues
+                  // Check if component uses AuthContext
+                  const usesAuthContext = content.includes('useAuth') || 
+                                        content.includes('AuthContext') || 
+                                        content.includes('AuthProvider');
+                  
+                  const authContextImport = usesAuthContext 
+                    ? "import { useAuth } from '../__mocks__/authContext';\n// Mock the module\njest.mock('../context/AuthContext', () => ({\n  useAuth: () => useAuth()\n}));\n"
+                    : '';
+                  
+                  // Create story template with proper indentation
                   const storyTemplate = `import React from 'react';
-          ${importStatement}
+          ${authContextImport}${importStatement}
           
           /**
            * ${fileName} component from ${relativePath}
@@ -161,16 +218,36 @@ jobs:
             tags: ['autodocs'],
             parameters: {
               componentSubtitle: 'Component from ${relativePath}',
+              // Disable controls for props that would cause errors
+              controls: {
+                exclude: ['navigate', 'location', 'params']
+              }
             },
+            // Add component-specific decorators if needed
+            decorators: [
+              (Story) => (
+                <div style={{ padding: '1rem', maxWidth: '800px', margin: '0 auto' }}>
+                  <Story />
+                </div>
+              )
+            ]
           };
           
-          // Story template
-          const Template = (args) => <${fileName} {...args} />;
-          
-          // Default story
-          export const Default = Template.bind({});
-          Default.args = {
-            // Add default props here
+          // Simple story with minimal props
+          export const Default = {
+            args: {
+              // Add simple props here that won't cause errors
+            },
+            // Add parameters like viewport or backgrounds if needed
+            parameters: {
+              backgrounds: {
+                default: 'light',
+                values: [
+                  { name: 'light', value: '#ffffff' },
+                  { name: 'dark', value: '#333333' }
+                ],
+              },
+            }
           };`;
                   
                   await fs.writeFile(storyFilePath, storyTemplate);
