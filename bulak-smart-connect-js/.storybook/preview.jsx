@@ -4,13 +4,19 @@ import { AuthProvider } from '../src/context/AuthContext';
 
 // Global decorator to wrap all stories in a Router
 export const decorators = [
-  (Story) => (
-    <MemoryRouter>
-      <AuthProvider>
-        <Story />
-      </AuthProvider>
-    </MemoryRouter>
-  ),
+  (Story) => {
+    // Create a mock navigate function for Storybook
+    const mockNavigate = () => console.log('Navigation triggered in Storybook');
+    
+    // Create a wrapper that provides both Router context and the navigate mock
+    return (
+      <MemoryRouter>
+        <AuthProvider>
+          <Story navigate={mockNavigate} />
+        </AuthProvider>
+      </MemoryRouter>
+    );
+  },
 ];
 
 export const parameters = {
