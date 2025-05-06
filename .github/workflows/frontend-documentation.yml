@@ -63,7 +63,7 @@ jobs:
           export default config;
           EOF
           
-          # Create preview.js with global decorators for context providers
+          # Create preview.js WITHOUT JSX syntax
           cat > .storybook/preview.js << 'EOF'
           import React from 'react';
           import { BrowserRouter } from 'react-router-dom';
@@ -81,11 +81,14 @@ jobs:
             },
             // Add global decorators to wrap all stories with necessary providers
             decorators: [
-              (Story) => (
-                <BrowserRouter>
-                  <Story />
-                </BrowserRouter>
-              ),
+              (Story) => {
+                // Use React.createElement instead of JSX
+                return React.createElement(
+                  BrowserRouter,
+                  null,
+                  React.createElement(Story, null)
+                );
+              }
             ],
           };
 
