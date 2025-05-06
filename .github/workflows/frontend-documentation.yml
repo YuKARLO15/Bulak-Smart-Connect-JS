@@ -51,6 +51,7 @@ jobs:
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           folder: bulak-smart-connect-js/frontend-docs
+          target-folder: frontend-docs
           branch: gh-pages
           clean: true
           clean-exclude: |
@@ -136,6 +137,12 @@ jobs:
                 <h2>Storybook</h2>
                 <p>Interactive frontend component documentation generated with Storybook.</p>
                 <a href="frontend-docs/" class="button">View Storybook</a>
+              </div>
+              
+              <div class="card">
+                <h2>API Documentation</h2>
+                <p>Comprehensive API documentation generated with Compodoc.</p>
+                <a href="api-docs/" class="button">View API Docs</a>
               </div>
               
               <div class="footer">
