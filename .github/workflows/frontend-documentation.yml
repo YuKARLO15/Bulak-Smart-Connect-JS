@@ -111,6 +111,16 @@ jobs:
           // Configuration
           const SRC_DIR = './src';
           
+          // Known component directories to prioritize
+          const COMPONENT_DIRS = [
+            'AdminBulakSmartConnect',
+            'LandingPageComponents',
+            'LogInComponents',
+            'NavigationComponents',
+            'UserBulakSmartConnect',
+            'components'
+          ];
+          
           async function generateStories() {
             try {
               console.log(`Looking for components in ${path.resolve(SRC_DIR)}`);
@@ -126,16 +136,20 @@ jobs:
               
               console.log(`Found ${jsxFiles.length} JSX files that could be components`);
               
-              // Also check JS files that might be components
-              const jsFiles = await globAsync(`${SRC_DIR}/**/[A-Z]*.js`, {
-                ignore: ['**/node_modules/**', '**/*.stories.*', '**/*.test.*', '**/*.spec.*', '**/context/*', '**/services/*', '**/utils/*']
+              // Prioritize files in known component directories
+              let priorityFiles = jsxFiles.filter(file => {
+                const relativePath = path.relative(SRC_DIR, file);
+                return COMPONENT_DIRS.some(dir => relativePath.startsWith(dir));
               });
               
-              console.log(`Found ${jsFiles.length} potential component JS files`);
+              console.log(`Found ${priorityFiles.length} priority component files`);
               
-              const allPotentialComponentFiles = [...jsxFiles, ...jsFiles];
+              if (priorityFiles.length === 0) {
+                // Fallback to all JSX files if no priority files found
+                priorityFiles = jsxFiles;
+              }
               
-              // Create mocks directory for auth context and other dependencies
+              // Create mocks directory
               const mocksDir = path.join(SRC_DIR, '__mocks__');
               await fs.mkdir(mocksDir, { recursive: true });
               
@@ -144,11 +158,18 @@ jobs:
               const authContextMock = `
           export const useAuth = () => ({
             isAuthenticated: true,
-            user: { name: 'John Doe', email: 'john@example.com', roles: ['admin'] },
+            user: { 
+              name: 'John Doe', 
+              email: 'john@example.com', 
+              roles: ['admin'],
+              defaultRole: 'admin'
+            },
             login: () => Promise.resolve({ success: true }),
             logout: () => {},
             hasRole: () => true,
-            isAdmin: true
+            isAdmin: true,
+            isStaff: true,
+            isCitizen: true
           });
           `;
               await fs.writeFile(authContextMockPath, authContextMock);
@@ -156,44 +177,24 @@ jobs:
               // Track progress
               let storiesGenerated = 0;
               
+              // Process prioritized components
+              console.log(`Processing ${priorityFiles.length} priority component files`);
+              
               // Generate stories for all potential component files
-              for (const filePath of allPotentialComponentFiles) {
+              for (const filePath of priorityFiles) {
                 try {
                   const content = await fs.readFile(filePath, 'utf8');
                   const fileName = path.basename(filePath, path.extname(filePath));
                   const relativePath = path.relative(SRC_DIR, path.dirname(filePath));
                   
-                  // Skip files that are clearly not components
-                  if (
-                    fileName.toLowerCase().includes('context') || 
-                    fileName.toLowerCase().includes('provider') ||
-                    fileName.toLowerCase().includes('service') ||
-                    fileName.toLowerCase().includes('utils') ||
-                    fileName.toLowerCase().includes('helper') ||
-                    fileName.toLowerCase().includes('constant')
-                  ) {
-                    continue;
-                  }
-                  
-                  // Check for component-like structure - be very lenient!
-                  const isProbablyComponent = content.includes('import React') || 
-                                         content.includes('from "react"') || 
-                                         (content.includes('export') && 
-                                          (content.includes('<') || content.includes('/>')));
-                  
-                  if (!isProbablyComponent) {
-                    continue;
-                  }
-                  
                   console.log(`Processing component: ${fileName} in ${relativePath}`);
                   
-                  // Create story path
+                  // Skip if story already exists
                   const storyFilePath = path.join(
                     path.dirname(filePath),
                     `${fileName}.stories.jsx`
                   );
                   
-                  // Skip if story already exists
                   try {
                     await fs.access(storyFilePath);
                     console.log(`Story already exists for ${fileName}, skipping`);
@@ -213,15 +214,12 @@ jobs:
                     ? `import ${fileName} from './${fileName}';`
                     : `import { ${fileName} } from './${fileName}';`;
                   
-                  // Create a category based on directory structure
-                  const category = relativePath.split(path.sep)[0] || 'General';
-                  
-                  // Generate story file
+                  // Generate story file with improved metadata
                   const storyTemplate = `import React from 'react';
           ${importStatement}
           
           export default {
-            title: '${category}/${fileName}',
+            title: '${relativePath}/${fileName}',
             component: ${fileName},
             parameters: {
               componentSubtitle: 'Component from ${relativePath}'
@@ -236,60 +234,116 @@ jobs:
                   console.log(`✓ Created story for ${fileName}`);
                   storiesGenerated++;
                 } catch (error) {
-                  console.log(`Error processing ${filePath}: ${error.message}`);
+                  console.error(`Error processing ${filePath}: ${error.message}`);
                 }
               }
               
-              // Create a dummy story if no stories were generated
+              // Create a sample button component if no stories were generated
               if (storiesGenerated === 0) {
-                console.log("No components found that match criteria. Creating minimal sample component...");
+                console.log("No components found that match criteria. Creating guaranteed sample component...");
                 
-                // Create a sample component and story to ensure Storybook works
-                const sampleComponentDir = path.join(SRC_DIR, 'stories');
-                await fs.mkdir(sampleComponentDir, { recursive: true });
+                // Create a sample Button component
+                const storiesDir = path.join(SRC_DIR, 'stories');
+                await fs.mkdir(storiesDir, { recursive: true });
                 
-                const sampleComponentPath = path.join(sampleComponentDir, 'SampleButton.jsx');
-                const sampleComponent = `import React from 'react';
+                const buttonPath = path.join(storiesDir, 'Button.jsx');
+                const buttonContent = `
+          import React from 'react';
+          import PropTypes from 'prop-types';
           
-          const SampleButton = ({ label, onClick }) => (
-            <button 
-              onClick={onClick}
-              style={{
-                backgroundColor: '#184a5b',
-                color: 'white',
-                padding: '10px 20px',
-                border: 'none',
-                borderRadius: '4px',
-                cursor: 'pointer'
-              }}
-            >
-              {label || 'Click Me'}
-            </button>
-          );
+          /**
+           * Primary UI component for user interaction
+           */
+          const Button = ({ primary, backgroundColor, size, label, onClick }) => {
+            const mode = primary ? 'primary-button' : 'secondary-button';
+            return (
+              <button
+                type="button"
+                className={['button', \`button--\${size}\`, mode].join(' ')}
+                style={backgroundColor && { backgroundColor }}
+                onClick={onClick}
+              >
+                {label}
+              </button>
+            );
+          };
           
-          export default SampleButton;
+          Button.propTypes = {
+            /**
+             * Is this the principal call to action on the page?
+             */
+            primary: PropTypes.bool,
+            /**
+             * What background color to use
+             */
+            backgroundColor: PropTypes.string,
+            /**
+             * How large should the button be?
+             */
+            size: PropTypes.oneOf(['small', 'medium', 'large']),
+            /**
+             * Button contents
+             */
+            label: PropTypes.string.isRequired,
+            /**
+             * Optional click handler
+             */
+            onClick: PropTypes.func,
+          };
+          
+          Button.defaultProps = {
+            primary: false,
+            size: 'medium',
+            onClick: undefined,
+          };
+          
+          export default Button;
           `;
-                await fs.writeFile(sampleComponentPath, sampleComponent);
+                await fs.writeFile(buttonPath, buttonContent);
                 
-                const sampleStoryPath = path.join(sampleComponentDir, 'SampleButton.stories.jsx');
-                const sampleStory = `import React from 'react';
-          import SampleButton from './SampleButton';
+                const buttonStoryPath = path.join(storiesDir, 'Button.stories.jsx');
+                const buttonStoryContent = `
+          import React from 'react';
+          import Button from './Button';
           
           export default {
-            title: 'Example/SampleButton',
-            component: SampleButton,
+            title: 'Example/Button',
+            component: Button,
             tags: ['autodocs'],
+            argTypes: {
+              backgroundColor: { control: 'color' },
+            },
           };
           
           export const Primary = {
             args: {
-              label: 'Sample Button',
-              onClick: () => alert('Button clicked!')
-            }
+              primary: true,
+              label: 'Button',
+            },
+          };
+          
+          export const Secondary = {
+            args: {
+              label: 'Button',
+            },
+          };
+          
+          export const Large = {
+            args: {
+              size: 'large',
+              label: 'Button',
+            },
+          };
+          
+          export const Small = {
+            args: {
+              size: 'small',
+              label: 'Button',
+            },
           };
           `;
-                await fs.writeFile(sampleStoryPath, sampleStory);
-                console.log("Created sample component and story");
+                await fs.writeFile(buttonStoryPath, buttonStoryContent);
+                console.log("Created guaranteed Button component and story");
                 storiesGenerated = 1;
               }
               
