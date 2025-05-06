@@ -34,6 +34,12 @@ async function processDirectory(directory) {
     const stats = await fs.stat(filePath);
 
     if (stats.isDirectory()) {
+      // Skip the __tests__ directory
+      if (file === '__tests__') {
+        console.log(`Skipping directory: ${filePath}`);
+        continue;
+      }
+
       // Recursively process subdirectories
       await processDirectory(filePath);
     } else {
