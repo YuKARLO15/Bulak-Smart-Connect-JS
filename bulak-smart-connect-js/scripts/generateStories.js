@@ -17,6 +17,7 @@ const skipPatterns = [
   'hooks',
   '.test.',
   '.spec.',
+  'stories',
 ];
 
 // List of filenames to skip
