@@ -34,7 +34,7 @@ jobs:
           cache-dependency-path: 'bsc-js-backend/package-lock.json'
       
       - name: Cache ZAP
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ~/.ZAP
           key: zap-${{ runner.os }}-${{ hashFiles('.github/workflows/api-security.yaml') }}
