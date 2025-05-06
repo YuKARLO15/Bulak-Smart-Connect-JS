@@ -79,7 +79,7 @@ jobs:
           EOF
           
           # Create Styleguidist config file with .cjs extension
-          cat > styleguide.config.js << 'EOF'
+          cat > styleguide.config.cjs << 'EOF'
           const path = require('path');
 
           module.exports = {
