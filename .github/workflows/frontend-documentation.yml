@@ -28,8 +28,8 @@ jobs:
           cd bulak-smart-connect-js
           npm ci
           
-          # Install Storybook and all required packages permanently (without --no-save flag)
-          npm install --save-dev @storybook/react @storybook/vite @storybook/addon-essentials @storybook/addon-links @storybook/addon-interactions @storybook/blocks @vitejs/plugin-react-swc
+          # Install Storybook with correct package names
+          npm install --save-dev @storybook/react @storybook/builder-vite @storybook/addon-essentials @storybook/addon-links @storybook/addon-interactions @storybook/blocks @vitejs/plugin-react-swc
           
       - name: Setup Storybook
         run: |
