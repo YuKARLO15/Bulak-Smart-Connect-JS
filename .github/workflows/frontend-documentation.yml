@@ -81,23 +81,23 @@ jobs:
           export default preview;
           EOF
           
-          # Create story generator script for JSX with correct ES module imports
+          # Create story generator script with proper indentation
           cat > generate-stories.mjs << 'EOF'
           import fs from 'fs/promises';
           import path from 'path';
           import { fileURLToPath } from 'url';
           import { dirname } from 'path';
-          import * as globModule from 'glob';  // Import the entire module, not as default
+          import * as globModule from 'glob';
           import { promisify } from 'util';
           
-          const glob = globModule.default || globModule.glob || globModule;  // Handle different versions
+          const glob = globModule.default || globModule.glob || globModule;
           const globAsync = promisify(glob);
           const __filename = fileURLToPath(import.meta.url);
           const __dirname = dirname(__filename);
           
           // Configuration
           const SRC_DIR = './src';
-          const COMPONENT_EXTENSIONS = ['.jsx', '.js']; // JSX only, no TS
+          const COMPONENT_EXTENSIONS = ['.jsx', '.js'];
           
           async function generateStories() {
             try {
@@ -148,31 +148,30 @@ jobs:
                     ? `import ${fileName} from './${fileName}';`
                     : `import { ${fileName} } from './${fileName}';`;
                   
-                  // Create JSX-friendly story template (no TypeScript)
+                  // Create JSX-friendly story template WITHOUT indentation issues
                   const storyTemplate = `import React from 'react';
-                  ${importStatement}
-
-                  /**
-                  * ${fileName} component from ${relativePath}
-                  */
-                  export default {
-                  title: '${category}/${fileName}',
-                  component: ${fileName},
-                  tags: ['autodocs'],
-                  parameters: {
-                  componentSubtitle: 'Component from ${relativePath}',
-                     },
-                  };              
-
-
-                   // Story template
-                   const Template = (args) => <${fileName} {...args} />;
-
-                  // Default story
-                  export const Default = Template.bind({});
-                  Default.args = {
-                  // Add default props here
-                  };`;
+          ${importStatement}
+          
+          /**
+           * ${fileName} component from ${relativePath}
+           */
+          export default {
+            title: '${category}/${fileName}',
+            component: ${fileName},
+            tags: ['autodocs'],
+            parameters: {
+              componentSubtitle: 'Component from ${relativePath}',
+            },
+          };
+          
+          // Story template
+          const Template = (args) => <${fileName} {...args} />;
+          
+          // Default story
+          export const Default = Template.bind({});
+          Default.args = {
+            // Add default props here
+          };`;
                   
                   await fs.writeFile(storyFilePath, storyTemplate);
                   console.log(`✓ Created story for ${fileName}`);
