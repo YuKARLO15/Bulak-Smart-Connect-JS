@@ -27,7 +27,7 @@ jobs:
         run: |
           cd bulak-smart-connect-js
           npm ci
-          npm install --save-dev @storybook/react @storybook/react-vite @storybook/addon-essentials @storybook/addon-links @storybook/addon-interactions @storybook/blocks @vitejs/plugin-react-swc glob
+          npm install --save-dev @storybook/react @storybook/react-vite @storybook/addon-essentials @storybook/addon-links @storybook/addon-interactions @storybook/blocks @vitejs/plugin-react-swc glob prop-types
       
       - name: Configure Storybook
         run: |
@@ -40,7 +40,7 @@ jobs:
           cat > .storybook/main.js << 'EOF'
           /** @type {import('@storybook/react-vite').StorybookConfig} */
           const config = {
-            stories: ['../src/**/*.mdx', '../src/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
+            stories: ['../src/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
             addons: [
               '@storybook/addon-links',
               '@storybook/addon-essentials',
@@ -51,7 +51,7 @@ jobs:
               options: {},
             },
             docs: {
-              autodocs: 'tag',
+              autodocs: true,
             },
             core: {
               disableTelemetry: true
@@ -67,7 +67,6 @@ jobs:
           import React from 'react';
           import { BrowserRouter } from 'react-router-dom';
 
-          /** @type {import('@storybook/react').Preview} */
           const preview = {
             parameters: {
               actions: { argTypesRegex: "^on[A-Z].*" },
@@ -90,176 +89,27 @@ jobs:
           export default preview;
           EOF
 
-      - name: Generate Component Stories with Improved Detection
+      - name: Create guaranteed stories
         run: |
           cd bulak-smart-connect-js
           
-          # Create an improved story generator script
-          cat > generate-stories.mjs << 'EOF'
-          import fs from 'fs/promises';
-          import path from 'path';
-          import { fileURLToPath } from 'url';
-          import { dirname } from 'path';
-          import * as globModule from 'glob';
-          import { promisify } from 'util';
+          # Create directory for custom stories
+          mkdir -p src/stories
           
-          const glob = globModule.default || globModule.glob || globModule;
-          const globAsync = promisify(glob);
-          const __filename = fileURLToPath(import.meta.url);
-          const __dirname = dirname(__filename);
-          
-          // Configuration
-          const SRC_DIR = './src';
-          
-          // Known component directories to prioritize
-          const COMPONENT_DIRS = [
-            'AdminBulakSmartConnect',
-            'LandingPageComponents',
-            'LogInComponents',
-            'NavigationComponents',
-            'UserBulakSmartConnect',
-            'components'
-          ];
-          
-          async function generateStories() {
-            try {
-              console.log(`Looking for components in ${path.resolve(SRC_DIR)}`);
-              
-              // Debug directory structure
-              const dirs = await fs.readdir(SRC_DIR);
-              console.log(`Found directories in src: ${dirs.join(', ')}`);
-              
-              // Get all JSX files - they're almost certainly components
-              const jsxFiles = await globAsync(`${SRC_DIR}/**/*.jsx`, {
-                ignore: ['**/node_modules/**', '**/*.stories.*', '**/*.test.*', '**/*.spec.*']
-              });
-              
-              console.log(`Found ${jsxFiles.length} JSX files that could be components`);
-              
-              // Prioritize files in known component directories
-              let priorityFiles = jsxFiles.filter(file => {
-                const relativePath = path.relative(SRC_DIR, file);
-                return COMPONENT_DIRS.some(dir => relativePath.startsWith(dir));
-              });
-              
-              console.log(`Found ${priorityFiles.length} priority component files`);
-              
-              if (priorityFiles.length === 0) {
-                // Fallback to all JSX files if no priority files found
-                priorityFiles = jsxFiles;
-              }
-              
-              // Create mocks directory
-              const mocksDir = path.join(SRC_DIR, '__mocks__');
-              await fs.mkdir(mocksDir, { recursive: true });
-              
-              // Create AuthContext mock
-              const authContextMockPath = path.join(mocksDir, 'authContext.js');
-              const authContextMock = `
-          export const useAuth = () => ({
-            isAuthenticated: true,
-            user: { 
-              name: 'John Doe', 
-              email: 'john@example.com', 
-              roles: ['admin'],
-              defaultRole: 'admin'
-            },
-            login: () => Promise.resolve({ success: true }),
-            logout: () => {},
-            hasRole: () => true,
-            isAdmin: true,
-            isStaff: true,
-            isCitizen: true
-          });
-          `;
-              await fs.writeFile(authContextMockPath, authContextMock);
-              
-              // Track progress
-              let storiesGenerated = 0;
-              
-              // Process prioritized components
-              console.log(`Processing ${priorityFiles.length} priority component files`);
-              
-              // Generate stories for all potential component files
-              for (const filePath of priorityFiles) {
-                try {
-                  const content = await fs.readFile(filePath, 'utf8');
-                  const fileName = path.basename(filePath, path.extname(filePath));
-                  const relativePath = path.relative(SRC_DIR, path.dirname(filePath));
-                  
-                  console.log(`Processing component: ${fileName} in ${relativePath}`);
-                  
-                  // Skip if story already exists
-                  const storyFilePath = path.join(
-                    path.dirname(filePath),
-                    `${fileName}.stories.jsx`
-                  );
-                  
-                  try {
-                    await fs.access(storyFilePath);
-                    console.log(`Story already exists for ${fileName}, skipping`);
-                    continue;
-                  } catch (error) {
-                    // File doesn't exist, continue
-                  }
-                  
-                  // Determine if default or named export (best effort)
-                  const hasDefaultExport = content.includes(`export default ${fileName}`) || 
-                                     content.includes('export default function') ||
-                                     content.includes('export default class') ||
-                                     content.includes('export default (') ||
-                                     content.includes('export default');
-                  
-                  const importStatement = hasDefaultExport
-                    ? `import ${fileName} from './${fileName}';`
-                    : `import { ${fileName} } from './${fileName}';`;
-                  
-                  // Generate story file with improved metadata
-                  const storyTemplate = `import React from 'react';
-          ${importStatement}
-          
-          export default {
-            title: '${relativePath}/${fileName}',
-            component: ${fileName},
-            parameters: {
-              componentSubtitle: 'Component from ${relativePath}'
-            }
-          };
-          
-          export const Default = {
-            args: {}
-          };`;
-                  
-                  await fs.writeFile(storyFilePath, storyTemplate);
-                  console.log(`✓ Created story for ${fileName}`);
-                  storiesGenerated++;
-                } catch (error) {
-                  console.error(`Error processing ${filePath}: ${error.message}`);
-                }
-              }
-              
-              // Create a sample button component if no stories were generated
-              if (storiesGenerated === 0) {
-                console.log("No components found that match criteria. Creating guaranteed sample component...");
-                
-                // Create a sample Button component
-                const storiesDir = path.join(SRC_DIR, 'stories');
-                await fs.mkdir(storiesDir, { recursive: true });
-                
-                const buttonPath = path.join(storiesDir, 'Button.jsx');
-                const buttonContent = `
+          # Create Button component (guaranteed to work)
+          cat > src/stories/Button.jsx << 'EOF'
           import React from 'react';
           import PropTypes from 'prop-types';
-          
+
           /**
-           * Primary UI component for user interaction
+           * Basic button component for user interactions
            */
           const Button = ({ primary, backgroundColor, size, label, onClick }) => {
             const mode = primary ? 'primary-button' : 'secondary-button';
             return (
               <button
                 type="button"
-                className={['button', \`button--\${size}\`, mode].join(' ')}
+                className={['button', `button--${size}`, mode].join(' ')}
                 style={backgroundColor && { backgroundColor }}
                 onClick={onClick}
               >
@@ -267,101 +117,127 @@ jobs:
               </button>
             );
           };
-          
+
           Button.propTypes = {
-            /**
-             * Is this the principal call to action on the page?
-             */
             primary: PropTypes.bool,
-            /**
-             * What background color to use
-             */
             backgroundColor: PropTypes.string,
-            /**
-             * How large should the button be?
-             */
             size: PropTypes.oneOf(['small', 'medium', 'large']),
-            /**
-             * Button contents
-             */
             label: PropTypes.string.isRequired,
-            /**
-             * Optional click handler
-             */
             onClick: PropTypes.func,
           };
-          
+
           Button.defaultProps = {
             primary: false,
             size: 'medium',
             onClick: undefined,
           };
-          
+
           export default Button;
-          `;
-                await fs.writeFile(buttonPath, buttonContent);
-                
-                const buttonStoryPath = path.join(storiesDir, 'Button.stories.jsx');
-                const buttonStoryContent = `
+          EOF
+
+          # Create Button story
+          cat > src/stories/Button.stories.jsx << 'EOF'
           import React from 'react';
           import Button from './Button';
-          
+
           export default {
             title: 'Example/Button',
             component: Button,
             tags: ['autodocs'],
             argTypes: {
               backgroundColor: { control: 'color' },
+              onClick: { action: 'clicked' },
             },
           };
-          
+
           export const Primary = {
             args: {
               primary: true,
               label: 'Button',
             },
           };
-          
+
           export const Secondary = {
             args: {
               label: 'Button',
             },
           };
-          
+
           export const Large = {
             args: {
               size: 'large',
               label: 'Button',
             },
           };
-          
+
           export const Small = {
             args: {
               size: 'small',
               label: 'Button',
             },
           };
-          `;
-                await fs.writeFile(buttonStoryPath, buttonStoryContent);
-                console.log("Created guaranteed Button component and story");
-                storiesGenerated = 1;
-              }
-              
-              console.log(`✅ Story generation complete!`);
-              console.log(`Generated ${storiesGenerated} stories`);
-              
-            } catch (error) {
-              console.error(`Error in story generation: ${error.message}`);
-              console.error(error.stack);
-              process.exit(1);
-            }
-          }
-          
-          generateStories();
           EOF
-          
-          # Run the improved generator
-          node generate-stories.mjs
+
+          # Create a direct story for NavBar component (which exists in the codebase)
+          cat > src/NavigationComponents/NavBar.stories.jsx << 'EOF'
+          import React from 'react';
+          import NavBar from './NavBar';
+
+          export default {
+            title: 'Navigation/NavBar',
+            component: NavBar,
+            parameters: {
+              layout: 'fullscreen',
+            }
+          };
+
+          export const Default = {
+            args: {
+              isSidebarOpen: false,
+              setIsSidebarOpen: () => {},
+            }
+          };
+
+          export const WithOpenSidebar = {
+            args: {
+              isSidebarOpen: true,
+              setIsSidebarOpen: () => {},
+            }
+          };
+          EOF
+
+          # Create another direct story for LandingPage component
+          cat > src/LandingPageComponents/LandingPage.stories.jsx << 'EOF'
+          import React from 'react';
+          import LandingPage from './LandingPage';
+
+          export default {
+            title: 'Pages/LandingPage',
+            component: LandingPage,
+            parameters: {
+              layout: 'fullscreen',
+            }
+          };
+
+          export const Default = {};
+          EOF
+
+          # Create a mock for authentication
+          mkdir -p src/__mocks__
+          cat > src/__mocks__/authContext.js << 'EOF'
+          export const useAuth = () => ({
+            isAuthenticated: true,
+            user: { 
+              name: 'John Doe', 
+              email: 'john@example.com', 
+              roles: ['admin']
+            },
+            login: () => Promise.resolve({ success: true }),
+            logout: () => {},
+            hasRole: () => true,
+            isAdmin: true
+          });
+          EOF
 
       - name: Validate stories
         run: |
@@ -375,34 +251,12 @@ jobs:
           if [ -n "$SAMPLE" ]; then
             echo "=== Sample story file content ==="
             cat "$SAMPLE"
-          else
-            echo "No story files found!"
-            # Create fallback story if none exists
-            cat > src/fallback.stories.jsx << 'EOF'
-          import React from 'react';
-          
-          const Fallback = () => (
-            <div style={{ padding: '20px', textAlign: 'center' }}>
-              <h2>No component stories were generated</h2>
-              <p>This is a fallback component to ensure Storybook can build properly.</p>
-            </div>
-          );
-          
-          export default {
-            title: 'Fallback/NoStories',
-            component: Fallback
-          };
-          
-          export const Default = {};
-          EOF
-            echo "Created fallback story"
           fi
 
       - name: Build Storybook
         run: |
           cd bulak-smart-connect-js
           npx storybook build --output-dir storybook-static
-        continue-on-error: false
       
       - name: Add .nojekyll file
         run: |
@@ -520,138 +374,3 @@ jobs:
           folder: doc_hub
           branch: gh-pages
           clean: false
-
-      - name: Fix Storybook configuration and build
-        run: |
-          cd bulak-smart-connect-js
-          
-          # 1. Fix preview.js by replacing JSX with React.createElement
-          cat > .storybook/preview.js << 'EOF'
-          import React from 'react';
-          import { BrowserRouter } from 'react-router-dom';
-
-          /** @type {import('@storybook/react').Preview} */
-          const preview = {
-            parameters: {
-              actions: { argTypesRegex: "^on[A-Z].*" },
-              controls: {
-                matchers: {
-                  color: /(background|color)$/i,
-                  date: /Date$/,
-                },
-              },
-            },
-            decorators: [
-              (Story) => React.createElement(
-                BrowserRouter,
-                null,
-                React.createElement(Story, null)
-              ),
-            ],
-          };
-          
-          export default preview;
-          EOF
-          
-          # 2. Create a simple test story to ensure something works
-          mkdir -p src/stories
-          cat > src/stories/Button.jsx << 'EOF'
-          import React from 'react';
-          import PropTypes from 'prop-types';
-
-          /**
-           * Basic button component for user interactions
-           */
-          const Button = ({ primary, backgroundColor, size, label, onClick }) => {
-            const mode = primary ? 'primary-button' : 'secondary-button';
-            return (
-              <button
-                type="button"
-                className={['button', `button--${size}`, mode].join(' ')}
-                style={backgroundColor && { backgroundColor }}
-                onClick={onClick}
-              >
-                {label}
-              </button>
-            );
-          };
-
-          Button.propTypes = {
-            /**
-             * Is this the principal call to action on the page?
-             */
-            primary: PropTypes.bool,
-            /**
-             * What background color to use
-             */
-            backgroundColor: PropTypes.string,
-            /**
-             * How large should the button be?
-             */
-            size: PropTypes.oneOf(['small', 'medium', 'large']),
-            /**
-             * Button contents
-             */
-            label: PropTypes.string.isRequired,
-            /**
-             * Optional click handler
-             */
-            onClick: PropTypes.func,
-          };
-
-          Button.defaultProps = {
-            primary: false,
-            size: 'medium',
-            onClick: undefined,
-          };
-
-          export default Button;
-          EOF
-
-          cat > src/stories/Button.stories.jsx << 'EOF'
-          import React from 'react';
-          import Button from './Button';
-
-          export default {
-            title: 'Example/Button',
-            component: Button,
-            tags: ['autodocs'],
-            argTypes: {
-              backgroundColor: { control: 'color' },
-              onClick: { action: 'clicked' },
-            },
-          };
-
-          export const Primary = {
-            args: {
-              primary: true,
-              label: 'Button',
-            },
-          };
-
-          export const Secondary = {
-            args: {
-              label: 'Button',
-            },
-          };
-
-          export const Large = {
-            args: {
-              size: 'large',
-              label: 'Button',
-            },
-          };
-
-          export const Small = {
-            args: {
-              size: 'small',
-              label: 'Button',
-            },
-          };
-          EOF
-          
-          # 3. Add missing prop-types dependency
-          npm install --save prop-types
-          
-          # 4. Run storybook build again
-          npx storybook build --output-dir storybook-static
