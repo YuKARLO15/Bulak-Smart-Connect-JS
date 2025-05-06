@@ -6,39 +6,6 @@
   width: 100vw;
 }
 
-  /* Sidebar (keep your existing sidebar styles, or adjust as needed) */
-.admin-walkin-queue-sidebar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 260px;
-  height: 100%;
-  background: #1C4D5A;
-  color: #fff;
-  z-index: 1000;
-  transition: transform 0.3s;
-  transform: translateX(-100%);
-}
-.admin-walkin-queue-sidebar.open {
-  transform: translateX(0);
-}
-.admin-walkin-queue-sidebar.closed {
-  transform: translateX(-100%);
-}
-.admin-walkin-queue-sidebar-toggle {
-  position: absolute;
-  top: 12px;
-  right: 16px;
-  background: none;
-  border: none;
-  color: #fff;
-  font-size: 2rem;
-  cursor: pointer;
-}
-.admin-walkin-queue-sidebar-user {
-  margin-top: 56px;
-  padding: 16px;
-}
 .admin-walkin-queue-user-info {
   text-align: left;
 }

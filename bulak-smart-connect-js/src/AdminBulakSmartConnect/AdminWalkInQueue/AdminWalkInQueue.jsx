@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './AdminWalkInQueue.css';
+import NavBar from '../../NavigationComponents/NavSide';
 
 const AdminWalkInQueue = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -8,7 +9,7 @@ const AdminWalkInQueue = () => {
   const currentQueue = '';
   const nextQueue = '';
   const totalQueues = 0;
-
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const getDetails = () => {
     navigate('/AdminWalkInDetails');
   };
@@ -32,31 +33,7 @@ const AdminWalkInQueue = () => {
       </div>
 
       {/* Sidebar */}
-      <div className={`admin-walkin-queue-sidebar${sidebarOpen ? ' open' : ''}`}>
-        <div
-          className="admin-walkin-queue-sidebar-toggle"
-          onClick={() => setSidebarOpen(false)}
-        >
-          ×
-        </div>
-        <div className="admin-walkin-queue-sidebar-user">
-          <div className="admin-walkin-queue-user-info">
-            <div className="admin-walkin-queue-user-name">[USERNAME]</div>
-            <div className="admin-walkin-queue-user-email">user@email.com</div>
-          </div>
-        </div>
-        <nav className="admin-walkin-queue-sidebar-nav">
-          <Link to="/admin" className="admin-walkin-queue-nav-item">Dashboard</Link>
-          <Link to="/admin/appointments" className="admin-walkin-queue-nav-item">Appointments</Link>
-          <Link to="/admin/walkin" className="admin-walkin-queue-nav-item active">Walk - In Number</Link>
-          <Link to="/admin/documents" className="admin-walkin-queue-nav-item">Document Application</Link>
-          <Link to="/admin/account" className="admin-walkin-queue-nav-item">Account</Link>
-          <Link to="/admin/settings" className="admin-walkin-queue-nav-item">Settings</Link>
-        </nav>
-        <div className="admin-walkin-queue-sidebar-footer">
-          <button className="admin-walkin-queue-logout-btn">Log Out</button>
-        </div>
-      </div>
+      <NavBar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
 
       {/* Main Content */}
       <div className="admin-walkin-queue-main">
