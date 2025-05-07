@@ -1,8 +1,13 @@
-# Bulak LGU Smart Connect: Information and Queuing Management System
+<div align="center">
+  <img src="https://github.com/YuKARLO15/Bulak-Smart-Connect-JS/blob/main/bulak-smart-connect-js/src/LandingPageComponents/LandingPageAssets/BulakLGULogo.png?raw=true" width="20%" />
+<h2>Bulak LGU Smart Connect</h2>
+<p>Information and Queuing Management System</p>
+</div>
 
 ## Technology Stack
 
 ### Frontend
+
 - **React** - UI library for building component-based interfaces
 - **Vite** - Fast build tool and development environment
 - **Storybook** - Component documentation and UI development environment
@@ -10,12 +15,14 @@
 - **Axios** - For API requests
 
 ### Backend
+
 - **NestJS** - Progressive Node.js framework for server-side applications
 - **TypeORM** - ORM for database interactions
 - **JWT** - For secure authentication
 - **MySQL** - Primary database
 
 ### DevOps & Documentation
+
 - **GitHub Actions** - CI/CD workflows for testing and deployment
 - **Storybook** - Component documentation
 - **Compodoc** - API documentation
@@ -28,20 +35,26 @@
 
 ## How to Install (Frontend)
 
-cd bulak-smart-connect-js </br>
-npm install (optional) </br>
-npm run dev </br>
+```bash
+cd bulak-smart-connect-js
+npm install # (optional)
+npm run dev
+```
 
 ## How to Install (Backend)
 
-cd bsc-js-backend </br>
-npm install or npm i -g @nestjs/cli (optional) </br>
-npm run start </br>
+```bash
+cd bsc-js-backend
+npm install # or
+npm i -g @nestjs/cli # (optional)
+npm run start
+```
 
-Test at http://localhost:3000/ </br>
+Test at [http://localhost:3000/](http://localhost:3000/)
 
 ## TypeORM Migrations for Production
 
+```bash
 #Install TypeORM CLI </br>
 npm install -g typeorm </br>
 
@@ -50,24 +63,31 @@ typeorm migration:generate -n CreateUserRolesStructure </br>
 
 #Apply migrations </br>
 typeorm migration:run </br>
+```
 
-# Complementary Instructions After Revisions
-## MySQL Setup
+## Complementary Instructions After Revisions
 
-1. Download and install MySQL Installer from https://dev.mysql.com/downloads/installer/
-- or https://dev.mysql.com/downloads/workbench/ </br>
-2. During installation, select: </br>
-- MySQL Server </br>
-- MySQL Workbench </br>
-- MySQL Shell </br>
-- Connector/J </br>
-- I selected all though </br>
-3. Configure MySQL Server with these settings: </br>
-- Authentication Method: Use Strong Password Encryption </br>
-- Root Password: [create a secure password] </br>
-4. Launch MySQL Workbench </br>
-5. Create a new database: </br>
+### MySQL Setup
 
+1. Download and install MySQL Installer from [https://dev.mysql.com/downloads/installer/](https://dev.mysql.com/downloads/installer/) or [https://dev.mysql.com/downloads/workbench/](https://dev.mysql.com/downloads/workbench/)
+
+2. During installation, select:
+
+- MySQL Server
+- MySQL Workbench
+- MySQL Shell
+- Connector/J
+
+> I selected all though
+
+3. Configure MySQL Server with these settings:
+
+- Authentication Method: Use Strong Password Encryption
+- Root Password: `[create a secure password]`
+4. Launch MySQL Workbench
+5. Create a new database:
+
+```sql
 CREATE DATABASE bulak_smart_connect; </br>
 USE bulak_smart_connect; </br>
 
@@ -156,94 +176,63 @@ WHERE u.email = 'superadmin@example.com'; </br>
 UPDATE users u JOIN roles r ON r.name = 'staff' </br>
 SET u.default_role_id = r.id </br>
 WHERE u.email = 'staff@example.com'; </br>
+```
 
-Note: You can also import the database from the folder "database" </br>
-Export it if you make any changes on the database and/or to ensure we have a backup to match the proper database on the latest iterations </br>
-Also ensure there is no personal information on the database before you export it, for our safety. Optionally, you can just export it without the data, only the schema. </br>
+> [!note]
+> You can also import the database from the folder "database" </br>
+> Export it if you make any changes on the database and/or to ensure we have a backup to match the proper database on the latest iterations </br>
+> Also ensure there is no personal information on the database before you export it, for our safety. Optionally, you can just export it without the data, only the schema.
 
 ## Environment Setup
 
-Create a .env file in the bsc-js-backend directory with: </br>
+Create a `.env` file in the bsc-js-backend directory with:
 
-DB_HOST=localhost </br>
-DB_PORT=3306 </br>
-DB_USERNAME=root </br>
-DB_PASSWORD=your_password </br>
-DB_NAME=bulak_smart_connect </br>
-JWT_SECRET=your_jwt_secret_key </br>
+```bash
+DB_HOST=localhost
+DB_PORT=3306
+DB_USERNAME=root
+DB_PASSWORD=your_password
+DB_NAME=bulak_smart_connect
+JWT_SECRET=your_jwt_secret_key
+```
 
-Generate a secure JWT secret using: </br>
+Generate a secure JWT secret using:
 
-node -e "console.log(require('crypto').randomBytes(64).toString('hex'))" </br>
+```bash
+node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"
+```
 
 Optionally, you can retrieve the env file from our secure channel and put it in the bsc-js-backend directory </br>
 
 ## XAMPP Setup (Alternative to MySQL Installer/Optional)
 
-If you prefer using XAMPP instead of MySQL Installer: </br>
+If you prefer using XAMPP instead of MySQL Installer:
 
-1. Download and install XAMPP from https://www.apachefriends.org/ </br>
-2. Start the MySQL and Apache services from XAMPP Control Panel </br>
-3. Open phpMyAdmin at http://localhost/phpmyadmin </br>
-4. Create database and tables as described in the MySQL Setup section </br>
-5. Note that XAMPP uses MariaDB instead of MySQL, but this is compatible with the provided instructions </br>
+1. Download and install XAMPP from https://www.apachefriends.org/
+2. Start the MySQL and Apache services from XAMPP Control Panel
+3. Open phpMyAdmin at http://localhost/phpmyadmin
+4. Create database and tables as described in the MySQL Setup section
+5. Note that XAMPP uses MariaDB instead of MySQL, but this is compatible with the provided instructions
 
 ## New Ways to Run Project
 
-cd bulak-smart-connect-js </br>
-npm run dev            # Run React and NestJS concurrently </br>
-npm run start-frontend # Run React only </br>
-npm run start-backend  # Run NestJS only </br>
-npm run build          # Vite build </br>
-npm run lint           # ESLint </br>
-npm run preview        # Vite preview </br>
+```bash
+cd bulak-smart-connect-js
+npm run dev            # Run React and NestJS concurrently
+npm run start-frontend # Run React only
+npm run start-backend  # Run NestJS only
+npm run build          # Vite build
+npm run lint           # ESLint
+npm run preview        # Vite preview
+```
 
-For more backend options: </br>
+For more backend options:
 
-cd bsc-js-backend </br>
-npm run start          # Start NestJS normally </br>
-npm run start:dev      # Start NestJS in development mode </br>
-
-# Old Instructions (Archived)
-## Firebase Tools (Firebase Emulator)
-
-npm install -g firebase-tools (can be skipped) </br>
-cd bsc-js-backend </br>
-firebase login </br>
-firebase init emulators or firebase init (can be skipped) </br>
-firebase emulators:start </br>
-
-Test at http://127.0.0.1:4000/ </br>
-
-install Java JDK from https://www.java.com/en/download/ and https://download.oracle.com/java/23/latest/jdk-23_windows-x64_bin.exe or https://www.oracle.com/java/technologies/downloads/ </br>
-
-## serviceAccountKey
-
-serviceAccountKey.json was ignored on git so if needed, just get it on our secure channel and put it on bsc-js-backend\src\config </br>
-
-## npm run dev
-
-npm run dev on the frontend folder now runs concurrently, meaning React, NestJs, & Firebase Emulator runs simultaneously </br>
-
-If you want to run it on its default behavior, go to package.json on the folder, C:\Users\YuKARLO15\Desktop\Programming_Codes\Bulak-Smart-Connect-JS\bulak-smart-connect-js and change the dev under the scripts into "dev": "vite", </br>
-
-## New Ways to Run Project (Mostly on Frontend Folder)
-
-cd bulak-smart-connect-js </br>
-npm run dev: will run React, NestJS (0n Dev Mode), and Firebase Emulator concurrently </br>
-npm run start-frontend: will run React only </br>
-npm run start-backend: will run NestJS (On Dev Mode) only </br>
-npm run start-emulators: will run Firebase Emulators only </br>
-npm run build: vite build </br>
-npm run lint: eslint </br>
-npm run preview: vite preview </br></br>
-To further see other options, just enter "npm run" to see options for React and Concurrently</br>
-
-For more options to run (mostly for Backend): </br>
-cd bsc-js-backend </br>
-npm run start: to start NestJS normally </br>
-firebase emulators:start: to start Firebase emulator </br>
-To further see other options, just enter "npm run" to see options for NestJS or "firebase" to see options for Firebase. </br>
+```bash
+cd bsc-js-backend
+npm run start          # Start NestJS normally
+npm run start:dev      # Start NestJS in development mode
+```
 
 # Authors
 
