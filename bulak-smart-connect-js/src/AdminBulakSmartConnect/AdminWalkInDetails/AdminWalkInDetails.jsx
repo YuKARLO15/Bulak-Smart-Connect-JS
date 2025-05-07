@@ -49,10 +49,7 @@ const AdminWalkInDetails = () => {
                 <span className="admin-walkin-details-label">Phone Number:</span>
                 <div className="admin-walkin-details-value">{phoneNumber}</div>
               </div>
-              <div>
-                <span className="admin-walkin-details-label">Appointment Time:</span>
-                <div className="admin-walkin-details-value">{appointmentTime}</div>
-              </div>
+            
             </div>
             <div className="admin-walkin-details-col">
               <div>
@@ -69,10 +66,7 @@ const AdminWalkInDetails = () => {
                 <span className="admin-walkin-details-label">Middle Initial:</span>
                 <div className="admin-walkin-details-value">{middleInitial}</div>
               </div>
-              <div>
-                <span className="admin-walkin-details-label">Appointment Date:</span>
-                <div className="admin-walkin-details-value">{appointmentDate}</div>
-              </div>
+              
             </div>
           </div>
           <div className="admin-walkin-details-actions">

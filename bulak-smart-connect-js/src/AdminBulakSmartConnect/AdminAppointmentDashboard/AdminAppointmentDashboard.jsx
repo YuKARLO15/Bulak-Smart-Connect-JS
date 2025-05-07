@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import './AdminAppointmentDashboard.css';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import NavBar from '../../NavigationComponents/NavSide';
+
 
 const AdminAppointmentDashboard = () => {
   // Empty data arrays
@@ -70,44 +72,11 @@ const AdminAppointmentDashboard = () => {
   ];
   const monthName = monthNames[currentMonth.getMonth()];
   const year = currentMonth.getFullYear();
-
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  
   return (
     <div className="admin-appointment-dashboard">
-      {/* Side Nav */}
-      <div className={`admin-appointment-dashboard-side-nav${navOpen ? ' open' : ''}`}>
-        <button
-          className="admin-appointment-dashboard-close-nav"
-          onClick={() => setNavOpen(false)}
-        >
-          &times;
-        </button>
-        <nav>
-          <ul>
-            <li>
-              <Link to="/admin" onClick={() => setNavOpen(false)}>Dashboard</Link>
-            </li>
-            <li>
-              <Link to="/AdminAppointmentDashboard" onClick={() => setNavOpen(false)}>Appointments</Link>
-            </li>
-            <li>
-              <Link to="/AdminWalkInQueue" onClick={() => setNavOpen(false)}>Walk-In Number</Link>
-            </li>
-            <li>
-              <Link to="/ApplicationAdmin" onClick={() => setNavOpen(false)}>Document Application</Link>
-            </li>
-            <li>
-              <Link to="/admin/account" onClick={() => setNavOpen(false)}>Account</Link>
-            </li>
-            <li>
-              <Link to="/admin/settings" onClick={() => setNavOpen(false)}>Settings</Link>
-            </li>
-            <li>
-              <Link to="/logout" onClick={() => setNavOpen(false)}>Log Out</Link>
-            </li>
-          </ul>
-        </nav>
-      </div>
-
+      <NavBar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
       {/* Top Navigation Bar */}
       <div className="admin-appointment-dashboard-header">
         <button
