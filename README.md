@@ -55,14 +55,14 @@ Test at [http://localhost:3000/](http://localhost:3000/)
 ## TypeORM Migrations for Production
 
 ```bash
-#Install TypeORM CLI </br>
-npm install -g typeorm </br>
+#Install TypeORM CLI
+npm install -g typeorm
 
-#Generate a migration after making entity changes </br>
-typeorm migration:generate -n CreateUserRolesStructure </br>
+#Generate a migration after making entity changes
+typeorm migration:generate -n CreateUserRolesStructure
 
-#Apply migrations </br>
-typeorm migration:run </br>
+#Apply migrations
+typeorm migration:run
 ```
 
 ## Complementary Instructions After Revisions
@@ -88,99 +88,99 @@ typeorm migration:run </br>
 5. Create a new database:
 
 ```sql
-CREATE DATABASE bulak_smart_connect; </br>
-USE bulak_smart_connect; </br>
+CREATE DATABASE bulak_smart_connect; 
+USE bulak_smart_connect; 
 
--- Create users table </br>
-CREATE TABLE users ( </br>
-  id INT AUTO_INCREMENT PRIMARY KEY, </br>
-  email VARCHAR(255) NOT NULL UNIQUE, </br>
-  password VARCHAR(255) NOT NULL, </br>
-  name VARCHAR(255) NOT NULL, </br>
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP </br>
-); </br>
+-- Create users table 
+CREATE TABLE users ( 
+  id INT AUTO_INCREMENT PRIMARY KEY, 
+  email VARCHAR(255) NOT NULL UNIQUE, 
+  password VARCHAR(255) NOT NULL, 
+  name VARCHAR(255) NOT NULL, 
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP 
+); 
 
--- Create a test user (password: password123) </br>
-INSERT INTO users (email, password, name) </br>
-VALUES ('test@example.com', '$2b$10$mExcKUyHurlq1zNDNos9LOXbtUJZuvIKybmHr/BngC6ZamAjz1ohS', 'Test User'); </br>
+-- Create a test user (password: password123) 
+INSERT INTO users (email, password, name) 
+VALUES ('test@example.com', '$2b$10$mExcKUyHurlq1zNDNos9LOXbtUJZuvIKybmHr/BngC6ZamAjz1ohS', 'Test User'); 
 
--- Add roles table </br>
-CREATE TABLE `roles` ( </br>
-  `id` int NOT NULL AUTO_INCREMENT, </br>
-  `name` varchar(50) NOT NULL, </br>
-  `description` varchar(255), </br>
-  PRIMARY KEY (`id`), </br>
-  UNIQUE KEY `IDX_roles_name` (`name`) </br>
-); </br>
+-- Add roles table 
+CREATE TABLE `roles` ( 
+  `id` int NOT NULL AUTO_INCREMENT, 
+  `name` varchar(50) NOT NULL, 
+  `description` varchar(255), 
+  PRIMARY KEY (`id`), 
+  UNIQUE KEY `IDX_roles_name` (`name`) 
+); 
 
--- Insert default roles </br>
-INSERT INTO `roles` (name, description) VALUES </br>
-('super_admin', 'Has all permissions and can manage other admins'), </br>
-('admin', 'Can manage staff and citizens'), </br>
-('staff', 'Can process applications and manage citizen requests'), </br>
-('citizen', 'Regular user of the system'); </br>
+-- Insert default roles 
+INSERT INTO `roles` (name, description) VALUES 
+('super_admin', 'Has all permissions and can manage other admins'), 
+('admin', 'Can manage staff and citizens'), 
+('staff', 'Can process applications and manage citizen requests'), 
+('citizen', 'Regular user of the system'); 
 
--- Add user_roles table for role assignment </br>
-CREATE TABLE `user_roles` ( </br>
-  `user_id` int NOT NULL, </br>
-  `role_id` int NOT NULL, </br>
-  PRIMARY KEY (`user_id`, `role_id`), </br>
-  FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE, </br>
-  FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`) ON DELETE CASCADE </br>
-); </br>
+-- Add user_roles table for role assignment 
+CREATE TABLE `user_roles` ( 
+  `user_id` int NOT NULL, 
+  `role_id` int NOT NULL, 
+  PRIMARY KEY (`user_id`, `role_id`), 
+  FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE, 
+  FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`) ON DELETE CASCADE 
+); 
 
--- Add a default role column to users table for quick access </br>
-ALTER TABLE `users` ADD COLUMN `default_role_id` int; </br>
-ALTER TABLE `users` ADD CONSTRAINT `fk_users_roles` FOREIGN KEY (`default_role_id`) REFERENCES `roles` (`id`); </br>
+-- Add a default role column to users table for quick access 
+ALTER TABLE `users` ADD COLUMN `default_role_id` int; 
+ALTER TABLE `users` ADD CONSTRAINT `fk_users_roles` FOREIGN KEY (`default_role_id`) REFERENCES `roles` (`id`); 
 
--- Update existing users to be citizens by default </br>
-UPDATE `users` SET `default_role_id` = (SELECT id FROM roles WHERE name = 'citizen'); </br>
+-- Update existing users to be citizens by default 
+UPDATE `users` SET `default_role_id` = (SELECT id FROM roles WHERE name = 'citizen'); 
 
--- Create a test admin (password: admin123) </br>
-INSERT INTO users (email, password, name) </br>
-VALUES ('admin@example.com', '$2b$10$oFpTU0U73YZPA.szNm2UHe22GtJY6k3yrGi2qa3txYzOD7EG2h.hq', 'Admin User'); </br>
+-- Create a test admin (password: admin123) 
+INSERT INTO users (email, password, name) 
+VALUES ('admin@example.com', '$2b$10$oFpTU0U73YZPA.szNm2UHe22GtJY6k3yrGi2qa3txYzOD7EG2h.hq', 'Admin User'); 
 
--- Create test super admin </br>
-INSERT INTO users (email, password, name)  </br>
-VALUES ('superadmin@example.com', '$2b$10$oFpTU0U73YZPA.szNm2UHe22GtJY6k3yrGi2qa3txYzOD7EG2h.hq', 'Super Admin User'); </br>
+-- Create test super admin 
+INSERT INTO users (email, password, name)  
+VALUES ('superadmin@example.com', '$2b$10$oFpTU0U73YZPA.szNm2UHe22GtJY6k3yrGi2qa3txYzOD7EG2h.hq', 'Super Admin User'); 
 
--- Create test staff </br>
-INSERT INTO users (email, password, name)  </br>
-VALUES ('staff@example.com', '$2b$10$oFpTU0U73YZPA.szNm2UHe22GtJY6k3yrGi2qa3txYzOD7EG2h.hq', 'Staff User'); </br>
+-- Create test staff 
+INSERT INTO users (email, password, name)  
+VALUES ('staff@example.com', '$2b$10$oFpTU0U73YZPA.szNm2UHe22GtJY6k3yrGi2qa3txYzOD7EG2h.hq', 'Staff User'); 
 
--- Assign appropriate roles </br>
-INSERT INTO user_roles (user_id, role_id) </br>
-SELECT u.id, r.id </br>
-FROM users u, roles r </br>
-WHERE u.email = 'admin@example.com' AND r.name = 'admin'; </br>
+-- Assign appropriate roles 
+INSERT INTO user_roles (user_id, role_id) 
+SELECT u.id, r.id 
+FROM users u, roles r 
+WHERE u.email = 'admin@example.com' AND r.name = 'admin'; 
 
-INSERT INTO user_roles (user_id, role_id) </br>
-SELECT u.id, r.id </br>
-FROM users u, roles r </br>
-WHERE u.email = 'superadmin@example.com' AND r.name = 'super_admin'; </br>
+INSERT INTO user_roles (user_id, role_id) 
+SELECT u.id, r.id 
+FROM users u, roles r 
+WHERE u.email = 'superadmin@example.com' AND r.name = 'super_admin'; 
 
-INSERT INTO user_roles (user_id, role_id) </br>
-SELECT u.id, r.id </br>
-FROM users u, roles r </br>
-WHERE u.email = 'staff@example.com' AND r.name = 'staff'; </br>
+INSERT INTO user_roles (user_id, role_id) 
+SELECT u.id, r.id 
+FROM users u, roles r 
+WHERE u.email = 'staff@example.com' AND r.name = 'staff'; 
 
--- Set default roles </br>
-UPDATE users u JOIN roles r ON r.name = 'admin' </br>
-SET u.default_role_id = r.id </br>
-WHERE u.email = 'admin@example.com'; </br>
+-- Set default roles 
+UPDATE users u JOIN roles r ON r.name = 'admin' 
+SET u.default_role_id = r.id 
+WHERE u.email = 'admin@example.com'; 
 
-UPDATE users u JOIN roles r ON r.name = 'super_admin' </br>
-SET u.default_role_id = r.id </br>
-WHERE u.email = 'superadmin@example.com'; </br>
+UPDATE users u JOIN roles r ON r.name = 'super_admin' 
+SET u.default_role_id = r.id 
+WHERE u.email = 'superadmin@example.com'; 
 
-UPDATE users u JOIN roles r ON r.name = 'staff' </br>
-SET u.default_role_id = r.id </br>
-WHERE u.email = 'staff@example.com'; </br>
+UPDATE users u JOIN roles r ON r.name = 'staff' 
+SET u.default_role_id = r.id 
+WHERE u.email = 'staff@example.com'; 
 ```
 
 > [!note]
-> You can also import the database from the folder "database" </br>
-> Export it if you make any changes on the database and/or to ensure we have a backup to match the proper database on the latest iterations </br>
+> You can also import the database from the folder "database" 
+> Export it if you make any changes on the database and/or to ensure we have a backup to match the proper database on the latest iterations 
 > Also ensure there is no personal information on the database before you export it, for our safety. Optionally, you can just export it without the data, only the schema.
 
 ## Environment Setup
@@ -202,7 +202,7 @@ Generate a secure JWT secret using:
 node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"
 ```
 
-Optionally, you can retrieve the env file from our secure channel and put it in the bsc-js-backend directory </br>
+Optionally, you can retrieve the env file from our secure channel and put it in the bsc-js-backend directory 
 
 ## XAMPP Setup (Alternative to MySQL Installer/Optional)
 
