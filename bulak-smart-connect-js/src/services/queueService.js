@@ -33,8 +33,14 @@ export const queueService = {
   },
   
   createQueue: async (queueData) => {
-    const response = await axios.post(`${API_URL}/queue`, queueData);
-    return response.data;
+    try {
+      console.log('Creating queue with data:', queueData); // For debugging
+      const response = await axios.post(`${API_URL}/queue`, queueData);
+      return response.data;
+    } catch (error) {
+      console.error('Error creating queue:', error);
+      throw error;
+    }
   },
 
   checkQueueExists: async (queueId) => {
