@@ -230,20 +230,27 @@ jobs:
     - name: Verify test user in database
       run: |
         echo "Checking test user in database:"
-        # Store the hash from the database in a variable
         DB_HASH=$(mysql -h 127.0.0.1 -uroot -proot -s -N -e "SELECT password FROM bulak_smart_connect_test.users WHERE email='test@example.com';")
         
         echo "Database hash: $DB_HASH"
         
-        # Test bcrypt verification with the database hash
+        # Correctly pass the environment variable BEFORE the node command
         cd bsc-js-backend
-        node -e "const bcrypt = require('bcrypt'); 
+        DB_HASH="$DB_HASH" node -e "
+          const bcrypt = require('bcrypt'); 
           const stored = process.env.DB_HASH; 
+          console.log('Hash from environment:', stored);
           const plain = 'password123';
+          
+          if (!stored) {
+            console.error('ERROR: DB_HASH environment variable is empty');
+            process.exit(1);
+          }
+          
           bcrypt.compare(plain, stored).then(result => {
             console.log('Bcrypt verification result:', result);
             if (!result) process.exit(1);
-          });" DB_HASH="$DB_HASH"
+          });"
     
     - name: Test login endpoint
       run: |
