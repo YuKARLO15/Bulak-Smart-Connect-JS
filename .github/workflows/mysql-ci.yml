@@ -143,6 +143,10 @@ jobs:
     
     - name: Set up database with test user
       run: |
+        # Generate a fresh hash using Node.js
+        HASH=$(cd bsc-js-backend && node -e "const bcrypt = require('bcrypt'); bcrypt.hash('password123', 10).then(hash => console.log(hash))")
+        
+        # Use the generated hash in the SQL command
         mysql -h 127.0.0.1 -uroot -proot -e "
         USE bulak_smart_connect_test;
         
@@ -184,9 +188,9 @@ jobs:
           ('staff', 'Can process applications'),
           ('citizen', 'Regular user');
         
-        -- Insert test user with known password hash for 'password123'
+        -- Insert test user with properly escaped hash
         INSERT INTO users (email, password, name, default_role_id) 
-        VALUES ('test@example.com', '$2b$10$Fv79BPbJ3qNpwM427v7hYuXrYTCZfGbcEGm2iFgiYVCV0vKxXGsm2', 'Test User', 
+        VALUES ('test@example.com', \"$HASH\", 'Test User', 
                (SELECT id FROM roles WHERE name = 'citizen'));
         
         -- Assign citizen role to test user
