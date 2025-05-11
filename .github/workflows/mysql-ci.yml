@@ -230,17 +230,20 @@ jobs:
     - name: Verify test user in database
       run: |
         echo "Checking test user in database:"
-        mysql -h 127.0.0.1 -uroot -proot -e "SELECT id, email, password FROM bulak_smart_connect_test.users WHERE email='test@example.com';"
+        # Store the hash from the database in a variable
+        DB_HASH=$(mysql -h 127.0.0.1 -uroot -proot -s -N -e "SELECT password FROM bulak_smart_connect_test.users WHERE email='test@example.com';")
         
-        # Test bcrypt verification directly with Node.js
+        echo "Database hash: $DB_HASH"
+        
+        # Test bcrypt verification with the database hash
         cd bsc-js-backend
         node -e "const bcrypt = require('bcrypt'); 
-          const stored = '$2b$10$Fv79BPbJ3qNpwM427v7hYuXrYTCZfGbcEGm2iFgiYVCV0vKxXGsm2'; 
+          const stored = process.env.DB_HASH; 
           const plain = 'password123';
           bcrypt.compare(plain, stored).then(result => {
             console.log('Bcrypt verification result:', result);
             if (!result) process.exit(1);
-          });"
+          });" DB_HASH="$DB_HASH"
     
     - name: Test login endpoint
       run: |
