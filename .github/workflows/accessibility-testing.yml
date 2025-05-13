@@ -23,7 +23,7 @@ jobs:
         run: |
           cd bulak-smart-connect-js
           npm ci
-          npm install -D axe-core jest-axe
+          npm install -D axe-core jest-axe @testing-library/react jest-environment-jsdom jest-html-reporter @babel/core @babel/preset-env @babel/preset-react babel-jest
       
       - name: Build
         run: |

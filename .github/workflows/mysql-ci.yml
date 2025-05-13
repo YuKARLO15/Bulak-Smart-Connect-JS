@@ -143,6 +143,10 @@ jobs:
     
     - name: Set up database with test user
       run: |
+        # Generate a fresh hash using Node.js
+        HASH=$(cd bsc-js-backend && node -e "const bcrypt = require('bcrypt'); bcrypt.hash('password123', 10).then(hash => console.log(hash))")
+        
+        # Use the generated hash in the SQL command
         mysql -h 127.0.0.1 -uroot -proot -e "
         USE bulak_smart_connect_test;
         
@@ -184,9 +188,9 @@ jobs:
           ('staff', 'Can process applications'),
           ('citizen', 'Regular user');
         
-        -- Insert test user with known password hash for 'password123'
+        -- Insert test user with properly escaped hash
         INSERT INTO users (email, password, name, default_role_id) 
-        VALUES ('test@example.com', '$2b$10$Fv79BPbJ3qNpwM427v7hYuXrYTCZfGbcEGm2iFgiYVCV0vKxXGsm2', 'Test User', 
+        VALUES ('test@example.com', \"$HASH\", 'Test User', 
                (SELECT id FROM roles WHERE name = 'citizen'));
         
         -- Assign citizen role to test user
@@ -222,6 +226,31 @@ jobs:
         DB_PASSWORD: root
         DB_NAME: bulak_smart_connect_test
         JWT_SECRET: test_jwt_secret
+    
+    - name: Verify test user in database
+      run: |
+        echo "Checking test user in database:"
+        DB_HASH=$(mysql -h 127.0.0.1 -uroot -proot -s -N -e "SELECT password FROM bulak_smart_connect_test.users WHERE email='test@example.com';")
+        
+        echo "Database hash: $DB_HASH"
+        
+        # Correctly pass the environment variable BEFORE the node command
+        cd bsc-js-backend
+        DB_HASH="$DB_HASH" node -e "
+          const bcrypt = require('bcrypt'); 
+          const stored = process.env.DB_HASH; 
+          console.log('Hash from environment:', stored);
+          const plain = 'password123';
+          
+          if (!stored) {
+            console.error('ERROR: DB_HASH environment variable is empty');
+            process.exit(1);
+          }
+          
+          bcrypt.compare(plain, stored).then(result => {
+            console.log('Bcrypt verification result:', result);
+            if (!result) process.exit(1);
+          });"
     
     - name: Test login endpoint
       run: |

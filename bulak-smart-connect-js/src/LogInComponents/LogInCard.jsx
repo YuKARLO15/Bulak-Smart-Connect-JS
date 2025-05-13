@@ -25,9 +25,25 @@ export default function LogInCard({ onLogin }) {
   const [passwordErrorMessage, setPasswordErrorMessage] = useState('');
   const [error, setError] = useState('');
   const [open, setOpen] = useState(false);
+  const [loginType, setLoginType] = useState('email');  // Add login type state
   const navigate = useNavigate();
   const { login, hasRole, isStaff } = useAuth(); // New AuthContext to handle login and roles
 
+  const toggleLoginType = () => {
+    const newType = loginType === 'email' ? 'username' : 'email';
+    setLoginType(newType);
+    
+    // Clear validation errors when switching
+    setEmailError(false);
+    setEmailErrorMessage('');
+    setEmail('');
+  };
+
+  // Get input label based on login type
+  const getInputLabel = () => loginType === 'email' ? 'Email' : 'Username';
+
+  // Get placeholder text based on login type
+  const getPlaceholder = () => loginType === 'email' ? 'your@email.com' : 'username';
 
   const handleClickOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -37,7 +53,10 @@ export default function LogInCard({ onLogin }) {
     
     if (validateInputs()) {
       try {
-        console.log('Sending login request with:', { email, password });
+        console.log(`Sending login request with ${loginType}:`, { [loginType]: email, password });
+
+        // Old Method to use the API service from api.js, now using the AuthContext
+        //console.log('Sending login request with:', { email, password });
   
         //Old Logic to use the API service from api.js, now using the AuthContext
         //const data = await authService.login(email, password);
@@ -47,7 +66,11 @@ export default function LogInCard({ onLogin }) {
         //navigate("/UserDashboard");
 
         // Use the login function from AuthContext directly, eliminating the one used in api.js
-        const { success, user } = await login(email, password);
+        //const { success, user } = await login(email, password);
+        // Old Method to use the API service from api.js, now using the AuthContext
+
+        // Use the login function from AuthContext
+        const { success, user } = await login(email, password, loginType);
 
         console.log('Login successful:', success);
         //Auth Success Step
@@ -81,15 +104,28 @@ export default function LogInCard({ onLogin }) {
   const validateInputs = () => {
     let isValid = true;
 
-    if (!email || !/\S+@\S+\.\S+/.test(email)) {
-      setEmailError(true);
-      setEmailErrorMessage('Please enter a valid email address.');
-      isValid = false;
+    if (loginType === 'email') {
+      if (!email || !/\S+@\S+\.\S+/.test(email)) {
+        setEmailError(true);
+        setEmailErrorMessage('Please enter a valid email address.');
+        isValid = false;
+      } else {
+        setEmailError(false);
+        setEmailErrorMessage('');
+      }
     } else {
-      setEmailError(false);
-      setEmailErrorMessage('');
+      // Username validation
+      if (!email || email.trim() === '') {
+        setEmailError(true);
+        setEmailErrorMessage('Please enter a valid username.');
+        isValid = false;
+      } else {
+        setEmailError(false);
+        setEmailErrorMessage('');
+      }
     }
 
+    // Password validation remains the same
     if (!password || password.length < 6) {
       setPasswordError(true);
       setPasswordErrorMessage('Password must be at least 6 characters long.');
@@ -109,17 +145,32 @@ export default function LogInCard({ onLogin }) {
       </Typography>
       <Box component="form" onSubmit={handleSubmit} noValidate className="LogInForm">
         <FormControl>
-          <FormLabel htmlFor="email" className="LogInLabel">
-            Email
-          </FormLabel>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <FormLabel htmlFor="email" className="LogInLabel">
+              {getInputLabel()}
+            </FormLabel>
+            <Button
+              onClick={toggleLoginType}
+              size="small"
+              color="primary"
+              sx={{ 
+                textTransform: 'none', 
+                padding: '0',
+                minWidth: 'auto',
+                fontSize: '0.85rem'
+              }}
+            >
+              Login with {loginType === 'email' ? 'username' : 'email'} instead
+            </Button>
+          </Box>
           <TextField
             error={emailError}
             helperText={emailErrorMessage}
             id="email"
-            type="email"
-            name="email"
-            placeholder="your@email.com"
-            autoComplete="email"
+            type={loginType === 'email' ? 'email' : 'text'}
+            name={loginType}
+            placeholder={getPlaceholder()}
+            autoComplete={loginType === 'email' ? 'email' : 'username'}
             autoFocus
             required
             fullWidth

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import './WalkInForm.css';
 import NavBar from '../../NavigationComponents/NavSide';
 import { queueService } from '../../services/queueService'; // Add this import
+import { use } from 'react';
 
 // Helper function to format backend queue numbers to WK format
 const formatWKNumber = (queueNumber) => {
@@ -85,6 +86,9 @@ const WalkInForm = () => {
       // Get current user ID
       const currentUser = JSON.parse(localStorage.getItem('currentUser')) || {};
       const userId = currentUser.id || currentUser.email || 'guest';
+
+      console.log('Creating queue with user ID:', userId); // Debugging line
+      console.log('Form data:', formData); // Debugging line
       
       // Call API to create queue
       const response = await queueService.createQueue({
@@ -94,7 +98,8 @@ const WalkInForm = () => {
         address: formData.address || '',
         phoneNumber: formData.phoneNumber || '',
         reasonOfVisit: formData.reasonOfVisit,
-        appointmentType: formData.reasonOfVisit
+        appointmentType: formData.reasonOfVisit,
+        userId: userId, // Store user ID with queue
       });
       
       // Format the queue number to WK format for display
