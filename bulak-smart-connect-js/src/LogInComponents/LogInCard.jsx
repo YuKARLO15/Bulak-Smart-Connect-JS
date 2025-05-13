@@ -144,20 +144,25 @@ export default function LogInCard({ onLogin }) {
         LOG IN
       </Typography>
       <Box component="form" onSubmit={handleSubmit} noValidate className="LogInForm">
-        <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 1 }}>
-          <Button
-            onClick={toggleLoginType}
-            size="small"
-            color="primary"
-            sx={{ textTransform: 'none' }}
-          >
-            Login with {loginType === 'email' ? 'username' : 'email'} instead
-          </Button>
-        </Box>
         <FormControl>
-          <FormLabel htmlFor="email" className="LogInLabel">
-            {getInputLabel()}
-          </FormLabel>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <FormLabel htmlFor="email" className="LogInLabel">
+              {getInputLabel()}
+            </FormLabel>
+            <Button
+              onClick={toggleLoginType}
+              size="small"
+              color="primary"
+              sx={{ 
+                textTransform: 'none', 
+                padding: '0',
+                minWidth: 'auto',
+                fontSize: '0.85rem'
+              }}
+            >
+              Login with {loginType === 'email' ? 'username' : 'email'} instead
+            </Button>
+          </Box>
           <TextField
             error={emailError}
             helperText={emailErrorMessage}
