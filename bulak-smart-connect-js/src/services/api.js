@@ -1,8 +1,7 @@
-// Currently unused, but may be useful in the future
-// This file contains the API service for handling authentication and user data.
-// It uses Axios for making HTTP requests and manages the authentication token in local storage.
-// It also includes interceptors for adding the token to requests and handling errors.
 // Currently we use src/context/AuthContext.jsx for authentication and user data management.
+// Currently we use src/services/api.js for API calls.
+// This is still used for registering
+// But logging in and getting user data is done in src/context/AuthContext.jsx
 
 import axios from 'axios';
 
