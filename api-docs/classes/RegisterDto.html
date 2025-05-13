@@ -123,6 +123,13 @@
         </p>
 
 
+            <p class="comment">
+                <h3>Description</h3>
+            </p>
+            <p class="comment">
+                <p>DTO for user registration</p>
+
+            </p>
 
 
 
@@ -140,26 +147,41 @@
                     <td class="col-md-4">
                         <ul class="index-list">
                             <li>
+                                    <span class="modifier"></span>
+                                    <span class="modifier"></span>
                                 <a href="#email" >email</a>
                             </li>
                             <li>
+                                    <span class="modifier"></span>
+                                    <span class="modifier"></span>
                                 <a href="#firstName" >firstName</a>
                             </li>
                             <li>
+                                    <span class="modifier"></span>
+                                    <span class="modifier"></span>
                                 <a href="#lastName" >lastName</a>
                             </li>
                             <li>
+                                    <span class="modifier"></span>
+                                    <span class="modifier"></span>
                                     <span class="modifier">Optional</span>
                                 <a href="#middleName" >middleName</a>
                             </li>
                             <li>
+                                    <span class="modifier"></span>
+                                    <span class="modifier"></span>
                                     <span class="modifier">Optional</span>
                                 <a href="#name" >name</a>
                             </li>
                             <li>
+                                    <span class="modifier"></span>
+                                    <span class="modifier"></span>
+                                    <span class="modifier"></span>
                                 <a href="#password" >password</a>
                             </li>
                             <li>
+                                    <span class="modifier"></span>
+                                    <span class="modifier"></span>
                                 <a href="#username" >username</a>
                             </li>
                         </ul>
@@ -187,6 +209,8 @@
                 <td class="col-md-4">
                     <a name="email"></a>
                     <span class="name">
+                            <span class="modifier"></span>
+                            <span class="modifier"></span>
                         <span ><b>email</b></span>
                         <a href="#email"><span class="icon ion-ios-link"></span></a>
                     </span>
@@ -198,9 +222,18 @@
 
                     </td>
                 </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <b>Decorators : </b>
+                        <br />
+                        <code>
+                            @IsEmail()<br />@IsNotEmpty()<br />
+                        </code>
+                    </td>
+                </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="2" class="link-to-prism">src/auth/dto/register.dto.ts:2</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="11" class="link-to-prism">src/auth/dto/register.dto.ts:11</a></div>
                         </td>
                     </tr>
 
@@ -213,6 +246,8 @@
                 <td class="col-md-4">
                     <a name="firstName"></a>
                     <span class="name">
+                            <span class="modifier"></span>
+                            <span class="modifier"></span>
                         <span ><b>firstName</b></span>
                         <a href="#firstName"><span class="icon ion-ios-link"></span></a>
                     </span>
@@ -224,9 +259,18 @@
 
                     </td>
                 </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <b>Decorators : </b>
+                        <br />
+                        <code>
+                            @IsString()<br />@IsNotEmpty()<br />
+                        </code>
+                    </td>
+                </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="5" class="link-to-prism">src/auth/dto/register.dto.ts:5</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="24" class="link-to-prism">src/auth/dto/register.dto.ts:24</a></div>
                         </td>
                     </tr>
 
@@ -239,6 +283,8 @@
                 <td class="col-md-4">
                     <a name="lastName"></a>
                     <span class="name">
+                            <span class="modifier"></span>
+                            <span class="modifier"></span>
                         <span ><b>lastName</b></span>
                         <a href="#lastName"><span class="icon ion-ios-link"></span></a>
                     </span>
@@ -250,9 +296,18 @@
 
                     </td>
                 </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <b>Decorators : </b>
+                        <br />
+                        <code>
+                            @IsString()<br />@IsNotEmpty()<br />
+                        </code>
+                    </td>
+                </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="7" class="link-to-prism">src/auth/dto/register.dto.ts:7</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="32" class="link-to-prism">src/auth/dto/register.dto.ts:32</a></div>
                         </td>
                     </tr>
 
@@ -265,6 +320,8 @@
                 <td class="col-md-4">
                     <a name="middleName"></a>
                     <span class="name">
+                            <span class="modifier"></span>
+                            <span class="modifier"></span>
                             <span class="modifier">Optional</span>
                         <span ><b>middleName</b></span>
                         <a href="#middleName"><span class="icon ion-ios-link"></span></a>
@@ -277,9 +334,18 @@
 
                     </td>
                 </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <b>Decorators : </b>
+                        <br />
+                        <code>
+                            @IsString()<br />@IsOptional()<br />
+                        </code>
+                    </td>
+                </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="6" class="link-to-prism">src/auth/dto/register.dto.ts:6</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="28" class="link-to-prism">src/auth/dto/register.dto.ts:28</a></div>
                         </td>
                     </tr>
 
@@ -292,6 +358,8 @@
                 <td class="col-md-4">
                     <a name="name"></a>
                     <span class="name">
+                            <span class="modifier"></span>
+                            <span class="modifier"></span>
                             <span class="modifier">Optional</span>
                         <span ><b>name</b></span>
                         <a href="#name"><span class="icon ion-ios-link"></span></a>
@@ -304,9 +372,18 @@
 
                     </td>
                 </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <b>Decorators : </b>
+                        <br />
+                        <code>
+                            @IsString()<br />@IsOptional()<br />
+                        </code>
+                    </td>
+                </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="8" class="link-to-prism">src/auth/dto/register.dto.ts:8</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="36" class="link-to-prism">src/auth/dto/register.dto.ts:36</a></div>
                         </td>
                     </tr>
 
@@ -319,6 +396,9 @@
                 <td class="col-md-4">
                     <a name="password"></a>
                     <span class="name">
+                            <span class="modifier"></span>
+                            <span class="modifier"></span>
+                            <span class="modifier"></span>
                         <span ><b>password</b></span>
                         <a href="#password"><span class="icon ion-ios-link"></span></a>
                     </span>
@@ -330,9 +410,18 @@
 
                     </td>
                 </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <b>Decorators : </b>
+                        <br />
+                        <code>
+                            @IsString()<br />@IsNotEmpty()<br />@MinLength(8)<br />
+                        </code>
+                    </td>
+                </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="4" class="link-to-prism">src/auth/dto/register.dto.ts:4</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="20" class="link-to-prism">src/auth/dto/register.dto.ts:20</a></div>
                         </td>
                     </tr>
 
@@ -345,6 +434,8 @@
                 <td class="col-md-4">
                     <a name="username"></a>
                     <span class="name">
+                            <span class="modifier"></span>
+                            <span class="modifier"></span>
                         <span ><b>username</b></span>
                         <a href="#username"><span class="icon ion-ios-link"></span></a>
                     </span>
@@ -356,9 +447,18 @@
 
                     </td>
                 </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <b>Decorators : </b>
+                        <br />
+                        <code>
+                            @IsString()<br />@IsNotEmpty()<br />
+                        </code>
+                    </td>
+                </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="3" class="link-to-prism">src/auth/dto/register.dto.ts:3</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="15" class="link-to-prism">src/auth/dto/register.dto.ts:15</a></div>
                         </td>
                     </tr>
 
@@ -377,14 +477,42 @@
 
 
     <div class="tab-pane fade  tab-source-code" id="source">
-        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">export class RegisterDto {
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { IsEmail, IsNotEmpty, IsOptional, IsString, MinLength } from &#x27;class-validator&#x27;;
+
+/**
+ * DTO for user registration
+ * @class RegisterDto
+ */
+
+export class RegisterDto {
+  @IsEmail()
+  @IsNotEmpty()
   email: string;
+
+  @IsString()
+  @IsNotEmpty()
   username: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @MinLength(8)
   password: string;
+
+  @IsString()
+  @IsNotEmpty()
   firstName: string;
-  middleName?: string; // Optional
+
+  @IsString()
+  @IsOptional()
+  middleName?: string;
+
+  @IsString()
+  @IsNotEmpty()
   lastName: string;
-  name?: string; // Optional, due to the name field being optional in the User entity
+
+  @IsString()
+  @IsOptional()
+  name?: string;
 }
 </code></pre>
     </div>
