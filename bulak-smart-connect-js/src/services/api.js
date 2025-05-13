@@ -1,3 +1,9 @@
+// Currently unused, but may be useful in the future
+// This file contains the API service for handling authentication and user data.
+// It uses Axios for making HTTP requests and manages the authentication token in local storage.
+// It also includes interceptors for adding the token to requests and handling errors.
+// Currently we use src/context/AuthContext.jsx for authentication and user data management.
+
 import axios from 'axios';
 
 const API_URL = 'http://localhost:3000';

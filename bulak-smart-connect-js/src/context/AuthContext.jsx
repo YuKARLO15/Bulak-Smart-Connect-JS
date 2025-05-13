@@ -38,12 +38,17 @@ export const AuthProvider = ({ children }) => {
     checkAuth();
   }, []);
 
-  const login = async (email, password) => {
+  const login = async (emailOrUsername, password, loginType = 'email') => {
     try {
-      const response = await axios.post('http://localhost:3000/auth/login', {
-        email,
+      // Create payload based on login type
+      const payload = { 
         password,
-      });
+        emailOrUsername: emailOrUsername // Backend expects a single field
+      };
+
+      console.log(`Attempting login with ${loginType}:`, emailOrUsername);
+      
+      const response = await axios.post('http://localhost:3000/auth/login', payload);
 
       const { access_token, user } = response.data;
 
@@ -59,7 +64,7 @@ export const AuthProvider = ({ children }) => {
 
       setUser(user);
       setIsAuthenticated(true);
-      return { success: true, user }; // Return both success status and user data
+      return { success: true, user };
     } catch (err) {
       console.error('Login error:', err);
       setError(err.response?.data?.message || 'Login failed');
