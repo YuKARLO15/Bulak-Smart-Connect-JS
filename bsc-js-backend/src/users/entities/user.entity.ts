@@ -36,6 +36,12 @@ export class User {
   @Column()
   name: string; // Keep for backward compatibility
 
+  @Column({ name: 'name_extension', nullable: true })
+  nameExtension: string;
+  
+  @Column({ name: 'contact_number', nullable: true })
+  contactNumber: string;
+
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 

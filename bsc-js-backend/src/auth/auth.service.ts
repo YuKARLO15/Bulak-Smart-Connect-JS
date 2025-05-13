@@ -99,10 +99,19 @@ export class AuthService {
   }
 
   async register(registerDto: RegisterDto) {
-    const { email, username, password, firstName, middleName, lastName } = registerDto;
+    const { 
+      email, 
+      username, 
+      password, 
+      firstName, 
+      middleName, 
+      lastName, 
+      nameExtension, 
+      contactNumber 
+    } = registerDto;
     
     // Generate full name
-    const name = `${firstName} ${middleName ? middleName + ' ' : ''}${lastName}`;
+    const name = `${firstName} ${middleName ? middleName + ' ' : ''}${lastName}${nameExtension ? ' ' + nameExtension : ''}`;
     
     // Validate email format
     if (!this.isValidEmail(email)) {
@@ -145,6 +154,8 @@ export class AuthService {
         firstName,
         middleName,
         lastName,
+        nameExtension,
+        contactNumber,
         name,
       });
 

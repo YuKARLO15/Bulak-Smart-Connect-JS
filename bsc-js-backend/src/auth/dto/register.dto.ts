@@ -34,4 +34,11 @@ export class RegisterDto {
   @IsString()
   @IsOptional()
   name?: string;
+
+  @IsString()
+  @IsOptional()
+  nameExtension?: string;
+  
+  @IsString()
+  contactNumber?: string;
 }

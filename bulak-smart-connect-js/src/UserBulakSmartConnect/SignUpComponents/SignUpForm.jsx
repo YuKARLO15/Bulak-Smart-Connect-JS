@@ -104,11 +104,11 @@ const SignUpForm = () => {
           firstName: formData.firstname,  
           lastName: formData.lastname,    
           ...(formData.middlename && { middleName: formData.middlename }), 
-          contact: formData.contact,
-          name: `${formData.firstname} ${formData.middlename ? formData.middlename + ' ' : ''}${formData.lastname}`,
+          ...(formData.hasExtension && formData.extension && { nameExtension: formData.extension }),
+          contactNumber: formData.contact,
+          name: `${formData.firstname} ${formData.middlename ? formData.middlename + ' ' : ''}${formData.lastname}${formData.hasExtension && formData.extension ? ' ' + formData.extension : ''}`,
           // updates: formData.updates,
           // age: formData.age,
-          // extension: formData.hasExtension ? formData.extension : null
         });
 
         setIsLoading(false);
