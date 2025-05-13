@@ -267,8 +267,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="195"
-                                    class="link-to-prism">src/auth/auth.service.ts:195</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="206"
+                                    class="link-to-prism">src/auth/auth.service.ts:206</a></div>
                         </td>
                     </tr>
 
@@ -336,8 +336,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="190"
-                                    class="link-to-prism">src/auth/auth.service.ts:190</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="201"
+                                    class="link-to-prism">src/auth/auth.service.ts:201</a></div>
                         </td>
                     </tr>
 
@@ -697,10 +697,19 @@ export class AuthService {
   }
 
   async register(registerDto: RegisterDto) {
-    const { email, username, password, firstName, middleName, lastName } &#x3D; registerDto;
+    const { 
+      email, 
+      username, 
+      password, 
+      firstName, 
+      middleName, 
+      lastName, 
+      nameExtension, 
+      contactNumber 
+    } &#x3D; registerDto;
     
     // Generate full name
-    const name &#x3D; &#x60;${firstName} ${middleName ? middleName + &#x27; &#x27; : &#x27;&#x27;}${lastName}&#x60;;
+    const name &#x3D; &#x60;${firstName} ${middleName ? middleName + &#x27; &#x27; : &#x27;&#x27;}${lastName}${nameExtension ? &#x27; &#x27; + nameExtension : &#x27;&#x27;}&#x60;;
     
     // Validate email format
     if (!this.isValidEmail(email)) {
@@ -743,6 +752,8 @@ export class AuthService {
         firstName,
         middleName,
         lastName,
+        nameExtension,
+        contactNumber,
         name,
       });
 
