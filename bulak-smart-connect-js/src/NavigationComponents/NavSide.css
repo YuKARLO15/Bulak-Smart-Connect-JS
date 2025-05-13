@@ -1,112 +1,153 @@
-/* NavBar.css */
 
 .sidebar {
-  height: 100%;
-  width: 20vw;
-
+  height: 100vh;
+  width: 280px;
   position: fixed;
   top: 0;
   left: 0;
   background-color: #8aacb5;
   overflow-x: hidden;
-  padding-top: 20px;
-  transition: transform ease-in-out;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: transform 0.1s ease-in-out;
   z-index: 100;
+  display: flex;
+  flex-direction: column;
 }
+
 
 .Profile {
   display: flex;
   flex-direction: column;
-  width: 20vw;
- 
-  margin-top: 5vh;
-  padding: 20px;
-  margin-bottom: 5vh;
+  padding: 30px 25px 20px;
+  padding-top: 80px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  background: linear-gradient(to bottom, rgba(24, 74, 91, 0.2), transparent);
 }
+
 .NavUserName {
   color: white;
   font-weight: 600;
-  display: flex;
-  flex-direction: row;
-  width: 20vw;
+  font-size: 1.1rem;
+  margin-bottom: 3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
+
 .NavUserEmail {
-  color: white;
-  font-weight: 400;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
+
 .NavUserRole {
   color: #184a5b;
-  font-weight: 400;
-  font-size: smaller;
-
-}
-.sidebar a {
-  padding: 10px 15px;
-  text-decoration: none;
-  font-size: 1.2vw;
-  color: #1c4d5a;
-  display: block;
   font-weight: 500;
-  margin-left: 10px;
+  font-size: 0.8rem;
+  background-color: rgba(255, 255, 255, 0.5);
+  padding: 4px 10px;
+  border-radius: 12px;
+  display: inline-block;
+  text-transform: capitalize;
+}
+
+
+.NavigationButtons {
+  flex: 1;
+  padding: 15px 0;
+  overflow-y: auto;
+}
+
+.sidebar a {
+  padding: 12px 25px;
+  text-decoration: none;
+  font-size: 0.95rem;
+  color: #184a5b;
+  display: flex;
+  align-items: center;
+  font-weight: 500;
+  margin: 3px 8px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
 }
 
 .sidebar a:hover {
-  background-color: #6797a5;
-  color: #1c4d5a;
-  font-weight: 500;
+  background-color: rgba(24, 74, 91, 0.1);
+  color: #184a5b;
+  transform: translateX(5px);
 }
 
-.main-content {
-  margin-left: 260px;
-  padding: 20px;
-}
-.Logout {
-  margin-top: 15vh;
-  height: 10px;
-}
-.Logout:hover {
-  background-color: #6797a5;
+.sidebar a.active {
+  background-color: #184a5b;
   color: white;
 }
-@media (max-width: 768px) {
-  .sidebar a {
-    font-size: 1.5vw;
-  }
-  .sidebar {
-    width: 30vw;
-  }
-  .Profile {
-    height: 10vh;
-    padding: 20px;
-    margin-bottom: 5vh;
-  }
-  .Username {
-    color: white;
-    font-size: 20px;
-    font-weight: bold;
-  }
-  .main-content {
-    margin-left: 260px;
-    padding: 20px;
-  }
-  .Logout {
-    margin-top: 15vh;
-    height: 10px;
-  }
-  .Logout:hover {
-    background-color: #6797a5;
-    color: white;
-  }
+
+
+.sidebar a svg {
+  margin-right: 12px;
+  font-size: 1.2rem;
 }
 
-@media (max-width: 568px) {
-  .sidebar a {
-    font-size: 15px;
-  }
-  .sidebar {
-    visibility: hidden;
-  }
+
+.Logout {
+  padding: 15px 25px 30px;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
 }
+
+.Logout a {
+  background-color: rgba(24, 74, 91, 0.1);
+  color: #184a5b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.Logout a:hover {
+  background-color: #184a5b;
+  color: white;
+}
+
+.Logout a svg {
+  margin-right: 8px;
+}
+
+
+.SidebarToggleBtn {
+  width: 48px;
+  height: 48px;
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  background: #184a5b;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s ease;
+}
+
+.SidebarToggleBtn:hover {
+  background: #1c5569;
+  transform: scale(1.05);
+}
+
+.SidebarToggleBtn.open {
+  background: #8aacb5 !important;
+}
+
 
 .sidebar.closed {
   transform: translateX(-100%);
@@ -116,35 +157,25 @@
   transform: translateX(0);
 }
 
-/* Toggle Button */
-.SidebarToggleBtn {
-  width: 50px;
-  position: fixed;
-  top: 15px;
-  left: 15px;
-  background: #184a5b;
-  color: white;
-  border: none;
-  padding: 8px 12px;
-  cursor: pointer;
-  z-index: 1000;
-  border-radius: 5px;
-}
 
-.SidebarToggleBtn.open {
-  width: 50px;
-  background: #8aacb5 !important;
-}
-/* Adjust sidebar width for smaller screens */
-@media (max-width: 768px) {
+@media (max-width: 992px) {
   .sidebar {
-    width: 50vw;
+    width: 260px;
   }
 }
 
-/* Ensure sidebar is hidden by default on smaller screens */
-@media (max-width: 568px) {
+@media (max-width: 768px) {
   .sidebar {
-    transform: translateX(-100%);
+    width: 300px;
+  }
+  
+  .NavigationBar {
+    width: 100%;
+  }
+}
+
+@media (max-width: 576px) {
+  .sidebar {
+    width: 280px;
   }
 }
