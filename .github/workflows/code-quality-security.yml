@@ -234,12 +234,12 @@ jobs:
       - name: Build with source maps
         run: |
           cd bulak-smart-connect-js
-          npm run build -- --sourcemap
+          npm run build -- --sourcemap=inline
       
       - name: Analyze bundle size
         run: |
           cd bulak-smart-connect-js
-          npx source-map-explorer 'dist/assets/*.js' --html bundle-analysis.html
+          npx source-map-explorer 'dist/assets/*.js' --html bundle-analysis.html --no-border-checks
       
       - name: Upload bundle analysis
         uses: actions/upload-artifact@v4
