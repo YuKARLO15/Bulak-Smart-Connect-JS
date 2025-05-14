@@ -23,10 +23,40 @@ const MarriageLicenseSummary = () => {
       setLoading(false);
     }
   }, []);
-  const handleModify = () => {
-     localStorage.setItem('isEditingMarriageForm', 'true');
+ const handleModify = () => {
+  try {
+    console.log('Current formData:', formData);
+    
+    // Get the application ID
+    const applicationId = formData.applicationId || formData.id;
+    console.log('Application ID for editing:', applicationId);
+    
+    // Make sure we save formData with the application ID
+    if (applicationId) {
+      const updatedFormData = {
+        ...formData,
+        applicationId: applicationId // Ensure ID is preserved
+      };
+      
+      localStorage.setItem('marriageFormData', JSON.stringify(updatedFormData));
+    } else {
+      console.warn('No application ID found for editing');
+      localStorage.setItem('marriageFormData', JSON.stringify(formData));
+    }
+    
+    // Set the editing flags
+   localStorage.setItem('isEditingMarriageForm', 'true');
+    localStorage.setItem('editingMarriageType', 'Marriage License'); 
+    localStorage.setItem('currentEditingApplicationId', applicationId);
+    localStorage.setItem('selectedMarriageOption', 'Marriage License'); 
+    
+    // Navigate to the form
     navigate('/MarriageForm');
-  };
+  } catch (err) {
+    console.error('Error setting up modification:', err);
+    alert('There was a problem preparing the form for editing. Please try again.');
+  }
+};
   const handleBackToForm = () => {
     navigate('/MarriageForm');
   };
@@ -36,12 +66,32 @@ const MarriageLicenseSummary = () => {
   };
 
 
+useEffect(() => {
+  try {
+    const savedLicenseData = localStorage.getItem('marriageFormData');
+    if (savedLicenseData) {
+      const parsedData = JSON.parse(savedLicenseData);
+      
+      // Debug log to check wife's birth data
+      console.log("Wife birth data:", {
+        day: parsedData.wifeBirthDay,
+        month: parsedData.wifeBirthMonth,
+        year: parsedData.wifeBirthYear
+      });
+      
+      // Log all keys to check for naming inconsistencies
+      console.log("All form keys:", Object.keys(parsedData));
+      
+      setFormData(parsedData);
+    }
+  } catch (err) {
+    console.error('Error loading form data:', err);
+  } finally {
+    setLoading(false);
+  }
+}, []);
 
 
-  // Add this function to cancel edit mode
-  const handleEditCancel = () => {
-    setEditConfirmOpen(false);
-  };
 
   if (loading) {
     return <div className="ContainerMLSummary">Loading...</div>;
@@ -225,7 +275,7 @@ const MarriageLicenseSummary = () => {
                     <div className="DateParenMLSummary">(Month)</div>
                   </div>
                   <div className="DateFieldMLSummary">
-                    <div className="DateValueMLSummary">{formData.wifeBirthYear || ''}</div>
+                    <div className="DateValueMLSummary">{formData.wifeBirthYear || '' }</div>
                     <div className="DateParenMLSummary">(Year)</div>
                   </div>
                   <div className="DateFieldMLSummary">

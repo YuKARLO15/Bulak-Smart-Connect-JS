@@ -393,7 +393,7 @@ const RecentApplicationsComponent = () => {
                           }
                         }}
                       >
-                        View Summary
+                        View Application
                       </Button>
                     </Box>
                   </Grid>

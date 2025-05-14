@@ -17,8 +17,7 @@ import HusbandForm from './HusbandForm';
 import WifeForm from './WifeForm';
 import MarriageDetailsForm from './MarriageDetailsForm';
 import MarriageAffidavitForm from './MarriageAffidavitForm';
-import { addApplication, getApplicationsByType } from '../../ApplicationData';
-
+import { addApplication, getApplicationsByType, updateApplication  } from '../../ApplicationData';
 
 
 const MarriageCertificateForm = () => {
@@ -35,52 +34,46 @@ const MarriageCertificateForm = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+       const isEditingForm = localStorage.getItem('isEditingMarriageForm') === 'true';
     const option = localStorage.getItem('selectedMarriageOption');
     if (option) {
       setSelectedOption(option);
       setMaxSteps(option === 'Marriage License' ? 2 : 4);
       
-      if (option === 'Marriage Certificate') {
-        checkForPreviousLicenseData();
-      }
+      if (option === 'Marriage Certificate' && !isEditingForm) {
+      checkForPreviousLicenseData();
+    }
     } else {
       navigate('/MarriageDashboard');
+
     }
-  }, [navigate]);
 
-
-useEffect(() => {
-
-  const isEditing = localStorage.getItem('isEditingMarriageForm') === 'true';
+ 
+  const editingType = localStorage.getItem('editingMarriageType');
   
-  if (isEditing) {
-    // Load the saved form data
+  if (isEditingForm && (!editingType || editingType === option)) {
     const savedData = localStorage.getItem('marriageFormData');
     if (savedData) {
       try {
         const parsedData = JSON.parse(savedData);
         setFormData(parsedData);
         
-        // Also set any other state that depends on form data
-        // For example, if you have conditional fields
         if (parsedData.husbandCivilStatus === 'Widowed') {
           setShowHusbandWidowedFields(true);
         }
         if (parsedData.wifeCivilStatus === 'Widowed') {
           setShowWifeWidowedFields(true);
         }
-        // Add similar logic for other conditional fields
         
-        console.log("Loaded existing marriage form data for editing");
+        console.log(`Loaded existing ${option} data for editing`);
       } catch (err) {
         console.error("Error loading marriage form data for editing:", err);
       }
     }
-    
-    // Clear the editing flag
-    localStorage.removeItem('isEditingMarriageForm');
+      
   }
-}, []);
+}, [navigate]);
+
 
 
   const checkForPreviousLicenseData = () => {
@@ -253,84 +246,139 @@ useEffect(() => {
     setStep(prevStep => prevStep - 1);
   };
 
-  const handleSubmit = e => {
+ const handleSubmit = e => {
   if (e && e.preventDefault) {
     e.preventDefault();
   }
+  
   try {
+    console.log('==== MARRIAGE FORM SUBMISSION ====');
+    
+    // Check if we're in edit mode
     const isEditing = localStorage.getItem('isEditingMarriageForm') === 'true';
+    const currentEditingId = localStorage.getItem('currentEditingApplicationId');
     
-    const existingData = localStorage.getItem('marriageFormData');
+    console.log('Is editing mode?', isEditing);
+    console.log('Editing ID:', currentEditingId);
+    
+    // Determine the application ID
     let applicationId;
-    
-    if (existingData) {
-      try {
-        const parsedData = JSON.parse(existingData);
-        applicationId = parsedData.id || parsedData.applicationId;
-      } catch (err) {
-        console.error("Error parsing existing form data:", err);
-      }
-    }
-    
-    if (!applicationId) {
+    if (isEditing && currentEditingId) {
+      applicationId = currentEditingId;
+      console.log('Using existing ID for edit:', applicationId);
+    } else {
       applicationId = selectedOption === 'Marriage License' 
         ? 'ML-' + Date.now().toString().slice(-6) 
         : 'MC-' + Date.now().toString().slice(-6);
+      console.log('Generated new ID:', applicationId);
     }
-
-    const updatedFormData = {
-      ...formData,
-      applicationId: applicationId,
-      lastUpdated: new Date().toISOString()
-    };
     
-    localStorage.setItem('marriageFormData', JSON.stringify(updatedFormData));
-
+    // Prepare form data
     const currentDate = new Date();
     const formattedDate = currentDate.toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'numeric',
-      day: 'numeric',
+      year: 'numeric', month: 'numeric', day: 'numeric'
     });
-    const applicationData = {
-      id: applicationId,
-      type: selectedOption || 'Marriage Certificate',
-      applicationType: isEditing ? 'Modified Application' : 'New Application',
-      date: formattedDate,
-      status: 'Pending',
-      message: `Application for ${selectedOption || 'marriage'} between ${formData.husbandFirstName || ''} ${formData.husbandLastName || ''} and ${formData.wifeFirstName || ''} ${formData.wifeLastName || ''}`,
-      formData: { ...updatedFormData },
-      lastModified: isEditing ? new Date().toISOString() : null
-    };
-
-    console.log(`${isEditing ? 'Updating' : 'Creating new'} ${selectedOption} application:`, applicationData);
     
-    const result = addApplication(applicationData);
+    // If we're editing, we need to get the existing application first
+    let finalApplicationData;
+    
+    if (isEditing && currentEditingId) {
+      // Get all applications to find the one we're editing
+      const applications = JSON.parse(localStorage.getItem('applications') || '[]');
+      const existingApp = applications.find(app => app.id === currentEditingId);
+      
+      if (!existingApp) {
+        console.error('Could not find application with ID:', currentEditingId);
+        alert('Error: Could not find the application you are trying to edit.');
+        return;
+      }
+      
+      console.log('Found existing application:', existingApp);
+      
+      // Create a complete application object with all fields
+      finalApplicationData = {
+        id: applicationId,
+        type: selectedOption || existingApp.type,
+        applicationType: 'Modified Application',
+        date: existingApp.date || formattedDate,
+        status: existingApp.status || 'Pending',
+        message: `Application for ${selectedOption || 'marriage'} between ${formData.husbandFirstName || ''} ${formData.husbandLastName || ''} and ${formData.wifeFirstName || ''} ${formData.wifeLastName || ''}`,
+        // Replace formData entirely instead of merging
+        formData: {
+          ...formData,
+          applicationId: applicationId,
+          certificateType: selectedOption,
+          lastUpdated: new Date().toISOString()
+        },
+        lastModified: new Date().toISOString()
+      };
+    } else {
+      // Creating a new application
+      finalApplicationData = {
+        id: applicationId,
+        type: selectedOption || 'Marriage Certificate',
+        applicationType: 'New Application',
+        date: formattedDate,
+        status: 'Pending',
+        message: `Application for ${selectedOption || 'marriage'} between ${formData.husbandFirstName || ''} ${formData.husbandLastName || ''} and ${formData.wifeFirstName || ''} ${formData.wifeLastName || ''}`,
+        formData: {
+          ...formData,
+          applicationId: applicationId,
+          certificateType: selectedOption,
+          lastUpdated: new Date().toISOString()
+        }
+      };
+    }
+    
+    console.log('Final application data to submit:', finalApplicationData);
+    
+    let result;
+    if (isEditing && currentEditingId) {
+      // For debugging purposes, get applications before update
+      const beforeApps = JSON.parse(localStorage.getItem('applications') || '[]');
+      console.log('Applications before update:', beforeApps.map(a => a.id));
+      
+      // Important: Pass the COMPLETE object to updateApplication
+      result = updateApplication(currentEditingId, finalApplicationData);
+      
+      // For debugging, get applications after update
+      const afterApps = JSON.parse(localStorage.getItem('applications') || '[]');
+      console.log('Applications after update:', afterApps.map(a => a.id));
+      
+      console.log('Update result:', result);
+    } else {
+      result = addApplication(finalApplicationData);
+      console.log('Add result:', result);
+    }
+    
     if (!result) {
-      console.error('Failed to add/update application in storage');
-      alert('There was an error submitting your application. Please try again.');
+      console.error('Failed to save application');
+      alert('There was an error saving your application. Please try again.');
       return;
     }
     
+    // Clear editing flags
     localStorage.removeItem('isEditingMarriageForm');
+    localStorage.removeItem('editingMarriageType');
+    localStorage.removeItem('currentEditingApplicationId');
+    localStorage.removeItem('marriageFormData');
     
+    // Notify any listeners about the storage change
     window.dispatchEvent(new Event('storage'));
-
- 
+    
+    // Navigate based on application type
     if (selectedOption === 'Marriage License') {
       navigate('/MarriageLicenseApplication');
     } else {
       navigate('/MarriageCertificateApplication');
     }
   } catch (error) {
-    console.error(`Error submitting ${selectedOption} application:`, error);
+    console.error('Error submitting form:', error);
     alert('There was an error submitting your application. Please try again.');
   }
 };
-
     return (
       <Box className="MarriageCertificateFormContainer">
-      {/* Dialog to ask if user wants to use previous data */}
       <Dialog
   open={showDataDialog}
   aria-labelledby="previous-data-dialog-title"

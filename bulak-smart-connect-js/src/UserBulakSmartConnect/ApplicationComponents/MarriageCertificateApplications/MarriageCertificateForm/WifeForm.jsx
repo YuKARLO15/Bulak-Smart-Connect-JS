@@ -66,7 +66,7 @@ const WifeForm = ({ formData, handleChange, errors , isMarriageLicense = false }
           <select
             name="wifeBirthMonth"
             className="wife-select"
-            value={formData.wifeBirthMonth || ''}
+                value={formData.wifeBirthMonth || ''}
             onChange={handleChange}
           >
             <option value="" disabled>
