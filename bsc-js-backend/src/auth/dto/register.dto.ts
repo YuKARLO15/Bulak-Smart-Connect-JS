@@ -1,4 +1,10 @@
-import { IsEmail, IsNotEmpty, IsOptional, IsString, MinLength } from 'class-validator';
+import {
+  IsEmail,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  MinLength,
+} from 'class-validator';
 
 /**
  * DTO for user registration
@@ -38,7 +44,7 @@ export class RegisterDto {
   @IsString()
   @IsOptional()
   nameExtension?: string;
-  
+
   @IsString()
   contactNumber?: string;
 }

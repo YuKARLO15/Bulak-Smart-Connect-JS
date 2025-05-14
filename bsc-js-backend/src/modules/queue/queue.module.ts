@@ -1,4 +1,7 @@
-import { Module, forwardRef } from '@nestjs/common';
+import { 
+  Module, 
+  //forwardRef, // Uncomment if you need to use forwardRef
+} from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { QueueService } from './queue.service';
 import { QueueController } from './queue.controller';

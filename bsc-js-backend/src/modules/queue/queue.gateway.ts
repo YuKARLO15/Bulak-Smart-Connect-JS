@@ -54,12 +54,12 @@ export class QueueGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   // Send updates to all clients or specific rooms
   notifyQueueUpdate(queueId: number, data: any) {
-    this.server.to(`queue_${queueId}`).emit('queueUpdate', data);
-    this.server.emit('queueListUpdate'); // Global queue update
+    void this.server.to(`queue_${queueId}`).emit('queueUpdate', data);
+    void this.server.emit('queueListUpdate'); // Global queue update
   }
 
   notifyCounterUpdate(counterId: number, data: any) {
-    this.server.to(`counter_${counterId}`).emit('counterUpdate', data);
-    this.server.emit('counterListUpdate'); // Global counter update
+    void this.server.to(`counter_${counterId}`).emit('counterUpdate', data);
+    void this.server.emit('counterListUpdate'); // Global counter update
   }
 }

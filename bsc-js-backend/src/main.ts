@@ -43,4 +43,5 @@ async function seedDatabaseIfNeeded(dataSource: DataSource) {
   }
 }
 
-bootstrap();
+bootstrap()
+  .catch(err => console.error('Error during bootstrap:', err));

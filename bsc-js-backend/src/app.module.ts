@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { databaseConfig } from './config/database.config';
+// import { databaseConfig } from './config/database.config';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { AppController } from './app.controller';
@@ -33,14 +33,14 @@ import { QueueModule } from './modules/queue/queue.module';
         dropSchema: false,
 
         // Only for development environments!
-        beforeConnect: async (connection) => {
+        beforeConnect: async (connection: any): Promise<void> => {
           if (process.env.NODE_ENV !== 'production') {
-            connection.query('SET FOREIGN_KEY_CHECKS=0;');
+            await connection.query('SET FOREIGN_KEY_CHECKS=0;');
           }
         },
-        afterConnect: async (connection) => {
+        afterConnect: async (connection: any): Promise<void> => {
           if (process.env.NODE_ENV !== 'production') {
-            connection.query('SET FOREIGN_KEY_CHECKS=1;');
+            await connection.query('SET FOREIGN_KEY_CHECKS=1;');
           }
         },
       }),

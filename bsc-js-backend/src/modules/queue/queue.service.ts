@@ -8,7 +8,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, LessThanOrEqual } from 'typeorm';
 import { Queue, QueueStatus } from './entities/queue.entity';
 import { QueueDetails } from './entities/queue-details.entity';
-import { Counter, CounterStatus } from '../counter/entities/counter.entity';
+import { Counter, 
+  //CounterStatus, //Uncomment if you need to use CounterStatus 
+} from '../counter/entities/counter.entity';
 import { CreateQueueDto } from './dto/create-queue.dto';
 import { UpdateQueueDto } from './dto/update-queue.dto';
 import { QueueGateway } from './queue.gateway';
