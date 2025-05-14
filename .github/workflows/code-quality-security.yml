@@ -328,8 +328,9 @@ jobs:
       - name: Generate code complexity report
         run: |
           cd bsc-js-backend
-          npm install --no-save complexity-report-html
-          npx cr src --format html --output reports/complexity-report.html
+          npm install --no-save ts-complexity
+          mkdir -p reports
+          npx ts-complexity src --output-format html > reports/complexity-report.html
           echo "Code complexity report generated"
       
       - name: Upload size report
