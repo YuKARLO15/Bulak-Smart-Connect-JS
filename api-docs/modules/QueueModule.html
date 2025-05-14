@@ -252,7 +252,10 @@
 
 
     <div class="tab-pane fade  tab-source-code" id="source">
-        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Module, forwardRef } from &#x27;@nestjs/common&#x27;;
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import {
+  Module,
+  //forwardRef, // Uncomment if you need to use forwardRef
+} from &#x27;@nestjs/common&#x27;;
 import { TypeOrmModule } from &#x27;@nestjs/typeorm&#x27;;
 import { QueueService } from &#x27;./queue.service&#x27;;
 import { QueueController } from &#x27;./queue.controller&#x27;;

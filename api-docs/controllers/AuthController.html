@@ -188,7 +188,7 @@
             <tr>
                 <td class="col-md-4">
                         <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>getProfile(req)</code>
+                    <code>getProfile(req: <a href="../interfaces/RequestWithUser.html" target="_self">RequestWithUser</a>)</code>
                 </td>
             </tr>
 
@@ -202,8 +202,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="38"
-                                    class="link-to-prism">src/auth/auth.controller.ts:38</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="44"
+                                    class="link-to-prism">src/auth/auth.controller.ts:44</a></div>
                         </td>
                     </tr>
 
@@ -218,12 +218,16 @@
                                     <thead>
                                         <tr>
                                             <td>Name</td>
+                                                <td>Type</td>
                                             <td>Optional</td>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
                                                 <td>req</td>
+                                            <td>
+                                                            <code><a href="../interfaces/RequestWithUser.html" target="_self" >RequestWithUser</a></code>
+                                            </td>
 
                                             <td>
                                                     No
@@ -275,8 +279,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="20"
-                                    class="link-to-prism">src/auth/auth.controller.ts:20</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="24"
+                                    class="link-to-prism">src/auth/auth.controller.ts:24</a></div>
                         </td>
                     </tr>
 
@@ -352,8 +356,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="31"
-                                    class="link-to-prism">src/auth/auth.controller.ts:31</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="37"
+                                    class="link-to-prism">src/auth/auth.controller.ts:37</a></div>
                         </td>
                     </tr>
 
@@ -417,6 +421,10 @@ import { LoginDto } from &#x27;./dto/login.dto&#x27;;
 import { RegisterDto } from &#x27;./dto/register.dto&#x27;;
 import { JwtAuthGuard } from &#x27;./guards/jwt-auth.guard&#x27;;
 
+interface RequestWithUser extends Request {
+  user: { sub: number; email: string; roles: string[] };
+}
+
 @Controller(&#x27;auth&#x27;)
 export class AuthController {
   constructor(private authService: AuthService) {}
@@ -428,7 +436,9 @@ export class AuthController {
       const result &#x3D; await this.authService.login(loginDto);
       return result;
     } catch (error) {
-      throw new UnauthorizedException(error.message || &#x27;Invalid credentials&#x27;);
+      throw new UnauthorizedException(
+        error instanceof Error ? error.message : &#x27;Invalid credentials&#x27;,
+      );
     }
   }
 
@@ -440,8 +450,12 @@ export class AuthController {
 
   @UseGuards(JwtAuthGuard)
   @Get(&#x27;profile&#x27;)
-  getProfile(@Request() req) {
-    return this.authService.getProfile(req.user.userId);
+  getProfile(@Request() req: RequestWithUser) {
+    // Add null check before converting to number
+    if (!req.user || req.user.sub &#x3D;&#x3D;&#x3D; undefined || req.user.sub &#x3D;&#x3D;&#x3D; null) {
+      throw new UnauthorizedException(&#x27;Invalid user ID&#x27;);
+    }
+    return this.authService.getProfile(Number(req.user.sub));
   }
 }
 </code></pre>

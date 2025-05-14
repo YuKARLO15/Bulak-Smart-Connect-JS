@@ -285,7 +285,7 @@
         <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Module } from &#x27;@nestjs/common&#x27;;
 import { ConfigModule, ConfigService } from &#x27;@nestjs/config&#x27;;
 import { TypeOrmModule } from &#x27;@nestjs/typeorm&#x27;;
-import { databaseConfig } from &#x27;./config/database.config&#x27;;
+// import { databaseConfig } from &#x27;./config/database.config&#x27;;
 import { UsersModule } from &#x27;./users/users.module&#x27;;
 import { AuthModule } from &#x27;./auth/auth.module&#x27;;
 import { AppController } from &#x27;./app.controller&#x27;;
@@ -317,14 +317,22 @@ import { QueueModule } from &#x27;./modules/queue/queue.module&#x27;;
         dropSchema: false,
 
         // Only for development environments!
-        beforeConnect: async (connection) &#x3D;&gt; {
+        beforeConnect: async (connection): Promise&lt;void&gt; &#x3D;&gt; {
           if (process.env.NODE_ENV !&#x3D;&#x3D; &#x27;production&#x27;) {
-            connection.query(&#x27;SET FOREIGN_KEY_CHECKS&#x3D;0;&#x27;);
+            const conn &#x3D; connection as {
+              query: (sql: string) &#x3D;&gt; Promise&lt;unknown&gt;;
+            };
+            // Disable foreign key checks for development
+            await conn.query(&#x27;SET FOREIGN_KEY_CHECKS&#x3D;0;&#x27;);
+            // Set time zone to UTC for consistent datetime handling
+            await conn.query(&quot;SET time_zone &#x3D; &#x27;+08:00&#x27;;&quot;); // Philippines time zone (UTC+8)
           }
         },
-        afterConnect: async (connection) &#x3D;&gt; {
+        afterConnect: async (connection): Promise&lt;void&gt; &#x3D;&gt; {
           if (process.env.NODE_ENV !&#x3D;&#x3D; &#x27;production&#x27;) {
-            connection.query(&#x27;SET FOREIGN_KEY_CHECKS&#x3D;1;&#x27;);
+            await (
+              connection as { query: (sql: string) &#x3D;&gt; Promise&lt;unknown&gt; }
+            ).query(&#x27;SET FOREIGN_KEY_CHECKS&#x3D;1;&#x27;);
           }
         },
       }),

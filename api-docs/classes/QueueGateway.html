@@ -180,6 +180,7 @@
                             </li>
                             <li>
                                     <span class="modifier"></span>
+                                    <span class="modifier">Async</span>
                                 <a href="#handleJoinCounter" >handleJoinCounter</a>
                             </li>
                             <li>
@@ -559,6 +560,7 @@
                     <a name="handleJoinCounter"></a>
                     <span class="name">
                             <span class="modifier"></span>
+                            <span class="modifier">Async</span>
                         <span ><b>handleJoinCounter</b></span>
                         <a href="#handleJoinCounter"><span class="icon ion-ios-link"></span></a>
                     </span>
@@ -630,7 +632,7 @@
                                 </table>
                             </div>
                         <div class="io-description">
-                            <b>Returns : </b>    <code>{ success: boolean; }</code>
+                            <b>Returns : </b>    <code>unknown</code>
 
                         </div>
                             <div class="io-description">
@@ -934,7 +936,7 @@ export class QueueGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   @SubscribeMessage(&#x27;joinQueue&#x27;)
   async handleJoinQueue(client: Socket, queueId: number) {
-    client.join(&#x60;queue_${queueId}&#x60;);
+    await client.join(&#x60;queue_${queueId}&#x60;);
     const queueData &#x3D; await this.queueService.getQueueDetails(queueId);
     return queueData;
   }
@@ -946,20 +948,20 @@ export class QueueGateway implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   @SubscribeMessage(&#x27;joinCounter&#x27;)
-  handleJoinCounter(client: Socket, counterId: number) {
-    client.join(&#x60;counter_${counterId}&#x60;);
+  async handleJoinCounter(client: Socket, counterId: number) {
+    await client.join(&#x60;counter_${counterId}&#x60;);
     return { success: true };
   }
 
   // Send updates to all clients or specific rooms
   notifyQueueUpdate(queueId: number, data: any) {
-    this.server.to(&#x60;queue_${queueId}&#x60;).emit(&#x27;queueUpdate&#x27;, data);
-    this.server.emit(&#x27;queueListUpdate&#x27;); // Global queue update
+    void this.server.to(&#x60;queue_${queueId}&#x60;).emit(&#x27;queueUpdate&#x27;, data);
+    void this.server.emit(&#x27;queueListUpdate&#x27;); // Global queue update
   }
 
   notifyCounterUpdate(counterId: number, data: any) {
-    this.server.to(&#x60;counter_${counterId}&#x60;).emit(&#x27;counterUpdate&#x27;, data);
-    this.server.emit(&#x27;counterListUpdate&#x27;); // Global counter update
+    void this.server.to(&#x60;counter_${counterId}&#x60;).emit(&#x27;counterUpdate&#x27;, data);
+    void this.server.emit(&#x27;counterListUpdate&#x27;); // Global counter update
   }
 }
 </code></pre>

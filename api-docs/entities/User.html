@@ -737,19 +737,19 @@ export class User {
 
   @Column({ unique: true })
   email: string;
-  
+
   @Column({ unique: true })
   username: string;
 
   @Column()
   password: string;
-  
+
   @Column({ name: &#x27;first_name&#x27; })
   firstName: string;
-  
+
   @Column({ name: &#x27;middle_name&#x27;, nullable: true })
   middleName: string;
-  
+
   @Column({ name: &#x27;last_name&#x27; })
   lastName: string;
 
@@ -758,7 +758,7 @@ export class User {
 
   @Column({ name: &#x27;name_extension&#x27;, nullable: true })
   nameExtension: string;
-  
+
   @Column({ name: &#x27;contact_number&#x27;, nullable: true })
   contactNumber: string;
 
