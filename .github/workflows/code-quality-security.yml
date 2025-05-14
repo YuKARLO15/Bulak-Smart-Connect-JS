@@ -240,6 +240,8 @@ jobs:
         run: |
           cd bulak-smart-connect-js
           npx source-map-explorer 'dist/assets/*.js' --html bundle-analysis.html --no-border-checks
+          echo "Bundle size summary:"
+          echo "$(du -sh dist/assets/*.js | sort -hr)"
       
       - name: Upload bundle analysis
         uses: actions/upload-artifact@v4
