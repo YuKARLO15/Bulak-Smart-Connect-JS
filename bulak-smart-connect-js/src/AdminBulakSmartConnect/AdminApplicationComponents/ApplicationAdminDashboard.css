@@ -1,143 +1,179 @@
+/* Modern Admin Dashboard Styles */
+
 .ApplicationDashContainer {
   display: flex;
-  width: 100vw;
+  width: 100%;
+  max-height: 100%;
+  min-height: 100vh;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-}
-.ApplicationDashContainer.sidebar-open {
-  margin-left: 240px;
+  transition: margin-left 0.3s ease;
+  background-color: #f5f8fa;
+  overflow-x: hidden; 
 }
 
+.ApplicationDashContainer.sidebar-open {
+  margin-left: 280px; 
+  width: calc(100% - 280px);
+}
 
 .ApplicationDashHeader {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 16px;
+  padding: 1.25rem 2rem;
   background-color: #184a5b;
-  width: 100%;
+  width: 100vw;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  z-index: 10;
+  position: relative;
 }
 
 .ApplicationDashTitle {
-  font-weight: 500;
+  font-weight: 600 !important;
+  font-size: 1.5rem !important;
   color: #fff;
-  margin-left: 50px !important;
+  letter-spacing: 0.5px;
+  margin-left: 4rem !important;
 }
 
-.ApplicationDashScanButton {
-  text-transform: none;
-  color: #fff !important;
-  margin-right: 15px !important;
-}
 
 .ApplicationDashContent {
-  padding: 16px;
-  width: 80vw;
+  padding: 1.75rem;
+  width: 92%;
+  max-width: 1400px;
   display: flex;
   justify-content: center;
-  gap: 16px;
+  gap: 1.5rem;
+  margin-top: 1rem;
 }
 
-.ApplicationDashOverview {
-  height: 100%;
+
+.ApplicationDashOverview,
+.ApplicationDashChart {
+  height: 40vh;
   display: flex;
   flex-direction: column;
   flex: 1;
+  border-radius: 12px !important;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06) !important;
+  border: none !important;
+}
+
+.ApplicationDashOverview:hover,
+.ApplicationDashChart:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1) !important;
 }
 
 .ApplicationDashSectionTitle {
-  font-weight: 500;
-  color: #333;
+  font-weight: 600 !important;
+  color: #184a5b !important;
+  font-size: 1.2rem !important;
+  margin-bottom: 1.25rem !important;
+  position: relative;
+  padding-bottom: 0.5rem;
+}
+
+.ApplicationDashSectionTitle::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 40px;
+  height: 3px;
+  background-color: #184a5b;
+  border-radius: 3px;
 }
 
 .ApplicationDashStats {
-  margin-top: 24px;
+  margin-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
-.ApplicationDashPendingCard {
+/* Status cards styling */
+.ApplicationDashPendingCard,
+.ApplicationDashApprovedCard,
+.ApplicationDashDeniedCard {
   display: flex;
   justify-content: space-between;
-  padding: 12px;
-  margin-bottom: 8px;
+  align-items: center;
+  padding: 1rem 1.25rem;
+  margin-bottom: 0.5rem;
   border: 1px solid;
-  border-radius: 4px;
-  text-transform: none;
+  border-radius: 10px !important;
+  text-transform: none !important;
   width: 100%;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+  height: 72px;
 }
 
+.ApplicationDashPendingCard:hover,
+.ApplicationDashApprovedCard:hover,
+.ApplicationDashDeniedCard:hover {
+  transform: translateX(5px);
+}
+
+/* Active states for cards */
 .ApplicationDashPendingCard.active {
   border-color: orange;
-  background-color: rgba(255, 152, 0, 0.1);
+  background-color: rgba(255, 152, 0, 0.08);
 }
 
 .ApplicationDashPendingCard:not(.active) {
   border-color: #e0e0e0;
-  background-color: transparent;
-}
-
-.ApplicationDashApprovedCard {
-  display: flex;
-  justify-content: space-between;
-  padding: 12px;
-  margin-bottom: 8px;
-  border: 1px solid;
-  border-radius: 4px;
-  text-transform: none;
-  width: 100%;
+  background-color: white;
 }
 
 .ApplicationDashApprovedCard.active {
   border-color: green;
-  background-color: rgba(76, 175, 80, 0.1);
+  background-color: rgba(76, 175, 80, 0.08);
 }
 
 .ApplicationDashApprovedCard:not(.active) {
   border-color: #e0e0e0;
-  background-color: transparent;
-}
-
-.ApplicationDashDeniedCard {
-  display: flex;
-  justify-content: space-between;
-  padding: 12px;
-  margin-bottom: 8px;
-  border: 1px solid;
-  border-radius: 4px;
-  text-transform: none;
-  width: 100%;
+  background-color: white;
 }
 
 .ApplicationDashDeniedCard.active {
-  border-color: red;
-  background-color: rgba(244, 67, 54, 0.1);
+  border-color: #d32f2f;
+  background-color: rgba(244, 67, 54, 0.08);
 }
 
 .ApplicationDashDeniedCard:not(.active) {
   border-color: #e0e0e0;
-  background-color: transparent;
+  background-color: white;
 }
 
 .ApplicationDashIcon {
-  padding: 8px;
-  border-radius: 4px;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
 }
 
 .ApplicationDashIcon.pending {
-  background-color: rgba(255, 152, 0, 0.2);
+  background-color: rgba(255, 152, 0, 0.15);
 }
 
 .ApplicationDashIcon.approved {
-  background-color: rgba(76, 175, 80, 0.2);
+  background-color: rgba(76, 175, 80, 0.15);
 }
 
 .ApplicationDashIcon.denied {
-  background-color: rgba(244, 67, 54, 0.2);
+  background-color: rgba(244, 67, 54, 0.15);
 }
 
 .ApplicationDashCircleIcon {
-  height: 20px;
-  width: 20px;
+  height: 18px;
+  width: 18px;
   border-radius: 50%;
 }
 
@@ -150,48 +186,51 @@
 }
 
 .ApplicationDashCircleIcon.denied {
-  background-color: red;
+  background-color: #d32f2f;
 }
 
 .ApplicationDashLabel {
   flex-grow: 1;
   text-align: left;
-  margin-left: 16px;
+  margin-left: 1rem;
+  font-size: 0.9rem !important;
+  color: rgba(0, 0, 0, 0.7) !important;
+  letter-spacing: 0.5px;
 }
 
 .ApplicationDashCount {
-  font-weight: bold;
+  font-weight: 700 !important;
+  font-size: 1.5rem !important;
+  color: #184a5b !important;
 }
 
-.ApplicationDashChart {
-  height: 100%;
-  flex: 1;
-}
-
+/* Chart styling */
 .ApplicationDashChartContainer {
-  height: 200px;
+  height: 240px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 16px;
+  padding: 1.25rem;
 }
 
 .ApplicationDashChartHeader {
   display: flex;
   justify-content: space-between;
-  border-bottom: 1px dashed #ccc;
-  padding-bottom: 8px;
+  align-items: center;
+  border-bottom: 1px dashed #e0e0e0;
+  padding-bottom: 0.75rem;
+  margin-bottom: 1rem;
 }
 
 .ApplicationDashChartLegend {
   display: flex;
-  gap: 16px;
+  gap: 1.25rem;
 }
 
 .ApplicationDashChartLegendItem {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
 }
 
 .ApplicationDashChartLegendDot {
@@ -210,8 +249,9 @@
 
 .ApplicationDashChartBody {
   position: relative;
-  height: 150px;
-  margin-top: 8px;
+  height: 160px;
+  margin-top: 0.75rem;
+  margin-bottom: 1rem;
 }
 
 .ApplicationDashChartGridLine {
@@ -219,7 +259,7 @@
   left: 0;
   right: 0;
   height: 1px;
-  background-color: #e0e0e0;
+  background-color: #f0f0f0;
 }
 
 .ApplicationDashChartGridLine:nth-child(1) {
@@ -241,90 +281,197 @@
 .ApplicationDashChartLabels {
   display: flex;
   justify-content: space-between;
-  margin-top: 8px;
+  margin-top: 0.5rem;
 }
 
 .ApplicationDashChartMonthLabel {
-  font-size: 0.6rem;
+  font-size: 0.7rem !important;
+  color: rgba(0, 0, 0, 0.5) !important;
 }
 
+
 .ApplicationDashTableSection {
-  margin: 16px;
+  display: flex;
+  flex-direction: column;
+  margin: 0.5rem 1.75rem 2rem;
   background-color: white;
-  border-radius: 4px;
-  box-shadow:
-    0 2px 1px -1px rgba(0, 0, 0, 0.2),
-    0 1px 1px 0 rgba(0, 0, 0, 0.14),
-    0 1px 3px 0 rgba(0, 0, 0, 0.12);
-  width: 80vw;
-  overflow-x: hidden;
+  border-radius: 12px !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06) !important;
+  width: 100%;
+  max-width: 1400px;
+  overflow: hidden;
   box-sizing: border-box;
 }
+
 .ApplicationDashTableHeader {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 16px;
-  border-bottom: 1px solid #e0e0e0;
-  width: 100%;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid #f0f0f0;
+  width: 100% !important;
   box-sizing: border-box;
 }
 
 .ApplicationDashTableTitle {
-  font-weight: 500;
-  color: #184a5b;
+  font-weight: 600 !important;
+  color: #184a5b !important;
+  font-size: 1.2rem !important;
 }
 
 .ApplicationDashFilterButton {
-  padding: 8px;
+  color: #184a5b !important;
+  background-color: rgba(24, 74, 91, 0.08) !important;
+  border-radius: 50% !important;
+  padding: 0.5rem !important;
+  transition: all 0.2s ease;
+}
+
+.ApplicationDashFilterButton:hover {
+  background-color: rgba(24, 74, 91, 0.14) !important;
+  transform: rotate(15deg);
 }
 
 .ApplicationDashTableContent {
-  max-height: 400px;
+
+  max-height: 450px;
   overflow-y: auto;
   overflow-x: hidden;
-  width: 100%;
+  width: 100% !important;
   box-sizing: border-box;
+  scrollbar-width: thin;
+  scrollbar-color: #8aacb5 #f5f8fa;
+}
+
+
+.ApplicationDashTableContent::-webkit-scrollbar {
+  width: 8px;
+}
+
+.ApplicationDashTableContent::-webkit-scrollbar-track {
+  background: #f5f8fa;
+}
+
+.ApplicationDashTableContent::-webkit-scrollbar-thumb {
+  background-color: #8aacb5;
+  border-radius: 4px;
 }
 
 .ApplicationDashNoData {
-  padding: 32px;
+  padding: 3rem;
   text-align: center;
-  color: rgba(0, 0, 0, 0.6);
+  color: rgba(0, 0, 0, 0.5);
+  font-style: italic;
 }
+
 .ApplicationDashTableRow {
-  width: 100%;
+  width: 100% !important; 
   box-sizing: border-box;
   display: flex;
   flex-wrap: nowrap;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
 }
+
 .ApplicationDashTableRow:hover {
-  background-color: #f9f9f9;
+  background-color: #f5f8fa;
+}
+
+.ApplicationDashApplicationStatus {
+  font-weight: 600 !important;
+  padding: 0.3rem 0.6rem !important;
+  border-radius: 6px;
+  display: inline-block;
 }
 
 .ApplicationDashApplicationStatus.pending {
-  color: darkorange;
+  color: darkorange !important;
+  background-color: rgba(255, 152, 0, 0.08);
 }
 
 .ApplicationDashApplicationStatus.approved {
-  color: green;
+  color: green !important;
+  background-color: rgba(76, 175, 80, 0.08);
 }
 
 .ApplicationDashApplicationStatus.denied {
-  color: red;
+  color: #d32f2f !important;
+  background-color: rgba(244, 67, 54, 0.08);
 }
 
 .ApplicationDashReviewButton {
-  text-transform: none;
+  text-transform: none !important;
+  background-color: rgba(24, 74, 91, 0.08) !important;
+  color: #184a5b !important;
+  font-weight: 500 !important;
+  padding: 0.3rem 1rem !important;
+  border-radius: 6px !important;
+  transition: all 0.2s ease !important;
 }
 
 .ApplicationDashReviewButton:hover {
-  text-decoration: underline;
+  background-color: #184a5b !important;
+  color: white !important;
+  transform: translateY(-2px);
 }
 
 .ApplicationDashLoading {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 300px;
+  height: 50vh;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+
+.MuiTable-root {
+  width: 100% !important;
+  table-layout: fixed !important;
+}
+
+
+.MuiTableContainer-root {
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow-x: auto !important;
+}
+
+
+.MuiTableCell-root {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+
+@media (max-width: 1200px) {
+  .ApplicationDashContent {
+    flex-direction: column;
+    width: 92%;
+  }
+  
+  .ApplicationDashTableSection {
+    width: 92%;
+  }
+}
+
+@media (max-width: 768px) {
+  .ApplicationDashContent,
+  .ApplicationDashTableSection {
+    width: 95%;
+  }
+  
+  .ApplicationDashContainer.sidebar-open {
+    margin-left: 0;
+    width: 100%;
+  }
+  
+  .ApplicationDashHeader {
+    padding: 1rem;
+  }
+  
+  .ApplicationDashTitle {
+    margin-left: 1rem !important;
+    font-size: 1.25rem !important;
+  }
 }
