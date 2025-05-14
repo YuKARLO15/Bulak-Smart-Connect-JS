@@ -1,6 +1,9 @@
-import { IsString, IsOptional, IsNotEmpty } from 'class-validator';
+import { IsString, IsOptional, IsNotEmpty, IsBoolean } from 'class-validator';
 
 export class CreateQueueDto {
+  @IsOptional()
+  userId?: number; 
+
   @IsString()
   @IsNotEmpty()
   firstName: string;
@@ -29,6 +32,7 @@ export class CreateQueueDto {
   @IsNotEmpty()
   appointmentType: string;
 
+  @IsBoolean()
   @IsOptional()
-  userId?: number;
+  isGuest?: boolean;
 }
