@@ -13,17 +13,17 @@ describe('AuthService', () => {
     findOne: jest.fn(),
     create: jest.fn(),
     save: jest.fn(),
-    delete: jest.fn()
+    delete: jest.fn(),
   };
 
   const mockJwtService = {
-    sign: jest.fn().mockReturnValue('test-token')
+    sign: jest.fn().mockReturnValue('test-token'),
   };
 
   const mockRolesService = {
     findByName: jest.fn().mockResolvedValue({ id: 1, name: 'citizen' }),
     assignRolesToUser: jest.fn(),
-    getUserRoles: jest.fn().mockResolvedValue([])
+    getUserRoles: jest.fn().mockResolvedValue([]),
   };
 
   beforeEach(async () => {
@@ -32,16 +32,16 @@ describe('AuthService', () => {
         AuthService,
         {
           provide: getRepositoryToken(User),
-          useValue: mockUsersRepository
+          useValue: mockUsersRepository,
         },
         {
           provide: JwtService,
-          useValue: mockJwtService
+          useValue: mockJwtService,
         },
         {
           provide: RolesService,
-          useValue: mockRolesService
-        }
+          useValue: mockRolesService,
+        },
       ],
     }).compile();
 

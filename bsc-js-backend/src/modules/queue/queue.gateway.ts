@@ -35,7 +35,7 @@ export class QueueGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   @SubscribeMessage('joinQueue')
   async handleJoinQueue(client: Socket, queueId: number) {
-    client.join(`queue_${queueId}`);
+    await client.join(`queue_${queueId}`);
     const queueData = await this.queueService.getQueueDetails(queueId);
     return queueData;
   }
@@ -47,19 +47,19 @@ export class QueueGateway implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   @SubscribeMessage('joinCounter')
-  handleJoinCounter(client: Socket, counterId: number) {
-    client.join(`counter_${counterId}`);
+  async handleJoinCounter(client: Socket, counterId: number) {
+    await client.join(`counter_${counterId}`);
     return { success: true };
   }
 
   // Send updates to all clients or specific rooms
   notifyQueueUpdate(queueId: number, data: any) {
-    this.server.to(`queue_${queueId}`).emit('queueUpdate', data);
-    this.server.emit('queueListUpdate'); // Global queue update
+    void this.server.to(`queue_${queueId}`).emit('queueUpdate', data);
+    void this.server.emit('queueListUpdate'); // Global queue update
   }
 
   notifyCounterUpdate(counterId: number, data: any) {
-    this.server.to(`counter_${counterId}`).emit('counterUpdate', data);
-    this.server.emit('counterListUpdate'); // Global counter update
+    void this.server.to(`counter_${counterId}`).emit('counterUpdate', data);
+    void this.server.emit('counterListUpdate'); // Global counter update
   }
 }

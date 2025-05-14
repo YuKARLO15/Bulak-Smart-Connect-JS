@@ -12,6 +12,10 @@ import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 
+interface RequestWithUser extends Request {
+  user: { sub: number; email: string; roles: string[] };
+}
+
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
@@ -23,7 +27,9 @@ export class AuthController {
       const result = await this.authService.login(loginDto);
       return result;
     } catch (error) {
-      throw new UnauthorizedException(error.message || 'Invalid credentials');
+      throw new UnauthorizedException(
+        error instanceof Error ? error.message : 'Invalid credentials',
+      );
     }
   }
 
@@ -35,7 +41,11 @@ export class AuthController {
 
   @UseGuards(JwtAuthGuard)
   @Get('profile')
-  getProfile(@Request() req) {
-    return this.authService.getProfile(req.user.userId);
+  getProfile(@Request() req: RequestWithUser) {
+    // Add null check before converting to number
+    if (!req.user || req.user.sub === undefined || req.user.sub === null) {
+      throw new UnauthorizedException('Invalid user ID');
+    }
+    return this.authService.getProfile(Number(req.user.sub));
   }
 }

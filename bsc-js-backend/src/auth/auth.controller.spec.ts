@@ -9,7 +9,7 @@ describe('AuthController', () => {
   const mockAuthService = {
     login: jest.fn(),
     register: jest.fn(),
-    getProfile: jest.fn()
+    getProfile: jest.fn(),
   };
 
   beforeEach(async () => {
@@ -18,8 +18,8 @@ describe('AuthController', () => {
       providers: [
         {
           provide: AuthService,
-          useValue: mockAuthService
-        }
+          useValue: mockAuthService,
+        },
       ],
     }).compile();
 
