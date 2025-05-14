@@ -35,7 +35,7 @@ export class QueueGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   @SubscribeMessage('joinQueue')
   async handleJoinQueue(client: Socket, queueId: number) {
-    client.join(`queue_${queueId}`);
+    await client.join(`queue_${queueId}`);
     const queueData = await this.queueService.getQueueDetails(queueId);
     return queueData;
   }
@@ -47,8 +47,8 @@ export class QueueGateway implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   @SubscribeMessage('joinCounter')
-  handleJoinCounter(client: Socket, counterId: number) {
-    client.join(`counter_${counterId}`);
+  async handleJoinCounter(client: Socket, counterId: number) {
+    await client.join(`counter_${counterId}`);
     return { success: true };
   }
 

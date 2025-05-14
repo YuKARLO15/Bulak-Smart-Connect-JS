@@ -1,5 +1,5 @@
-import { 
-  Module, 
+import {
+  Module,
   //forwardRef, // Uncomment if you need to use forwardRef
 } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';

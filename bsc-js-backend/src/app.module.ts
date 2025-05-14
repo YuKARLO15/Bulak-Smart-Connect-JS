@@ -33,14 +33,18 @@ import { QueueModule } from './modules/queue/queue.module';
         dropSchema: false,
 
         // Only for development environments!
-        beforeConnect: async (connection: any): Promise<void> => {
+        beforeConnect: async (connection): Promise<void> => {
           if (process.env.NODE_ENV !== 'production') {
-            await connection.query('SET FOREIGN_KEY_CHECKS=0;');
+            await (
+              connection as { query: (sql: string) => Promise<unknown> }
+            ).query('SET FOREIGN_KEY_CHECKS=0;');
           }
         },
-        afterConnect: async (connection: any): Promise<void> => {
+        afterConnect: async (connection): Promise<void> => {
           if (process.env.NODE_ENV !== 'production') {
-            await connection.query('SET FOREIGN_KEY_CHECKS=1;');
+            await (
+              connection as { query: (sql: string) => Promise<unknown> }
+            ).query('SET FOREIGN_KEY_CHECKS=1;');
           }
         },
       }),

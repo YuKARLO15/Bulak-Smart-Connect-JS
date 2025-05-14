@@ -30,7 +30,8 @@ export class AuthService {
       ],
     });
     if (user && (await bcrypt.compare(loginDto.password, user.password))) {
-      const { password, ...result } = user;
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { password: __password, ...result } = user;
       return result;
     }
     return null;
@@ -82,7 +83,8 @@ export class AuthService {
       console.log('Generated token:', token ? 'Success' : 'Failed');
 
       // Remove password from response
-      const { password: _password, ...userWithoutPassword } = user;
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { password: __password, ...userWithoutPassword } = user;
 
       return {
         access_token: token,
@@ -182,7 +184,8 @@ export class AuthService {
       const payload = { sub: user.id, email: user.email, roles: ['citizen'] };
 
       // Remove password from response
-      const { password: _password, ...userWithoutPassword } = user;
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { password: __password, ...userWithoutPassword } = user;
 
       return {
         access_token: this.jwtService.sign(payload),
@@ -221,7 +224,9 @@ export class AuthService {
     const roles = await this.rolesService.getUserRoles(userId);
     const roleNames = roles.map((role) => role.name);
 
-    const { password: _password, ...result } = user;
+    // Remove password from response
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password: __password, ...result } = user;
     return {
       ...result,
       roles: roleNames,

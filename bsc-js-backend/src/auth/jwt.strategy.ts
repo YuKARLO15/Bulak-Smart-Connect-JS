@@ -25,7 +25,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  async validate(payload: JwtPayload): Promise<JwtPayload> {
+  validate(payload: JwtPayload): JwtPayload {
     // Validation for the payload
     if (!payload || payload.sub === undefined || isNaN(Number(payload.sub))) {
       throw new UnauthorizedException('Invalid token payload');
@@ -34,7 +34,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     const userId = Number(payload.sub);
     const email = String(payload.email || '');
     const roles = Array.isArray(payload.roles) ? payload.roles : [];
-    
+
     return { sub: userId, email, roles };
   }
 }
