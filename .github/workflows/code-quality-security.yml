@@ -206,8 +206,8 @@ jobs:
           name: backend-coverage-report
           path: bsc-js-backend/coverage/
 
-  bundle-analysis:
-    name: Bundle Size Analysis
+  frontend-bundle-analysis:
+    name: Frontend Bundle Size Analysis
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -259,3 +259,58 @@ jobs:
         with:
           name: bundle-visualization
           path: bulak-smart-connect-js/stats.html
+
+  backend-bundle-analysis:
+    name: Backend Bundle Size Analysis
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Cache node modules
+        uses: actions/cache@v4
+        with:
+          path: |
+            **/node_modules
+            .eslintcache
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/package-lock.json') }}
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: Install dependencies and analysis tools
+        run: |
+          cd bsc-js-backend
+          npm ci
+          npm install webpack-bundle-analyzer --no-save
+      
+      - name: Build backend with webpack stats
+        run: |
+          cd bsc-js-backend
+          NODE_ENV=production npm run build -- --webpack
+          npx webpack-bundle-analyzer dist/webpack-stats.json dist --report stats.html --no-open
+      
+      - name: Generate size report
+        run: |
+          cd bsc-js-backend
+          echo "Backend bundle size summary:" > size-report.txt
+          echo "=============================" >> size-report.txt
+          echo "" >> size-report.txt
+          find dist -type f -name "*.js" | xargs du -sh | sort -hr >> size-report.txt
+          echo "" >> size-report.txt
+          echo "Total size:" >> size-report.txt
+          du -sh dist >> size-report.txt
+          cat size-report.txt
+      
+      - name: Upload bundle visualization
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-bundle-visualization
+          path: bsc-js-backend/stats.html
+      
+      - name: Upload size report
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-size-report
+          path: bsc-js-backend/size-report.txt
