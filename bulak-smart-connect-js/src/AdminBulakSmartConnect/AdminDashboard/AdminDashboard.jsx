@@ -13,6 +13,9 @@ import {
   ResponsiveContainer,
 } from 'recharts';
 import NavBar from '../../NavigationComponents/NavSide';
+import RecentApplicationsAdmin from './RecentApplicationsAdmin';
+import RecentAppointmentsAdmin from './RecentAppointmentsAdmin';
+
 
 const AdminDashboard = () => {
   // Empty data arrays
@@ -81,20 +84,27 @@ const AdminDashboard = () => {
             {/* Document Application Section */}
             <div className="admin-dashboard-section-container">
               <h2>Document Application</h2>
+                  <RecentApplicationsAdmin />
               <div className="admin-dashboard-document-applications">{/* No data */}</div>
             </div>
 
             {/* Pre-Appointments Section */}
             <div className="admin-dashboard-section-container">
-              <h2>Pre-Appointments</h2>
+              <h2> Scheduled Appointments</h2>
+                  <RecentAppointmentsAdmin />
               <div className="admin-dashboard-pre-appointments">{/* No data */}</div>
             </div>
           </div>
 
-          {/* Walk-In Queue Section */}
-          <div className="admin-dashboard-walk-in-queue">
-            <h2>Walk - In Queue</h2>
-            <div className="admin-dashboard-queue-content">{/* Queue content */}</div>
+          {/* Right side column */}
+          <div className="admin-dashboard-sidebar">
+            {/* Walk-In Queue Section */}
+            <div className="admin-dashboard-walk-in-queue">
+              <h2>Walk - In Queue</h2>
+              <div className="admin-dashboard-queue-content">{/* Queue content */}</div>
+            </div>
+            
+          
           </div>
         </div>
       </div>
