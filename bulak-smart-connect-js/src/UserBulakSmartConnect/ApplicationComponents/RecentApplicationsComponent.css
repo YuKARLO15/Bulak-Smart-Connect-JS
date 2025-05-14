@@ -4,16 +4,36 @@
   justify-items: left;
   width: 80vw;
   margin-top: 10vh;
-  background-color: #fffbfa !important;
+  background-color: #ffffff;
   padding: 15px;
   border-radius: 8px;
+   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
 .RecentApplicationsTitle {
   color: #184a5b !important;
-  text-align: start;
   font-weight: 600 !important;
+  font-size: 1.2rem !important;
+  margin-bottom: 0.75rem !important;
+  letter-spacing: 0.5px;
 }
-
+.LoadingContainerApplications {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 150px;
+  width: 100%;
+}
+.ErrorContainerApplications {
+  width: 100%;
+  padding: 1rem;
+}
+.NoApplicationsCard {
+  background-color: #fcfcfc !important;
+  border: 1px dashed #e0e0e0;
+  text-align: center;
+  padding: 1.5rem;
+}
 .ApplicationCard {
   justify-content: start;
   margin-left: 0vw;
@@ -58,4 +78,19 @@
 .ApplicationBtn {
   text-decoration: underline !important;
   margin-top: 2vh !important;
+}
+
+.StartApplicationBtn {
+  margin-top: 0.5rem !important;
+}
+@media (max-width: 600px) {
+  .RecentApplicationsDivider {
+    padding: 1.25rem 1rem;
+    margin: 1rem;
+    width: calc(100% - 2rem);
+  }
+  
+  .RecentApplicationsTitle {
+    font-size: 1.1rem !important;
+  }
 }
