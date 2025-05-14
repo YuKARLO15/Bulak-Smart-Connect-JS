@@ -285,10 +285,56 @@ jobs:
           npm ci
           npm install webpack-bundle-analyzer --no-save
       
+      - name: Create webpack config for stats
+        run: |
+          cd bsc-js-backend
+          cat > webpack-stats.config.js << 'EOF'
+          const { compilerOptions } = require('./tsconfig.json');
+          const nodeExternals = require('webpack-node-externals');
+          const path = require('path');
+
+          module.exports = {
+            mode: 'production',
+            target: 'node',
+            externals: [nodeExternals()],
+            entry: './src/main.ts',
+            module: {
+              rules: [
+                {
+                  test: /\.tsx?$/,
+                  use: 'ts-loader',
+                  exclude: /node_modules/,
+                },
+              ],
+            },
+            optimization: {
+              minimize: false,
+            },
+            resolve: {
+              extensions: ['.tsx', '.ts', '.js'],
+              alias: {
+                '@': path.resolve(__dirname, 'src'),
+              },
+            },
+            output: {
+              path: path.resolve(__dirname, 'dist'),
+              filename: 'main.js',
+            },
+            stats: {
+              // Configure stats to output JSON file
+              json: true,
+            },
+          };
+          EOF
+      
       - name: Build backend with webpack stats
         run: |
           cd bsc-js-backend
-          NODE_ENV=production npm run build -- --webpack
+          NODE_ENV=production npx webpack --config webpack-stats.config.js --profile --json > dist/webpack-stats.json
+      
+      - name: Analyze bundle
+        run: |
+          cd bsc-js-backend
           npx webpack-bundle-analyzer dist/webpack-stats.json dist --report stats.html --no-open
       
       - name: Generate size report
