@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, Typography, Box } from '@mui/material';
 import './MarriageLicenseSummary.css';
+import EditIcon from '@mui/icons-material/Edit';
 
 const MarriageLicenseSummary = () => {
   const [formData, setFormData] = useState({});
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const [isEditing, setIsEditing] = useState(false); 
 
 
   useEffect(() => {
@@ -21,13 +23,24 @@ const MarriageLicenseSummary = () => {
       setLoading(false);
     }
   }, []);
-
+  const handleModify = () => {
+     localStorage.setItem('isEditingMarriageForm', 'true');
+    navigate('/MarriageForm');
+  };
   const handleBackToForm = () => {
     navigate('/MarriageForm');
   };
 
   const handleSubmit = () => {
     navigate('/ApplicationForm');
+  };
+
+
+
+
+  // Add this function to cancel edit mode
+  const handleEditCancel = () => {
+    setEditConfirmOpen(false);
   };
 
   if (loading) {
@@ -39,6 +52,27 @@ const MarriageLicenseSummary = () => {
     const consentPersonAddWife = formData.wifewaliStreet + " " + formData.wifewaliBarangay + " " + formData.wifewaliCity + " " + formData.wifewaliProvince;
   return (
     <div className="ContainerMLSummary">
+       {formData.lastUpdated && (
+      <Box 
+        sx={{ 
+          backgroundColor: '#e3f2fd', 
+          padding: '10px 15px', 
+          borderRadius: '8px',
+          margin: '0 auto 20px auto',
+          maxWidth: '80%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+            gap: '8px',
+       
+        }}
+      >
+        <EditIcon fontSize="small" sx={{ color: '#184a5b' }} />
+        <Typography variant="body2" sx={{ color: '#184a5b' }}>
+          This application was last modified on {new Date(formData.lastUpdated).toLocaleString()}
+        </Typography>
+      </Box>
+    )}
       <div className="FormDocumentMLSummary">
         
         <div className="DocumentHeaderMLSummary">
@@ -589,6 +623,23 @@ const MarriageLicenseSummary = () => {
         >
           Back to Form
         </Button>
+
+          <Button 
+    variant="contained" 
+    onClick={handleModify}
+    className="ModifyButtonMLSummary"
+    startIcon={<EditIcon />}
+    sx={{
+      backgroundColor: '#8aacb5',
+      color: 'white',
+      marginRight: '10px',
+      '&:hover': {
+        backgroundColor: '#6d8a91',
+      }
+    }}
+  >
+    Modify
+  </Button>
         <Button 
           variant="contained" 
           onClick={handleSubmit}
