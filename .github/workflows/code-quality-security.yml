@@ -328,10 +328,20 @@ jobs:
       - name: Generate code complexity report
         run: |
           cd bsc-js-backend
-          npm install --no-save ts-complexity
+          npm install --no-save eslint-plugin-complexity eslint-formatter-html
           mkdir -p reports
-          npx ts-complexity src --output-format html > reports/complexity-report.html
-          echo "Code complexity report generated"
+          echo 'module.exports = { plugins: ["complexity"], rules: { "complexity": ["warn", 10] }, extends: ["eslint:recommended"] }' > complexity.eslintrc.js
+          npx eslint --no-eslintrc -c complexity.eslintrc.js --ext .ts,.js src --format html > reports/complexity-report.html
+          
+          # Generate summary for quick reference
+          npx eslint --no-eslintrc -c complexity.eslintrc.js --ext .ts,.js src -f json | \
+            node -e "const data = JSON.parse(require('fs').readFileSync(0, 'utf-8')); \
+            const complexFiles = data.filter(f => f.messages.some(m => m.ruleId === 'complexity')); \
+            console.log('Files with high complexity:'); \
+            complexFiles.forEach(f => console.log(\`\${f.filePath}: \${f.messages.filter(m => m.ruleId === 'complexity').length} issues\`)); \
+            console.log(\`Total files with complexity issues: \${complexFiles.length}\`);" > reports/complexity-summary.txt
+          
+          cat reports/complexity-summary.txt
       
       - name: Upload size report
         uses: actions/upload-artifact@v4
@@ -344,3 +354,9 @@ jobs:
         with:
           name: backend-complexity-report
           path: bsc-js-backend/reports/complexity-report.html
+
+      - name: Upload complexity summary
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-complexity-summary
+          path: bsc-js-backend/reports/complexity-summary.txt
