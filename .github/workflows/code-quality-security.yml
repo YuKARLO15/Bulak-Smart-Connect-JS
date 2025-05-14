@@ -225,16 +225,21 @@ jobs:
         with:
           node-version: '20'
       
-      - name: Install dependencies
-        run: cd bulak-smart-connect-js && npm ci
+      - name: Install dependencies and source-map-explorer
+        run: |
+          cd bulak-smart-connect-js
+          npm ci
+          npm install source-map-explorer --no-save
       
       - name: Build with source maps
-        run: cd bulak-smart-connect-js && npm run build
+        run: |
+          cd bulak-smart-connect-js
+          npm run build -- --sourcemap
       
       - name: Analyze bundle size
         run: |
           cd bulak-smart-connect-js
-          npx source-map-explorer 'build/static/js/*.js' --html bundle-analysis.html
+          npx source-map-explorer 'dist/assets/*.js' --html bundle-analysis.html
       
       - name: Upload bundle analysis
         uses: actions/upload-artifact@v4
