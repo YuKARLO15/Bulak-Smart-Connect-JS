@@ -363,6 +363,29 @@
     min-width: 120px;
     padding: 10px !important;
   }
+
+  .ButtonContainerMLSummary {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  margin-bottom: 30px;
+  gap: 10px; /* Add gap between buttons */
+}
+
+.ModifyButtonMLSummary:hover {
+  background-color: #6d8a91 !important;
+}
+
+/* Add a subtle animation for the edit icon */
+.ModifyButtonMLSummary:hover .MuiSvgIcon-root {
+  animation: wiggle 0.5s ease;
+}
+
+@keyframes wiggle {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-10deg); }
+  75% { transform: rotate(10deg); }
+}
   
   @media print {
     .ButtonContainerMLSummary {
