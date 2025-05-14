@@ -35,9 +35,13 @@ import { QueueModule } from './modules/queue/queue.module';
         // Only for development environments!
         beforeConnect: async (connection): Promise<void> => {
           if (process.env.NODE_ENV !== 'production') {
-            await (
-              connection as { query: (sql: string) => Promise<unknown> }
-            ).query('SET FOREIGN_KEY_CHECKS=0;');
+            const conn = connection as {
+              query: (sql: string) => Promise<unknown>;
+            };
+            // Disable foreign key checks for development
+            await conn.query('SET FOREIGN_KEY_CHECKS=0;');
+            // Set time zone to UTC for consistent datetime handling
+            await conn.query("SET time_zone = '+08:00';"); // Philippines time zone (UTC+8)
           }
         },
         afterConnect: async (connection): Promise<void> => {
