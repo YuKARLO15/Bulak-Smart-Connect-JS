@@ -5,6 +5,7 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 import NavBar from '../../NavigationComponents/NavSide';
 
 
+
 const AdminAppointmentDashboard = () => {
   // Empty data arrays
   const appointmentsData = [];
