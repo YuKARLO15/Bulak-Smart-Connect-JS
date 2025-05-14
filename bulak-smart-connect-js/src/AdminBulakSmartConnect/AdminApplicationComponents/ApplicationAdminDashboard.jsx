@@ -21,6 +21,7 @@ import './ApplicationAdminDashboard.css';
 import { getApplications } from '../../UserBulakSmartConnect/ApplicationComponents/ApplicationData';
 import { useNavigate } from 'react-router-dom';
 import NavBar from '../../NavigationComponents/NavSide';
+import ApplicationLineChart from '../AdminChartsComponent/ApplicationLineChart';
 
 const AdminApplicationDashboard = () => {
   const [filter, setFilter] = useState('All');
@@ -42,6 +43,13 @@ const AdminApplicationDashboard = () => {
       setLoading(false);
     }
   }, []);
+
+const [monthlyData, setMonthlyData] = useState({
+  Birth: [15, 20, 10, 25, 30, 22, 28, 35, 32, 40, 45, 50],
+  Marriage: [20, 25, 15, 18, 20, 25, 22, 28, 30, 32, 28, 35],
+});
+
+
 
   useEffect(() => {
     const handleStorageChange = e => {
@@ -198,147 +206,32 @@ const AdminApplicationDashboard = () => {
 
         {/* Right Column: Line Chart */}
         <Card className="ApplicationDashChart">
-          <CardContent>
-            <Box className="ApplicationDashChartContainer">
-              <Box className="ApplicationDashChartHeader">
-                <Typography variant="caption" color="textSecondary">
-                  Stats overview
-                </Typography>
-                <Box className="ApplicationDashChartLegend">
-                  <Box className="ApplicationDashChartLegendItem">
-                    <Box className="ApplicationDashChartLegendDot approved"></Box>
-                    <Typography variant="caption">Approved</Typography>
-                  </Box>
-                  <Box className="ApplicationDashChartLegendItem">
-                    <Box className="ApplicationDashChartLegendDot pending"></Box>
-                    <Typography variant="caption">Pending</Typography>
-                  </Box>
-                </Box>
-              </Box>
-
-              {/* Line chart */}
-              <Box className="ApplicationDashChartBody">
-                {/* Chart grid lines */}
-                {[0, 1, 2, 3].map(line => (
-                  <Box key={line} className="ApplicationDashChartGridLine" />
-                ))}
-
-                {/* Line chart for approved applications */}
-                <svg
-                  width="100%"
-                  height="100%"
-                  viewBox="0 0 100 100"
-                  preserveAspectRatio="none"
-                  style={{ position: 'absolute', left: 0, bottom: 0, right: 0, top: 0 }}
-                >
-                  <polyline
-                    points="
-                      0,80
-                      9,65
-                      18,75
-                      27,55
-                      36,45
-                      45,50
-                      54,40
-                      63,30
-                      72,35
-                      81,25
-                      90,20
-                      100,15
-                    "
-                    fill="none"
-                    stroke="green"
-                    strokeWidth="2"
-                  />
-                  {/* Dots for approved line */}
-                  {[
-                    [0, 80],
-                    [9, 65],
-                    [18, 75],
-                    [27, 55],
-                    [36, 45],
-                    [45, 50],
-                    [54, 40],
-                    [63, 30],
-                    [72, 35],
-                    [81, 25],
-                    [90, 20],
-                    [100, 15],
-                  ].map((point, i) => (
-                    <circle
-                      key={`approved-${i}`}
-                      cx={point[0]}
-                      cy={point[1]}
-                      r="1.5"
-                      fill="green"
-                    />
-                  ))}
-                </svg>
-
-                {/* Line chart for pending applications */}
-                <svg
-                  width="100%"
-                  height="100%"
-                  viewBox="0 0 100 100"
-                  preserveAspectRatio="none"
-                  style={{ position: 'absolute', left: 0, bottom: 0, right: 0, top: 0 }}
-                >
-                  <polyline
-                    points="
-                      0,85
-                      9,75
-                      18,80
-                      27,70
-                      36,60
-                      45,65
-                      54,55
-                      63,60
-                      72,50
-                      81,45
-                      90,35
-                      100,40
-                    "
-                    fill="none"
-                    stroke="orange"
-                    strokeWidth="2"
-                  />
-                  {/* Dots for pending line */}
-                  {[
-                    [0, 85],
-                    [9, 75],
-                    [18, 80],
-                    [27, 70],
-                    [36, 60],
-                    [45, 65],
-                    [54, 55],
-                    [63, 60],
-                    [72, 50],
-                    [81, 45],
-                    [90, 35],
-                    [100, 40],
-                  ].map((point, i) => (
-                    <circle
-                      key={`pending-${i}`}
-                      cx={point[0]}
-                      cy={point[1]}
-                      r="1.5"
-                      fill="orange"
-                    />
-                  ))}
-                </svg>
-              </Box>
-
-              {/* Month labels */}
-              <Box className="ApplicationDashChartLabels">
-                {['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'].map((month, i) => (
-                  <Typography key={i} variant="caption" className="ApplicationDashChartMonthLabel">
-                    {month}
-                  </Typography>
-                ))}
-              </Box>
-            </Box>
-          </CardContent>
-        </Card>
+  <CardContent>
+    <Typography variant="h6" className="ApplicationDashSectionTitle" gutterBottom>
+      Application Trends
+    </Typography>
+    <Typography variant="body2" sx={{ color: 'rgba(0,0,0,0.6)', marginBottom: 2 }}>
+      Monthly application statistics
+    </Typography>
+    
+   
+    <ApplicationLineChart 
+      data={[
+        { name: 'Feb', Birth: monthlyData.Birth[1], Marriage: monthlyData.Marriage[1] },
+        { name: 'Mar', Birth: monthlyData.Birth[2], Marriage: monthlyData.Marriage[2] },
+        { name: 'Apr', Birth: monthlyData.Birth[3], Marriage: monthlyData.Marriage[3] },
+        { name: 'May', Birth: monthlyData.Birth[4], Marriage: monthlyData.Marriage[4] },
+        { name: 'Jun', Birth: monthlyData.Birth[5], Marriage: monthlyData.Marriage[5] },
+        { name: 'Jul', Birth: monthlyData.Birth[6], Marriage: monthlyData.Marriage[6] },
+        { name: 'Aug', Birth: monthlyData.Birth[7], Marriage: monthlyData.Marriage[7] },
+        { name: 'Sep', Birth: monthlyData.Birth[8], Marriage: monthlyData.Marriage[8] },
+        { name: 'Oct', Birth: monthlyData.Birth[9], Marriage: monthlyData.Marriage[9] },
+        { name: 'Nov', Birth: monthlyData.Birth[10],Marriage: monthlyData.Marriage[10] },
+        { name: 'Dec', Birth: monthlyData.Birth[11],Marriage: monthlyData.Marriage[11] },
+      ]}
+    />
+  </CardContent>
+</Card>
       </Box>
 
       <Box className="ApplicationDashTableSection" sx={{ maxWidth: '80vw', overflowX: 'hidden' }}>

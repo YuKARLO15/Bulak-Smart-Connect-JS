@@ -1,3 +1,8 @@
+// Currently we use src/context/AuthContext.jsx for authentication and user data management.
+// Currently we use src/services/api.js for API calls.
+// This is still used for registering
+// But logging in and getting user data is done in src/context/AuthContext.jsx
+
 import axios from 'axios';
 
 const API_URL = 'http://localhost:3000';

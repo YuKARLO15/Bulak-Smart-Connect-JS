@@ -17,12 +17,30 @@ export class User {
 
   @Column({ unique: true })
   email: string;
+  
+  @Column({ unique: true })
+  username: string;
 
   @Column()
   password: string;
+  
+  @Column({ name: 'first_name' })
+  firstName: string;
+  
+  @Column({ name: 'middle_name', nullable: true })
+  middleName: string;
+  
+  @Column({ name: 'last_name' })
+  lastName: string;
 
   @Column()
-  name: string;
+  name: string; // Keep for backward compatibility
+
+  @Column({ name: 'name_extension', nullable: true })
+  nameExtension: string;
+  
+  @Column({ name: 'contact_number', nullable: true })
+  contactNumber: string;
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;

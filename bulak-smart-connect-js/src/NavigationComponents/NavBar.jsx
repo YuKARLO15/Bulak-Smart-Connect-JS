@@ -42,40 +42,44 @@ const NavBar = () => {
             <>
               <Button onClick={handleServicesClick}>Services</Button>
               <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleServicesClose}>
-                <MenuItem className="submenu-container">
-                  <ListItemIcon>
-                    <DescriptionIcon fontSize="small" />
-                  </ListItemIcon>
-                  <RouterLink
-                    to="/ApplicationForm"
-                    style={{ textDecoration: 'none', color: 'inherit', width: '100%' }}
-                  >
+                <RouterLink
+                  to="/ApplicationForm"
+                  style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}
+                  onClick={handleServicesClose}
+                >
+                  <MenuItem>
+                    <ListItemIcon>
+                      <DescriptionIcon fontSize="small" />
+                    </ListItemIcon>
                     <ListItemText primary="Document Application" />
-                  </RouterLink>
-                </MenuItem>
+                  </MenuItem>
+                </RouterLink>
 
-                <MenuItem onClick={handleServicesClose}>
-                  <ListItemIcon>
-                    <CalendarTodayIcon fontSize="small" />
-                  </ListItemIcon>
-                  <RouterLink
-                    to="/AppointmentForm"
-                    style={{ textDecoration: 'none', color: 'inherit', width: '100%' }}
-                  >
+                <RouterLink
+                  to="/AppointmentForm"
+                  style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}
+                  onClick={handleServicesClose}
+                >
+                  <MenuItem>
+                    <ListItemIcon>
+                      <CalendarTodayIcon fontSize="small" />
+                    </ListItemIcon>
                     <ListItemText primary="Appointment Booking" />
-                  </RouterLink>
-                </MenuItem>
-                <MenuItem onClick={handleServicesClose}>
-                  <ListItemIcon>
-                    <DirectionsWalkOutlinedIcon fontSize="small" />
-                  </ListItemIcon>
-                  <RouterLink
-                    to="/WalkInQueue"
-                    style={{ textDecoration: 'none', color: 'inherit', width: '100%' }}
-                  >
+                  </MenuItem>
+                </RouterLink>
+
+                <RouterLink
+                  to="/WalkInQueue"
+                  style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}
+                  onClick={handleServicesClose}
+                >
+                  <MenuItem>
+                    <ListItemIcon>
+                      <DirectionsWalkOutlinedIcon fontSize="small" />
+                    </ListItemIcon>
                     <ListItemText primary="Smart Walk-In Queue" />
-                  </RouterLink>
-                </MenuItem>
+                  </MenuItem>
+                </RouterLink>
               </Menu>
 
               <RouterLink to="/UserDashboard">

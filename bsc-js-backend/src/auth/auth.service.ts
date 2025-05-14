@@ -24,7 +24,10 @@ export class AuthService {
 
   async validateUser(loginDto: LoginDto): Promise<any> {
     const user = await this.usersRepository.findOne({
-      where: { email: loginDto.email },
+      where: [
+        { email: loginDto.emailOrUsername },
+        { username: loginDto.emailOrUsername }
+      ],
     });
     if (user && (await bcrypt.compare(loginDto.password, user.password))) {
       const { password, ...result } = user;
@@ -38,7 +41,10 @@ export class AuthService {
 
     try {
       const user = await this.usersRepository.findOne({
-        where: { email: loginDto.email },
+        where: [
+          { email: loginDto.emailOrUsername },
+          { username: loginDto.emailOrUsername }
+        ],
         relations: ['defaultRole'],
       });
 
@@ -93,19 +99,41 @@ export class AuthService {
   }
 
   async register(registerDto: RegisterDto) {
-    const { email, password, name } = registerDto;
-
+    const { 
+      email, 
+      username, 
+      password, 
+      firstName, 
+      middleName, 
+      lastName, 
+      nameExtension, 
+      contactNumber 
+    } = registerDto;
+    
+    // Generate full name
+    const name = `${firstName} ${middleName ? middleName + ' ' : ''}${lastName}${nameExtension ? ' ' + nameExtension : ''}`;
+    
     // Validate email format
     if (!this.isValidEmail(email)) {
       throw new BadRequestException('Invalid email format');
     }
 
-    // Check if user exists
-    const existingUser = await this.usersRepository.findOne({
+    // Check if user exists by email
+    const existingUserByEmail = await this.usersRepository.findOne({
       where: { email },
     });
-    if (existingUser) {
+    if (existingUserByEmail) {
       throw new ConflictException('Email already exists');
+    }
+    
+    // Check if username is taken
+    if (username) {
+      const existingUserByUsername = await this.usersRepository.findOne({
+        where: { username },
+      });
+      if (existingUserByUsername) {
+        throw new ConflictException('Username already exists');
+      }
     }
 
     // Validate password strength
@@ -118,10 +146,16 @@ export class AuthService {
     const hashedPassword = await bcrypt.hash(password, salt);
 
     try {
-      // Create new user
+      // Create new user with all fields
       const user = this.usersRepository.create({
         email,
+        username,
         password: hashedPassword,
+        firstName,
+        middleName,
+        lastName,
+        nameExtension,
+        contactNumber,
         name,
       });
 

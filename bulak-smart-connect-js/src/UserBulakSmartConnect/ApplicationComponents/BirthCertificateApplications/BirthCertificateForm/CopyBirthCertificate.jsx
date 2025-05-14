@@ -166,7 +166,7 @@ const CopyBirthCertificate = ({ formData = {}, handleChange }) => {
 
       const applicationData = {
         id: applicationId,
-        type: 'Copy of Birth Certificate',
+        type: 'Birth Certificate',
         applicationType: 'Request copy',
         date: new Date().toLocaleDateString('en-US', {
           year: 'numeric',
@@ -220,13 +220,13 @@ const CopyBirthCertificate = ({ formData = {}, handleChange }) => {
       const customEvent = new CustomEvent('customStorageUpdate', { 
         detail: { 
           id: applicationId,
-          type: 'Copy of Birth Certificate', 
+          type: 'Birth Certificate', 
           action: isEditing ? 'updated' : 'created' 
         }
       });
       window.dispatchEvent(customEvent);
       
-      // Navigate to appropriate page
+   
       if (isEditing) {
     
         window.location.href = '/CTCBirthCertificate';
