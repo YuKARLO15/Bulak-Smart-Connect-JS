@@ -248,3 +248,14 @@ jobs:
         with:
           name: bundle-analysis
           path: bulak-smart-connect-js/bundle-analysis.html
+
+      - name: Build with visualization
+        run: |
+          cd bulak-smart-connect-js
+          npm run build
+
+      - name: Upload visualizer report
+        uses: actions/upload-artifact@v4
+        with:
+          name: bundle-visualization
+          path: bulak-smart-connect-js/stats.html
