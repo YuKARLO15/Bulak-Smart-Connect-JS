@@ -8,7 +8,8 @@ import RecentAppointments from '../AppointmentComponents/RecentAppointment';
 import Footer from '../../footer';
 
 const UserDashboard = () => {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+ 
+  
 
   return (
     <div>

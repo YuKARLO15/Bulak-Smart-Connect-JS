@@ -13,6 +13,8 @@ import {
   ResponsiveContainer,
 } from 'recharts';
 import NavBar from '../../NavigationComponents/NavSide';
+import RecentApplicationsAdmin from './RecentApplicationsAdmin';
+import RecentAppointmentsAdmin from './RecentAppointmentsAdmin';
 
 const AdminDashboard = () => {
   // Empty data arrays
@@ -28,7 +30,7 @@ const AdminDashboard = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   // Search functionality
-  const handleSearch = (e) => {
+  const handleSearch = e => {
     setSearchTerm(e.target.value);
   };
 
@@ -37,14 +39,14 @@ const AdminDashboard = () => {
     const fetchDashboardData = async () => {
       setLoading(true);
       try {
-         const response = await fetch('http://localhost:3000/api/dashboard');
-         const data = await response.json();
-         setWalkInData(data.walkInData || []);
-         setCertificateData(data.certificateData || []);
-         setDocumentApplications(data.applications || []);
-         setPreAppointments(data.appointments || []);
-         setWalkInQueue(data.queue || []);
-        
+        const response = await fetch('http://localhost:3000/api/dashboard');
+        const data = await response.json();
+        setWalkInData(data.walkInData || []);
+        setCertificateData(data.certificateData || []);
+        setDocumentApplications(data.applications || []);
+        setPreAppointments(data.appointments || []);
+        setWalkInQueue(data.queue || []);
+
         setLoading(false);
       } catch (err) {
         console.error('Error fetching dashboard data:', err);
@@ -52,25 +54,20 @@ const AdminDashboard = () => {
         setLoading(false);
       }
     };
-    
+
     // Uncomment when ready to fetch data
-     fetchDashboardData();
+    fetchDashboardData();
   }, []);
 
   return (
     <div className={`admin-dashboard ${isSidebarOpen ? 'sidebar-open' : ''}`}>
       <NavBar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
-      
+
       {/* Top Navigation Bar */}
       <div className="admin-dashboard-top-nav">
         <h1 className="admin-dashboard-title">Dashboard</h1>
         <div className="admin-dashboard-search-bar">
-          <input 
-            type="text" 
-            placeholder="Search" 
-            value={searchTerm}
-            onChange={handleSearch}
-          />
+          <input type="text" placeholder="Search" value={searchTerm} onChange={handleSearch} />
         </div>
       </div>
 
@@ -121,35 +118,25 @@ const AdminDashboard = () => {
             {/* Document Application Section */}
             <div className="admin-dashboard-section-container">
               <h2>Document Application</h2>
-              <div className="admin-dashboard-document-applications">
-                {/* No data */}
-              </div>
-              <Link to="/admin/documents" className="admin-dashboard-view-all">
-                View All Applications →
-              </Link>
+              <RecentApplicationsAdmin />
+              <div className="admin-dashboard-document-applications">{/* No data */}</div>
             </div>
 
             {/* Pre-Appointments Section */}
             <div className="admin-dashboard-section-container">
-              <h2>Pre-Appointments</h2>
-              <div className="admin-dashboard-pre-appointments">
-                {/* No data */}
-              </div>
-              <Link to="/admin/appointments" className="admin-dashboard-view-all">
-                View All Appointments →
-              </Link>
+              <h2> Scheduled Appointments</h2>
+              <RecentAppointmentsAdmin />
+              <div className="admin-dashboard-pre-appointments">{/* No data */}</div>
             </div>
           </div>
 
-          {/* Walk-In Queue Section */}
-          <div className="admin-dashboard-walk-in-queue">
-            <h2>Walk - In Queue</h2>
-            <div className="admin-dashboard-queue-content">
-              {/* No data */}
+          {/* Right side column */}
+          <div className="admin-dashboard-sidebar">
+            {/* Walk-In Queue Section */}
+            <div className="admin-dashboard-walk-in-queue">
+              <h2>Walk - In Queue</h2>
+              <div className="admin-dashboard-queue-content">{/* Queue content */}</div>
             </div>
-            <Link to="/AdminWalkInQueue" className="admin-dashboard-view-all">
-              Manage Queue →
-            </Link>
           </div>
         </div>
       </div>
