@@ -18,12 +18,13 @@ const formatWKNumber = (queueNumber) => {
 };
 
 const WalkInForm = () => {
+  const { user } = useAuth();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    lastName: '',
-    firstName: '',
+  lastName:  '',
+    firstName:  '',
     middleInitial: '',
-    address: '',
+    address:  '',
     phoneNumber: '',
     reasonOfVisit: '',
   });
@@ -39,11 +40,11 @@ const WalkInForm = () => {
 
   useEffect(() => {
     const mockRegisteredUser = {
-      lastName: 'Francisco',
-      firstName: 'John',
-      middleInitial: 'D',
-      address: '123 Pinaod San Ildefonso, Bulacan',
-      phoneNumber: '09123456789',
+      lastName: user.lastName || '',
+      firstName: user.firstName || '',
+      middleInitial: user.middleName || '',
+      address: user.address || '',
+      phoneNumber: user.contactNumber|| '',
     };
 
     setRegisteredUserData(mockRegisteredUser);
