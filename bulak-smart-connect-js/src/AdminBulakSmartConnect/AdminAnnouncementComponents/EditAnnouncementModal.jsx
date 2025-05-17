@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-//import './EditAnnouncementModal.css';
+import './EditAnnouncementModal.css';
 
 const EditAnnouncementModal = ({ isOpen, onClose, announcementData, onSave }) => {
-  // Use a more defensive initialization
+
   const [editedAnnouncement, setEditedAnnouncement] = useState({
     title: '',
     description: '',
@@ -10,7 +10,7 @@ const EditAnnouncementModal = ({ isOpen, onClose, announcementData, onSave }) =>
     image: ''
   });
 
-  // Use a more robust approach to update the state
+
   useEffect(() => {
     if (isOpen && announcementData) {
       setEditedAnnouncement({
@@ -49,7 +49,7 @@ const EditAnnouncementModal = ({ isOpen, onClose, announcementData, onSave }) =>
     <div className="modal-backdrop">
       <div className="modal">
         <h2>Edit Announcement</h2>
-        <form onSubmit={handleSubmit}>
+        <form className='announcementeditform' onSubmit={handleSubmit}>
           <input
             type="text"
             name="title"
