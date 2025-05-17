@@ -57,16 +57,29 @@ const SignUpForm = () => {
     }
   };
 
-  const validate = formData => {
+  const validate = (formData) => {
     let formErrors = {};
-    if (!formData.username) formErrors.username = 'Username is required';
+    
+    // Username validations
+    if (!formData.username) {
+      formErrors.username = 'Username is required';
+    } else if (formData.username.length < 4) {
+      formErrors.username = 'Username must be at least 4 characters';
+    }
+    
+    // Email validations
+    if (!formData.email) {
+      formErrors.email = 'Email is required';
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      formErrors.email = 'Email is invalid';
+    }
+    
     if (!formData.password) formErrors.password = 'Password is required';
     if (!formData.confirmpassword) formErrors.confirmpassword = 'Password is required';
     if (formData.password !== formData.confirmpassword)
       formErrors.confirmpassword = 'Passwords do not match';
     if (!formData.lastname) formErrors.lastname = 'Last name is required';
     if (!formData.firstname) formErrors.firstname = 'First name is required';
-    if (!formData.email) formErrors.email = 'Email is required';
     return formErrors;
   };
 
@@ -85,9 +98,17 @@ const SignUpForm = () => {
 
         // Register user with MySQL
         await authService.register({
+          username: formData.username,
           email: formData.email,
           password: formData.password,
-          name: `${formData.firstname} ${formData.lastname}`,
+          firstName: formData.firstname,  
+          lastName: formData.lastname,    
+          ...(formData.middlename && { middleName: formData.middlename }), 
+          ...(formData.hasExtension && formData.extension && { nameExtension: formData.extension }),
+          contactNumber: formData.contact,
+          name: `${formData.firstname} ${formData.middlename ? formData.middlename + ' ' : ''}${formData.lastname}${formData.hasExtension && formData.extension ? ' ' + formData.extension : ''}`,
+          // updates: formData.updates,
+          // age: formData.age,
         });
 
         setIsLoading(false);

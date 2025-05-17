@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './AdminDashboard.css';
 import {
@@ -19,22 +19,61 @@ import RecentAppointmentsAdmin from './RecentAppointmentsAdmin';
 
 const AdminDashboard = () => {
   // Empty data arrays
-  const walkInData = [];
-  const certificateData = [];
-  const documentApplications = [];
-  const preAppointments = [];
+  const [walkInData, setWalkInData] = useState([]);
+  const [certificateData, setCertificateData] = useState([]);
+  const [documentApplications, setDocumentApplications] = useState([]);
+  const [preAppointments, setPreAppointments] = useState([]);
+  const [walkInQueue, setWalkInQueue] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
   const [navOpen, setNavOpen] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  // Search functionality
+  const handleSearch = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  // API Connection - example structure for future implementation
+  useEffect(() => {
+    const fetchDashboardData = async () => {
+      setLoading(true);
+      try {
+         const response = await fetch('http://localhost:3000/api/dashboard');
+         const data = await response.json();
+         setWalkInData(data.walkInData || []);
+         setCertificateData(data.certificateData || []);
+         setDocumentApplications(data.applications || []);
+         setPreAppointments(data.appointments || []);
+         setWalkInQueue(data.queue || []);
+        
+        setLoading(false);
+      } catch (err) {
+        console.error('Error fetching dashboard data:', err);
+        setError('Failed to load dashboard data');
+        setLoading(false);
+      }
+    };
+    
+    // Uncomment when ready to fetch data
+     fetchDashboardData();
+  }, []);
+
   return (
-      <div className={`admin-dashboard ${isSidebarOpen ? 'sidebar-open' : ''}`}>
+    <div className={`admin-dashboard ${isSidebarOpen ? 'sidebar-open' : ''}`}>
       <NavBar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
       
       {/* Top Navigation Bar */}
       <div className="admin-dashboard-top-nav">
-     
         <h1 className="admin-dashboard-title">Dashboard</h1>
         <div className="admin-dashboard-search-bar">
-          <input type="text" placeholder="Search" />
+          <input 
+            type="text" 
+            placeholder="Search" 
+            value={searchTerm}
+            onChange={handleSearch}
+          />
         </div>
       </div>
 
@@ -56,7 +95,8 @@ const AdminDashboard = () => {
                     <XAxis dataKey="name" />
                     <YAxis />
                     <Tooltip />
-                    <Bar dataKey="value" fill="#1C4D5A" />
+                    <Bar dataKey="value" name="Walk-ins" fill="#1C4D5A" />
+                    <Bar dataKey="appointments" name="Appointments" fill="#8DC3A7" />
                   </BarChart>
                 </ResponsiveContainer>
               </div>
