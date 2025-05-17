@@ -35,7 +35,8 @@ const WalkInForm = () => {
   const [showForm, setShowForm] = useState(false);
 
   const [registeredUserData, setRegisteredUserData] = useState(null);
-  const { user } = useAuth();
+
+  // Check if the user is logged in
   const userId = user?.id || 'guest';
 
   useEffect(() => {
