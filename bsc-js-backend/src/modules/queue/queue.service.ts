@@ -56,11 +56,31 @@ export class QueueService {
 
     const savedQueue = await this.queueRepository.save(queue);
 
+    // Handle guest users - determine userId and isGuest values
+    let parsedUserId: number | undefined = undefined;
+    let isGuest = createQueueDto.isGuest || false;
+    
+    // Check if userId is the string "guest"
+    if (typeof createQueueDto.userId === 'string' && createQueueDto.userId === 'guest') {
+      isGuest = true;
+    } 
+    // If userId exists and is not "guest", try to use it
+    else if (createQueueDto.userId !== undefined && createQueueDto.userId !== null) {
+      const numUserId = Number(createQueueDto.userId);
+      // If conversion succeeds, use the number
+      if (!isNaN(numUserId)) {
+        parsedUserId = numUserId;
+      } else {
+        // If conversion fails, treat as guest
+        isGuest = true;
+      }
+    }
+
     // Create queue details
+    // If userId is not provided or is "guest", set it to null
     const queueDetails = this.queueDetailsRepository.create({
-      queue: savedQueue,
       queueId: savedQueue.id,
-      userId: createQueueDto.userId,
+      userId: parsedUserId,
       firstName: createQueueDto.firstName,
       lastName: createQueueDto.lastName,
       middleInitial: createQueueDto.middleInitial,
@@ -68,7 +88,11 @@ export class QueueService {
       phoneNumber: createQueueDto.phoneNumber,
       reasonOfVisit: createQueueDto.reasonOfVisit,
       appointmentType: createQueueDto.appointmentType,
+      isGuest: isGuest
     });
+    
+    // Set the queue relation separately to avoid TypeORM errors
+    queueDetails.queue = savedQueue;
 
     await this.queueDetailsRepository.save(queueDetails);
 
