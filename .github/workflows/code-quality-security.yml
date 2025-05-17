@@ -206,8 +206,8 @@ jobs:
           name: backend-coverage-report
           path: bsc-js-backend/coverage/
 
-  bundle-analysis:
-    name: Bundle Size Analysis
+  frontend-bundle-analysis:
+    name: Frontend Bundle Size Analysis
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -225,19 +225,268 @@ jobs:
         with:
           node-version: '20'
       
-      - name: Install dependencies
-        run: cd bulak-smart-connect-js && npm ci
+      - name: Install dependencies and source-map-explorer
+        run: |
+          cd bulak-smart-connect-js
+          npm ci
+          npm install source-map-explorer --no-save
       
       - name: Build with source maps
-        run: cd bulak-smart-connect-js && npm run build
+        run: |
+          cd bulak-smart-connect-js
+          npm run build -- --sourcemap=inline
       
       - name: Analyze bundle size
         run: |
           cd bulak-smart-connect-js
-          npx source-map-explorer 'build/static/js/*.js' --html bundle-analysis.html
+          npx source-map-explorer 'dist/assets/*.js' --html bundle-analysis.html --no-border-checks
+          echo "Bundle size summary:"
+          echo "$(du -sh dist/assets/*.js | sort -hr)"
       
       - name: Upload bundle analysis
         uses: actions/upload-artifact@v4
         with:
           name: bundle-analysis
           path: bulak-smart-connect-js/bundle-analysis.html
+
+      - name: Build with visualization
+        run: |
+          cd bulak-smart-connect-js
+          npm run build
+
+      - name: Upload visualizer report
+        uses: actions/upload-artifact@v4
+        with:
+          name: bundle-visualization
+          path: bulak-smart-connect-js/stats.html
+
+  backend-bundle-analysis:
+    name: Backend Code Analysis
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Cache node modules
+        uses: actions/cache@v4
+        with:
+          path: |
+            **/node_modules
+            .eslintcache
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/package-lock.json') }}
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: Install dependencies
+        run: |
+          cd bsc-js-backend
+          npm ci
+      
+      - name: Build project
+        run: |
+          cd bsc-js-backend
+          npm run build
+      
+      - name: Generate size report
+        run: |
+          cd bsc-js-backend
+          mkdir -p reports
+          
+          echo "Backend code size summary:" > reports/size-report.txt
+          echo "=========================" >> reports/size-report.txt
+          echo "" >> reports/size-report.txt
+          
+          echo "Source files by directory:" >> reports/size-report.txt
+          find src -type f -name "*.ts" | wc -l | xargs -I {} echo "Total TypeScript files: {}" >> reports/size-report.txt
+          find src -type d | sort | while read dir; do
+            count=$(find "$dir" -maxdepth 1 -type f -name "*.ts" | wc -l)
+            if [ "$count" -gt 0 ]; then
+              echo "  $dir: $count files" >> reports/size-report.txt
+            fi
+          done
+          echo "" >> reports/size-report.txt
+          
+          echo "Source code lines:" >> reports/size-report.txt
+          find src -type f -name "*.ts" | xargs wc -l | sort -nr >> reports/size-report.txt
+          echo "" >> reports/size-report.txt
+          
+          echo "Compiled output size:" >> reports/size-report.txt
+          find dist -type f -name "*.js" | xargs du -sh | sort -hr >> reports/size-report.txt
+          echo "" >> reports/size-report.txt
+          
+          echo "Total compiled size:" >> reports/size-report.txt
+          du -sh dist >> reports/size-report.txt
+          echo "" >> reports/size-report.txt
+          
+          echo "Dependencies:" >> reports/size-report.txt
+          npm list --prod --depth=0 >> reports/size-report.txt
+          
+          cat reports/size-report.txt
+      
+      - name: Generate code complexity report
+        run: |
+          cd bsc-js-backend
+          mkdir -p reports
+          
+          # Create a temporary script to analyze complexity
+          cat > analyze-complexity.js << 'EOF'
+          const fs = require('fs');
+          const path = require('path');
+          
+          // Function to count cyclomatic complexity in a simple way
+          function analyzeComplexity(filePath) {
+            const content = fs.readFileSync(filePath, 'utf-8');
+            const lines = content.split('\n');
+            
+            // Count conditional statements as a basic complexity metric
+            const ifCount = (content.match(/if\s*\(/g) || []).length;
+            const elseCount = (content.match(/}\s*else\s*{/g) || []).length;
+            const switchCount = (content.match(/switch\s*\(/g) || []).length;
+            const caseCount = (content.match(/case\s+/g) || []).length;
+            const forCount = (content.match(/for\s*\(/g) || []).length;
+            const whileCount = (content.match(/while\s*\(/g) || []).length;
+            const catchCount = (content.match(/catch\s*\(/g) || []).length;
+            const ternaryCount = (content.match(/\?\s*[^\s:]+\s*:/g) || []).length;
+            const logicalOpCount = (content.match(/&&|\|\|/g) || []).length;
+            
+            // Basic approximation of cyclomatic complexity
+            const complexity = ifCount + elseCount + switchCount + caseCount + 
+                              forCount + whileCount + catchCount + ternaryCount + 
+                              Math.floor(logicalOpCount / 2);
+            
+            return {
+              path: filePath,
+              complexity,
+              details: {
+                ifStatements: ifCount,
+                elseStatements: elseCount,
+                switchStatements: switchCount,
+                caseStatements: caseCount,
+                forLoops: forCount,
+                whileLoops: whileCount,
+                catchBlocks: catchCount,
+                ternaryOperators: ternaryCount,
+                logicalOperators: logicalOpCount
+              }
+            };
+          }
+          
+          // Walk through all TypeScript files
+          function walkSync(dir, fileList = []) {
+            const files = fs.readdirSync(dir);
+            files.forEach(file => {
+              const filePath = path.join(dir, file);
+              if (fs.statSync(filePath).isDirectory()) {
+                walkSync(filePath, fileList);
+              } else if (filePath.endsWith('.ts') && !filePath.endsWith('.d.ts')) {
+                fileList.push(filePath);
+              }
+            });
+            return fileList;
+          }
+          
+          // Analyze all files
+          const srcDir = path.join(process.cwd(), 'src');
+          const files = walkSync(srcDir);
+          const results = files.map(file => analyzeComplexity(file));
+          
+          // Sort by complexity
+          results.sort((a, b) => b.complexity - a.complexity);
+          
+          // Generate HTML report
+          let html = `
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <title>Code Complexity Report</title>
+            <style>
+              body { font-family: Arial, sans-serif; margin: 20px; }
+              h1 { color: #333; }
+              table { border-collapse: collapse; width: 100%; }
+              th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+              th { background-color: #f2f2f2; }
+              tr:nth-child(even) { background-color: #f9f9f9; }
+              .high { background-color: #ffdddd; }
+              .medium { background-color: #ffffcc; }
+              .low { background-color: #ddffdd; }
+            </style>
+          </head>
+          <body>
+            <h1>Code Complexity Report</h1>
+            <table>
+              <tr>
+                <th>File</th>
+                <th>Complexity</th>
+                <th>Details</th>
+              </tr>
+          `;
+          
+          results.forEach(result => {
+            const relativePath = path.relative(process.cwd(), result.path);
+            const complexityClass = 
+              result.complexity > 15 ? 'high' : 
+              result.complexity > 10 ? 'medium' : 'low';
+            
+            html += `
+              <tr class="${complexityClass}">
+                <td>${relativePath}</td>
+                <td>${result.complexity}</td>
+                <td>
+                  If: ${result.details.ifStatements},
+                  Else: ${result.details.elseStatements},
+                  Switch: ${result.details.switchStatements},
+                  Case: ${result.details.caseStatements},
+                  For: ${result.details.forLoops},
+                  While: ${result.details.whileLoops},
+                  Catch: ${result.details.catchBlocks},
+                  Ternary: ${result.details.ternaryOperators},
+                  Logical: ${result.details.logicalOperators}
+                </td>
+              </tr>
+            `;
+          });
+          
+          html += `
+            </table>
+            <p>Generated at: ${new Date().toISOString()}</p>
+          </body>
+          </html>
+          `;
+          
+          fs.writeFileSync('reports/complexity-report.html', html);
+          
+          // Generate summary
+          let summary = 'Files with high complexity:\n';
+          const highComplexityFiles = results.filter(r => r.complexity > 10);
+          highComplexityFiles.forEach(result => {
+            const relativePath = path.relative(process.cwd(), result.path);
+            summary += `${relativePath}: Complexity score ${result.complexity}\n`;
+          });
+          summary += `\nTotal files with complexity issues: ${highComplexityFiles.length}`;
+          
+          fs.writeFileSync('reports/complexity-summary.txt', summary);
+          console.log(summary);
+          EOF
+          
+          # Run the custom complexity analyzer
+          node analyze-complexity.js
+      
+      - name: Upload size report
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-size-report
+          path: bsc-js-backend/reports/size-report.txt
+      
+      - name: Upload complexity report
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-complexity-report
+          path: bsc-js-backend/reports/complexity-report.html
+
+      - name: Upload complexity summary
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-complexity-summary
+          path: bsc-js-backend/reports/complexity-summary.txt

@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { databaseConfig } from './config/database.config';
+// import { databaseConfig } from './config/database.config';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { AppController } from './app.controller';
@@ -33,14 +33,22 @@ import { QueueModule } from './modules/queue/queue.module';
         dropSchema: false,
 
         // Only for development environments!
-        beforeConnect: async (connection) => {
+        beforeConnect: async (connection): Promise<void> => {
           if (process.env.NODE_ENV !== 'production') {
-            connection.query('SET FOREIGN_KEY_CHECKS=0;');
+            const conn = connection as {
+              query: (sql: string) => Promise<unknown>;
+            };
+            // Disable foreign key checks for development
+            await conn.query('SET FOREIGN_KEY_CHECKS=0;');
+            // Set time zone to UTC for consistent datetime handling
+            await conn.query("SET time_zone = '+08:00';"); // Philippines time zone (UTC+8)
           }
         },
-        afterConnect: async (connection) => {
+        afterConnect: async (connection): Promise<void> => {
           if (process.env.NODE_ENV !== 'production') {
-            connection.query('SET FOREIGN_KEY_CHECKS=1;');
+            await (
+              connection as { query: (sql: string) => Promise<unknown> }
+            ).query('SET FOREIGN_KEY_CHECKS=1;');
           }
         },
       }),
