@@ -1,0 +1,40 @@
+.RecentAppsAdminCard {
+  width: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.RecentAppsAdminTitle {
+  font-size: 1rem !important;
+  font-weight: 600 !important;
+  color: #184a5b !important;
+  margin-bottom: 8px !important;
+}
+
+.RecentAppsAdminList {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.RecentAppsAdminItem {
+  transition: all 0.2s ease;
+}
+
+.RecentAppsAdminItemCard {
+  transition: transform 0.2s;
+}
+
+.RecentAppsAdminItemCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
+}
+
+.RecentAppsAdminLoading, 
+.RecentAppsAdminError {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  min-height: 150px;
+}

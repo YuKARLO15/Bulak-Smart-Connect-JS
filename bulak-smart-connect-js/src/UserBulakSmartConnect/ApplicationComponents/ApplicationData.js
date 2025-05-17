@@ -23,7 +23,10 @@ export const updateApplication = (applicationId, updatedData) => {
       applications[index] = { ...applications[index], ...updatedData };
       localStorage.setItem('applications', JSON.stringify(applications));
       return true;
+      
     }
+    console.log(`Found application at index ${index}`);
+    console.log('Original:', applications[index]);
     return false;
   } catch (error) {
     console.error('Error updating application:', error);
@@ -52,3 +55,5 @@ export const getApplicationsByType = (type) => {
     return [];
   }
 };
+
+

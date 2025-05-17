@@ -6,6 +6,8 @@ import {
   Button, TextField, Typography, Box
 } from '@mui/material';
 
+import EditIcon from '@mui/icons-material/Edit';
+
 const MarriageSummaryForm = () => {
   const [formData, setFormData] = useState({});
   const [loading, setLoading] = useState(true);
@@ -100,18 +102,71 @@ const MarriageSummaryForm = () => {
   };
  
   const handleBackToForm = () => {
-    navigate('/MarriageCertificateForm');
+    navigate('/MarriageForm');
   };
 
   const handleSubmit = () => {
     navigate('/ApplicationForm');
   };
 
+ const handleModify = () => {
+  try {
+    console.log('Current formData:', formData);
+
+    const applicationId = formData.applicationId || formData.id;
+    console.log('Application ID for editing:', applicationId);
+    
+    // Make sure we save formData with the application ID
+    if (applicationId) {
+      const updatedFormData = {
+        ...formData,
+        applicationId: applicationId // Ensure ID is preserved
+      };
+      
+      localStorage.setItem('marriageFormData', JSON.stringify(updatedFormData));
+    } else {
+      console.warn('No application ID found for editing');
+      localStorage.setItem('marriageFormData', JSON.stringify(formData));
+    }
+    
+    // Set the editing flags
+   localStorage.setItem('isEditingMarriageForm', 'true');
+    localStorage.setItem('editingMarriageType', 'Marriage Certificate'); 
+    localStorage.setItem('currentEditingApplicationId', applicationId);
+    localStorage.setItem('selectedMarriageOption', 'Marriage Certificate'); 
+    
+    // Navigate to the form
+    navigate('/MarriageForm');
+  } catch (err) {
+    console.error('Error setting up modification:', err);
+    alert('There was a problem preparing the form for editing. Please try again.');
+  }
+};
   if (loading) {
     return <div className="MarriageSummaryContainerMSummary">Loading...</div>;
   }
   return (
     <div className="MarriageSummaryContainer">
+      {formData.lastUpdated && (
+  <Box 
+    sx={{ 
+      backgroundColor: '#e3f2fd', 
+      padding: '10px 15px', 
+      borderRadius: '8px',
+      margin: '0 auto 20px auto',
+      maxWidth: '80%',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      gap: '8px'
+    }}
+  >
+    <EditIcon fontSize="small" sx={{ color: '#184a5b' }} />
+    <Typography variant="body2" sx={{ color: '#184a5b' }}>
+      This application was last modified on {new Date(formData.lastUpdated).toLocaleString()}
+    </Typography>
+  </Box>
+)}
     <div className="MarriageSummaryContainerMSummary">
       <div className="FormHeaderMSummary">Municipal Form No. 97<br/>(Revised August 2016)</div>
       <div className="RegistryNoMSummary">Registry No. _________</div>
@@ -350,7 +405,26 @@ const MarriageSummaryForm = () => {
       <div className="ActionsContainerMSummary">
         <button onClick={handleBackToForm} className="BackButtonMSummary">
           Back to Form
-        </button>
+          </button>
+<Button 
+  variant="contained" 
+  onClick={handleModify}
+  className="ModifyButtonMSummary"
+  startIcon={<EditIcon />}
+  sx={{
+    backgroundColor: '#8aacb5',
+    color: 'white',
+    marginLeft: '10px',
+    marginRight: '10px',
+    padding: '6px 16px',
+    '&:hover': {
+      backgroundColor: '#6d8a91',
+    }
+  }}
+>
+  Modify
+</Button>
+    
         <button onClick={handleSubmit} className="BackButtonMSummary" >
          Done
           </button>

@@ -23,6 +23,7 @@ import { useNavigate } from 'react-router-dom';
 import NavBar from '../../NavigationComponents/NavSide';
 import ApplicationLineChart from '../AdminChartsComponent/ApplicationLineChart';
 
+
 const AdminApplicationDashboard = () => {
   const [filter, setFilter] = useState('All');
   const [applications, setApplications] = useState([]);

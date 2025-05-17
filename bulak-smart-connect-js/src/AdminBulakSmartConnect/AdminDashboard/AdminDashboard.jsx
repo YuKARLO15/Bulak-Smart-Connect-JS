@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './AdminDashboard.css';
 import {
@@ -13,25 +13,61 @@ import {
   ResponsiveContainer,
 } from 'recharts';
 import NavBar from '../../NavigationComponents/NavSide';
+import RecentApplicationsAdmin from './RecentApplicationsAdmin';
+import RecentAppointmentsAdmin from './RecentAppointmentsAdmin';
 
 const AdminDashboard = () => {
   // Empty data arrays
-  const walkInData = [];
-  const certificateData = [];
-  const documentApplications = [];
-  const preAppointments = [];
+  const [walkInData, setWalkInData] = useState([]);
+  const [certificateData, setCertificateData] = useState([]);
+  const [documentApplications, setDocumentApplications] = useState([]);
+  const [preAppointments, setPreAppointments] = useState([]);
+  const [walkInQueue, setWalkInQueue] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
   const [navOpen, setNavOpen] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  // Search functionality
+  const handleSearch = e => {
+    setSearchTerm(e.target.value);
+  };
+
+  // API Connection - example structure for future implementation
+  useEffect(() => {
+    const fetchDashboardData = async () => {
+      setLoading(true);
+      try {
+        const response = await fetch('http://localhost:3000/api/dashboard');
+        const data = await response.json();
+        setWalkInData(data.walkInData || []);
+        setCertificateData(data.certificateData || []);
+        setDocumentApplications(data.applications || []);
+        setPreAppointments(data.appointments || []);
+        setWalkInQueue(data.queue || []);
+
+        setLoading(false);
+      } catch (err) {
+        console.error('Error fetching dashboard data:', err);
+        setError('Failed to load dashboard data');
+        setLoading(false);
+      }
+    };
+
+    // Uncomment when ready to fetch data
+    fetchDashboardData();
+  }, []);
+
   return (
-      <div className={`admin-dashboard ${isSidebarOpen ? 'sidebar-open' : ''}`}>
+    <div className={`admin-dashboard ${isSidebarOpen ? 'sidebar-open' : ''}`}>
       <NavBar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
-      
+
       {/* Top Navigation Bar */}
       <div className="admin-dashboard-top-nav">
-     
         <h1 className="admin-dashboard-title">Dashboard</h1>
         <div className="admin-dashboard-search-bar">
-          <input type="text" placeholder="Search" />
+          <input type="text" placeholder="Search" value={searchTerm} onChange={handleSearch} />
         </div>
       </div>
 
@@ -53,7 +89,8 @@ const AdminDashboard = () => {
                     <XAxis dataKey="name" />
                     <YAxis />
                     <Tooltip />
-                    <Bar dataKey="value" fill="#1C4D5A" />
+                    <Bar dataKey="value" name="Walk-ins" fill="#1C4D5A" />
+                    <Bar dataKey="appointments" name="Appointments" fill="#8DC3A7" />
                   </BarChart>
                 </ResponsiveContainer>
               </div>
@@ -81,20 +118,25 @@ const AdminDashboard = () => {
             {/* Document Application Section */}
             <div className="admin-dashboard-section-container">
               <h2>Document Application</h2>
+              <RecentApplicationsAdmin />
               <div className="admin-dashboard-document-applications">{/* No data */}</div>
             </div>
 
             {/* Pre-Appointments Section */}
             <div className="admin-dashboard-section-container">
-              <h2>Pre-Appointments</h2>
+              <h2> Scheduled Appointments</h2>
+              <RecentAppointmentsAdmin />
               <div className="admin-dashboard-pre-appointments">{/* No data */}</div>
             </div>
           </div>
 
-          {/* Walk-In Queue Section */}
-          <div className="admin-dashboard-walk-in-queue">
-            <h2>Walk - In Queue</h2>
-            <div className="admin-dashboard-queue-content">{/* Queue content */}</div>
+          {/* Right side column */}
+          <div className="admin-dashboard-sidebar">
+            {/* Walk-In Queue Section */}
+            <div className="admin-dashboard-walk-in-queue">
+              <h2>Walk - In Queue</h2>
+              <div className="admin-dashboard-queue-content">{/* Queue content */}</div>
+            </div>
           </div>
         </div>
       </div>

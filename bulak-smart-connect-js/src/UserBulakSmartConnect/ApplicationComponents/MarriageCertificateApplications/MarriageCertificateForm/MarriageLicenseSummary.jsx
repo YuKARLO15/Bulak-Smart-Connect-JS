@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, Typography, Box } from '@mui/material';
 import './MarriageLicenseSummary.css';
+import EditIcon from '@mui/icons-material/Edit';
 
 const MarriageLicenseSummary = () => {
   const [formData, setFormData] = useState({});
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const [isEditing, setIsEditing] = useState(false); 
 
 
   useEffect(() => {
@@ -21,7 +23,40 @@ const MarriageLicenseSummary = () => {
       setLoading(false);
     }
   }, []);
-
+ const handleModify = () => {
+  try {
+    console.log('Current formData:', formData);
+    
+    // Get the application ID
+    const applicationId = formData.applicationId || formData.id;
+    console.log('Application ID for editing:', applicationId);
+    
+    // Make sure we save formData with the application ID
+    if (applicationId) {
+      const updatedFormData = {
+        ...formData,
+        applicationId: applicationId // Ensure ID is preserved
+      };
+      
+      localStorage.setItem('marriageFormData', JSON.stringify(updatedFormData));
+    } else {
+      console.warn('No application ID found for editing');
+      localStorage.setItem('marriageFormData', JSON.stringify(formData));
+    }
+    
+    // Set the editing flags
+   localStorage.setItem('isEditingMarriageForm', 'true');
+    localStorage.setItem('editingMarriageType', 'Marriage License'); 
+    localStorage.setItem('currentEditingApplicationId', applicationId);
+    localStorage.setItem('selectedMarriageOption', 'Marriage License'); 
+    
+    // Navigate to the form
+    navigate('/MarriageForm');
+  } catch (err) {
+    console.error('Error setting up modification:', err);
+    alert('There was a problem preparing the form for editing. Please try again.');
+  }
+};
   const handleBackToForm = () => {
     navigate('/MarriageForm');
   };
@@ -29,6 +64,34 @@ const MarriageLicenseSummary = () => {
   const handleSubmit = () => {
     navigate('/ApplicationForm');
   };
+
+
+useEffect(() => {
+  try {
+    const savedLicenseData = localStorage.getItem('marriageFormData');
+    if (savedLicenseData) {
+      const parsedData = JSON.parse(savedLicenseData);
+      
+      // Debug log to check wife's birth data
+      console.log("Wife birth data:", {
+        day: parsedData.wifeBirthDay,
+        month: parsedData.wifeBirthMonth,
+        year: parsedData.wifeBirthYear
+      });
+      
+      // Log all keys to check for naming inconsistencies
+      console.log("All form keys:", Object.keys(parsedData));
+      
+      setFormData(parsedData);
+    }
+  } catch (err) {
+    console.error('Error loading form data:', err);
+  } finally {
+    setLoading(false);
+  }
+}, []);
+
+
 
   if (loading) {
     return <div className="ContainerMLSummary">Loading...</div>;
@@ -39,6 +102,27 @@ const MarriageLicenseSummary = () => {
     const consentPersonAddWife = formData.wifewaliStreet + " " + formData.wifewaliBarangay + " " + formData.wifewaliCity + " " + formData.wifewaliProvince;
   return (
     <div className="ContainerMLSummary">
+       {formData.lastUpdated && (
+      <Box 
+        sx={{ 
+          backgroundColor: '#e3f2fd', 
+          padding: '10px 15px', 
+          borderRadius: '8px',
+          margin: '0 auto 20px auto',
+          maxWidth: '80%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+            gap: '8px',
+       
+        }}
+      >
+        <EditIcon fontSize="small" sx={{ color: '#184a5b' }} />
+        <Typography variant="body2" sx={{ color: '#184a5b' }}>
+          This application was last modified on {new Date(formData.lastUpdated).toLocaleString()}
+        </Typography>
+      </Box>
+    )}
       <div className="FormDocumentMLSummary">
         
         <div className="DocumentHeaderMLSummary">
@@ -191,7 +275,7 @@ const MarriageLicenseSummary = () => {
                     <div className="DateParenMLSummary">(Month)</div>
                   </div>
                   <div className="DateFieldMLSummary">
-                    <div className="DateValueMLSummary">{formData.wifeBirthYear || ''}</div>
+                    <div className="DateValueMLSummary">{formData.wifeBirthYear || '' }</div>
                     <div className="DateParenMLSummary">(Year)</div>
                   </div>
                   <div className="DateFieldMLSummary">
@@ -589,6 +673,23 @@ const MarriageLicenseSummary = () => {
         >
           Back to Form
         </Button>
+
+          <Button 
+    variant="contained" 
+    onClick={handleModify}
+    className="ModifyButtonMLSummary"
+    startIcon={<EditIcon />}
+    sx={{
+      backgroundColor: '#8aacb5',
+      color: 'white',
+      marginRight: '10px',
+      '&:hover': {
+        backgroundColor: '#6d8a91',
+      }
+    }}
+  >
+    Modify
+  </Button>
         <Button 
           variant="contained" 
           onClick={handleSubmit}
