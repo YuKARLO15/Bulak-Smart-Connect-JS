@@ -1,3 +1,10 @@
+.announcementeditform {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
 .modal-backdrop {
   position: fixed;
   top: 0;
@@ -18,7 +25,7 @@
   border-radius: 12px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
   width: 90%;
-  max-width: 500px;
+  max-width: 800px;
   animation: modal-fade-in 0.3s ease forwards;
 }
 
@@ -76,7 +83,9 @@
 .modal-actions {
   display: flex;
   justify-content: space-between;
-  gap: 12px;
+  margin-left: 35px;
+  margin-right: 35px;
+  gap: 35px;
   margin-top: 8px;
 }
 
