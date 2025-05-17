@@ -24,13 +24,13 @@
 <title>cluster_QueueModule</title>
 <polygon fill="none" stroke="black" stroke-dasharray="1,5" points="121,-70 121,-268 375,-268 375,-70 121,-70"/>
 </g>
-<g id="clust4" class="cluster">
-<title>cluster_QueueModule_exports</title>
-<polygon fill="none" stroke="black" points="129,-208 129,-260 367,-260 367,-208 129,-208"/>
-</g>
 <g id="clust6" class="cluster">
 <title>cluster_QueueModule_providers</title>
 <polygon fill="none" stroke="black" points="175,-78 175,-130 321,-130 321,-78 175,-78"/>
+</g>
+<g id="clust4" class="cluster">
+<title>cluster_QueueModule_exports</title>
+<polygon fill="none" stroke="black" points="129,-208 129,-260 367,-260 367,-208 129,-208"/>
 </g>
 <!-- QueueGateway  -->
 <g id="node1" class="node">
