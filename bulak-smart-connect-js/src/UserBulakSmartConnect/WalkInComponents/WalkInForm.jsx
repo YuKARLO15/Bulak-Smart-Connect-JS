@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './WalkInForm.css';
 import NavBar from '../../NavigationComponents/NavSide';
-import { queueService } from '../../services/queueService'; // Add this import
+import { queueService } from '../../services/queueService'; 
 import { use } from 'react';
+import { useAuth } from '../../context/AuthContext';
 
 // Helper function to format backend queue numbers to WK format
 const formatWKNumber = (queueNumber) => {
@@ -17,13 +18,14 @@ const formatWKNumber = (queueNumber) => {
 };
 
 const WalkInForm = () => {
+  const { user } = useAuth();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    lastName: '',
-    firstName: '',
-    middleInitial: '',
-    address: '',
-    phoneNumber: '',
+  lastName: user?.lastName || '',
+    firstName: user?.firstName || '',
+    middleInitial: user?.middleName || '',
+    address: user?.address || '',
+    phoneNumber: user?.contactNumber || '',
     reasonOfVisit: '',
   });
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -36,11 +38,11 @@ const WalkInForm = () => {
 
   useEffect(() => {
     const mockRegisteredUser = {
-      lastName: 'Francisco',
-      firstName: 'John',
-      middleInitial: 'D',
-      address: '123 Pinaod San Ildefonso, Bulacan',
-      phoneNumber: '09123456789',
+      lastName: user.lastName || '',
+      firstName: user.firstName || '',
+      middleInitial: user.middleName || '',
+      address: user.address || '',
+      phoneNumber: user.contactNumber|| '',
     };
 
     setRegisteredUserData(mockRegisteredUser);
