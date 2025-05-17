@@ -1,15 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import './EditAnnouncementModal.css';
 
-const EditAnnouncementModal = ({ isOpen, onClose, announcementData, onSave }) => {
-
+const EditAnnouncementModal = ({ isOpen, onClose, announcementData, onSave, onDelete }) => {
   const [editedAnnouncement, setEditedAnnouncement] = useState({
     title: '',
     description: '',
-    date: '',
     image: ''
   });
-
 
   useEffect(() => {
     if (isOpen && announcementData) {
@@ -17,7 +14,6 @@ const EditAnnouncementModal = ({ isOpen, onClose, announcementData, onSave }) =>
         id: announcementData.id || '',
         title: announcementData.title || '',
         description: announcementData.description || '',
-        date: announcementData.date || '',
         image: announcementData.image || ''
       });
     }
@@ -31,46 +27,52 @@ const EditAnnouncementModal = ({ isOpen, onClose, announcementData, onSave }) =>
     }));
   };
 
+  const getCurrentPHDateTimeISO = () => {
+    const now = new Date();
+    const phTime = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Manila' }));
+    return phTime.toISOString();
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSave(editedAnnouncement);
+    const updatedWithDate = {
+      ...editedAnnouncement,
+      date: getCurrentPHDateTimeISO(),
+    };
+    onSave(updatedWithDate);
     onClose();
   };
 
-  // Early return if modal is not open
-  if (!isOpen) return null;
+  const handleDelete = () => {
+    if (window.confirm('Are you sure you want to delete this announcement?')) {
+      onDelete(editedAnnouncement.id);
+      onClose();
+    }
+  };
 
-  // Defensive rendering - ensure all accessed properties have default values
-  const title = editedAnnouncement?.title || '';
-  const description = editedAnnouncement?.description || '';
-  const date = editedAnnouncement?.date || '';
+  if (!isOpen) return null;
 
   return (
     <div className="modal-backdrop">
       <div className="modal">
         <h2>Edit Announcement</h2>
-        <form className='announcementeditform' onSubmit={handleSubmit}>
+        <form className="announcementeditform" onSubmit={handleSubmit}>
           <input
             type="text"
             name="title"
-            value={title}
+            value={editedAnnouncement.title}
             onChange={handleChange}
             required
           />
           <textarea
             name="description"
-            value={description}
+            value={editedAnnouncement.description}
             onChange={handleChange}
             required
           />
-          <input
-            type="datetime-local"
-            name="date"
-            value={date}
-            onChange={handleChange}
-          />
           <div className="modal-actions">
             <button type="submit">Save Changes</button>
+             <button type="button" onClick={handleDelete} className="delete-button">Delete</button>
             <button type="button" onClick={onClose}>Cancel</button>
           </div>
         </form>

@@ -118,6 +118,23 @@
   background-color: #e5e7eb;
 }
 
+
+.modal .delete-button {
+  background-color: #bb3222 !important; /* force red */
+  color: white !important;
+  border: none !important;
+  padding: 8px 16px;
+  cursor: pointer;
+  border-radius: 4px;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.modal .delete-button:hover {
+  background-color: #95473f !important; /* darker red on hover */
+}
+
+
 /* Add responsive adjustments */
 @media (max-width: 640px) {
   .modal {
@@ -129,3 +146,4 @@
     flex-direction: column;
   }
 }
+
