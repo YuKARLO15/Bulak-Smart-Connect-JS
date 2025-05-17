@@ -47,4 +47,7 @@ export class QueueDetails {
 
   @Column({ name: 'appointment_type' })
   appointmentType: string;
+
+  @Column({ name: 'is_guest', default: false })
+  isGuest: boolean;
 }
