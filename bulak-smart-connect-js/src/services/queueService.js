@@ -1,4 +1,5 @@
 import axios from 'axios';
+import api from './api'; // Import your preconfigured axios instance
 
 const API_URL = 'http://localhost:3000'; // Change to your backend URL
 
@@ -34,8 +35,8 @@ export const queueService = {
   
   createQueue: async (queueData) => {
     try {
-      console.log('Creating queue with data:', queueData); // For debugging
-      const response = await axios.post(`${API_URL}/queue`, queueData);
+      console.log('Creating queue with data:', queueData); //For Debugging
+      const response = await api.post('/queue', queueData);
       return response.data;
     } catch (error) {
       console.error('Error creating queue:', error);
