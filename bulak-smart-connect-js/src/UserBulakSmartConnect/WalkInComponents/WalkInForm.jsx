@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './WalkInForm.css';
 import NavBar from '../../NavigationComponents/NavSide';
-import { queueService } from '../../services/queueService'; // Add this import
-import { use } from 'react';
+import { queueService } from '../../services/queueService'; // Queue service import
+import { useAuth } from '../../context/AuthContext'; // Auth context import
+import { use } from 'react'; // Importing use from react for potential future use
 
 // Helper function to format backend queue numbers to WK format
 const formatWKNumber = (queueNumber) => {
@@ -33,6 +34,8 @@ const WalkInForm = () => {
   const [showForm, setShowForm] = useState(false);
 
   const [registeredUserData, setRegisteredUserData] = useState(null);
+  const { user } = useAuth();
+  const userId = user?.id || 'guest';
 
   useEffect(() => {
     const mockRegisteredUser = {
@@ -83,10 +86,6 @@ const WalkInForm = () => {
     e.preventDefault();
     
     try {
-      // Get current user ID
-      const currentUser = JSON.parse(localStorage.getItem('currentUser')) || {};
-      const userId = currentUser.id || currentUser.email || 'guest';
-
       console.log('Creating queue with user ID:', userId); // Debugging line
       console.log('Form data:', formData); // Debugging line
       
@@ -99,7 +98,8 @@ const WalkInForm = () => {
         phoneNumber: formData.phoneNumber || '',
         reasonOfVisit: formData.reasonOfVisit,
         appointmentType: formData.reasonOfVisit,
-        userId: userId, // Store user ID with queue
+        userId: user?.id || null,  // Use null instead of 'guest' string for database
+        isGuest: !user?.id         // Set isGuest flag based on user existence
       });
       
       // Format the queue number to WK format for display

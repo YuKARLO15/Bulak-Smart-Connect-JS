@@ -6,18 +6,35 @@ import {
   Patch,
   Param,
   //Delete, // Uncomment if you want to implement delete functionality
+  Request,
+  UseGuards,
 } from '@nestjs/common';
 import { QueueService } from './queue.service';
 import { CreateQueueDto } from './dto/create-queue.dto';
 import { UpdateQueueDto } from './dto/update-queue.dto';
 import { QueueStatus } from './entities/queue.entity';
+import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
 
 @Controller('queue')
 export class QueueController {
   constructor(private readonly queueService: QueueService) {}
 
   @Post()
-  create(@Body() createQueueDto: CreateQueueDto) {
+  @UseGuards(JwtAuthGuard)
+  create(@Request() req, @Body() createQueueDto: CreateQueueDto) {
+    // Extract user ID from JWT token if authenticated
+    const userId = req.user?.id || null;
+
+    // Override the userId in the DTO with the authenticated user's ID
+    // This prevents users from creating queues for other users
+    if (userId) {
+      createQueueDto.userId = userId;
+      createQueueDto.isGuest = false;
+    } else {
+      createQueueDto.userId = undefined;
+      createQueueDto.isGuest = true;
+    }
+
     return this.queueService.create(createQueueDto);
   }
 
