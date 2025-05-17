@@ -21,11 +21,11 @@ const WalkInForm = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-  lastName: user?.lastName || '',
-    firstName: user?.firstName || '',
-    middleInitial: user?.middleName || '',
-    address: user?.address || '',
-    phoneNumber: user?.contactNumber || '',
+  lastName:  '',
+    firstName:  '',
+    middleInitial: '',
+    address:  '',
+    phoneNumber: '',
     reasonOfVisit: '',
   });
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
