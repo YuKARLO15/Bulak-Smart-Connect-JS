@@ -5,30 +5,50 @@ const AnnouncementForm = ({ addAnnouncement }) => {
   const [announcement, setAnnouncement] = useState({
     title: '',
     description: '',
-    date: '',
     image: '',
   });
 
-  const handleChange = e => {
-    setAnnouncement({ ...announcement, [e.target.name]: e.target.value });
+  const getPhilippineDateTimeISO = () => {
+    const now = new Date();
+    const options = { timeZone: 'Asia/Manila' };
+    const phTime = new Date(now.toLocaleString('en-US', options));
+    return phTime.toISOString();
   };
 
-  const handleSubmit = e => {
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setAnnouncement((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = (e) => {
     e.preventDefault();
-    const newAnnouncement = { ...announcement, id: Date.now() };
+    const newAnnouncement = {
+      ...announcement,
+      id: Date.now(),
+      date: getPhilippineDateTimeISO(), // ✅ set PH time automatically
+    };
     addAnnouncement(newAnnouncement);
+    setAnnouncement({ title: '', description: '', image: '' });
   };
 
   return (
     <form name="announcementform" className="announcementform" onSubmit={handleSubmit}>
-      <input type="text" name="title" placeholder="Title" onChange={handleChange} required />
+      <input
+        type="text"
+        name="title"
+        placeholder="Title"
+        value={announcement.title}
+        onChange={handleChange}
+        required
+      />
       <textarea
         name="description"
         placeholder="Description"
+        value={announcement.description}
         onChange={handleChange}
         required
-      ></textarea>
-      <input type="datetime-local" name="date" onChange={handleChange} />
+      />
+      {/* Removed datetime-local input since system sets time automatically */}
       <button type="submit">Post Announcement</button>
     </form>
   );

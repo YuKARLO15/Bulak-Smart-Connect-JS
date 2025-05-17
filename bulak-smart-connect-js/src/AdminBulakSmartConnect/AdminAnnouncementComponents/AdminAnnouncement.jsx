@@ -40,6 +40,15 @@ const AdminAnnouncement = () => {
     setAnnouncements(prev =>
       prev.map(a => (a.id === editedAnnouncement.id ? editedAnnouncement : a))
     );
+    setIsModalOpen(false);
+    setSelectedAnnouncement(null);
+  };
+
+  // DELETE handler to remove an announcement from state
+  const handleDelete = (id) => {
+    setAnnouncements(prev => prev.filter(a => a.id !== id));
+    setIsModalOpen(false);
+    setSelectedAnnouncement(null);
   };
 
   return (
@@ -56,6 +65,7 @@ const AdminAnnouncement = () => {
         onClose={() => setIsModalOpen(false)}
         announcementData={selectedAnnouncement}
         onSave={saveEditedAnnouncement}
+        onDelete={handleDelete} 
       />
     </div>
   );

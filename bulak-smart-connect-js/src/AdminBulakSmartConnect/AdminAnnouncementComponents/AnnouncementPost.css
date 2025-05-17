@@ -58,3 +58,19 @@
   border-radius: 8px;
   object-fit: cover;
 }
+
+.announcement-edit-btn {
+  background: none;
+  border: none;
+  color: #1d4ed8; 
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 4px 8px;
+  transition: color 0.2s ease;
+  margin-left: 10px;
+}
+
+.announcement-edit-btn:hover {
+  color: #2563eb; 
+}
