@@ -1,1 +1,0 @@
-import{j as n}from"./jsx-runtime-Ds-gkUgj.js";import"./index-CtvPRVHf.js";import{A as s}from"./AnnouncementPost-CGM333Ql.js";const t=({announcements:o})=>n.jsx("div",{className:"announcement-feed",children:o.map(e=>n.jsx(s,{announcement:e},e.id))});t.__docgenInfo={description:"",methods:[],displayName:"AnnouncementFeed"};export{t as A};
