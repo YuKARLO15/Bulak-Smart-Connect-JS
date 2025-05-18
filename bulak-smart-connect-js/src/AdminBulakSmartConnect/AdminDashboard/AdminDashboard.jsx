@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import './AdminDashboard.css';
+import axios from 'axios';
 import {
   LineChart,
   Line,
@@ -15,7 +16,20 @@ import {
 import NavBar from '../../NavigationComponents/NavSide';
 import RecentApplicationsAdmin from './RecentApplicationsAdmin';
 import RecentAppointmentsAdmin from './RecentAppointmentsAdmin';
+import WalkInQueueAdmin from './WalkInQueueAdmin';
 
+const formatWKNumber = (queueNumber) => {
+  if (typeof queueNumber === 'string' && queueNumber.startsWith('WK')) {
+    return queueNumber;
+  }
+  
+  // Handle null or undefined
+  if (!queueNumber) return 'WK000';
+  
+  const numberPart = queueNumber.includes('-') ? queueNumber.split('-')[1] : queueNumber;
+  const num = parseInt(numberPart, 10) || 0;
+  return `WK${String(num).padStart(3, '0')}`;
+};
 const AdminDashboard = () => {
   // Empty data arrays
   const [walkInData, setWalkInData] = useState([]);
@@ -28,6 +42,8 @@ const AdminDashboard = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [navOpen, setNavOpen] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [queueLoading, setQueueLoading] = useState(true);
+  const [queueError, setQueueError] = useState(null);
 
   // Search functionality
   const handleSearch = e => {
@@ -35,6 +51,76 @@ const AdminDashboard = () => {
   };
 
   // API Connection - example structure for future implementation
+  const fetchWalkInQueue = useCallback(async () => {
+    setQueueLoading(true);
+    try {
+      // Fetch walk-in queue data from your API
+      const response = await axios.get('http://localhost:3000/queues/walk-in');
+      
+      // Format the data for display
+      const formattedQueue = response.data.map(queue => ({
+        id: queue.id,
+        queueNumber: formatWKNumber(queue.queueNumber),
+        firstName: queue.firstName || 'Guest',
+        lastName: queue.lastName || '',
+        reasonOfVisit: queue.reasonOfVisit || 'General Inquiry',
+        status: queue.status || 'pending',
+        timestamp: queue.createdAt || new Date().toISOString()
+      }));
+      
+      setWalkInQueue(formattedQueue);
+      setQueueError(null);
+    } catch (error) {
+      console.error('Error fetching walk-in queue:', error);
+      setQueueError('Could not load queue data');
+      
+      // Fallback to mock data for development
+      setWalkInQueue([
+        {
+          id: 1,
+          queueNumber: 'WK001',
+          firstName: 'Juan',
+          lastName: 'Dela Cruz',
+          reasonOfVisit: 'Birth Certificate',
+          status: 'pending',
+          timestamp: new Date().toISOString()
+        },
+        {
+          id: 2,
+          queueNumber: 'WK002',
+          firstName: 'Maria',
+          lastName: 'Santos',
+          reasonOfVisit: 'Marriage Certificate',
+          status: 'in-progress',
+          timestamp: new Date().toISOString()
+        },
+        {
+          id: 3,
+          queueNumber: 'WK003',
+          firstName: 'Pedro',
+          lastName: 'Reyes',
+          reasonOfVisit: 'Death Certificate',
+          status: 'pending',
+          timestamp: new Date().toISOString()
+        }
+      ]);
+    } finally {
+      setQueueLoading(false);
+    }
+  }, []);
+
+  // Fetch queue data initially and refresh every 30 seconds
+  useEffect(() => {
+    fetchWalkInQueue();
+    
+    // Auto-refresh queue data every 30 seconds
+    const intervalId = setInterval(fetchWalkInQueue, 30000);
+    
+    // Clean up interval on component unmount
+    return () => clearInterval(intervalId);
+  }, [fetchWalkInQueue]);
+
+  // Existing useEffect for dashboard data
   useEffect(() => {
     const fetchDashboardData = async () => {
       setLoading(true);
@@ -45,7 +131,6 @@ const AdminDashboard = () => {
         setCertificateData(data.certificateData || []);
         setDocumentApplications(data.applications || []);
         setPreAppointments(data.appointments || []);
-        setWalkInQueue(data.queue || []);
 
         setLoading(false);
       } catch (err) {
@@ -55,9 +140,9 @@ const AdminDashboard = () => {
       }
     };
 
-    // Uncomment when ready to fetch data
     fetchDashboardData();
   }, []);
+
 
   return (
     <div className={`admin-dashboard ${isSidebarOpen ? 'sidebar-open' : ''}`}>
@@ -135,12 +220,13 @@ const AdminDashboard = () => {
             {/* Walk-In Queue Section */}
             <div className="admin-dashboard-walk-in-queue">
               <h2>Walk - In Queue</h2>
-              <div className="admin-dashboard-queue-content">{/* Queue content */}</div>
+         <WalkInQueueAdmin />
             </div>
           </div>
         </div>
       </div>
     </div>
+           
   );
 };
 
