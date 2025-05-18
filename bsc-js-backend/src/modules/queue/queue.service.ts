@@ -56,31 +56,27 @@ export class QueueService {
 
     const savedQueue = await this.queueRepository.save(queue);
 
-    // Handle guest users - determine userId and isGuest values
-    let parsedUserId: number | undefined = undefined;
-    let isGuest = createQueueDto.isGuest || false;
-    
-    // Check if userId is the string "guest"
-    if (typeof createQueueDto.userId === 'string' && createQueueDto.userId === 'guest') {
-      isGuest = true;
-    } 
-    // If userId exists and is not "guest", try to use it
-    else if (createQueueDto.userId !== undefined && createQueueDto.userId !== null) {
-      const numUserId = Number(createQueueDto.userId);
-      // If conversion succeeds, use the number
-      if (!isNaN(numUserId)) {
-        parsedUserId = numUserId;
-      } else {
-        // If conversion fails, treat as guest
-        isGuest = true;
-      }
-    }
+    // Simplify the user ID handling - trust what the controller provided
+    const userId =
+      typeof createQueueDto.userId === 'number'
+        ? createQueueDto.userId
+        : typeof createQueueDto.userId === 'string' && createQueueDto.userId !== 'guest'
+        ? Number(createQueueDto.userId)
+        : undefined;
 
-    // Create queue details
-    // If userId is not provided or is "guest", set it to null
+    const isGuest = createQueueDto.isGuest || !userId;
+
+    // Log for debugging
+    console.log('Creating queue details with:', {
+      providedUserId: createQueueDto.userId,
+      parsedUserId: userId,
+      isGuest,
+    });
+
+    // Create queue details using the simplified userId
     const queueDetails = this.queueDetailsRepository.create({
       queueId: savedQueue.id,
-      userId: parsedUserId,
+      userId: userId, // Use the simplified userId
       firstName: createQueueDto.firstName,
       lastName: createQueueDto.lastName,
       middleInitial: createQueueDto.middleInitial,
@@ -88,10 +84,10 @@ export class QueueService {
       phoneNumber: createQueueDto.phoneNumber,
       reasonOfVisit: createQueueDto.reasonOfVisit,
       appointmentType: createQueueDto.appointmentType,
-      isGuest: isGuest
+      isGuest: isGuest,
     });
-    
-    // Set the queue relation separately to avoid TypeORM errors
+
+    // Set the queue relation
     queueDetails.queue = savedQueue;
 
     await this.queueDetailsRepository.save(queueDetails);
@@ -338,5 +334,13 @@ export class QueueService {
     return await this.counterRepository.find({
       relations: ['currentQueue'],
     });
+  }
+
+  // Check if queue exists
+  async checkExists(id: number): Promise<boolean> {
+    const queue = await this.queueRepository.findOne({
+      where: { id }
+    });
+    return !!queue;
   }
 }
