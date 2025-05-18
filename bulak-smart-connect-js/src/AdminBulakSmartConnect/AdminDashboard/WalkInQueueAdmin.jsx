@@ -288,7 +288,7 @@ const fetchQueueData = useCallback(async () => {
         )}
         
         <div className="queue-footer">
-          <Link to="/admin/queue-management" className="view-all-btn">
+          <Link to="/AdminWalkInQueue" className="view-all-btn">
             View All Queues
           </Link>
         </div>
