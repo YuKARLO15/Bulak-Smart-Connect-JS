@@ -101,6 +101,7 @@ function App() {
           <Route path="/AdminWalkInQueue" element={<AdminWalkInQueue />} />
           <Route path="/AdminHome" element={<AdminDashboard />} />
           <Route path="/AdminWalkInDetails" element={<AdminWalkInDetails />} />
+          <Route path="/AdminWalkInDetails/:id" element={<AdminWalkInDetails />} />
           <Route path="/AdminAppointmentDashboard" element={<AdminAppointmentDashboard />} />
           
         </Route>
