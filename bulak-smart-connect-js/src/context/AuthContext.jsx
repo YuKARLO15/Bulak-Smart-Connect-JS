@@ -24,8 +24,17 @@ export const AuthProvider = ({ children }) => {
         const response = await axios.get('http://localhost:3000/auth/profile', {
           headers: { Authorization: `Bearer ${token}` },
         });
-
-        setUser(response.data);
+        
+        console.log("Profile response:", response.data);
+        
+        // Process the user data to ensure it has an id
+        const userData = response.data;
+        const processedUser = {
+          ...userData,
+          id: userData.id || userData._id || userData.userId || null
+        };
+        
+        setUser(processedUser);
         setIsAuthenticated(true);
       } catch (err) {
         console.error('Auth check failed:', err);
@@ -50,7 +59,17 @@ export const AuthProvider = ({ children }) => {
       
       const response = await axios.post('http://localhost:3000/auth/login', payload);
 
-      const { access_token, user } = response.data;
+      // New logging for backend response
+      console.log("Backend auth response:", response.data); //Debugging line
+      console.log("User object from backend:", response.data.user); //Debugging line
+
+      const { access_token, user: userData } = response.data;
+
+      // Ensure the user object has an id field - adapt the field names based on your API response
+      const processedUser = {
+        ...userData,
+        id: userData.id || userData._id || userData.userId || null
+      };
 
       // Store token in localStorage
       localStorage.setItem('token', access_token);
@@ -62,9 +81,10 @@ export const AuthProvider = ({ children }) => {
         //user.roleNames = user.defaultRole ? [user.defaultRole.name] : [];
       //} Tempoarily commented out to avoid errors
 
-      setUser(user);
+
+      setUser(processedUser);
       setIsAuthenticated(true);
-      return { success: true, user };
+      return { success: true, user: processedUser };
     } catch (err) {
       console.error('Login error:', err);
       setError(err.response?.data?.message || 'Login failed');
@@ -115,6 +135,12 @@ export const AuthProvider = ({ children }) => {
     }
   }, [isAuthenticated]);
 
+  // Get current user ID
+  // This function returns the user ID from the user object
+  const getCurrentUserId = () => {
+    return user?.id || user?._id || null;
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -126,6 +152,7 @@ export const AuthProvider = ({ children }) => {
         logout,
         hasRole,
         hasAnyRole,
+        getCurrentUserId,  // <-- Add this
         isAdmin: hasRole('admin') || hasRole('super_admin'),
         isStaff: hasRole('staff') || hasRole('admin') || hasRole('super_admin'),
         isCitizen: hasRole('citizen'),

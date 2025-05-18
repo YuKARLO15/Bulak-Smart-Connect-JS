@@ -34,15 +34,21 @@ export const queueService = {
   },
   
   createQueue: async (queueData) => {
-    try {
-      console.log('Creating queue with data:', queueData); //For Debugging
-      const response = await api.post('/queue', queueData);
-      return response.data;
-    } catch (error) {
-      console.error('Error creating queue:', error);
-      throw error;
-    }
-  },
+  try {
+    console.log('Creating queue with data:', queueData);
+    
+    // Debug token
+    const token = localStorage.getItem('token');
+    console.log('Token being used:', token ? 'Valid token present' : 'No token');
+    
+    const response = await api.post('/queue', queueData);
+    console.log('Queue creation response:', response.data);
+    return response.data;
+  } catch (error) {
+    console.error('Error creating queue:', error);
+    throw error;
+  }
+},
 
   checkQueueExists: async (queueId) => {
     try {
