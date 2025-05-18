@@ -311,6 +311,7 @@ import { QueueModule } from &#x27;./modules/queue/queue.module&#x27;;
         entities: [__dirname + &#x27;/**/*.entity{.ts,.js}&#x27;],
         synchronize: configService.get(&#x27;NODE_ENV&#x27;) !&#x3D;&#x3D; &#x27;production&#x27;, //set this sheesh to true in development only
         logging: configService.get(&#x27;NODE_ENV&#x27;) !&#x3D;&#x3D; &#x27;production&#x27;,
+        logger: &#x27;advanced-console&#x27;,
         // Prevent data loss in development (below code is for development only)
         // synchronize: true,
         migrationsRun: false,
