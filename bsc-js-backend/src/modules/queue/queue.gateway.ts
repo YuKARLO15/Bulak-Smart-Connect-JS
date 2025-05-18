@@ -11,8 +11,11 @@ import { Logger, Inject, forwardRef } from '@nestjs/common';
 
 @WebSocketGateway({
   cors: {
-    origin: '*', // In production, set to your frontend URL
+    origin: 'http://localhost:5173', // Match your app's CORS setting
+    methods: ['GET', 'POST'],
+    credentials: true,
   },
+  namespace: 'socket.io', // Add this to match client expectation
 })
 export class QueueGateway implements OnGatewayConnection, OnGatewayDisconnect {
   private readonly logger = new Logger(QueueGateway.name);
@@ -50,6 +53,13 @@ export class QueueGateway implements OnGatewayConnection, OnGatewayDisconnect {
   async handleJoinCounter(client: Socket, counterId: number) {
     await client.join(`counter_${counterId}`);
     return { success: true };
+  }
+
+  @SubscribeMessage('join_queue_updates')
+  async handleJoinQueueUpdates(client: Socket) {
+    this.logger.log(`Socket ${client.id} joined queue updates`);
+    await client.join('queue_updates');
+    return { event: 'joined', data: 'Successfully joined queue updates' };
   }
 
   // Send updates to all clients or specific rooms
