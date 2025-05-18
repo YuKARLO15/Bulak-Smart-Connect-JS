@@ -189,6 +189,11 @@
                                 <a href="#handleJoinQueue" >handleJoinQueue</a>
                             </li>
                             <li>
+                                    <span class="modifier"></span>
+                                    <span class="modifier">Async</span>
+                                <a href="#handleJoinQueueUpdates" >handleJoinQueueUpdates</a>
+                            </li>
+                            <li>
                                 <a href="#notifyCounterUpdate" >notifyCounterUpdate</a>
                             </li>
                             <li>
@@ -217,7 +222,7 @@
                 </tr>
                         <tr>
                             <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="21" class="link-to-prism">src/modules/queue/queue.gateway.ts:21</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="24" class="link-to-prism">src/modules/queue/queue.gateway.ts:24</a></div>
                             </td>
                         </tr>
 
@@ -280,7 +285,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="18" class="link-to-prism">src/modules/queue/queue.gateway.ts:18</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="21" class="link-to-prism">src/modules/queue/queue.gateway.ts:21</a></div>
                         </td>
                     </tr>
 
@@ -316,7 +321,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="21" class="link-to-prism">src/modules/queue/queue.gateway.ts:21</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="24" class="link-to-prism">src/modules/queue/queue.gateway.ts:24</a></div>
                         </td>
                     </tr>
 
@@ -350,8 +355,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="28"
-                                    class="link-to-prism">src/modules/queue/queue.gateway.ts:28</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="31"
+                                    class="link-to-prism">src/modules/queue/queue.gateway.ts:31</a></div>
                         </td>
                     </tr>
 
@@ -417,8 +422,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="32"
-                                    class="link-to-prism">src/modules/queue/queue.gateway.ts:32</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="35"
+                                    class="link-to-prism">src/modules/queue/queue.gateway.ts:35</a></div>
                         </td>
                     </tr>
 
@@ -494,8 +499,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="44"
-                                    class="link-to-prism">src/modules/queue/queue.gateway.ts:44</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="47"
+                                    class="link-to-prism">src/modules/queue/queue.gateway.ts:47</a></div>
                         </td>
                     </tr>
 
@@ -583,8 +588,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="50"
-                                    class="link-to-prism">src/modules/queue/queue.gateway.ts:50</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="53"
+                                    class="link-to-prism">src/modules/queue/queue.gateway.ts:53</a></div>
                         </td>
                     </tr>
 
@@ -672,8 +677,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="37"
-                                    class="link-to-prism">src/modules/queue/queue.gateway.ts:37</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="40"
+                                    class="link-to-prism">src/modules/queue/queue.gateway.ts:40</a></div>
                         </td>
                     </tr>
 
@@ -735,6 +740,83 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
+                    <a name="handleJoinQueueUpdates"></a>
+                    <span class="name">
+                            <span class="modifier"></span>
+                            <span class="modifier">Async</span>
+                        <span ><b>handleJoinQueueUpdates</b></span>
+                        <a href="#handleJoinQueueUpdates"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>handleJoinQueueUpdates(client: Socket)</code>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <b>Decorators : </b>
+                    <br />
+                    <code>@SubscribeMessage(&#x27;join_queue_updates&#x27;)<br /></code>
+                </td>
+            </tr>
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="59"
+                                    class="link-to-prism">src/modules/queue/queue.gateway.ts:59</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>client</td>
+                                            <td>
+                                                        <code>Socket</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
                     <a name="notifyCounterUpdate"></a>
                     <span class="name">
                         <span ><b>notifyCounterUpdate</b></span>
@@ -751,8 +833,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="61"
-                                    class="link-to-prism">src/modules/queue/queue.gateway.ts:61</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="71"
+                                    class="link-to-prism">src/modules/queue/queue.gateway.ts:71</a></div>
                         </td>
                     </tr>
 
@@ -830,8 +912,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="56"
-                                    class="link-to-prism">src/modules/queue/queue.gateway.ts:56</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="66"
+                                    class="link-to-prism">src/modules/queue/queue.gateway.ts:66</a></div>
                         </td>
                     </tr>
 
@@ -912,8 +994,11 @@ import { Logger, Inject, forwardRef } from &#x27;@nestjs/common&#x27;;
 
 @WebSocketGateway({
   cors: {
-    origin: &#x27;*&#x27;, // In production, set to your frontend URL
+    origin: &#x27;http://localhost:5173&#x27;, // Match your app&#x27;s CORS setting
+    methods: [&#x27;GET&#x27;, &#x27;POST&#x27;],
+    credentials: true,
   },
+  namespace: &#x27;socket.io&#x27;, // Add this to match client expectation
 })
 export class QueueGateway implements OnGatewayConnection, OnGatewayDisconnect {
   private readonly logger &#x3D; new Logger(QueueGateway.name);
@@ -951,6 +1036,13 @@ export class QueueGateway implements OnGatewayConnection, OnGatewayDisconnect {
   async handleJoinCounter(client: Socket, counterId: number) {
     await client.join(&#x60;counter_${counterId}&#x60;);
     return { success: true };
+  }
+
+  @SubscribeMessage(&#x27;join_queue_updates&#x27;)
+  async handleJoinQueueUpdates(client: Socket) {
+    this.logger.log(&#x60;Socket ${client.id} joined queue updates&#x60;);
+    await client.join(&#x27;queue_updates&#x27;);
+    return { event: &#x27;joined&#x27;, data: &#x27;Successfully joined queue updates&#x27; };
   }
 
   // Send updates to all clients or specific rooms
