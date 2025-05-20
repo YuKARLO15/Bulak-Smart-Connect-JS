@@ -36,6 +36,9 @@ export const AuthProvider = ({ children }) => {
         
         setUser(processedUser);
         setIsAuthenticated(true);
+
+        // Store user in localStorage during auth check too
+        localStorage.setItem('currentUser', JSON.stringify(processedUser));
       } catch (err) {
         console.error('Auth check failed:', err);
         localStorage.removeItem('token');
@@ -64,15 +67,16 @@ export const AuthProvider = ({ children }) => {
       console.log("User object from backend:", response.data.user); //Debugging line
 
       const { access_token, user: userData } = response.data;
-
-      // Ensure the user object has an id field - adapt the field names based on your API response
+      
+      // Process user data
       const processedUser = {
         ...userData,
         id: userData.id || userData._id || userData.userId || null
       };
 
-      // Store token in localStorage
+      // Store token AND user data in localStorage
       localStorage.setItem('token', access_token);
+      localStorage.setItem('currentUser', JSON.stringify(processedUser)); // Add this line
 
       // Process roles - ensure we extract role names correctly
       //if (user.roles) {
