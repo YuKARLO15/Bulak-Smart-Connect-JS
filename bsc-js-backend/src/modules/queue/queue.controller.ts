@@ -107,4 +107,15 @@ export class QueueController {
   getCounters() {
     return this.queueService.getCounters();
   }
+
+  @Get(':id/exists')
+  async checkQueueExists(@Param('id') id: string) {
+    try {
+      const exists = await this.queueService.checkExists(+id);
+      return { exists };
+    } catch (error) {
+      console.error(`Error checking if queue ${id} exists:`, error);
+      return { exists: false };
+    }
+  }
 }

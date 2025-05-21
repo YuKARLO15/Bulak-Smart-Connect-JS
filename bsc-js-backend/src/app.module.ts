@@ -27,6 +27,7 @@ import { QueueModule } from './modules/queue/queue.module';
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
         synchronize: configService.get('NODE_ENV') !== 'production', //set this sheesh to true in development only
         logging: configService.get('NODE_ENV') !== 'production',
+        logger: 'advanced-console',
         // Prevent data loss in development (below code is for development only)
         // synchronize: true,
         migrationsRun: false,

@@ -88,20 +88,25 @@ const WalkInForm = () => {
     e.preventDefault();
     
     try {
-      console.log('Creating queue with user ID:', userId); // Debugging line
-      console.log('Form data:', formData); // Debugging line
+      // Log user information more explicitly
+      console.log('Creating queue for authenticated user:', user);
       
-      // Call API to create queue
+      // Make the userId more explicit at the top level
+      const actualUserId = user?.id || null;
+      
       const response = await queueService.createQueue({
+        // Make userId the first property so it's more noticeable in logs
+        userId: actualUserId,
+        isGuest: !actualUserId,
+        
+        // Other data
         firstName: formData.firstName,
         lastName: formData.lastName,
         middleInitial: formData.middleInitial || '',
         address: formData.address || '',
         phoneNumber: formData.phoneNumber || '',
         reasonOfVisit: formData.reasonOfVisit,
-        appointmentType: formData.reasonOfVisit,
-        userId: user?.id || null,  // Use null instead of 'guest' string for database
-        isGuest: !user?.id         // Set isGuest flag based on user existence
+        appointmentType: formData.reasonOfVisit
       });
       
       // Format the queue number to WK format for display
@@ -120,26 +125,26 @@ const WalkInForm = () => {
         userData: formData,
         appointmentType: formData.reasonOfVisit,
         isUserQueue: true,
-        userId: userId // Store user ID with queue
+        userId: actualUserId // Use the same variable
       };
 
       // Store with user-specific keys
-      localStorage.setItem(`userQueue_${userId}`, JSON.stringify(newQueue));
+      localStorage.setItem(`userQueue_${actualUserId}`, JSON.stringify(newQueue));
       
       // Also add to user-specific queues array
       try {
-        const storedQueues = localStorage.getItem(`userQueues_${userId}`);
+        const storedQueues = localStorage.getItem(`userQueues_${actualUserId}`);
         let userQueues = storedQueues ? JSON.parse(storedQueues) : [];
         if (!Array.isArray(userQueues)) userQueues = [];
         
         userQueues.push(newQueue);
-        localStorage.setItem(`userQueues_${userId}`, JSON.stringify(userQueues));
+        localStorage.setItem(`userQueues_${actualUserId}`, JSON.stringify(userQueues));
         
         // For backward compatibility
         localStorage.setItem('userQueue', JSON.stringify(newQueue));
       } catch (e) {
         console.error('Error updating user queues:', e);
-        localStorage.setItem(`userQueues_${userId}`, JSON.stringify([newQueue]));
+        localStorage.setItem(`userQueues_${actualUserId}`, JSON.stringify([newQueue]));
       }
       
       window.location.href = '/WalkInDetails';
