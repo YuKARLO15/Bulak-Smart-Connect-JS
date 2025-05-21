@@ -23,60 +23,117 @@ const WalkInQueueAdmin = () => {
   const [currentQueues, setCurrentQueues] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [debugMode, setDebugMode] = useState(false);
-  const [debugData, setDebugData] = useState(null);
 
-  // Update the fetchQueueData function
-  const fetchQueueData = useCallback(async () => {
+// Update the fetchQueueData function
+const fetchQueueData = useCallback(async () => {
   setLoading(true);
   try {
-    // Simplify the fetch approach to match what works in AdminWalkInDetails
-    const [pendingData, currentData] = await Promise.all([
-      queueService.fetchPendingQueuesWithDetails(),
-      queueService.fetchCurrentQueuesWithDetails()
-    ]);
+    // Try to fetch queues with details directly (if those endpoints exist)
+    let pendingData, currentData;
     
-    console.log('Queue data fetched:', pendingData, currentData);
+    try {
+      // First attempt: Try to fetch queues with details included
+      [pendingData, currentData] = await Promise.all([
+        queueService.fetchPendingQueuesWithDetails(),
+        queueService.fetchCurrentQueuesWithDetails()
+      ]);
+    } catch (e) {
+      console.log('Detailed endpoints not available, falling back to basic endpoints');
+      // Fallback: Fetch basic queue data without details
+      [pendingData, currentData] = await Promise.all([
+        queueService.fetchPendingQueues(),
+        queueService.fetchCurrentQueues()
+      ]);
+      
+      // Get queue IDs
+      const pendingIds = pendingData.map(q => q.id);
+      const currentIds = currentData.map(q => q.id);
+      const allIds = [...pendingIds, ...currentIds];
+      
+      if (allIds.length > 0) {
+        // Fetch details for all queues in a single request
+        try {
+          const detailsMap = await queueService.fetchDetailsForMultipleQueues(allIds);
+          
+          // Attach details to queue objects
+          pendingData = pendingData.map(queue => ({
+            ...queue,
+            userData: detailsMap[queue.id] || {}
+          }));
+          
+          currentData = currentData.map(queue => ({
+            ...queue,
+            userData: detailsMap[queue.id] || {}
+          }));
+        } catch (error) {
+          console.error('Failed to fetch queue details in bulk:', error);
+          
+          // Fallback to individual requests if bulk fetch fails
+          console.log('Attempting to fetch details individually');
+          
+          // Fetch details for each pending queue
+          const pendingDetailsPromises = pendingData.map(queue => 
+            queueService.fetchQueueDetails(queue.id)
+              .then(details => ({ ...queue, userData: details }))
+              .catch(() => queue) // Keep original queue if details fetch fails
+          );
+          
+          // Fetch details for each current queue
+          const currentDetailsPromises = currentData.map(queue => 
+            queueService.fetchQueueDetails(queue.id)
+              .then(details => ({ ...queue, userData: details }))
+              .catch(() => queue) // Keep original queue if details fetch fails
+          );
+          
+          // Wait for all details to be fetched
+          pendingData = await Promise.all(pendingDetailsPromises);
+          currentData = await Promise.all(currentDetailsPromises);
+        }
+      }
+    }
     
-    // Process the data similar to how AdminWalkInDetails handles it
-    const formattedPendingQueues = pendingData.map(queueDetail => {
-      const queue = queueDetail.queue || {};
-      const details = queueDetail.details || {};
-      const user = details.user || {};
+    // Process and format pending queues with details
+    const formattedPendingQueues = pendingData.map(queue => {
+      console.log('Queue with details:', queue);
+      
+      // Extract userData from wherever it exists
+      const userData = queue.userData || queue.details || queue.user || {};
       
       return {
-        id: queue.id || queueDetail.id,
+        id: queue.id || queue._id,
         queueNumber: formatWKNumber(queue.queueNumber || queue.id),
-        firstName: details.firstName || user.firstName || queue.firstName || 'Guest',
-        lastName: details.lastName || user.lastName || queue.lastName || '',
-        reasonOfVisit: details.reasonOfVisit || queue.reason || queue.reasonOfVisit || 'General Inquiry',
+        firstName: userData.firstName || 'Guest',
+        lastName: userData.lastName || '',
+        reasonOfVisit: userData.reasonOfVisit || userData.reason || userData.service || 'General Inquiry',
         status: queue.status || 'pending',
         timestamp: queue.createdAt || queue.date || new Date().toISOString()
       };
     });
-      const formattedCurrentQueues = currentData.map(queueDetail => {
-      const queue = queueDetail.queue || {};
-      const details = queueDetail.details || {};
-      const user = details.user || {};
+    
+    // Process and format current queues with details
+    const formattedCurrentQueues = currentData.map(queue => {
+      // Extract userData from wherever it exists
+      const userData = queue.userData || queue.details || queue.user || {};
       
       return {
-        id: queue.id || queueDetail.id,
+        id: queue.id || queue._id,
         queueNumber: formatWKNumber(queue.queueNumber || queue.id),
-        firstName: details.firstName || user.firstName || queue.firstName || 'Guest',
-        lastName: details.lastName || user.lastName || queue.lastName || '',
-        reasonOfVisit: details.reasonOfVisit || queue.reason || queue.reasonOfVisit || 'General Inquiry',
-        status: queue.status || 'in-progress',
+        firstName: userData.firstName || 'Guest',
+        lastName: userData.lastName || '',
+        reasonOfVisit: userData.reasonOfVisit || userData.reason || userData.service || 'General Inquiry',
+        status: 'in-progress',
         timestamp: queue.createdAt || queue.date || new Date().toISOString()
       };
     });
-
-
+    
     setPendingQueues(formattedPendingQueues);
     setCurrentQueues(formattedCurrentQueues);
     setError(null);
   } catch (err) {
     console.error('Error fetching queue data:', err);
     setError('Could not load queue data. Please ensure the server is running.');
+    setPendingQueues([]);
+    setCurrentQueues([]);
   } finally {
     setLoading(false);
   }
@@ -142,18 +199,6 @@ const WalkInQueueAdmin = () => {
     return () => clearInterval(intervalId);
   }, [fetchQueueData]);
 
-  // Direct test of an endpoint - for debugging
-  const testEndpoint = async (endpoint) => {
-    try {
-      const response = await axios.get(`http://localhost:3000${endpoint}`);
-      alert(`Response from ${endpoint}:\n${JSON.stringify(response.data, null, 2).slice(0, 300)}...`);
-      console.log(`Full response from ${endpoint}:`, response.data);
-    } catch (err) {
-      alert(`Error testing ${endpoint}: ${err.message}`);
-      console.error(`Error testing ${endpoint}:`, err);
-    }
-  };
-
   return (
     <div className="admin-walk-in-queue">
       {/* Queue stats summary */}
@@ -183,22 +228,6 @@ const WalkInQueueAdmin = () => {
         ) : error ? (
           <div className="queue-error">
             <p>{error}</p>
-            {/* Reload button for error cases */}
-            <button 
-              onClick={fetchQueueData} 
-              className="retry-btn"
-              style={{
-                padding: '8px 16px',
-                background: '#1C4D5A',
-                color: 'white',
-                border: 'none',
-                borderRadius: '4px',
-                marginTop: '10px',
-                cursor: 'pointer'
-              }}
-            >
-              Retry
-            </button>
           </div>
         ) : getAllQueues().length === 0 ? (
           <div className="queue-empty">
@@ -264,77 +293,6 @@ const WalkInQueueAdmin = () => {
           </Link>
         </div>
       </div>
-      
-      {/* Debug panel - hidden by default */}
-      {debugMode && (
-        <div style={{
-          position: 'fixed',
-          bottom: '20px',
-          right: '20px',
-          background: 'white',
-          border: '1px solid #ddd',
-          padding: '15px',
-          borderRadius: '5px',
-          boxShadow: '0 0 10px rgba(0,0,0,0.1)',
-          zIndex: 9999,
-          maxWidth: '400px',
-          maxHeight: '80vh',
-          overflow: 'auto'
-        }}>
-          <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
-            <h3 style={{margin: '0 0 10px'}}>API Response Debug</h3>
-            <button onClick={() => setDebugMode(false)}>Close</button>
-          </div>
-          
-          {debugData ? (
-            <>
-              <p><strong>Queue Count:</strong> {debugData.queueCount || 0}</p>
-              <p><strong>Queue Properties:</strong> {debugData.dataStructure || 'No data'}</p>
-              <div>
-                <strong>Test API Endpoints:</strong>
-                <div style={{display: 'flex', flexDirection: 'column', gap: '5px', margin: '5px 0'}}>
-                  <button onClick={() => testEndpoint('/queue/pending')}>Test /queue/pending</button>
-                  <button onClick={() => testEndpoint('/queue/pending/details')}>Test /queue/pending/details</button>
-                  {debugData.rawPendingQueue && debugData.rawPendingQueue.id && (
-                    <button onClick={() => testEndpoint(`/queue/${debugData.rawPendingQueue.id}/details`)}>
-                      Test /queue/{debugData.rawPendingQueue.id}/details
-                    </button>
-                  )}
-                </div>
-              </div>
-              <p><strong>Raw Queue Data:</strong></p>
-              <pre style={{
-                background: '#f5f5f5', 
-                padding: '10px', 
-                overflow: 'auto',
-                fontSize: '12px'
-              }}>
-                {JSON.stringify(debugData.rawPendingQueue, null, 2)}
-              </pre>
-            </>
-          ) : (
-            <p>No queue data available for debugging</p>
-          )}
-        </div>
-      )}
-
-      {/* Debug toggle button */}
-      <button 
-        onClick={() => setDebugMode(!debugMode)}
-        style={{
-          position: 'fixed',
-          bottom: '10px',
-          right: '10px',
-          padding: '5px 10px',
-          background: '#f0f0f0',
-          border: '1px solid #ccc',
-          borderRadius: '4px',
-          opacity: debugMode ? 0 : 0.7,
-          zIndex: 9990
-        }}
-      >
-        Debug
-      </button>
     </div>
   );
 };
