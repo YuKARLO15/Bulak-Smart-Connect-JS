@@ -301,26 +301,6 @@
   margin: 0;
 }
 
-.admin-appointment-dashboard-filter-control {
-  background: #e9ecef;
-  border-radius: 12px;
-  padding: 4px 18px;
-  display: flex;
-  align-items: center;
-}
-
-.admin-appointment-dashboard-filter-button {
-  background: none;
-  border: none;
-  color: #1C4D5A;
-  font-size: 1.2rem;
-  cursor: pointer;
-  padding: 0;
-}
-
-.admin-appointment-dashboard-filter-icon {
-  font-size: 1.2rem;
-}
 
 /* Appointments List */
 .admin-appointment-dashboard-appointments-list {
