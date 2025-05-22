@@ -10,12 +10,15 @@ const WalkInQueueList = ({ pendingQueues, userQueue }) => {
   
   // Filter out any queues that belong to the user
   const filteredPendingQueues = pendingQueues.filter(queue => !userQueueIds.includes(queue.id));
-  
-  // Sort all queues by queue number for sequential display
+    // Sort all queues by queue number for sequential display
   const sortByQueueNumber = (queues) => {
     return [...queues].sort((a, b) => {
-      const numA = parseInt(a.id.replace('WK', ''), 10);
-      const numB = parseInt(b.id.replace('WK', ''), 10);
+      // Ensure id is a string and handle WK prefix
+      const idA = typeof a.id === 'string' ? a.id : a.id?.toString() || '';
+      const idB = typeof b.id === 'string' ? b.id : b.id?.toString() || '';
+      
+      const numA = parseInt(idA.replace('WK', ''), 10) || 0;
+      const numB = parseInt(idB.replace('WK', ''), 10) || 0;
       return numA - numB;
     });
   };

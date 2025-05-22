@@ -9,42 +9,35 @@ export class QueuesController {
   // This endpoint is for supporting the legacy API path that the frontend is using
   @Get('walk-in') 
   async getWalkInQueues() {
-    // Get both pending and serving queues
-    const [pendingQueues, servingQueues] = await Promise.all([
-      this.queueService.findByStatus(QueueStatus.PENDING),
-      this.queueService.findByStatus(QueueStatus.SERVING)
-    ]);
+    try {
+      // Get both pending and serving queues with details using the service methods
+      const [pendingQueuesWithDetails, servingQueuesWithDetails] = await Promise.all([
+        this.queueService.findByStatusWithDetails(QueueStatus.PENDING),
+        this.queueService.findByStatusWithDetails(QueueStatus.SERVING)
+      ]);
 
-    // Combine all queues
-    const allQueues = [...pendingQueues, ...servingQueues];
+      // Combine all queues
+      const allQueues = [...pendingQueuesWithDetails, ...servingQueuesWithDetails];
 
-    // Get queue details for all queues
-    const queueIds = allQueues.map(queue => queue.id);
-    
-    // Get details for all of these queues
-    const detailsPromises = queueIds.map(async (id) => {
-      try {
-        return await this.queueService.getQueueDetails(id);
-      } catch (error) {
-        console.error(`Failed to get details for queue ${id}:`, error);
-        return null;
-      }
-    });
-
-    const queueDetailsArray = await Promise.all(detailsPromises);
-    
-    // Combine queue and details
-    return allQueues.map(queue => {
-      const detailsObj = queueDetailsArray.find(details => 
-        details && details.queue && details.queue.id === queue.id
-      );
-      
-      return {
-        ...queue,
-        firstName: detailsObj?.details?.firstName || null,
-        lastName: detailsObj?.details?.lastName || null,
-        reasonOfVisit: detailsObj?.details?.reasonOfVisit || null
-      };
-    });
+      // Map to a frontend-friendly format
+      return allQueues.map(queue => ({
+        id: queue.id,
+        queueNumber: queue.queueNumber,
+        status: queue.status,
+        counterNumber: queue.counterNumber,
+        createdAt: queue.createdAt,
+        completedAt: queue.completedAt,
+        estimatedWaitTime: queue.estimatedWaitTime,
+        firstName: queue.details?.firstName || null,
+        lastName: queue.details?.lastName || null,
+        middleInitial: queue.details?.middleInitial || null,
+        reasonOfVisit: queue.details?.reasonOfVisit || null,
+        address: queue.details?.address || null,
+        phoneNumber: queue.details?.phoneNumber || null
+      }));
+    } catch (error) {
+      console.error('Error fetching walk-in queues:', error);
+      throw error;
+    }
   }
 }
