@@ -1,0 +1,205 @@
+{
+	"info": {
+		"_postman_id": "7d2a0e1b-4f5a-4b8e-9e3c-5d4e2f7d99a1",
+		"name": "Bulak Smart Connect - User Management",
+		"description": "Collection for testing user management endpoints in Bulak Smart Connect system",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"emailOrUsername\": \"citizen@example.com\",\n    \"password\": \"password123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						},
+						"description": "Login endpoint for both citizens and admins."
+					},
+					"response": []
+				},
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"newuser@example.com\",\n    \"username\": \"newuser\",\n    \"password\": \"password123\",\n    \"firstName\": \"New\",\n    \"lastName\": \"User\",\n    \"middleName\": \"Test\",\n    \"contactNumber\": \"09123456789\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/register",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"register"
+							]
+						},
+						"description": "Register new users (citizens)."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Profile",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{citizen_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/auth/profile",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"profile"
+							]
+						},
+						"description": "Get current user's profile."
+					},
+					"response": []
+				}
+			],
+			"description": "Basic authentication endpoints for login, register and profile."
+		},
+		{
+			"name": "User Updates",
+			"item": [
+				{
+					"name": "Update Own Profile (Citizen)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{citizen_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"firstName\": \"Updated\",\n    \"lastName\": \"Citizen\",\n    \"contactNumber\": \"09876543210\",\n    \"address\": \"123 Main St, Bulak City\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/update-profile",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"update-profile"
+							]
+						},
+						"description": "Citizens can update their own profile information."
+					},
+					"response": []
+				},
+				{
+					"name": "Admin Update User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{admin_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"firstName\": \"Admin\",\n    \"lastName\": \"Updated\",\n    \"roleIds\": [1, 2],\n    \"defaultRoleId\": 2\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/admin/update-user/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"admin",
+								"update-user",
+								"1"
+							]
+						},
+						"description": "Admin can update any user's information including roles."
+					},
+					"response": []
+				}
+			],
+			"description": "Endpoints for updating user profiles."
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:3000",
+			"type": "string"
+		},
+		{
+			"key": "citizen_token",
+			"value": "YOUR_CITIZEN_JWT_TOKEN",
+			"type": "string"
+		},
+		{
+			"key": "admin_token",
+			"value": "YOUR_ADMIN_JWT_TOKEN",
+			"type": "string"
+		}
+	]
+}

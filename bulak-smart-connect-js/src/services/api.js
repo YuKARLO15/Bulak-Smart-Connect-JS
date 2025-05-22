@@ -14,6 +14,20 @@ const api = axios.create({
   },
 });
 
+// Helper function to get current user ID from localStorage
+const getCurrentUserId = () => {
+  const currentUser = localStorage.getItem('currentUser');
+  if (!currentUser) return null;
+  
+  try {
+    const userData = JSON.parse(currentUser);
+    return userData?.id || userData?._id || null;
+  } catch (e) {
+    console.error('Error parsing user data from localStorage', e);
+    return null;
+  }
+};
+
 // Add token to requests if available
 api.interceptors.request.use(
   config => {
@@ -55,6 +69,16 @@ export const authService = {
   getProfile: async () => {
     return api.get('/auth/profile');
   },
+  
+  updateProfile: async (userData) => {
+    const response = await api.post('/auth/update-profile', userData);
+    return response.data;
+  },
+  
+  adminUpdateUser: async (userId, userData) => {
+    const response = await api.post(`/auth/admin/update-user/${userId}`, userData);
+    return response.data;
+  }
 };
 
 export default api;

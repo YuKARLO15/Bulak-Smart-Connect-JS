@@ -13,10 +13,7 @@ import { Counter } from '../counter/entities/counter.entity';
 @Module({
   imports: [TypeOrmModule.forFeature([Queue, QueueDetails, Counter])],
   controllers: [QueueController],
-  providers: [
-    QueueService,
-    QueueGateway,
-  ],
+  providers: [QueueService, QueueGateway],
   exports: [QueueService, QueueGateway],
 })
 export class QueueModule {}

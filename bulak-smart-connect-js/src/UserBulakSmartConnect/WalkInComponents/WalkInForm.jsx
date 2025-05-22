@@ -83,7 +83,6 @@ const WalkInForm = () => {
 
     setAppointmentType(isOwner ? 'self' : 'other');
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     
@@ -94,10 +93,17 @@ const WalkInForm = () => {
       // Make the userId more explicit at the top level
       const actualUserId = user?.id || null;
       
+      // Set isGuest based on dialog choice
+      // If user selected "Yes, use my details" (isAccountOwner = true), isGuest = false (0)
+      // If user selected "No, enter new details" (isAccountOwner = false), isGuest = true (1)
+      const isGuest = !isAccountOwner;
+      
+      console.log('Queue creation with userId:', actualUserId, 'isGuest:', isGuest);
+      
       const response = await queueService.createQueue({
         // Make userId the first property so it's more noticeable in logs
-        userId: actualUserId,
-        isGuest: !actualUserId,
+        userId: actualUserId, 
+        isGuest: isGuest,
         
         // Other data
         firstName: formData.firstName,
@@ -111,8 +117,7 @@ const WalkInForm = () => {
       
       // Format the queue number to WK format for display
       const queueNumber = formatWKNumber(response.queue.queueNumber);
-      
-      // Create the new queue with user ID
+        // Create the new queue with user ID
       const newQueue = {
         id: queueNumber,
         dbId: response.queue.id,
@@ -125,7 +130,8 @@ const WalkInForm = () => {
         userData: formData,
         appointmentType: formData.reasonOfVisit,
         isUserQueue: true,
-        userId: actualUserId // Use the same variable
+        userId: actualUserId, // Use the same variable
+        isGuest: !isAccountOwner // Track if this queue is for someone else
       };
 
       // Store with user-specific keys

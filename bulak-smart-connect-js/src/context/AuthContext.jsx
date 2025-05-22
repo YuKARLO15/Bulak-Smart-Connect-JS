@@ -8,6 +8,7 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [updateSuccess, setUpdateSuccess] = useState(false); // For profile updates
 
   // Check if user is authenticated on mount
   useEffect(() => {
@@ -138,11 +139,82 @@ export const AuthProvider = ({ children }) => {
       startLogoutTimer();
     }
   }, [isAuthenticated]);
-
   // Get current user ID
   // This function returns the user ID from the user object
   const getCurrentUserId = () => {
     return user?.id || user?._id || null;
+  };
+
+  // Update user profile (for citizens)
+  const updateProfile = async (profileData) => {
+    setError(null);
+    setUpdateSuccess(false);
+    
+    const token = localStorage.getItem('token');
+    if (!token) {
+      setError('Authentication required');
+      return { success: false, error: 'Authentication required' };
+    }
+    
+    try {
+      const response = await axios.post(
+        'http://localhost:3000/auth/update-profile',
+        profileData,
+        {
+          headers: { Authorization: `Bearer ${token}` }
+        }
+      );
+      
+      // Update user state and localStorage
+      const updatedUserData = response.data;
+      setUser(updatedUserData);
+      localStorage.setItem('currentUser', JSON.stringify(updatedUserData));
+      setUpdateSuccess(true);
+      
+      return { success: true, user: updatedUserData };
+    } catch (err) {
+      console.error('Profile update error:', err);
+      const errorMsg = err.response?.data?.message || 'Profile update failed';
+      setError(errorMsg);
+      return { success: false, error: errorMsg };
+    }
+  };
+  
+  // Admin update user (for admins)
+  const adminUpdateUser = async (targetUserId, userData) => {
+    setError(null);
+    setUpdateSuccess(false);
+    
+    // Verify the current user is an admin
+    if (!hasRole('admin') && !hasRole('super_admin')) {
+      const errorMsg = 'Insufficient permissions';
+      setError(errorMsg);
+      return { success: false, error: errorMsg };
+    }
+    
+    const token = localStorage.getItem('token');
+    if (!token) {
+      setError('Authentication required');
+      return { success: false, error: 'Authentication required' };
+    }
+    
+    try {
+      const response = await axios.post(
+        `http://localhost:3000/auth/admin/update-user/${targetUserId}`,
+        userData,
+        {
+          headers: { Authorization: `Bearer ${token}` }
+        }
+      );
+      
+      setUpdateSuccess(true);
+      return { success: true, user: response.data };
+    } catch (err) {
+      console.error('Admin user update error:', err);
+      const errorMsg = err.response?.data?.message || 'User update failed';
+      setError(errorMsg);
+      return { success: false, error: errorMsg };
+    }
   };
 
   return (
@@ -152,11 +224,14 @@ export const AuthProvider = ({ children }) => {
         user,
         loading,
         error,
+        updateSuccess,
         login,
         logout,
+        updateProfile,
+        adminUpdateUser,
         hasRole,
         hasAnyRole,
-        getCurrentUserId,  // <-- Add this
+        getCurrentUserId,
         isAdmin: hasRole('admin') || hasRole('super_admin'),
         isStaff: hasRole('staff') || hasRole('admin') || hasRole('super_admin'),
         isCitizen: hasRole('citizen'),
