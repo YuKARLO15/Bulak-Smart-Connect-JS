@@ -80,11 +80,29 @@ export class QueueController {
   getDetailsForMultipleQueues(@Body() body: { queueIds: number[] }) {
     return this.queueService.getDetailsForMultipleQueues(body.queueIds);
   }
-
   // Endpoint for updating queue status
   @Patch(':id/status')
-  updateStatus(@Param('id') id: string, @Body() body: { status: QueueStatus }) {
-    return this.queueService.update(+id, { status: body.status });
+  async updateStatus(@Param('id') id: string, @Body() body: { status: QueueStatus }) {
+    console.log(`PATCH /queue/${id}/status with body:`, body);
+    
+    try {
+      // Validate the status enum value
+      if (!Object.values(QueueStatus).includes(body.status)) {
+        console.error(`Invalid status value: ${body.status}`);
+        return { 
+          error: 'Invalid status value',
+          validValues: Object.values(QueueStatus)
+        };
+      }
+      
+      // Update the queue status
+      const result = await this.queueService.update(+id, { status: body.status });
+      console.log(`Queue ${id} status updated successfully to ${body.status}`);
+      return result;
+    } catch (error) {
+      console.error(`Error updating queue ${id} status:`, error);
+      throw error;
+    }
   }
 
   @Get('stats')
