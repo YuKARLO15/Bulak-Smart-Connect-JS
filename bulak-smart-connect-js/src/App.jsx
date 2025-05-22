@@ -48,6 +48,8 @@ import WalkInQueueContainer from './UserBulakSmartConnect/WalkInComponents/WalkI
 import WalkInForm from './UserBulakSmartConnect/WalkInComponents/WalkInForm';
 import WalkInQueueDetail from './UserBulakSmartConnect/WalkInComponents/WalkInDetails';
 
+//User Accouunt//
+import UserAccount from './UserBulakSmartConnect/UserAccountSettings/UserAccount';
 //-----------ADMIN SIDE --------------//
 //Admin Dashboard//
 import AdminDashboard from './AdminBulakSmartConnect/AdminDashboard/AdminDashboard';
@@ -141,6 +143,7 @@ function App() {
           <Route path="/RequirementBirthList" element={<RequirementBirthList />} />
           <Route path="/MarriageSummaryForm" element={<MarriageSummaryForm />} />
           <Route path="/RequirementMarriageList" element={<RequirementMarriageList />} />
+            <Route path="/UserAccount" element={<UserAccount />} />
 
         </Route>
       </Routes>
