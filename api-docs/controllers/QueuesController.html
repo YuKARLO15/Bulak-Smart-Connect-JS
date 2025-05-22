@@ -192,8 +192,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="10"
-                                    class="link-to-prism">src/modules/queue/queues.controller.ts:10</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="11"
+                                    class="link-to-prism">src/modules/queue/queues.controller.ts:11</a></div>
                         </td>
                     </tr>
 
@@ -220,10 +220,10 @@ import { QueueStatus } from &#x27;./entities/queue.entity&#x27;;
 @Controller(&#x27;queues&#x27;)
 export class QueuesController {
   constructor(private readonly queueService: QueueService) {}
+
   // This endpoint is for supporting the legacy API path that the frontend is using
   @Get(&#x27;walk-in&#x27;) 
   async getWalkInQueues() {
-    console.log(&#x27;GET /queues/walk-in endpoint called&#x27;);
     try {
       // Get both pending and serving queues with details using the service methods
       const [pendingQueuesWithDetails, servingQueuesWithDetails] &#x3D; await Promise.all([
@@ -231,39 +231,25 @@ export class QueuesController {
         this.queueService.findByStatusWithDetails(QueueStatus.SERVING)
       ]);
 
-      console.log(&#x27;Found pending queues:&#x27;, pendingQueuesWithDetails.length);
-      console.log(&#x27;Found serving queues:&#x27;, servingQueuesWithDetails.length);
-
       // Combine all queues
       const allQueues &#x3D; [...pendingQueuesWithDetails, ...servingQueuesWithDetails];
 
-      // Extract details from the nested structure and flatten them for the frontend
-      const result &#x3D; allQueues.map(queue &#x3D;&gt; {
-        // For debugging
-        console.log(&#x27;Processing queue:&#x27;, queue.id, &#x27;status:&#x27;, queue.status);
-        
-        // Handle potential null/undefined details
-        const details &#x3D; Array.isArray(queue.details) ? queue.details[0] : queue.details;
-        
-        return {
-          id: queue.id,
-          queueNumber: queue.queueNumber,
-          status: queue.status,
-          counterNumber: queue.counterNumber,
-          createdAt: queue.createdAt,
-          completedAt: queue.completedAt,
-          estimatedWaitTime: queue.estimatedWaitTime,
-          firstName: details?.firstName || null,
-          lastName: details?.lastName || null,
-          middleInitial: details?.middleInitial || null,
-          reasonOfVisit: details?.reasonOfVisit || null,
-          address: details?.address || null,
-          phoneNumber: details?.phoneNumber || null
-        };
-      });
-
-      console.log(&#x60;Returning ${result.length} walk-in queues&#x60;);
-      return result;
+      // Map to a frontend-friendly format
+      return allQueues.map(queue &#x3D;&gt; ({
+        id: queue.id,
+        queueNumber: queue.queueNumber,
+        status: queue.status,
+        counterNumber: queue.counterNumber,
+        createdAt: queue.createdAt,
+        completedAt: queue.completedAt,
+        estimatedWaitTime: queue.estimatedWaitTime,
+        firstName: queue.details?.firstName || null,
+        lastName: queue.details?.lastName || null,
+        middleInitial: queue.details?.middleInitial || null,
+        reasonOfVisit: queue.details?.reasonOfVisit || null,
+        address: queue.details?.address || null,
+        phoneNumber: queue.details?.phoneNumber || null
+      }));
     } catch (error) {
       console.error(&#x27;Error fetching walk-in queues:&#x27;, error);
       throw error;
