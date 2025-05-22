@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import axios from 'axios';
 import './UserAccount.css';
+import NavBar from '../../NavigationComponents/NavSide';
 
 const UserAccount = () => {
   const { user, getCurrentUserId } = useAuth();
@@ -13,7 +14,7 @@ const UserAccount = () => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
-
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   // Password states
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
@@ -280,7 +281,8 @@ const UserAccount = () => {
   }
 
   return (
-    <div className="AccountUAcc">
+       <div className={`AccountUAcc ${isSidebarOpen ? 'sidebar-open' : ''}`}>
+      <NavBar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
       <div className="AccountHeaderUAcc">
         <h1>User Account Settings</h1>
       </div>
