@@ -60,9 +60,10 @@ export class QueueService {
     const userId =
       typeof createQueueDto.userId === 'number'
         ? createQueueDto.userId
-        : typeof createQueueDto.userId === 'string' && createQueueDto.userId !== 'guest'
-        ? Number(createQueueDto.userId)
-        : undefined;
+        : typeof createQueueDto.userId === 'string' &&
+            createQueueDto.userId !== 'guest'
+          ? Number(createQueueDto.userId)
+          : undefined;
 
     const isGuest = createQueueDto.isGuest || !userId;
 
@@ -339,7 +340,7 @@ export class QueueService {
   // Check if queue exists
   async checkExists(id: number): Promise<boolean> {
     const queue = await this.queueRepository.findOne({
-      where: { id }
+      where: { id },
     });
     return !!queue;
   }

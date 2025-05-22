@@ -3,6 +3,8 @@ import { AppModule } from './app.module';
 import * as dotenv from 'dotenv';
 import { DataSource } from 'typeorm';
 import { Role } from './roles/entities/role.entity';
+import { ValidationPipe } from '@nestjs/common';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 dotenv.config();
 
@@ -12,6 +14,32 @@ async function bootstrap() {
   console.log('JWT_SECRET length:', process.env.JWT_SECRET?.length);
 
   const app = await NestFactory.create(AppModule);
+
+  // Set up global validation pipe
+  app.useGlobalPipes(new ValidationPipe({ transform: true }));
+  // Set up Swagger documentation
+  const config = new DocumentBuilder()
+    .setTitle('Bulak Smart Connect API')
+    .setDescription('REST API for Bulak Smart Connect System')
+    .setVersion('1.0')
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+        name: 'Authorization',
+        description: 'Enter JWT token',
+        in: 'header',
+      },
+      'JWT-auth', // This name here is important for references
+    )
+    .addTag(
+      'Authentication',
+      'User authentication and profile management endpoints',
+    )
+    .build();
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api/docs', app, document);
 
   // Enable CORS
   app.enableCors({
