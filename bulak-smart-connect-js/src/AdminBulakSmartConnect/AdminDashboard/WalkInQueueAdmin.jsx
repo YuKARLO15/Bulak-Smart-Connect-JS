@@ -137,40 +137,49 @@ const fetchQueueData = useCallback(async () => {
   } finally {
     setLoading(false);
   }
-}, []);
-  // Update queue status using the queueService
+}, []);  // Update queue status using the queueService
   const updateQueueStatus = async (queueId, newStatus) => {
     try {
-      // Make API call to update status using queueService
-      await queueService.updateQueueStatus(queueId, newStatus);
+      console.log(`Attempting to update queue ${queueId} to status: ${newStatus}`);
       
-      // Update local state based on new status
+      // Parse the queueId if it's not already a number
+      const parsedQueueId = parseInt(queueId, 10) || queueId;
+      
+      // First update local state optimistically to provide immediate feedback
       if (newStatus === 'in-progress') {
         // Move from pending to current
-        const queueToMove = pendingQueues.find(q => q.id === queueId);
+        const queueToMove = pendingQueues.find(q => q.id === queueId || q.id === parsedQueueId);
         if (queueToMove) {
-          setPendingQueues(prev => prev.filter(q => q.id !== queueId));
+          setPendingQueues(prev => prev.filter(q => q.id !== queueId && q.id !== parsedQueueId));
           setCurrentQueues(prev => [...prev, {...queueToMove, status: 'in-progress'}]);
         }
       } else if (newStatus === 'completed') {
         // Remove from current
-        setCurrentQueues(prev => prev.filter(q => q.id !== queueId));
+        setCurrentQueues(prev => prev.filter(q => q.id !== queueId && q.id !== parsedQueueId));
       } else if (newStatus === 'pending') {
         // Move from current to pending
-        const queueToMove = currentQueues.find(q => q.id === queueId);
+        const queueToMove = currentQueues.find(q => q.id === queueId || q.id === parsedQueueId);
         if (queueToMove) {
-          setCurrentQueues(prev => prev.filter(q => q.id !== queueId));
+          setCurrentQueues(prev => prev.filter(q => q.id !== queueId && q.id !== parsedQueueId));
           setPendingQueues(prev => [...prev, {...queueToMove, status: 'pending'}]);
         }
       }
       
-      console.log(`Queue ${queueId} updated to ${newStatus}`);
+      // Make API call to update status using queueService
+      await queueService.updateQueueStatus(parsedQueueId, newStatus);
+      console.log(`Queue status updated successfully: ${queueId} → ${newStatus}`);
       
-      // Refresh data after updating
-      fetchQueueData();
+      // Refresh data after updating to ensure our UI is in sync with the server
+      setTimeout(() => fetchQueueData(), 500);
     } catch (error) {
       console.error('Failed to update queue status:', error);
+      console.error('Error details:', error.response?.data || error.message);
+      
+      // Show friendlier error message
       alert('Failed to update queue status. Please try again.');
+      
+      // Refresh data to revert UI to server state
+      fetchQueueData();
     }
   };
 
@@ -184,16 +193,22 @@ const fetchQueueData = useCallback(async () => {
       return numA - numB;
     });
   };
-
   // Fetch queue data on component mount and refresh periodically
   useEffect(() => {
+    console.log('WalkInQueueAdmin: Initial data fetch');
     fetchQueueData();
     
     // Refresh queue data every 30 seconds
-    const intervalId = setInterval(fetchQueueData, 30000);
+    const intervalId = setInterval(() => {
+      console.log('WalkInQueueAdmin: Auto-refreshing queue data');
+      fetchQueueData();
+    }, 30000);
     
     // Clean up on component unmount
-    return () => clearInterval(intervalId);
+    return () => {
+      console.log('WalkInQueueAdmin: Cleanup - clearing interval');
+      clearInterval(intervalId);
+    };
   }, [fetchQueueData]);
 
   return (

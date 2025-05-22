@@ -160,32 +160,44 @@ export class QueueService {
 
     return { queue, details, position };
   }
-
   async update(id: number, updateQueueDto: UpdateQueueDto) {
-    const queue = await this.findOne(id);
+    console.log(`Updating queue ${id} with:`, updateQueueDto);
+    
+    try {
+      // Find the queue
+      const queue = await this.findOne(id);
+      console.log('Found queue:', queue);
 
-    if (updateQueueDto.status) {
-      queue.status = updateQueueDto.status;
+      if (updateQueueDto.status) {
+        // Log the status change
+        console.log(`Changing status from ${queue.status} to ${updateQueueDto.status}`);
+        queue.status = updateQueueDto.status;
 
-      // If completed, set completion time
-      if (updateQueueDto.status === QueueStatus.COMPLETED) {
-        queue.completedAt = new Date();
+        // If completed, set completion time
+        if (updateQueueDto.status === QueueStatus.COMPLETED) {
+          queue.completedAt = new Date();
+        }
       }
+
+      if (updateQueueDto.counterNumber) {
+        queue.counterNumber = updateQueueDto.counterNumber;
+      }
+
+      // Save the updated queue
+      const updatedQueue = await this.queueRepository.save(queue);
+      console.log('Queue updated successfully:', updatedQueue);
+
+      // Notify clients about the queue update
+      this.queueGateway.notifyQueueUpdate(id, {
+        action: 'updated',
+        queue: updatedQueue,
+      });
+
+      return updatedQueue;
+    } catch (error) {
+      console.error(`Error updating queue ${id}:`, error);
+      throw error;
     }
-
-    if (updateQueueDto.counterNumber) {
-      queue.counterNumber = updateQueueDto.counterNumber;
-    }
-
-    const updatedQueue = await this.queueRepository.save(queue);
-
-    // Notify clients about the queue update
-    this.queueGateway.notifyQueueUpdate(id, {
-      action: 'updated',
-      queue: updatedQueue,
-    });
-
-    return updatedQueue;
   }
 
   async getQueuePosition(queueId: number) {
@@ -207,54 +219,75 @@ export class QueueService {
 
     return position;
   }
-
   async getDetailsForMultipleQueues(queueIds: number[]) {
+    console.log('Getting details for queue IDs:', queueIds);
+    
     if (!queueIds || queueIds.length === 0) {
       return {};
     }
 
     const detailsMap = {};
 
-    // Fetch all queue details in a single query for better performance
-    const allDetails = await this.queueDetailsRepository.find({
-      where: {
-        queueId: In(queueIds),
-      },
-      relations: ['user'],
-    });
+    try {
+      // Fetch all queue details in a single query for better performance
+      const allDetails = await this.queueDetailsRepository.find({
+        where: {
+          queueId: In(queueIds),
+        },
+        relations: ['user'],
+      });
 
-    // Organize by queueId for easy lookup
-    allDetails.forEach((detail) => {
-      detailsMap[detail.queueId] = detail;
-    });
+      console.log(`Found ${allDetails.length} details for ${queueIds.length} queues`);
 
-    return detailsMap;
+      // Organize by queueId for easy lookup
+      allDetails.forEach((detail) => {
+        detailsMap[detail.queueId] = detail;
+      });
+
+      return detailsMap;
+    } catch (error) {
+      console.error('Error fetching details for multiple queues:', error);
+      // Return empty details rather than failing
+      return {};
+    }
   }
-
   async findByStatusWithDetails(status: QueueStatus) {
-    // First get all queues with this status
-    const queues = await this.queueRepository.find({
-      where: { status },
-      order: { createdAt: 'ASC' },
-    });
+    console.log(`Finding queues with status: ${status} and their details`);
+    
+    try {
+      // First get all queues with this status
+      const queues = await this.queueRepository.find({
+        where: { status },
+        order: { createdAt: 'ASC' },
+      });
 
-    if (queues.length === 0) {
+      console.log(`Found ${queues.length} queues with status ${status}`);
+      
+      if (queues.length === 0) {
+        return [];
+      }
+
+      // Get all queue IDs
+      const queueIds = queues.map((queue) => queue.id);
+
+      // Fetch details for all these queues
+      const detailsMap = await this.getDetailsForMultipleQueues(queueIds);
+
+      // Combine queue and details data
+      const result = queues.map((queue) => {
+        return {
+          ...queue,
+          details: detailsMap[queue.id] || null,
+        };
+      });
+      
+      console.log(`Returning ${result.length} queues with details`);
+      return result;
+    } catch (error) {
+      console.error(`Error finding queues with status ${status} and details:`, error);
+      // Return empty array rather than failing
       return [];
     }
-
-    // Get all queue IDs
-    const queueIds = queues.map((queue) => queue.id);
-
-    // Fetch details for all these queues
-    const detailsMap = await this.getDetailsForMultipleQueues(queueIds);
-
-    // Combine queue and details data
-    return queues.map((queue) => {
-      return {
-        ...queue,
-        details: detailsMap[queue.id] || null,
-      };
-    });
   }
 
   async callNext(counterId: number) {

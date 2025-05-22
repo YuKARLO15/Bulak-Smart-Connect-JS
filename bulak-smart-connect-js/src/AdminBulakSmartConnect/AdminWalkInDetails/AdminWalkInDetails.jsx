@@ -49,16 +49,17 @@ const AdminWalkInDetails = () => {
     
     fetchQueueDetails();
   }, [id]);
-  
-  // Handle queue completion
+    // Handle queue completion
   const handleCompleteQueue = async () => {
     try {
-      await axios.patch(`http://localhost:3000/queue/${id}`, { status: 'completed' });
+      // Use queueService for consistency
+      await queueService.updateQueueStatus(id, 'completed');
       alert('Queue marked as complete!');
       navigate(-1); // Go back to previous page
     } catch (err) {
       console.error('Error completing queue:', err);
-      alert('Failed to complete queue');
+      console.error('Error details:', err.response?.data || err.message);
+      alert(`Failed to complete queue. Error: ${err.response?.data?.message || err.message}`);
     }
   };
 

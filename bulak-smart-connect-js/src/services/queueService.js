@@ -123,15 +123,36 @@ export const queueService = {
       throw error;
     }
   },
-  
   // Update queue status
   updateQueueStatus: async (queueId, status) => {
     try {
       console.log(`Updating queue ${queueId} status to ${status}`);
-      const response = await axios.patch(`${API_URL}/queue/${queueId}/status`, { status });
+      
+      // Map frontend status values to backend expected values
+      let backendStatus;
+      switch (status) {
+        case 'in-progress':
+          backendStatus = 'serving';
+          break;
+        case 'completed':
+          backendStatus = 'completed';
+          break;
+        case 'pending':
+          backendStatus = 'pending';
+          break;
+        default:
+          backendStatus = status;
+      }
+      
+      console.log(`Mapped status: ${status} -> ${backendStatus}`);
+      console.log(`Making request to: ${API_URL}/queue/${queueId}/status`);
+      
+      const response = await axios.patch(`${API_URL}/queue/${queueId}/status`, { status: backendStatus });
+      console.log('Update status response:', response.data);
       return response.data;
     } catch (error) {
       console.error(`Error updating queue ${queueId} status:`, error);
+      console.error('Error details:', error.response?.data || error.message);
       throw error;
     }
   },

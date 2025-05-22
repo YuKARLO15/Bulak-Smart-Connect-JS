@@ -37,40 +37,48 @@ const AdminWalkInQueue = () => {
     formatWKNumber(pendingQueues[0].queueNumber || pendingQueues[0].id) : 'None';
   
   // Total queues count
-  const totalQueues = pendingQueues.length + currentQueues.length;
-  // Update queue status
+  const totalQueues = pendingQueues.length + currentQueues.length;  // Update queue status
   const updateQueueStatus = async (queueId, newStatus) => {
     try {
+      console.log(`Attempting to update queue ${queueId} to status: ${newStatus}`);
+      
+      // Parse the queueId if it's not already a number
+      const parsedQueueId = parseInt(queueId, 10) || queueId;
+      
       // Make API call to update status using queueService
-      await queueService.updateQueueStatus(queueId, newStatus);
+      await queueService.updateQueueStatus(parsedQueueId, newStatus);
+      
+      console.log(`Queue status updated successfully: ${queueId} → ${newStatus}`);
       
       // Update local state based on new status
-      if (newStatus === 'serving') {
+      if (newStatus === 'serving' || newStatus === 'in-progress') {
+        // Make sure we use consistent status naming when updating UI
+        const mappedStatus = 'serving'; // NestJS backend uses 'serving'
+        
         // Move from pending to current
-        const queueToMove = pendingQueues.find(q => q.id === queueId);
+        const queueToMove = pendingQueues.find(q => q.id === queueId || q.id === parsedQueueId);
         if (queueToMove) {
-          setPendingQueues(prev => prev.filter(q => q.id !== queueId));
-          setCurrentQueues(prev => [...prev, {...queueToMove, status: 'serving'}]);
+          setPendingQueues(prev => prev.filter(q => q.id !== queueId && q.id !== parsedQueueId));
+          setCurrentQueues(prev => [...prev, {...queueToMove, status: mappedStatus}]);
         }
       } else if (newStatus === 'completed') {
         // Remove from current
-        setCurrentQueues(prev => prev.filter(q => q.id !== queueId));
+        setCurrentQueues(prev => prev.filter(q => q.id !== queueId && q.id !== parsedQueueId));
       } else if (newStatus === 'pending') {
         // Move from current to pending
-        const queueToMove = currentQueues.find(q => q.id === queueId);
+        const queueToMove = currentQueues.find(q => q.id === queueId || q.id === parsedQueueId);
         if (queueToMove) {
-          setCurrentQueues(prev => prev.filter(q => q.id !== queueId));
+          setCurrentQueues(prev => prev.filter(q => q.id !== queueId && q.id !== parsedQueueId));
           setPendingQueues(prev => [...prev, {...queueToMove, status: 'pending'}]);
         }
       }
       
-      console.log(`Queue ${queueId} updated to ${newStatus}`);
-      
-      // Refresh data after updating
-      fetchQueueData();
+      // Refresh data after updating with a slight delay to ensure backend has processed the change
+      setTimeout(() => fetchQueueData(), 500);
     } catch (error) {
       console.error('Failed to update queue status:', error);
-      alert('Failed to update queue status. Please try again.');
+      console.error('Error details:', error.response?.data || error.message);
+      alert(`Failed to update queue status. Error: ${error.response?.data?.message || error.message}`);
     }
   };
   // Function to fetch queue data - using queueService.fetchWalkInQueues
