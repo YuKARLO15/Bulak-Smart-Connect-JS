@@ -117,13 +117,13 @@
 <title>cluster_QueueModule</title>
 <polygon fill="none" stroke="black" stroke-dasharray="1,5" points="121,-70 121,-268 375,-268 375,-70 121,-70"/>
 </g>
-<g id="clust6" class="cluster">
-<title>cluster_QueueModule_providers</title>
-<polygon fill="none" stroke="black" points="175,-78 175,-130 321,-130 321,-78 175,-78"/>
-</g>
 <g id="clust4" class="cluster">
 <title>cluster_QueueModule_exports</title>
 <polygon fill="none" stroke="black" points="129,-208 129,-260 367,-260 367,-208 129,-208"/>
+</g>
+<g id="clust6" class="cluster">
+<title>cluster_QueueModule_providers</title>
+<polygon fill="none" stroke="black" points="175,-78 175,-130 321,-130 321,-78 175,-78"/>
 </g>
 <!-- QueueGateway  -->
 <g id="node1" class="node">
@@ -229,6 +229,9 @@
                         <li class="list-group-item">
                             <a href="../controllers/QueueController.html">QueueController</a>
                         </li>
+                        <li class="list-group-item">
+                            <a href="../controllers/QueuesController.html">QueuesController</a>
+                        </li>
                     </ul>
                 </div>
                 <div class="col-sm-3">
@@ -259,6 +262,7 @@
 import { TypeOrmModule } from &#x27;@nestjs/typeorm&#x27;;
 import { QueueService } from &#x27;./queue.service&#x27;;
 import { QueueController } from &#x27;./queue.controller&#x27;;
+import { QueuesController } from &#x27;./queues.controller&#x27;;
 import { QueueGateway } from &#x27;./queue.gateway&#x27;;
 import { Queue } from &#x27;./entities/queue.entity&#x27;;
 import { QueueDetails } from &#x27;./entities/queue-details.entity&#x27;;
@@ -266,11 +270,8 @@ import { Counter } from &#x27;../counter/entities/counter.entity&#x27;;
 
 @Module({
   imports: [TypeOrmModule.forFeature([Queue, QueueDetails, Counter])],
-  controllers: [QueueController],
-  providers: [
-    QueueService,
-    QueueGateway,
-  ],
+  controllers: [QueueController, QueuesController],
+  providers: [QueueService, QueueGateway],
   exports: [QueueService, QueueGateway],
 })
 export class QueueModule {}

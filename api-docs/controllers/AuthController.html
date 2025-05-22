@@ -143,17 +143,60 @@
                             <li>
                                     <span class="modifier"></span>
                                     <span class="modifier"></span>
+                                    <span class="modifier"></span>
+                                    <span class="modifier"></span>
+                                    <span class="modifier"></span>
+                                    <span class="modifier"></span>
+                                    <span class="modifier"></span>
+                                    <span class="modifier"></span>
+                                    <span class="modifier"></span>
+                                    <span class="modifier"></span>
+                                    <span class="modifier"></span>
+                                    <span class="modifier"></span>
+                                    <span class="modifier"></span>
+                                    <span class="modifier">Async</span>
+                                <a href="#adminUpdateUser" >adminUpdateUser</a>
+                            </li>
+                            <li>
+                                    <span class="modifier"></span>
+                                    <span class="modifier"></span>
+                                    <span class="modifier"></span>
+                                    <span class="modifier"></span>
+                                    <span class="modifier"></span>
+                                    <span class="modifier"></span>
                                 <a href="#getProfile" >getProfile</a>
                             </li>
                             <li>
+                                    <span class="modifier"></span>
+                                    <span class="modifier"></span>
+                                    <span class="modifier"></span>
+                                    <span class="modifier"></span>
                                     <span class="modifier"></span>
                                     <span class="modifier">Async</span>
                                 <a href="#login" >login</a>
                             </li>
                             <li>
                                     <span class="modifier"></span>
+                                    <span class="modifier"></span>
+                                    <span class="modifier"></span>
+                                    <span class="modifier"></span>
+                                    <span class="modifier"></span>
+                                    <span class="modifier"></span>
                                     <span class="modifier">Async</span>
                                 <a href="#register" >register</a>
+                            </li>
+                            <li>
+                                    <span class="modifier"></span>
+                                    <span class="modifier"></span>
+                                    <span class="modifier"></span>
+                                    <span class="modifier"></span>
+                                    <span class="modifier"></span>
+                                    <span class="modifier"></span>
+                                    <span class="modifier"></span>
+                                    <span class="modifier"></span>
+                                    <span class="modifier"></span>
+                                    <span class="modifier">Async</span>
+                                <a href="#updateProfile" >updateProfile</a>
                             </li>
                         </ul>
                     </td>
@@ -176,8 +219,125 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
+                    <a name="adminUpdateUser"></a>
+                    <span class="name">
+                            <span class="modifier"></span>
+                            <span class="modifier"></span>
+                            <span class="modifier"></span>
+                            <span class="modifier"></span>
+                            <span class="modifier"></span>
+                            <span class="modifier"></span>
+                            <span class="modifier"></span>
+                            <span class="modifier"></span>
+                            <span class="modifier"></span>
+                            <span class="modifier"></span>
+                            <span class="modifier"></span>
+                            <span class="modifier"></span>
+                            <span class="modifier"></span>
+                            <span class="modifier">Async</span>
+                        <span ><b>adminUpdateUser</b></span>
+                        <a href="#adminUpdateUser"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>adminUpdateUser(req: <a href="../interfaces/RequestWithUser.html" target="_self">RequestWithUser</a>, targetUserId: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, updateUserDto: <a href="../classes/AdminUpdateUserDto.html" target="_self">AdminUpdateUserDto</a>)</code>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <b>Decorators : </b>
+                    <br />
+                    <code>@ApiOperation({summary: &#x27;Admin update user&#x27;, description: &#x27;Allows administrators to update any user&#x27;s information including role assignments&#x27;})<br />@ApiParam({name: &#x27;userId&#x27;, description: &#x27;ID of the user to update&#x27;})<br />@ApiBody({type: AdminUpdateUserDto})<br />@ApiResponse({status: 200, description: &#x27;User successfully updated&#x27;})<br />@ApiResponse({status: 400, description: &#x27;Bad request - invalid input data&#x27;})<br />@ApiResponse({status: 401, description: &#x27;Unauthorized - invalid credentials&#x27;})<br />@ApiResponse({status: 403, description: &#x27;Forbidden - insufficient permissions&#x27;})<br />@ApiResponse({status: 404, description: &#x27;Not found - user or role not found&#x27;})<br />@ApiResponse({status: 409, description: &#x27;Conflict - email or username already exists&#x27;})<br />@ApiBearerAuth(&#x27;JWT-auth&#x27;)<br />@UseGuards(JwtAuthGuard, RolesGuard)<br />@Roles(&#x27;admin&#x27;, &#x27;super_admin&#x27;)<br />@Post(&#x27;admin/update-user/:userId&#x27;)<br /></code>
+                </td>
+            </tr>
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="182"
+                                    class="link-to-prism">src/auth/auth.controller.ts:182</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>req</td>
+                                            <td>
+                                                            <code><a href="../interfaces/RequestWithUser.html" target="_self" >RequestWithUser</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>targetUserId</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>updateUserDto</td>
+                                            <td>
+                                                            <code><a href="../classes/AdminUpdateUserDto.html" target="_self" >AdminUpdateUserDto</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
                     <a name="getProfile"></a>
                     <span class="name">
+                            <span class="modifier"></span>
+                            <span class="modifier"></span>
+                            <span class="modifier"></span>
+                            <span class="modifier"></span>
                             <span class="modifier"></span>
                             <span class="modifier"></span>
                         <span ><b>getProfile</b></span>
@@ -196,14 +356,14 @@
                 <td class="col-md-4">
                     <b>Decorators : </b>
                     <br />
-                    <code>@UseGuards(JwtAuthGuard)<br />@Get(&#x27;profile&#x27;)<br /></code>
+                    <code>@ApiOperation({summary: &#x27;Get user profile&#x27;})<br />@ApiResponse({status: 200, description: &#x27;Profile retrieved successfully&#x27;})<br />@ApiResponse({status: 401, description: &#x27;Unauthorized&#x27;})<br />@ApiBearerAuth(&#x27;JWT-auth&#x27;)<br />@UseGuards(JwtAuthGuard)<br />@Get(&#x27;profile&#x27;)<br /></code>
                 </td>
             </tr>
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="44"
-                                    class="link-to-prism">src/auth/auth.controller.ts:44</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="111"
+                                    class="link-to-prism">src/auth/auth.controller.ts:111</a></div>
                         </td>
                     </tr>
 
@@ -256,6 +416,10 @@
                     <a name="login"></a>
                     <span class="name">
                             <span class="modifier"></span>
+                            <span class="modifier"></span>
+                            <span class="modifier"></span>
+                            <span class="modifier"></span>
+                            <span class="modifier"></span>
                             <span class="modifier">Async</span>
                         <span ><b>login</b></span>
                         <a href="#login"><span class="icon ion-ios-link"></span></a>
@@ -273,14 +437,14 @@
                 <td class="col-md-4">
                     <b>Decorators : </b>
                     <br />
-                    <code>@Post(&#x27;login&#x27;)<br /></code>
+                    <code>@ApiOperation({summary: &#x27;User login&#x27;})<br />@ApiResponse({status: 200, description: &#x27;Login successful&#x27;, schema: undefined})<br />@ApiResponse({status: 401, description: &#x27;Unauthorized - invalid credentials&#x27;})<br />@ApiBody({type: LoginDto})<br />@Post(&#x27;login&#x27;)<br /></code>
                 </td>
             </tr>
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="24"
-                                    class="link-to-prism">src/auth/auth.controller.ts:24</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="62"
+                                    class="link-to-prism">src/auth/auth.controller.ts:62</a></div>
                         </td>
                     </tr>
 
@@ -333,6 +497,11 @@
                     <a name="register"></a>
                     <span class="name">
                             <span class="modifier"></span>
+                            <span class="modifier"></span>
+                            <span class="modifier"></span>
+                            <span class="modifier"></span>
+                            <span class="modifier"></span>
+                            <span class="modifier"></span>
                             <span class="modifier">Async</span>
                         <span ><b>register</b></span>
                         <a href="#register"><span class="icon ion-ios-link"></span></a>
@@ -350,14 +519,14 @@
                 <td class="col-md-4">
                     <b>Decorators : </b>
                     <br />
-                    <code>@Post(&#x27;register&#x27;)<br /></code>
+                    <code>@ApiOperation({summary: &#x27;User registration&#x27;})<br />@ApiResponse({status: 201, description: &#x27;Registration successful&#x27;, schema: undefined})<br />@ApiResponse({status: 400, description: &#x27;Bad request - invalid data&#x27;})<br />@ApiResponse({status: 409, description: &#x27;Conflict - email or username already exists&#x27;})<br />@ApiBody({type: RegisterDto})<br />@Post(&#x27;register&#x27;)<br /></code>
                 </td>
             </tr>
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="37"
-                                    class="link-to-prism">src/auth/auth.controller.ts:37</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="101"
+                                    class="link-to-prism">src/auth/auth.controller.ts:101</a></div>
                         </td>
                     </tr>
 
@@ -403,6 +572,103 @@
             </tr>
         </tbody>
     </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="updateProfile"></a>
+                    <span class="name">
+                            <span class="modifier"></span>
+                            <span class="modifier"></span>
+                            <span class="modifier"></span>
+                            <span class="modifier"></span>
+                            <span class="modifier"></span>
+                            <span class="modifier"></span>
+                            <span class="modifier"></span>
+                            <span class="modifier"></span>
+                            <span class="modifier"></span>
+                            <span class="modifier">Async</span>
+                        <span ><b>updateProfile</b></span>
+                        <a href="#updateProfile"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>updateProfile(req: <a href="../interfaces/RequestWithUser.html" target="_self">RequestWithUser</a>, updateUserDto: <a href="../classes/UpdateUserDto.html" target="_self">UpdateUserDto</a>)</code>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <b>Decorators : </b>
+                    <br />
+                    <code>@ApiOperation({summary: &#x27;Update user profile&#x27;, description: &#x27;Allows a user to update their own profile information&#x27;})<br />@ApiResponse({status: 200, description: &#x27;Profile updated successfully&#x27;})<br />@ApiResponse({status: 400, description: &#x27;Bad request - invalid data&#x27;})<br />@ApiResponse({status: 401, description: &#x27;Unauthorized&#x27;})<br />@ApiResponse({status: 409, description: &#x27;Conflict - email or username already exists&#x27;})<br />@ApiBearerAuth(&#x27;JWT-auth&#x27;)<br />@ApiBody({type: UpdateUserDto})<br />@UseGuards(JwtAuthGuard)<br />@Post(&#x27;update-profile&#x27;)<br /></code>
+                </td>
+            </tr>
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="133"
+                                    class="link-to-prism">src/auth/auth.controller.ts:133</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>req</td>
+                                            <td>
+                                                            <code><a href="../interfaces/RequestWithUser.html" target="_self" >RequestWithUser</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>updateUserDto</td>
+                                            <td>
+                                                            <code><a href="../classes/UpdateUserDto.html" target="_self" >UpdateUserDto</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 </section>    </div>
 
 
@@ -415,20 +681,58 @@
   UseGuards,
   Request,
   UnauthorizedException,
+  Param,
 } from &#x27;@nestjs/common&#x27;;
 import { AuthService } from &#x27;./auth.service&#x27;;
 import { LoginDto } from &#x27;./dto/login.dto&#x27;;
 import { RegisterDto } from &#x27;./dto/register.dto&#x27;;
 import { JwtAuthGuard } from &#x27;./guards/jwt-auth.guard&#x27;;
+import { UpdateUserDto, AdminUpdateUserDto } from &#x27;./dto/update-user.dto&#x27;;
+import { Roles } from &#x27;./decorators/roles.decorator&#x27;;
+import { RolesGuard } from &#x27;./guards/roles.guard&#x27;;
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBearerAuth,
+  ApiParam,
+  ApiBody,
+} from &#x27;@nestjs/swagger&#x27;;
 
 interface RequestWithUser extends Request {
   user: { sub: number; email: string; roles: string[] };
 }
 
+@ApiTags(&#x27;Authentication&#x27;)
 @Controller(&#x27;auth&#x27;)
 export class AuthController {
   constructor(private authService: AuthService) {}
 
+  @ApiOperation({ summary: &#x27;User login&#x27; })
+  @ApiResponse({
+    status: 200,
+    description: &#x27;Login successful&#x27;,
+    schema: {
+      properties: {
+        access_token: { type: &#x27;string&#x27; },
+        user: {
+          type: &#x27;object&#x27;,
+          properties: {
+            id: { type: &#x27;number&#x27; },
+            email: { type: &#x27;string&#x27; },
+            username: { type: &#x27;string&#x27; },
+            roles: { type: &#x27;array&#x27;, items: { type: &#x27;string&#x27; } },
+            defaultRole: { type: &#x27;string&#x27; },
+          },
+        },
+      },
+    },
+  })
+  @ApiResponse({
+    status: 401,
+    description: &#x27;Unauthorized - invalid credentials&#x27;,
+  })
+  @ApiBody({ type: LoginDto })
   @Post(&#x27;login&#x27;)
   async login(@Body() loginDto: LoginDto) {
     console.log(&#x27;Login request received:&#x27;, loginDto);
@@ -442,12 +746,41 @@ export class AuthController {
     }
   }
 
+  @ApiOperation({ summary: &#x27;User registration&#x27; })
+  @ApiResponse({
+    status: 201,
+    description: &#x27;Registration successful&#x27;,
+    schema: {
+      properties: {
+        access_token: { type: &#x27;string&#x27; },
+        user: {
+          type: &#x27;object&#x27;,
+          properties: {
+            id: { type: &#x27;number&#x27; },
+            email: { type: &#x27;string&#x27; },
+            username: { type: &#x27;string&#x27; },
+            roles: { type: &#x27;array&#x27;, items: { type: &#x27;string&#x27; } },
+            defaultRole: { type: &#x27;string&#x27; },
+          },
+        },
+      },
+    },
+  })
+  @ApiResponse({ status: 400, description: &#x27;Bad request - invalid data&#x27; })
+  @ApiResponse({
+    status: 409,
+    description: &#x27;Conflict - email or username already exists&#x27;,
+  })
+  @ApiBody({ type: RegisterDto })
   @Post(&#x27;register&#x27;)
   async register(@Body() registerDto: RegisterDto) {
     console.log(&#x27;Register endpoint hit with data:&#x27;, registerDto); //Debugging Statement
     return this.authService.register(registerDto);
   }
-
+  @ApiOperation({ summary: &#x27;Get user profile&#x27; })
+  @ApiResponse({ status: 200, description: &#x27;Profile retrieved successfully&#x27; })
+  @ApiResponse({ status: 401, description: &#x27;Unauthorized&#x27; })
+  @ApiBearerAuth(&#x27;JWT-auth&#x27;)
   @UseGuards(JwtAuthGuard)
   @Get(&#x27;profile&#x27;)
   getProfile(@Request() req: RequestWithUser) {
@@ -456,6 +789,92 @@ export class AuthController {
       throw new UnauthorizedException(&#x27;Invalid user ID&#x27;);
     }
     return this.authService.getProfile(Number(req.user.sub));
+  }
+  @ApiOperation({
+    summary: &#x27;Update user profile&#x27;,
+    description: &#x27;Allows a user to update their own profile information&#x27;,
+  })
+  @ApiResponse({ status: 200, description: &#x27;Profile updated successfully&#x27; })
+  @ApiResponse({ status: 400, description: &#x27;Bad request - invalid data&#x27; })
+  @ApiResponse({ status: 401, description: &#x27;Unauthorized&#x27; })
+  @ApiResponse({
+    status: 409,
+    description: &#x27;Conflict - email or username already exists&#x27;,
+  })
+  @ApiBearerAuth(&#x27;JWT-auth&#x27;)
+  @ApiBody({ type: UpdateUserDto })
+  @UseGuards(JwtAuthGuard)
+  @Post(&#x27;update-profile&#x27;)
+  async updateProfile(
+    @Request() req: RequestWithUser,
+    @Body() updateUserDto: UpdateUserDto,
+  ) {
+    // Add null check before converting to number
+    if (!req.user || req.user.sub &#x3D;&#x3D;&#x3D; undefined || req.user.sub &#x3D;&#x3D;&#x3D; null) {
+      throw new UnauthorizedException(&#x27;Invalid user ID&#x27;);
+    }
+
+    try {
+      return await this.authService.updateUserInfo(
+        Number(req.user.sub),
+        updateUserDto,
+      );
+    } catch (error) {
+      throw new UnauthorizedException(
+        error instanceof Error ? error.message : &#x27;Failed to update profile&#x27;,
+      );
+    }
+  }
+  @ApiOperation({
+    summary: &#x27;Admin update user&#x27;,
+    description:
+      &quot;Allows administrators to update any user&#x27;s information including role assignments&quot;,
+  })
+  @ApiParam({ name: &#x27;userId&#x27;, description: &#x27;ID of the user to update&#x27; })
+  @ApiBody({ type: AdminUpdateUserDto })
+  @ApiResponse({ status: 200, description: &#x27;User successfully updated&#x27; })
+  @ApiResponse({ status: 400, description: &#x27;Bad request - invalid input data&#x27; })
+  @ApiResponse({
+    status: 401,
+    description: &#x27;Unauthorized - invalid credentials&#x27;,
+  })
+  @ApiResponse({
+    status: 403,
+    description: &#x27;Forbidden - insufficient permissions&#x27;,
+  })
+  @ApiResponse({
+    status: 404,
+    description: &#x27;Not found - user or role not found&#x27;,
+  })
+  @ApiResponse({
+    status: 409,
+    description: &#x27;Conflict - email or username already exists&#x27;,
+  })
+  @ApiBearerAuth(&#x27;JWT-auth&#x27;)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(&#x27;admin&#x27;, &#x27;super_admin&#x27;)
+  @Post(&#x27;admin/update-user/:userId&#x27;)
+  async adminUpdateUser(
+    @Request() req: RequestWithUser,
+    @Param(&#x27;userId&#x27;) targetUserId: string,
+    @Body() updateUserDto: AdminUpdateUserDto,
+  ) {
+    // Add null check before converting to number
+    if (!req.user || req.user.sub &#x3D;&#x3D;&#x3D; undefined || req.user.sub &#x3D;&#x3D;&#x3D; null) {
+      throw new UnauthorizedException(&#x27;Invalid admin ID&#x27;);
+    }
+
+    try {
+      return await this.authService.adminUpdateUser(
+        Number(req.user.sub),
+        Number(targetUserId),
+        updateUserDto,
+      );
+    } catch (error) {
+      throw new UnauthorizedException(
+        error instanceof Error ? error.message : &#x27;Failed to update user&#x27;,
+      );
+    }
   }
 }
 </code></pre>

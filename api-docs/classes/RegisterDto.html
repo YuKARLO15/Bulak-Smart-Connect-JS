@@ -148,10 +148,12 @@
                         <ul class="index-list">
                             <li>
                                     <span class="modifier"></span>
+                                    <span class="modifier"></span>
                                     <span class="modifier">Optional</span>
                                 <a href="#contactNumber" >contactNumber</a>
                             </li>
                             <li>
+                                    <span class="modifier"></span>
                                     <span class="modifier"></span>
                                     <span class="modifier"></span>
                                 <a href="#email" >email</a>
@@ -159,14 +161,17 @@
                             <li>
                                     <span class="modifier"></span>
                                     <span class="modifier"></span>
+                                    <span class="modifier"></span>
                                 <a href="#firstName" >firstName</a>
                             </li>
                             <li>
                                     <span class="modifier"></span>
                                     <span class="modifier"></span>
+                                    <span class="modifier"></span>
                                 <a href="#lastName" >lastName</a>
                             </li>
                             <li>
+                                    <span class="modifier"></span>
                                     <span class="modifier"></span>
                                     <span class="modifier"></span>
                                     <span class="modifier">Optional</span>
@@ -175,10 +180,12 @@
                             <li>
                                     <span class="modifier"></span>
                                     <span class="modifier"></span>
+                                    <span class="modifier"></span>
                                     <span class="modifier">Optional</span>
                                 <a href="#name" >name</a>
                             </li>
                             <li>
+                                    <span class="modifier"></span>
                                     <span class="modifier"></span>
                                     <span class="modifier"></span>
                                     <span class="modifier">Optional</span>
@@ -188,9 +195,11 @@
                                     <span class="modifier"></span>
                                     <span class="modifier"></span>
                                     <span class="modifier"></span>
+                                    <span class="modifier"></span>
                                 <a href="#password" >password</a>
                             </li>
                             <li>
+                                    <span class="modifier"></span>
                                     <span class="modifier"></span>
                                     <span class="modifier"></span>
                                 <a href="#username" >username</a>
@@ -221,6 +230,7 @@
                     <a name="contactNumber"></a>
                     <span class="name">
                             <span class="modifier"></span>
+                            <span class="modifier"></span>
                             <span class="modifier">Optional</span>
                         <span ><b>contactNumber</b></span>
                         <a href="#contactNumber"><span class="icon ion-ios-link"></span></a>
@@ -238,13 +248,13 @@
                         <b>Decorators : </b>
                         <br />
                         <code>
-                            @IsString()<br />
+                            @ApiPropertyOptional({description: &#x27;Contact number&#x27;, example: &#x27;09123456789&#x27;})<br />@IsString()<br />
                         </code>
                     </td>
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="49" class="link-to-prism">src/auth/dto/register.dto.ts:49</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="87" class="link-to-prism">src/auth/dto/register.dto.ts:87</a></div>
                         </td>
                     </tr>
 
@@ -257,6 +267,7 @@
                 <td class="col-md-4">
                     <a name="email"></a>
                     <span class="name">
+                            <span class="modifier"></span>
                             <span class="modifier"></span>
                             <span class="modifier"></span>
                         <span ><b>email</b></span>
@@ -275,13 +286,13 @@
                         <b>Decorators : </b>
                         <br />
                         <code>
-                            @IsEmail()<br />@IsNotEmpty()<br />
+                            @ApiProperty({description: &#x27;User email address&#x27;, example: &#x27;test@example.com&#x27;})<br />@IsEmail()<br />@IsNotEmpty()<br />
                         </code>
                     </td>
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="17" class="link-to-prism">src/auth/dto/register.dto.ts:17</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="22" class="link-to-prism">src/auth/dto/register.dto.ts:22</a></div>
                         </td>
                     </tr>
 
@@ -294,6 +305,7 @@
                 <td class="col-md-4">
                     <a name="firstName"></a>
                     <span class="name">
+                            <span class="modifier"></span>
                             <span class="modifier"></span>
                             <span class="modifier"></span>
                         <span ><b>firstName</b></span>
@@ -312,13 +324,13 @@
                         <b>Decorators : </b>
                         <br />
                         <code>
-                            @IsString()<br />@IsNotEmpty()<br />
+                            @ApiProperty({description: &#x27;User first name&#x27;, example: &#x27;John&#x27;})<br />@IsString()<br />@IsNotEmpty()<br />
                         </code>
                     </td>
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="30" class="link-to-prism">src/auth/dto/register.dto.ts:30</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="48" class="link-to-prism">src/auth/dto/register.dto.ts:48</a></div>
                         </td>
                     </tr>
 
@@ -331,6 +343,7 @@
                 <td class="col-md-4">
                     <a name="lastName"></a>
                     <span class="name">
+                            <span class="modifier"></span>
                             <span class="modifier"></span>
                             <span class="modifier"></span>
                         <span ><b>lastName</b></span>
@@ -349,13 +362,13 @@
                         <b>Decorators : </b>
                         <br />
                         <code>
-                            @IsString()<br />@IsNotEmpty()<br />
+                            @ApiProperty({description: &#x27;User last name&#x27;, example: &#x27;Doe&#x27;})<br />@IsString()<br />@IsNotEmpty()<br />
                         </code>
                     </td>
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="38" class="link-to-prism">src/auth/dto/register.dto.ts:38</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="64" class="link-to-prism">src/auth/dto/register.dto.ts:64</a></div>
                         </td>
                     </tr>
 
@@ -368,6 +381,7 @@
                 <td class="col-md-4">
                     <a name="middleName"></a>
                     <span class="name">
+                            <span class="modifier"></span>
                             <span class="modifier"></span>
                             <span class="modifier"></span>
                             <span class="modifier">Optional</span>
@@ -387,13 +401,13 @@
                         <b>Decorators : </b>
                         <br />
                         <code>
-                            @IsString()<br />@IsOptional()<br />
+                            @ApiPropertyOptional({description: &#x27;User middle name (optional)&#x27;, example: &#x27;Robert&#x27;})<br />@IsString()<br />@IsOptional()<br />
                         </code>
                     </td>
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="34" class="link-to-prism">src/auth/dto/register.dto.ts:34</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="56" class="link-to-prism">src/auth/dto/register.dto.ts:56</a></div>
                         </td>
                     </tr>
 
@@ -406,6 +420,7 @@
                 <td class="col-md-4">
                     <a name="name"></a>
                     <span class="name">
+                            <span class="modifier"></span>
                             <span class="modifier"></span>
                             <span class="modifier"></span>
                             <span class="modifier">Optional</span>
@@ -425,13 +440,13 @@
                         <b>Decorators : </b>
                         <br />
                         <code>
-                            @IsString()<br />@IsOptional()<br />
+                            @ApiPropertyOptional({description: &#x27;Full name (auto-generated)&#x27;, example: &#x27;John Robert Doe&#x27;})<br />@IsString()<br />@IsOptional()<br />
                         </code>
                     </td>
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="42" class="link-to-prism">src/auth/dto/register.dto.ts:42</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="72" class="link-to-prism">src/auth/dto/register.dto.ts:72</a></div>
                         </td>
                     </tr>
 
@@ -444,6 +459,7 @@
                 <td class="col-md-4">
                     <a name="nameExtension"></a>
                     <span class="name">
+                            <span class="modifier"></span>
                             <span class="modifier"></span>
                             <span class="modifier"></span>
                             <span class="modifier">Optional</span>
@@ -463,13 +479,13 @@
                         <b>Decorators : </b>
                         <br />
                         <code>
-                            @IsString()<br />@IsOptional()<br />
+                            @ApiPropertyOptional({description: &#x27;Name extension (e.g., Jr., III)&#x27;, example: &#x27;Jr.&#x27;})<br />@IsString()<br />@IsOptional()<br />
                         </code>
                     </td>
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="46" class="link-to-prism">src/auth/dto/register.dto.ts:46</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="80" class="link-to-prism">src/auth/dto/register.dto.ts:80</a></div>
                         </td>
                     </tr>
 
@@ -482,6 +498,7 @@
                 <td class="col-md-4">
                     <a name="password"></a>
                     <span class="name">
+                            <span class="modifier"></span>
                             <span class="modifier"></span>
                             <span class="modifier"></span>
                             <span class="modifier"></span>
@@ -501,13 +518,13 @@
                         <b>Decorators : </b>
                         <br />
                         <code>
-                            @IsString()<br />@IsNotEmpty()<br />@MinLength(8)<br />
+                            @ApiProperty({description: &#x27;User password (min 8 characters)&#x27;, example: &#x27;password123&#x27;, minLength: 8})<br />@IsString()<br />@IsNotEmpty()<br />@MinLength(8)<br />
                         </code>
                     </td>
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="26" class="link-to-prism">src/auth/dto/register.dto.ts:26</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="40" class="link-to-prism">src/auth/dto/register.dto.ts:40</a></div>
                         </td>
                     </tr>
 
@@ -520,6 +537,7 @@
                 <td class="col-md-4">
                     <a name="username"></a>
                     <span class="name">
+                            <span class="modifier"></span>
                             <span class="modifier"></span>
                             <span class="modifier"></span>
                         <span ><b>username</b></span>
@@ -538,13 +556,13 @@
                         <b>Decorators : </b>
                         <br />
                         <code>
-                            @IsString()<br />@IsNotEmpty()<br />
+                            @ApiProperty({description: &#x27;Username for login&#x27;, example: &#x27;john_doe&#x27;})<br />@IsString()<br />@IsNotEmpty()<br />
                         </code>
                     </td>
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="21" class="link-to-prism">src/auth/dto/register.dto.ts:21</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="30" class="link-to-prism">src/auth/dto/register.dto.ts:30</a></div>
                         </td>
                     </tr>
 
@@ -570,6 +588,7 @@
   IsString,
   MinLength,
 } from &#x27;class-validator&#x27;;
+import { ApiProperty, ApiPropertyOptional } from &#x27;@nestjs/swagger&#x27;;
 
 /**
  * DTO for user registration
@@ -577,39 +596,76 @@
  */
 
 export class RegisterDto {
+  @ApiProperty({
+    description: &#x27;User email address&#x27;,
+    example: &#x27;test@example.com&#x27;,
+  })
   @IsEmail()
   @IsNotEmpty()
   email: string;
 
+  @ApiProperty({
+    description: &#x27;Username for login&#x27;,
+    example: &#x27;john_doe&#x27;,
+  })
   @IsString()
   @IsNotEmpty()
   username: string;
 
+  @ApiProperty({
+    description: &#x27;User password (min 8 characters)&#x27;,
+    example: &#x27;password123&#x27;,
+    minLength: 8,
+  })
   @IsString()
   @IsNotEmpty()
   @MinLength(8)
   password: string;
 
+  @ApiProperty({
+    description: &#x27;User first name&#x27;,
+    example: &#x27;John&#x27;,
+  })
   @IsString()
   @IsNotEmpty()
   firstName: string;
 
+  @ApiPropertyOptional({
+    description: &#x27;User middle name (optional)&#x27;,
+    example: &#x27;Robert&#x27;,
+  })
   @IsString()
   @IsOptional()
   middleName?: string;
 
+  @ApiProperty({
+    description: &#x27;User last name&#x27;,
+    example: &#x27;Doe&#x27;,
+  })
   @IsString()
   @IsNotEmpty()
   lastName: string;
 
+  @ApiPropertyOptional({
+    description: &#x27;Full name (auto-generated)&#x27;,
+    example: &#x27;John Robert Doe&#x27;,
+  })
   @IsString()
   @IsOptional()
   name?: string;
 
+  @ApiPropertyOptional({
+    description: &#x27;Name extension (e.g., Jr., III)&#x27;,
+    example: &#x27;Jr.&#x27;,
+  })
   @IsString()
   @IsOptional()
   nameExtension?: string;
 
+  @ApiPropertyOptional({
+    description: &#x27;Contact number&#x27;,
+    example: &#x27;09123456789&#x27;,
+  })
   @IsString()
   contactNumber?: string;
 }
