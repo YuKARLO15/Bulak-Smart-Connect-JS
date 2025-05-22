@@ -319,8 +319,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="377"
-                                    class="link-to-prism">src/modules/queue/queue.service.ts:377</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="410"
+                                    class="link-to-prism">src/modules/queue/queue.service.ts:410</a></div>
                         </td>
                     </tr>
 
@@ -388,8 +388,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="260"
-                                    class="link-to-prism">src/modules/queue/queue.service.ts:260</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="293"
+                                    class="link-to-prism">src/modules/queue/queue.service.ts:293</a></div>
                         </td>
                     </tr>
 
@@ -457,8 +457,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="390"
-                                    class="link-to-prism">src/modules/queue/queue.service.ts:390</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="423"
+                                    class="link-to-prism">src/modules/queue/queue.service.ts:423</a></div>
                         </td>
                     </tr>
 
@@ -772,8 +772,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="234"
-                                    class="link-to-prism">src/modules/queue/queue.service.ts:234</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="254"
+                                    class="link-to-prism">src/modules/queue/queue.service.ts:254</a></div>
                         </td>
                     </tr>
 
@@ -910,8 +910,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="383"
-                                    class="link-to-prism">src/modules/queue/queue.service.ts:383</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="416"
+                                    class="link-to-prism">src/modules/queue/queue.service.ts:416</a></div>
                         </td>
                     </tr>
 
@@ -949,8 +949,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="211"
-                                    class="link-to-prism">src/modules/queue/queue.service.ts:211</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="222"
+                                    class="link-to-prism">src/modules/queue/queue.service.ts:222</a></div>
                         </td>
                     </tr>
 
@@ -1087,8 +1087,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="191"
-                                    class="link-to-prism">src/modules/queue/queue.service.ts:191</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="203"
+                                    class="link-to-prism">src/modules/queue/queue.service.ts:203</a></div>
                         </td>
                     </tr>
 
@@ -1156,8 +1156,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="330"
-                                    class="link-to-prism">src/modules/queue/queue.service.ts:330</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="363"
+                                    class="link-to-prism">src/modules/queue/queue.service.ts:363</a></div>
                         </td>
                     </tr>
 
@@ -1195,8 +1195,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="164"
-                                    class="link-to-prism">src/modules/queue/queue.service.ts:164</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="163"
+                                    class="link-to-prism">src/modules/queue/queue.service.ts:163</a></div>
                         </td>
                     </tr>
 
@@ -1422,32 +1422,44 @@ export class QueueService {
 
     return { queue, details, position };
   }
-
   async update(id: number, updateQueueDto: UpdateQueueDto) {
-    const queue &#x3D; await this.findOne(id);
+    console.log(&#x60;Updating queue ${id} with:&#x60;, updateQueueDto);
+    
+    try {
+      // Find the queue
+      const queue &#x3D; await this.findOne(id);
+      console.log(&#x27;Found queue:&#x27;, queue);
 
-    if (updateQueueDto.status) {
-      queue.status &#x3D; updateQueueDto.status;
+      if (updateQueueDto.status) {
+        // Log the status change
+        console.log(&#x60;Changing status from ${queue.status} to ${updateQueueDto.status}&#x60;);
+        queue.status &#x3D; updateQueueDto.status;
 
-      // If completed, set completion time
-      if (updateQueueDto.status &#x3D;&#x3D;&#x3D; QueueStatus.COMPLETED) {
-        queue.completedAt &#x3D; new Date();
+        // If completed, set completion time
+        if (updateQueueDto.status &#x3D;&#x3D;&#x3D; QueueStatus.COMPLETED) {
+          queue.completedAt &#x3D; new Date();
+        }
       }
+
+      if (updateQueueDto.counterNumber) {
+        queue.counterNumber &#x3D; updateQueueDto.counterNumber;
+      }
+
+      // Save the updated queue
+      const updatedQueue &#x3D; await this.queueRepository.save(queue);
+      console.log(&#x27;Queue updated successfully:&#x27;, updatedQueue);
+
+      // Notify clients about the queue update
+      this.queueGateway.notifyQueueUpdate(id, {
+        action: &#x27;updated&#x27;,
+        queue: updatedQueue,
+      });
+
+      return updatedQueue;
+    } catch (error) {
+      console.error(&#x60;Error updating queue ${id}:&#x60;, error);
+      throw error;
     }
-
-    if (updateQueueDto.counterNumber) {
-      queue.counterNumber &#x3D; updateQueueDto.counterNumber;
-    }
-
-    const updatedQueue &#x3D; await this.queueRepository.save(queue);
-
-    // Notify clients about the queue update
-    this.queueGateway.notifyQueueUpdate(id, {
-      action: &#x27;updated&#x27;,
-      queue: updatedQueue,
-    });
-
-    return updatedQueue;
   }
 
   async getQueuePosition(queueId: number) {
@@ -1469,54 +1481,75 @@ export class QueueService {
 
     return position;
   }
-
   async getDetailsForMultipleQueues(queueIds: number[]) {
+    console.log(&#x27;Getting details for queue IDs:&#x27;, queueIds);
+    
     if (!queueIds || queueIds.length &#x3D;&#x3D;&#x3D; 0) {
       return {};
     }
 
     const detailsMap &#x3D; {};
 
-    // Fetch all queue details in a single query for better performance
-    const allDetails &#x3D; await this.queueDetailsRepository.find({
-      where: {
-        queueId: In(queueIds),
-      },
-      relations: [&#x27;user&#x27;],
-    });
+    try {
+      // Fetch all queue details in a single query for better performance
+      const allDetails &#x3D; await this.queueDetailsRepository.find({
+        where: {
+          queueId: In(queueIds),
+        },
+        relations: [&#x27;user&#x27;],
+      });
 
-    // Organize by queueId for easy lookup
-    allDetails.forEach((detail) &#x3D;&gt; {
-      detailsMap[detail.queueId] &#x3D; detail;
-    });
+      console.log(&#x60;Found ${allDetails.length} details for ${queueIds.length} queues&#x60;);
 
-    return detailsMap;
+      // Organize by queueId for easy lookup
+      allDetails.forEach((detail) &#x3D;&gt; {
+        detailsMap[detail.queueId] &#x3D; detail;
+      });
+
+      return detailsMap;
+    } catch (error) {
+      console.error(&#x27;Error fetching details for multiple queues:&#x27;, error);
+      // Return empty details rather than failing
+      return {};
+    }
   }
-
   async findByStatusWithDetails(status: QueueStatus) {
-    // First get all queues with this status
-    const queues &#x3D; await this.queueRepository.find({
-      where: { status },
-      order: { createdAt: &#x27;ASC&#x27; },
-    });
+    console.log(&#x60;Finding queues with status: ${status} and their details&#x60;);
+    
+    try {
+      // First get all queues with this status
+      const queues &#x3D; await this.queueRepository.find({
+        where: { status },
+        order: { createdAt: &#x27;ASC&#x27; },
+      });
 
-    if (queues.length &#x3D;&#x3D;&#x3D; 0) {
+      console.log(&#x60;Found ${queues.length} queues with status ${status}&#x60;);
+      
+      if (queues.length &#x3D;&#x3D;&#x3D; 0) {
+        return [];
+      }
+
+      // Get all queue IDs
+      const queueIds &#x3D; queues.map((queue) &#x3D;&gt; queue.id);
+
+      // Fetch details for all these queues
+      const detailsMap &#x3D; await this.getDetailsForMultipleQueues(queueIds);
+
+      // Combine queue and details data
+      const result &#x3D; queues.map((queue) &#x3D;&gt; {
+        return {
+          ...queue,
+          details: detailsMap[queue.id] || null,
+        };
+      });
+      
+      console.log(&#x60;Returning ${result.length} queues with details&#x60;);
+      return result;
+    } catch (error) {
+      console.error(&#x60;Error finding queues with status ${status} and details:&#x60;, error);
+      // Return empty array rather than failing
       return [];
     }
-
-    // Get all queue IDs
-    const queueIds &#x3D; queues.map((queue) &#x3D;&gt; queue.id);
-
-    // Fetch details for all these queues
-    const detailsMap &#x3D; await this.getDetailsForMultipleQueues(queueIds);
-
-    // Combine queue and details data
-    return queues.map((queue) &#x3D;&gt; {
-      return {
-        ...queue,
-        details: detailsMap[queue.id] || null,
-      };
-    });
   }
 
   async callNext(counterId: number) {
