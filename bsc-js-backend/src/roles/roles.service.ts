@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, In } from 'typeorm';
 import { Role } from './entities/role.entity';
 import { User } from '../users/entities/user.entity';
 
@@ -53,8 +53,10 @@ export class RolesService {
       throw new Error('User not found');
     }
 
-    // Find the roles
-    const roles = await this.rolesRepository.findByIds(roleIds);
+    // Find the roles using In operator (replaces deprecated findByIds)
+    const roles = await this.rolesRepository.findBy({
+      id: In(roleIds)
+    });
 
     // Assign roles to user
     user.roles = roles;

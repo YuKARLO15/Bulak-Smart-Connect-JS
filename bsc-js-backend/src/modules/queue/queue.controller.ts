@@ -63,6 +63,48 @@ export class QueueController {
     return this.queueService.findByStatus(QueueStatus.COMPLETED);
   }
 
+  // Endpoint for pending queues with details
+  @Get('pending/details')
+  findPendingWithDetails() {
+    return this.queueService.findByStatusWithDetails(QueueStatus.PENDING);
+  }
+
+  // Endpoint for serving queues with details
+  @Get('serving/details')
+  findServingWithDetails() {
+    return this.queueService.findByStatusWithDetails(QueueStatus.SERVING);
+  }
+
+  // Endpoint for bulk fetching queue details
+  @Post('bulk-details')
+  getDetailsForMultipleQueues(@Body() body: { queueIds: number[] }) {
+    return this.queueService.getDetailsForMultipleQueues(body.queueIds);
+  }
+  // Endpoint for updating queue status
+  @Patch(':id/status')
+  async updateStatus(@Param('id') id: string, @Body() body: { status: QueueStatus }) {
+    console.log(`PATCH /queue/${id}/status with body:`, body);
+    
+    try {
+      // Validate the status enum value
+      if (!Object.values(QueueStatus).includes(body.status)) {
+        console.error(`Invalid status value: ${body.status}`);
+        return { 
+          error: 'Invalid status value',
+          validValues: Object.values(QueueStatus)
+        };
+      }
+      
+      // Update the queue status
+      const result = await this.queueService.update(+id, { status: body.status });
+      console.log(`Queue ${id} status updated successfully to ${body.status}`);
+      return result;
+    } catch (error) {
+      console.error(`Error updating queue ${id} status:`, error);
+      throw error;
+    }
+  }
+
   @Get('stats')
   getStats() {
     return this.queueService.getStats();

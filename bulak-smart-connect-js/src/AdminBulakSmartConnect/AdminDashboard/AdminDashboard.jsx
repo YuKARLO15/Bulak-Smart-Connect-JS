@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import './AdminDashboard.css';
 import axios from 'axios';
+import { queueService } from '../../services/queueService';
 import {
   LineChart,
   Line,
@@ -48,17 +49,17 @@ const AdminDashboard = () => {
   // Search functionality
   const handleSearch = e => {
     setSearchTerm(e.target.value);
-  };
-
-  // API Connection - example structure for future implementation
+  };  // API Connection using queueService
   const fetchWalkInQueue = useCallback(async () => {
     setQueueLoading(true);
     try {
-      // Fetch walk-in queue data from your API
-      const response = await axios.get('http://localhost:3000/queues/walk-in');
+      // Fetch walk-in queue data from API using queueService
+      const queueData = await queueService.fetchWalkInQueues();
+      
+      console.log('Walk-in queues fetched:', queueData);
       
       // Format the data for display
-      const formattedQueue = response.data.map(queue => ({
+      const formattedQueue = queueData.map(queue => ({
         id: queue.id,
         queueNumber: formatWKNumber(queue.queueNumber),
         firstName: queue.firstName || 'Guest',
@@ -119,23 +120,64 @@ const AdminDashboard = () => {
     // Clean up interval on component unmount
     return () => clearInterval(intervalId);
   }, [fetchWalkInQueue]);
-
   // Existing useEffect for dashboard data
   useEffect(() => {
     const fetchDashboardData = async () => {
       setLoading(true);
       try {
-        const response = await fetch('http://localhost:3000/api/dashboard');
-        const data = await response.json();
-        setWalkInData(data.walkInData || []);
-        setCertificateData(data.certificateData || []);
-        setDocumentApplications(data.applications || []);
-        setPreAppointments(data.appointments || []);
+        // Try to get stats from the queue stats endpoint
+        const response = await axios.get('http://localhost:3000/queue/stats');
+        
+        // Format the data for the charts
+        // For walk-in data, create sample data based on stats
+        const walkInDataFormatted = [
+          { name: 'Mon', value: response.data.pending || 0, appointments: response.data.serving || 0 },
+          { name: 'Tue', value: response.data.pending || 0, appointments: response.data.serving || 0 },
+          { name: 'Wed', value: response.data.pending || 0, appointments: response.data.serving || 0 },
+          { name: 'Thu', value: response.data.pending || 0, appointments: response.data.serving || 0 },
+          { name: 'Fri', value: response.data.pending || 0, appointments: response.data.serving || 0 },
+        ];
+        
+        // For certificate data, create sample data
+        const certificateDataFormatted = [
+          { name: 'Mon', birth: 10, marriage: 5 },
+          { name: 'Tue', birth: 15, marriage: 8 },
+          { name: 'Wed', birth: 12, marriage: 10 },
+          { name: 'Thu', birth: 18, marriage: 12 },
+          { name: 'Fri', birth: 20, marriage: 15 },
+        ];
+        
+        setWalkInData(walkInDataFormatted);
+        setCertificateData(certificateDataFormatted);
+        
+        // For applications and appointments, use mock data for now
+        setDocumentApplications([]);
+        setPreAppointments([]);
 
         setLoading(false);
       } catch (err) {
         console.error('Error fetching dashboard data:', err);
         setError('Failed to load dashboard data');
+        
+        // Fallback to mock data
+        setWalkInData([
+          { name: 'Mon', value: 10, appointments: 5 },
+          { name: 'Tue', value: 15, appointments: 8 },
+          { name: 'Wed', value: 12, appointments: 10 },
+          { name: 'Thu', value: 18, appointments: 12 },
+          { name: 'Fri', value: 20, appointments: 15 },
+        ]);
+        
+        setCertificateData([
+          { name: 'Mon', birth: 10, marriage: 5 },
+          { name: 'Tue', birth: 15, marriage: 8 },
+          { name: 'Wed', birth: 12, marriage: 10 },
+          { name: 'Thu', birth: 18, marriage: 12 },
+          { name: 'Fri', birth: 20, marriage: 15 },
+        ]);
+        
+        setDocumentApplications([]);
+        setPreAppointments([]);
         setLoading(false);
       }
     };

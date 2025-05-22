@@ -12,6 +12,7 @@ import * as bcrypt from 'bcrypt';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 import { RolesService } from '../roles/roles.service';
+import { UpdateUserDto, AdminUpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class AuthService {
@@ -232,5 +233,288 @@ export class AuthService {
       roles: roleNames,
       defaultRole: user.defaultRole?.name || 'citizen',
     };
+  }
+
+  async updateUserInfo(userId: number, updateUserDto: UpdateUserDto) {
+    try {
+      // First get the existing user
+      const user = await this.usersRepository.findOne({
+        where: { id: userId },
+      });
+
+      if (!user) {
+        throw new UnauthorizedException('User not found');
+      }
+
+      // Check if email is being updated and not already taken
+      if (updateUserDto.email && updateUserDto.email !== user.email) {
+        // Validate email format
+        if (!this.isValidEmail(updateUserDto.email)) {
+          throw new BadRequestException('Invalid email format');
+        }
+
+        const existingUserByEmail = await this.usersRepository.findOne({
+          where: { email: updateUserDto.email },
+        });
+
+        if (existingUserByEmail && existingUserByEmail.id !== userId) {
+          throw new ConflictException('Email already exists');
+        }
+      }
+
+      // Check if username is being updated and not already taken
+      if (updateUserDto.username && updateUserDto.username !== user.username) {
+        const existingUserByUsername = await this.usersRepository.findOne({
+          where: { username: updateUserDto.username },
+        });
+
+        if (existingUserByUsername && existingUserByUsername.id !== userId) {
+          throw new ConflictException('Username already exists');
+        }
+      }
+
+      // Handle password change if provided
+      if (updateUserDto.password) {
+        // Validate password strength
+        if (updateUserDto.password.length < 8) {
+          throw new BadRequestException('Password must be at least 8 characters');
+        }
+
+        // Hash new password
+        const salt = await bcrypt.genSalt();
+        const hashedPassword = await bcrypt.hash(updateUserDto.password, salt);
+        updateUserDto.password = hashedPassword;
+      } else {
+        // Remove password from DTO if not being updated
+        delete updateUserDto.password;
+      }
+
+      // Update name if name parts are changed
+      let shouldUpdateName = false;
+      const nameComponents = {
+        firstName: updateUserDto.firstName || user.firstName,
+        middleName:
+          updateUserDto.middleName !== undefined
+            ? updateUserDto.middleName
+            : user.middleName,
+        lastName: updateUserDto.lastName || user.lastName,
+        nameExtension:
+          updateUserDto.nameExtension !== undefined
+            ? updateUserDto.nameExtension
+            : user.nameExtension,
+      };
+
+      if (
+        updateUserDto.firstName ||
+        updateUserDto.middleName !== undefined ||
+        updateUserDto.lastName ||
+        updateUserDto.nameExtension !== undefined
+      ) {
+        shouldUpdateName = true;
+      }
+
+      // Generate full name if any name component changed
+      if (shouldUpdateName) {
+        const fullName = `${nameComponents.firstName} ${
+          nameComponents.middleName ? nameComponents.middleName + ' ' : ''
+        }${nameComponents.lastName}${
+          nameComponents.nameExtension ? ' ' + nameComponents.nameExtension : ''
+        }`;
+        updateUserDto['name'] = fullName;
+      }
+
+      try {
+        // Update user with all provided fields
+        await this.usersRepository.update(userId, updateUserDto);
+        
+        // Get updated user with relations
+        const updatedUser = await this.usersRepository.findOne({
+          where: { id: userId },
+          relations: ['defaultRole'],
+        });
+
+        if (!updatedUser) {
+          throw new BadRequestException('Failed to retrieve updated user');
+        }
+
+        // Get user roles
+        const roles = await this.rolesService.getUserRoles(userId);
+        const roleNames = roles.map((role) => role.name);
+
+        // Remove password from response
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { password: __password, ...result } = updatedUser;
+
+        return {
+          ...result,
+          roles: roleNames,
+          defaultRole: updatedUser.defaultRole?.name || 'citizen',
+        };
+      } catch (error) {
+        console.error('User update database error:', error);
+        if (error.code === 'ER_DUP_ENTRY') {
+          throw new ConflictException('Email or username already exists');
+        }
+        throw new BadRequestException('Failed to update user information in database');
+      }
+    } catch (error) {
+      console.error('User update error:', error);
+      // Re-throw specific errors
+      if (error instanceof UnauthorizedException || 
+          error instanceof BadRequestException || 
+          error instanceof ConflictException) {
+        throw error;
+      }
+      // For any other unexpected error
+      throw new BadRequestException('Failed to update user information');
+    }
+  }
+  async adminUpdateUser(
+    adminId: number,
+    targetUserId: number,
+    updateUserDto: AdminUpdateUserDto,
+  ) {
+    console.log(
+      `Admin ${adminId} attempting to update user ${targetUserId}`,
+      updateUserDto,
+    );
+
+    try {
+      // Verify the admin has proper permissions
+      const admin = await this.usersRepository.findOne({
+        where: { id: adminId },
+      });
+
+      if (!admin) {
+        throw new UnauthorizedException('Admin not found');
+      }
+
+      // Get admin roles
+      const adminRoles = await this.rolesService.getUserRoles(adminId);
+      const adminRoleNames = adminRoles.map((role) => role.name);
+
+      // Check if the user has admin or super_admin role
+      const isAuthorized = adminRoleNames.some(
+        (role) => role === 'admin' || role === 'super_admin',
+      );
+
+      if (!isAuthorized) {
+        throw new UnauthorizedException('Insufficient permissions');
+      }
+
+      // Check if target user exists
+      const targetUser = await this.usersRepository.findOne({
+        where: { id: targetUserId },
+      });
+
+      if (!targetUser) {
+        throw new BadRequestException(`User with ID ${targetUserId} not found`);
+      }
+
+      // First perform the basic user update
+      // We'll catch any errors here to handle them appropriately
+      let basicUpdate;
+      try {
+        basicUpdate = await this.updateUserInfo(targetUserId, updateUserDto);
+      } catch (error) {
+        console.error('Error during basic user update:', error);
+        throw error; // Re-throw to be caught by outer try-catch
+      }
+
+      // Handle role updates if provided
+      if (updateUserDto.roleIds && updateUserDto.roleIds.length > 0) {
+        try {
+          // Verify all roles exist before assigning
+          for (const roleId of updateUserDto.roleIds) {
+            try {
+              await this.rolesService.findOne(roleId);
+            } catch (error) {
+              throw new BadRequestException(`Role with ID ${roleId} not found`);
+            }
+          }
+
+          // Assign roles
+          await this.rolesService.assignRolesToUser(
+            targetUserId,
+            updateUserDto.roleIds,
+          );
+          console.log(
+            `Assigned roles ${updateUserDto.roleIds.join(', ')} to user ${targetUserId}`,
+          );
+        } catch (error) {
+          console.error('Error assigning roles:', error);
+          throw new BadRequestException(
+            error instanceof Error ? error.message : 'Failed to assign roles',
+          );
+        }
+      }
+
+      // Update default role if provided
+      if (updateUserDto.defaultRoleId) {
+        try {
+          // Verify the role exists
+          try {
+            await this.rolesService.findOne(updateUserDto.defaultRoleId);
+          } catch (error) {
+            throw new BadRequestException(
+              `Default role with ID ${updateUserDto.defaultRoleId} not found`,
+            );
+          }
+
+          // Verify user has this role assigned or will have it assigned 
+          const userRoles = await this.rolesService.getUserRoles(targetUserId);
+          const hasRoleAssigned = userRoles.some(
+            (role) => role.id === updateUserDto.defaultRoleId,
+          );
+          
+          const willBeAssigned = updateUserDto.roleIds && 
+            updateUserDto.roleIds.includes(updateUserDto.defaultRoleId);
+
+          if (!hasRoleAssigned && !willBeAssigned) {
+            throw new BadRequestException(
+              'Cannot set default role to a role the user does not have',
+            );
+          }
+
+          // Update the default role
+          await this.usersRepository.update(targetUserId, {
+            defaultRoleId: updateUserDto.defaultRoleId,
+          });
+          console.log(
+            `Updated default role to ${updateUserDto.defaultRoleId} for user ${targetUserId}`,
+          );
+        } catch (error) {
+          console.error('Error updating default role:', error);
+          throw new BadRequestException(
+            error instanceof Error
+              ? error.message
+              : 'Failed to update default role',
+          );
+        }
+      }
+
+      // Return the fully updated user
+      try {
+        const updatedUser = await this.getProfile(targetUserId);
+        return updatedUser;
+      } catch (error) {
+        console.error('Error retrieving updated user profile:', error);
+        throw new BadRequestException('User was updated but profile could not be retrieved');
+      }
+    } catch (error) {
+      console.error('Admin update user error:', error);
+      
+      // Re-throw specific exceptions
+      if (error instanceof UnauthorizedException || 
+          error instanceof BadRequestException || 
+          error instanceof ConflictException) {
+        throw error;
+      }
+      
+      // For any other errors
+      throw new BadRequestException(
+        'Failed to update user: Unexpected error occurred'
+      );
+    }
   }
 }

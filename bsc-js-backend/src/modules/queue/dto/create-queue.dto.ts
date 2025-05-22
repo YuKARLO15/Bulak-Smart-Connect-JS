@@ -2,7 +2,7 @@ import { IsString, IsOptional, IsNotEmpty, IsBoolean } from 'class-validator';
 
 export class CreateQueueDto {
   @IsOptional()
-  userId?: number | string; 
+  userId?: number | string;
 
   @IsString()
   @IsNotEmpty()
