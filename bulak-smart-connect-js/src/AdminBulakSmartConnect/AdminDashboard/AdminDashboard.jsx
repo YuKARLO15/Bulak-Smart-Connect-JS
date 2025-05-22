@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import './AdminDashboard.css';
 import axios from 'axios';
+import { queueService } from '../../services/queueService';
 import {
   LineChart,
   Line,
@@ -49,16 +50,15 @@ const AdminDashboard = () => {
   const handleSearch = e => {
     setSearchTerm(e.target.value);
   };
-
-  // API Connection - example structure for future implementation
+  // API Connection using queueService
   const fetchWalkInQueue = useCallback(async () => {
     setQueueLoading(true);
     try {
-      // Fetch walk-in queue data from your API
-      const response = await axios.get('http://localhost:3000/queues/walk-in');
+      // Fetch walk-in queue data from API using queueService
+      const queueData = await queueService.fetchWalkInQueues();
       
       // Format the data for display
-      const formattedQueue = response.data.map(queue => ({
+      const formattedQueue = queueData.map(queue => ({
         id: queue.id,
         queueNumber: formatWKNumber(queue.queueNumber),
         firstName: queue.firstName || 'Guest',
