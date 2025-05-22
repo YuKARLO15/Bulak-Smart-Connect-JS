@@ -177,3 +177,19 @@
 - **404 Not Found**: Resource not found
 - **409 Conflict**: Resource conflict (e.g., email already exists)
 - **500 Internal Server Error**: Server error
+
+### Specific Error Cases
+
+#### Update Profile Errors
+- **400**: Password must be at least 8 characters
+- **400**: Invalid email format
+- **409**: Email already exists (when trying to use an email that another user has)
+- **409**: Username already exists (when trying to use a username that another user has)
+
+#### Admin Update User Errors
+- **400**: User with ID {userId} not found
+- **400**: Role with ID {roleId} not found
+- **400**: Cannot set default role to a role the user does not have
+- **400**: Default role with ID {defaultRoleId} not found
+- **403**: Insufficient permissions (when non-admin tries to use admin endpoints)
+- **409**: Email or username already exists

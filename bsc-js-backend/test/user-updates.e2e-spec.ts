@@ -166,6 +166,60 @@ describe('User Update Functionality (e2e)', () => {
         .send({ password: 'short' })
         .expect(400);
     });
+    
+    it('should reject invalid email format', async () => {
+      return request(app.getHttpServer())
+        .post('/auth/update-profile')
+        .set('Authorization', `Bearer ${citizenToken}`)
+        .send({ email: 'invalid-email' })
+        .expect(400)
+        .then(response => {
+          expect(response.body.message).toContain('Invalid email format');
+        });
+    });
+    
+    it('should update only provided fields', async () => {
+      // First get current user data
+      const profileResponse = await request(app.getHttpServer())
+        .get('/auth/profile')
+        .set('Authorization', `Bearer ${citizenToken}`)
+        .expect(200);
+      
+      const originalData = profileResponse.body;
+      
+      // Update only contact number
+      const updateResponse = await request(app.getHttpServer())
+        .post('/auth/update-profile')
+        .set('Authorization', `Bearer ${citizenToken}`)
+        .send({ contactNumber: '9999999999' })
+        .expect(200);
+      
+      // Verify other fields remain unchanged
+      expect(updateResponse.body.firstName).toBe(originalData.firstName);
+      expect(updateResponse.body.lastName).toBe(originalData.lastName);
+      expect(updateResponse.body.email).toBe(originalData.email);
+      expect(updateResponse.body.contactNumber).toBe('9999999999');
+    });
+    
+    it('should properly update name when name components change', async () => {
+      return request(app.getHttpServer())
+        .post('/auth/update-profile')
+        .set('Authorization', `Bearer ${citizenToken}`)
+        .send({ 
+          firstName: 'New',
+          middleName: 'Middle', 
+          lastName: 'Name',
+          nameExtension: 'Jr.'
+        })
+        .expect(200)
+        .then(response => {
+          expect(response.body.firstName).toBe('New');
+          expect(response.body.middleName).toBe('Middle');
+          expect(response.body.lastName).toBe('Name');
+          expect(response.body.nameExtension).toBe('Jr.');
+          expect(response.body.name).toBe('New Middle Name Jr.');
+        });
+    });
   });
 
   describe('Admin Update User', () => {
@@ -219,6 +273,58 @@ describe('User Update Functionality (e2e)', () => {
         .set('Authorization', `Bearer ${adminToken}`)
         .send({ roleIds: [999] }) // Non-existent role ID
         .expect(400);
+    });
+    
+    it('should reject setting default role that is not in roleIds', async () => {
+      // First set user back to citizen only
+      await request(app.getHttpServer())
+        .post(`/auth/admin/update-user/${testCitizen.id}`)
+        .set('Authorization', `Bearer ${adminToken}`)
+        .send({
+          roleIds: [citizenRole.id],
+          defaultRoleId: citizenRole.id,
+        })
+        .expect(200);
+        
+      // Now try to set admin as default without including it in roleIds
+      return request(app.getHttpServer())
+        .post(`/auth/admin/update-user/${testCitizen.id}`)
+        .set('Authorization', `Bearer ${adminToken}`)
+        .send({
+          defaultRoleId: adminRole.id, // Admin role
+        })
+        .expect(400)
+        .then(response => {
+          expect(response.body.message).toContain('Cannot set default role to a role the user does not have');
+        });
+    });
+    
+    it('should handle setting empty role list', async () => {
+      return request(app.getHttpServer())
+        .post(`/auth/admin/update-user/${testCitizen.id}`)
+        .set('Authorization', `Bearer ${adminToken}`)
+        .send({
+          roleIds: [], // Empty role list
+        })
+        .expect(200)
+        .then(response => {
+          // User should still have at least citizen role from previous test
+          expect(response.body.roles.length).toBeGreaterThan(0);
+        });
+    });
+    
+    it('should reject updating non-existent user', async () => {
+      const nonExistentUserId = 9999;
+      return request(app.getHttpServer())
+        .post(`/auth/admin/update-user/${nonExistentUserId}`)
+        .set('Authorization', `Bearer ${adminToken}`)
+        .send({
+          firstName: 'Nobody',
+        })
+        .expect(400)
+        .then(response => {
+          expect(response.body.message).toContain(`User with ID ${nonExistentUserId} not found`);
+        });
     });
   });
 });
