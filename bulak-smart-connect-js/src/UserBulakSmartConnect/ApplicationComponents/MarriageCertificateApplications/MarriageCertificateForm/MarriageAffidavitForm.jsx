@@ -67,8 +67,8 @@ const MarriageAffidavitForm = () => {
     }
   };
   return (
-    <section className="affidavit-form-container">
-      <form onSubmit={handleSubmit}>
+    <section onSubmit={handleSubmit} className="affidavit-form-container">
+      <form  className="affidavit-form1-container">
         <div className="affidavit-witnesses-section">
           <div className="affidavit-section-title">20b. WITNESSES (Print Name and Sign):</div>
           <div className="affidavit-witnesses-row">
