@@ -138,14 +138,11 @@ const fetchQueueData = useCallback(async () => {
     setLoading(false);
   }
 }, []);
-
-  // Update queue status (we should add this to queueService later)
+  // Update queue status using the queueService
   const updateQueueStatus = async (queueId, newStatus) => {
     try {
-      // Make API call to update status
-      await axios.patch(`http://localhost:3000/queue/${queueId}/status`, { 
-        status: newStatus 
-      });
+      // Make API call to update status using queueService
+      await queueService.updateQueueStatus(queueId, newStatus);
       
       // Update local state based on new status
       if (newStatus === 'in-progress') {

@@ -63,6 +63,30 @@ export class QueueController {
     return this.queueService.findByStatus(QueueStatus.COMPLETED);
   }
 
+  // Endpoint for pending queues with details
+  @Get('pending/details')
+  findPendingWithDetails() {
+    return this.queueService.findByStatusWithDetails(QueueStatus.PENDING);
+  }
+
+  // Endpoint for serving queues with details
+  @Get('serving/details')
+  findServingWithDetails() {
+    return this.queueService.findByStatusWithDetails(QueueStatus.SERVING);
+  }
+
+  // Endpoint for bulk fetching queue details
+  @Post('bulk-details')
+  getDetailsForMultipleQueues(@Body() body: { queueIds: number[] }) {
+    return this.queueService.getDetailsForMultipleQueues(body.queueIds);
+  }
+
+  // Endpoint for updating queue status
+  @Patch(':id/status')
+  updateStatus(@Param('id') id: string, @Body() body: { status: QueueStatus }) {
+    return this.queueService.update(+id, { status: body.status });
+  }
+
   @Get('stats')
   getStats() {
     return this.queueService.getStats();

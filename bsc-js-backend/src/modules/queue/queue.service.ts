@@ -5,7 +5,7 @@ import {
   forwardRef,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, LessThanOrEqual } from 'typeorm';
+import { Repository, LessThanOrEqual, In } from 'typeorm';
 import { Queue, QueueStatus } from './entities/queue.entity';
 import { QueueDetails } from './entities/queue-details.entity';
 import {
@@ -206,6 +206,55 @@ export class QueueService {
     });
 
     return position;
+  }
+
+  async getDetailsForMultipleQueues(queueIds: number[]) {
+    if (!queueIds || queueIds.length === 0) {
+      return {};
+    }
+
+    const detailsMap = {};
+
+    // Fetch all queue details in a single query for better performance
+    const allDetails = await this.queueDetailsRepository.find({
+      where: {
+        queueId: In(queueIds),
+      },
+      relations: ['user'],
+    });
+
+    // Organize by queueId for easy lookup
+    allDetails.forEach((detail) => {
+      detailsMap[detail.queueId] = detail;
+    });
+
+    return detailsMap;
+  }
+
+  async findByStatusWithDetails(status: QueueStatus) {
+    // First get all queues with this status
+    const queues = await this.queueRepository.find({
+      where: { status },
+      order: { createdAt: 'ASC' },
+    });
+
+    if (queues.length === 0) {
+      return [];
+    }
+
+    // Get all queue IDs
+    const queueIds = queues.map((queue) => queue.id);
+
+    // Fetch details for all these queues
+    const detailsMap = await this.getDetailsForMultipleQueues(queueIds);
+
+    // Combine queue and details data
+    return queues.map((queue) => {
+      return {
+        ...queue,
+        details: detailsMap[queue.id] || null,
+      };
+    });
   }
 
   async callNext(counterId: number) {

@@ -4,6 +4,19 @@ import api from './api'; // Import your preconfigured axios instance
 const API_URL = 'http://localhost:3000'; // Change to your backend URL
 
 export const queueService = {
+  // Get all walk-in queues (both pending and serving)
+  fetchWalkInQueues: async () => {
+    try {
+      console.log(`Making request to: ${API_URL}/queues/walk-in`);
+      const response = await axios.get(`${API_URL}/queues/walk-in`);
+      console.log('Walk-in queues API response:', response.data);
+      return response.data;
+    } catch (error) {
+      console.error('API error getting walk-in queues:', error);
+      throw error;
+    }
+  },
+
   fetchCurrentQueues: async () => {
     try {
       console.log(`Making request to: ${API_URL}/queue/serving`);
@@ -34,21 +47,21 @@ export const queueService = {
   },
   
   createQueue: async (queueData) => {
-  try {
-    console.log('Creating queue with data:', queueData);
-    
-    // Debug token
-    const token = localStorage.getItem('token');
-    console.log('Token being used:', token ? 'Valid token present' : 'No token');
-    
-    const response = await api.post('/queue', queueData);
-    console.log('Queue creation response:', response.data);
-    return response.data;
-  } catch (error) {
-    console.error('Error creating queue:', error);
-    throw error;
-  }
-},
+    try {
+      console.log('Creating queue with data:', queueData);
+      
+      // Debug token
+      const token = localStorage.getItem('token');
+      console.log('Token being used:', token ? 'Valid token present' : 'No token');
+      
+      const response = await api.post('/queue', queueData);
+      console.log('Queue creation response:', response.data);
+      return response.data;
+    } catch (error) {
+      console.error('Error creating queue:', error);
+      throw error;
+    }
+  },
 
   checkQueueExists: async (queueId) => {
     try {
@@ -110,12 +123,12 @@ export const queueService = {
       throw error;
     }
   },
-
-  // Add to the queueService object
+  
+  // Update queue status
   updateQueueStatus: async (queueId, status) => {
     try {
       console.log(`Updating queue ${queueId} status to ${status}`);
-      const response = await axios.patch(`${API_URL}/queue/${queueId}`, { status });
+      const response = await axios.patch(`${API_URL}/queue/${queueId}/status`, { status });
       return response.data;
     } catch (error) {
       console.error(`Error updating queue ${queueId} status:`, error);

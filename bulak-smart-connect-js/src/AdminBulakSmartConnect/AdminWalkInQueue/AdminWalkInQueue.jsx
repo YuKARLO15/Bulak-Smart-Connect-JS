@@ -38,14 +38,11 @@ const AdminWalkInQueue = () => {
   
   // Total queues count
   const totalQueues = pendingQueues.length + currentQueues.length;
-
   // Update queue status
   const updateQueueStatus = async (queueId, newStatus) => {
     try {
-      // Make API call to update status
-      await axios.patch(`http://localhost:3000/queue/${queueId}`, { 
-        status: newStatus 
-      });
+      // Make API call to update status using queueService
+      await queueService.updateQueueStatus(queueId, newStatus);
       
       // Update local state based on new status
       if (newStatus === 'serving') {
@@ -76,93 +73,37 @@ const AdminWalkInQueue = () => {
       alert('Failed to update queue status. Please try again.');
     }
   };
-
-  // Function to fetch queue data - reused from WalkInQueueAdmin
+  // Function to fetch queue data - using queueService.fetchWalkInQueues
   const fetchQueueData = useCallback(async () => {
     setLoading(true);
     try {
-      // Fetch pending and current queues
-      const [pendingData, currentData] = await Promise.all([
-        queueService.fetchPendingQueues(),
-        queueService.fetchCurrentQueues()
-      ]);
+      // Fetch all walk-in queues (includes both pending and serving)
+      const walkInQueues = await queueService.fetchWalkInQueues();
       
-      // Process and format pending queues
-      const formattedPendingQueues = pendingData.map(queue => {
-        // Try to extract user data from wherever it might exist
-        const userData = queue.userData || queue.details || queue.user || {};
-        
-        return {
+      // Separate into pending and current queues
+      const formattedPendingQueues = walkInQueues
+        .filter(queue => queue.status === 'pending')
+        .map(queue => ({
           id: queue.id,
           queueNumber: formatWKNumber(queue.queueNumber || queue.id),
-          firstName: userData.firstName || queue.firstName || 'Guest',
-          lastName: userData.lastName || queue.lastName || '',
-          reasonOfVisit: userData.reasonOfVisit || queue.reasonOfVisit || 'General Inquiry',
+          firstName: queue.firstName || 'Guest',
+          lastName: queue.lastName || '',
+          reasonOfVisit: queue.reasonOfVisit || 'General Inquiry',
           status: 'pending',
           timestamp: queue.createdAt || new Date().toISOString()
-        };
-      });
+        }));
       
-      // Process and format current queues
-      const formattedCurrentQueues = currentData.map(queue => {
-        // Try to extract user data from wherever it might exist
-        const userData = queue.userData || queue.details || queue.user || {};
-        
-        return {
+      const formattedCurrentQueues = walkInQueues
+        .filter(queue => queue.status === 'serving')
+        .map(queue => ({
           id: queue.id,
           queueNumber: formatWKNumber(queue.queueNumber || queue.id),
-          firstName: userData.firstName || queue.firstName || 'Guest',
-          lastName: userData.lastName || queue.lastName || '',
-          reasonOfVisit: userData.reasonOfVisit || queue.reasonOfVisit || 'General Inquiry',
+          firstName: queue.firstName || 'Guest',
+          lastName: queue.lastName || '',
+          reasonOfVisit: queue.reasonOfVisit || 'General Inquiry',
           status: 'serving',
           timestamp: queue.createdAt || new Date().toISOString()
-        };
-      });
-      
-      // Try to fetch additional details for each queue
-      if (pendingData.length > 0 || currentData.length > 0) {
-        try {
-          const allQueues = [...pendingData, ...currentData];
-          const queueDetailPromises = allQueues.map(queue => 
-            queueService.fetchQueueDetails(queue.id)
-              .then(details => {
-                // Find which array the queue is in
-                const pendingIndex = formattedPendingQueues.findIndex(q => q.id === queue.id);
-                if (pendingIndex !== -1) {
-                  // Update pending queue with details
-                  formattedPendingQueues[pendingIndex] = {
-                    ...formattedPendingQueues[pendingIndex],
-                    firstName: details.details?.firstName || formattedPendingQueues[pendingIndex].firstName,
-                    lastName: details.details?.lastName || formattedPendingQueues[pendingIndex].lastName,
-                    reasonOfVisit: details.details?.reasonOfVisit || formattedPendingQueues[pendingIndex].reasonOfVisit,
-                  };
-                } else {
-                  // Update current queue with details
-                  const currentIndex = formattedCurrentQueues.findIndex(q => q.id === queue.id);
-                  if (currentIndex !== -1) {
-                    formattedCurrentQueues[currentIndex] = {
-                      ...formattedCurrentQueues[currentIndex],
-                      firstName: details.details?.firstName || formattedCurrentQueues[currentIndex].firstName,
-                      lastName: details.details?.lastName || formattedCurrentQueues[currentIndex].lastName,
-                      reasonOfVisit: details.details?.reasonOfVisit || formattedCurrentQueues[currentIndex].reasonOfVisit,
-                    };
-                  }
-                }
-                return details;
-              })
-              .catch(err => {
-                console.error(`Error fetching details for queue ${queue.id}:`, err);
-                return null;
-              })
-          );
-          
-          // Wait for all detail fetches to complete
-          await Promise.all(queueDetailPromises);
-        } catch (detailError) {
-          console.error('Error fetching queue details:', detailError);
-          // Continue with the basic data we already have
-        }
-      }
+        }));
       
       setPendingQueues(formattedPendingQueues);
       setCurrentQueues(formattedCurrentQueues);
