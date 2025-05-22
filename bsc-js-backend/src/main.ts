@@ -15,8 +15,14 @@ async function bootstrap() {
 
   const app = await NestFactory.create(AppModule);
 
-  // Set up global validation pipe
-  app.useGlobalPipes(new ValidationPipe({ transform: true }));
+  // Set up global validation pipe with transformation enabled
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+      transformOptions: { enableImplicitConversion: true },
+      whitelist: true,
+    }),
+  );
   // Set up Swagger documentation
   const config = new DocumentBuilder()
     .setTitle('Bulak Smart Connect API')

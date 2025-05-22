@@ -7,6 +7,7 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { User } from '../src/users/entities/user.entity';
 import { Role } from '../src/roles/entities/role.entity';
 import * as bcrypt from 'bcrypt';
+import 'class-transformer';
 
 describe('User Update Functionality (e2e)', () => {
   let app: INestApplication;
@@ -46,7 +47,13 @@ describe('User Update Functionality (e2e)', () => {
     }).compile();
 
     app = moduleFixture.createNestApplication();
-    app.useGlobalPipes(new ValidationPipe());
+    app.useGlobalPipes(
+      new ValidationPipe({
+        transform: true,
+        transformOptions: { enableImplicitConversion: true },
+        whitelist: true,
+      }),
+    );
 
     jwtService = moduleFixture.get<JwtService>(JwtService);
     userRepository = moduleFixture.get(getRepositoryToken(User));
