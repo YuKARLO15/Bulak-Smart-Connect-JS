@@ -1,76 +1,214 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './MarriageCertificateForm.css';
 
-const MarriageAffidavitForm = () => {
-  const [formData, setFormData] = useState({});
-  const [error, setError] = useState('');
+const MarriageAffidavitForm = ({
+  formData,
+  handleChange,
+  errors: propErrors,
+  onValidationChange,
+}) => {
+  const [errors, setErrors] = useState({});
   const [emptyFields, setEmptyFields] = useState([]);
+  const [submitted, setSubmitted] = useState(false);
+  const [isFormValid, setIsFormValid] = useState(false);
 
+  // Add useEffect to report validation status to parent component
+  useEffect(() => {
+    // When errors change, update validation status
+    const isValid = Object.keys(errors).length === 0;
+    setIsFormValid(isValid);
+
+    // Report validation status to parent component if provided
+    if (onValidationChange) {
+      onValidationChange(isValid);
+    }
+  }, [errors, onValidationChange]);
+
+  // Validate form on mount and when important data changes
+  useEffect(() => {
+    // Initial validation to ensure parent component knows status
+    validateSilently();
+  }, [formData]);
+
+  // Silent validation that doesn't show UI errors but updates state
+  const validateSilently = () => {
+    const requiredFields = document.querySelectorAll('input[required]');
+    let isValid = true;
+    const newErrors = {};
+
+    requiredFields.forEach(field => {
+      const fieldName = field.name;
+      if (!field.value.trim()) {
+        newErrors[fieldName] = `This field is required`;
+        isValid = false;
+      }
+    });
+
+    setErrors(newErrors);
+    return isValid;
+  };
+
+  // Helper functions to get combined data from previous forms
+  const getHusbandFullName = () => {
+    const firstName = formData?.husbandFirstName || '';
+    const middleName = formData?.husbandMiddleName || '';
+    const lastName = formData?.husbandLastName || '';
+
+    return [firstName, middleName, lastName].filter(Boolean).join(' ').trim();
+  };
+
+  const getWifeFullName = () => {
+    const firstName = formData?.wifeFirstName || '';
+    const middleName = formData?.wifeMiddleName || '';
+    const lastName = formData?.wifeLastName || '';
+
+    return [firstName, middleName, lastName].filter(Boolean).join(' ').trim();
+  };
+
+  const getHusbandAddress = () => {
+    const street = formData?.husbandStreet || '';
+    const barangay = formData?.husbandBarangay || '';
+    const city = formData?.husbandCity || '';
+    const province = formData?.husbandProvince || '';
+
+    return [street, barangay, city, province].filter(Boolean).join(', ').trim();
+  };
+
+  const getWifeAddress = () => {
+    const street = formData?.wifeStreet || '';
+    const barangay = formData?.wifeBarangay || '';
+    const city = formData?.wifeCity || '';
+    const province = formData?.wifeProvince || '';
+
+    return [street, barangay, city, province].filter(Boolean).join(', ').trim();
+  };
+
+  const getMarriageDate = () => {
+    const day = formData?.marriageDay || '';
+    const month = formData?.marriageMonth || '';
+    const year = formData?.marriageYear || '';
+
+    if (month && day && year) {
+      return `${month} ${day}, ${year}`;
+    }
+    return '';
+  };
+
+  const getMarriageLocation = () => {
+    const barangay = formData?.marriageBarangay || '';
+    const city = formData?.marriageCity || '';
+    const province = formData?.marriageProvince || '';
+
+    return [barangay, city, province]
+      .filter(Boolean)
+      .join(', ')
+      .replace(/^,\s*|,\s*$/g, '')
+      .replace(/,\s*,/g, ',');
+  };
+
+  // Updated handleInputChange to clear errors on input
   const handleInputChange = e => {
-    const { name, value, type, checked } = e.target;
-    const fieldValue = type === 'checkbox' ? checked : value;
-    setFormData({ ...formData, [name]: fieldValue });
+    const { name } = e.target;
+    handleChange(e);
+
+    // Clear error for this field when user types
+    if (errors[name]) {
+      setErrors(prev => {
+        const newErrors = { ...prev };
+        delete newErrors[name];
+        return newErrors;
+      });
+    }
   };
 
-  const debugValidation = () => {
-    const requiredFields = document.querySelectorAll('input[type="text"][required]');
-    const emptyFieldsList = [];
-    let fieldCount = 0;
-    let emptyCount = 0;
+  // Enhanced validation function
+  const validate = () => {
+    const newErrors = {};
+    const requiredFields = document.querySelectorAll('input[required]');
+    let isValid = true;
 
-    for (let field of requiredFields) {
-      fieldCount++;
+    // Check each required field
+    requiredFields.forEach(field => {
+      const fieldName = field.name;
       if (!field.value.trim()) {
-        emptyCount++;
-        const fieldName = field.name || field.id || `Field at index ${fieldCount}`;
-        const fieldClass = field.className;
-        emptyFieldsList.push({ fieldName, fieldClass });
+        newErrors[fieldName] = `This field is required`;
+        isValid = false;
+
+        // Add visual indication
+        field.classList.add('error-field');
+      } else {
+        field.classList.remove('error-field');
       }
-    }
+    });
 
-    console.log(`Total required fields: ${fieldCount}`);
-    console.log(`Empty required fields: ${emptyCount}`);
-    console.log('Empty fields details:', emptyFieldsList);
-
-    setEmptyFields(emptyFieldsList);
-    return emptyCount === 0;
-  };
-
-  // Only check required fields instead of all text fields
-  const validateForm = () => {
-    const requiredFields = document.querySelectorAll('input[type="text"][required]');
-    for (let field of requiredFields) {
-      if (!field.value.trim()) {
-        return false;
-      }
-    }
-    return true;
+    setErrors(newErrors);
+    return isValid;
   };
 
   const handleSubmit = e => {
     e.preventDefault();
+    setSubmitted(true);
 
-    // Run debug validation first
-    debugValidation();
+    // Validate all fields
+    const isValid = validate();
 
-    if (validateForm()) {
-      setError('');
+    if (isValid) {
       console.log('Form submitted successfully:', formData);
-
-      // Save affidavit data to localStorage
-      localStorage.setItem('marriageAffidavitData', JSON.stringify(formData));
-
-      // Continue with your existing logic
+      // Parent component will handle actual submission
     } else {
-      setError('Please fill in all required fields before submitting.');
-      console.log('Form validation failed - empty required fields detected');
+      // Scroll to first error
+      const firstErrorField = document.querySelector('.error-field');
+      if (firstErrorField) {
+        firstErrorField.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        firstErrorField.focus();
+      }
+
+      // Explicitly notify parent that submission should be blocked
+      if (onValidationChange) {
+        onValidationChange(false);
+      }
+
+      // Prevent form submission
+      e.stopPropagation();
     }
   };
+
+  // Current date information for auto-filling
+  const currentDate = new Date();
+  const currentDay = currentDate.getDate();
+  const months = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+  ];
+  const currentMonth = months[currentDate.getMonth()];
+  const currentYear = currentDate.getFullYear();
+
+  // Required field indicator
+  const requiredField = <span className="required-indicator">*</span>;
+
   return (
-    <section onSubmit={handleSubmit} className="affidavit-form-container">
-      <form  className="affidavit-form1-container">
+    <section className="affidavit-form-container">
+      {/* Add required fields note */}
+      <div className="required-fields-note">
+        Fields marked with <span className="required-indicator">*</span> are required
+      </div>
+
+      <form onSubmit={handleSubmit} className="affidavit-form1-container">
+        {/* Witnesses section */}
         <div className="affidavit-witnesses-section">
-          <div className="affidavit-section-title">20b. WITNESSES (Print Name and Sign):</div>
+          <div className="affidavit-section-title">
+            20b. WITNESSES (Print Name and Sign): {requiredField}
+          </div>
           <div className="affidavit-witnesses-row">
             <div className="affidavit-witness-input-container">
               <input
@@ -79,7 +217,9 @@ const MarriageAffidavitForm = () => {
                 className="affidavit-witness-input"
                 onChange={handleInputChange}
                 value={formData.witness1Name || ''}
+                required
               />
+              {errors.witness1Name && <div className="error-message">{errors.witness1Name}</div>}
             </div>
             <div className="affidavit-witness-input-container">
               <input
@@ -88,21 +228,63 @@ const MarriageAffidavitForm = () => {
                 className="affidavit-witness-input"
                 onChange={handleInputChange}
                 value={formData.witness1Address || ''}
+                required
               />
+              {errors.witness1Address && (
+                <div className="error-message">{errors.witness1Address}</div>
+              )}
             </div>
             <div className="affidavit-witness-input-container">
-              <input type="text" className="affidavit-witness-input" />
+              <input
+                type="text"
+                name="witness1Signature"
+                className="affidavit-witness-input"
+                onChange={handleInputChange}
+                value={formData.witness1Signature || ''}
+                required
+              />
+              {errors.witness1Signature && (
+                <div className="error-message">{errors.witness1Signature}</div>
+              )}
             </div>
           </div>
           <div className="affidavit-witnesses-row">
             <div className="affidavit-witness-input-container">
-              <input type="text" className="affidavit-witness-input" />
+              <input
+                type="text"
+                name="witness2Name"
+                className="affidavit-witness-input"
+                onChange={handleInputChange}
+                value={formData.witness2Name || ''}
+                required
+              />
+              {errors.witness2Name && <div className="error-message">{errors.witness2Name}</div>}
             </div>
             <div className="affidavit-witness-input-container">
-              <input type="text" className="affidavit-witness-input" />
+              <input
+                type="text"
+                name="witness2Address"
+                className="affidavit-witness-input"
+                onChange={handleInputChange}
+                value={formData.witness2Address || ''}
+                required
+              />
+              {errors.witness2Address && (
+                <div className="error-message">{errors.witness2Address}</div>
+              )}
             </div>
             <div className="affidavit-witness-input-container">
-              <input type="text" className="affidavit-witness-input" />
+              <input
+                type="text"
+                name="witness2Signature"
+                className="affidavit-witness-input"
+                onChange={handleInputChange}
+                value={formData.witness2Signature || ''}
+                required
+              />
+              {errors.witness2Signature && (
+                <div className="error-message">{errors.witness2Signature}</div>
+              )}
             </div>
           </div>
         </div>
@@ -120,19 +302,51 @@ const MarriageAffidavitForm = () => {
                 className="affidavit-form-input affidavit-inline-input"
                 onChange={handleInputChange}
                 value={formData.solemnizingOfficerName || ''}
+                required
               />
-              , of legal age, Solemnizing Officer of{' '}
-              <input type="text" className="affidavit-form-input affidavit-inline-input" /> with
-              address at{' '}
-              <input type="text" className="affidavit-form-input affidavit-inline-input" />, after
-              having sworn to in accordance with law, do hereby depose and say:
+              {requiredField}, of legal age, Solemnizing Officer of{' '}
+              <input
+                type="text"
+                className="affidavit-form-input affidavit-inline-input"
+                name="solemnizingOfficerInstitution"
+                onChange={handleInputChange}
+                value={formData.solemnizingOfficerInstitution || formData.marriageBarangay || ''}
+                required
+              />
+              {requiredField} with address at{' '}
+              <input
+                type="text"
+                className="affidavit-form-input affidavit-inline-input"
+                name="solemnizingOfficerAddress"
+                onChange={handleInputChange}
+                value={formData.solemnizingOfficerAddress || getMarriageLocation()}
+                required
+              />
+              {requiredField}, after having sworn to in accordance with law, do hereby depose and
+              say:
             </p>
 
             <div className="affidavit-numbered-items">
               <p className="affidavit-numbered-item">
                 1. That I have solemnized the marriage between{' '}
-                <input type="text" className="affidavit-form-input affidavit-inline-input" /> and{' '}
-                <input type="text" className="affidavit-form-input affidavit-inline-input" />;
+                <input
+                  type="text"
+                  className="affidavit-form-input affidavit-inline-input"
+                  name="husbandFullNameAffidavit"
+                  onChange={handleInputChange}
+                  value={formData.husbandFullNameAffidavit || getHusbandFullName()}
+                  required
+                />{' '}
+                and{' '}
+                <input
+                  type="text"
+                  className="affidavit-form-input affidavit-inline-input"
+                  name="wifeFullNameAffidavit"
+                  onChange={handleInputChange}
+                  value={formData.wifeFullNameAffidavit || getWifeFullName()}
+                  required
+                />
+                ;
               </p>
 
               <div className="affidavit-numbered-item">
@@ -211,21 +425,37 @@ const MarriageAffidavitForm = () => {
               <input
                 type="text"
                 className="affidavit-form-input affidavit-inline-input affidavit-small-input"
+                name="officerSignatureDay"
+                onChange={handleInputChange}
+                value={formData.officerSignatureDay || currentDay}
+                required
               />{' '}
               day of{' '}
               <input
                 type="text"
                 className="affidavit-form-input affidavit-inline-input affidavit-medium-input"
+                name="officerSignatureMonth"
+                onChange={handleInputChange}
+                value={formData.officerSignatureMonth || currentMonth}
+                required
               />
               ,{' '}
               <input
                 type="text"
                 className="affidavit-form-input affidavit-inline-input affidavit-small-input"
+                name="officerSignatureYear"
+                onChange={handleInputChange}
+                value={formData.officerSignatureYear || currentYear}
+                required
               />
               , at{' '}
               <input
                 type="text"
                 className="affidavit-form-input affidavit-inline-input affidavit-medium-input"
+                name="officerSignaturePlace"
+                onChange={handleInputChange}
+                value={formData.officerSignaturePlace || getMarriageLocation()}
+                required
               />
               , Philippines.
             </p>
@@ -299,17 +529,30 @@ const MarriageAffidavitForm = () => {
           </div>
         </div>
 
-        {/* Affidavit for Delayed Registration of Marriage */}
+        {/* Affidavit for Delayed Registration section */}
         <div className="affidavit-delayed-section">
           <h3 className="affidavit-heading">AFFIDAVIT FOR DELAYED REGISTRATION OF MARRIAGE</h3>
 
           <div className="affidavit-content">
             <p className="affidavit-paragraph">
-              I, <input type="text" className="affidavit-form-input affidavit-inline-input" />, of
-              legal age, single/married/divorced/widow/widower, with residence and postal address at{' '}
+              I,{' '}
+              <input
+                type="text"
+                className="affidavit-form-input affidavit-inline-input"
+                name="delayedRegistrationApplicant"
+                onChange={handleInputChange}
+                value={formData.delayedRegistrationApplicant || getHusbandFullName()}
+                required
+              />
+              , of legal age, {formData.husbandCivilStatus || 'single'}, with residence and postal
+              address at{' '}
               <input
                 type="text"
                 className="affidavit-form-input affidavit-inline-input affidavit-large-input"
+                name="delayedRegistrationAddress"
+                onChange={handleInputChange}
+                value={formData.delayedRegistrationAddress || getHusbandAddress()}
+                required
               />
               , after having duly sworn in accordance with law do hereby depose and say:
             </p>
@@ -323,15 +566,31 @@ const MarriageAffidavitForm = () => {
                   </div>
                   <label htmlFor="item1a">
                     my marriage with{' '}
-                    <input type="text" className="affidavit-form-input affidavit-inline-input" /> in{' '}
+                    <input
+                      type="text"
+                      className="affidavit-form-input affidavit-inline-input"
+                      name="spouseName"
+                      onChange={handleInputChange}
+                      value={formData.spouseName || getWifeFullName()}
+                      required
+                    />{' '}
+                    in{' '}
                     <input
                       type="text"
                       className="affidavit-form-input affidavit-inline-input affidavit-medium-input"
+                      name="marriagePlace"
+                      onChange={handleInputChange}
+                      value={formData.marriagePlace || getMarriageLocation()}
+                      required
                     />{' '}
                     on{' '}
                     <input
                       type="text"
                       className="affidavit-form-input affidavit-inline-input affidavit-medium-input"
+                      name="marriageDate"
+                      onChange={handleInputChange}
+                      value={formData.marriageDate || getMarriageDate()}
+                      required
                     />
                     ,
                   </label>
@@ -438,6 +697,7 @@ const MarriageAffidavitForm = () => {
                 <input
                   type="text"
                   className="affidavit-form-input affidavit-inline-input affidavit-large-input"
+                  required
                 />
                 ;
               </p>
@@ -541,33 +801,67 @@ const MarriageAffidavitForm = () => {
           </div>
         </div>
 
-        {error && (
-          <div className="error-container">
-            <p className="error-message">{error}</p>
-            {emptyFields.length > 0 && (
-              <div className="empty-fields-debug">
-                <p>Debug information: {emptyFields.length} empty fields detected</p>
-                <button
-                  type="button"
-                  onClick={() => console.log('Empty fields:', emptyFields)}
-                  className="debug-button"
-                >
-                  Show Empty Fields in Console
-                </button>
-              </div>
-            )}
+        {/* Error display */}
+        {submitted && Object.keys(errors).length > 0 && (
+          <div className="error-summary">
+            <h4>Please correct the following errors:</h4>
+            <ul>
+              {Object.keys(errors).map(key => (
+                <li key={key}>
+                  {key}: {errors[key]}
+                </li>
+              ))}
+            </ul>
           </div>
         )}
+
+        {/* Form actions */}
         <div className="form-actions">
           <button type="submit" className="submit-button">
             Submit Form
           </button>
-          <button type="button" onClick={debugValidation} className="debug-button">
-            Debug Validation
-          </button>
         </div>
       </form>
+
+      {/* Add CSS for error styling */}
+      <style jsx>{`
+        .required-indicator {
+          color: red;
+          margin-left: 3px;
+        }
+
+        .required-fields-note {
+          margin-bottom: 15px;
+          color: #555;
+          font-size: 14px;
+        }
+
+        .error-field {
+          border: 2px solid red !important;
+          background-color: #fff6f6 !important;
+        }
+
+        .error-message {
+          color: red;
+          font-size: 12px;
+          margin-top: 2px;
+        }
+
+        .error-summary {
+          background-color: #fff6f6;
+          border: 1px solid red;
+          border-radius: 4px;
+          padding: 10px;
+          margin: 20px 0;
+        }
+
+        .error-summary h4 {
+          color: red;
+          margin-top: 0;
+        }
+      `}</style>
     </section>
   );
 };
+
 export default MarriageAffidavitForm;
