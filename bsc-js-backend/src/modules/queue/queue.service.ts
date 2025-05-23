@@ -290,8 +290,8 @@ export class QueueService {
     } catch (error: unknown) {
       console.error('Error in findByStatusWithDetails:', error);
       let errorMessage = 'Unknown error';
-      if (typeof error === 'object' && error !== null && 'message' in error) {
-        errorMessage = String((error as { message?: unknown }).message);
+      if (error && typeof error === 'object' && 'message' in error && typeof (error as any).message === 'string') {
+        errorMessage = (error as { message: string }).message;
       } else if (typeof error === 'string') {
         errorMessage = error;
       }
