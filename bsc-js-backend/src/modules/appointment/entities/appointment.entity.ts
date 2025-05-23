@@ -51,7 +51,10 @@ export class Appointment {
   userId: number;
 
   @ManyToOne(() => User, { nullable: true })
-  @JoinColumn({ name: 'userId' })
+  @JoinColumn({ 
+    name: 'userId',
+    foreignKeyConstraintName: 'FK_appointment_user' 
+  })
   user: User;
 
   @Column({ default: false })
