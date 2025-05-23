@@ -42,8 +42,8 @@ export class QueuesController {
 
         // Handle potential null/undefined details
         const details: QueueDetails | null = Array.isArray(queue.details)
-          ? queue.details[0] as QueueDetails
-          : queue.details as QueueDetails;
+          ? (queue.details[0] as QueueDetails)
+          : (queue.details as QueueDetails);
 
         return {
           id: queue.id,

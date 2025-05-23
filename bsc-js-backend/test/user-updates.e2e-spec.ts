@@ -106,28 +106,28 @@ describe('User Update Functionality (e2e)', () => {
       defaultRoleId: adminRole.id,
     });
 
-    await userRepository.save(citizenUser as User);
-    await userRepository.save(adminUser as User);
+    await userRepository.save(citizenUser);
+    await userRepository.save(adminUser);
 
     // Assign roles to users
     const savedCitizen = await userRepository.findOne({
       where: { id: testCitizen.id },
       relations: ['roles'],
     });
-    
+
     if (savedCitizen) {
       (savedCitizen as any).roles = [citizenRole];
-      await userRepository.save(savedCitizen as User);
+      await userRepository.save(savedCitizen);
     }
 
     const savedAdmin = await userRepository.findOne({
       where: { id: testAdmin.id },
       relations: ['roles'],
     });
-    
+
     if (savedAdmin) {
       (savedAdmin as any).roles = [citizenRole, adminRole];
-      await userRepository.save(savedAdmin as User);
+      await userRepository.save(savedAdmin);
     }
 
     // Generate JWT tokens
@@ -161,7 +161,7 @@ describe('User Update Functionality (e2e)', () => {
         contactNumber: '1234567890',
       };
 
-      return request(app.getHttpServer() as HttpServer)
+      return request(app.getHttpServer())
         .post('/auth/update-profile')
         .set('Authorization', `Bearer ${citizenToken}`)
         .send(updateData)
@@ -176,7 +176,7 @@ describe('User Update Functionality (e2e)', () => {
     });
 
     it('should not allow updating to an existing email', async () => {
-      return request(app.getHttpServer() as HttpServer)
+      return request(app.getHttpServer())
         .post('/auth/update-profile')
         .set('Authorization', `Bearer ${citizenToken}`)
         .send({ email: testAdmin.email })
@@ -184,7 +184,7 @@ describe('User Update Functionality (e2e)', () => {
     });
 
     it('should allow updating password with valid length', async () => {
-      return request(app.getHttpServer() as HttpServer)
+      return request(app.getHttpServer())
         .post('/auth/update-profile')
         .set('Authorization', `Bearer ${citizenToken}`)
         .send({ password: 'newSecurePassword123' })
@@ -192,7 +192,7 @@ describe('User Update Functionality (e2e)', () => {
     });
 
     it('should reject password that is too short', async () => {
-      return request(app.getHttpServer() as HttpServer)
+      return request(app.getHttpServer())
         .post('/auth/update-profile')
         .set('Authorization', `Bearer ${citizenToken}`)
         .send({ password: 'short' })
@@ -200,7 +200,7 @@ describe('User Update Functionality (e2e)', () => {
     });
 
     it('should reject invalid email format', async () => {
-      return request(app.getHttpServer() as HttpServer)
+      return request(app.getHttpServer())
         .post('/auth/update-profile')
         .set('Authorization', `Bearer ${citizenToken}`)
         .send({ email: 'invalid-email' })
@@ -213,7 +213,7 @@ describe('User Update Functionality (e2e)', () => {
 
     it('should update only provided fields', async () => {
       // First get current user data
-      const profileResponse = await request(app.getHttpServer() as HttpServer)
+      const profileResponse = await request(app.getHttpServer())
         .get('/auth/profile')
         .set('Authorization', `Bearer ${citizenToken}`)
         .expect(200);
@@ -221,14 +221,14 @@ describe('User Update Functionality (e2e)', () => {
       const originalData = profileResponse.body as ResponseData;
 
       // Update only contact number
-      const updateResponse = await request(app.getHttpServer() as HttpServer)
+      const updateResponse = await request(app.getHttpServer())
         .post('/auth/update-profile')
         .set('Authorization', `Bearer ${citizenToken}`)
         .send({ contactNumber: '9999999999' })
         .expect(200);
 
       const responseData = updateResponse.body as ResponseData;
-      
+
       // Verify other fields remain unchanged
       expect(responseData.firstName).toBe(originalData.firstName);
       expect(responseData.lastName).toBe(originalData.lastName);
@@ -237,7 +237,7 @@ describe('User Update Functionality (e2e)', () => {
     });
 
     it('should properly update name when name components change', async () => {
-      return request(app.getHttpServer() as HttpServer)
+      return request(app.getHttpServer())
         .post('/auth/update-profile')
         .set('Authorization', `Bearer ${citizenToken}`)
         .send({
@@ -266,7 +266,7 @@ describe('User Update Functionality (e2e)', () => {
         contactNumber: '9876543210',
       };
 
-      return request(app.getHttpServer() as HttpServer)
+      return request(app.getHttpServer())
         .post(`/auth/admin/update-user/${testCitizen.id}`)
         .set('Authorization', `Bearer ${adminToken}`)
         .send(updateData)
@@ -281,7 +281,7 @@ describe('User Update Functionality (e2e)', () => {
     });
 
     it('should allow admin to update user roles', async () => {
-      return request(app.getHttpServer() as HttpServer)
+      return request(app.getHttpServer())
         .post(`/auth/admin/update-user/${testCitizen.id}`)
         .set('Authorization', `Bearer ${adminToken}`)
         .send({
@@ -298,7 +298,7 @@ describe('User Update Functionality (e2e)', () => {
     });
 
     it('should not allow citizen to use admin endpoint', async () => {
-      return request(app.getHttpServer() as HttpServer)
+      return request(app.getHttpServer())
         .post(`/auth/admin/update-user/${testAdmin.id}`)
         .set('Authorization', `Bearer ${citizenToken}`)
         .send({ firstName: 'Hacked' })
@@ -306,7 +306,7 @@ describe('User Update Functionality (e2e)', () => {
     });
 
     it('should validate role IDs', async () => {
-      return request(app.getHttpServer() as HttpServer)
+      return request(app.getHttpServer())
         .post(`/auth/admin/update-user/${testCitizen.id}`)
         .set('Authorization', `Bearer ${adminToken}`)
         .send({ roleIds: [999] }) // Non-existent role ID
@@ -315,7 +315,7 @@ describe('User Update Functionality (e2e)', () => {
 
     it('should reject setting default role that is not in roleIds', async () => {
       // First set user back to citizen only
-      await request(app.getHttpServer() as HttpServer)
+      await request(app.getHttpServer())
         .post(`/auth/admin/update-user/${testCitizen.id}`)
         .set('Authorization', `Bearer ${adminToken}`)
         .send({
@@ -325,7 +325,7 @@ describe('User Update Functionality (e2e)', () => {
         .expect(200);
 
       // Now try to set admin as default without including it in roleIds
-      return request(app.getHttpServer() as HttpServer)
+      return request(app.getHttpServer())
         .post(`/auth/admin/update-user/${testCitizen.id}`)
         .set('Authorization', `Bearer ${adminToken}`)
         .send({
@@ -341,7 +341,7 @@ describe('User Update Functionality (e2e)', () => {
     });
 
     it('should handle setting empty role list', async () => {
-      return request(app.getHttpServer() as HttpServer)
+      return request(app.getHttpServer())
         .post(`/auth/admin/update-user/${testCitizen.id}`)
         .set('Authorization', `Bearer ${adminToken}`)
         .send({
@@ -357,7 +357,7 @@ describe('User Update Functionality (e2e)', () => {
 
     it('should reject updating non-existent user', async () => {
       const nonExistentUserId = 9999;
-      return request(app.getHttpServer() as HttpServer)
+      return request(app.getHttpServer())
         .post(`/auth/admin/update-user/${nonExistentUserId}`)
         .set('Authorization', `Bearer ${adminToken}`)
         .send({
