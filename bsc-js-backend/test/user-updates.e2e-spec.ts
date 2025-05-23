@@ -8,7 +8,6 @@ import { Repository } from 'typeorm';
 import { User } from '../src/users/entities/user.entity';
 import { Role } from '../src/roles/entities/role.entity';
 import * as bcrypt from 'bcrypt';
-import 'class-transformer';
 
 describe('User Update Functionality (e2e)', () => {
   let app: INestApplication;
@@ -71,53 +70,57 @@ describe('User Update Functionality (e2e)', () => {
     );
 
     jwtService = moduleFixture.get<JwtService>(JwtService);
-    userRepository = moduleFixture.get<Repository<User>>(getRepositoryToken(User));
-    roleRepository = moduleFixture.get<Repository<Role>>(getRepositoryToken(Role));
+    userRepository = moduleFixture.get<Repository<User>>(
+      getRepositoryToken(User),
+    );
+    roleRepository = moduleFixture.get<Repository<Role>>(
+      getRepositoryToken(Role),
+    );
 
     await app.init();
 
     // Create test roles
-    await roleRepository.save(citizenRole as any);
-    await roleRepository.save(adminRole as any);
+    await (roleRepository as any).save(citizenRole);
+    await (roleRepository as any).save(adminRole);
 
     // Create test users with hashed passwords
     const salt = await bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(testCitizen.password, salt);
 
-    const citizenUser = userRepository.create({
+    const citizenUser = (userRepository as any).create({
       ...testCitizen,
       password: hashedPassword,
       defaultRoleId: citizenRole.id,
-    } as any);
+    });
 
-    const adminUser = userRepository.create({
+    const adminUser = (userRepository as any).create({
       ...testAdmin,
       password: hashedPassword,
       defaultRoleId: adminRole.id,
-    } as any);
+    });
 
-    await userRepository.save(citizenUser);
-    await userRepository.save(adminUser);
+    await (userRepository as any).save(citizenUser);
+    await (userRepository as any).save(adminUser);
 
     // Assign roles to users - Fixed typing
-    const savedCitizen = await userRepository.findOne({
+    const savedCitizen = await (userRepository as any).findOne({
       where: { id: testCitizen.id },
       relations: ['roles'],
-    } as any);
+    });
 
     if (savedCitizen) {
-      (savedCitizen as any).roles = [citizenRole];
-      await userRepository.save(savedCitizen);
+      savedCitizen.roles = [citizenRole];
+      await (userRepository as any).save(savedCitizen);
     }
 
-    const savedAdmin = await userRepository.findOne({
+    const savedAdmin = await (userRepository as any).findOne({
       where: { id: testAdmin.id },
       relations: ['roles'],
-    } as any);
+    });
 
     if (savedAdmin) {
-      (savedAdmin as any).roles = [citizenRole, adminRole];
-      await userRepository.save(savedAdmin);
+      savedAdmin.roles = [citizenRole, adminRole];
+      await (userRepository as any).save(savedAdmin);
     }
 
     // Generate JWT tokens
@@ -136,10 +139,10 @@ describe('User Update Functionality (e2e)', () => {
 
   afterAll(async () => {
     // Clean up
-    await userRepository.delete(testCitizen.id);
-    await userRepository.delete(testAdmin.id);
-    await roleRepository.delete(citizenRole.id);
-    await roleRepository.delete(adminRole.id);
+    await (userRepository as any).delete(testCitizen.id);
+    await (userRepository as any).delete(testAdmin.id);
+    await (roleRepository as any).delete(citizenRole.id);
+    await (roleRepository as any).delete(adminRole.id);
     await app.close();
   });
 
