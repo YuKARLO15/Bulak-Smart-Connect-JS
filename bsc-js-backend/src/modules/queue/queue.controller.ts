@@ -21,7 +21,10 @@ export class QueueController {
 
   @Post()
   @UseGuards(JwtAuthGuard)
-  create(@Request() req, @Body() createQueueDto: CreateQueueDto) {
+  create(
+    @Request() req: { user?: { id: number } },
+    @Body() createQueueDto: CreateQueueDto,
+  ) {
     // Extract user ID from JWT token if authenticated
     const userId = req.user?.id || null;
 
@@ -82,21 +85,26 @@ export class QueueController {
   }
   // Endpoint for updating queue status
   @Patch(':id/status')
-  async updateStatus(@Param('id') id: string, @Body() body: { status: QueueStatus }) {
+  async updateStatus(
+    @Param('id') id: string,
+    @Body() body: { status: QueueStatus },
+  ) {
     console.log(`PATCH /queue/${id}/status with body:`, body);
-    
+
     try {
       // Validate the status enum value
       if (!Object.values(QueueStatus).includes(body.status)) {
         console.error(`Invalid status value: ${body.status}`);
-        return { 
+        return {
           error: 'Invalid status value',
-          validValues: Object.values(QueueStatus)
+          validValues: Object.values(QueueStatus),
         };
       }
-      
+
       // Update the queue status
-      const result = await this.queueService.update(+id, { status: body.status });
+      const result = await this.queueService.update(+id, {
+        status: body.status,
+      });
       console.log(`Queue ${id} status updated successfully to ${body.status}`);
       return result;
     } catch (error) {

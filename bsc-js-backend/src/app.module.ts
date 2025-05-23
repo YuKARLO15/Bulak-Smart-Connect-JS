@@ -8,6 +8,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { RolesModule } from './roles/roles.module';
 import { QueueModule } from './modules/queue/queue.module';
+import { AppointmentModule } from './modules/appointment/appointment.module';
 
 @Module({
   imports: [
@@ -58,6 +59,7 @@ import { QueueModule } from './modules/queue/queue.module';
     AuthModule,
     RolesModule,
     QueueModule,
+    AppointmentModule,
   ],
   controllers: [AppController],
   providers: [AppService],
