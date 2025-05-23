@@ -352,9 +352,9 @@ export class AuthService {
           roles: roleNames,
           defaultRole: updatedUser.defaultRole?.name || 'citizen',
         };
-      } catch (error) {
+      } catch (error: unknown) {
         console.error('User update database error:', error);
-        if (error.code === 'ER_DUP_ENTRY') {
+        if (typeof error === 'object' && error !== null && 'code' in error && error.code === 'ER_DUP_ENTRY') {
           throw new ConflictException('Email or username already exists');
         }
         throw new BadRequestException(
@@ -419,12 +419,11 @@ export class AuthService {
 
       // First perform the basic user update
       // We'll catch any errors here to handle them appropriately
-      let basicUpdate;
       try {
-        basicUpdate = await this.updateUserInfo(targetUserId, updateUserDto);
-      } catch (error) {
-        console.error('Error during basic user update:', error);
-        throw error; // Re-throw to be caught by outer try-catch
+        await this.updateUserInfo(targetUserId, updateUserDto);
+      } catch (err) {
+        console.error('Error during basic user update:', err);
+        throw err; // Re-throw to be caught by outer try-catch
       }
 
       // Handle role updates if provided
@@ -434,7 +433,7 @@ export class AuthService {
           for (const roleId of updateUserDto.roleIds) {
             try {
               await this.rolesService.findOne(roleId);
-            } catch (error) {
+            } catch (err) {
               throw new BadRequestException(`Role with ID ${roleId} not found`);
             }
           }
@@ -461,7 +460,7 @@ export class AuthService {
           // Verify the role exists
           try {
             await this.rolesService.findOne(updateUserDto.defaultRoleId);
-          } catch (error) {
+          } catch (err) {
             throw new BadRequestException(
               `Default role with ID ${updateUserDto.defaultRoleId} not found`,
             );

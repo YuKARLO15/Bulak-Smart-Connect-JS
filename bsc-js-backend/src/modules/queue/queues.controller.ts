@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, UseGuards } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
 import { QueueService } from './queue.service';
 import { QueueStatus } from './entities/queue.entity';
 
@@ -55,9 +55,9 @@ export class QueuesController {
 
       console.log(`Returning ${result.length} walk-in queues`);
       return result;
-    } catch (error) {
-      console.error('Error fetching walk-in queues:', error);
-      throw error;
+    } catch (err: unknown) {
+      console.error('Error fetching walk-in queues:', err);
+      throw err;
     }
   }
 }
