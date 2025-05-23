@@ -287,10 +287,10 @@ export class QueueService {
 
       console.log(`Returning ${result.length} queues with details`);
       return result;
-    } catch (error: unknown) {
-      console.error('Error in findByStatusWithDetails:', error);
+    } catch (err: unknown) {
+      console.error('Error in findByStatusWithDetails:', err);
       const errorMessage =
-        error instanceof Error ? error.message : 'Unknown error occurred';
+        err instanceof Error ? err.message : 'Unknown error occurred';
       throw new Error(`Failed to get queue details: ${errorMessage}`);
     }
   }
