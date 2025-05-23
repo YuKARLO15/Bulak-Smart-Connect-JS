@@ -319,8 +319,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="433"
-                                    class="link-to-prism">src/modules/queue/queue.service.ts:433</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="424"
+                                    class="link-to-prism">src/modules/queue/queue.service.ts:424</a></div>
                         </td>
                     </tr>
 
@@ -388,8 +388,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="316"
-                                    class="link-to-prism">src/modules/queue/queue.service.ts:316</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="307"
+                                    class="link-to-prism">src/modules/queue/queue.service.ts:307</a></div>
                         </td>
                     </tr>
 
@@ -457,8 +457,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="446"
-                                    class="link-to-prism">src/modules/queue/queue.service.ts:446</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="437"
+                                    class="link-to-prism">src/modules/queue/queue.service.ts:437</a></div>
                         </td>
                     </tr>
 
@@ -910,8 +910,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="439"
-                                    class="link-to-prism">src/modules/queue/queue.service.ts:439</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="430"
+                                    class="link-to-prism">src/modules/queue/queue.service.ts:430</a></div>
                         </td>
                     </tr>
 
@@ -1156,8 +1156,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="386"
-                                    class="link-to-prism">src/modules/queue/queue.service.ts:386</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="377"
+                                    class="link-to-prism">src/modules/queue/queue.service.ts:377</a></div>
                         </td>
                     </tr>
 
@@ -1511,7 +1511,7 @@ export class QueueService {
       });
 
       return detailsMap;
-    } catch (error) {
+    } catch (error: unknown) {
       console.error(&#x27;Error fetching details for multiple queues:&#x27;, error);
       // Return empty details rather than failing
       return {};
@@ -1551,27 +1551,18 @@ export class QueueService {
       console.log(&#x60;Returning ${result.length} queues with details&#x60;);
       return result;
     } catch (error: unknown) {
-      // Convert error to string BEFORE logging to avoid unsafe assignment
-      const errorString &#x3D;
-        error instanceof Error
-          ? &#x60;Error: ${error.message}&#x60;
-          : typeof error &#x3D;&#x3D;&#x3D; &#x27;string&#x27;
-            ? error
-            : &#x27;Unknown error occurred&#x27;;
+      console.error(&#x27;Error in findByStatusWithDetails:&#x27;, error);
 
-      // Log string representation instead of raw error object
-      console.error(&#x27;Error in findByStatusWithDetails:&#x27;, errorString);
-
-      // Throw appropriate error based on type
+      // Handle error safely without assignment from unknown
       if (error instanceof Error) {
         throw new Error(&#x60;Failed to get queue details: ${error.message}&#x60;);
-      } else if (typeof error &#x3D;&#x3D;&#x3D; &#x27;string&#x27;) {
-        throw new Error(&#x60;Failed to get queue details: ${error}&#x60;);
-      } else {
-        throw new Error(
-          &#x27;Failed to get queue details: An unknown error occurred&#x27;,
-        );
       }
+
+      if (typeof error &#x3D;&#x3D;&#x3D; &#x27;string&#x27;) {
+        throw new Error(&#x60;Failed to get queue details: ${error}&#x60;);
+      }
+
+      throw new Error(&#x27;Failed to get queue details: An unknown error occurred&#x27;);
     }
   }
 
