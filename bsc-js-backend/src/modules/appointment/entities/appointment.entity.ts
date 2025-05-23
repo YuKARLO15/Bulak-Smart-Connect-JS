@@ -1,11 +1,19 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
+  ManyToOne,
+  JoinColumn,
+} from 'typeorm';
 import { User } from '../../../users/entities/user.entity';
 
 export enum AppointmentStatus {
   PENDING = 'pending',
   CONFIRMED = 'confirmed',
   COMPLETED = 'completed',
-  CANCELLED = 'cancelled'
+  CANCELLED = 'cancelled',
 }
 
 @Entity('appointments')
@@ -40,10 +48,10 @@ export class Appointment {
   @Column()
   appointmentTime: string;
 
-  @Column({ 
-    type: 'enum', 
+  @Column({
+    type: 'enum',
     enum: AppointmentStatus,
-    default: AppointmentStatus.PENDING
+    default: AppointmentStatus.PENDING,
   })
   status: AppointmentStatus;
 
@@ -51,9 +59,9 @@ export class Appointment {
   userId: number;
 
   @ManyToOne(() => User, { nullable: true })
-  @JoinColumn({ 
+  @JoinColumn({
     name: 'userId',
-    foreignKeyConstraintName: 'FK_appointment_user' 
+    foreignKeyConstraintName: 'FK_appointment_user',
   })
   user: User;
 

@@ -55,7 +55,7 @@ export class RolesService {
 
     // Find the roles using In operator (replaces deprecated findByIds)
     const roles = await this.rolesRepository.findBy({
-      id: In(roleIds)
+      id: In(roleIds),
     });
 
     // Assign roles to user

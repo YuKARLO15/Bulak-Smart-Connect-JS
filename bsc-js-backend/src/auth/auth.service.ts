@@ -277,7 +277,9 @@ export class AuthService {
       if (updateUserDto.password) {
         // Validate password strength
         if (updateUserDto.password.length < 8) {
-          throw new BadRequestException('Password must be at least 8 characters');
+          throw new BadRequestException(
+            'Password must be at least 8 characters',
+          );
         }
 
         // Hash new password
@@ -326,7 +328,7 @@ export class AuthService {
       try {
         // Update user with all provided fields
         await this.usersRepository.update(userId, updateUserDto);
-        
+
         // Get updated user with relations
         const updatedUser = await this.usersRepository.findOne({
           where: { id: userId },
@@ -355,14 +357,18 @@ export class AuthService {
         if (error.code === 'ER_DUP_ENTRY') {
           throw new ConflictException('Email or username already exists');
         }
-        throw new BadRequestException('Failed to update user information in database');
+        throw new BadRequestException(
+          'Failed to update user information in database',
+        );
       }
     } catch (error) {
       console.error('User update error:', error);
       // Re-throw specific errors
-      if (error instanceof UnauthorizedException || 
-          error instanceof BadRequestException || 
-          error instanceof ConflictException) {
+      if (
+        error instanceof UnauthorizedException ||
+        error instanceof BadRequestException ||
+        error instanceof ConflictException
+      ) {
         throw error;
       }
       // For any other unexpected error
@@ -461,13 +467,14 @@ export class AuthService {
             );
           }
 
-          // Verify user has this role assigned or will have it assigned 
+          // Verify user has this role assigned or will have it assigned
           const userRoles = await this.rolesService.getUserRoles(targetUserId);
           const hasRoleAssigned = userRoles.some(
             (role) => role.id === updateUserDto.defaultRoleId,
           );
-          
-          const willBeAssigned = updateUserDto.roleIds && 
+
+          const willBeAssigned =
+            updateUserDto.roleIds &&
             updateUserDto.roleIds.includes(updateUserDto.defaultRoleId);
 
           if (!hasRoleAssigned && !willBeAssigned) {
@@ -499,21 +506,25 @@ export class AuthService {
         return updatedUser;
       } catch (error) {
         console.error('Error retrieving updated user profile:', error);
-        throw new BadRequestException('User was updated but profile could not be retrieved');
+        throw new BadRequestException(
+          'User was updated but profile could not be retrieved',
+        );
       }
     } catch (error) {
       console.error('Admin update user error:', error);
-      
+
       // Re-throw specific exceptions
-      if (error instanceof UnauthorizedException || 
-          error instanceof BadRequestException || 
-          error instanceof ConflictException) {
+      if (
+        error instanceof UnauthorizedException ||
+        error instanceof BadRequestException ||
+        error instanceof ConflictException
+      ) {
         throw error;
       }
-      
+
       // For any other errors
       throw new BadRequestException(
-        'Failed to update user: Unexpected error occurred'
+        'Failed to update user: Unexpected error occurred',
       );
     }
   }

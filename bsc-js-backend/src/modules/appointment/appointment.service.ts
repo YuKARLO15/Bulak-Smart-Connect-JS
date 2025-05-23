@@ -1,10 +1,21 @@
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, Between, LessThanOrEqual, MoreThanOrEqual } from 'typeorm';
 import { Appointment, AppointmentStatus } from './entities/appointment.entity';
 import { CreateAppointmentDto } from './dto/create-appointment.dto';
 import { UpdateAppointmentDto } from './dto/update-appointment.dto';
-import { format, addDays, parseISO, isValid, startOfDay, endOfDay } from 'date-fns';
+import {
+  format,
+  addDays,
+  parseISO,
+  isValid,
+  startOfDay,
+  endOfDay,
+} from 'date-fns';
 
 @Injectable()
 export class AppointmentService {
@@ -13,7 +24,9 @@ export class AppointmentService {
     private appointmentRepository: Repository<Appointment>,
   ) {}
 
-  async create(createAppointmentDto: CreateAppointmentDto): Promise<Appointment> {
+  async create(
+    createAppointmentDto: CreateAppointmentDto,
+  ): Promise<Appointment> {
     try {
       // Check date validity
       const date = parseISO(createAppointmentDto.appointmentDate);
@@ -50,7 +63,8 @@ export class AppointmentService {
         appointmentNumber,
       });
 
-      const savedAppointment = await this.appointmentRepository.save(appointment);
+      const savedAppointment =
+        await this.appointmentRepository.save(appointment);
       console.log('Created new appointment:', savedAppointment);
       return savedAppointment;
     } catch (error) {
@@ -90,7 +104,9 @@ export class AppointmentService {
     return appointment;
   }
 
-  async findByAppointmentNumber(appointmentNumber: string): Promise<Appointment> {
+  async findByAppointmentNumber(
+    appointmentNumber: string,
+  ): Promise<Appointment> {
     const appointment = await this.appointmentRepository.findOne({
       where: { appointmentNumber },
     });
@@ -102,16 +118,27 @@ export class AppointmentService {
     return appointment;
   }
 
-  async update(id: number, updateAppointmentDto: UpdateAppointmentDto): Promise<Appointment> {
+  async update(
+    id: number,
+    updateAppointmentDto: UpdateAppointmentDto,
+  ): Promise<Appointment> {
     try {
       const appointment = await this.findOne(id);
 
       // If changing date or time, check availability
-      if (updateAppointmentDto.appointmentDate || updateAppointmentDto.appointmentTime) {
-        const newDate = updateAppointmentDto.appointmentDate || appointment.appointmentDate;
-        const newTime = updateAppointmentDto.appointmentTime || appointment.appointmentTime;
-        
-        if (newDate !== appointment.appointmentDate || newTime !== appointment.appointmentTime) {
+      if (
+        updateAppointmentDto.appointmentDate ||
+        updateAppointmentDto.appointmentTime
+      ) {
+        const newDate =
+          updateAppointmentDto.appointmentDate || appointment.appointmentDate;
+        const newTime =
+          updateAppointmentDto.appointmentTime || appointment.appointmentTime;
+
+        if (
+          newDate !== appointment.appointmentDate ||
+          newTime !== appointment.appointmentTime
+        ) {
           await this.checkTimeSlotAvailability(newDate, newTime);
         }
       }
@@ -139,7 +166,10 @@ export class AppointmentService {
     }
   }
 
-  async updateStatus(id: number, status: AppointmentStatus): Promise<Appointment> {
+  async updateStatus(
+    id: number,
+    status: AppointmentStatus,
+  ): Promise<Appointment> {
     try {
       const appointment = await this.findOne(id);
       appointment.status = status;
@@ -168,13 +198,15 @@ export class AppointmentService {
         select: ['appointmentTime'],
       });
 
-      const bookedSlots = existingAppointments.map(app => app.appointmentTime);
-      
+      const bookedSlots = existingAppointments.map(
+        (app) => app.appointmentTime,
+      );
+
       // Generate all time slots (8:00 AM - 5:00 PM with 30min intervals)
       const allTimeSlots = this.generateAllTimeSlots();
-      
+
       // Return only available slots
-      return allTimeSlots.filter(slot => !bookedSlots.includes(slot));
+      return allTimeSlots.filter((slot) => !bookedSlots.includes(slot));
     } catch (error) {
       console.error(`Error getting available slots for date ${date}:`, error);
       throw error;
@@ -202,7 +234,10 @@ export class AppointmentService {
     }
   }
 
-  async getAppointmentsByDateRange(startDate: string, endDate: string): Promise<Appointment[]> {
+  async getAppointmentsByDateRange(
+    startDate: string,
+    endDate: string,
+  ): Promise<Appointment[]> {
     try {
       return this.appointmentRepository.find({
         where: {
@@ -214,7 +249,10 @@ export class AppointmentService {
         },
       });
     } catch (error) {
-      console.error(`Error getting appointments in range ${startDate} to ${endDate}:`, error);
+      console.error(
+        `Error getting appointments in range ${startDate} to ${endDate}:`,
+        error,
+      );
       throw error;
     }
   }
@@ -223,33 +261,38 @@ export class AppointmentService {
     try {
       const today = new Date();
       today.setHours(0, 0, 0, 0);
-      
+
       const tomorrow = addDays(today, 1);
       tomorrow.setHours(0, 0, 0, 0);
 
       // Get counts for different statuses
-      const [pendingCount, confirmedCount, completedCount, cancelledCount, totalCount] = 
-        await Promise.all([
-          this.appointmentRepository.count({ 
-            where: { status: AppointmentStatus.PENDING } 
-          }),
-          this.appointmentRepository.count({ 
-            where: { status: AppointmentStatus.CONFIRMED } 
-          }),
-          this.appointmentRepository.count({ 
-            where: { status: AppointmentStatus.COMPLETED } 
-          }),
-          this.appointmentRepository.count({ 
-            where: { status: AppointmentStatus.CANCELLED } 
-          }),
-          this.appointmentRepository.count()
-        ]);
+      const [
+        pendingCount,
+        confirmedCount,
+        completedCount,
+        cancelledCount,
+        totalCount,
+      ] = await Promise.all([
+        this.appointmentRepository.count({
+          where: { status: AppointmentStatus.PENDING },
+        }),
+        this.appointmentRepository.count({
+          where: { status: AppointmentStatus.CONFIRMED },
+        }),
+        this.appointmentRepository.count({
+          where: { status: AppointmentStatus.COMPLETED },
+        }),
+        this.appointmentRepository.count({
+          where: { status: AppointmentStatus.CANCELLED },
+        }),
+        this.appointmentRepository.count(),
+      ]);
 
       // Get today's appointments
       const todayAppointments = await this.appointmentRepository.count({
         where: {
-          appointmentDate: format(today, 'yyyy-MM-dd')
-        }
+          appointmentDate: format(today, 'yyyy-MM-dd'),
+        },
       });
 
       return {
@@ -258,7 +301,7 @@ export class AppointmentService {
         completed: completedCount,
         cancelled: cancelledCount,
         total: totalCount,
-        today: todayAppointments
+        today: todayAppointments,
       };
     } catch (error) {
       console.error('Error getting appointment stats:', error);
@@ -266,7 +309,10 @@ export class AppointmentService {
     }
   }
 
-  private async checkTimeSlotAvailability(date: string, time: string): Promise<void> {
+  private async checkTimeSlotAvailability(
+    date: string,
+    time: string,
+  ): Promise<void> {
     try {
       // Check if time slot is already booked
       const existingAppointment = await this.appointmentRepository.findOne({
@@ -281,7 +327,10 @@ export class AppointmentService {
         throw new BadRequestException('This time slot is already booked');
       }
     } catch (error) {
-      console.error(`Error checking time slot availability for ${date} at ${time}:`, error);
+      console.error(
+        `Error checking time slot availability for ${date} at ${time}:`,
+        error,
+      );
       throw error;
     }
   }
@@ -294,20 +343,20 @@ export class AppointmentService {
       const startHour = hour === 12 ? 12 : hour % 12;
       const startAmPm = hour < 12 ? 'AM' : 'PM';
       const startTime = `${startHour}:${minute === 0 ? '00' : '30'} ${startAmPm}`;
-      
+
       minute += 30;
       if (minute === 60) {
         minute = 0;
         hour += 1;
       }
-      
+
       const endHour = hour === 12 ? 12 : hour % 12;
       const endAmPm = hour < 12 ? 'AM' : 'PM';
       const endTime = `${endHour}:${minute === 0 ? '00' : '30'} ${endAmPm}`;
-      
+
       slots.push(`${startTime} - ${endTime}`);
     }
-    
+
     return slots;
   }
 }

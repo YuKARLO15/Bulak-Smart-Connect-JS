@@ -162,7 +162,7 @@ export class QueueService {
   }
   async update(id: number, updateQueueDto: UpdateQueueDto) {
     console.log(`Updating queue ${id} with:`, updateQueueDto);
-    
+
     try {
       // Find the queue
       const queue = await this.findOne(id);
@@ -170,7 +170,9 @@ export class QueueService {
 
       if (updateQueueDto.status) {
         // Log the status change
-        console.log(`Changing status from ${queue.status} to ${updateQueueDto.status}`);
+        console.log(
+          `Changing status from ${queue.status} to ${updateQueueDto.status}`,
+        );
         queue.status = updateQueueDto.status;
 
         // If completed, set completion time
@@ -221,7 +223,7 @@ export class QueueService {
   }
   async getDetailsForMultipleQueues(queueIds: number[]) {
     console.log('Getting details for queue IDs:', queueIds);
-    
+
     if (!queueIds || queueIds.length === 0) {
       return {};
     }
@@ -237,7 +239,9 @@ export class QueueService {
         relations: ['user'],
       });
 
-      console.log(`Found ${allDetails.length} details for ${queueIds.length} queues`);
+      console.log(
+        `Found ${allDetails.length} details for ${queueIds.length} queues`,
+      );
 
       // Organize by queueId for easy lookup
       allDetails.forEach((detail) => {
@@ -253,7 +257,7 @@ export class QueueService {
   }
   async findByStatusWithDetails(status: QueueStatus) {
     console.log(`Finding queues with status: ${status} and their details`);
-    
+
     try {
       // First get all queues with this status
       const queues = await this.queueRepository.find({
@@ -262,7 +266,7 @@ export class QueueService {
       });
 
       console.log(`Found ${queues.length} queues with status ${status}`);
-      
+
       if (queues.length === 0) {
         return [];
       }
@@ -280,11 +284,14 @@ export class QueueService {
           details: detailsMap[queue.id] || null,
         };
       });
-      
+
       console.log(`Returning ${result.length} queues with details`);
       return result;
     } catch (error) {
-      console.error(`Error finding queues with status ${status} and details:`, error);
+      console.error(
+        `Error finding queues with status ${status} and details:`,
+        error,
+      );
       // Return empty array rather than failing
       return [];
     }

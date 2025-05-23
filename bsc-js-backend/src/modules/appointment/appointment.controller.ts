@@ -1,17 +1,17 @@
-import { 
-  Controller, 
-  Get, 
-  Post, 
-  Body, 
-  Patch, 
-  Param, 
-  Delete, 
-  UseGuards, 
-  Query, 
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+  Query,
   BadRequestException,
   HttpCode,
   HttpStatus,
-  Logger
+  Logger,
 } from '@nestjs/common';
 import { AppointmentService } from './appointment.service';
 import { CreateAppointmentDto } from './dto/create-appointment.dto';
@@ -26,12 +26,14 @@ import { User as UserEntity } from '../../users/entities/user.entity';
 @Controller('appointments')
 export class AppointmentController {
   private readonly logger = new Logger(AppointmentController.name);
-  
+
   constructor(private readonly appointmentService: AppointmentService) {}
 
   @Post()
   async create(@Body() createAppointmentDto: CreateAppointmentDto) {
-    this.logger.log(`Creating appointment for ${createAppointmentDto.firstName} ${createAppointmentDto.lastName}`);
+    this.logger.log(
+      `Creating appointment for ${createAppointmentDto.firstName} ${createAppointmentDto.lastName}`,
+    );
     return this.appointmentService.create(createAppointmentDto);
   }
 
@@ -77,10 +79,15 @@ export class AppointmentController {
     @Query('end') endDate: string,
   ) {
     if (!startDate || !endDate) {
-      throw new BadRequestException('Start and end date parameters are required');
+      throw new BadRequestException(
+        'Start and end date parameters are required',
+      );
     }
     this.logger.log(`Fetching appointments from ${startDate} to ${endDate}`);
-    return this.appointmentService.getAppointmentsByDateRange(startDate, endDate);
+    return this.appointmentService.getAppointmentsByDateRange(
+      startDate,
+      endDate,
+    );
   }
 
   @Get('available-slots')
@@ -109,16 +116,21 @@ export class AppointmentController {
   async update(
     @Param('id') id: string,
     @Body() updateAppointmentDto: UpdateAppointmentDto,
-    @User() user: UserEntity
+    @User() user: UserEntity,
   ) {
     // Get the appointment to check if it belongs to the user
     const appointment = await this.appointmentService.findOne(+id);
-    
+
     // If not admin and not the appointment owner, don't allow update
-    if (!user.roles.some(role => ['admin', 'staff'].includes(role.name)) && appointment.userId !== user.id) {
-      throw new BadRequestException('You do not have permission to update this appointment');
+    if (
+      !user.roles.some((role) => ['admin', 'staff'].includes(role.name)) &&
+      appointment.userId !== user.id
+    ) {
+      throw new BadRequestException(
+        'You do not have permission to update this appointment',
+      );
     }
-    
+
     this.logger.log(`Updating appointment with ID: ${id}`);
     return this.appointmentService.update(+id, updateAppointmentDto);
   }
@@ -128,13 +140,17 @@ export class AppointmentController {
   @Roles('admin', 'staff')
   async updateStatus(
     @Param('id') id: string,
-    @Body('status') status: AppointmentStatus
+    @Body('status') status: AppointmentStatus,
   ) {
     if (!Object.values(AppointmentStatus).includes(status)) {
-      throw new BadRequestException(`Invalid status. Must be one of: ${Object.values(AppointmentStatus).join(', ')}`);
+      throw new BadRequestException(
+        `Invalid status. Must be one of: ${Object.values(AppointmentStatus).join(', ')}`,
+      );
     }
-    
-    this.logger.log(`Updating status for appointment with ID: ${id} to ${status}`);
+
+    this.logger.log(
+      `Updating status for appointment with ID: ${id} to ${status}`,
+    );
     return this.appointmentService.updateStatus(+id, status);
   }
 
@@ -144,12 +160,17 @@ export class AppointmentController {
   async remove(@Param('id') id: string, @User() user: UserEntity) {
     // Get the appointment to check if it belongs to the user
     const appointment = await this.appointmentService.findOne(+id);
-    
+
     // If not admin and not the appointment owner, don't allow deletion
-    if (!user.roles.some(role => ['admin', 'staff'].includes(role.name)) && appointment.userId !== user.id) {
-      throw new BadRequestException('You do not have permission to delete this appointment');
+    if (
+      !user.roles.some((role) => ['admin', 'staff'].includes(role.name)) &&
+      appointment.userId !== user.id
+    ) {
+      throw new BadRequestException(
+        'You do not have permission to delete this appointment',
+      );
     }
-    
+
     this.logger.log(`Deleting appointment with ID: ${id}`);
     await this.appointmentService.remove(+id);
   }

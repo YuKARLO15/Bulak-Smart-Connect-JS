@@ -6,30 +6,36 @@ import { QueueStatus } from './entities/queue.entity';
 export class QueuesController {
   constructor(private readonly queueService: QueueService) {}
   // This endpoint is for supporting the legacy API path that the frontend is using
-  @Get('walk-in') 
+  @Get('walk-in')
   async getWalkInQueues() {
     console.log('GET /queues/walk-in endpoint called');
     try {
       // Get both pending and serving queues with details using the service methods
-      const [pendingQueuesWithDetails, servingQueuesWithDetails] = await Promise.all([
-        this.queueService.findByStatusWithDetails(QueueStatus.PENDING),
-        this.queueService.findByStatusWithDetails(QueueStatus.SERVING)
-      ]);
+      const [pendingQueuesWithDetails, servingQueuesWithDetails] =
+        await Promise.all([
+          this.queueService.findByStatusWithDetails(QueueStatus.PENDING),
+          this.queueService.findByStatusWithDetails(QueueStatus.SERVING),
+        ]);
 
       console.log('Found pending queues:', pendingQueuesWithDetails.length);
       console.log('Found serving queues:', servingQueuesWithDetails.length);
 
       // Combine all queues
-      const allQueues = [...pendingQueuesWithDetails, ...servingQueuesWithDetails];
+      const allQueues = [
+        ...pendingQueuesWithDetails,
+        ...servingQueuesWithDetails,
+      ];
 
       // Extract details from the nested structure and flatten them for the frontend
-      const result = allQueues.map(queue => {
+      const result = allQueues.map((queue) => {
         // For debugging
         console.log('Processing queue:', queue.id, 'status:', queue.status);
-        
+
         // Handle potential null/undefined details
-        const details = Array.isArray(queue.details) ? queue.details[0] : queue.details;
-        
+        const details = Array.isArray(queue.details)
+          ? queue.details[0]
+          : queue.details;
+
         return {
           id: queue.id,
           queueNumber: queue.queueNumber,
@@ -43,7 +49,7 @@ export class QueuesController {
           middleInitial: details?.middleInitial || null,
           reasonOfVisit: details?.reasonOfVisit || null,
           address: details?.address || null,
-          phoneNumber: details?.phoneNumber || null
+          phoneNumber: details?.phoneNumber || null,
         };
       });
 
