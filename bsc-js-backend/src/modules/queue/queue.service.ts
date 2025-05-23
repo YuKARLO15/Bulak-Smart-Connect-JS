@@ -288,18 +288,18 @@ export class QueueService {
       console.log(`Returning ${result.length} queues with details`);
       return result;
     } catch (error: unknown) {
-      console.error('Error in findByStatusWithDetails:', error);
-      let errorMessage = 'Unknown error';
-      if (
-        typeof error === 'object' &&
-        error !== null &&
-        'message' in error &&
-        typeof (error as Record<string, unknown>).message === 'string'
-      ) {
-        errorMessage = (error as { message: string }).message;
-      } else if (typeof error === 'string') {
-        errorMessage = error;
-      }
+      
+      const errorMessage = (() => {
+        if (error instanceof Error && typeof error.message === 'string') {
+          return error.message;
+        }
+        if (typeof error === 'string') {
+          return error;
+        }
+        return 'Unknown error';
+      })();
+
+      console.error(`Error in findByStatusWithDetails: ${errorMessage}`);
       throw new Error(`Failed to get queue details: ${errorMessage}`);
     }
   }
