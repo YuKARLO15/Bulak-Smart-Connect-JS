@@ -8,12 +8,7 @@ import { Repository, Between } from 'typeorm';
 import { Appointment, AppointmentStatus } from './entities/appointment.entity';
 import { CreateAppointmentDto } from './dto/create-appointment.dto';
 import { UpdateAppointmentDto } from './dto/update-appointment.dto';
-import {
-  format,
-  addDays,
-  parseISO,
-  isValid,
-} from 'date-fns';
+import { format, addDays, parseISO, isValid } from 'date-fns';
 
 @Injectable()
 export class AppointmentService {

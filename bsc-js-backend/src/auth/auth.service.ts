@@ -354,7 +354,12 @@ export class AuthService {
         };
       } catch (error: unknown) {
         console.error('User update database error:', error);
-        if (typeof error === 'object' && error !== null && 'code' in error && error.code === 'ER_DUP_ENTRY') {
+        if (
+          typeof error === 'object' &&
+          error !== null &&
+          'code' in error &&
+          error.code === 'ER_DUP_ENTRY'
+        ) {
           throw new ConflictException('Email or username already exists');
         }
         throw new BadRequestException(
@@ -433,7 +438,7 @@ export class AuthService {
           for (const roleId of updateUserDto.roleIds) {
             try {
               await this.rolesService.findOne(roleId);
-            } catch (err) {
+            } catch (_) {
               throw new BadRequestException(`Role with ID ${roleId} not found`);
             }
           }
@@ -460,7 +465,7 @@ export class AuthService {
           // Verify the role exists
           try {
             await this.rolesService.findOne(updateUserDto.defaultRoleId);
-          } catch (err) {
+          } catch (_) {
             throw new BadRequestException(
               `Default role with ID ${updateUserDto.defaultRoleId} not found`,
             );

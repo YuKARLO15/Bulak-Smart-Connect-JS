@@ -287,7 +287,7 @@ export class QueueService {
 
       console.log(`Returning ${result.length} queues with details`);
       return result;
-    } catch (error) {
+    } catch (error: unknown) {
       console.error(
         `Error finding queues with status ${status} and details:`,
         error,

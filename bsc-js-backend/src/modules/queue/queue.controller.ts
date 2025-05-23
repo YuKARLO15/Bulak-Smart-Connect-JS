@@ -21,7 +21,10 @@ export class QueueController {
 
   @Post()
   @UseGuards(JwtAuthGuard)
-  create(@Request() req: { user?: { id: number } }, @Body() createQueueDto: CreateQueueDto) {
+  create(
+    @Request() req: { user?: { id: number } },
+    @Body() createQueueDto: CreateQueueDto,
+  ) {
     // Extract user ID from JWT token if authenticated
     const userId = req.user?.id || null;
 

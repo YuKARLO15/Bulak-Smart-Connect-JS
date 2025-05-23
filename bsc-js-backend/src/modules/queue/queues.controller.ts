@@ -2,6 +2,15 @@ import { Controller, Get } from '@nestjs/common';
 import { QueueService } from './queue.service';
 import { QueueStatus } from './entities/queue.entity';
 
+interface QueueDetails {
+  firstName?: string;
+  lastName?: string;
+  middleInitial?: string;
+  reasonOfVisit?: string;
+  address?: string;
+  phoneNumber?: string;
+}
+
 @Controller('queues')
 export class QueuesController {
   constructor(private readonly queueService: QueueService) {}
@@ -32,9 +41,9 @@ export class QueuesController {
         console.log('Processing queue:', queue.id, 'status:', queue.status);
 
         // Handle potential null/undefined details
-        const details = Array.isArray(queue.details)
-          ? queue.details[0]
-          : queue.details;
+        const details: QueueDetails | null = Array.isArray(queue.details)
+          ? queue.details[0] as QueueDetails
+          : queue.details as QueueDetails;
 
         return {
           id: queue.id,
