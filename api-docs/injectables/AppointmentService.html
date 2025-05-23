@@ -91,7 +91,7 @@
 
 <ol class="breadcrumb">
   <li class="breadcrumb-item">Injectables</li>
-  <li class="breadcrumb-item" >QueueService</li>
+  <li class="breadcrumb-item" >AppointmentService</li>
 </ol>
 
 <ul class="nav nav-tabs" role="tablist">
@@ -115,7 +115,7 @@
             <h3>File</h3>
         </p>
         <p class="comment">
-            <code>src/modules/queue/queue.service.ts</code>
+            <code>src/modules/appointment/appointment.service.ts</code>
         </p>
 
 
@@ -136,16 +136,9 @@
                     <td class="col-md-4">
                         <ul class="index-list">
                             <li>
+                                    <span class="modifier">Private</span>
                                     <span class="modifier">Async</span>
-                                <a href="#addCounter" >addCounter</a>
-                            </li>
-                            <li>
-                                    <span class="modifier">Async</span>
-                                <a href="#callNext" >callNext</a>
-                            </li>
-                            <li>
-                                    <span class="modifier">Async</span>
-                                <a href="#checkExists" >checkExists</a>
+                                <a href="#checkTimeSlotAvailability" >checkTimeSlotAvailability</a>
                             </li>
                             <li>
                                     <span class="modifier">Async</span>
@@ -157,43 +150,47 @@
                             </li>
                             <li>
                                     <span class="modifier">Async</span>
-                                <a href="#findByQueueNumber" >findByQueueNumber</a>
+                                <a href="#findAllByUser" >findAllByUser</a>
                             </li>
                             <li>
                                     <span class="modifier">Async</span>
-                                <a href="#findByStatus" >findByStatus</a>
-                            </li>
-                            <li>
-                                    <span class="modifier">Async</span>
-                                <a href="#findByStatusWithDetails" >findByStatusWithDetails</a>
+                                <a href="#findByAppointmentNumber" >findByAppointmentNumber</a>
                             </li>
                             <li>
                                     <span class="modifier">Async</span>
                                 <a href="#findOne" >findOne</a>
                             </li>
                             <li>
-                                    <span class="modifier">Async</span>
-                                <a href="#getCounters" >getCounters</a>
+                                    <span class="modifier">Private</span>
+                                <a href="#generateAllTimeSlots" >generateAllTimeSlots</a>
                             </li>
                             <li>
                                     <span class="modifier">Async</span>
-                                <a href="#getDetailsForMultipleQueues" >getDetailsForMultipleQueues</a>
+                                <a href="#getAppointmentsByDate" >getAppointmentsByDate</a>
                             </li>
                             <li>
                                     <span class="modifier">Async</span>
-                                <a href="#getQueueDetails" >getQueueDetails</a>
+                                <a href="#getAppointmentsByDateRange" >getAppointmentsByDateRange</a>
                             </li>
                             <li>
                                     <span class="modifier">Async</span>
-                                <a href="#getQueuePosition" >getQueuePosition</a>
+                                <a href="#getAppointmentsStats" >getAppointmentsStats</a>
                             </li>
                             <li>
                                     <span class="modifier">Async</span>
-                                <a href="#getStats" >getStats</a>
+                                <a href="#getAvailableSlots" >getAvailableSlots</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#remove" >remove</a>
                             </li>
                             <li>
                                     <span class="modifier">Async</span>
                                 <a href="#update" >update</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#updateStatus" >updateStatus</a>
                             </li>
                         </ul>
                     </td>
@@ -213,12 +210,12 @@
             <tbody>
                 <tr>
                     <td class="col-md-4">
-<code>constructor(queueRepository: <a href="../entitys/Queue.html" target="_self">Repository&lt;Queue&gt;</a>, queueDetailsRepository: <a href="../interfaces/QueueDetails.html" target="_self">Repository&lt;QueueDetails&gt;</a>, counterRepository: <a href="../entitys/Counter.html" target="_self">Repository&lt;Counter&gt;</a>, queueGateway: <a href="../classes/QueueGateway.html" target="_self">QueueGateway</a>)</code>
+<code>constructor(appointmentRepository: <a href="../entitys/Appointment.html" target="_self">Repository&lt;Appointment&gt;</a>)</code>
                     </td>
                 </tr>
                         <tr>
                             <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="20" class="link-to-prism">src/modules/queue/queue.service.ts:20</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="14" class="link-to-prism">src/modules/appointment/appointment.service.ts:14</a></div>
                             </td>
                         </tr>
 
@@ -236,46 +233,10 @@
                                         </thead>
                                         <tbody>
                                                 <tr>
-                                                        <td>queueRepository</td>
+                                                        <td>appointmentRepository</td>
                                                   
                                                         <td>
-                                                                        <code><a href="../entitys/Queue.html" target="_self" >Repository&lt;Queue&gt;</a></code>
-                                                        </td>
-                                                  
-                                                    <td>
-                                                            No
-                                                    </td>
-                                                    
-                                                </tr>
-                                                <tr>
-                                                        <td>queueDetailsRepository</td>
-                                                  
-                                                        <td>
-                                                                        <code><a href="../interfaces/QueueDetails.html" target="_self" >Repository&lt;QueueDetails&gt;</a></code>
-                                                        </td>
-                                                  
-                                                    <td>
-                                                            No
-                                                    </td>
-                                                    
-                                                </tr>
-                                                <tr>
-                                                        <td>counterRepository</td>
-                                                  
-                                                        <td>
-                                                                        <code><a href="../entitys/Counter.html" target="_self" >Repository&lt;Counter&gt;</a></code>
-                                                        </td>
-                                                  
-                                                    <td>
-                                                            No
-                                                    </td>
-                                                    
-                                                </tr>
-                                                <tr>
-                                                        <td>queueGateway</td>
-                                                  
-                                                        <td>
-                                                                        <code><a href="../classes/QueueGateway.html" target="_self" >QueueGateway</a></code>
+                                                                        <code><a href="../entitys/Appointment.html" target="_self" >Repository&lt;Appointment&gt;</a></code>
                                                         </td>
                                                   
                                                     <td>
@@ -301,26 +262,27 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
-                    <a name="addCounter"></a>
+                    <a name="checkTimeSlotAvailability"></a>
                     <span class="name">
+                            <span class="modifier">Private</span>
                             <span class="modifier">Async</span>
-                        <span ><b>addCounter</b></span>
-                        <a href="#addCounter"><span class="icon ion-ios-link"></span></a>
+                        <span ><b>checkTimeSlotAvailability</b></span>
+                        <a href="#checkTimeSlotAvailability"><span class="icon ion-ios-link"></span></a>
                     </span>
                 </td>
             </tr>
             <tr>
                 <td class="col-md-4">
                         <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>addCounter(name: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                    <code>checkTimeSlotAvailability(date: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, time: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
                 </td>
             </tr>
 
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="433"
-                                    class="link-to-prism">src/modules/queue/queue.service.ts:433</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="305"
+                                    class="link-to-prism">src/modules/appointment/appointment.service.ts:305</a></div>
                         </td>
                     </tr>
 
@@ -341,7 +303,19 @@
                                     </thead>
                                     <tbody>
                                         <tr>
-                                                <td>name</td>
+                                                <td>date</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>time</td>
                                             <td>
                                                             <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
                                             </td>
@@ -356,145 +330,7 @@
                                 </table>
                             </div>
                         <div class="io-description">
-                            <b>Returns : </b>    <code>unknown</code>
-
-                        </div>
-                            <div class="io-description">
-                                
-                            </div>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    <table class="table table-sm table-bordered">
-        <tbody>
-            <tr>
-                <td class="col-md-4">
-                    <a name="callNext"></a>
-                    <span class="name">
-                            <span class="modifier">Async</span>
-                        <span ><b>callNext</b></span>
-                        <a href="#callNext"><span class="icon ion-ios-link"></span></a>
-                    </span>
-                </td>
-            </tr>
-            <tr>
-                <td class="col-md-4">
-                        <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>callNext(counterId: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
-                </td>
-            </tr>
-
-
-                    <tr>
-                        <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="316"
-                                    class="link-to-prism">src/modules/queue/queue.service.ts:316</a></div>
-                        </td>
-                    </tr>
-
-
-            <tr>
-                <td class="col-md-4">
-
-                            <div class="io-description">
-                                <b>Parameters :</b>
-                                
-                                <table class="params">
-                                    <thead>
-                                        <tr>
-                                            <td>Name</td>
-                                                <td>Type</td>
-                                            <td>Optional</td>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                                <td>counterId</td>
-                                            <td>
-                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
-                                            </td>
-
-                                            <td>
-                                                    No
-                                            </td>
-
-
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        <div class="io-description">
-                            <b>Returns : </b>    <code>unknown</code>
-
-                        </div>
-                            <div class="io-description">
-                                
-                            </div>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    <table class="table table-sm table-bordered">
-        <tbody>
-            <tr>
-                <td class="col-md-4">
-                    <a name="checkExists"></a>
-                    <span class="name">
-                            <span class="modifier">Async</span>
-                        <span ><b>checkExists</b></span>
-                        <a href="#checkExists"><span class="icon ion-ios-link"></span></a>
-                    </span>
-                </td>
-            </tr>
-            <tr>
-                <td class="col-md-4">
-                        <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>checkExists(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
-                </td>
-            </tr>
-
-
-                    <tr>
-                        <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="446"
-                                    class="link-to-prism">src/modules/queue/queue.service.ts:446</a></div>
-                        </td>
-                    </tr>
-
-
-            <tr>
-                <td class="col-md-4">
-
-                            <div class="io-description">
-                                <b>Parameters :</b>
-                                
-                                <table class="params">
-                                    <thead>
-                                        <tr>
-                                            <td>Name</td>
-                                                <td>Type</td>
-                                            <td>Optional</td>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                                <td>id</td>
-                                            <td>
-                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
-                                            </td>
-
-                                            <td>
-                                                    No
-                                            </td>
-
-
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        <div class="io-description">
-                            <b>Returns : </b>    <code>Promise&lt;boolean&gt;</code>
+                            <b>Returns : </b>    <code>Promise&lt;void&gt;</code>
 
                         </div>
                             <div class="io-description">
@@ -519,15 +355,15 @@
             <tr>
                 <td class="col-md-4">
                         <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>create(createQueueDto: <a href="../classes/CreateQueueDto.html" target="_self">CreateQueueDto</a>)</code>
+                    <code>create(createAppointmentDto: <a href="../classes/CreateAppointmentDto.html" target="_self">CreateAppointmentDto</a>)</code>
                 </td>
             </tr>
 
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="32"
-                                    class="link-to-prism">src/modules/queue/queue.service.ts:32</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="20"
+                                    class="link-to-prism">src/modules/appointment/appointment.service.ts:20</a></div>
                         </td>
                     </tr>
 
@@ -548,9 +384,9 @@
                                     </thead>
                                     <tbody>
                                         <tr>
-                                                <td>createQueueDto</td>
+                                                <td>createAppointmentDto</td>
                                             <td>
-                                                            <code><a href="../classes/CreateQueueDto.html" target="_self" >CreateQueueDto</a></code>
+                                                            <code><a href="../classes/CreateAppointmentDto.html" target="_self" >CreateAppointmentDto</a></code>
                                             </td>
 
                                             <td>
@@ -563,7 +399,7 @@
                                 </table>
                             </div>
                         <div class="io-description">
-                            <b>Returns : </b>    <code>unknown</code>
+                            <b>Returns : </b>        <code><a href="../entitys/Appointment.html" target="_self" >Promise&lt;Appointment&gt;</a></code>
 
                         </div>
                             <div class="io-description">
@@ -595,8 +431,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="110"
-                                    class="link-to-prism">src/modules/queue/queue.service.ts:110</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="69"
+                                    class="link-to-prism">src/modules/appointment/appointment.service.ts:69</a></div>
                         </td>
                     </tr>
 
@@ -605,7 +441,7 @@
                 <td class="col-md-4">
 
                         <div class="io-description">
-                            <b>Returns : </b>    <code>unknown</code>
+                            <b>Returns : </b>        <code><a href="../entitys/Appointment.html" target="_self" >Promise&lt;Appointment[]&gt;</a></code>
 
                         </div>
                 </td>
@@ -616,26 +452,26 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
-                    <a name="findByQueueNumber"></a>
+                    <a name="findAllByUser"></a>
                     <span class="name">
                             <span class="modifier">Async</span>
-                        <span ><b>findByQueueNumber</b></span>
-                        <a href="#findByQueueNumber"><span class="icon ion-ios-link"></span></a>
+                        <span ><b>findAllByUser</b></span>
+                        <a href="#findAllByUser"><span class="icon ion-ios-link"></span></a>
                     </span>
                 </td>
             </tr>
             <tr>
                 <td class="col-md-4">
                         <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>findByQueueNumber(queueNumber: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                    <code>findAllByUser(userId: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
                 </td>
             </tr>
 
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="135"
-                                    class="link-to-prism">src/modules/queue/queue.service.ts:135</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="78"
+                                    class="link-to-prism">src/modules/appointment/appointment.service.ts:78</a></div>
                         </td>
                     </tr>
 
@@ -656,7 +492,76 @@
                                     </thead>
                                     <tbody>
                                         <tr>
-                                                <td>queueNumber</td>
+                                                <td>userId</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="../entitys/Appointment.html" target="_self" >Promise&lt;Appointment[]&gt;</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="findByAppointmentNumber"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>findByAppointmentNumber</b></span>
+                        <a href="#findByAppointmentNumber"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>findByAppointmentNumber(appointmentNumber: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="100"
+                                    class="link-to-prism">src/modules/appointment/appointment.service.ts:100</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>appointmentNumber</td>
                                             <td>
                                                             <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
                                             </td>
@@ -671,145 +576,7 @@
                                 </table>
                             </div>
                         <div class="io-description">
-                            <b>Returns : </b>    <code>unknown</code>
-
-                        </div>
-                            <div class="io-description">
-                                
-                            </div>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    <table class="table table-sm table-bordered">
-        <tbody>
-            <tr>
-                <td class="col-md-4">
-                    <a name="findByStatus"></a>
-                    <span class="name">
-                            <span class="modifier">Async</span>
-                        <span ><b>findByStatus</b></span>
-                        <a href="#findByStatus"><span class="icon ion-ios-link"></span></a>
-                    </span>
-                </td>
-            </tr>
-            <tr>
-                <td class="col-md-4">
-                        <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>findByStatus(status: <a href="../undefineds/QueueStatus.html" target="_self">QueueStatus</a>)</code>
-                </td>
-            </tr>
-
-
-                    <tr>
-                        <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="116"
-                                    class="link-to-prism">src/modules/queue/queue.service.ts:116</a></div>
-                        </td>
-                    </tr>
-
-
-            <tr>
-                <td class="col-md-4">
-
-                            <div class="io-description">
-                                <b>Parameters :</b>
-                                
-                                <table class="params">
-                                    <thead>
-                                        <tr>
-                                            <td>Name</td>
-                                                <td>Type</td>
-                                            <td>Optional</td>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                                <td>status</td>
-                                            <td>
-                                                            <code><a href="../miscellaneous/enumerations.html#QueueStatus" target="_self" >QueueStatus</a></code>
-                                            </td>
-
-                                            <td>
-                                                    No
-                                            </td>
-
-
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        <div class="io-description">
-                            <b>Returns : </b>    <code>unknown</code>
-
-                        </div>
-                            <div class="io-description">
-                                
-                            </div>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    <table class="table table-sm table-bordered">
-        <tbody>
-            <tr>
-                <td class="col-md-4">
-                    <a name="findByStatusWithDetails"></a>
-                    <span class="name">
-                            <span class="modifier">Async</span>
-                        <span ><b>findByStatusWithDetails</b></span>
-                        <a href="#findByStatusWithDetails"><span class="icon ion-ios-link"></span></a>
-                    </span>
-                </td>
-            </tr>
-            <tr>
-                <td class="col-md-4">
-                        <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>findByStatusWithDetails(status: <a href="../undefineds/QueueStatus.html" target="_self">QueueStatus</a>)</code>
-                </td>
-            </tr>
-
-
-                    <tr>
-                        <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="259"
-                                    class="link-to-prism">src/modules/queue/queue.service.ts:259</a></div>
-                        </td>
-                    </tr>
-
-
-            <tr>
-                <td class="col-md-4">
-
-                            <div class="io-description">
-                                <b>Parameters :</b>
-                                
-                                <table class="params">
-                                    <thead>
-                                        <tr>
-                                            <td>Name</td>
-                                                <td>Type</td>
-                                            <td>Optional</td>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                                <td>status</td>
-                                            <td>
-                                                            <code><a href="../miscellaneous/enumerations.html#QueueStatus" target="_self" >QueueStatus</a></code>
-                                            </td>
-
-                                            <td>
-                                                    No
-                                            </td>
-
-
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        <div class="io-description">
-                            <b>Returns : </b>    <code>unknown</code>
+                            <b>Returns : </b>        <code><a href="../entitys/Appointment.html" target="_self" >Promise&lt;Appointment&gt;</a></code>
 
                         </div>
                             <div class="io-description">
@@ -841,8 +608,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="123"
-                                    class="link-to-prism">src/modules/queue/queue.service.ts:123</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="88"
+                                    class="link-to-prism">src/modules/appointment/appointment.service.ts:88</a></div>
                         </td>
                     </tr>
 
@@ -878,7 +645,7 @@
                                 </table>
                             </div>
                         <div class="io-description">
-                            <b>Returns : </b>    <code>unknown</code>
+                            <b>Returns : </b>        <code><a href="../entitys/Appointment.html" target="_self" >Promise&lt;Appointment&gt;</a></code>
 
                         </div>
                             <div class="io-description">
@@ -892,26 +659,26 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
-                    <a name="getCounters"></a>
+                    <a name="generateAllTimeSlots"></a>
                     <span class="name">
-                            <span class="modifier">Async</span>
-                        <span ><b>getCounters</b></span>
-                        <a href="#getCounters"><span class="icon ion-ios-link"></span></a>
+                            <span class="modifier">Private</span>
+                        <span ><b>generateAllTimeSlots</b></span>
+                        <a href="#generateAllTimeSlots"><span class="icon ion-ios-link"></span></a>
                     </span>
                 </td>
             </tr>
             <tr>
                 <td class="col-md-4">
                         <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>getCounters()</code>
+                    <code>generateAllTimeSlots()</code>
                 </td>
             </tr>
 
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="439"
-                                    class="link-to-prism">src/modules/queue/queue.service.ts:439</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="330"
+                                    class="link-to-prism">src/modules/appointment/appointment.service.ts:330</a></div>
                         </td>
                     </tr>
 
@@ -920,7 +687,7 @@
                 <td class="col-md-4">
 
                         <div class="io-description">
-                            <b>Returns : </b>    <code>unknown</code>
+                            <b>Returns : </b>    <code>string[]</code>
 
                         </div>
                 </td>
@@ -931,26 +698,26 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
-                    <a name="getDetailsForMultipleQueues"></a>
+                    <a name="getAppointmentsByDate"></a>
                     <span class="name">
                             <span class="modifier">Async</span>
-                        <span ><b>getDetailsForMultipleQueues</b></span>
-                        <a href="#getDetailsForMultipleQueues"><span class="icon ion-ios-link"></span></a>
+                        <span ><b>getAppointmentsByDate</b></span>
+                        <a href="#getAppointmentsByDate"><span class="icon ion-ios-link"></span></a>
                     </span>
                 </td>
             </tr>
             <tr>
                 <td class="col-md-4">
                         <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>getDetailsForMultipleQueues(queueIds: number[])</code>
+                    <code>getAppointmentsByDate(date: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
                 </td>
             </tr>
 
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="224"
-                                    class="link-to-prism">src/modules/queue/queue.service.ts:224</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="209"
+                                    class="link-to-prism">src/modules/appointment/appointment.service.ts:209</a></div>
                         </td>
                     </tr>
 
@@ -971,9 +738,9 @@
                                     </thead>
                                     <tbody>
                                         <tr>
-                                                <td>queueIds</td>
+                                                <td>date</td>
                                             <td>
-                                                        <code>number[]</code>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
                                             </td>
 
                                             <td>
@@ -986,7 +753,7 @@
                                 </table>
                             </div>
                         <div class="io-description">
-                            <b>Returns : </b>    <code>unknown</code>
+                            <b>Returns : </b>        <code><a href="../entitys/Appointment.html" target="_self" >Promise&lt;Appointment[]&gt;</a></code>
 
                         </div>
                             <div class="io-description">
@@ -1000,26 +767,26 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
-                    <a name="getQueueDetails"></a>
+                    <a name="getAppointmentsByDateRange"></a>
                     <span class="name">
                             <span class="modifier">Async</span>
-                        <span ><b>getQueueDetails</b></span>
-                        <a href="#getQueueDetails"><span class="icon ion-ios-link"></span></a>
+                        <span ><b>getAppointmentsByDateRange</b></span>
+                        <a href="#getAppointmentsByDateRange"><span class="icon ion-ios-link"></span></a>
                     </span>
                 </td>
             </tr>
             <tr>
                 <td class="col-md-4">
                         <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>getQueueDetails(queueId: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                    <code>getAppointmentsByDateRange(startDate: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, endDate: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
                 </td>
             </tr>
 
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="147"
-                                    class="link-to-prism">src/modules/queue/queue.service.ts:147</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="230"
+                                    class="link-to-prism">src/modules/appointment/appointment.service.ts:230</a></div>
                         </td>
                     </tr>
 
@@ -1040,7 +807,196 @@
                                     </thead>
                                     <tbody>
                                         <tr>
-                                                <td>queueId</td>
+                                                <td>startDate</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>endDate</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="../entitys/Appointment.html" target="_self" >Promise&lt;Appointment[]&gt;</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getAppointmentsStats"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>getAppointmentsStats</b></span>
+                        <a href="#getAppointmentsStats"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>getAppointmentsStats()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="253"
+                                    class="link-to-prism">src/modules/appointment/appointment.service.ts:253</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getAvailableSlots"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>getAvailableSlots</b></span>
+                        <a href="#getAvailableSlots"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>getAvailableSlots(date: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="177"
+                                    class="link-to-prism">src/modules/appointment/appointment.service.ts:177</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>date</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;string[]&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="remove"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>remove</b></span>
+                        <a href="#remove"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>remove(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="149"
+                                    class="link-to-prism">src/modules/appointment/appointment.service.ts:149</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>id</td>
                                             <td>
                                                             <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
                                             </td>
@@ -1055,120 +1011,12 @@
                                 </table>
                             </div>
                         <div class="io-description">
-                            <b>Returns : </b>    <code>unknown</code>
+                            <b>Returns : </b>    <code>Promise&lt;void&gt;</code>
 
                         </div>
                             <div class="io-description">
                                 
                             </div>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    <table class="table table-sm table-bordered">
-        <tbody>
-            <tr>
-                <td class="col-md-4">
-                    <a name="getQueuePosition"></a>
-                    <span class="name">
-                            <span class="modifier">Async</span>
-                        <span ><b>getQueuePosition</b></span>
-                        <a href="#getQueuePosition"><span class="icon ion-ios-link"></span></a>
-                    </span>
-                </td>
-            </tr>
-            <tr>
-                <td class="col-md-4">
-                        <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>getQueuePosition(queueId: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
-                </td>
-            </tr>
-
-
-                    <tr>
-                        <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="205"
-                                    class="link-to-prism">src/modules/queue/queue.service.ts:205</a></div>
-                        </td>
-                    </tr>
-
-
-            <tr>
-                <td class="col-md-4">
-
-                            <div class="io-description">
-                                <b>Parameters :</b>
-                                
-                                <table class="params">
-                                    <thead>
-                                        <tr>
-                                            <td>Name</td>
-                                                <td>Type</td>
-                                            <td>Optional</td>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                                <td>queueId</td>
-                                            <td>
-                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
-                                            </td>
-
-                                            <td>
-                                                    No
-                                            </td>
-
-
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        <div class="io-description">
-                            <b>Returns : </b>    <code>unknown</code>
-
-                        </div>
-                            <div class="io-description">
-                                
-                            </div>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    <table class="table table-sm table-bordered">
-        <tbody>
-            <tr>
-                <td class="col-md-4">
-                    <a name="getStats"></a>
-                    <span class="name">
-                            <span class="modifier">Async</span>
-                        <span ><b>getStats</b></span>
-                        <a href="#getStats"><span class="icon ion-ios-link"></span></a>
-                    </span>
-                </td>
-            </tr>
-            <tr>
-                <td class="col-md-4">
-                        <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>getStats()</code>
-                </td>
-            </tr>
-
-
-                    <tr>
-                        <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="386"
-                                    class="link-to-prism">src/modules/queue/queue.service.ts:386</a></div>
-                        </td>
-                    </tr>
-
-
-            <tr>
-                <td class="col-md-4">
-
-                        <div class="io-description">
-                            <b>Returns : </b>    <code>unknown</code>
-
-                        </div>
                 </td>
             </tr>
         </tbody>
@@ -1188,15 +1036,15 @@
             <tr>
                 <td class="col-md-4">
                         <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>update(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, updateQueueDto: <a href="../classes/UpdateQueueDto.html" target="_self">UpdateQueueDto</a>)</code>
+                    <code>update(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, updateAppointmentDto: <a href="../classes/UpdateAppointmentDto.html" target="_self">UpdateAppointmentDto</a>)</code>
                 </td>
             </tr>
 
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="163"
-                                    class="link-to-prism">src/modules/queue/queue.service.ts:163</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="114"
+                                    class="link-to-prism">src/modules/appointment/appointment.service.ts:114</a></div>
                         </td>
                     </tr>
 
@@ -1229,9 +1077,9 @@
 
                                         </tr>
                                         <tr>
-                                                <td>updateQueueDto</td>
+                                                <td>updateAppointmentDto</td>
                                             <td>
-                                                            <code><a href="../classes/UpdateQueueDto.html" target="_self" >UpdateQueueDto</a></code>
+                                                            <code><a href="../classes/UpdateAppointmentDto.html" target="_self" >UpdateAppointmentDto</a></code>
                                             </td>
 
                                             <td>
@@ -1244,7 +1092,88 @@
                                 </table>
                             </div>
                         <div class="io-description">
-                            <b>Returns : </b>    <code>unknown</code>
+                            <b>Returns : </b>        <code><a href="../entitys/Appointment.html" target="_self" >Promise&lt;Appointment&gt;</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="updateStatus"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>updateStatus</b></span>
+                        <a href="#updateStatus"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>updateStatus(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, status: <a href="../undefineds/AppointmentStatus.html" target="_self">AppointmentStatus</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="162"
+                                    class="link-to-prism">src/modules/appointment/appointment.service.ts:162</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>id</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>status</td>
+                                            <td>
+                                                            <code><a href="../miscellaneous/enumerations.html#AppointmentStatus" target="_self" >AppointmentStatus</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="../entitys/Appointment.html" target="_self" >Promise&lt;Appointment&gt;</a></code>
 
                         </div>
                             <div class="io-description">
@@ -1263,453 +1192,356 @@
         <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import {
   Injectable,
   NotFoundException,
-  Inject,
-  forwardRef,
+  BadRequestException,
 } from &#x27;@nestjs/common&#x27;;
 import { InjectRepository } from &#x27;@nestjs/typeorm&#x27;;
-import { Repository, LessThanOrEqual, In } from &#x27;typeorm&#x27;;
-import { Queue, QueueStatus } from &#x27;./entities/queue.entity&#x27;;
-import { QueueDetails } from &#x27;./entities/queue-details.entity&#x27;;
-import {
-  Counter,
-  //CounterStatus, //Uncomment if you need to use CounterStatus
-} from &#x27;../counter/entities/counter.entity&#x27;;
-import { CreateQueueDto } from &#x27;./dto/create-queue.dto&#x27;;
-import { UpdateQueueDto } from &#x27;./dto/update-queue.dto&#x27;;
-import { QueueGateway } from &#x27;./queue.gateway&#x27;;
+import { Repository, Between } from &#x27;typeorm&#x27;;
+import { Appointment, AppointmentStatus } from &#x27;./entities/appointment.entity&#x27;;
+import { CreateAppointmentDto } from &#x27;./dto/create-appointment.dto&#x27;;
+import { UpdateAppointmentDto } from &#x27;./dto/update-appointment.dto&#x27;;
+import { format, addDays, parseISO, isValid } from &#x27;date-fns&#x27;;
 
 @Injectable()
-export class QueueService {
+export class AppointmentService {
   constructor(
-    @InjectRepository(Queue)
-    private queueRepository: Repository&lt;Queue&gt;,
-    @InjectRepository(QueueDetails)
-    private queueDetailsRepository: Repository&lt;QueueDetails&gt;,
-    @InjectRepository(Counter)
-    private counterRepository: Repository&lt;Counter&gt;,
-    @Inject(forwardRef(() &#x3D;&gt; QueueGateway))
-    private queueGateway: QueueGateway,
+    @InjectRepository(Appointment)
+    private appointmentRepository: Repository&lt;Appointment&gt;,
   ) {}
 
-  async create(createQueueDto: CreateQueueDto) {
-    // Generate a queue number based on date and sequence
-    const today &#x3D; new Date();
-    const dateStr &#x3D; &#x60;${today.getFullYear()}${String(today.getMonth() + 1).padStart(2, &#x27;0&#x27;)}${String(today.getDate()).padStart(2, &#x27;0&#x27;)}&#x60;;
-
-    // Get the count of queues created today to determine the sequence number
-    const todayStart &#x3D; new Date(today);
-    todayStart.setHours(0, 0, 0, 0);
-
-    const todayCount &#x3D; await this.queueRepository.count({
-      where: {
-        createdAt: LessThanOrEqual(today),
-      },
-    });
-
-    // Format the queue number: YYYYMMDD-XXXX where XXXX is the sequence number
-    const queueNumber &#x3D; &#x60;${dateStr}-${String(todayCount + 1).padStart(4, &#x27;0&#x27;)}&#x60;;
-
-    // Create and save the queue
-    const queue &#x3D; this.queueRepository.create({
-      queueNumber,
-      status: QueueStatus.PENDING,
-      estimatedWaitTime: 15 * (todayCount + 1), // Simple estimation: 15 minutes per person
-    });
-
-    const savedQueue &#x3D; await this.queueRepository.save(queue);
-
-    // Simplify the user ID handling - trust what the controller provided
-    const userId &#x3D;
-      typeof createQueueDto.userId &#x3D;&#x3D;&#x3D; &#x27;number&#x27;
-        ? createQueueDto.userId
-        : typeof createQueueDto.userId &#x3D;&#x3D;&#x3D; &#x27;string&#x27; &amp;&amp;
-            createQueueDto.userId !&#x3D;&#x3D; &#x27;guest&#x27;
-          ? Number(createQueueDto.userId)
-          : undefined;
-
-    const isGuest &#x3D; createQueueDto.isGuest || !userId;
-
-    // Log for debugging
-    console.log(&#x27;Creating queue details with:&#x27;, {
-      providedUserId: createQueueDto.userId,
-      parsedUserId: userId,
-      isGuest,
-    });
-
-    // Create queue details using the simplified userId
-    const queueDetails &#x3D; this.queueDetailsRepository.create({
-      queueId: savedQueue.id,
-      userId: userId, // Use the simplified userId
-      firstName: createQueueDto.firstName,
-      lastName: createQueueDto.lastName,
-      middleInitial: createQueueDto.middleInitial,
-      address: createQueueDto.address,
-      phoneNumber: createQueueDto.phoneNumber,
-      reasonOfVisit: createQueueDto.reasonOfVisit,
-      appointmentType: createQueueDto.appointmentType,
-      isGuest: isGuest,
-    });
-
-    // Set the queue relation
-    queueDetails.queue &#x3D; savedQueue;
-
-    await this.queueDetailsRepository.save(queueDetails);
-
-    // Get queue position
-    const position &#x3D; await this.getQueuePosition(savedQueue.id);
-
-    const result &#x3D; { queue: savedQueue, details: queueDetails, position };
-
-    // Notify all clients that a new queue has been created
-    this.queueGateway.server.emit(&#x27;queueListUpdate&#x27;, {
-      action: &#x27;created&#x27;,
-      queueId: savedQueue.id,
-    });
-
-    return result;
-  }
-
-  async findAll() {
-    return await this.queueRepository.find({
-      order: { createdAt: &#x27;ASC&#x27; },
-    });
-  }
-
-  async findByStatus(status: QueueStatus) {
-    return await this.queueRepository.find({
-      where: { status },
-      order: { createdAt: &#x27;ASC&#x27; },
-    });
-  }
-
-  async findOne(id: number) {
-    const queue &#x3D; await this.queueRepository.findOne({
-      where: { id },
-    });
-
-    if (!queue) {
-      throw new NotFoundException(&#x60;Queue #${id} not found&#x60;);
-    }
-
-    return queue;
-  }
-
-  async findByQueueNumber(queueNumber: string) {
-    const queue &#x3D; await this.queueRepository.findOne({
-      where: { queueNumber },
-    });
-
-    if (!queue) {
-      throw new NotFoundException(&#x60;Queue #${queueNumber} not found&#x60;);
-    }
-
-    return queue;
-  }
-
-  async getQueueDetails(queueId: number) {
-    const queue &#x3D; await this.findOne(queueId);
-
-    const details &#x3D; await this.queueDetailsRepository.findOne({
-      where: { queueId },
-      relations: [&#x27;user&#x27;],
-    });
-
-    if (!details) {
-      throw new NotFoundException(&#x60;Details for queue #${queueId} not found&#x60;);
-    }
-
-    const position &#x3D; await this.getQueuePosition(queueId);
-
-    return { queue, details, position };
-  }
-  async update(id: number, updateQueueDto: UpdateQueueDto) {
-    console.log(&#x60;Updating queue ${id} with:&#x60;, updateQueueDto);
-
+  async create(
+    createAppointmentDto: CreateAppointmentDto,
+  ): Promise&lt;Appointment&gt; {
     try {
-      // Find the queue
-      const queue &#x3D; await this.findOne(id);
-      console.log(&#x27;Found queue:&#x27;, queue);
-
-      if (updateQueueDto.status) {
-        // Log the status change
-        console.log(
-          &#x60;Changing status from ${queue.status} to ${updateQueueDto.status}&#x60;,
-        );
-        queue.status &#x3D; updateQueueDto.status;
-
-        // If completed, set completion time
-        if (updateQueueDto.status &#x3D;&#x3D;&#x3D; QueueStatus.COMPLETED) {
-          queue.completedAt &#x3D; new Date();
-        }
+      // Check date validity
+      const date &#x3D; parseISO(createAppointmentDto.appointmentDate);
+      if (!isValid(date)) {
+        throw new BadRequestException(&#x27;Invalid appointment date&#x27;);
       }
 
-      if (updateQueueDto.counterNumber) {
-        queue.counterNumber &#x3D; updateQueueDto.counterNumber;
+      // Check if date is a weekend
+      const dayOfWeek &#x3D; date.getDay();
+      if (dayOfWeek &#x3D;&#x3D;&#x3D; 0 || dayOfWeek &#x3D;&#x3D;&#x3D; 6) {
+        throw new BadRequestException(&#x27;Cannot book appointments on weekends&#x27;);
       }
 
-      // Save the updated queue
-      const updatedQueue &#x3D; await this.queueRepository.save(queue);
-      console.log(&#x27;Queue updated successfully:&#x27;, updatedQueue);
+      // Check if date is in the past
+      const today &#x3D; new Date();
+      today.setHours(0, 0, 0, 0);
+      if (date &lt; today) {
+        throw new BadRequestException(&#x27;Cannot book appointments in the past&#x27;);
+      }
 
-      // Notify clients about the queue update
-      this.queueGateway.notifyQueueUpdate(id, {
-        action: &#x27;updated&#x27;,
-        queue: updatedQueue,
+      // Generate appointment number with date prefix
+      const dateStr &#x3D; format(date, &#x27;yyyyMMdd&#x27;);
+      const randomSuffix &#x3D; Math.floor(1000 + Math.random() * 9000); // 4-digit random number
+      const appointmentNumber &#x3D; &#x60;APPT-${dateStr}-${randomSuffix}&#x60;;
+
+      // Check if time slot is available
+      await this.checkTimeSlotAvailability(
+        createAppointmentDto.appointmentDate,
+        createAppointmentDto.appointmentTime,
+      );
+
+      const appointment &#x3D; this.appointmentRepository.create({
+        ...createAppointmentDto,
+        appointmentNumber,
       });
 
-      return updatedQueue;
+      const savedAppointment &#x3D;
+        await this.appointmentRepository.save(appointment);
+      console.log(&#x27;Created new appointment:&#x27;, savedAppointment);
+      return savedAppointment;
     } catch (error) {
-      console.error(&#x60;Error updating queue ${id}:&#x60;, error);
+      console.error(&#x27;Error creating appointment:&#x27;, error);
       throw error;
     }
   }
 
-  async getQueuePosition(queueId: number) {
-    const queue &#x3D; await this.findOne(queueId);
-
-    // If the queue is not pending, it&#x27;s not in line
-    if (queue.status !&#x3D;&#x3D; QueueStatus.PENDING) {
-      return 0;
-    }
-
-    // Count how many pending queues are ahead of this one
-    const position &#x3D; await this.queueRepository.count({
-      where: {
-        status: QueueStatus.PENDING,
-        createdAt: LessThanOrEqual(queue.createdAt),
-        id: LessThanOrEqual(queueId), // Break ties using ID
+  async findAll(): Promise&lt;Appointment[]&gt; {
+    return this.appointmentRepository.find({
+      order: {
+        appointmentDate: &#x27;ASC&#x27;,
+        appointmentTime: &#x27;ASC&#x27;,
       },
     });
-
-    return position;
-  }
-  async getDetailsForMultipleQueues(queueIds: number[]) {
-    console.log(&#x27;Getting details for queue IDs:&#x27;, queueIds);
-
-    if (!queueIds || queueIds.length &#x3D;&#x3D;&#x3D; 0) {
-      return {};
-    }
-
-    const detailsMap &#x3D; {};
-
-    try {
-      // Fetch all queue details in a single query for better performance
-      const allDetails &#x3D; await this.queueDetailsRepository.find({
-        where: {
-          queueId: In(queueIds),
-        },
-        relations: [&#x27;user&#x27;],
-      });
-
-      console.log(
-        &#x60;Found ${allDetails.length} details for ${queueIds.length} queues&#x60;,
-      );
-
-      // Organize by queueId for easy lookup
-      allDetails.forEach((detail) &#x3D;&gt; {
-        detailsMap[detail.queueId] &#x3D; detail;
-      });
-
-      return detailsMap;
-    } catch (error) {
-      console.error(&#x27;Error fetching details for multiple queues:&#x27;, error);
-      // Return empty details rather than failing
-      return {};
-    }
   }
 
-  async findByStatusWithDetails(status: QueueStatus) {
-    console.log(&#x60;Finding queues with status: ${status} and their details&#x60;);
-
-    try {
-      // First get all queues with this status
-      const queues &#x3D; await this.queueRepository.find({
-        where: { status },
-        order: { createdAt: &#x27;ASC&#x27; },
-      });
-
-      console.log(&#x60;Found ${queues.length} queues with status ${status}&#x60;);
-
-      if (queues.length &#x3D;&#x3D;&#x3D; 0) {
-        return [];
-      }
-
-      // Get all queue IDs
-      const queueIds &#x3D; queues.map((queue) &#x3D;&gt; queue.id);
-
-      // Fetch details for all these queues
-      const detailsMap &#x3D; await this.getDetailsForMultipleQueues(queueIds);
-
-      // Combine queue and details data
-      const result &#x3D; queues.map((queue) &#x3D;&gt; {
-        return {
-          ...queue,
-          details: detailsMap[queue.id] || null,
-        };
-      });
-
-      console.log(&#x60;Returning ${result.length} queues with details&#x60;);
-      return result;
-    } catch (error: unknown) {
-      // Convert error to string BEFORE logging to avoid unsafe assignment
-      const errorString &#x3D;
-        error instanceof Error
-          ? &#x60;Error: ${error.message}&#x60;
-          : typeof error &#x3D;&#x3D;&#x3D; &#x27;string&#x27;
-            ? error
-            : &#x27;Unknown error occurred&#x27;;
-
-      // Log string representation instead of raw error object
-      console.error(&#x27;Error in findByStatusWithDetails:&#x27;, errorString);
-
-      // Throw appropriate error based on type
-      if (error instanceof Error) {
-        throw new Error(&#x60;Failed to get queue details: ${error.message}&#x60;);
-      } else if (typeof error &#x3D;&#x3D;&#x3D; &#x27;string&#x27;) {
-        throw new Error(&#x60;Failed to get queue details: ${error}&#x60;);
-      } else {
-        throw new Error(
-          &#x27;Failed to get queue details: An unknown error occurred&#x27;,
-        );
-      }
-    }
-  }
-
-  async callNext(counterId: number) {
-    const counter &#x3D; await this.counterRepository.findOne({
-      where: { id: counterId },
-      relations: [&#x27;currentQueue&#x27;],
-    });
-
-    if (!counter) {
-      throw new NotFoundException(&#x60;Counter #${counterId} not found&#x60;);
-    }
-
-    // Mark current queue as completed if exists
-    if (counter.currentQueue) {
-      counter.currentQueue.status &#x3D; QueueStatus.COMPLETED;
-      counter.currentQueue.completedAt &#x3D; new Date();
-      await this.queueRepository.save(counter.currentQueue);
-    }
-
-    // Find the next pending queue
-    const nextQueue &#x3D; await this.queueRepository.findOne({
-      where: { status: QueueStatus.PENDING },
-      order: { createdAt: &#x27;ASC&#x27; },
-    });
-
-    if (!nextQueue) {
-      counter.currentQueueId &#x3D; null;
-      counter.currentQueue &#x3D; null;
-      await this.counterRepository.save(counter);
-      return { counter, message: &#x27;No more queues waiting&#x27; };
-    }
-
-    // Update the next queue
-    nextQueue.status &#x3D; QueueStatus.SERVING;
-    nextQueue.counterNumber &#x3D; counter.name;
-    await this.queueRepository.save(nextQueue);
-
-    // Update counter
-    counter.currentQueueId &#x3D; nextQueue.id;
-    counter.currentQueue &#x3D; nextQueue;
-    await this.counterRepository.save(counter);
-
-    // Get associated details
-    const details &#x3D; await this.queueDetailsRepository.findOne({
-      where: { queueId: nextQueue.id },
-    });
-
-    const result &#x3D; {
-      counter,
-      queue: nextQueue,
-      details,
-      message: &#x27;Next queue called successfully&#x27;,
-    };
-
-    if (nextQueue) {
-      // Notify the specific queue room that it&#x27;s their turn
-      this.queueGateway.notifyQueueUpdate(nextQueue.id, {
-        action: &#x27;called&#x27;,
-        counterName: counter.name,
-        counterId: counter.id,
-      });
-    }
-
-    // Notify counter clients
-    this.queueGateway.notifyCounterUpdate(counterId, {
-      action: &#x27;nextCalled&#x27;,
-      ...result,
-    });
-
-    return result;
-  }
-
-  async getStats() {
-    const [
-      pendingCount,
-      servingCount,
-      completedCount,
-      cancelledCount,
-      totalCount,
-    ] &#x3D; await Promise.all([
-      this.queueRepository.count({ where: { status: QueueStatus.PENDING } }),
-      this.queueRepository.count({ where: { status: QueueStatus.SERVING } }),
-      this.queueRepository.count({ where: { status: QueueStatus.COMPLETED } }),
-      this.queueRepository.count({ where: { status: QueueStatus.CANCELLED } }),
-      this.queueRepository.count(),
-    ]);
-
-    // Calculate average wait time
-    const completedQueues &#x3D; await this.queueRepository.find({
-      where: {
-        status: QueueStatus.COMPLETED,
-        completedAt: LessThanOrEqual(new Date()),
+  async findAllByUser(userId: number): Promise&lt;Appointment[]&gt; {
+    return this.appointmentRepository.find({
+      where: { userId },
+      order: {
+        appointmentDate: &#x27;DESC&#x27;,
+        appointmentTime: &#x27;ASC&#x27;,
       },
-      select: [&#x27;createdAt&#x27;, &#x27;completedAt&#x27;],
-    });
-
-    let averageWaitTime &#x3D; 0;
-    if (completedQueues.length &gt; 0) {
-      const totalWaitTimeMs &#x3D; completedQueues.reduce((total, queue) &#x3D;&gt; {
-        return (
-          total + (queue.completedAt.getTime() - queue.createdAt.getTime())
-        );
-      }, 0);
-      averageWaitTime &#x3D; Math.floor(
-        totalWaitTimeMs / completedQueues.length / 60000,
-      ); // Convert to minutes
-    }
-
-    return {
-      pending: pendingCount,
-      serving: servingCount,
-      completed: completedCount,
-      cancelled: cancelledCount,
-      total: totalCount,
-      averageWaitTime,
-    };
-  }
-
-  // Add a counter
-  async addCounter(name: string) {
-    const counter &#x3D; this.counterRepository.create({ name });
-    return await this.counterRepository.save(counter);
-  }
-
-  // Get all counters
-  async getCounters() {
-    return await this.counterRepository.find({
-      relations: [&#x27;currentQueue&#x27;],
     });
   }
 
-  // Check if queue exists
-  async checkExists(id: number): Promise&lt;boolean&gt; {
-    const queue &#x3D; await this.queueRepository.findOne({
+  async findOne(id: number): Promise&lt;Appointment&gt; {
+    const appointment &#x3D; await this.appointmentRepository.findOne({
       where: { id },
     });
-    return !!queue;
+
+    if (!appointment) {
+      throw new NotFoundException(&#x60;Appointment with ID ${id} not found&#x60;);
+    }
+
+    return appointment;
+  }
+
+  async findByAppointmentNumber(
+    appointmentNumber: string,
+  ): Promise&lt;Appointment&gt; {
+    const appointment &#x3D; await this.appointmentRepository.findOne({
+      where: { appointmentNumber },
+    });
+
+    if (!appointment) {
+      throw new NotFoundException(&#x60;Appointment ${appointmentNumber} not found&#x60;);
+    }
+
+    return appointment;
+  }
+
+  async update(
+    id: number,
+    updateAppointmentDto: UpdateAppointmentDto,
+  ): Promise&lt;Appointment&gt; {
+    try {
+      const appointment &#x3D; await this.findOne(id);
+
+      // If changing date or time, check availability
+      if (
+        updateAppointmentDto.appointmentDate ||
+        updateAppointmentDto.appointmentTime
+      ) {
+        const newDate &#x3D;
+          updateAppointmentDto.appointmentDate || appointment.appointmentDate;
+        const newTime &#x3D;
+          updateAppointmentDto.appointmentTime || appointment.appointmentTime;
+
+        if (
+          newDate !&#x3D;&#x3D; appointment.appointmentDate ||
+          newTime !&#x3D;&#x3D; appointment.appointmentTime
+        ) {
+          await this.checkTimeSlotAvailability(newDate, newTime);
+        }
+      }
+
+      // Update the appointment
+      const updated &#x3D; Object.assign(appointment, updateAppointmentDto);
+      console.log(&#x60;Updated appointment ${id}:&#x60;, updated);
+      return this.appointmentRepository.save(updated);
+    } catch (error) {
+      console.error(&#x60;Error updating appointment ${id}:&#x60;, error);
+      throw error;
+    }
+  }
+
+  async remove(id: number): Promise&lt;void&gt; {
+    try {
+      const result &#x3D; await this.appointmentRepository.delete(id);
+      if (result.affected &#x3D;&#x3D;&#x3D; 0) {
+        throw new NotFoundException(&#x60;Appointment with ID ${id} not found&#x60;);
+      }
+      console.log(&#x60;Deleted appointment ${id}&#x60;);
+    } catch (error) {
+      console.error(&#x60;Error deleting appointment ${id}:&#x60;, error);
+      throw error;
+    }
+  }
+
+  async updateStatus(
+    id: number,
+    status: AppointmentStatus,
+  ): Promise&lt;Appointment&gt; {
+    try {
+      const appointment &#x3D; await this.findOne(id);
+      appointment.status &#x3D; status;
+      console.log(&#x60;Updated status for appointment ${id} to ${status}&#x60;);
+      return this.appointmentRepository.save(appointment);
+    } catch (error) {
+      console.error(&#x60;Error updating status for appointment ${id}:&#x60;, error);
+      throw error;
+    }
+  }
+
+  async getAvailableSlots(date: string): Promise&lt;string[]&gt; {
+    try {
+      // Parse the date
+      const parsedDate &#x3D; parseISO(date);
+      if (!isValid(parsedDate)) {
+        throw new BadRequestException(&#x27;Invalid date format&#x27;);
+      }
+
+      // Get all appointments for the specified date
+      const existingAppointments &#x3D; await this.appointmentRepository.find({
+        where: {
+          appointmentDate: date,
+          status: AppointmentStatus.PENDING || AppointmentStatus.CONFIRMED,
+        },
+        select: [&#x27;appointmentTime&#x27;],
+      });
+
+      const bookedSlots &#x3D; existingAppointments.map(
+        (app) &#x3D;&gt; app.appointmentTime,
+      );
+
+      // Generate all time slots (8:00 AM - 5:00 PM with 30min intervals)
+      const allTimeSlots &#x3D; this.generateAllTimeSlots();
+
+      // Return only available slots
+      return allTimeSlots.filter((slot) &#x3D;&gt; !bookedSlots.includes(slot));
+    } catch (error) {
+      console.error(&#x60;Error getting available slots for date ${date}:&#x60;, error);
+      throw error;
+    }
+  }
+
+  async getAppointmentsByDate(date: string): Promise&lt;Appointment[]&gt; {
+    try {
+      const parsedDate &#x3D; parseISO(date);
+      if (!isValid(parsedDate)) {
+        throw new BadRequestException(&#x27;Invalid date format&#x27;);
+      }
+
+      return this.appointmentRepository.find({
+        where: {
+          appointmentDate: date,
+        },
+        order: {
+          appointmentTime: &#x27;ASC&#x27;,
+        },
+      });
+    } catch (error) {
+      console.error(&#x60;Error getting appointments for date ${date}:&#x60;, error);
+      throw error;
+    }
+  }
+
+  async getAppointmentsByDateRange(
+    startDate: string,
+    endDate: string,
+  ): Promise&lt;Appointment[]&gt; {
+    try {
+      return this.appointmentRepository.find({
+        where: {
+          appointmentDate: Between(startDate, endDate),
+        },
+        order: {
+          appointmentDate: &#x27;ASC&#x27;,
+          appointmentTime: &#x27;ASC&#x27;,
+        },
+      });
+    } catch (error) {
+      console.error(
+        &#x60;Error getting appointments in range ${startDate} to ${endDate}:&#x60;,
+        error,
+      );
+      throw error;
+    }
+  }
+
+  async getAppointmentsStats() {
+    try {
+      const today &#x3D; new Date();
+      today.setHours(0, 0, 0, 0);
+
+      const tomorrow &#x3D; addDays(today, 1);
+      tomorrow.setHours(0, 0, 0, 0);
+
+      // Get counts for different statuses
+      const [
+        pendingCount,
+        confirmedCount,
+        completedCount,
+        cancelledCount,
+        totalCount,
+      ] &#x3D; await Promise.all([
+        this.appointmentRepository.count({
+          where: { status: AppointmentStatus.PENDING },
+        }),
+        this.appointmentRepository.count({
+          where: { status: AppointmentStatus.CONFIRMED },
+        }),
+        this.appointmentRepository.count({
+          where: { status: AppointmentStatus.COMPLETED },
+        }),
+        this.appointmentRepository.count({
+          where: { status: AppointmentStatus.CANCELLED },
+        }),
+        this.appointmentRepository.count(),
+      ]);
+
+      // Get today&#x27;s appointments
+      const todayAppointments &#x3D; await this.appointmentRepository.count({
+        where: {
+          appointmentDate: format(today, &#x27;yyyy-MM-dd&#x27;),
+        },
+      });
+
+      return {
+        pending: pendingCount,
+        confirmed: confirmedCount,
+        completed: completedCount,
+        cancelled: cancelledCount,
+        total: totalCount,
+        today: todayAppointments,
+      };
+    } catch (error) {
+      console.error(&#x27;Error getting appointment stats:&#x27;, error);
+      throw error;
+    }
+  }
+
+  private async checkTimeSlotAvailability(
+    date: string,
+    time: string,
+  ): Promise&lt;void&gt; {
+    try {
+      // Check if time slot is already booked
+      const existingAppointment &#x3D; await this.appointmentRepository.findOne({
+        where: {
+          appointmentDate: date,
+          appointmentTime: time,
+          status: AppointmentStatus.PENDING || AppointmentStatus.CONFIRMED,
+        },
+      });
+
+      if (existingAppointment) {
+        throw new BadRequestException(&#x27;This time slot is already booked&#x27;);
+      }
+    } catch (error) {
+      console.error(
+        &#x60;Error checking time slot availability for ${date} at ${time}:&#x60;,
+        error,
+      );
+      throw error;
+    }
+  }
+  private generateAllTimeSlots(): string[] {
+    const slots: string[] &#x3D; [];
+    let hour &#x3D; 8;
+    let minute &#x3D; 0;
+
+    while (hour &lt; 17) {
+      const startHour &#x3D; hour &#x3D;&#x3D;&#x3D; 12 ? 12 : hour % 12;
+      const startAmPm &#x3D; hour &lt; 12 ? &#x27;AM&#x27; : &#x27;PM&#x27;;
+      const startTime &#x3D; &#x60;${startHour}:${minute &#x3D;&#x3D;&#x3D; 0 ? &#x27;00&#x27; : &#x27;30&#x27;} ${startAmPm}&#x60;;
+
+      minute +&#x3D; 30;
+      if (minute &#x3D;&#x3D;&#x3D; 60) {
+        minute &#x3D; 0;
+        hour +&#x3D; 1;
+      }
+
+      const endHour &#x3D; hour &#x3D;&#x3D;&#x3D; 12 ? 12 : hour % 12;
+      const endAmPm &#x3D; hour &lt; 12 ? &#x27;AM&#x27; : &#x27;PM&#x27;;
+      const endTime &#x3D; &#x60;${endHour}:${minute &#x3D;&#x3D;&#x3D; 0 ? &#x27;00&#x27; : &#x27;30&#x27;} ${endAmPm}&#x60;;
+
+      slots.push(&#x60;${startTime} - ${endTime}&#x60;);
+    }
+
+    return slots;
   }
 }
 </code></pre>
@@ -1755,7 +1587,7 @@ export class QueueService {
        <script>
             var COMPODOC_CURRENT_PAGE_DEPTH = 1;
             var COMPODOC_CURRENT_PAGE_CONTEXT = 'injectable';
-            var COMPODOC_CURRENT_PAGE_URL = 'QueueService.html';
+            var COMPODOC_CURRENT_PAGE_URL = 'AppointmentService.html';
             var MAX_SEARCH_RESULTS = 15;
        </script>
 

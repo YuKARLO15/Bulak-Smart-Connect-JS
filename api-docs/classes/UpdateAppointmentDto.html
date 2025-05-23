@@ -79,7 +79,7 @@
                    <compodoc-menu mode="normal"></compodoc-menu>
                </div>
                <!-- START CONTENT -->
-               <div class="content interface">
+               <div class="content class">
                    <div class="content-data">
 
 
@@ -93,12 +93,9 @@
 
 
 
-
 <ol class="breadcrumb">
-  <li class="breadcrumb-item">Interfaces</li>
-  <li class="breadcrumb-item"
-  >
-  RequestWithUser</li>
+  <li class="breadcrumb-item">Classes</li>
+  <li class="breadcrumb-item" >UpdateAppointmentDto</li>
 </ol>
 
 <ul class="nav nav-tabs" role="tablist">
@@ -122,94 +119,121 @@
             <h3>File</h3>
         </p>
         <p class="comment">
-            <code>src/auth/decorators/user.decorator.ts</code>
+            <code>src/modules/appointment/dto/update-appointment.dto.ts</code>
         </p>
 
 
 
+            <p class="comment">
+                <h3>Extends</h3>
+            </p>
+            <p class="comment">
+                            <code><a href="../classes/CreateAppointmentDto.html" target="_self" >PartialType(CreateAppointmentDto)</a></code>
+            </p>
 
-        <section data-compodoc="block-index">
-            <h3 id="index">Index</h3>
-            <table class="table table-sm table-bordered index-table">
-                <tbody>
-                    <tr>
-                        <td class="col-md-4">
-                            <h6><b>Properties</b></h6>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="col-md-4">
-                            <ul class="index-list">
-                                <li>
-                                        <a href="#user" 
->
-                                            user
-                                        </a>
-                                </li>
-                            </ul>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </section>
 
+
+            <section data-compodoc="block-index">
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier"></span>
+                                    <span class="modifier"></span>
+                                    <span class="modifier">Optional</span>
+                                <a href="#status" >status</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
 
 
             <section data-compodoc="block-properties">
-                <h3 id="inputs">Properties</h3>
-                    <table class="table table-sm table-bordered">
-                        <tbody>
-                                <tr>
-                                    <td class="col-md-4">
-                                        <a name="user"></a>
-                                        <span class="name "><b>user</b>
-                                            <a href="#user">
-                                                <span class="icon ion-ios-link"></span>
-                                            </a>
-                                        </span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="col-md-4">
-                                        <code>user:     <code>Record&lt;string | &gt;</code>
-</code>
-                                    </td>
-                                </tr>
+    
+    <h3 id="inputs">
+        Properties
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="status"></a>
+                    <span class="name">
+                            <span class="modifier"></span>
+                            <span class="modifier"></span>
+                            <span class="modifier">Optional</span>
+                        <span ><b>status</b></span>
+                        <a href="#status"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../miscellaneous/enumerations.html#AppointmentStatus" target="_self" >AppointmentStatus</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <b>Decorators : </b>
+                        <br />
+                        <code>
+                            @IsOptional()<br />@IsEnum(AppointmentStatus)<br />
+                        </code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="9" class="link-to-prism">src/modules/appointment/dto/update-appointment.dto.ts:9</a></div>
+                        </td>
+                    </tr>
 
 
-                                    <tr>
-                                        <td class="col-md-4">
-                                            <i>Type : </i>    <code>Record&lt;string | &gt;</code>
-
-                                        </td>
-                                    </tr>
+        </tbody>
+    </table>
+</section>
 
 
 
 
 
-                        </tbody>
-                    </table>
-            </section>
+
+
     </div>
 
 
     <div class="tab-pane fade  tab-source-code" id="source">
-        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { createParamDecorator, ExecutionContext } from &#x27;@nestjs/common&#x27;;
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { PartialType } from &#x27;@nestjs/mapped-types&#x27;;
+import { IsOptional, IsEnum } from &#x27;class-validator&#x27;;
+import { CreateAppointmentDto } from &#x27;./create-appointment.dto&#x27;;
+import { AppointmentStatus } from &#x27;../entities/appointment.entity&#x27;;
 
-interface RequestWithUser {
-  user: Record&lt;string, unknown&gt;;
+export class UpdateAppointmentDto extends PartialType(CreateAppointmentDto) {
+  @IsOptional()
+  @IsEnum(AppointmentStatus)
+  status?: AppointmentStatus;
 }
-
-export const User &#x3D; createParamDecorator(
-  (data: unknown, ctx: ExecutionContext) &#x3D;&gt; {
-    const request &#x3D; ctx.switchToHttp().getRequest&lt;RequestWithUser&gt;();
-    return request.user;
-  },
-);
 </code></pre>
     </div>
 </div>
+
 
 
 
@@ -243,8 +267,8 @@ export const User &#x3D; createParamDecorator(
 
        <script>
             var COMPODOC_CURRENT_PAGE_DEPTH = 1;
-            var COMPODOC_CURRENT_PAGE_CONTEXT = 'interface';
-            var COMPODOC_CURRENT_PAGE_URL = 'RequestWithUser-1.html';
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'class';
+            var COMPODOC_CURRENT_PAGE_URL = 'UpdateAppointmentDto.html';
             var MAX_SEARCH_RESULTS = 15;
        </script>
 

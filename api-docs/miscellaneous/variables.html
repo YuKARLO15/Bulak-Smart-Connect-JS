@@ -120,6 +120,9 @@
                         <li>
                             <a href="#ROLES_KEY" title="src/auth/decorators/roles.decorator.ts" ><b>ROLES_KEY</b>&nbsp;&nbsp;&nbsp;(src/.../roles.decorator.ts)</a>
                         </li>
+                        <li>
+                            <a href="#User" title="src/auth/decorators/user.decorator.ts" ><b>User</b>&nbsp;&nbsp;&nbsp;(src/.../user.decorator.ts)</a>
+                        </li>
                     </ul>
                 </td>
             </tr>
@@ -208,6 +211,34 @@
                 <tr>
                     <td class="col-md-4">
                         <i>Default value : </i><code>&#x27;roles&#x27;</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+</section>
+    <h3>src/auth/decorators/user.decorator.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="User"></a>
+                    <span class="name">
+                        <span ><b>User</b></span>
+                        <a href="#User"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>createParamDecorator(
+  (data: unknown, ctx: ExecutionContext) &#x3D;&gt; {
+    const request &#x3D; ctx.switchToHttp().getRequest&lt;RequestWithUser&gt;();
+    return request.user;
+  },
+)</code>
                     </td>
                 </tr>
 

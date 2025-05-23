@@ -192,8 +192,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="10"
-                                    class="link-to-prism">src/modules/queue/queues.controller.ts:10</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="19"
+                                    class="link-to-prism">src/modules/queue/queues.controller.ts:19</a></div>
                         </td>
                     </tr>
 
@@ -213,38 +213,53 @@
 
 
     <div class="tab-pane fade  tab-source-code" id="source">
-        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Controller, Get, Post, Body, Param, UseGuards } from &#x27;@nestjs/common&#x27;;
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Controller, Get } from &#x27;@nestjs/common&#x27;;
 import { QueueService } from &#x27;./queue.service&#x27;;
 import { QueueStatus } from &#x27;./entities/queue.entity&#x27;;
+
+interface QueueDetails {
+  firstName?: string;
+  lastName?: string;
+  middleInitial?: string;
+  reasonOfVisit?: string;
+  address?: string;
+  phoneNumber?: string;
+}
 
 @Controller(&#x27;queues&#x27;)
 export class QueuesController {
   constructor(private readonly queueService: QueueService) {}
   // This endpoint is for supporting the legacy API path that the frontend is using
-  @Get(&#x27;walk-in&#x27;) 
+  @Get(&#x27;walk-in&#x27;)
   async getWalkInQueues() {
     console.log(&#x27;GET /queues/walk-in endpoint called&#x27;);
     try {
       // Get both pending and serving queues with details using the service methods
-      const [pendingQueuesWithDetails, servingQueuesWithDetails] &#x3D; await Promise.all([
-        this.queueService.findByStatusWithDetails(QueueStatus.PENDING),
-        this.queueService.findByStatusWithDetails(QueueStatus.SERVING)
-      ]);
+      const [pendingQueuesWithDetails, servingQueuesWithDetails] &#x3D;
+        await Promise.all([
+          this.queueService.findByStatusWithDetails(QueueStatus.PENDING),
+          this.queueService.findByStatusWithDetails(QueueStatus.SERVING),
+        ]);
 
       console.log(&#x27;Found pending queues:&#x27;, pendingQueuesWithDetails.length);
       console.log(&#x27;Found serving queues:&#x27;, servingQueuesWithDetails.length);
 
       // Combine all queues
-      const allQueues &#x3D; [...pendingQueuesWithDetails, ...servingQueuesWithDetails];
+      const allQueues &#x3D; [
+        ...pendingQueuesWithDetails,
+        ...servingQueuesWithDetails,
+      ];
 
       // Extract details from the nested structure and flatten them for the frontend
-      const result &#x3D; allQueues.map(queue &#x3D;&gt; {
+      const result &#x3D; allQueues.map((queue) &#x3D;&gt; {
         // For debugging
         console.log(&#x27;Processing queue:&#x27;, queue.id, &#x27;status:&#x27;, queue.status);
-        
+
         // Handle potential null/undefined details
-        const details &#x3D; Array.isArray(queue.details) ? queue.details[0] : queue.details;
-        
+        const details: QueueDetails | null &#x3D; Array.isArray(queue.details)
+          ? (queue.details[0] as QueueDetails)
+          : (queue.details as QueueDetails);
+
         return {
           id: queue.id,
           queueNumber: queue.queueNumber,
@@ -258,15 +273,15 @@ export class QueuesController {
           middleInitial: details?.middleInitial || null,
           reasonOfVisit: details?.reasonOfVisit || null,
           address: details?.address || null,
-          phoneNumber: details?.phoneNumber || null
+          phoneNumber: details?.phoneNumber || null,
         };
       });
 
       console.log(&#x60;Returning ${result.length} walk-in queues&#x60;);
       return result;
-    } catch (error) {
-      console.error(&#x27;Error fetching walk-in queues:&#x27;, error);
-      throw error;
+    } catch (err: unknown) {
+      console.error(&#x27;Error fetching walk-in queues:&#x27;, err);
+      throw err;
     }
   }
 }
