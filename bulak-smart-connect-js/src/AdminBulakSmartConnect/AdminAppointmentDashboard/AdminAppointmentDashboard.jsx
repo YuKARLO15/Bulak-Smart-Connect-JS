@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import './AdminAppointmentDashboard.css';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import NavBar from '../../NavigationComponents/NavSide';
+import AllAppointmentsAdmin from './AllAppointmentsAdmin';
 
 
 
@@ -162,40 +163,12 @@ const AdminAppointmentDashboard = () => {
           <div className="admin-appointment-dashboard-section-header">
             <h2 className="admin-appointment-dashboard-section-title">Booked Appointments</h2>
             <div className="admin-appointment-dashboard-filter-control">
-              <button className="admin-appointment-dashboard-filter-button">
-                <span className="admin-appointment-dashboard-filter-icon">⌄</span>
-              </button>
+         
             </div>
           </div>
 
           <div className="admin-appointment-dashboard-appointments-list">
-            {appointmentsData.length === 0 ? (
-              <div className="admin-appointment-dashboard-no-appointments">
-                No appointments available
-              </div>
-            ) : (
-              appointmentsData.map((appointment, index) => (
-                <div key={index} className="admin-appointment-dashboard-appointment-card">
-                  <div className="admin-appointment-dashboard-appointment-type-container">
-                    <div className="admin-appointment-dashboard-appointment-type">
-                      {appointment.type}
-                    </div>
-                    <div className="admin-appointment-dashboard-appointment-date">
-                      {appointment.date}
-                    </div>
-                  </div>
-                  <div className="admin-appointment-dashboard-appointment-client">
-                    {appointment.clientName}
-                  </div>
-                  <div className="admin-appointment-dashboard-appointment-actions">
-                    <div className="admin-appointment-dashboard-appointment-id">
-                      {appointment.id}
-                    </div>
-                    <button className="admin-appointment-dashboard-see-more-btn">See More</button>
-                  </div>
-                </div>
-              ))
-            )}
+            <AllAppointmentsAdmin />
           </div>
         </div>
       </div>

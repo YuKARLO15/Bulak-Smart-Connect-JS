@@ -125,7 +125,7 @@ const NavBar = ({ isSidebarOpen, setIsSidebarOpen }) => {
 
             {/* Account */}
             <Link 
-              to={getRoute('/account', '/AdminAccountManagement')} 
+              to={getRoute('/UserAccount', '/AdminAccountManagement')} 
               className={isActive(getRoute('/account', '/AdminAccountManagement')) ? 'active' : ''}
             >
               <AccountCircleIcon /> Account

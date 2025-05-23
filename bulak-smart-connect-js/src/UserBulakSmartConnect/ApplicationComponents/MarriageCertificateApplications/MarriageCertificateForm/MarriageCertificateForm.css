@@ -16,6 +16,7 @@
   margin-top: 10px;
   padding: 2.5rem;
   width: 80vw;
+  margin-left: 10vw;
 }
 
 .section {
@@ -65,9 +66,6 @@
   border-radius: 5px;
 }
 
-.husband-heading {
-  /* Inherits from .section h3 */
-}
 
 .husband-label {
   display: block;
@@ -147,9 +145,7 @@
   border-radius: 5px;
 }
 
-.wife-heading {
-  
-}
+
 
 .wife-label {
   display: block;
@@ -322,24 +318,31 @@ label:not([data-required])::after {
 }
 
 .affidavit-form-container {
-  width: 100vw;
+  width: 80vw;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
   box-sizing: border-box;
 }
+
+.affidavit-form1-container {
+  width: 77vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  box-sizing: border-box;
+  padding-left: 25px;
+}
+
 
 .affidavit-certificate-form {
   width: 80vw !important;
   margin-top: 10px;
   justify-content: center;
-  align-items: center;
   box-sizing: border-box;
   padding: 2rem;
   background-color: #fff;
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .affidavit-heading {
@@ -398,6 +401,7 @@ label:not([data-required])::after {
 .affidavit-officer-section,
 .affidavit-delayed-section {
   margin-bottom: 2.5rem;
+  width: 75vw;
 }
 
 .affidavit-content {
