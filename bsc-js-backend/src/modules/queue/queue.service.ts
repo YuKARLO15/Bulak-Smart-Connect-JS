@@ -289,27 +289,18 @@ export class QueueService {
       console.log(`Returning ${result.length} queues with details`);
       return result;
     } catch (error: unknown) {
-      // Convert error to string BEFORE logging to avoid unsafe assignment
-      const errorString =
-        error instanceof Error
-          ? `Error: ${error.message}`
-          : typeof error === 'string'
-            ? error
-            : 'Unknown error occurred';
+      console.error('Error in findByStatusWithDetails:', error);
 
-      // Log string representation instead of raw error object
-      console.error('Error in findByStatusWithDetails:', errorString);
-
-      // Throw appropriate error based on type
+      // Handle error safely without assignment from unknown
       if (error instanceof Error) {
         throw new Error(`Failed to get queue details: ${error.message}`);
-      } else if (typeof error === 'string') {
-        throw new Error(`Failed to get queue details: ${error}`);
-      } else {
-        throw new Error(
-          'Failed to get queue details: An unknown error occurred',
-        );
       }
+
+      if (typeof error === 'string') {
+        throw new Error(`Failed to get queue details: ${error}`);
+      }
+
+      throw new Error('Failed to get queue details: An unknown error occurred');
     }
   }
 
