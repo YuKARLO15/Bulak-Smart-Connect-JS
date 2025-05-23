@@ -289,14 +289,18 @@ export class QueueService {
       console.log(`Returning ${result.length} queues with details`);
       return result;
     } catch (error: unknown) {
-      console.error(
-        'Error in findByStatusWithDetails:',
-        error instanceof Error
-          ? error.message
-          : typeof error === 'string'
-            ? error
-            : 'An unknown error occurred',
-      );
+      // Handle errors gracefully - use type assertion for safe assignment
+      const errorMessage: string = (() => {
+        if (error instanceof Error) {
+          return error.message;
+        }
+        if (typeof error === 'string') {
+          return error;
+        }
+        return 'An unknown error occurred';
+      })();
+
+      console.error('Error in findByStatusWithDetails:', errorMessage);
 
       if (error instanceof Error) {
         throw new Error(`Failed to get queue details: ${error.message}`);
