@@ -387,7 +387,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="61" class="link-to-prism">src/modules/appointment/entities/appointment.entity.ts:61</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="64" class="link-to-prism">src/modules/appointment/entities/appointment.entity.ts:64</a></div>
                         </td>
                     </tr>
 
@@ -495,7 +495,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="58" class="link-to-prism">src/modules/appointment/entities/appointment.entity.ts:58</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="61" class="link-to-prism">src/modules/appointment/entities/appointment.entity.ts:61</a></div>
                         </td>
                     </tr>
 
@@ -711,7 +711,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="64" class="link-to-prism">src/modules/appointment/entities/appointment.entity.ts:64</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="67" class="link-to-prism">src/modules/appointment/entities/appointment.entity.ts:67</a></div>
                         </td>
                     </tr>
 
@@ -742,13 +742,13 @@
                         <b>Decorators : </b>
                         <br />
                         <code>
-                            @ManyToOne(undefined, {nullable: true})<br />@JoinColumn({name: &#x27;userId&#x27;})<br />
+                            @ManyToOne(undefined, {nullable: true})<br />@JoinColumn({name: &#x27;userId&#x27;, foreignKeyConstraintName: &#x27;FK_appointment_user&#x27;})<br />
                         </code>
                     </td>
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="55" class="link-to-prism">src/modules/appointment/entities/appointment.entity.ts:55</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="58" class="link-to-prism">src/modules/appointment/entities/appointment.entity.ts:58</a></div>
                         </td>
                     </tr>
 
@@ -849,7 +849,10 @@ export class Appointment {
   userId: number;
 
   @ManyToOne(() &#x3D;&gt; User, { nullable: true })
-  @JoinColumn({ name: &#x27;userId&#x27; })
+  @JoinColumn({ 
+    name: &#x27;userId&#x27;,
+    foreignKeyConstraintName: &#x27;FK_appointment_user&#x27; 
+  })
   user: User;
 
   @Column({ default: false })
