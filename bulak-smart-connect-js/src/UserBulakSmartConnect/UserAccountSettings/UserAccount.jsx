@@ -3,6 +3,9 @@ import { useAuth } from '../../context/AuthContext';
 import axios from 'axios';
 import './UserAccount.css';
 import NavBar from '../../NavigationComponents/NavSide';
+import EditIcon from '@mui/icons-material/Edit';
+import CloseIcon from '@mui/icons-material/Close';
+
 
 const UserAccount = () => {
   const { user, getCurrentUserId } = useAuth();
@@ -15,18 +18,21 @@ const UserAccount = () => {
   const [email, setEmail] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  
   // Password states
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [confirmationPassword, setConfirmationPassword] = useState('');
 
+  // Tab state
+  const [activeTab, setActiveTab] = useState('profile');
+
   // UI states
   const [message, setMessage] = useState({ text: '', type: '' });
   const [isEditing, setIsEditing] = useState({
     email: false,
     phoneNumber: false,
-    password: false,
     username: false,
   });
   const [lastUsernameChange, setLastUsernameChange] = useState(null);
@@ -54,9 +60,8 @@ const UserAccount = () => {
         setLastName(userData.lastName || '');
         setUsername(userData.username || '');
         setEmail(userData.email || '');
-        setPhoneNumber(userData.phoneNumber || '');
+        setPhoneNumber(userData.contactNumber || '');
 
-        // Check username change timestamp from localStorage
         const usernameChangeDate = localStorage.getItem('lastUsernameChange');
         if (usernameChangeDate) {
           setLastUsernameChange(new Date(usernameChangeDate));
@@ -73,8 +78,7 @@ const UserAccount = () => {
     fetchUserData();
   }, [userId]);
 
-  // Check if user can change username (30-day rule)
-  const checkUsernameChangeEligibility = lastChangeDate => {
+const checkUsernameChangeEligibility = lastChangeDate => {
     if (!lastChangeDate) {
       setCanChangeUsername(true);
       return;
@@ -87,45 +91,36 @@ const UserAccount = () => {
     setCanChangeUsername(canChange);
   };
 
-  // Prepare save profile changes
   const handleSaveProfile = async e => {
     e.preventDefault();
     setMessage({ text: '', type: '' });
 
     const updates = { firstName, lastName };
 
-    // Check if sensitive fields are being edited
     const isSensitiveEdit =
       isEditing.email || isEditing.phoneNumber || (isEditing.username && canChangeUsername);
 
-    // If sensitive fields are being edited, show password confirmation dialog
     if (isSensitiveEdit) {
-      // Only include fields being edited
       if (isEditing.email) updates.email = email;
-      if (isEditing.phoneNumber) updates.phoneNumber = phoneNumber;
-      if (isEditing.username && canChangeUsername) updates.username = username;
+if (isEditing.phoneNumber) updates.contactNumber = phoneNumber; 
 
       setPendingUpdates(updates);
       setShowPasswordConfirmation(true);
     } else {
-      // If only non-sensitive fields (firstName, lastName) are being edited, proceed without confirmation
       await submitProfileUpdates(updates);
     }
   };
 
-  // Submit profile updates after password confirmation (or directly for non-sensitive changes)
   const submitProfileUpdates = async updates => {
     try {
       const token = localStorage.getItem('token');
 
-      // If username is being changed, update local storage
       if (updates.username && canChangeUsername) {
         localStorage.setItem('lastUsernameChange', new Date().toISOString());
         setLastUsernameChange(new Date());
         setCanChangeUsername(false);
       }
 
-      // Use the correct endpoint from your API docs: /auth/update-profile
       await axios.post(`http://localhost:3000/auth/update-profile`, updates, {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -138,7 +133,6 @@ const UserAccount = () => {
         username: false,
       });
 
-      // Reset confirmation dialog
       setShowPasswordConfirmation(false);
       setConfirmationPassword('');
       setPendingUpdates(null);
@@ -158,18 +152,17 @@ const UserAccount = () => {
     console.log('Attempting to verify password');
 
     const response = await axios.post(`http://localhost:3000/auth/login`, {
-      email: email, // Use the email state variable
-      emailOrUsername: email, // Use the email state variable here too
+      email: email,
+      emailOrUsername: email,
       username: username,
       password: confirmationPassword,
     });
 
     console.log('Verification response received');
 
-    // If login would succeed, we consider the password correct
+ 
     if (response.data && response.data.access_token) {
       console.log('Password verification successful');
-      // Password is correct, proceed with the update
       await submitProfileUpdates(pendingUpdates);
     } else {
       console.log('Password verification failed - unexpected response format');
@@ -178,7 +171,7 @@ const UserAccount = () => {
   } catch (error) {
     console.error('Error verifying password:', error);
 
-    // Match error handling with your login component
+  
     if (error.response) {
       console.log('Error status:', error.response.status);
       console.log('Error data:', error.response.data);
@@ -194,7 +187,6 @@ const UserAccount = () => {
     }
   }
 };
-  // Change password
   const handleChangePassword = async e => {
     e.preventDefault();
     setMessage({ text: '', type: '' });
@@ -204,20 +196,18 @@ const UserAccount = () => {
       return;
     }
 
-    // Check password complexity
     if (newPassword.length < 8) {
       setMessage({ text: 'New password must be at least 8 characters long', type: 'error' });
       return;
     }
-
-    // Check for complexity requirements
     const hasUpperCase = /[A-Z]/.test(newPassword);
     const hasLowerCase = /[a-z]/.test(newPassword);
     const hasNumbers = /\d/.test(newPassword);
+    const hasSpecialChars = /[!@#$%^&*(),.?":{}|<>]/.test(newPassword);
 
-    if (!hasUpperCase || !hasLowerCase || !hasNumbers) {
+    if (!hasUpperCase || !hasLowerCase || !hasNumbers || !hasSpecialChars) {
       setMessage({
-        text: 'Password must contain uppercase, lowercase, and numbers',
+        text: 'Password must contain uppercase, lowercase, numbers, and special characters',
         type: 'error',
       });
       return;
@@ -225,12 +215,11 @@ const UserAccount = () => {
 
     try {
       const token = localStorage.getItem('token');
-      // Include password in the update-profile endpoint
       await axios.post(
         `http://localhost:3000/auth/update-profile`,
         {
           password: newPassword,
-          oldPassword: currentPassword, // Include current password for verification
+          oldPassword: currentPassword, 
         },
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -253,14 +242,12 @@ const UserAccount = () => {
     }
   };
 
-  // Cancel password confirmation dialog
   const cancelPasswordConfirmation = () => {
     setShowPasswordConfirmation(false);
     setConfirmationPassword('');
     setPendingUpdates(null);
   };
 
-  // Calculate time remaining until username can be changed again
   const getTimeUntilUsernameChange = () => {
     if (!lastUsernameChange) return null;
 
@@ -276,19 +263,38 @@ const UserAccount = () => {
     return `${days} days`;
   };
 
+
   if (loading) {
     return <div className="AccountLoaderUAcc">Loading...</div>;
   }
 
   return (
-       <div className={`AccountUAcc ${isSidebarOpen ? 'sidebar-open' : ''}`}>
+    <div className={`AccountUAcc ${isSidebarOpen ? 'sidebar-open' : ''}`}>
       <NavBar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
       <div className="AccountHeaderUAcc">
-        <h1>User Account Settings</h1>
+        <h1 className="AccountHeaderUAcc"> User Account Settings</h1>
       </div>
+      
       <div className="AccountContainerUAcc">
         {message.text && <div className={`MessageUAcc ${message.type}`}>{message.text}</div>}
 
+        {/* Tab Navigation */}
+        <div className="AccountTabsUAcc">
+          <button 
+            className={`TabButtonUAcc ${activeTab === 'profile' ? 'active' : ''}`}
+            onClick={() => setActiveTab('profile')}
+          >
+            Profile Information
+          </button>
+          <button 
+            className={`TabButtonUAcc ${activeTab === 'password' ? 'active' : ''}`}
+            onClick={() => setActiveTab('password')}
+          >
+            Change Password
+          </button>
+        </div>
+
+        {/* Password Confirmation Dialog */}
         {showPasswordConfirmation && (
           <div className="PasswordConfirmationOverlayUAcc">
             <div className="PasswordConfirmationDialogUAcc">
@@ -325,184 +331,186 @@ const UserAccount = () => {
           </div>
         )}
 
-        <form onSubmit={handleSaveProfile} className="AccountFormUAcc">
-          <div className="FormGroupUAcc">
-            <label htmlFor="firstName">First name</label>
-            <input
-              type="text"
-              id="firstName"
-              value={firstName}
-              onChange={e => setFirstName(e.target.value)}
-            />
-          </div>
-
-          <div className="FormGroupUAcc">
-            <label htmlFor="lastName">Last name</label>
-            <input
-              type="text"
-              id="lastName"
-              value={lastName}
-              onChange={e => setLastName(e.target.value)}
-            />
-          </div>
-
-          <div className="FormGroupUAcc">
-            <label htmlFor="username">Username</label>
-            <div className="InputWithActionUAcc">
-              <input
-                type="text"
-                id="username"
-                value={username}
-                onChange={e => setUsername(e.target.value)}
-                disabled={!canChangeUsername || !isEditing.username}
-              />
-              {!isEditing.username ? (
-                <button
-                  type="button"
-                  onClick={() => setIsEditing({ ...isEditing, username: true })}
-                  className="EditButtonUAcc"
-                  disabled={!canChangeUsername}
-                >
-                  <i className="fas fa-pen"></i>
-                </button>
-              ) : (
-                <button
-                  type="button"
-                  onClick={() => setIsEditing({ ...isEditing, username: false })}
-                  className="CancelButtonUAcc"
-                >
-                  <i className="fas fa-times"></i>
-                </button>
-              )}
-            </div>
-            {!canChangeUsername && (
-              <p className="RestrictionNoteUAcc">
-                Username can only be changed once every 30 days.
-                {getTimeUntilUsernameChange() && ` Time remaining: ${getTimeUntilUsernameChange()}`}
-              </p>
-            )}
-          </div>
-
-          <div className="FormGroupUAcc">
-            <label htmlFor="email">E-mail</label>
-            <div className="InputWithActionUAcc">
-              <input
-                type="email"
-                id="email"
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-                disabled={!isEditing.email}
-              />
-              {!isEditing.email ? (
-                <button
-                  type="button"
-                  onClick={() => setIsEditing({ ...isEditing, email: true })}
-                  className="EditButtonUAcc"
-                >
-                  <i className="fas fa-pen"></i>
-                </button>
-              ) : (
-                <button
-                  type="button"
-                  onClick={() => setIsEditing({ ...isEditing, email: false })}
-                  className="CancelButtonUAcc"
-                >
-                  <i className="fas fa-times"></i>
-                </button>
-              )}
-            </div>
-          </div>
-
-          <div className="FormGroupUAcc">
-            <label htmlFor="phoneNumber">Phone number</label>
-            <div className="InputWithActionUAcc">
-              <input
-                type="tel"
-                id="phoneNumber"
-                value={phoneNumber}
-                onChange={e => setPhoneNumber(e.target.value)}
-                disabled={!isEditing.phoneNumber}
-              />
-              {!isEditing.phoneNumber ? (
-                <button
-                  type="button"
-                  onClick={() => setIsEditing({ ...isEditing, phoneNumber: true })}
-                  className="EditButtonUAcc"
-                >
-                  <i className="fas fa-pen"></i>
-                </button>
-              ) : (
-                <button
-                  type="button"
-                  onClick={() => setIsEditing({ ...isEditing, phoneNumber: false })}
-                  className="CancelButtonUAcc"
-                >
-                  <i className="fas fa-times"></i>
-                </button>
-              )}
-            </div>
-          </div>
-
-          <div className="ActionsUAcc">
-            <button type="submit" className="SaveButtonUAcc">
-              Save Changes
-            </button>
-          </div>
-        </form>
-
-        <div className="PasswordSectionUAcc">
-          <h2>Change Password</h2>
-          <button
-            type="button"
-            onClick={() => setIsEditing({ ...isEditing, password: !isEditing.password })}
-            className={isEditing.password ? 'CancelButtonUAcc' : 'ChangePasswordButtonUAcc'}
-          >
-            {isEditing.password ? 'Cancel' : 'Change Password'}
-          </button>
-
-          {isEditing.password && (
-            <form onSubmit={handleChangePassword} className="PasswordFormUAcc">
+        {/* Profile Tab Content */}
+        {activeTab === 'profile' && (
+          <div className="TabContentUAcc">
+            <form onSubmit={handleSaveProfile} className="AccountFormUAcc">
               <div className="FormGroupUAcc">
-                <label htmlFor="currentPassword">Current Password*</label>
+                <label htmlFor="firstName">First name</label>
                 <input
-                  type="password"
-                  id="currentPassword"
-                  value={currentPassword}
-                  onChange={e => setCurrentPassword(e.target.value)}
-                  required
+                  type="text"
+                  id="firstName"
+                  value={firstName}
+                  onChange={e => setFirstName(e.target.value)}
                 />
               </div>
 
               <div className="FormGroupUAcc">
-                <label htmlFor="newPassword">New Password*</label>
+                <label htmlFor="lastName">Last name</label>
                 <input
-                  type="password"
-                  id="newPassword"
-                  value={newPassword}
-                  onChange={e => setNewPassword(e.target.value)}
-                  required
+                  type="text"
+                  id="lastName"
+                  value={lastName}
+                  onChange={e => setLastName(e.target.value)}
                 />
               </div>
 
               <div className="FormGroupUAcc">
-                <label htmlFor="confirmPassword">Confirm New Password*</label>
-                <input
-                  type="password"
-                  id="confirmPassword"
-                  value={confirmPassword}
-                  onChange={e => setConfirmPassword(e.target.value)}
-                  required
-                />
+                <label htmlFor="username">Username</label>
+                <div className="InputWithActionUAcc">
+                  <input
+                    type="text"
+                    id="username"
+                    value={username}
+                    onChange={e => setUsername(e.target.value)}
+                    disabled={!canChangeUsername || !isEditing.username}
+                  />
+                  {!isEditing.username ? (
+                    <button
+                      type="button"
+                      onClick={() => setIsEditing({ ...isEditing, username: true })}
+                      className="EditButtonUAcc"
+                      disabled={!canChangeUsername}
+                    >
+                       <EditIcon fontSize="small" />
+                    </button>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => setIsEditing({ ...isEditing, username: false })}
+                      className="CancelButtonUAcc"
+                    >
+                      <i className="fas fa-times"></i>
+                    </button>
+                  )}
+                </div>
+                {!canChangeUsername && (
+                  <p className="RestrictionNoteUAcc">
+                    Username can only be changed once every 30 days.
+                    {getTimeUntilUsernameChange() && ` Time remaining: ${getTimeUntilUsernameChange()}`}
+                  </p>
+                )}
+              </div>
+
+              <div className="FormGroupUAcc">
+                <label htmlFor="email">E-mail</label>
+                <div className="InputWithActionUAcc">
+                  <input
+                    type="email"
+                    id="email"
+                    value={email}
+                    onChange={e => setEmail(e.target.value)}
+                    disabled={!isEditing.email}
+                  />
+                  {!isEditing.email ? (
+                    <button
+                      type="button"
+                      onClick={() => setIsEditing({ ...isEditing, email: true })}
+                      className="EditButtonUAcc"
+                    >
+                       <EditIcon fontSize="small" />
+                    </button>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => setIsEditing({ ...isEditing, email: false })}
+                      className="CancelButtonUAcc"
+                    >
+                      <CloseIcon fontSize="small" />
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              <div className="FormGroupUAcc">
+                <label htmlFor="phoneNumber">Phone number</label>
+                <div className="InputWithActionUAcc">
+                  <input
+                    type="tel"
+                    id="phoneNumber"
+                    value={phoneNumber}
+                    onChange={e => setPhoneNumber(e.target.value)}
+                    disabled={!isEditing.phoneNumber}
+                  />
+                  {!isEditing.phoneNumber ? (
+                    <button
+                      type="button"
+                      onClick={() => setIsEditing({ ...isEditing, phoneNumber: true })}
+                      className="EditButtonUAcc"
+                    >
+                       <EditIcon fontSize="small" />
+                    </button>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => setIsEditing({ ...isEditing, phoneNumber: false })}
+                      className="CancelButtonUAcc"
+                    >
+                    <CloseIcon fontSize="small" />
+                    </button>
+                  )}
+                </div>
               </div>
 
               <div className="ActionsUAcc">
                 <button type="submit" className="SaveButtonUAcc">
-                  Update Password
+                  Save Changes
                 </button>
               </div>
             </form>
-          )}
-        </div>
+          </div>
+        )}
+
+        {/* Password Tab Content */}
+        {activeTab === 'password' && (
+          <div className="TabContentUAcc">
+            <div className="PasswordTabCardUAcc">
+              <form onSubmit={handleChangePassword} className="PasswordFormUAcc">
+                <div className="FormGroupUAcc">
+                  <label htmlFor="currentPassword">Current Password*</label>
+                  <input
+                    type="password"
+                    id="currentPassword"
+                    value={currentPassword}
+                    onChange={e => setCurrentPassword(e.target.value)}
+                    required
+                  />
+                </div>
+
+                <div className="FormGroupUAcc">
+                  <label htmlFor="newPassword">New Password*</label>
+                  <input
+                    type="password"
+                    id="newPassword"
+                    value={newPassword}
+                    onChange={e => setNewPassword(e.target.value)}
+                    required
+                  />
+                  <p className="PasswordRequirementsUAcc">
+                    Password must be at least 8 characters long and include uppercase, lowercase and numbers.
+                  </p>
+                </div>
+
+                <div className="FormGroupUAcc">
+                  <label htmlFor="confirmPassword">Confirm New Password*</label>
+                  <input
+                    type="password"
+                    id="confirmPassword"
+                    value={confirmPassword}
+                    onChange={e => setConfirmPassword(e.target.value)}
+                    required
+                  />
+                </div>
+
+                <div className="ActionsUAcc">
+                  <button type="submit" className="SaveButtonUAcc">
+                    Update Password
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
