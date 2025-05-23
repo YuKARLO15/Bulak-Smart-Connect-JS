@@ -438,6 +438,7 @@ export class AuthService {
           for (const roleId of updateUserDto.roleIds) {
             try {
               await this.rolesService.findOne(roleId);
+              // eslint-disable-next-line @typescript-eslint/no-unused-vars
             } catch (_) {
               throw new BadRequestException(`Role with ID ${roleId} not found`);
             }
@@ -465,6 +466,7 @@ export class AuthService {
           // Verify the role exists
           try {
             await this.rolesService.findOne(updateUserDto.defaultRoleId);
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
           } catch (_) {
             throw new BadRequestException(
               `Default role with ID ${updateUserDto.defaultRoleId} not found`,

@@ -288,12 +288,8 @@ export class QueueService {
       console.log(`Returning ${result.length} queues with details`);
       return result;
     } catch (error: unknown) {
-      console.error(
-        `Error finding queues with status ${status} and details:`,
-        error,
-      );
-      // Return empty array rather than failing
-      return [];
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+      throw new Error(`Failed to get queue details: ${errorMessage}`);
     }
   }
 
