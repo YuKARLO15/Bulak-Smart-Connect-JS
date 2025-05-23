@@ -214,7 +214,9 @@ describe('User Update Functionality (e2e)', () => {
 
     it('should update only provided fields', async () => {
       // First get current user data
-      const profileResponse = await request(app.getHttpServer() as unknown as import('http').Server)
+      const profileResponse = await request(
+        app.getHttpServer() as unknown as import('http').Server,
+      )
         .get('/auth/profile')
         .set('Authorization', `Bearer ${citizenToken}`)
         .expect(200);
@@ -222,7 +224,9 @@ describe('User Update Functionality (e2e)', () => {
       const originalData = profileResponse.body as ResponseData;
 
       // Update only contact number
-      const updateResponse = await request(app.getHttpServer() as unknown as import('http').Server)
+      const updateResponse = await request(
+        app.getHttpServer() as unknown as import('http').Server,
+      )
         .post('/auth/update-profile')
         .set('Authorization', `Bearer ${citizenToken}`)
         .send({ contactNumber: '9999999999' })
