@@ -249,7 +249,7 @@ export class QueueService {
       });
 
       return detailsMap;
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Error fetching details for multiple queues:', error);
       // Return empty details rather than failing
       return {};
