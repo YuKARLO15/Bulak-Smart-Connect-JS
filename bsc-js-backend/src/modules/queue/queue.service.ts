@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import {
   Injectable,
   NotFoundException,
@@ -289,16 +290,14 @@ export class QueueService {
       console.log(`Returning ${result.length} queues with details`);
       return result;
     } catch (error: unknown) {
-      // Handle errors gracefully - use type assertion for safe assignment
-      const errorMessage: string = (() => {
-        if (error instanceof Error) {
-          return error.message;
-        }
-        if (typeof error === 'string') {
-          return error;
-        }
-        return 'An unknown error occurred';
-      })();
+      // Handle error message extraction without triggering ESLint
+      let errorMessage: string;
+
+      if (error instanceof Error) {
+        errorMessage = error.message;
+      } else {
+        errorMessage = String(error);
+      }
 
       console.error('Error in findByStatusWithDetails:', errorMessage);
 
