@@ -288,20 +288,17 @@ export class QueueService {
       console.log(`Returning ${result.length} queues with details`);
       return result;
     } catch (error: unknown) {
-      // Use an IIFE to safely determine the error message
-      const errorMessage: string = (() => {
-        if (error instanceof Error) {
-          // We know error is an Error, so error.message is a string
-          return error.message;
-        }
-        if (typeof error === 'string') {
-          return error;
-        }
-        // Fallback for any other type of error
-        return 'An unknown error occurred';
-      })();
+      console.error('Error in findByStatusWithDetails:', error);
+      
+      let errorMessage: string;
+      if (error instanceof Error) {
+        errorMessage = error.message;
+      } else if (typeof error === 'string') {
+        errorMessage = error;
+      } else {
+        errorMessage = 'An unknown error occurred';
+      }
 
-      console.error(`Error in findByStatusWithDetails: ${errorMessage}`);
       throw new Error(`Failed to get queue details: ${errorMessage}`);
     }
   }
