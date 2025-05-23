@@ -255,6 +255,7 @@ export class QueueService {
       return {};
     }
   }
+
   async findByStatusWithDetails(status: QueueStatus) {
     console.log(`Finding queues with status: ${status} and their details`);
 
@@ -289,17 +290,17 @@ export class QueueService {
       return result;
     } catch (error: unknown) {
       console.error('Error in findByStatusWithDetails:', error);
-      
-      let errorMessage: string;
-      if (error instanceof Error) {
-        errorMessage = error.message;
-      } else if (typeof error === 'string') {
-        errorMessage = error;
-      } else {
-        errorMessage = 'An unknown error occurred';
-      }
 
-      throw new Error(`Failed to get queue details: ${errorMessage}`);
+      // Inline error message handling to avoid unsafe assignment
+      if (error instanceof Error) {
+        throw new Error(`Failed to get queue details: ${error.message}`);
+      } else if (typeof error === 'string') {
+        throw new Error(`Failed to get queue details: ${error}`);
+      } else {
+        throw new Error(
+          'Failed to get queue details: An unknown error occurred',
+        );
+      }
     }
   }
 
