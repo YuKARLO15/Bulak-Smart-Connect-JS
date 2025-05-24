@@ -1,124 +1,184 @@
 import axios from 'axios';
-import api from './api'; // Import your preconfigured axios instance
+import api from './api';
 
-const API_URL = 'http://localhost:3000'; // Change to your backend URL
+const API_URL = 'http://localhost:3000';
 
 export const appointmentService = {
-  // Get all appointments for the current user
-  fetchUserAppointments: async () => {
-    try {
-      console.log(`Making request to: ${API_URL}/appointments/user`);
-      const response = await api.get('/appointments/user');
-      console.log('User appointments API response:', response.data);
-      return response.data;
-    } catch (error) {
-      console.error('API error getting user appointments:', error);
-      throw error;
-    }
-  },
-
-  // Get available appointment slots for a specific date
-  fetchAvailableSlots: async (date) => {
-    try {
-      console.log(`Making request to: ${API_URL}/appointments/available-slots?date=${date}`);
-      const response = await axios.get(`${API_URL}/appointments/available-slots?date=${date}`);
-      console.log('Available slots API response:', response.data);
-      return response.data;
-    } catch (error) {
-      console.error('API error getting available slots:', error);
-      throw error;
-    }
-  },
-  
-  // Create a new appointment
+  // Create a new appointment 
   createAppointment: async (appointmentData) => {
     try {
       console.log('Creating appointment with data:', appointmentData);
       
-      // Debug token
-      const token = localStorage.getItem('token');
-      console.log('Token being used:', token ? 'Valid token present' : 'No token');
-      
       const response = await api.post('/appointments', appointmentData);
-      console.log('Appointment creation response:', response.data);
+      console.log('Appointment created successfully:', response.data);
       return response.data;
     } catch (error) {
       console.error('Error creating appointment:', error);
-      throw error;
-    }
-  },
-
-  // Get a specific appointment by ID
-  getAppointmentById: async (appointmentId) => {
-    try {
-      console.log(`Making request to: ${API_URL}/appointments/${appointmentId}`);
-      const response = await axios.get(`${API_URL}/appointments/${appointmentId}`);
-      console.log(`Details for appointment ${appointmentId}:`, response.data);
-      return response.data;
-    } catch (error) {
-      console.error(`Error fetching details for appointment ${appointmentId}:`, error);
-      throw error;
-    }
-  },
-
-  // Update an appointment status
-  updateAppointmentStatus: async (appointmentId, status) => {
-    try {
-      console.log(`Updating appointment ${appointmentId} status to ${status}`);
-      
-      console.log(`Making request to: ${API_URL}/appointments/${appointmentId}/status`);
-      
-      const response = await api.patch(`/appointments/${appointmentId}/status`, { status });
-      console.log('Update status response:', response.data);
-      return response.data;
-    } catch (error) {
-      console.error(`Error updating appointment ${appointmentId} status:`, error);
       console.error('Error details:', error.response?.data || error.message);
       throw error;
     }
   },
 
-  // Cancel an appointment
-  cancelAppointment: async (appointmentId) => {
+  // Get user's own appointments 
+  fetchUserAppointments: async () => {
     try {
-      console.log(`Cancelling appointment ${appointmentId}`);
-      const response = await api.patch(`/appointments/${appointmentId}/status`, { status: 'cancelled' });
-      console.log('Cancel appointment response:', response.data);
+      console.log('Fetching user appointments from /appointments/mine');
+      const response = await api.get('/appointments/mine');
+      console.log('User appointments fetched:', response.data);
       return response.data;
     } catch (error) {
-      console.error(`Error cancelling appointment ${appointmentId}:`, error);
+      console.error('Error fetching user appointments:', error);
       throw error;
     }
   },
 
-  // For admin: get all appointments
-  fetchAllAppointments: async (status = '') => {
+  // Get all appointments (admin only)
+  fetchAllAppointments: async () => {
     try {
-      let url = `${API_URL}/appointments`;
-      if (status) {
-        url += `?status=${status}`;
-      }
-      console.log(`Making request to: ${url}`);
-      const response = await api.get(url);
-      console.log('All appointments API response:', response.data);
+      console.log('Fetching all appointments from /appointments');
+      const response = await api.get('/appointments');
+      console.log('All appointments fetched:', response.data);
       return response.data;
     } catch (error) {
-      console.error('API error getting all appointments:', error);
+      console.error('Error fetching all appointments:', error);
       throw error;
     }
   },
 
-  // For admin: get appointments for a specific date
+  // Get appointment by ID 
+  getAppointmentById: async (appointmentId) => {
+    try {
+      console.log(`Fetching appointment by ID: ${appointmentId}`);
+      const response = await api.get(`/appointments/${appointmentId}`);
+      console.log('Appointment fetched by ID:', response.data);
+      return response.data;
+    } catch (error) {
+      console.error(`Error fetching appointment ${appointmentId}:`, error);
+      throw error;
+    }
+  },
+
+  // Get appointment by appointment number (GET /appointments/by-number/:number)
+  getAppointmentByNumber: async (appointmentNumber) => {
+    try {
+      console.log(`Fetching appointment by number: ${appointmentNumber}`);
+      const response = await api.get(`/appointments/by-number/${appointmentNumber}`);
+      console.log('Appointment fetched by number:', response.data);
+      return response.data;
+    } catch (error) {
+      console.error(`Error fetching appointment by number ${appointmentNumber}:`, error);
+      throw error;
+    }
+  },
+
+  // Get appointments by date (GET /appointments/by-date)
   fetchAppointmentsByDate: async (date) => {
     try {
-      console.log(`Making request to: ${API_URL}/appointments/date/${date}`);
-      const response = await api.get(`/appointments/date/${date}`);
+      console.log(`Fetching appointments for date: ${date}`);
+      const response = await api.get('/appointments/by-date', {
+        params: { date }
+      });
       console.log(`Appointments for date ${date}:`, response.data);
       return response.data;
     } catch (error) {
       console.error(`Error fetching appointments for date ${date}:`, error);
       throw error;
     }
+  },
+
+  // Get appointment statistics (GET /appointments/stats)
+  getAppointmentStats: async () => {
+    try {
+      console.log('Fetching appointment statistics');
+      const response = await api.get('/appointments/stats');
+      console.log('Appointment stats:', response.data);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching appointment stats:', error);
+      throw error;
+    }
+  },
+
+  // Get appointments in date range (GET /appointments/date-range)
+  fetchAppointmentsByDateRange: async (startDate, endDate) => {
+    try {
+      console.log(`Fetching appointments from ${startDate} to ${endDate}`);
+      const response = await api.get('/appointments/date-range', {
+        params: { startDate, endDate }
+      });
+      console.log('Appointments in date range:', response.data);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching appointments by date range:', error);
+      throw error;
+    }
+  },
+
+  // Get available time slots (GET /appointments/available-slots)
+  fetchAvailableSlots: async (date) => {
+    try {
+      console.log(`Fetching available slots for date: ${date}`);
+      const response = await api.get('/appointments/available-slots', {
+        params: { date }
+      });
+      console.log('Available slots:', response.data);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching available slots:', error);
+      throw error;
+    }
+  },
+
+  // Update appointment (PATCH /appointments/:id)
+  updateAppointment: async (appointmentId, updateData) => {
+    try {
+      console.log(`Updating appointment ${appointmentId}:`, updateData);
+      const response = await api.patch(`/appointments/${appointmentId}`, updateData);
+      console.log('Appointment updated:', response.data);
+      return response.data;
+    } catch (error) {
+      console.error(`Error updating appointment ${appointmentId}:`, error);
+      throw error;
+    }
+  },
+
+  // Update appointment status (PATCH /appointments/:id/status)
+  updateAppointmentStatus: async (appointmentId, status) => {
+    try {
+      console.log(`Updating appointment ${appointmentId} status to: ${status}`);
+      const response = await api.patch(`/appointments/${appointmentId}/status`, { status });
+      console.log('Appointment status updated:', response.data);
+      return response.data;
+    } catch (error) {
+      console.error(`Error updating appointment ${appointmentId} status:`, error);
+      throw error;
+    }
+  },
+
+  // Delete appointment (DELETE /appointments/:id)
+  deleteAppointment: async (appointmentId) => {
+    try {
+      console.log(`Deleting appointment: ${appointmentId}`);
+      const response = await api.delete(`/appointments/${appointmentId}`);
+      console.log('Appointment deleted:', response.data);
+      return response.data;
+    } catch (error) {
+      console.error(`Error deleting appointment ${appointmentId}:`, error);
+      throw error;
+    }
+  },
+
+  // Helper methods for convenience
+  confirmAppointment: async (appointmentId) => {
+    return appointmentService.updateAppointmentStatus(appointmentId, 'confirmed');
+  },
+
+  cancelAppointment: async (appointmentId) => {
+    return appointmentService.updateAppointmentStatus(appointmentId, 'cancelled');
+  },
+
+  completeAppointment: async (appointmentId) => {
+    return appointmentService.updateAppointmentStatus(appointmentId, 'completed');
   }
 };
 
