@@ -4,12 +4,14 @@ import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import './AppointmentContent.css';
 import { saveRecentAppointments } from './RecentAppointmentData';
+import { appointmentService } from '../../services/appointmentService'; 
 
 const AppointmentContainer = ({ onBack, preselectedDate }) => {
   const navigate = useNavigate();
 
   const [showDialog, setShowDialog] = useState(true);
   const [isForSelf, setIsForSelf] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [userData, setUserData] = useState({
     lastName: 'Francisco',
@@ -33,6 +35,8 @@ const AppointmentContainer = ({ onBack, preselectedDate }) => {
   const [errors, setErrors] = useState({});
   const [selectedDate, setSelectedDate] = useState(preselectedDate);
   const [tooltip, setTooltip] = useState(false);
+  const [availableSlots, setAvailableSlots] = useState([]); 
+  const [loadingSlots, setLoadingSlots] = useState(false); 
 
   const handleDialogChoice = forSelf => {
     setIsForSelf(forSelf);
@@ -57,6 +61,29 @@ const AppointmentContainer = ({ onBack, preselectedDate }) => {
     }
   }, [preselectedDate]);
 
+  // Fetch real available slots when date changes
+  useEffect(() => {
+    if (selectedDate) {
+      fetchAvailableSlots();
+    }
+  }, [selectedDate]);
+
+  const fetchAvailableSlots = async () => {
+    try {
+      setLoadingSlots(true);
+      const dateStr = selectedDate.toISOString().split('T')[0]; // Format as YYYY-MM-DD
+      const slots = await appointmentService.fetchAvailableSlots(dateStr);
+      setAvailableSlots(slots);
+    } catch (error) {
+      console.error('Error fetching available slots:', error);
+      // Fallback to existing generated slots if API fails
+      setAvailableSlots(generateTimeSlots());
+    } finally {
+      setLoadingSlots(false);
+    }
+  };
+
+  // Keep existing generateTimeSlots as fallback
   const generateTimeSlots = () => {
     const slots = [];
     let hour = 8;
@@ -75,7 +102,8 @@ const AppointmentContainer = ({ onBack, preselectedDate }) => {
     return slots;
   };
 
-  const timeSlots = generateTimeSlots();
+  // Use real slots if available, otherwise fallback to generated slots
+  const timeSlots = availableSlots.length > 0 ? availableSlots : generateTimeSlots();
 
   const handleChange = e => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -98,7 +126,7 @@ const AppointmentContainer = ({ onBack, preselectedDate }) => {
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => { 
     let newErrors = {};
     Object.keys(formData).forEach(key => {
       if (!formData[key]) newErrors[key] = 'This field is required.';
@@ -109,36 +137,99 @@ const AppointmentContainer = ({ onBack, preselectedDate }) => {
       return;
     }
 
-    const appointmentId = `APPT-${Date.now()}`;
+    try {
+      setIsSubmitting(true);
 
-    const newAppointment = {
-      id: appointmentId,
-      type: formData.reason,
-      date: formData.date,
-      time: formData.time,
-      lastName: formData.lastName,
-      firstName: formData.firstName,
-      middleInitial: formData.middleInitial,
-      address: formData.address,
-      phoneNumber: formData.phoneNumber,
-    };
+      // Keep existing appointmentId generation
+      const appointmentId = `APPT-${Date.now()}`;
 
-    saveRecentAppointments(newAppointment);
+      // Prepare data for backend API (real data)
+      const appointmentData = {
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        middleInitial: formData.middleInitial || '',
+        address: formData.address,
+        phoneNumber: formData.phoneNumber,
+        reasonOfVisit: formData.reason, // Map 'reason' to 'reasonOfVisit'
+        appointmentDate: selectedDate.toISOString().split('T')[0], // Format as YYYY-MM-DD
+        appointmentTime: formData.time,
+        isGuest: !isForSelf
+      };
 
-    alert('Appointment Confirmed!');
+      console.log('Submitting real appointment data to backend:', appointmentData);
 
-    navigate(`/QRCodeAppointment/${appointmentId}`, { state: { appointment: newAppointment } });
+      // Create appointment via backend API using real data
+      const result = await appointmentService.createAppointment(appointmentData);
+      
+      console.log('Real appointment created successfully:', result);
 
-    setFormData({
-      lastName: '',
-      firstName: '',
-      middleInitial: '',
-      address: '',
-      phoneNumber: '',
-      reason: '',
-      date: '',
-      time: '',
-    });
+      // Keep existing local appointment structure for backwards compatibility
+      const newAppointment = {
+        id: result.appointmentNumber || appointmentId, // Use real appointmentNumber from backend
+        appointmentNumber: result.appointmentNumber, // Store real appointment number
+        type: formData.reason,
+        date: selectedDate.toISOString().split('T')[0], // Use consistent date format
+        time: formData.time,
+        lastName: formData.lastName,
+        firstName: formData.firstName,
+        middleInitial: formData.middleInitial,
+        address: formData.address,
+        phoneNumber: formData.phoneNumber,
+        reasonOfVisit: formData.reason,
+        appointmentDate: selectedDate.toISOString().split('T')[0],
+        appointmentTime: formData.time,
+        status: result.status || 'pending', // Use real status from backend
+        // Include all real backend data
+        dbId: result.id, // Store database ID
+        createdAt: result.createdAt,
+        updatedAt: result.updatedAt
+      };
+
+      // Keep existing local storage save
+      saveRecentAppointments(newAppointment);
+
+      alert('Appointment Confirmed!');
+
+      // Navigate with the real appointment data
+      navigate(`/QRCodeAppointment/${result.appointmentNumber || appointmentId}`, { 
+        state: { 
+          appointment: {
+            ...newAppointment,
+            // Pass real backend data
+            id: result.id,
+            appointmentNumber: result.appointmentNumber,
+            status: result.status
+          }
+        } 
+      });
+
+      // Keep existing form reset
+      setFormData({
+        lastName: '',
+        firstName: '',
+        middleInitial: '',
+        address: '',
+        phoneNumber: '',
+        reason: '',
+        date: '',
+        time: '',
+      });
+
+    } catch (error) {
+      console.error('Error creating real appointment:', error);
+      
+      // Show error message from backend
+      let errorMessage = 'Failed to create appointment. Please try again.';
+      if (error.response?.data?.message) {
+        errorMessage = error.response.data.message;
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+      
+      alert(errorMessage);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -237,8 +328,15 @@ const AppointmentContainer = ({ onBack, preselectedDate }) => {
 
             <div className="InputWrapper AppointTime">
               <label className="AppointTimeSelected">Select Time</label>
-              <select name="time" value={formData.time} onChange={handleChange}>
-                <option value="">Select a Time Slot</option>
+              <select 
+                name="time" 
+                value={formData.time} 
+                onChange={handleChange}
+                disabled={loadingSlots}
+              >
+                <option value="">
+                  {loadingSlots ? 'Loading available times...' : 'Select a Time Slot'}
+                </option>
                 {timeSlots.map((slot, index) => (
                   <option key={index} value={slot}>
                     {slot}
@@ -246,6 +344,7 @@ const AppointmentContainer = ({ onBack, preselectedDate }) => {
                 ))}
               </select>
               {errors.time && <span className="ErrorText">{errors.time}</span>}
+              {loadingSlots && <span className="InfoText">Fetching real-time availability...</span>}
             </div>
           </div>
 
@@ -269,8 +368,12 @@ const AppointmentContainer = ({ onBack, preselectedDate }) => {
               )}
             </div>
             <div className="ConfirmContainer">
-              <button className="ConfirmButton" onClick={handleSubmit}>
-                Confirm
+              <button 
+                className="ConfirmButton" 
+                onClick={handleSubmit}
+                disabled={isSubmitting || loadingSlots}
+              >
+                {isSubmitting ? 'Creating Appointment...' : 'Confirm'}
               </button>
             </div>
           </div>
