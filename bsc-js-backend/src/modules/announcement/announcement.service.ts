@@ -3,13 +3,13 @@ import { CreateAnnouncementDto } from './dto/create-announcement.dto';
 import { UpdateAnnouncementDto } from './dto/update-announcement.dto';
 
 @Injectable()
-export class AnnouncementsService {
+export class AnnouncementService {
   create(createAnnouncementDto: CreateAnnouncementDto) {
     return 'This action adds a new announcement';
   }
 
   findAll() {
-    return `This action returns all announcements`;
+    return `This action returns all announcement`;
   }
 
   findOne(id: number) {

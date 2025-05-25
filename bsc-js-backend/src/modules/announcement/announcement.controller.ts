@@ -1,34 +1,34 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { AnnouncementsService } from './announcements.service';
+import { AnnouncementService } from './announcement.service';
 import { CreateAnnouncementDto } from './dto/create-announcement.dto';
 import { UpdateAnnouncementDto } from './dto/update-announcement.dto';
 
-@Controller('announcements')
-export class AnnouncementsController {
-  constructor(private readonly announcementsService: AnnouncementsService) {}
+@Controller('announcement')
+export class AnnouncementController {
+  constructor(private readonly announcementService: AnnouncementService) {}
 
   @Post()
   create(@Body() createAnnouncementDto: CreateAnnouncementDto) {
-    return this.announcementsService.create(createAnnouncementDto);
+    return this.announcementService.create(createAnnouncementDto);
   }
 
   @Get()
   findAll() {
-    return this.announcementsService.findAll();
+    return this.announcementService.findAll();
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.announcementsService.findOne(+id);
+    return this.announcementService.findOne(+id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateAnnouncementDto: UpdateAnnouncementDto) {
-    return this.announcementsService.update(+id, updateAnnouncementDto);
+    return this.announcementService.update(+id, updateAnnouncementDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.announcementsService.remove(+id);
+    return this.announcementService.remove(+id);
   }
 }
