@@ -1,35 +1,50 @@
-import { Controller, Get, Post, Body, Param, UseGuards } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
 import { QueueService } from './queue.service';
 import { QueueStatus } from './entities/queue.entity';
+
+interface QueueDetails {
+  firstName?: string;
+  lastName?: string;
+  middleInitial?: string;
+  reasonOfVisit?: string;
+  address?: string;
+  phoneNumber?: string;
+}
 
 @Controller('queues')
 export class QueuesController {
   constructor(private readonly queueService: QueueService) {}
   // This endpoint is for supporting the legacy API path that the frontend is using
-  @Get('walk-in') 
+  @Get('walk-in')
   async getWalkInQueues() {
     console.log('GET /queues/walk-in endpoint called');
     try {
       // Get both pending and serving queues with details using the service methods
-      const [pendingQueuesWithDetails, servingQueuesWithDetails] = await Promise.all([
-        this.queueService.findByStatusWithDetails(QueueStatus.PENDING),
-        this.queueService.findByStatusWithDetails(QueueStatus.SERVING)
-      ]);
+      const [pendingQueuesWithDetails, servingQueuesWithDetails] =
+        await Promise.all([
+          this.queueService.findByStatusWithDetails(QueueStatus.PENDING),
+          this.queueService.findByStatusWithDetails(QueueStatus.SERVING),
+        ]);
 
       console.log('Found pending queues:', pendingQueuesWithDetails.length);
       console.log('Found serving queues:', servingQueuesWithDetails.length);
 
       // Combine all queues
-      const allQueues = [...pendingQueuesWithDetails, ...servingQueuesWithDetails];
+      const allQueues = [
+        ...pendingQueuesWithDetails,
+        ...servingQueuesWithDetails,
+      ];
 
       // Extract details from the nested structure and flatten them for the frontend
-      const result = allQueues.map(queue => {
+      const result = allQueues.map((queue) => {
         // For debugging
         console.log('Processing queue:', queue.id, 'status:', queue.status);
-        
+
         // Handle potential null/undefined details
-        const details = Array.isArray(queue.details) ? queue.details[0] : queue.details;
-        
+        const details: QueueDetails | null = Array.isArray(queue.details)
+          ? (queue.details[0] as QueueDetails)
+          : (queue.details as QueueDetails);
+
         return {
           id: queue.id,
           queueNumber: queue.queueNumber,
@@ -43,15 +58,15 @@ export class QueuesController {
           middleInitial: details?.middleInitial || null,
           reasonOfVisit: details?.reasonOfVisit || null,
           address: details?.address || null,
-          phoneNumber: details?.phoneNumber || null
+          phoneNumber: details?.phoneNumber || null,
         };
       });
 
       console.log(`Returning ${result.length} walk-in queues`);
       return result;
-    } catch (error) {
-      console.error('Error fetching walk-in queues:', error);
-      throw error;
+    } catch (err: unknown) {
+      console.error('Error fetching walk-in queues:', err);
+      throw err;
     }
   }
 }
