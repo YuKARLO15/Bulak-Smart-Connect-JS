@@ -7,28 +7,36 @@ const AnnouncementForm = ({ addAnnouncement }) => {
     description: '',
     image: '',
   });
-
-  const getPhilippineDateTimeISO = () => {
-    const now = new Date();
-    const options = { timeZone: 'Asia/Manila' };
-    const phTime = new Date(now.toLocaleString('en-US', options));
-    return phTime.toISOString();
-  };
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setAnnouncement((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const newAnnouncement = {
-      ...announcement,
-      id: Date.now(),
-      date: getPhilippineDateTimeISO(), // ✅ set PH time automatically
-    };
-    addAnnouncement(newAnnouncement);
-    setAnnouncement({ title: '', description: '', image: '' });
+    setIsSubmitting(true);
+
+    try {
+      // Prepare data for backend API
+      const announcementData = {
+        title: announcement.title,
+        description: announcement.description,
+        image: announcement.image,
+        createdBy: 'admin', // You can get this from auth context if needed
+      };
+
+      // Pass to parent (which handles API call)
+      await addAnnouncement(announcementData);
+
+      // Reset form on successful submission
+      setAnnouncement({ title: '', description: '', image: '' });
+    } catch (error) {
+      console.error('Form submission error:', error);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -40,6 +48,7 @@ const AnnouncementForm = ({ addAnnouncement }) => {
         value={announcement.title}
         onChange={handleChange}
         required
+        disabled={isSubmitting}
       />
       <textarea
         name="description"
@@ -47,9 +56,20 @@ const AnnouncementForm = ({ addAnnouncement }) => {
         value={announcement.description}
         onChange={handleChange}
         required
+        disabled={isSubmitting}
       />
-      {/* Removed datetime-local input since system sets time automatically */}
-      <button type="submit">Post Announcement</button>
+      {/* Uncomment if you want to include image URL input, di ako sure eh, or image upload might need changes depends kasi varchar ito eh */}
+      {/*<input
+        type="url"
+        name="image"
+        placeholder="Image URL (optional)"
+        value={announcement.image}
+        onChange={handleChange}
+        disabled={isSubmitting}
+      />*/}
+      <button type="submit" disabled={isSubmitting}>
+        {isSubmitting ? 'Posting...' : 'Post Announcement'}
+      </button>
     </form>
   );
 };
