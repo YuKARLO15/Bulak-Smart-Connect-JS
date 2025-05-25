@@ -1,104 +1,180 @@
 .QrCodeContainerAppointment {
-  display: flex;
-  align-items: center;
-  justify-content: center;
   min-height: 100vh;
   width: 100vw;
-  text-align: center;
-  padding: 20px;
+  padding: 30px;
+  display: flex;
+  justify-content: center;
+  background-color: #f5f7fa;
   transition: margin-left 0.3s ease;
 }
 
-.QrCodeCardAppointment {
-  background: #ffffff;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  text-align: center;
-  max-width: 400px;
-  width: 100%;
+.QrCodeContainerAppointment.sidebar-open {
+  margin-left: 250px;
 }
 
 .QueueInfoAppointment {
-  max-width: 65vw;
-}
-.LabelAppointmentID {
-  color:#fff !important;
-}
-.QueueNumberAppointment {
-  font-size: 2.5rem;
-  font-weight: bold;
-  color: #fff !important;
-  margin: 10px 0;
+  background: #ffffff;
+  max-width: 800px;
+  width: 100%;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  margin-top: 30px;
+  padding: 30px;
 }
 
-.QrSectionAppointment {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  margin-top: 20px;
-}
-
-.QrCodeAppointment {
-  width: 200px;
-  height: 200px;
-  object-fit: contain;
-  margin-bottom: 10px;
-}
-
-.QrSectionAppointment p {
-  font-size: 1.2rem;
-  font-weight: bold;
-  color: #333;
-}
-
-.RequirementsLinkAppointment {
+.QueueInfoAppointment h2 {
   color: #184a5b;
-  text-decoration: none;
-  font-weight: bold;
-  margin-top: 10px;
-  display: inline-block;
+  font-size: 24px;
+  margin-bottom: 25px;
+  text-align: center;
 }
 
-.RequirementsLinkAppointment:hover {
-  text-decoration: underline;
+.HighlightAppointment {
+  color: #184a5b;
+  font-weight: 700;
+}
+
+.LabelAppointmentID {
+  font-size: 16px;
+  text-align: center;
+  margin-bottom: 5px;
+  color: #6c757d;
+  font-weight: 500;
+}
+
+.QueueNumberAppointment {
+  font-size: 32px;
+  font-weight: 700;
+  text-align: center;
+  color: #f9f9f9;
+  margin: 5px 0 30px;
 }
 
 .AppointmentDetailsSectionAppointment {
-  display: flex;
-  justify-content: center;
-  width: 100%;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  padding: 25px;
+  margin: 25px 0;
+  border: 1px solid #eaecef;
 }
 
-.AppointmentDetailsAppointment {
-  display: flex;
-  flex-direction: column;
-  text-align: left;
-  background: #ffffff;
-  padding: 15px;
-  border-radius: 8px;
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-  width: 100%;
-  max-width: 400px;
-  margin-top: 15px;
-  color: #333;
+.DetailsSectionTitleAppointment {
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-size: 20px;
+  color: #184a5b;
+  font-weight: 600;
 }
 
 .AppointmentDetailsAppointment p {
-  margin: 5px 0;
-  font-size: 1rem;
+  margin: 10px 0;
+  font-size: 16px;
+  line-height: 1.6;
+  color: #333;
 }
 
-.NoteAppointment {
-  font-size: 0.9rem;
-  color: #555;
+.AppointmentDetailsAppointment p strong {
+  display: inline-block;
+  width: 160px;
+  color: #184a5b;
+}
+
+.NoteContainerAppointment {
+  margin: 25px 0;
+  padding: 25px;
+  background-color: #e7f4f8;
+  border-radius: 8px;
+  border-left: 4px solid #184a5b;
+}
+
+.NoteTitleAppointment {
+  margin-top: 0;
+  color: #184a5b;
+  font-size: 18px;
+  margin-bottom: 15px;
+}
+
+.NoteListAppointment {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.NoteListAppointment li {
+  margin-bottom: 10px;
+  color: #5a5a5a;
+  line-height: 1.5;
+}
+
+.RequirementsLinkAppointment {
+  display: block;
   text-align: center;
-  margin-top: 20px;
-  max-width: 500vw;
+  margin-top: 30px;
+  padding: 14px 25px;
+  background-color: #184a5b;
+  color: white;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 16px;
+  transition: all 0.2s ease;
+  width: 100%;
 }
-/* for Nav side bar */
 
-.QrCodeContainerAppointment .sidebar-open {
-  margin-left: 500px !important;
+.RequirementsLinkAppointment:hover {
+  background-color: #0f3a48;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.ErrorContainerAppointment {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f5f7fa;
+}
+
+.MessageContainerAppointment {
+  background: white;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  max-width: 400px;
+}
+
+.MessageContainerAppointment h2 {
+  color: #e53e3e;
+  margin: 0 0 15px;
+}
+
+.MessageContainerAppointment p {
+  color: #4a5568;
+  margin: 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .QrCodeContainerAppointment {
+    padding: 15px;
+  }
+  
+  .QueueInfoAppointment {
+    padding: 20px;
+  }
+  
+  .AppointmentDetailsSectionAppointment {
+    padding: 15px;
+  }
+  
+  .AppointmentDetailsAppointment p strong {
+    display: block;
+    width: 100%;
+    margin-bottom: 5px;
+  }
+  
+  .QueueNumberAppointment {
+    font-size: 28px;
+  }
 }
