@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
+const API_BASE_URL = /*import.meta.env.VITE_REACT_APP_API_URL || Temporary Comment will setup later*/ 'http://localhost:3000';
 
 export const announcementService = {
   // Get all announcements
