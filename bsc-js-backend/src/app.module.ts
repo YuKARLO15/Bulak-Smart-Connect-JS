@@ -9,6 +9,7 @@ import { AppService } from './app.service';
 import { RolesModule } from './roles/roles.module';
 import { QueueModule } from './modules/queue/queue.module';
 import { AppointmentModule } from './modules/appointment/appointment.module';
+import { AnnouncementsModule } from './modules/announcements/announcements.module';
 
 @Module({
   imports: [
@@ -60,6 +61,7 @@ import { AppointmentModule } from './modules/appointment/appointment.module';
     RolesModule,
     QueueModule,
     AppointmentModule,
+    AnnouncementsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
