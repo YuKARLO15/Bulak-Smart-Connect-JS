@@ -86,7 +86,7 @@
 
 <ol class="breadcrumb">
     <li class="breadcrumb-item">Modules</li>
-    <li class="breadcrumb-item" >QueueModule</li>
+    <li class="breadcrumb-item" >AnnouncementModule</li>
 </ol>
 
 <div class="text-center module-graph-container">
@@ -114,56 +114,44 @@
 <polygon fill="#fb8072" stroke="transparent" points="406,-10 406,-30 426,-30 426,-10 406,-10"/>
 <text text-anchor="start" x="429.73" y="-15.4" font-family="Times-12" font-size="14.00"> &#160;Exports</text>
 <g id="clust1" class="cluster">
-<title>cluster_QueueModule</title>
-<polygon fill="none" stroke="black" stroke-dasharray="1,5" points="121,-70 121,-268 375,-268 375,-70 121,-70"/>
-</g>
-<g id="clust6" class="cluster">
-<title>cluster_QueueModule_providers</title>
-<polygon fill="none" stroke="black" points="175,-78 175,-130 321,-130 321,-78 175,-78"/>
+<title>cluster_AnnouncementModule</title>
+<polygon fill="none" stroke="black" stroke-dasharray="1,5" points="133,-70 133,-268 363,-268 363,-70 133,-70"/>
 </g>
 <g id="clust4" class="cluster">
-<title>cluster_QueueModule_exports</title>
-<polygon fill="none" stroke="black" points="129,-208 129,-260 367,-260 367,-208 129,-208"/>
+<title>cluster_AnnouncementModule_exports</title>
+<polygon fill="none" stroke="black" points="166,-208 166,-260 330,-260 330,-208 166,-208"/>
 </g>
-<!-- QueueGateway  -->
+<g id="clust6" class="cluster">
+<title>cluster_AnnouncementModule_providers</title>
+<polygon fill="none" stroke="black" points="141,-78 141,-130 355,-130 355,-78 141,-78"/>
+</g>
+<!-- AnnouncementService  -->
 <g id="node1" class="node">
-<title>QueueGateway </title>
-<polygon fill="#fb8072" stroke="black" points="358.78,-252 253.22,-252 253.22,-216 358.78,-216 358.78,-252"/>
-<text text-anchor="middle" x="306" y="-229.8" font-family="Times,serif" font-size="14.00">QueueGateway </text>
+<title>AnnouncementService </title>
+<polygon fill="#fb8072" stroke="black" points="321.51,-252 174.49,-252 174.49,-216 321.51,-216 321.51,-252"/>
+<text text-anchor="middle" x="248" y="-229.8" font-family="Times,serif" font-size="14.00">AnnouncementService </text>
 </g>
-<!-- QueueService  -->
+<!-- AnnouncementModule -->
 <g id="node2" class="node">
-<title>QueueService </title>
-<polygon fill="#fb8072" stroke="black" points="235.01,-252 136.99,-252 136.99,-216 235.01,-216 235.01,-252"/>
-<text text-anchor="middle" x="186" y="-229.8" font-family="Times,serif" font-size="14.00">QueueService </text>
+<title>AnnouncementModule</title>
+<polygon fill="#8dd3c7" stroke="black" points="320.58,-187 317.58,-191 296.58,-191 293.58,-187 175.42,-187 175.42,-151 320.58,-151 320.58,-187"/>
+<text text-anchor="middle" x="248" y="-164.8" font-family="Times,serif" font-size="14.00">AnnouncementModule</text>
 </g>
-<!-- QueueModule -->
-<g id="node3" class="node">
-<title>QueueModule</title>
-<polygon fill="#8dd3c7" stroke="black" points="296.09,-187 293.09,-191 272.09,-191 269.09,-187 199.91,-187 199.91,-151 296.09,-151 296.09,-187"/>
-<text text-anchor="middle" x="248" y="-164.8" font-family="Times,serif" font-size="14.00">QueueModule</text>
-</g>
-<!-- QueueModule&#45;&gt;QueueGateway  -->
+<!-- AnnouncementModule&#45;&gt;AnnouncementService  -->
 <g id="edge1" class="edge">
-<title>QueueModule&#45;&gt;QueueGateway </title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M274.58,-187.11C274.58,-187.11 274.58,-205.99 274.58,-205.99"/>
-<polygon fill="black" stroke="black" points="271.08,-205.99 274.58,-215.99 278.08,-205.99 271.08,-205.99"/>
+<title>AnnouncementModule&#45;&gt;AnnouncementService </title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M248,-187.11C248,-187.11 248,-205.99 248,-205.99"/>
+<polygon fill="black" stroke="black" points="244.5,-205.99 248,-215.99 251.5,-205.99 244.5,-205.99"/>
 </g>
-<!-- QueueModule&#45;&gt;QueueService  -->
+<!-- AnnouncementService -->
+<g id="node3" class="node">
+<title>AnnouncementService</title>
+<ellipse fill="#fdb462" stroke="black" cx="248" cy="-104" rx="98.98" ry="18"/>
+<text text-anchor="middle" x="248" y="-99.8" font-family="Times,serif" font-size="14.00">AnnouncementService</text>
+</g>
+<!-- AnnouncementService&#45;&gt;AnnouncementModule -->
 <g id="edge2" class="edge">
-<title>QueueModule&#45;&gt;QueueService </title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M217.48,-187.11C217.48,-187.11 217.48,-205.99 217.48,-205.99"/>
-<polygon fill="black" stroke="black" points="213.98,-205.99 217.48,-215.99 220.98,-205.99 213.98,-205.99"/>
-</g>
-<!-- QueueService -->
-<g id="node4" class="node">
-<title>QueueService</title>
-<ellipse fill="#fdb462" stroke="black" cx="248" cy="-104" rx="65.39" ry="18"/>
-<text text-anchor="middle" x="248" y="-99.8" font-family="Times,serif" font-size="14.00">QueueService</text>
-</g>
-<!-- QueueService&#45;&gt;QueueModule -->
-<g id="edge3" class="edge">
-<title>QueueService&#45;&gt;QueueModule</title>
+<title>AnnouncementService&#45;&gt;AnnouncementModule</title>
 <path fill="none" stroke="black" d="M248,-122.11C248,-122.11 248,-140.99 248,-140.99"/>
 <polygon fill="black" stroke="black" points="244.5,-140.99 248,-150.99 251.5,-140.99 244.5,-140.99"/>
 </g>
@@ -203,7 +191,7 @@
             <h3>File</h3>
         </p>
         <p class="comment">
-            <code>src/modules/queue/queue.module.ts</code>
+            <code>src/modules/announcement/announcement.module.ts</code>
         </p>
 
 
@@ -217,7 +205,7 @@
                             title="Official documentation about module providers"><span class="icon ion-ios-information-circle-outline"></a></h3>
                     <ul class="list-group">
                         <li class="list-group-item">
-                            <a href="../injectables/QueueService.html">QueueService</a>
+                            <a href="../injectables/AnnouncementService.html">AnnouncementService</a>
                         </li>
                     </ul>
                 </div>
@@ -227,10 +215,7 @@
                                 class="icon ion-ios-information-circle-outline"></a></h3>
                     <ul class="list-group">
                         <li class="list-group-item">
-                            <a href="../controllers/QueueController.html">QueueController</a>
-                        </li>
-                        <li class="list-group-item">
-                            <a href="../controllers/QueuesController.html">QueuesController</a>
+                            <a href="../controllers/AnnouncementController.html">AnnouncementController</a>
                         </li>
                     </ul>
                 </div>
@@ -240,10 +225,7 @@
                                 class="icon ion-ios-information-circle-outline"></a></h3>
                     <ul class="list-group">
                         <li class="list-group-item">
-                            <a href="../s/QueueGateway.html">QueueGateway</a>
-                        </li>
-                        <li class="list-group-item">
-                            <a href="../injectables/QueueService.html">QueueService</a>
+                            <a href="../injectables/AnnouncementService.html">AnnouncementService</a>
                         </li>
                     </ul>
                 </div>
@@ -255,26 +237,19 @@
 
 
     <div class="tab-pane fade  tab-source-code" id="source">
-        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import {
-  Module,
-  //forwardRef, // Uncomment if you need to use forwardRef
-} from &#x27;@nestjs/common&#x27;;
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Module } from &#x27;@nestjs/common&#x27;;
 import { TypeOrmModule } from &#x27;@nestjs/typeorm&#x27;;
-import { QueueService } from &#x27;./queue.service&#x27;;
-import { QueueController } from &#x27;./queue.controller&#x27;;
-import { QueuesController } from &#x27;./queues.controller&#x27;;
-import { QueueGateway } from &#x27;./queue.gateway&#x27;;
-import { Queue } from &#x27;./entities/queue.entity&#x27;;
-import { QueueDetails } from &#x27;./entities/queue-details.entity&#x27;;
-import { Counter } from &#x27;../counter/entities/counter.entity&#x27;;
+import { AnnouncementService } from &#x27;./announcement.service&#x27;;
+import { AnnouncementController } from &#x27;./announcement.controller&#x27;;
+import { Announcement } from &#x27;./entities/announcement.entity&#x27;;
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Queue, QueueDetails, Counter])],
-  controllers: [QueueController, QueuesController],
-  providers: [QueueService, QueueGateway],
-  exports: [QueueService, QueueGateway],
+  imports: [TypeOrmModule.forFeature([Announcement])],
+  controllers: [AnnouncementController],
+  providers: [AnnouncementService],
+  exports: [AnnouncementService],
 })
-export class QueueModule {}
+export class AnnouncementModule {}
 </code></pre>
     </div>
 </div>
@@ -321,7 +296,7 @@ export class QueueModule {}
        <script>
             var COMPODOC_CURRENT_PAGE_DEPTH = 1;
             var COMPODOC_CURRENT_PAGE_CONTEXT = 'module';
-            var COMPODOC_CURRENT_PAGE_URL = 'QueueModule.html';
+            var COMPODOC_CURRENT_PAGE_URL = 'AnnouncementModule.html';
             var MAX_SEARCH_RESULTS = 15;
        </script>
 

@@ -21,44 +21,44 @@
 <polygon fill="#fb8072" stroke="transparent" points="406,-10 406,-30 426,-30 426,-10 406,-10"/>
 <text text-anchor="start" x="429.73" y="-15.4" font-family="Times-12" font-size="14.00"> &#160;Exports</text>
 <g id="clust1" class="cluster">
-<title>cluster_RolesModule</title>
-<polygon fill="none" stroke="black" stroke-dasharray="1,5" points="170,-70 170,-268 326,-268 326,-70 170,-70"/>
+<title>cluster_AnnouncementModule</title>
+<polygon fill="none" stroke="black" stroke-dasharray="1,5" points="133,-70 133,-268 363,-268 363,-70 133,-70"/>
 </g>
 <g id="clust4" class="cluster">
-<title>cluster_RolesModule_exports</title>
-<polygon fill="none" stroke="black" points="193,-208 193,-260 303,-260 303,-208 193,-208"/>
+<title>cluster_AnnouncementModule_exports</title>
+<polygon fill="none" stroke="black" points="166,-208 166,-260 330,-260 330,-208 166,-208"/>
 </g>
 <g id="clust6" class="cluster">
-<title>cluster_RolesModule_providers</title>
-<polygon fill="none" stroke="black" points="178,-78 178,-130 318,-130 318,-78 178,-78"/>
+<title>cluster_AnnouncementModule_providers</title>
+<polygon fill="none" stroke="black" points="141,-78 141,-130 355,-130 355,-78 141,-78"/>
 </g>
-<!-- RolesService  -->
+<!-- AnnouncementService  -->
 <g id="node1" class="node">
-<title>RolesService </title>
-<polygon fill="#fb8072" stroke="black" points="294.86,-252 201.14,-252 201.14,-216 294.86,-216 294.86,-252"/>
-<text text-anchor="middle" x="248" y="-229.8" font-family="Times,serif" font-size="14.00">RolesService </text>
+<title>AnnouncementService </title>
+<polygon fill="#fb8072" stroke="black" points="321.51,-252 174.49,-252 174.49,-216 321.51,-216 321.51,-252"/>
+<text text-anchor="middle" x="248" y="-229.8" font-family="Times,serif" font-size="14.00">AnnouncementService </text>
 </g>
-<!-- RolesModule -->
+<!-- AnnouncementModule -->
 <g id="node2" class="node">
-<title>RolesModule</title>
-<polygon fill="#8dd3c7" stroke="black" points="293.94,-187 290.94,-191 269.94,-191 266.94,-187 202.06,-187 202.06,-151 293.94,-151 293.94,-187"/>
-<text text-anchor="middle" x="248" y="-164.8" font-family="Times,serif" font-size="14.00">RolesModule</text>
+<title>AnnouncementModule</title>
+<polygon fill="#8dd3c7" stroke="black" points="320.58,-187 317.58,-191 296.58,-191 293.58,-187 175.42,-187 175.42,-151 320.58,-151 320.58,-187"/>
+<text text-anchor="middle" x="248" y="-164.8" font-family="Times,serif" font-size="14.00">AnnouncementModule</text>
 </g>
-<!-- RolesModule&#45;&gt;RolesService  -->
+<!-- AnnouncementModule&#45;&gt;AnnouncementService  -->
 <g id="edge1" class="edge">
-<title>RolesModule&#45;&gt;RolesService </title>
+<title>AnnouncementModule&#45;&gt;AnnouncementService </title>
 <path fill="none" stroke="black" stroke-dasharray="5,2" d="M248,-187.11C248,-187.11 248,-205.99 248,-205.99"/>
 <polygon fill="black" stroke="black" points="244.5,-205.99 248,-215.99 251.5,-205.99 244.5,-205.99"/>
 </g>
-<!-- RolesService -->
+<!-- AnnouncementService -->
 <g id="node3" class="node">
-<title>RolesService</title>
-<ellipse fill="#fdb462" stroke="black" cx="248" cy="-104" rx="61.97" ry="18"/>
-<text text-anchor="middle" x="248" y="-99.8" font-family="Times,serif" font-size="14.00">RolesService</text>
+<title>AnnouncementService</title>
+<ellipse fill="#fdb462" stroke="black" cx="248" cy="-104" rx="98.98" ry="18"/>
+<text text-anchor="middle" x="248" y="-99.8" font-family="Times,serif" font-size="14.00">AnnouncementService</text>
 </g>
-<!-- RolesService&#45;&gt;RolesModule -->
+<!-- AnnouncementService&#45;&gt;AnnouncementModule -->
 <g id="edge2" class="edge">
-<title>RolesService&#45;&gt;RolesModule</title>
+<title>AnnouncementService&#45;&gt;AnnouncementModule</title>
 <path fill="none" stroke="black" d="M248,-122.11C248,-122.11 248,-140.99 248,-140.99"/>
 <polygon fill="black" stroke="black" points="244.5,-140.99 248,-150.99 251.5,-140.99 244.5,-140.99"/>
 </g>
