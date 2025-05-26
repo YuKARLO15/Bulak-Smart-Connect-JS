@@ -1,5 +1,7 @@
 import React from 'react';
 import './TermsAndCondition.css';
+// You can remove the backgroundImage import since we're using CSS now
+// import backgroundImage from './MunicipalImage/municipal.jpg';
 
 const PrivacyPolicy = () => {
   return (

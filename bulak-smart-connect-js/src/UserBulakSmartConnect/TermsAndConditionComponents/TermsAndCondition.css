@@ -7,34 +7,59 @@ body, html {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* Page container centers the content */
 .page-container {
     min-height: 100vh;
+    min-width: 100vw;
     display: flex;
     justify-content: center;
     align-items: flex-start;
-    padding: 40px 20px;
+    padding: 5px 20px;
     background-color: #f0f2f5;
+    background-image: url('./MunicipalImage/SIMunicipal.jpg'); /* Background image on page container */
+    background-size: cover; 
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed; /* Makes background stay in place when scrolling */
     box-sizing: border-box;
-    margin-left: 270px; /* Only on larger screens - see media query below */
+    /* margin-left: 270px;  */
+    position: relative;
 }
 
-/* Privacy container styles */
+/* Optional: Add overlay to page-container for better readability */
+.page-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(240, 242, 245, 0.7); /* Light overlay to match original background */
+    z-index: 1;
+}
+
+/* Ensure privacy-container appears above the overlay */
+.page-container > .privacy-container {
+    position: relative;
+    z-index: 2;
+}
+
 .privacy-container {
     width: 100%;
     max-width: 1000px;
-    background-color: #ffffff;
+    background-color: rgba(250, 250, 250, 0.95); /* Semi-transparent white background */
+    /* Remove background image from privacy-container */
     border-radius: 12px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     padding: 30px 40px;
     box-sizing: border-box;
     color: #333;
+    position: relative;
 }
 
 /* Headings */
 .privacy-container h1 {
     text-align: center;
-    color: #e6e6e7;
+    color: #fcf5f5; /* Changed from #e6e6e7 to darker color for better readability */
     margin-bottom: 30px;
     font-size: 2rem;
 }
@@ -43,11 +68,11 @@ body, html {
     color: #154360;
     margin-top: 30px;
     font-size: 1.4rem;
-       text-align: left;
+    text-align: left;
 }
 
 .privacy-container h3 {
-    color: #1a5276;
+    color: #0c4061;
     margin-top: 20px;
     font-size: 1.2rem;
 }
@@ -79,17 +104,19 @@ body, html {
     font-weight: 600;
 }
 
+
 /* Responsive adjustments */
 @media (max-width: 1024px) {
     .page-container {
-        margin-left: 0; /* Remove sidebar margin on tablets and smaller */
+        margin-left: 0; 
     }
 }
 
 @media (max-width: 768px) {
     .page-container {
         padding: 20px 10px;
-        margin-left: 0; /* Ensure no left margin on mobile */
+        margin-left: 0; 
+        background-attachment: scroll; 
     }
     
     .privacy-container {
