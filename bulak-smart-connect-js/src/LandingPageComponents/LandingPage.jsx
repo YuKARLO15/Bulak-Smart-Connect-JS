@@ -11,6 +11,8 @@ import DirectionsWalkOutlinedIcon from '@mui/icons-material/DirectionsWalkOutlin
 import NavBar from '../NavigationComponents/NavBar';
 import DeviceMockUp from './LandingPageAssets/DeviceMockUp.png';
 import BulakLGULogo from './LandingPageAssets/BulakLGULogo.png';
+import HeroBg from './LandingPageAssets/HeroBg.JPEG'; // Add this import
+
 import PhTimeComponent from './PhTimeComponent';
 import { useAuth } from '../context/AuthContext';
 
@@ -24,34 +26,30 @@ const LandingPage = () => {
         <PhTimeComponent />{' '}
       </div>
       <Container className="">
-        <Box className="HeroLanding">
-          <Grid container spacing={4} alignItems="center">
-            <Grid item xs={12} md={6}>
-              <Box className="HeroContentLanding">
-                <Typography variant="h3" className="HeroTitleLanding">
-                  Fast Queues, Simple Transactions, Better Service
-                </Typography>
-                <Typography variant="body1" className="HeroDescriptionLanding">
-                  <strong className="LandingTitle"> Bulak LGU Smart Connect</strong> for the civil
-                  registrar office of San Ildefonso Bulacan, offers fast queuing, simplified
-                  transactions, and improved government services by allowing residents to manage
-                  their queues and applications online, enhancing service efficiency and
-                  convenience.
-                </Typography>
-                <Link to={isAuthenticated ? '/Home' : '/SignUpForm'}>
-                  <Button variant="contained" color="primary" className="SignUpButtonLanding">
-                    {isAuthenticated ? 'DASHBOARD' : 'SIGN UP'}
-                  </Button>
-                </Link>
-              </Box>
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <Box className="HeroImageLanding">
-                <img src={DeviceMockUp} alt="Device Mockups" className="DeviceMockupsLanding" />
-              </Box>
-            </Grid>
-          </Grid>
-        </Box>
+<Box className="HeroLanding">
+  <Grid container spacing={4} alignItems="center">
+    <Grid item xs={12} md={7}>
+      <Box className="HeroContentLanding">
+        <Typography variant="h3" className="HeroTitleLanding">
+          Fast Queues, Simple Transactions, Better Service
+        </Typography>
+        <Typography variant="body1" className="HeroDescriptionLanding">
+          <strong className="LandingTitle"> Bulak LGU Smart Connect</strong> for the civil
+          registrar office of San Ildefonso Bulacan, offers fast queuing, simplified
+          transactions, and improved government services by allowing residents to manage
+          their queues and applications online, enhancing service efficiency and
+          convenience.
+        </Typography>
+        <Link to={isAuthenticated ? '/Home' : '/SignUpForm'}>
+          <Button variant="contained" color="primary" className="SignUpButtonLanding">
+            {isAuthenticated ? 'DASHBOARD' : 'SIGN UP'}
+          </Button>
+        </Link>
+      </Box>
+    </Grid>
+
+  </Grid>
+</Box>
 
         <Box className="AboutSectionLanding">
           <Grid container spacing={4} alignItems="center">
@@ -134,32 +132,7 @@ const LandingPage = () => {
             </Box>
           </Link>
 
-          <Link to={isAuthenticated ? '/Home' : '/LogIn'}>
-            <Box className="FeatureItemLanding">
-              <Grid container spacing={2} alignItems="center">
-                <Grid item xs={12} md={3}>
-                  <Box className="FeatureIconContainerLanding">
-                    <QrCodeScannerIcon className="FeatureIconLanding" />
-                  </Box>
-                </Grid>
-                <Grid item xs={12} md={9}>
-                  <Box className="FeatureContentLanding">
-                    <Typography variant="h6" className="FeatureTitleLanding">
-                      QR SCANNING
-                    </Typography>
-                    <Typography variant="body1" className="FeatureDescriptionLanding">
-                      Fast-track your transaction with QR scanning! Municipal staff will scan your
-                      QR code to quickly retrieve your queue number, appointment details, or
-                      document application status. This ensures faster processing, reduces wait
-                      times, and provides a smooth and efficient experience at the Municipal Civil
-                      Registrar of San Ildefonso Bulacan
-                    </Typography>
-                  </Box>
-                </Grid>
-              </Grid>
-            </Box>
-          </Link>
-
+     
           <Link to={isAuthenticated ? '/WalkInForm' : '/LogIn'}>
             <Box className="FeatureItemLanding">
               <Grid container spacing={2} alignItems="center">
