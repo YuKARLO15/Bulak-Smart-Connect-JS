@@ -256,7 +256,7 @@ jobs:
       run: |
         response=$(curl -s -X POST http://localhost:3000/auth/login \
           -H "Content-Type: application/json" \
-          -d '{"email":"test@example.com","password":"password123"}')
+          -d '{"emailOrUsername":"test@example.com","password":"password123"}')
         
         # Check if response contains access_token
         if echo "$response" | grep -q "access_token"; then
