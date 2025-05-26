@@ -142,3 +142,44 @@
   white-space: nowrap;
   z-index: 1000;
 }
+
+/* Announcement Box Styles for UserDashboard */
+
+.AnnouncementBox {
+  min-height: 200px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.AnnouncementText {
+  text-align: center;
+  color: #666;
+  font-style: italic;
+  padding: 40px 20px;
+}
+
+/* Scrollbar styling for announcement box */
+.AnnouncementBox::-webkit-scrollbar {
+  width: 6px;
+}
+
+.AnnouncementBox::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.AnnouncementBox::-webkit-scrollbar-thumb {
+  background: #184a5b;
+  border-radius: 3px;
+}
+
+.AnnouncementBox::-webkit-scrollbar-thumb:hover {
+  background: #1a3a47;
+}
+
+/* Responsive adjustments for announcements */
+@media (max-width: 768px) {
+  .AnnouncementBox {
+    max-height: 250px;
+  }
+}
