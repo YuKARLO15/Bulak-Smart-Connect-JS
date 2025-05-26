@@ -20,12 +20,17 @@
 - **TypeORM** - ORM for database interactions
 - **JWT** - For secure authentication
 - **MySQL** - Primary database
+- **Socket.IO** - Real-time communication for queue updates
+- **Class Validator** - Request validation and transformation
+- **Swagger/OpenAPI** - API documentation
+- **Jest** - Testing framework
 
 ### DevOps & Documentation
 
 - **GitHub Actions** - CI/CD workflows for testing and deployment
 - **Storybook** - Component documentation
 - **Compodoc** - API documentation
+- **Jest** - Unit and integration testing
 
 ## Site Accessibility
 
@@ -176,6 +181,40 @@ WHERE u.email = 'superadmin@example.com';
 UPDATE users u JOIN roles r ON r.name = 'staff' 
 SET u.default_role_id = r.id 
 WHERE u.email = 'staff@example.com'; 
+
+-- Additional tables for the complete system
+CREATE TABLE announcements (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  title VARCHAR(255) NOT NULL,
+  content TEXT NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE appointments (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  appointment_date DATE NOT NULL,
+  appointment_time TIME NOT NULL,
+  purpose VARCHAR(255) NOT NULL,
+  status ENUM('pending', 'confirmed', 'cancelled', 'completed') DEFAULT 'pending',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE queues (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  queue_number VARCHAR(20) NOT NULL,
+  user_id INT,
+  department VARCHAR(100) NOT NULL,
+  service_type VARCHAR(100) NOT NULL,
+  status ENUM('waiting', 'serving', 'completed', 'cancelled') DEFAULT 'waiting',
+  priority_level INT DEFAULT 1,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  called_at TIMESTAMP NULL,
+  completed_at TIMESTAMP NULL,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL
+);
 ```
 
 > [!note]
@@ -234,6 +273,122 @@ npm run start          # Start NestJS normally
 npm run start:dev      # Start NestJS in development mode
 ```
 
+## Development Scripts
+
+### Frontend (bulak-smart-connect-js)
+```bash
+npm run dev            # Run React with Vite dev server
+npm run build          # Build for production
+npm run preview        # Preview production build
+npm run lint           # Run ESLint
+npm run storybook      # Start Storybook
+npm run build-storybook # Build Storybook
+```
+
+### Backend (bsc-js-backend)
+```bash
+npm run start          # Start production server
+npm run start:dev      # Start development server with hot reload
+npm run start:debug    # Start in debug mode
+npm run build          # Build TypeScript
+npm run test           # Run tests
+npm run test:e2e       # Run end-to-end tests
+npm run test:cov       # Run tests with coverage
+```
+
+### Full Stack Development
+```bash
+# From root directory
+npm run dev            # Run both frontend and backend concurrently
+npm run start-frontend # Run React only  
+npm run start-backend  # Run NestJS only
+```
+
+## Testing
+
+### Backend Tests
+```bash
+cd bsc-js-backend
+npm test                    # Run all tests
+npm run test:watch          # Run tests in watch mode
+npm run test:cov            # Run tests with coverage
+npm run test:e2e            # Run end-to-end tests
+```
+
+### Test Coverage
+- ✅ Authentication & Authorization
+- ✅ User Management & Roles
+- ✅ Queue Management System
+- ✅ Appointment Scheduling
+- ✅ Announcements
+- ✅ Real-time WebSocket Gateway
+
+All modules include both unit tests and controller tests with proper mocking.
+
+## API Endpoints
+
+### Authentication
+- `POST /auth/login` - User login
+- `POST /auth/register` - User registration
+- `GET /auth/profile` - Get user profile
+- `POST /auth/update-profile` - Update user profile
+
+### Queue Management
+- `GET /queue` - Get all queues
+- `POST /queue/join` - Join a queue
+- `DELETE /queue/leave` - Leave a queue
+- WebSocket events for real-time updates
+
+### Appointments
+- `GET /appointment` - Get appointments
+- `POST /appointment` - Create appointment
+- `PATCH /appointment/:id` - Update appointment
+
+### Announcements
+- `GET /announcements` - Get all announcements
+- `GET /announcements/recent` - Get recent announcements
+
+For complete API documentation, check the Postman collection in `/docs/bulak-smart-connect-postman-collection.json`
+
+## Test Accounts
+
+The system comes with pre-configured test accounts:
+
+| Email | Password | Role | Description |
+|-------|----------|------|-------------|
+| `test@example.com` | `password123` | citizen | Regular user account |
+| `admin@example.com` | `admin123` | admin | Administrator account |
+| `superadmin@example.com` | `admin123` | super_admin | Super administrator |
+| `staff@example.com` | `admin123` | staff | Staff member account |
+
+All passwords are hashed using bcrypt for security.
+
+## Project Structure
+
+```
+Bulak-Smart-Connect-JS/
+├── bulak-smart-connect-js/     # React frontend
+│   ├── src/
+│   │   ├── components/         # Reusable components
+│   │   ├── LandingPageComponents/ # Landing page specific
+│   │   └── ...
+│   └── package.json
+├── bsc-js-backend/            # NestJS backend
+│   ├── src/
+│   │   ├── auth/              # Authentication module
+│   │   ├── users/             # User management
+│   │   ├── roles/             # Role management
+│   │   ├── modules/
+│   │   │   ├── queue/         # Queue management
+│   │   │   ├── appointment/   # Appointment system
+│   │   │   └── announcement/  # Announcements
+│   │   └── main.ts
+│   ├── test/                  # E2E tests
+│   ├── docs/                  # API documentation
+│   └── package.json
+└── README.md
+```
+
 # Authors
 
 <div align="center">
@@ -260,4 +415,3 @@ npm run start:dev      # Start NestJS in development mode
         </tbody>
     </table>
 </div>
-
