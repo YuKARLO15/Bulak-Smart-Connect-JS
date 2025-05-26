@@ -15,6 +15,14 @@ describe('QueueController', () => {
     leaveQueue: jest.fn(),
     getQueueStatus: jest.fn(),
     getNextInQueue: jest.fn(),
+    findByStatus: jest.fn(),
+    findByStatusWithDetails: jest.fn(),
+    getDetailsForMultipleQueues: jest.fn(),
+    callNext: jest.fn(),
+    addCounter: jest.fn(),
+    getCounters: jest.fn(),
+    checkExists: jest.fn(),
+    getStats: jest.fn(),
   };
 
   beforeEach(async () => {

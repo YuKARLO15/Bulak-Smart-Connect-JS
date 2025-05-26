@@ -14,6 +14,9 @@ describe('QueueGateway', () => {
     joinQueue: jest.fn(),
     leaveQueue: jest.fn(),
     getQueueStatus: jest.fn(),
+    findByStatus: jest.fn(),
+    callNext: jest.fn(),
+    getStats: jest.fn(),
   };
 
   beforeEach(async () => {
