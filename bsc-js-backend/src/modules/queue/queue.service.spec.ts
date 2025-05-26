@@ -2,6 +2,9 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { QueueService } from './queue.service';
 import { Queue } from './entities/queue.entity';
+import { QueueDetails } from './entities/queue-details.entity';
+import { Counter } from '../counter/entities/counter.entity';
+import { QueueGateway } from './queue.gateway';
 
 describe('QueueService', () => {
   let service: QueueService;
@@ -24,6 +27,32 @@ describe('QueueService', () => {
     })),
   };
 
+  const mockQueueDetailsRepository = {
+    find: jest.fn(),
+    findOne: jest.fn(),
+    create: jest.fn(),
+    save: jest.fn(),
+    update: jest.fn(),
+    delete: jest.fn(),
+  };
+
+  const mockCounterRepository = {
+    find: jest.fn(),
+    findOne: jest.fn(),
+    create: jest.fn(),
+    save: jest.fn(),
+    update: jest.fn(),
+    delete: jest.fn(),
+  };
+
+  const mockQueueGateway = {
+    server: {
+      emit: jest.fn(),
+    },
+    handleConnection: jest.fn(),
+    handleDisconnect: jest.fn(),
+  };
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -31,6 +60,18 @@ describe('QueueService', () => {
         {
           provide: getRepositoryToken(Queue),
           useValue: mockQueueRepository,
+        },
+        {
+          provide: getRepositoryToken(QueueDetails),
+          useValue: mockQueueDetailsRepository,
+        },
+        {
+          provide: getRepositoryToken(Counter),
+          useValue: mockCounterRepository,
+        },
+        {
+          provide: QueueGateway,
+          useValue: mockQueueGateway,
         },
       ],
     }).compile();
