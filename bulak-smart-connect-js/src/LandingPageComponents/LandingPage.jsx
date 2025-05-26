@@ -11,8 +11,7 @@ import DirectionsWalkOutlinedIcon from '@mui/icons-material/DirectionsWalkOutlin
 import NavBar from '../NavigationComponents/NavBar';
 import DeviceMockUp from './LandingPageAssets/DeviceMockUp.png';
 import BulakLGULogo from './LandingPageAssets/BulakLGULogo.png';
-import HeroBg from './LandingPageAssets/HeroBg.JPEG'; // Add this import
-
+import HeroBg from './LandingPageAssets/HeroBg.JPEG';
 import PhTimeComponent from './PhTimeComponent';
 import { useAuth } from '../context/AuthContext';
 
@@ -20,7 +19,8 @@ const LandingPage = () => {
   const { isAuthenticated } = useAuth();
 
   return (
-    <Box className="LandingContainer">
+    <Box className="LandingContainer"
+   >
       <NavBar />
       <div className="PhTimeComponent">
         <PhTimeComponent />{' '}
