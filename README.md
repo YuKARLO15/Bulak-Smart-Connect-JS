@@ -6,26 +6,92 @@
 
 ## Technology Stack
 
-### Frontend
+<div align="center">
+    <table>
+        <tbody>
+            <tr>
+                <th colspan="4"><h3>Frontend Technologies</h3></th>
+            </tr>
+            <tr>
+                <td><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/react/react-original.svg" alt="React" width="60px" height="auto" /></td>
+                <td><img src="https://vitejs.dev/logo.svg" alt="Vite" width="60px" height="auto" /></td>
+                <td><img src="https://raw.githubusercontent.com/storybookjs/brand/master/icon/icon-storybook-default.svg" alt="Storybook" width="60px" height="auto" /></td>
+                <td><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/axios/axios-plain.svg" alt="Axios" width="60px" height="auto" /></td>
+            </tr>
+            <tr>
+                <td><p><b>React</b></p></td>
+                <td><p><b>Vite</b></p></td>
+                <td><p><b>Storybook</b></p></td>
+                <td><p><b>Axios</b></p></td>
+            </tr>
+            <tr>
+                <td><p>UI library for building component-based interfaces</p></td>
+                <td><p>Fast build tool and development environment</p></td>
+                <td><p>Component documentation and UI development</p></td>
+                <td><p>HTTP client for API requests</p></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
 
-- **React** - UI library for building component-based interfaces
-- **Vite** - Fast build tool and development environment
-- **Storybook** - Component documentation and UI development environment
-- **React Router** - For application routing
-- **Axios** - For API requests
+<div align="center">
+    <table>
+        <tbody>
+            <tr>
+                <th colspan="5"><h3>Backend Technologies</h3></th>
+            </tr>
+            <tr>
+                <td><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/nestjs/nestjs-original.svg" alt="NestJS" width="60px" height="auto" /></td>
+                <td><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/mysql/mysql-original.svg" alt="MySQL" width="60px" height="auto" /></td>
+                <td><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/socketio/socketio-original.svg" alt="Socket.IO" width="60px" height="auto" /></td>
+                <td><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/jest/jest-plain.svg" alt="Jest" width="60px" height="auto" /></td>
+                <td><img src="https://swagger.io/wp-content/uploads/2020/01/swagger-logo.png" alt="Swagger" width="60px" height="auto" /></td>
+            </tr>
+            <tr>
+                <td><p><b>NestJS</b></p></td>
+                <td><p><b>MySQL</b></p></td>
+                <td><p><b>Socket.IO</b></p></td>
+                <td><p><b>Jest</b></p></td>
+                <td><p><b>Swagger</b></p></td>
+            </tr>
+            <tr>
+                <td><p>Progressive Node.js framework</p></td>
+                <td><p>Primary database</p></td>
+                <td><p>Real-time communication</p></td>
+                <td><p>Testing framework</p></td>
+                <td><p>API documentation</p></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
 
-### Backend
-
-- **NestJS** - Progressive Node.js framework for server-side applications
-- **TypeORM** - ORM for database interactions
-- **JWT** - For secure authentication
-- **MySQL** - Primary database
-
-### DevOps & Documentation
-
-- **GitHub Actions** - CI/CD workflows for testing and deployment
-- **Storybook** - Component documentation
-- **Compodoc** - API documentation
+<div align="center">
+    <table>
+        <tbody>
+            <tr>
+                <th colspan="4"><h3>Additional Technologies</h3></th>
+            </tr>
+            <tr>
+                <td><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/typescript/typescript-original.svg" alt="TypeScript" width="60px" height="auto" /></td>
+                <td><img src="https://jwt.io/img/pic_logo.svg" alt="JWT" width="60px" height="auto" /></td>
+                <td><img src="https://raw.githubusercontent.com/typeorm/typeorm/master/resources/logo_big.png" alt="TypeORM" width="60px" height="auto" /></td>
+                <td><img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub Actions" width="60px" height="auto" /></td>
+            </tr>
+            <tr>
+                <td><p><b>TypeScript</b></p></td>
+                <td><p><b>JWT</b></p></td>
+                <td><p><b>TypeORM</b></p></td>
+                <td><p><b>GitHub Actions</b></p></td>
+            </tr>
+            <tr>
+                <td><p>Type-safe JavaScript</p></td>
+                <td><p>Secure authentication</p></td>
+                <td><p>ORM for database interactions</p></td>
+                <td><p>CI/CD workflows</p></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
 
 ## Site Accessibility
 
@@ -176,6 +242,40 @@ WHERE u.email = 'superadmin@example.com';
 UPDATE users u JOIN roles r ON r.name = 'staff' 
 SET u.default_role_id = r.id 
 WHERE u.email = 'staff@example.com'; 
+
+-- Additional tables for the complete system
+CREATE TABLE announcements (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  title VARCHAR(255) NOT NULL,
+  content TEXT NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE appointments (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  appointment_date DATE NOT NULL,
+  appointment_time TIME NOT NULL,
+  purpose VARCHAR(255) NOT NULL,
+  status ENUM('pending', 'confirmed', 'cancelled', 'completed') DEFAULT 'pending',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE queues (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  queue_number VARCHAR(20) NOT NULL,
+  user_id INT,
+  department VARCHAR(100) NOT NULL,
+  service_type VARCHAR(100) NOT NULL,
+  status ENUM('waiting', 'serving', 'completed', 'cancelled') DEFAULT 'waiting',
+  priority_level INT DEFAULT 1,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  called_at TIMESTAMP NULL,
+  completed_at TIMESTAMP NULL,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL
+);
 ```
 
 > [!note]
@@ -234,6 +334,122 @@ npm run start          # Start NestJS normally
 npm run start:dev      # Start NestJS in development mode
 ```
 
+## Development Scripts
+
+### Frontend (bulak-smart-connect-js)
+```bash
+npm run dev            # Run React with Vite dev server
+npm run build          # Build for production
+npm run preview        # Preview production build
+npm run lint           # Run ESLint
+npm run storybook      # Start Storybook
+npm run build-storybook # Build Storybook
+```
+
+### Backend (bsc-js-backend)
+```bash
+npm run start          # Start production server
+npm run start:dev      # Start development server with hot reload
+npm run start:debug    # Start in debug mode
+npm run build          # Build TypeScript
+npm run test           # Run tests
+npm run test:e2e       # Run end-to-end tests
+npm run test:cov       # Run tests with coverage
+```
+
+### Full Stack Development
+```bash
+# From root directory
+npm run dev            # Run both frontend and backend concurrently
+npm run start-frontend # Run React only  
+npm run start-backend  # Run NestJS only
+```
+
+## Testing
+
+### Backend Tests
+```bash
+cd bsc-js-backend
+npm test                    # Run all tests
+npm run test:watch          # Run tests in watch mode
+npm run test:cov            # Run tests with coverage
+npm run test:e2e            # Run end-to-end tests
+```
+
+### Test Coverage
+- ✅ Authentication & Authorization
+- ✅ User Management & Roles
+- ✅ Queue Management System
+- ✅ Appointment Scheduling
+- ✅ Announcements
+- ✅ Real-time WebSocket Gateway
+
+All modules include both unit tests and controller tests with proper mocking.
+
+## API Endpoints
+
+### Authentication
+- `POST /auth/login` - User login
+- `POST /auth/register` - User registration
+- `GET /auth/profile` - Get user profile
+- `POST /auth/update-profile` - Update user profile
+
+### Queue Management
+- `GET /queue` - Get all queues
+- `POST /queue/join` - Join a queue
+- `DELETE /queue/leave` - Leave a queue
+- WebSocket events for real-time updates
+
+### Appointments
+- `GET /appointment` - Get appointments
+- `POST /appointment` - Create appointment
+- `PATCH /appointment/:id` - Update appointment
+
+### Announcements
+- `GET /announcements` - Get all announcements
+- `GET /announcements/recent` - Get recent announcements
+
+For complete API documentation, check the Postman collection in `/docs/bulak-smart-connect-postman-collection.json`
+
+## Test Accounts
+
+The system comes with pre-configured test accounts:
+
+| Email | Password | Role | Description |
+|-------|----------|------|-------------|
+| `test@example.com` | `password123` | citizen | Regular user account |
+| `admin@example.com` | `admin123` | admin | Administrator account |
+| `superadmin@example.com` | `admin123` | super_admin | Super administrator |
+| `staff@example.com` | `admin123` | staff | Staff member account |
+
+All passwords are hashed using bcrypt for security.
+
+## Project Structure
+
+```
+Bulak-Smart-Connect-JS/
+├── bulak-smart-connect-js/     # React frontend
+│   ├── src/
+│   │   ├── components/         # Reusable components
+│   │   ├── LandingPageComponents/ # Landing page specific
+│   │   └── ...
+│   └── package.json
+├── bsc-js-backend/            # NestJS backend
+│   ├── src/
+│   │   ├── auth/              # Authentication module
+│   │   ├── users/             # User management
+│   │   ├── roles/             # Role management
+│   │   ├── modules/
+│   │   │   ├── queue/         # Queue management
+│   │   │   ├── appointment/   # Appointment system
+│   │   │   └── announcement/  # Announcements
+│   │   └── main.ts
+│   ├── test/                  # E2E tests
+│   ├── docs/                  # API documentation
+│   └── package.json
+└── README.md
+```
+
 # Authors
 
 <div align="center">
@@ -260,4 +476,3 @@ npm run start:dev      # Start NestJS in development mode
         </tbody>
     </table>
 </div>
-
