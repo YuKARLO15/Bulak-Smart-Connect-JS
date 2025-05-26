@@ -15,17 +15,17 @@ body, html {
     align-items: flex-start;
     padding: 5px 20px;
     background-color: #f0f2f5;
-    background-image: url('./MunicipalImage/SIMunicipal.jpg'); /* Background image on page container */
+    background-image: url('./MunicipalImage/SIMunicipal.jpg'); 
     background-size: cover; 
     background-position: center center;
     background-repeat: no-repeat;
-    background-attachment: fixed; /* Makes background stay in place when scrolling */
+    background-attachment: fixed; 
     box-sizing: border-box;
     /* margin-left: 270px;  */
     position: relative;
 }
 
-/* Optional: Add overlay to page-container for better readability */
+
 .page-container::before {
     content: '';
     position: absolute;
@@ -33,11 +33,11 @@ body, html {
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(240, 242, 245, 0.7); /* Light overlay to match original background */
+    background-color: rgba(240, 242, 245, 0.7); 
     z-index: 1;
 }
 
-/* Ensure privacy-container appears above the overlay */
+
 .page-container > .privacy-container {
     position: relative;
     z-index: 2;
@@ -46,8 +46,7 @@ body, html {
 .privacy-container {
     width: 100%;
     max-width: 1000px;
-    background-color: rgba(250, 250, 250, 0.95); /* Semi-transparent white background */
-    /* Remove background image from privacy-container */
+    background-color: rgba(250, 250, 250, 0.95); 
     border-radius: 12px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     padding: 30px 40px;
@@ -59,7 +58,7 @@ body, html {
 /* Headings */
 .privacy-container h1 {
     text-align: center;
-    color: #fcf5f5; /* Changed from #e6e6e7 to darker color for better readability */
+    color: #fcf5f5; 
     margin-bottom: 30px;
     font-size: 2rem;
 }
@@ -83,7 +82,7 @@ body, html {
     font-size: 1.05rem;
 }
 
-/* Paragraph and list styling */
+
 .privacy-container p {
     margin-bottom: 15px;
     font-size: 1rem;
@@ -99,7 +98,7 @@ body, html {
     margin-bottom: 5px;
 }
 
-/* Strong text enhancement */
+
 .privacy-container strong {
     font-weight: 600;
 }
