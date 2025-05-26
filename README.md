@@ -6,31 +6,92 @@
 
 ## Technology Stack
 
-### Frontend
+<div align="center">
+    <table>
+        <tbody>
+            <tr>
+                <th colspan="4"><h3>Frontend Technologies</h3></th>
+            </tr>
+            <tr>
+                <td><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/react/react-original.svg" alt="React" width="60px" height="auto" /></td>
+                <td><img src="https://vitejs.dev/logo.svg" alt="Vite" width="60px" height="auto" /></td>
+                <td><img src="https://raw.githubusercontent.com/storybookjs/brand/master/icon/icon-storybook-default.svg" alt="Storybook" width="60px" height="auto" /></td>
+                <td><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/axios/axios-plain.svg" alt="Axios" width="60px" height="auto" /></td>
+            </tr>
+            <tr>
+                <td><p><b>React</b></p></td>
+                <td><p><b>Vite</b></p></td>
+                <td><p><b>Storybook</b></p></td>
+                <td><p><b>Axios</b></p></td>
+            </tr>
+            <tr>
+                <td><p>UI library for building component-based interfaces</p></td>
+                <td><p>Fast build tool and development environment</p></td>
+                <td><p>Component documentation and UI development</p></td>
+                <td><p>HTTP client for API requests</p></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
 
-- **React** - UI library for building component-based interfaces
-- **Vite** - Fast build tool and development environment
-- **Storybook** - Component documentation and UI development environment
-- **React Router** - For application routing
-- **Axios** - For API requests
+<div align="center">
+    <table>
+        <tbody>
+            <tr>
+                <th colspan="5"><h3>Backend Technologies</h3></th>
+            </tr>
+            <tr>
+                <td><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/nestjs/nestjs-original.svg" alt="NestJS" width="60px" height="auto" /></td>
+                <td><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/mysql/mysql-original.svg" alt="MySQL" width="60px" height="auto" /></td>
+                <td><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/socketio/socketio-original.svg" alt="Socket.IO" width="60px" height="auto" /></td>
+                <td><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/jest/jest-plain.svg" alt="Jest" width="60px" height="auto" /></td>
+                <td><img src="https://swagger.io/wp-content/uploads/2020/01/swagger-logo.png" alt="Swagger" width="60px" height="auto" /></td>
+            </tr>
+            <tr>
+                <td><p><b>NestJS</b></p></td>
+                <td><p><b>MySQL</b></p></td>
+                <td><p><b>Socket.IO</b></p></td>
+                <td><p><b>Jest</b></p></td>
+                <td><p><b>Swagger</b></p></td>
+            </tr>
+            <tr>
+                <td><p>Progressive Node.js framework</p></td>
+                <td><p>Primary database</p></td>
+                <td><p>Real-time communication</p></td>
+                <td><p>Testing framework</p></td>
+                <td><p>API documentation</p></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
 
-### Backend
-
-- **NestJS** - Progressive Node.js framework for server-side applications
-- **TypeORM** - ORM for database interactions
-- **JWT** - For secure authentication
-- **MySQL** - Primary database
-- **Socket.IO** - Real-time communication for queue updates
-- **Class Validator** - Request validation and transformation
-- **Swagger/OpenAPI** - API documentation
-- **Jest** - Testing framework
-
-### DevOps & Documentation
-
-- **GitHub Actions** - CI/CD workflows for testing and deployment
-- **Storybook** - Component documentation
-- **Compodoc** - API documentation
-- **Jest** - Unit and integration testing
+<div align="center">
+    <table>
+        <tbody>
+            <tr>
+                <th colspan="4"><h3>Additional Technologies</h3></th>
+            </tr>
+            <tr>
+                <td><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/typescript/typescript-original.svg" alt="TypeScript" width="60px" height="auto" /></td>
+                <td><img src="https://jwt.io/img/pic_logo.svg" alt="JWT" width="60px" height="auto" /></td>
+                <td><img src="https://raw.githubusercontent.com/typeorm/typeorm/master/resources/logo_big.png" alt="TypeORM" width="60px" height="auto" /></td>
+                <td><img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub Actions" width="60px" height="auto" /></td>
+            </tr>
+            <tr>
+                <td><p><b>TypeScript</b></p></td>
+                <td><p><b>JWT</b></p></td>
+                <td><p><b>TypeORM</b></p></td>
+                <td><p><b>GitHub Actions</b></p></td>
+            </tr>
+            <tr>
+                <td><p>Type-safe JavaScript</p></td>
+                <td><p>Secure authentication</p></td>
+                <td><p>ORM for database interactions</p></td>
+                <td><p>CI/CD workflows</p></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
 
 ## Site Accessibility
 
