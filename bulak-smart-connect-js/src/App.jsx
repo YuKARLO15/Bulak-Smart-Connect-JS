@@ -8,6 +8,9 @@ import Unauthorized from './components/Unauthorized';
 
 //-----------USER SIDE --------------//
 
+// User Privacy Policy //
+import PrivacyPolicy from './UserBulakSmartConnect/TermsAndConditionComponents/TermsAndCondition';
+
 //Login and SignUp//
 import LogIn from './LogInComponents/LogIn';
 import SignUpForm from './UserBulakSmartConnect/SignUpComponents/SignUpForm';
@@ -56,7 +59,6 @@ import AdminAccountManagement from './AdminBulakSmartConnect/AccountManagementCo
 import SearchAddUser from './AdminBulakSmartConnect/AccountManagementComponents/SearchAdd';
 import AdminAddUser from './AdminBulakSmartConnect/AccountManagementComponents/AdminAddAccount';
 
-
 // Admin Announcement //
 import AdminAnnouncement from './AdminBulakSmartConnect/AdminAnnouncementComponents/AdminAnnouncement';
 
@@ -69,8 +71,7 @@ import AdminAppointmentDashboard from './AdminBulakSmartConnect/AdminAppointment
 
 // Admin WalkIn //
 import AdminWalkInQueue from './AdminBulakSmartConnect/AdminWalkInQueue/AdminWalkInQueue';
-import AdminWalkInDetails from './AdminBulakSmartConnect/AdminWalkInDetails/AdminWalkInDetails';  
-
+import AdminWalkInDetails from './AdminBulakSmartConnect/AdminWalkInDetails/AdminWalkInDetails';
 
 function App() {
   return (
@@ -96,13 +97,12 @@ function App() {
         {/* Staff routes - Protected for staff, admin and super_admin */}
         <Route element={<PrivateRoute allowedRoles={['staff', 'admin', 'super_admin']} />}>
           <Route path="/ApplicationAdmin" element={<AdminApplicationDashboard />} />
-          <Route path="/ApplicationDetails/:id" element={<AdminApplicationForm/>} />
+          <Route path="/ApplicationDetails/:id" element={<AdminApplicationForm />} />
           <Route path="AppointmentDetailsCard" element={<AppointmentDetailsCard />} />
           <Route path="/AdminWalkInQueue" element={<AdminWalkInQueue />} />
           <Route path="/AdminHome" element={<AdminDashboard />} />
           <Route path="/AdminWalkInDetails" element={<AdminWalkInDetails />} />
           <Route path="/AdminAppointmentDashboard" element={<AdminAppointmentDashboard />} />
-          
         </Route>
 
         {/* User routes - Any authenticated user */}
@@ -125,7 +125,10 @@ function App() {
             element={<DelayedOneParentForeignerRegistration />}
           />
           <Route path="/MarriageDashboard" element={<MarriageDashboard />} />
-          <Route path="/MarriageCertificateApplication" element={<MarriageCertificateApplication />} />
+          <Route
+            path="/MarriageCertificateApplication"
+            element={<MarriageCertificateApplication />}
+          />
           <Route path="/MarriageLicenseSummary" element={<MarriageLicenseSummary />} />
 
           <Route path="/QrCodeAppointment/:id" element={<QRCodeAppointment />} />
@@ -141,6 +144,8 @@ function App() {
           <Route path="/MarriageSummaryForm" element={<MarriageSummaryForm />} />
           <Route path="/RequirementMarriageList" element={<RequirementMarriageList />} />
 
+          {/* User Privacy Policy */}
+          <Route path="/PrivacyPolicy" element={<PrivacyPolicy />} />
         </Route>
       </Routes>
     </AuthProvider>

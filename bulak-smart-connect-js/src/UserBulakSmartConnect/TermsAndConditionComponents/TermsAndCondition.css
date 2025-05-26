@@ -1,0 +1,114 @@
+/* Base styles */
+body, html {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f2f5;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Page container centers the content */
+.page-container {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 40px 20px;
+    background-color: #f0f2f5;
+    box-sizing: border-box;
+    margin-left: 270px; /* Only on larger screens - see media query below */
+}
+
+/* Privacy container styles */
+.privacy-container {
+    width: 100%;
+    max-width: 1000px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 30px 40px;
+    box-sizing: border-box;
+    color: #333;
+}
+
+/* Headings */
+.privacy-container h1 {
+    text-align: center;
+    color: #e6e6e7;
+    margin-bottom: 30px;
+    font-size: 2rem;
+}
+
+.privacy-container h2 {
+    color: #154360;
+    margin-top: 30px;
+    font-size: 1.4rem;
+       text-align: left;
+}
+
+.privacy-container h3 {
+    color: #1a5276;
+    margin-top: 20px;
+    font-size: 1.2rem;
+}
+
+.privacy-container h4 {
+    color: #000000;
+    margin-top: 15px;
+    font-size: 1.05rem;
+}
+
+/* Paragraph and list styling */
+.privacy-container p {
+    margin-bottom: 15px;
+    font-size: 1rem;
+    line-height: 1.7;
+}
+
+.privacy-container ul {
+    margin-left: 20px;
+    margin-bottom: 20px;
+}
+
+.privacy-container ul li {
+    margin-bottom: 5px;
+}
+
+/* Strong text enhancement */
+.privacy-container strong {
+    font-weight: 600;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+    .page-container {
+        margin-left: 0; /* Remove sidebar margin on tablets and smaller */
+    }
+}
+
+@media (max-width: 768px) {
+    .page-container {
+        padding: 20px 10px;
+        margin-left: 0; /* Ensure no left margin on mobile */
+    }
+    
+    .privacy-container {
+        padding: 20px;
+    }
+    
+    .privacy-container h1 {
+        font-size: 1.5rem;
+    }
+    
+    .privacy-container h2 {
+        font-size: 1.2rem;
+    }
+    
+    .privacy-container h3 {
+        font-size: 1.1rem;
+    }
+    
+    .privacy-container h4 {
+        font-size: 1rem;
+    }
+}
