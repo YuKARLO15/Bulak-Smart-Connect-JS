@@ -17,6 +17,7 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import LogoutIcon from '@mui/icons-material/Logout';
 import TuneIcon from '@mui/icons-material/Tune';
+import CampaignIcon from '@mui/icons-material/Campaign';
 
 const NavBar = ({ isSidebarOpen, setIsSidebarOpen }) => {
   const { logout, hasRole, user } = useAuth();
@@ -105,12 +106,23 @@ const NavBar = ({ isSidebarOpen, setIsSidebarOpen }) => {
 
             {/* Admin+ links */}
             {(hasRole('admin') || hasRole('super_admin')) && (
+              <>
+               {/* Admin Announcements */}
+                <Link 
+                  to="/AdminAnnouncement" 
+                  className={isActive('/AdminAnnouncement') ? 'active' : ''}
+                >
+                  <CampaignIcon /> Announcements
+                </Link>
+
+              {/* User Management */}
               <Link 
                 to="/AdminAccountManagement" 
                 className={isActive('/AdminAccountManagement') ? 'active' : ''}
               >
                 <ManageAccountsIcon /> User Management
               </Link>
+              </>
             )}
 
             {/* Super admin only links */}
