@@ -226,7 +226,9 @@ export class DocumentApplicationsService {
     });
   }
 
-  async getApplicationStats(): Promise<any> {
+  async getApplicationStats(): Promise<
+    Array<{ type: string; status: string; count: string }>
+  > {
     const stats = await this.documentApplicationRepository
       .createQueryBuilder('app')
       .select('app.applicationType', 'type')
@@ -236,6 +238,6 @@ export class DocumentApplicationsService {
       .addGroupBy('app.status')
       .getRawMany();
 
-    return stats;
+    return stats as Array<{ type: string; status: string; count: string }>;
   }
 }

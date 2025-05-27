@@ -189,7 +189,9 @@ export class DocumentApplicationsController {
   @Roles('admin')
   @UseGuards(RolesGuard)
   @ApiOperation({ summary: 'Get application statistics (Admin only)' })
-  async getStats() {
+  async getStats(): Promise<
+    Array<{ type: string; status: string; count: string }>
+  > {
     return this.documentApplicationsService.getApplicationStats();
   }
 }
