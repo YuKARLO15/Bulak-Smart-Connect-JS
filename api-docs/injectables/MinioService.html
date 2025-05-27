@@ -537,7 +537,7 @@ export class MinioService {
       secretKey: process.env.MINIO_SECRET_KEY || &#x27;minioadmin123&#x27;,
     });
     
-    this.bucketName &#x3D; process.env.MINIO_BUCKET_NAME || &#x27;document-applications&#x27;;
+    this.bucketName &#x3D; process.env.MINIO_BUCKET_NAME || &#x27;bulak-smart-connect&#x27;;
   }
 
   async uploadFile(file: Express.Multer.File, objectName: string): Promise&lt;string&gt; {
