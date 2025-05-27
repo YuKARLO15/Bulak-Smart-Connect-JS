@@ -38,7 +38,7 @@
     <table>
         <tbody>
             <tr>
-                <th colspan="5"><h3>Backend Technologies</h3></th>
+                <th colspan="6"><h3>Backend Technologies</h3></th>
             </tr>
             <tr>
                 <td><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/nestjs/nestjs-original.svg" alt="NestJS" width="60px" height="auto" /></td>
@@ -46,7 +46,7 @@
                 <td><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/socketio/socketio-original.svg" alt="Socket.IO" width="60px" height="auto" /></td>
                 <td><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/jest/jest-plain.svg" alt="Jest" width="60px" height="auto" /></td>
                 <td><img src="https://static1.smartbear.co/swagger/media/assets/images/swagger_logo.svg" alt="Swagger" width="60px" height="auto" /></td>
-                <td><img src="https://min.io/resources/img/logo/minio-logo.svg" alt="MinIO" width="60px" height="auto" /></td>
+                <td><img src="https://github.com/minio/minio/raw/master/.github/logo.svg" alt="MinIO" width="60px" height="auto" /></td>
             </tr>
             <tr>
                 <td><p><b>NestJS</b></p></td>
@@ -72,21 +72,24 @@
     <table>
         <tbody>
             <tr>
-                <th colspan="4"><h3>Additional Technologies</h3></th>
+                <th colspan="5"><h3>Additional Technologies</h3></th>
             </tr>
             <tr>
+                <td><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/javascript/javascript-original.svg" alt="JavaScript" width="60px" height="auto" /></td>
                 <td><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/typescript/typescript-original.svg" alt="TypeScript" width="60px" height="auto" /></td>
                 <td><img src="https://jwt.io/img/pic_logo.svg" alt="JWT" width="60px" height="auto" /></td>
                 <td><img src="https://raw.githubusercontent.com/typeorm/typeorm/master/resources/logo_big.png" alt="TypeORM" width="60px" height="auto" /></td>
                 <td><img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub Actions" width="60px" height="auto" /></td>
             </tr>
             <tr>
+                <td><p><b>JavaScript</b></p></td>
                 <td><p><b>TypeScript</b></p></td>
                 <td><p><b>JWT</b></p></td>
                 <td><p><b>TypeORM</b></p></td>
                 <td><p><b>GitHub Actions</b></p></td>
             </tr>
             <tr>
+                <td><p>Core programming language</p></td>
                 <td><p>Type-safe JavaScript</p></td>
                 <td><p>Secure authentication</p></td>
                 <td><p>ORM for database interactions</p></td>
@@ -286,6 +289,116 @@ CREATE TABLE queues (
 > Export it if you make any changes on the database and/or to ensure we have a backup to match the proper database on the latest iterations 
 > Also ensure there is no personal information on the database before you export it, for our safety. Optionally, you can just export it without the data, only the schema.
 
+### MinIO Setup
+
+MinIO is an object storage solution used for storing and managing document files in the application.
+
+#### Option 1: Docker Installation (Recommended)
+
+1. **Install Docker** (if not already installed):
+   - Download from [https://www.docker.com/products/docker-desktop](https://www.docker.com/products/docker-desktop)
+   - Install and start Docker Desktop
+
+2. **Run MinIO using Docker**:
+```bash
+# Create a directory for MinIO data (optional)
+mkdir -p ~/minio/data
+
+# Run MinIO container
+docker run -d \
+  -p 9000:9000 \
+  -p 9001:9001 \
+  --name minio \
+  -v ~/minio/data:/data \
+  -e "MINIO_ROOT_USER=minioadmin" \
+  -e "MINIO_ROOT_PASSWORD=minioadmin123" \
+  quay.io/minio/minio server /data --console-address ":9001"
+```
+
+3. **Access MinIO Console**:
+   - Navigate to [http://localhost:9001](http://localhost:9001)
+   - Login with:
+     - **Username**: `minioadmin`
+     - **Password**: `minioadmin123`
+
+#### Option 2: Windows Binary Installation
+
+1. **Download MinIO**:
+   - Go to [https://min.io/download](https://min.io/download)
+   - Download the Windows binary (`minio.exe`)
+
+2. **Create MinIO directory**:
+```cmd
+mkdir C:\minio
+mkdir C:\minio\data
+```
+
+3. **Move the executable**:
+   - Place `minio.exe` in `C:\minio\`
+
+4. **Start MinIO Server**:
+```cmd
+cd C:\minio
+set MINIO_ROOT_USER=minioadmin
+set MINIO_ROOT_PASSWORD=minioadmin123
+minio.exe server C:\minio\data --console-address ":9001"
+```
+
+#### Option 3: Using XAMPP/Alternative Setup
+
+If you're using XAMPP or prefer a different approach:
+
+1. Follow Option 1 (Docker) as it's platform-independent
+2. Alternatively, use MinIO's Windows Service installer from their official website
+
+#### Post-Installation Setup
+
+1. **Verify Installation**:
+   - MinIO API: [http://localhost:9000](http://localhost:9000)
+   - MinIO Console: [http://localhost:9001](http://localhost:9001)
+
+2. **Create Bucket** (if not auto-created):
+   - Login to MinIO Console
+   - Click "Create Bucket"
+   - Name: `document-applications` (or as specified in your `.env`)
+   - Set to public read if needed
+
+3. **Update Environment Variables**:
+   ```bash
+   # In your .env file
+   MINIO_ENDPOINT=localhost
+   MINIO_PORT=9000
+   MINIO_USE_SSL=false
+   MINIO_ACCESS_KEY=minioadmin
+   MINIO_SECRET_KEY=minioadmin123
+   MINIO_BUCKET_NAME=document-applications
+   ```
+
+#### Troubleshooting
+
+- **Port Conflicts**: If port 9000 is in use, change to a different port:
+  ```bash
+  # For Docker
+  docker run -d -p 9002:9000 -p 9003:9001 --name minio ...
+  
+  # Update .env file
+  MINIO_PORT=9002
+  ```
+
+- **Permission Issues**: Ensure the data directory has proper read/write permissions
+
+- **Docker Issues**: 
+  ```bash
+  # Stop existing container
+  docker stop minio
+  docker rm minio
+  
+  # Run new container
+  docker run -d ...
+  ```
+
+- **Connection Testing**: The backend will automatically test MinIO connection on startup and provide helpful error messages.
+
 ## Environment Setup
 
 Create a `.env` file in the bsc-js-backend directory with:
@@ -397,6 +510,7 @@ npm run test:e2e            # Run end-to-end tests
 - ✅ Queue Management System
 - ✅ Appointment Scheduling
 - ✅ Announcements
+- ✅ Document Applications with MinIO Storage
 - ✅ Real-time WebSocket Gateway
 
 All modules include both unit tests and controller tests with proper mocking.
@@ -461,8 +575,9 @@ npm run start:dev
 
 ### File Storage
 - **MinIO Integration**: Secure document storage and retrieval
-- **File Upload**: Support for multiple document types
+- **File Upload**: Support for multiple document types (PDF, Images)
 - **Presigned URLs**: Secure file access with expiration
+- **Automatic Bucket Management**: Auto-creation and configuration
 
 For complete API documentation, check the Postman collection in `/docs/bulak-smart-connect-postman-collection.json`
 
@@ -497,7 +612,8 @@ Bulak-Smart-Connect-JS/
 │   │   ├── modules/
 │   │   │   ├── queue/         # Queue management
 │   │   │   ├── appointment/   # Appointment system
-│   │   │   └── announcement/  # Announcements
+│   │   │   ├── announcement/  # Announcements
+│   │   │   └── document-applications/ # Document applications with MinIO
 │   │   └── main.ts
 │   ├── test/                  # E2E tests
 │   ├── docs/                  # API documentation
