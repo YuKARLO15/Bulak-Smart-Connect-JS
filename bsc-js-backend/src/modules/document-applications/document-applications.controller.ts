@@ -20,34 +20,52 @@ import { UpdateDocumentApplicationDto } from './dto/update-document-application.
 import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../../auth/guards/roles.guard';
 import { Roles } from '../../auth/decorators/roles.decorator';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiConsumes } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBearerAuth,
+  ApiConsumes,
+} from '@nestjs/swagger';
 
 @ApiTags('Document Applications')
 @Controller('document-applications')
 @UseGuards(JwtAuthGuard)
 @ApiBearerAuth('JWT-auth')
 export class DocumentApplicationsController {
-  constructor(private readonly documentApplicationsService: DocumentApplicationsService) {}
+  constructor(
+    private readonly documentApplicationsService: DocumentApplicationsService,
+  ) {}
 
   @Post()
   @ApiOperation({ summary: 'Create new document application' })
   @ApiResponse({ status: 201, description: 'Application created successfully' })
-  async create(@Body() createDto: CreateDocumentApplicationDto, @Request() req) {
+  async create(
+    @Body() createDto: CreateDocumentApplicationDto,
+    @Request() req,
+  ) {
     return this.documentApplicationsService.create(createDto, req.user.userId);
   }
 
   @Post(':id/files')
-  @UseInterceptors(FileInterceptor('file', {
-    limits: {
-      fileSize: 10 * 1024 * 1024, // 10MB limit
-    },
-    fileFilter: (req, file, callback) => {
-      if (!file.mimetype.match(/\/(jpg|jpeg|png|pdf)$/)) {
-        return callback(new BadRequestException('Only JPEG, PNG, and PDF files are allowed'), false);
-      }
-      callback(null, true);
-    },
-  }))
+  @UseInterceptors(
+    FileInterceptor('file', {
+      limits: {
+        fileSize: 10 * 1024 * 1024, // 10MB limit
+      },
+      fileFilter: (req, file, callback) => {
+        if (!file.mimetype.match(/\/(jpg|jpeg|png|pdf)$/)) {
+          return callback(
+            new BadRequestException(
+              'Only JPEG, PNG, and PDF files are allowed',
+            ),
+            false,
+          );
+        }
+        callback(null, true);
+      },
+    }),
+  )
   @ApiConsumes('multipart/form-data')
   @ApiOperation({ summary: 'Upload document file' })
   async uploadDocument(
@@ -67,22 +85,31 @@ export class DocumentApplicationsController {
   @Get()
   @ApiOperation({ summary: 'Get user applications' })
   async findAll(@Query('status') status?: string, @Request() req?) {
-    const userId = req.user.roles.includes('admin') ? undefined : req.user.userId;
+    const userId = req.user.roles.includes('admin')
+      ? undefined
+      : req.user.userId;
     return this.documentApplicationsService.findAll(userId);
   }
 
   @Get(':id')
   @ApiOperation({ summary: 'Get specific application' })
   async findOne(@Param('id') id: string, @Request() req) {
-    const userId = req.user.roles.includes('admin') ? undefined : req.user.userId;
+    const userId = req.user.roles.includes('admin')
+      ? undefined
+      : req.user.userId;
     return this.documentApplicationsService.findOne(id, userId);
   }
 
   @Get('files/:fileId/download')
   @ApiOperation({ summary: 'Get file download URL' })
   async getFileDownloadUrl(@Param('fileId') fileId: string, @Request() req) {
-    const userId = req.user.roles.includes('admin') ? undefined : req.user.userId;
-    const url = await this.documentApplicationsService.getFileDownloadUrl(+fileId, userId);
+    const userId = req.user.roles.includes('admin')
+      ? undefined
+      : req.user.userId;
+    const url = await this.documentApplicationsService.getFileDownloadUrl(
+      +fileId,
+      userId,
+    );
     return { url };
   }
 
@@ -93,10 +120,19 @@ export class DocumentApplicationsController {
     @Body() updateDto: UpdateDocumentApplicationDto,
     @Request() req,
   ) {
-    const userId = req.user.roles.includes('admin') ? undefined : req.user.userId;
-    const adminId = req.user.roles.includes('admin') ? req.user.userId : undefined;
-    
-    return this.documentApplicationsService.update(id, updateDto, userId, adminId);
+    const userId = req.user.roles.includes('admin')
+      ? undefined
+      : req.user.userId;
+    const adminId = req.user.roles.includes('admin')
+      ? req.user.userId
+      : undefined;
+
+    return this.documentApplicationsService.update(
+      id,
+      updateDto,
+      userId,
+      adminId,
+    );
   }
 
   @Patch(':id/status')
@@ -119,7 +155,9 @@ export class DocumentApplicationsController {
   @Delete(':id')
   @ApiOperation({ summary: 'Delete application' })
   async remove(@Param('id') id: string, @Request() req) {
-    const userId = req.user.roles.includes('admin') ? undefined : req.user.userId;
+    const userId = req.user.roles.includes('admin')
+      ? undefined
+      : req.user.userId;
     await this.documentApplicationsService.remove(id, userId);
     return { message: 'Application deleted successfully' };
   }

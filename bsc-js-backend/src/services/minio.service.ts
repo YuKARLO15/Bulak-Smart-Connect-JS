@@ -15,11 +15,14 @@ export class MinioService {
       accessKey: process.env.MINIO_ACCESS_KEY || 'minioadmin',
       secretKey: process.env.MINIO_SECRET_KEY || 'minioadmin123',
     });
-    
+
     this.bucketName = process.env.MINIO_BUCKET_NAME || 'bulak-smart-connect';
   }
 
-  async uploadFile(file: Express.Multer.File, objectName: string): Promise<string> {
+  async uploadFile(
+    file: Express.Multer.File,
+    objectName: string,
+  ): Promise<string> {
     try {
       await this.minioClient.putObject(
         this.bucketName,
@@ -29,9 +32,9 @@ export class MinioService {
         {
           'Content-Type': file.mimetype,
           'Original-Name': file.originalname,
-        }
+        },
       );
-      
+
       this.logger.log(`File uploaded: ${objectName}`);
       return objectName;
     } catch (error) {
@@ -42,7 +45,11 @@ export class MinioService {
 
   async getDownloadUrl(objectName: string): Promise<string> {
     try {
-      return await this.minioClient.presignedGetObject(this.bucketName, objectName, 3600);
+      return await this.minioClient.presignedGetObject(
+        this.bucketName,
+        objectName,
+        3600,
+      );
     } catch (error) {
       this.logger.error('Get URL failed:', error);
       throw error;

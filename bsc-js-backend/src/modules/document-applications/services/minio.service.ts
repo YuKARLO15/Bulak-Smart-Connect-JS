@@ -9,13 +9,24 @@ export class MinioService implements OnModuleInit {
   private bucketName: string;
 
   constructor(private configService: ConfigService) {
-    const endpoint = this.configService.get<string>('MINIO_ENDPOINT', 'localhost');
+    const endpoint = this.configService.get<string>(
+      'MINIO_ENDPOINT',
+      'localhost',
+    );
     const port = this.configService.get<number>('MINIO_PORT', 9000);
-    const useSSLValue = this.configService.get<string>('MINIO_USE_SSL', 'false').toLowerCase();
+    const useSSLValue = this.configService
+      .get<string>('MINIO_USE_SSL', 'false')
+      .toLowerCase();
     const useSSL = ['true', '1', 'yes', 'on'].includes(useSSLValue);
-    const accessKey = this.configService.get<string>('MINIO_ACCESS_KEY', 'minioadmin');
-    const secretKey = this.configService.get<string>('MINIO_SECRET_KEY', 'minioadmin123');
-    
+    const accessKey = this.configService.get<string>(
+      'MINIO_ACCESS_KEY',
+      'minioadmin',
+    );
+    const secretKey = this.configService.get<string>(
+      'MINIO_SECRET_KEY',
+      'minioadmin123',
+    );
+
     this.minioClient = new Minio.Client({
       endPoint: endpoint,
       port: port,
@@ -23,9 +34,12 @@ export class MinioService implements OnModuleInit {
       accessKey: accessKey,
       secretKey: secretKey,
     });
-    
-    this.bucketName = this.configService.get<string>('MINIO_BUCKET_NAME', 'document-applications');
-    
+
+    this.bucketName = this.configService.get<string>(
+      'MINIO_BUCKET_NAME',
+      'document-applications',
+    );
+
     this.logger.log(`MinIO configured with endpoint: ${endpoint}:${port}`);
   }
 
@@ -48,7 +62,10 @@ export class MinioService implements OnModuleInit {
     }
   }
 
-  async uploadFile(file: Express.Multer.File, objectName: string): Promise<string> {
+  async uploadFile(
+    file: Express.Multer.File,
+    objectName: string,
+  ): Promise<string> {
     try {
       const metaData = {
         'Content-Type': file.mimetype,
@@ -62,7 +79,7 @@ export class MinioService implements OnModuleInit {
         objectName,
         file.buffer,
         file.size,
-        metaData
+        metaData,
       );
 
       this.logger.log(`File uploaded successfully: ${objectName}`);
@@ -73,9 +90,16 @@ export class MinioService implements OnModuleInit {
     }
   }
 
-  async getPresignedUrl(objectName: string, expiry: number = 3600): Promise<string> {
+  async getPresignedUrl(
+    objectName: string,
+    expiry: number = 3600,
+  ): Promise<string> {
     try {
-      return await this.minioClient.presignedGetObject(this.bucketName, objectName, expiry);
+      return await this.minioClient.presignedGetObject(
+        this.bucketName,
+        objectName,
+        expiry,
+      );
     } catch (error) {
       this.logger.error('Error generating presigned URL:', error);
       throw error;
@@ -104,8 +128,12 @@ export class MinioService implements OnModuleInit {
   async listFiles(prefix?: string): Promise<any[]> {
     return new Promise((resolve, reject) => {
       const files: any[] = [];
-      const stream = this.minioClient.listObjects(this.bucketName, prefix, true);
-      
+      const stream = this.minioClient.listObjects(
+        this.bucketName,
+        prefix,
+        true,
+      );
+
       stream.on('data', (obj) => files.push(obj));
       stream.on('error', reject);
       stream.on('end', () => resolve(files));

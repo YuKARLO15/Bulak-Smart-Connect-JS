@@ -12,8 +12,12 @@ export class AnnouncementService {
     private announcementRepository: Repository<Announcement>,
   ) {}
 
-  async create(createAnnouncementDto: CreateAnnouncementDto): Promise<Announcement> {
-    const announcement = this.announcementRepository.create(createAnnouncementDto);
+  async create(
+    createAnnouncementDto: CreateAnnouncementDto,
+  ): Promise<Announcement> {
+    const announcement = this.announcementRepository.create(
+      createAnnouncementDto,
+    );
     return await this.announcementRepository.save(announcement);
   }
 
@@ -28,17 +32,20 @@ export class AnnouncementService {
     const announcement = await this.announcementRepository.findOne({
       where: { id, isActive: true },
     });
-    
+
     if (!announcement) {
       throw new NotFoundException(`Announcement with ID ${id} not found`);
     }
-    
+
     return announcement;
   }
 
-  async update(id: number, updateAnnouncementDto: UpdateAnnouncementDto): Promise<Announcement> {
+  async update(
+    id: number,
+    updateAnnouncementDto: UpdateAnnouncementDto,
+  ): Promise<Announcement> {
     const announcement = await this.findOne(id);
-    
+
     Object.assign(announcement, updateAnnouncementDto);
     return await this.announcementRepository.save(announcement);
   }

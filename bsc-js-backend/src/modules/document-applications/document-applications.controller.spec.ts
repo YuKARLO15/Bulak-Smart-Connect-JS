@@ -11,7 +11,9 @@ describe('DocumentApplicationsController', () => {
       providers: [DocumentApplicationsService],
     }).compile();
 
-    controller = module.get<DocumentApplicationsController>(DocumentApplicationsController);
+    controller = module.get<DocumentApplicationsController>(
+      DocumentApplicationsController,
+    );
   });
 
   it('should be defined', () => {

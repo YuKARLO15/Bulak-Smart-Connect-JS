@@ -1,7 +1,15 @@
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { DocumentApplication, ApplicationStatus, ApplicationType } from './entities/document-application.entity';
+import {
+  DocumentApplication,
+  ApplicationStatus,
+  ApplicationType,
+} from './entities/document-application.entity';
 import { DocumentFile } from './entities/document-file.entity';
 import { ApplicationStatusHistory } from './entities/application-status-history.entity';
 import { MinioService } from './services/minio.service';
@@ -20,7 +28,10 @@ export class DocumentApplicationsService {
     private minioService: MinioService,
   ) {}
 
-  async create(createDto: CreateDocumentApplicationDto, userId?: number): Promise<DocumentApplication> {
+  async create(
+    createDto: CreateDocumentApplicationDto,
+    userId?: number,
+  ): Promise<DocumentApplication> {
     // Generate application ID
     const timestamp = Date.now().toString().slice(-6);
     const prefix = this.getApplicationPrefix(createDto.applicationType);
@@ -62,7 +73,9 @@ export class DocumentApplicationsService {
     const application = await query.getOne();
 
     if (!application) {
-      throw new NotFoundException(`Document application with ID ${id} not found`);
+      throw new NotFoundException(
+        `Document application with ID ${id} not found`,
+      );
     }
 
     return application;
@@ -111,9 +124,16 @@ export class DocumentApplicationsService {
     }
 
     // File type validation
-    const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg', 'application/pdf'];
+    const allowedTypes = [
+      'image/jpeg',
+      'image/png',
+      'image/jpg',
+      'application/pdf',
+    ];
     if (!allowedTypes.includes(file.mimetype)) {
-      throw new BadRequestException('Only JPEG, PNG, and PDF files are allowed');
+      throw new BadRequestException(
+        'Only JPEG, PNG, and PDF files are allowed',
+      );
     }
 
     // Generate unique object name
@@ -196,7 +216,9 @@ export class DocumentApplicationsService {
     return await this.update(id, { status, statusMessage }, undefined, adminId);
   }
 
-  async findByStatus(status: ApplicationStatus): Promise<DocumentApplication[]> {
+  async findByStatus(
+    status: ApplicationStatus,
+  ): Promise<DocumentApplication[]> {
     return await this.documentApplicationRepository.find({
       where: { status },
       relations: ['files', 'user'],
