@@ -136,19 +136,48 @@
                     <td class="col-md-4">
                         <ul class="index-list">
                             <li>
+                                    <span class="modifier">Async</span>
                                 <a href="#create" >create</a>
                             </li>
                             <li>
+                                    <span class="modifier">Async</span>
                                 <a href="#findAll" >findAll</a>
                             </li>
                             <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#findByStatus" >findByStatus</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
                                 <a href="#findOne" >findOne</a>
                             </li>
                             <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#getApplicationPrefix" >getApplicationPrefix</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#getApplicationStats" >getApplicationStats</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#getFileDownloadUrl" >getFileDownloadUrl</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
                                 <a href="#remove" >remove</a>
                             </li>
                             <li>
+                                    <span class="modifier">Async</span>
                                 <a href="#update" >update</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#updateStatus" >updateStatus</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#uploadFile" >uploadFile</a>
                             </li>
                         </ul>
                     </td>
@@ -162,6 +191,90 @@
     </table>
 </section>
 
+            <section data-compodoc="block-constructor">
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(documentApplicationRepository: <a href="../classes/DocumentApplication.html" target="_self">Repository&lt;DocumentApplication&gt;</a>, documentFileRepository: <a href="../classes/DocumentFile.html" target="_self">Repository&lt;DocumentFile&gt;</a>, statusHistoryRepository: <a href="../classes/ApplicationStatusHistory.html" target="_self">Repository&lt;ApplicationStatusHistory&gt;</a>, minioService: <a href="../injectables/MinioService.html" target="_self">MinioService</a>)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="12" class="link-to-prism">src/modules/document-applications/document-applications.service.ts:12</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div>
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>documentApplicationRepository</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../classes/DocumentApplication.html" target="_self" >Repository&lt;DocumentApplication&gt;</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>documentFileRepository</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../classes/DocumentFile.html" target="_self" >Repository&lt;DocumentFile&gt;</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>statusHistoryRepository</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../classes/ApplicationStatusHistory.html" target="_self" >Repository&lt;ApplicationStatusHistory&gt;</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>minioService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/MinioService.html" target="_self" >MinioService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
 
             <section data-compodoc="block-methods">
     
@@ -174,6 +287,7 @@
                 <td class="col-md-4">
                     <a name="create"></a>
                     <span class="name">
+                            <span class="modifier">Async</span>
                         <span ><b>create</b></span>
                         <a href="#create"><span class="icon ion-ios-link"></span></a>
                     </span>
@@ -181,178 +295,8 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>create(createDocumentApplicationDto: <a href="../classes/CreateDocumentApplicationDto.html" target="_self">CreateDocumentApplicationDto</a>)</code>
-                </td>
-            </tr>
-
-
-                    <tr>
-                        <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="7"
-                                    class="link-to-prism">src/modules/document-applications/document-applications.service.ts:7</a></div>
-                        </td>
-                    </tr>
-
-
-            <tr>
-                <td class="col-md-4">
-
-                            <div class="io-description">
-                                <b>Parameters :</b>
-                                
-                                <table class="params">
-                                    <thead>
-                                        <tr>
-                                            <td>Name</td>
-                                                <td>Type</td>
-                                            <td>Optional</td>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                                <td>createDocumentApplicationDto</td>
-                                            <td>
-                                                            <code><a href="../classes/CreateDocumentApplicationDto.html" target="_self" >CreateDocumentApplicationDto</a></code>
-                                            </td>
-
-                                            <td>
-                                                    No
-                                            </td>
-
-
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        <div class="io-description">
-                            <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
-
-                        </div>
-                            <div class="io-description">
-                                
-                            </div>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    <table class="table table-sm table-bordered">
-        <tbody>
-            <tr>
-                <td class="col-md-4">
-                    <a name="findAll"></a>
-                    <span class="name">
-                        <span ><b>findAll</b></span>
-                        <a href="#findAll"><span class="icon ion-ios-link"></span></a>
-                    </span>
-                </td>
-            </tr>
-            <tr>
-                <td class="col-md-4">
-<code>findAll()</code>
-                </td>
-            </tr>
-
-
-                    <tr>
-                        <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="11"
-                                    class="link-to-prism">src/modules/document-applications/document-applications.service.ts:11</a></div>
-                        </td>
-                    </tr>
-
-
-            <tr>
-                <td class="col-md-4">
-
-                        <div class="io-description">
-                            <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
-
-                        </div>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    <table class="table table-sm table-bordered">
-        <tbody>
-            <tr>
-                <td class="col-md-4">
-                    <a name="findOne"></a>
-                    <span class="name">
-                        <span ><b>findOne</b></span>
-                        <a href="#findOne"><span class="icon ion-ios-link"></span></a>
-                    </span>
-                </td>
-            </tr>
-            <tr>
-                <td class="col-md-4">
-<code>findOne(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
-                </td>
-            </tr>
-
-
-                    <tr>
-                        <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="15"
-                                    class="link-to-prism">src/modules/document-applications/document-applications.service.ts:15</a></div>
-                        </td>
-                    </tr>
-
-
-            <tr>
-                <td class="col-md-4">
-
-                            <div class="io-description">
-                                <b>Parameters :</b>
-                                
-                                <table class="params">
-                                    <thead>
-                                        <tr>
-                                            <td>Name</td>
-                                                <td>Type</td>
-                                            <td>Optional</td>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                                <td>id</td>
-                                            <td>
-                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
-                                            </td>
-
-                                            <td>
-                                                    No
-                                            </td>
-
-
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        <div class="io-description">
-                            <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
-
-                        </div>
-                            <div class="io-description">
-                                
-                            </div>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    <table class="table table-sm table-bordered">
-        <tbody>
-            <tr>
-                <td class="col-md-4">
-                    <a name="remove"></a>
-                    <span class="name">
-                        <span ><b>remove</b></span>
-                        <a href="#remove"><span class="icon ion-ios-link"></span></a>
-                    </span>
-                </td>
-            </tr>
-            <tr>
-                <td class="col-md-4">
-<code>remove(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>create(createDto: <a href="../classes/CreateDocumentApplicationDto.html" target="_self">CreateDocumentApplicationDto</a>, userId?: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
                 </td>
             </tr>
 
@@ -381,9 +325,309 @@
                                     </thead>
                                     <tbody>
                                         <tr>
-                                                <td>id</td>
+                                                <td>createDto</td>
+                                            <td>
+                                                            <code><a href="../classes/CreateDocumentApplicationDto.html" target="_self" >CreateDocumentApplicationDto</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>userId</td>
                                             <td>
                                                             <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                            </td>
+
+                                            <td>
+                                                    Yes
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="../classes/DocumentApplication.html" target="_self" >Promise&lt;DocumentApplication&gt;</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="findAll"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>findAll</b></span>
+                        <a href="#findAll"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>findAll(userId?: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="38"
+                                    class="link-to-prism">src/modules/document-applications/document-applications.service.ts:38</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>userId</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                            </td>
+
+                                            <td>
+                                                    Yes
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="../classes/DocumentApplication.html" target="_self" >Promise&lt;DocumentApplication[]&gt;</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="findByStatus"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>findByStatus</b></span>
+                        <a href="#findByStatus"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>findByStatus(status: <a href="../undefineds/ApplicationStatus.html" target="_self">ApplicationStatus</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="199"
+                                    class="link-to-prism">src/modules/document-applications/document-applications.service.ts:199</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>status</td>
+                                            <td>
+                                                            <code><a href="../miscellaneous/enumerations.html#ApplicationStatus" target="_self" >ApplicationStatus</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="../classes/DocumentApplication.html" target="_self" >Promise&lt;DocumentApplication[]&gt;</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="findOne"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>findOne</b></span>
+                        <a href="#findOne"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>findOne(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, userId?: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="51"
+                                    class="link-to-prism">src/modules/document-applications/document-applications.service.ts:51</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>id</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>userId</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                            </td>
+
+                                            <td>
+                                                    Yes
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="../classes/DocumentApplication.html" target="_self" >Promise&lt;DocumentApplication&gt;</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getApplicationPrefix"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>getApplicationPrefix</b></span>
+                        <a href="#getApplicationPrefix"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>getApplicationPrefix(type: <a href="../undefineds/ApplicationType.html" target="_self">ApplicationType</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="172"
+                                    class="link-to-prism">src/modules/document-applications/document-applications.service.ts:172</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>type</td>
+                                            <td>
+                                                            <code><a href="../miscellaneous/enumerations.html#ApplicationType" target="_self" >ApplicationType</a></code>
                                             </td>
 
                                             <td>
@@ -410,24 +654,146 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
-                    <a name="update"></a>
+                    <a name="getApplicationStats"></a>
                     <span class="name">
-                        <span ><b>update</b></span>
-                        <a href="#update"><span class="icon ion-ios-link"></span></a>
+                            <span class="modifier">Async</span>
+                        <span ><b>getApplicationStats</b></span>
+                        <a href="#getApplicationStats"><span class="icon ion-ios-link"></span></a>
                     </span>
                 </td>
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>update(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, updateDocumentApplicationDto: <a href="../classes/UpdateDocumentApplicationDto.html" target="_self">UpdateDocumentApplicationDto</a>)</code>
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>getApplicationStats()</code>
                 </td>
             </tr>
 
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="19"
-                                    class="link-to-prism">src/modules/document-applications/document-applications.service.ts:19</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="207"
+                                    class="link-to-prism">src/modules/document-applications/document-applications.service.ts:207</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;any&gt;</code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getFileDownloadUrl"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>getFileDownloadUrl</b></span>
+                        <a href="#getFileDownloadUrl"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>getFileDownloadUrl(fileId: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, userId?: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="139"
+                                    class="link-to-prism">src/modules/document-applications/document-applications.service.ts:139</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>fileId</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>userId</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                            </td>
+
+                                            <td>
+                                                    Yes
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;string&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="remove"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>remove</b></span>
+                        <a href="#remove"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>remove(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, userId?: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="157"
+                                    class="link-to-prism">src/modules/document-applications/document-applications.service.ts:157</a></div>
                         </td>
                     </tr>
 
@@ -450,7 +816,7 @@
                                         <tr>
                                                 <td>id</td>
                                             <td>
-                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
                                             </td>
 
                                             <td>
@@ -460,7 +826,88 @@
 
                                         </tr>
                                         <tr>
-                                                <td>updateDocumentApplicationDto</td>
+                                                <td>userId</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                            </td>
+
+                                            <td>
+                                                    Yes
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;void&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="update"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>update</b></span>
+                        <a href="#update"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>update(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, updateDto: <a href="../classes/UpdateDocumentApplicationDto.html" target="_self">UpdateDocumentApplicationDto</a>, userId?: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, adminId?: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="71"
+                                    class="link-to-prism">src/modules/document-applications/document-applications.service.ts:71</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>id</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>updateDto</td>
                                             <td>
                                                             <code><a href="../classes/UpdateDocumentApplicationDto.html" target="_self" >UpdateDocumentApplicationDto</a></code>
                                             </td>
@@ -471,11 +918,245 @@
 
 
                                         </tr>
+                                        <tr>
+                                                <td>userId</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                            </td>
+
+                                            <td>
+                                                    Yes
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>adminId</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                            </td>
+
+                                            <td>
+                                                    Yes
+                                            </td>
+
+
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
                         <div class="io-description">
-                            <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                            <b>Returns : </b>        <code><a href="../classes/DocumentApplication.html" target="_self" >Promise&lt;DocumentApplication&gt;</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="updateStatus"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>updateStatus</b></span>
+                        <a href="#updateStatus"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>updateStatus(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, status: <a href="../undefineds/ApplicationStatus.html" target="_self">ApplicationStatus</a>, statusMessage?: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, adminId?: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="190"
+                                    class="link-to-prism">src/modules/document-applications/document-applications.service.ts:190</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>id</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>status</td>
+                                            <td>
+                                                            <code><a href="../miscellaneous/enumerations.html#ApplicationStatus" target="_self" >ApplicationStatus</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>statusMessage</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    Yes
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>adminId</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                            </td>
+
+                                            <td>
+                                                    Yes
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="../classes/DocumentApplication.html" target="_self" >Promise&lt;DocumentApplication&gt;</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="uploadFile"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>uploadFile</b></span>
+                        <a href="#uploadFile"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>uploadFile(applicationId: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, file: Express.Multer.File, documentCategory: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, userId?: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="98"
+                                    class="link-to-prism">src/modules/document-applications/document-applications.service.ts:98</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>applicationId</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>file</td>
+                                            <td>
+                                                        <code>Express.Multer.File</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>documentCategory</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>userId</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                            </td>
+
+                                            <td>
+                                                    Yes
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="../classes/DocumentFile.html" target="_self" >Promise&lt;DocumentFile&gt;</a></code>
 
                         </div>
                             <div class="io-description">
@@ -491,30 +1172,223 @@
 
 
     <div class="tab-pane fade  tab-source-code" id="source">
-        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable } from &#x27;@nestjs/common&#x27;;
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable, NotFoundException, BadRequestException } from &#x27;@nestjs/common&#x27;;
+import { InjectRepository } from &#x27;@nestjs/typeorm&#x27;;
+import { Repository } from &#x27;typeorm&#x27;;
+import { DocumentApplication, ApplicationStatus, ApplicationType } from &#x27;./entities/document-application.entity&#x27;;
+import { DocumentFile } from &#x27;./entities/document-file.entity&#x27;;
+import { ApplicationStatusHistory } from &#x27;./entities/application-status-history.entity&#x27;;
+import { MinioService } from &#x27;./services/minio.service&#x27;;
 import { CreateDocumentApplicationDto } from &#x27;./dto/create-document-application.dto&#x27;;
 import { UpdateDocumentApplicationDto } from &#x27;./dto/update-document-application.dto&#x27;;
 
 @Injectable()
 export class DocumentApplicationsService {
-  create(createDocumentApplicationDto: CreateDocumentApplicationDto) {
-    return &#x27;This action adds a new documentApplication&#x27;;
+  constructor(
+    @InjectRepository(DocumentApplication)
+    private documentApplicationRepository: Repository&lt;DocumentApplication&gt;,
+    @InjectRepository(DocumentFile)
+    private documentFileRepository: Repository&lt;DocumentFile&gt;,
+    @InjectRepository(ApplicationStatusHistory)
+    private statusHistoryRepository: Repository&lt;ApplicationStatusHistory&gt;,
+    private minioService: MinioService,
+  ) {}
+
+  async create(createDto: CreateDocumentApplicationDto, userId?: number): Promise&lt;DocumentApplication&gt; {
+    // Generate application ID
+    const timestamp &#x3D; Date.now().toString().slice(-6);
+    const prefix &#x3D; this.getApplicationPrefix(createDto.applicationType);
+    const applicationId &#x3D; &#x60;${prefix}-${timestamp}&#x60;;
+
+    const application &#x3D; this.documentApplicationRepository.create({
+      id: applicationId,
+      userId,
+      ...createDto,
+    });
+
+    return await this.documentApplicationRepository.save(application);
   }
 
-  findAll() {
-    return &#x60;This action returns all documentApplications&#x60;;
+  async findAll(userId?: number): Promise&lt;DocumentApplication[]&gt; {
+    const query &#x3D; this.documentApplicationRepository
+      .createQueryBuilder(&#x27;app&#x27;)
+      .leftJoinAndSelect(&#x27;app.files&#x27;, &#x27;files&#x27;)
+      .orderBy(&#x27;app.createdAt&#x27;, &#x27;DESC&#x27;);
+
+    if (userId) {
+      query.where(&#x27;app.userId &#x3D; :userId&#x27;, { userId });
+    }
+
+    return await query.getMany();
   }
 
-  findOne(id: number) {
-    return &#x60;This action returns a #${id} documentApplication&#x60;;
+  async findOne(id: string, userId?: number): Promise&lt;DocumentApplication&gt; {
+    const query &#x3D; this.documentApplicationRepository
+      .createQueryBuilder(&#x27;app&#x27;)
+      .leftJoinAndSelect(&#x27;app.files&#x27;, &#x27;files&#x27;)
+      .leftJoinAndSelect(&#x27;app.statusHistory&#x27;, &#x27;history&#x27;)
+      .where(&#x27;app.id &#x3D; :id&#x27;, { id });
+
+    if (userId) {
+      query.andWhere(&#x27;app.userId &#x3D; :userId&#x27;, { userId });
+    }
+
+    const application &#x3D; await query.getOne();
+
+    if (!application) {
+      throw new NotFoundException(&#x60;Document application with ID ${id} not found&#x60;);
+    }
+
+    return application;
   }
 
-  update(id: number, updateDocumentApplicationDto: UpdateDocumentApplicationDto) {
-    return &#x60;This action updates a #${id} documentApplication&#x60;;
+  async update(
+    id: string,
+    updateDto: UpdateDocumentApplicationDto,
+    userId?: number,
+    adminId?: number,
+  ): Promise&lt;DocumentApplication&gt; {
+    const application &#x3D; await this.findOne(id, userId);
+
+    // Track status changes
+    if (updateDto.status &amp;&amp; updateDto.status !&#x3D;&#x3D; application.status) {
+      await this.statusHistoryRepository.save({
+        applicationId: id,
+        oldStatus: application.status,
+        newStatus: updateDto.status,
+        statusMessage: updateDto.statusMessage,
+        changedBy: adminId || userId,
+      });
+    }
+
+    Object.assign(application, updateDto);
+    if (adminId) {
+      application.lastModifiedBy &#x3D; adminId;
+    }
+
+    return await this.documentApplicationRepository.save(application);
   }
 
-  remove(id: number) {
-    return &#x60;This action removes a #${id} documentApplication&#x60;;
+  async uploadFile(
+    applicationId: string,
+    file: Express.Multer.File,
+    documentCategory: string,
+    userId?: number,
+  ): Promise&lt;DocumentFile&gt; {
+    // Verify application exists and user has access
+    await this.findOne(applicationId, userId);
+
+    // File size validation (10MB limit)
+    const maxSize &#x3D; 10 * 1024 * 1024; // 10MB
+    if (file.size &gt; maxSize) {
+      throw new BadRequestException(&#x27;File size exceeds 10MB limit&#x27;);
+    }
+
+    // File type validation
+    const allowedTypes &#x3D; [&#x27;image/jpeg&#x27;, &#x27;image/png&#x27;, &#x27;image/jpg&#x27;, &#x27;application/pdf&#x27;];
+    if (!allowedTypes.includes(file.mimetype)) {
+      throw new BadRequestException(&#x27;Only JPEG, PNG, and PDF files are allowed&#x27;);
+    }
+
+    // Generate unique object name
+    const timestamp &#x3D; Date.now();
+    const objectName &#x3D; &#x60;applications/${applicationId}/${documentCategory}/${timestamp}_${file.originalname}&#x60;;
+
+    // Upload to MinIO
+    await this.minioService.uploadFile(file, objectName);
+
+    // Save file record
+    const documentFile &#x3D; this.documentFileRepository.create({
+      applicationId,
+      fileName: file.originalname,
+      fileType: file.mimetype,
+      fileSize: file.size,
+      minioObjectName: objectName,
+      documentCategory,
+    });
+
+    return await this.documentFileRepository.save(documentFile);
+  }
+
+  async getFileDownloadUrl(fileId: number, userId?: number): Promise&lt;string&gt; {
+    const file &#x3D; await this.documentFileRepository.findOne({
+      where: { id: fileId },
+      relations: [&#x27;application&#x27;],
+    });
+
+    if (!file) {
+      throw new NotFoundException(&#x60;File with ID ${fileId} not found&#x60;);
+    }
+
+    // Check user access
+    if (userId &amp;&amp; file.application.userId !&#x3D;&#x3D; userId) {
+      throw new BadRequestException(&#x27;Access denied to this file&#x27;);
+    }
+
+    return await this.minioService.getPresignedUrl(file.minioObjectName);
+  }
+
+  async remove(id: string, userId?: number): Promise&lt;void&gt; {
+    const application &#x3D; await this.findOne(id, userId);
+
+    // Delete files from MinIO
+    for (const file of application.files) {
+      try {
+        await this.minioService.deleteFile(file.minioObjectName);
+      } catch (error) {
+        console.warn(&#x60;Failed to delete file ${file.minioObjectName}:&#x60;, error);
+      }
+    }
+
+    await this.documentApplicationRepository.remove(application);
+  }
+
+  private getApplicationPrefix(type: ApplicationType): string {
+    switch (type) {
+      case ApplicationType.BIRTH_CERTIFICATE:
+        return &#x27;BC&#x27;;
+      case ApplicationType.MARRIAGE_CERTIFICATE:
+        return &#x27;MC&#x27;;
+      case ApplicationType.MARRIAGE_LICENSE:
+        return &#x27;ML&#x27;;
+      case ApplicationType.DEATH_CERTIFICATE:
+        return &#x27;DC&#x27;;
+      case ApplicationType.BUSINESS_PERMIT:
+        return &#x27;BP&#x27;;
+      default:
+        return &#x27;APP&#x27;;
+    }
+  }
+
+  // Admin methods
+  async updateStatus(
+    id: string,
+    status: ApplicationStatus,
+    statusMessage?: string,
+    adminId?: number,
+  ): Promise&lt;DocumentApplication&gt; {
+    return await this.update(id, { status, statusMessage }, undefined, adminId);
+  }
+
+  async findByStatus(status: ApplicationStatus): Promise&lt;DocumentApplication[]&gt; {
+    return await this.documentApplicationRepository.find({
+      where: { status },
+      relations: [&#x27;files&#x27;, &#x27;user&#x27;],
+      order: { createdAt: &#x27;DESC&#x27; },
+    });
+  }
+
+  async getApplicationStats(): Promise&lt;any&gt; {
+    const stats &#x3D; await this.documentApplicationRepository
+      .createQueryBuilder(&#x27;app&#x27;)
+      .select(&#x27;app.applicationType&#x27;, &#x27;type&#x27;)
+      .addSelect(&#x27;app.status&#x27;, &#x27;status&#x27;)
+      .addSelect(&#x27;COUNT(*)&#x27;, &#x27;count&#x27;)
+      .groupBy(&#x27;app.applicationType&#x27;)
+      .addGroupBy(&#x27;app.status&#x27;)
+      .getRawMany();
+
+    return stats;
   }
 }
 </code></pre>

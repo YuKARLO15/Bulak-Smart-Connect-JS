@@ -24,13 +24,13 @@
 <title>cluster_AuthModule</title>
 <polygon fill="none" stroke="black" stroke-dasharray="1,5" points="49,-70 49,-268 447,-268 447,-70 49,-70"/>
 </g>
-<g id="clust4" class="cluster">
-<title>cluster_AuthModule_exports</title>
-<polygon fill="none" stroke="black" points="134,-208 134,-260 344,-260 344,-208 134,-208"/>
-</g>
 <g id="clust6" class="cluster">
 <title>cluster_AuthModule_providers</title>
 <polygon fill="none" stroke="black" points="173,-78 173,-130 439,-130 439,-78 173,-78"/>
+</g>
+<g id="clust4" class="cluster">
+<title>cluster_AuthModule_exports</title>
+<polygon fill="none" stroke="black" points="134,-208 134,-260 344,-260 344,-208 134,-208"/>
 </g>
 <g id="clust3" class="cluster">
 <title>cluster_AuthModule_imports</title>
