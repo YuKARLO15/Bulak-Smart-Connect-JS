@@ -326,22 +326,92 @@ docker run -d \
 1. **Download MinIO**:
    - Go to [https://min.io/download](https://min.io/download)
    - Download the Windows binary (`minio.exe`)
+   - Or use PowerShell to download directly:
+   ```powershell
+   # Open PowerShell as Administrator
+   Invoke-WebRequest -Uri "https://dl.min.io/server/minio/release/windows-amd64/minio.exe" -OutFile "minio.exe"
+   ```
 
-2. **Create MinIO directory**:
+2. **Create MinIO directory and setup**:
 ```cmd
+# Create directory structure
 mkdir C:\minio
 mkdir C:\minio\data
+
+# Move the downloaded minio.exe to C:\minio\
+# Or download directly to the directory:
+cd C:\minio
 ```
 
-3. **Move the executable**:
-   - Place `minio.exe` in `C:\minio\`
+If using PowerShell to download directly to the correct location:
+```powershell
+# Create directory and download in one go
+New-Item -ItemType Directory -Force -Path "C:\minio"
+New-Item -ItemType Directory -Force -Path "C:\minio\data"
+Invoke-WebRequest -Uri "https://dl.min.io/server/minio/release/windows-amd64/minio.exe" -OutFile "C:\minio\minio.exe"
+```
+
+3. **Create a startup batch file** (Recommended for easy management):
+
+Create a file named `start-minio.bat` in `C:\minio\` with the following content:
+```batch
+@echo off
+REM MinIO Server Startup Script
+REM Place this file in C:\minio\start-minio.bat
+
+echo ===============================================
+echo Starting MinIO Object Storage Server
+echo ===============================================
+
+REM Set MinIO credentials (change these for production)
+set MINIO_ROOT_USER=minioadmin
+set MINIO_ROOT_PASSWORD=minioadmin123
+
+REM Optional: Set additional MinIO configurations
+set MINIO_CONSOLE_ADDRESS=:9001
+
+echo.
+echo MinIO Configuration:
+echo - API Server: http://localhost:9000
+echo - Web Console: http://localhost:9001
+echo - Username: %MINIO_ROOT_USER%
+echo - Password: %MINIO_ROOT_PASSWORD%
+echo.
+echo Starting server...
+echo (Press Ctrl+C to stop the server)
+echo.
+
+REM Start MinIO server
+minio.exe server C:\minio\data --console-address ":9001"
+
+echo.
+echo MinIO server has stopped.
+pause
+```
 
 4. **Start MinIO Server**:
+
+**Method 1: Using the batch file (Recommended)**
+```cmd
+# Double-click start-minio.bat or run from command prompt:
+cd C:\minio
+start-minio.bat
+```
+
+**Method 2: Manual command line**
 ```cmd
 cd C:\minio
 set MINIO_ROOT_USER=minioadmin
 set MINIO_ROOT_PASSWORD=minioadmin123
 minio.exe server C:\minio\data --console-address ":9001"
+```
+
+**Method 3: Using PowerShell**
+```powershell
+cd C:\minio
+$env:MINIO_ROOT_USER = "minioadmin"
+$env:MINIO_ROOT_PASSWORD = "minioadmin123"
+.\minio.exe server C:\minio\data --console-address ":9001"
 ```
 
 #### Option 3: Using XAMPP/Alternative Setup
@@ -351,6 +421,54 @@ If you're using XAMPP or prefer a different approach:
 1. Follow Option 1 (Docker) as it's platform-independent
 2. Alternatively, use MinIO's Windows Service installer from their official website
 
+#### (Optional) Install the MinIO Client
+
+The MinIO Client allows you to work with your MinIO volume from the command line for advanced operations.
+
+1. **Download MinIO Client**:
+   - Download from: [https://dl.min.io/client/mc/release/windows-amd64/mc.exe](https://dl.min.io/client/mc/release/windows-amd64/mc.exe)
+   - Or use PowerShell:
+   ```powershell
+   # Download to C:\minio\ directory
+   Invoke-WebRequest -Uri "https://dl.min.io/client/mc/release/windows-amd64/mc.exe" -OutFile "C:\minio\mc.exe"
+   ```
+
+2. **Set up MinIO Client**:
+```cmd
+# Navigate to MinIO directory
+cd C:\minio
+
+# Test the client
+mc.exe --help
+```
+
+3. **Configure MinIO Client alias**:
+```cmd
+# Set up alias for your local MinIO instance
+mc.exe alias set local http://127.0.0.1:9000 minioadmin minioadmin123
+
+# Test the connection
+mc.exe admin info local
+```
+
+4. **Common MinIO Client Commands**:
+```cmd
+# List buckets
+mc.exe ls local
+
+# Create a bucket
+mc.exe mb local/my-new-bucket
+
+# List files in a bucket
+mc.exe ls local/document-applications
+
+# Copy files
+mc.exe cp myfile.pdf local/document-applications/
+
+# Get bucket policy
+mc.exe policy get local/document-applications
+```
+
 #### Post-Installation Setup
 
 1. **Verify Installation**:
@@ -358,10 +476,16 @@ If you're using XAMPP or prefer a different approach:
    - MinIO Console: [http://localhost:9001](http://localhost:9001)
 
 2. **Create Bucket** (if not auto-created):
-   - Login to MinIO Console
-   - Click "Create Bucket"
-   - Name: `document-applications` (or as specified in your `.env`)
-   - Set to public read if needed
+   - **Option A: Using Web Console**
+     - Login to MinIO Console
+     - Click "Create Bucket"
+     - Name: `document-applications` (or as specified in your `.env`)
+     - Set to public read if needed
+   
+   - **Option B: Using MinIO Client (if installed)**
+   ```cmd
+   mc.exe mb local/document-applications
+   ```
 
 3. **Update Environment Variables**:
    ```bash
@@ -381,11 +505,17 @@ If you're using XAMPP or prefer a different approach:
   # For Docker
   docker run -d -p 9002:9000 -p 9003:9001 --name minio ...
   
+  # For Windows Binary - update your batch file:
+  minio.exe server C:\minio\data --address ":9002" --console-address ":9003"
+  
   # Update .env file
   MINIO_PORT=9002
   ```
 
-- **Permission Issues**: Ensure the data directory has proper read/write permissions
+- **Permission Issues**: 
+  - Ensure the data directory has proper read/write permissions
+  - Run Command Prompt as Administrator if needed
+  - Check Windows Defender/Antivirus isn't blocking minio.exe
 
 - **Docker Issues**: 
   ```bash
@@ -397,7 +527,52 @@ If you're using XAMPP or prefer a different approach:
   docker run -d ...
   ```
 
+- **Windows Binary Issues**:
+  ```cmd
+  # Check if MinIO is running
+  netstat -an | findstr :9000
+  
+  # Kill existing MinIO process if needed
+  taskkill /f /im minio.exe
+  
+  # Restart using batch file
+  start-minio.bat
+  ```
+
+- **MinIO Client Issues**:
+  ```cmd
+  # Test client connectivity
+  mc.exe admin info local
+  
+  # Re-configure alias if needed
+  mc.exe alias remove local
+  mc.exe alias set local http://127.0.0.1:9000 minioadmin minioadmin123
+  ```
+
 - **Connection Testing**: The backend will automatically test MinIO connection on startup and provide helpful error messages.
+
+#### Production Considerations
+
+For production environments, consider:
+
+1. **Change Default Credentials**:
+   ```batch
+   # In start-minio.bat, update:
+   set MINIO_ROOT_USER=your_secure_username
+   set MINIO_ROOT_PASSWORD=your_secure_password_min_8_chars
+   ```
+
+2. **Use HTTPS/TLS**:
+   ```batch
+   # Add certificates and update:
+   set MINIO_USE_SSL=true
+   minio.exe server C:\minio\data --certs-dir C:\minio\certs --console-address ":9001"
+   ```
+
+3. **Run as Windows Service**: Consider using tools like NSSM (Non-Sucking Service Manager) to run MinIO as a Windows service.
+
+4. **Backup Strategy**: Regularly backup your `C:\minio\data` directory.
+```
 
 ## Environment Setup
 
