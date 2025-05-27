@@ -275,8 +275,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="85"
-                                    class="link-to-prism">src/modules/document-applications/services/minio.service.ts:85</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="109"
+                                    class="link-to-prism">src/modules/document-applications/services/minio.service.ts:109</a></div>
                         </td>
                     </tr>
 
@@ -344,8 +344,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="36"
-                                    class="link-to-prism">src/modules/document-applications/services/minio.service.ts:36</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="50"
+                                    class="link-to-prism">src/modules/document-applications/services/minio.service.ts:50</a></div>
                         </td>
                     </tr>
 
@@ -383,8 +383,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="95"
-                                    class="link-to-prism">src/modules/document-applications/services/minio.service.ts:95</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="119"
+                                    class="link-to-prism">src/modules/document-applications/services/minio.service.ts:119</a></div>
                         </td>
                     </tr>
 
@@ -452,8 +452,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="76"
-                                    class="link-to-prism">src/modules/document-applications/services/minio.service.ts:76</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="93"
+                                    class="link-to-prism">src/modules/document-applications/services/minio.service.ts:93</a></div>
                         </td>
                     </tr>
 
@@ -539,8 +539,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="104"
-                                    class="link-to-prism">src/modules/document-applications/services/minio.service.ts:104</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="128"
+                                    class="link-to-prism">src/modules/document-applications/services/minio.service.ts:128</a></div>
                         </td>
                     </tr>
 
@@ -608,8 +608,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="32"
-                                    class="link-to-prism">src/modules/document-applications/services/minio.service.ts:32</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="46"
+                                    class="link-to-prism">src/modules/document-applications/services/minio.service.ts:46</a></div>
                         </td>
                     </tr>
 
@@ -647,8 +647,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="51"
-                                    class="link-to-prism">src/modules/document-applications/services/minio.service.ts:51</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="65"
+                                    class="link-to-prism">src/modules/document-applications/services/minio.service.ts:65</a></div>
                         </td>
                     </tr>
 
@@ -810,13 +810,24 @@ export class MinioService implements OnModuleInit {
   private bucketName: string;
 
   constructor(private configService: ConfigService) {
-    const endpoint &#x3D; this.configService.get&lt;string&gt;(&#x27;MINIO_ENDPOINT&#x27;, &#x27;localhost&#x27;);
+    const endpoint &#x3D; this.configService.get&lt;string&gt;(
+      &#x27;MINIO_ENDPOINT&#x27;,
+      &#x27;localhost&#x27;,
+    );
     const port &#x3D; this.configService.get&lt;number&gt;(&#x27;MINIO_PORT&#x27;, 9000);
-    const useSSLValue &#x3D; this.configService.get&lt;string&gt;(&#x27;MINIO_USE_SSL&#x27;, &#x27;false&#x27;).toLowerCase();
+    const useSSLValue &#x3D; this.configService
+      .get&lt;string&gt;(&#x27;MINIO_USE_SSL&#x27;, &#x27;false&#x27;)
+      .toLowerCase();
     const useSSL &#x3D; [&#x27;true&#x27;, &#x27;1&#x27;, &#x27;yes&#x27;, &#x27;on&#x27;].includes(useSSLValue);
-    const accessKey &#x3D; this.configService.get&lt;string&gt;(&#x27;MINIO_ACCESS_KEY&#x27;, &#x27;minioadmin&#x27;);
-    const secretKey &#x3D; this.configService.get&lt;string&gt;(&#x27;MINIO_SECRET_KEY&#x27;, &#x27;minioadmin123&#x27;);
-    
+    const accessKey &#x3D; this.configService.get&lt;string&gt;(
+      &#x27;MINIO_ACCESS_KEY&#x27;,
+      &#x27;minioadmin&#x27;,
+    );
+    const secretKey &#x3D; this.configService.get&lt;string&gt;(
+      &#x27;MINIO_SECRET_KEY&#x27;,
+      &#x27;minioadmin123&#x27;,
+    );
+
     this.minioClient &#x3D; new Minio.Client({
       endPoint: endpoint,
       port: port,
@@ -824,9 +835,12 @@ export class MinioService implements OnModuleInit {
       accessKey: accessKey,
       secretKey: secretKey,
     });
-    
-    this.bucketName &#x3D; this.configService.get&lt;string&gt;(&#x27;MINIO_BUCKET_NAME&#x27;, &#x27;document-applications&#x27;);
-    
+
+    this.bucketName &#x3D; this.configService.get&lt;string&gt;(
+      &#x27;MINIO_BUCKET_NAME&#x27;,
+      &#x27;document-applications&#x27;,
+    );
+
     this.logger.log(&#x60;MinIO configured with endpoint: ${endpoint}:${port}&#x60;);
   }
 
@@ -849,7 +863,10 @@ export class MinioService implements OnModuleInit {
     }
   }
 
-  async uploadFile(file: Express.Multer.File, objectName: string): Promise&lt;string&gt; {
+  async uploadFile(
+    file: Express.Multer.File,
+    objectName: string,
+  ): Promise&lt;string&gt; {
     try {
       const metaData &#x3D; {
         &#x27;Content-Type&#x27;: file.mimetype,
@@ -863,7 +880,7 @@ export class MinioService implements OnModuleInit {
         objectName,
         file.buffer,
         file.size,
-        metaData
+        metaData,
       );
 
       this.logger.log(&#x60;File uploaded successfully: ${objectName}&#x60;);
@@ -874,9 +891,16 @@ export class MinioService implements OnModuleInit {
     }
   }
 
-  async getPresignedUrl(objectName: string, expiry: number &#x3D; 3600): Promise&lt;string&gt; {
+  async getPresignedUrl(
+    objectName: string,
+    expiry: number &#x3D; 3600,
+  ): Promise&lt;string&gt; {
     try {
-      return await this.minioClient.presignedGetObject(this.bucketName, objectName, expiry);
+      return await this.minioClient.presignedGetObject(
+        this.bucketName,
+        objectName,
+        expiry,
+      );
     } catch (error) {
       this.logger.error(&#x27;Error generating presigned URL:&#x27;, error);
       throw error;
@@ -905,14 +929,19 @@ export class MinioService implements OnModuleInit {
   async listFiles(prefix?: string): Promise&lt;any[]&gt; {
     return new Promise((resolve, reject) &#x3D;&gt; {
       const files: any[] &#x3D; [];
-      const stream &#x3D; this.minioClient.listObjects(this.bucketName, prefix, true);
-      
+      const stream &#x3D; this.minioClient.listObjects(
+        this.bucketName,
+        prefix,
+        true,
+      );
+
       stream.on(&#x27;data&#x27;, (obj) &#x3D;&gt; files.push(obj));
       stream.on(&#x27;error&#x27;, reject);
       stream.on(&#x27;end&#x27;, () &#x3D;&gt; resolve(files));
     });
   }
-}</code></pre>
+}
+</code></pre>
     </div>
 
 </div>

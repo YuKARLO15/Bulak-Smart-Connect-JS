@@ -229,8 +229,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="52"
-                                    class="link-to-prism">src/services/minio.service.ts:52</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="59"
+                                    class="link-to-prism">src/services/minio.service.ts:59</a></div>
                         </td>
                     </tr>
 
@@ -298,8 +298,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="43"
-                                    class="link-to-prism">src/services/minio.service.ts:43</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="46"
+                                    class="link-to-prism">src/services/minio.service.ts:46</a></div>
                         </td>
                     </tr>
 
@@ -536,11 +536,14 @@ export class MinioService {
       accessKey: process.env.MINIO_ACCESS_KEY || &#x27;minioadmin&#x27;,
       secretKey: process.env.MINIO_SECRET_KEY || &#x27;minioadmin123&#x27;,
     });
-    
+
     this.bucketName &#x3D; process.env.MINIO_BUCKET_NAME || &#x27;bulak-smart-connect&#x27;;
   }
 
-  async uploadFile(file: Express.Multer.File, objectName: string): Promise&lt;string&gt; {
+  async uploadFile(
+    file: Express.Multer.File,
+    objectName: string,
+  ): Promise&lt;string&gt; {
     try {
       await this.minioClient.putObject(
         this.bucketName,
@@ -550,9 +553,9 @@ export class MinioService {
         {
           &#x27;Content-Type&#x27;: file.mimetype,
           &#x27;Original-Name&#x27;: file.originalname,
-        }
+        },
       );
-      
+
       this.logger.log(&#x60;File uploaded: ${objectName}&#x60;);
       return objectName;
     } catch (error) {
@@ -563,7 +566,11 @@ export class MinioService {
 
   async getDownloadUrl(objectName: string): Promise&lt;string&gt; {
     try {
-      return await this.minioClient.presignedGetObject(this.bucketName, objectName, 3600);
+      return await this.minioClient.presignedGetObject(
+        this.bucketName,
+        objectName,
+        3600,
+      );
     } catch (error) {
       this.logger.error(&#x27;Get URL failed:&#x27;, error);
       throw error;
@@ -579,7 +586,8 @@ export class MinioService {
       throw error;
     }
   }
-}</code></pre>
+}
+</code></pre>
     </div>
 
 </div>
