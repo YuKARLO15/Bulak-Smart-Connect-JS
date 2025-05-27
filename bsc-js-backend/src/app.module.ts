@@ -10,6 +10,7 @@ import { RolesModule } from './roles/roles.module';
 import { QueueModule } from './modules/queue/queue.module';
 import { AppointmentModule } from './modules/appointment/appointment.module';
 import { AnnouncementModule } from './modules/announcement/announcement.module';
+import { DocumentApplicationsModule } from './modules/document-applications/document-applications.module';
 
 @Module({
   imports: [
@@ -62,6 +63,7 @@ import { AnnouncementModule } from './modules/announcement/announcement.module';
     QueueModule,
     AppointmentModule,
     AnnouncementModule,
+    DocumentApplicationsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
