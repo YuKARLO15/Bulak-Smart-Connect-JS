@@ -5,6 +5,7 @@ import { DataSource } from 'typeorm';
 import { Role } from './roles/entities/role.entity';
 import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import * as Minio from 'minio';
 
 dotenv.config();
 
@@ -23,6 +24,7 @@ async function bootstrap() {
       whitelist: true,
     }),
   );
+
   // Set up Swagger documentation
   const config = new DocumentBuilder()
     .setTitle('Bulak Smart Connect API')
@@ -35,6 +37,7 @@ async function bootstrap() {
     - Appointment Scheduling
     - Municipal Announcements
     - Role-based Access Control
+    - MinIO Document Storage 
     
     ## Authentication
     Most endpoints require JWT authentication. Use the login endpoint to obtain a token.
@@ -63,6 +66,7 @@ async function bootstrap() {
     .addTag('Appointments', 'Appointment scheduling system')
     .addTag('Announcements', 'Municipal announcements and notifications')
     .addTag('Roles', 'Role and permission management')
+    .addTag('Document Applications', 'Document application management with MinIO storage') 
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api/docs', app, document);
@@ -78,7 +82,58 @@ async function bootstrap() {
   const dataSource = app.get(DataSource);
   await seedDatabaseIfNeeded(dataSource);
 
+  // Test MinIO connection 
+  await testMinIOConnection();
+
   await app.listen(process.env.PORT ?? 3000);
+}
+
+async function testMinIOConnection() {
+  try {
+    console.log('🧪 Testing MinIO connection...');
+    
+    const minioClient = new Minio.Client({
+      endPoint: process.env.MINIO_ENDPOINT || 'localhost',
+      port: parseInt(process.env.MINIO_PORT || '9000'),
+      useSSL: process.env.MINIO_USE_SSL === 'true',
+      accessKey: process.env.MINIO_ACCESS_KEY || 'minioadmin',
+      secretKey: process.env.MINIO_SECRET_KEY || 'minioadmin123',
+    });
+
+    // Test connection by listing buckets
+    const buckets = await minioClient.listBuckets();
+    console.log(`✅ MinIO connection successful! Found ${buckets.length} buckets`);
+    
+    // Ensure document-applications bucket exists
+    const bucketName = process.env.MINIO_BUCKET_NAME || 'document-applications';
+    const bucketExists = await minioClient.bucketExists(bucketName);
+    
+    if (!bucketExists) {
+      await minioClient.makeBucket(bucketName, 'us-east-1');
+      console.log(`✅ Created bucket: ${bucketName}`);
+    } else {
+      console.log(`✅ Bucket '${bucketName}' already exists`);
+    }
+
+    // Test file upload
+    const testData = Buffer.from('Hello MinIO from Bulak Smart Connect!');
+    const testObjectName = `test/connection-test-${Date.now()}.txt`;
+    
+    await minioClient.putObject(bucketName, testObjectName, testData);
+    console.log(`✅ Test file uploaded: ${testObjectName}`);
+    
+    // Clean up test file
+    await minioClient.removeObject(bucketName, testObjectName);
+    console.log(`✅ Test file cleaned up`);
+    
+    console.log('🎉 MinIO is ready for document storage!');
+    
+  } catch (error) {
+    console.error('❌ MinIO connection failed:', error.message);
+    console.error('💡 Make sure MinIO server is running on localhost:9000');
+    console.error('💡 Check your MinIO credentials in .env file');
+    // Don't throw error to allow app to continue starting
+  }
 }
 
 async function seedDatabaseIfNeeded(dataSource: DataSource) {
