@@ -1,0 +1,93 @@
+name: Backend Tests
+
+on:
+  push:
+    branches: [ '*' ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: test_password
+          MYSQL_DATABASE: bsc_test
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+        ports:
+          - 3306:3306
+
+      minio:
+        image: minio/minio:latest
+        env:
+          MINIO_ROOT_USER: minioadmin
+          MINIO_ROOT_PASSWORD: minioadmin123
+        options: >-
+          --health-cmd="curl -f http://localhost:9000/minio/health/live"
+          --health-interval=30s
+          --health-timeout=20s
+          --health-retries=3
+        ports:
+          - 9000:9000
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Use Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: bsc-js-backend/package-lock.json
+
+    - name: Install dependencies
+      working-directory: ./bsc-js-backend
+      run: npm ci
+
+    - name: Create test environment file
+      working-directory: ./bsc-js-backend
+      run: |
+        echo "DB_HOST=localhost" > .env.test
+        echo "DB_PORT=3306" >> .env.test
+        echo "DB_USERNAME=root" >> .env.test
+        echo "DB_PASSWORD=test_password" >> .env.test
+        echo "DB_NAME=bsc_test" >> .env.test
+        echo "JWT_SECRET=test_jwt_secret_key_for_testing_purposes_only" >> .env.test
+        echo "MINIO_ENDPOINT=localhost" >> .env.test
+        echo "MINIO_PORT=9000" >> .env.test
+        echo "MINIO_USE_SSL=false" >> .env.test
+        echo "MINIO_ACCESS_KEY=minioadmin" >> .env.test
+        echo "MINIO_SECRET_KEY=minioadmin123" >> .env.test
+        echo "MINIO_BUCKET_NAME=test-bucket" >> .env.test
+
+    - name: Wait for services
+      run: |
+        # Wait for MySQL
+        while ! mysqladmin ping -h"127.0.0.1" -P3306 -uroot -ptest_password --silent; do
+          echo "Waiting for MySQL..."
+          sleep 2
+        done
+        # Wait for MinIO
+        while ! curl -f http://localhost:9000/minio/health/live; do
+          echo "Waiting for MinIO..."
+          sleep 2
+        done
+
+    - name: Run tests
+      working-directory: ./bsc-js-backend
+      run: npm test
+
+    - name: Run e2e tests
+      working-directory: ./bsc-js-backend
+      run: npm run test:e2e
+
+    - name: Generate test coverage
+      working-directory: ./bsc-js-backend
+      run: npm run test:cov
