@@ -45,7 +45,8 @@
                 <td><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/mysql/mysql-original.svg" alt="MySQL" width="60px" height="auto" /></td>
                 <td><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/socketio/socketio-original.svg" alt="Socket.IO" width="60px" height="auto" /></td>
                 <td><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/jest/jest-plain.svg" alt="Jest" width="60px" height="auto" /></td>
-               <td><img src="https://static1.smartbear.co/swagger/media/assets/images/swagger_logo.svg" alt="Swagger" width="60px" height="auto" /></td>
+                <td><img src="https://static1.smartbear.co/swagger/media/assets/images/swagger_logo.svg" alt="Swagger" width="60px" height="auto" /></td>
+                <td><img src="https://min.io/resources/img/logo/minio-logo.svg" alt="MinIO" width="60px" height="auto" /></td>
             </tr>
             <tr>
                 <td><p><b>NestJS</b></p></td>
@@ -53,6 +54,7 @@
                 <td><p><b>Socket.IO</b></p></td>
                 <td><p><b>Jest</b></p></td>
                 <td><p><b>Swagger</b></p></td>
+                <td><p><b>MinIO</b></p></td>
             </tr>
             <tr>
                 <td><p>Progressive Node.js framework</p></td>
@@ -60,6 +62,7 @@
                 <td><p>Real-time communication</p></td>
                 <td><p>Testing framework</p></td>
                 <td><p>API documentation</p></td>
+                <td><p>Object storage for documents</p></td>
             </tr>
         </tbody>
     </table>
@@ -288,12 +291,24 @@ CREATE TABLE queues (
 Create a `.env` file in the bsc-js-backend directory with:
 
 ```bash
+# Database Configuration
 DB_HOST=localhost
 DB_PORT=3306
 DB_USERNAME=root
 DB_PASSWORD=your_password
 DB_NAME=bulak_smart_connect
+
+# JWT Configuration
 JWT_SECRET=your_jwt_secret_key
+
+# MinIO Configuration
+MINIO_ENDPOINT=localhost
+MINIO_PORT=9000
+MINIO_USE_SSL=false
+MINIO_ACCESS_KEY=minioadmin
+MINIO_SECRET_KEY=your_password
+MINIO_BUCKET_NAME=bulak-smart-connect
+FILE_STORAGE_TYPE=minio
 ```
 
 Generate a secure JWT secret using:
@@ -434,6 +449,20 @@ npm run start:dev
 ### Announcements
 - `GET /announcements` - Get all announcements
 - `GET /announcements/recent` - Get recent announcements
+
+### Document Applications
+- `GET /document-applications` - Get user's applications
+- `POST /document-applications` - Create new application
+- `POST /document-applications/:id/upload` - Upload document file
+- `GET /document-applications/files/:fileId/download` - Get file download URL
+- `PATCH /document-applications/:id` - Update application
+- `PATCH /document-applications/:id/status` - Update application status (Admin only)
+- `DELETE /document-applications/:id` - Delete application
+
+### File Storage
+- **MinIO Integration**: Secure document storage and retrieval
+- **File Upload**: Support for multiple document types
+- **Presigned URLs**: Secure file access with expiration
 
 For complete API documentation, check the Postman collection in `/docs/bulak-smart-connect-postman-collection.json`
 
