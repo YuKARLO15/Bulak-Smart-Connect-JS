@@ -20,6 +20,7 @@ import { UpdateDocumentApplicationDto } from './dto/update-document-application.
 import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../../auth/guards/roles.guard';
 import { Roles } from '../../auth/decorators/roles.decorator';
+import { ApplicationStatus } from './entities/document-application.entity';
 import {
   ApiTags,
   ApiOperation,
@@ -27,6 +28,13 @@ import {
   ApiBearerAuth,
   ApiConsumes,
 } from '@nestjs/swagger';
+
+interface AuthenticatedRequest extends Request {
+  user: {
+    userId: number;
+    roles: string[];
+  };
+}
 
 @ApiTags('Document Applications')
 @Controller('document-applications')
@@ -42,7 +50,7 @@ export class DocumentApplicationsController {
   @ApiResponse({ status: 201, description: 'Application created successfully' })
   async create(
     @Body() createDto: CreateDocumentApplicationDto,
-    @Request() req,
+    @Request() req: AuthenticatedRequest,
   ) {
     return this.documentApplicationsService.create(createDto, req.user.userId);
   }
@@ -72,7 +80,7 @@ export class DocumentApplicationsController {
     @Param('id') id: string,
     @UploadedFile() file: Express.Multer.File,
     @Body('documentCategory') documentCategory: string,
-    @Request() req,
+    @Request() req: AuthenticatedRequest,
   ) {
     return this.documentApplicationsService.uploadFile(
       id,
@@ -84,16 +92,19 @@ export class DocumentApplicationsController {
 
   @Get()
   @ApiOperation({ summary: 'Get user applications' })
-  async findAll(@Query('status') status?: string, @Request() req?) {
-    const userId = req.user.roles.includes('admin')
+  async findAll(
+    @Query('status') status?: string,
+    @Request() req?: AuthenticatedRequest,
+  ) {
+    const userId = req?.user.roles.includes('admin')
       ? undefined
-      : req.user.userId;
+      : req?.user.userId;
     return this.documentApplicationsService.findAll(userId);
   }
 
   @Get(':id')
   @ApiOperation({ summary: 'Get specific application' })
-  async findOne(@Param('id') id: string, @Request() req) {
+  async findOne(@Param('id') id: string, @Request() req: AuthenticatedRequest) {
     const userId = req.user.roles.includes('admin')
       ? undefined
       : req.user.userId;
@@ -102,7 +113,10 @@ export class DocumentApplicationsController {
 
   @Get('files/:fileId/download')
   @ApiOperation({ summary: 'Get file download URL' })
-  async getFileDownloadUrl(@Param('fileId') fileId: string, @Request() req) {
+  async getFileDownloadUrl(
+    @Param('fileId') fileId: string,
+    @Request() req: AuthenticatedRequest,
+  ) {
     const userId = req.user.roles.includes('admin')
       ? undefined
       : req.user.userId;
@@ -118,7 +132,7 @@ export class DocumentApplicationsController {
   async update(
     @Param('id') id: string,
     @Body() updateDto: UpdateDocumentApplicationDto,
-    @Request() req,
+    @Request() req: AuthenticatedRequest,
   ) {
     const userId = req.user.roles.includes('admin')
       ? undefined
@@ -142,11 +156,11 @@ export class DocumentApplicationsController {
   async updateStatus(
     @Param('id') id: string,
     @Body() statusDto: { status: string; statusMessage?: string },
-    @Request() req,
+    @Request() req: AuthenticatedRequest,
   ) {
     return this.documentApplicationsService.updateStatus(
       id,
-      statusDto.status as any,
+      statusDto.status as ApplicationStatus,
       statusDto.statusMessage,
       req.user.userId,
     );
@@ -154,7 +168,7 @@ export class DocumentApplicationsController {
 
   @Delete(':id')
   @ApiOperation({ summary: 'Delete application' })
-  async remove(@Param('id') id: string, @Request() req) {
+  async remove(@Param('id') id: string, @Request() req: AuthenticatedRequest) {
     const userId = req.user.roles.includes('admin')
       ? undefined
       : req.user.userId;
