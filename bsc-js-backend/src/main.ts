@@ -138,7 +138,10 @@ async function testMinIOConnection() {
 
     console.log('🎉 MinIO is ready for document storage!');
   } catch (error) {
-    console.error('❌ MinIO connection failed:', error.message);
+    console.error(
+      '❌ MinIO connection failed:',
+      error instanceof Error ? error.message : 'Unknown error',
+    );
     console.error('💡 Make sure MinIO server is running on localhost:9000');
     console.error('💡 Check your MinIO credentials in .env file');
     // Don't throw error to allow app to continue starting
