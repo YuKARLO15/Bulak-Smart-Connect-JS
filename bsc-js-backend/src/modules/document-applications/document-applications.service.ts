@@ -1,26 +1,219 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { DocumentApplication, ApplicationStatus, ApplicationType } from './entities/document-application.entity';
+import { DocumentFile } from './entities/document-file.entity';
+import { ApplicationStatusHistory } from './entities/application-status-history.entity';
+import { MinioService } from './services/minio.service';
 import { CreateDocumentApplicationDto } from './dto/create-document-application.dto';
 import { UpdateDocumentApplicationDto } from './dto/update-document-application.dto';
 
 @Injectable()
 export class DocumentApplicationsService {
-  create(createDocumentApplicationDto: CreateDocumentApplicationDto) {
-    return 'This action adds a new documentApplication';
+  constructor(
+    @InjectRepository(DocumentApplication)
+    private documentApplicationRepository: Repository<DocumentApplication>,
+    @InjectRepository(DocumentFile)
+    private documentFileRepository: Repository<DocumentFile>,
+    @InjectRepository(ApplicationStatusHistory)
+    private statusHistoryRepository: Repository<ApplicationStatusHistory>,
+    private minioService: MinioService,
+  ) {}
+
+  async create(createDto: CreateDocumentApplicationDto, userId?: number): Promise<DocumentApplication> {
+    // Generate application ID
+    const timestamp = Date.now().toString().slice(-6);
+    const prefix = this.getApplicationPrefix(createDto.applicationType);
+    const applicationId = `${prefix}-${timestamp}`;
+
+    const application = this.documentApplicationRepository.create({
+      id: applicationId,
+      userId,
+      ...createDto,
+    });
+
+    return await this.documentApplicationRepository.save(application);
   }
 
-  findAll() {
-    return `This action returns all documentApplications`;
+  async findAll(userId?: number): Promise<DocumentApplication[]> {
+    const query = this.documentApplicationRepository
+      .createQueryBuilder('app')
+      .leftJoinAndSelect('app.files', 'files')
+      .orderBy('app.createdAt', 'DESC');
+
+    if (userId) {
+      query.where('app.userId = :userId', { userId });
+    }
+
+    return await query.getMany();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} documentApplication`;
+  async findOne(id: string, userId?: number): Promise<DocumentApplication> {
+    const query = this.documentApplicationRepository
+      .createQueryBuilder('app')
+      .leftJoinAndSelect('app.files', 'files')
+      .leftJoinAndSelect('app.statusHistory', 'history')
+      .where('app.id = :id', { id });
+
+    if (userId) {
+      query.andWhere('app.userId = :userId', { userId });
+    }
+
+    const application = await query.getOne();
+
+    if (!application) {
+      throw new NotFoundException(`Document application with ID ${id} not found`);
+    }
+
+    return application;
   }
 
-  update(id: number, updateDocumentApplicationDto: UpdateDocumentApplicationDto) {
-    return `This action updates a #${id} documentApplication`;
+  async update(
+    id: string,
+    updateDto: UpdateDocumentApplicationDto,
+    userId?: number,
+    adminId?: number,
+  ): Promise<DocumentApplication> {
+    const application = await this.findOne(id, userId);
+
+    // Track status changes
+    if (updateDto.status && updateDto.status !== application.status) {
+      await this.statusHistoryRepository.save({
+        applicationId: id,
+        oldStatus: application.status,
+        newStatus: updateDto.status,
+        statusMessage: updateDto.statusMessage,
+        changedBy: adminId || userId,
+      });
+    }
+
+    Object.assign(application, updateDto);
+    if (adminId) {
+      application.lastModifiedBy = adminId;
+    }
+
+    return await this.documentApplicationRepository.save(application);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} documentApplication`;
+  async uploadFile(
+    applicationId: string,
+    file: Express.Multer.File,
+    documentCategory: string,
+    userId?: number,
+  ): Promise<DocumentFile> {
+    // Verify application exists and user has access
+    await this.findOne(applicationId, userId);
+
+    // File size validation (10MB limit)
+    const maxSize = 10 * 1024 * 1024; // 10MB
+    if (file.size > maxSize) {
+      throw new BadRequestException('File size exceeds 10MB limit');
+    }
+
+    // File type validation
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg', 'application/pdf'];
+    if (!allowedTypes.includes(file.mimetype)) {
+      throw new BadRequestException('Only JPEG, PNG, and PDF files are allowed');
+    }
+
+    // Generate unique object name
+    const timestamp = Date.now();
+    const objectName = `applications/${applicationId}/${documentCategory}/${timestamp}_${file.originalname}`;
+
+    // Upload to MinIO
+    await this.minioService.uploadFile(file, objectName);
+
+    // Save file record
+    const documentFile = this.documentFileRepository.create({
+      applicationId,
+      fileName: file.originalname,
+      fileType: file.mimetype,
+      fileSize: file.size,
+      minioObjectName: objectName,
+      documentCategory,
+    });
+
+    return await this.documentFileRepository.save(documentFile);
+  }
+
+  async getFileDownloadUrl(fileId: number, userId?: number): Promise<string> {
+    const file = await this.documentFileRepository.findOne({
+      where: { id: fileId },
+      relations: ['application'],
+    });
+
+    if (!file) {
+      throw new NotFoundException(`File with ID ${fileId} not found`);
+    }
+
+    // Check user access
+    if (userId && file.application.userId !== userId) {
+      throw new BadRequestException('Access denied to this file');
+    }
+
+    return await this.minioService.getPresignedUrl(file.minioObjectName);
+  }
+
+  async remove(id: string, userId?: number): Promise<void> {
+    const application = await this.findOne(id, userId);
+
+    // Delete files from MinIO
+    for (const file of application.files) {
+      try {
+        await this.minioService.deleteFile(file.minioObjectName);
+      } catch (error) {
+        console.warn(`Failed to delete file ${file.minioObjectName}:`, error);
+      }
+    }
+
+    await this.documentApplicationRepository.remove(application);
+  }
+
+  private getApplicationPrefix(type: ApplicationType): string {
+    switch (type) {
+      case ApplicationType.BIRTH_CERTIFICATE:
+        return 'BC';
+      case ApplicationType.MARRIAGE_CERTIFICATE:
+        return 'MC';
+      case ApplicationType.MARRIAGE_LICENSE:
+        return 'ML';
+      case ApplicationType.DEATH_CERTIFICATE:
+        return 'DC';
+      case ApplicationType.BUSINESS_PERMIT:
+        return 'BP';
+      default:
+        return 'APP';
+    }
+  }
+
+  // Admin methods
+  async updateStatus(
+    id: string,
+    status: ApplicationStatus,
+    statusMessage?: string,
+    adminId?: number,
+  ): Promise<DocumentApplication> {
+    return await this.update(id, { status, statusMessage }, undefined, adminId);
+  }
+
+  async findByStatus(status: ApplicationStatus): Promise<DocumentApplication[]> {
+    return await this.documentApplicationRepository.find({
+      where: { status },
+      relations: ['files', 'user'],
+      order: { createdAt: 'DESC' },
+    });
+  }
+
+  async getApplicationStats(): Promise<any> {
+    const stats = await this.documentApplicationRepository
+      .createQueryBuilder('app')
+      .select('app.applicationType', 'type')
+      .addSelect('app.status', 'status')
+      .addSelect('COUNT(*)', 'count')
+      .groupBy('app.applicationType')
+      .addGroupBy('app.status')
+      .getRawMany();
+
+    return stats;
   }
 }
