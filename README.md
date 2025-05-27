@@ -386,7 +386,33 @@ npm run test:e2e            # Run end-to-end tests
 
 All modules include both unit tests and controller tests with proper mocking.
 
-## API Endpoints
+## API Documentation
+
+### Swagger/OpenAPI Documentation
+- **Local Development**: http://localhost:3000/api/docs
+- **Interactive API Testing**: Available through Swagger UI
+- **JWT Authentication**: Supported in Swagger interface
+
+### Additional Documentation
+- **Postman Collection**: [`/docs/bulak-smart-connect-postman-collection.json`](bsc-js-backend/docs/bulak-smart-connect-postman-collection.json)
+- **User Management Guide**: [`/docs/user-management-api.md`](bsc-js-backend/docs/user-management-api.md)
+- **User Update Guide**: [`/docs/user-update-readme.md`](bsc-js-backend/docs/user-update-readme.md)
+
+### API Testing
+```bash
+# Start the backend server
+cd bsc-js-backend
+npm run start:dev
+
+# Access Swagger documentation at:
+# http://localhost:3000/api/docs
+```
+
+### Using Swagger UI
+1. Start your backend server (`npm run start:dev`)
+2. Navigate to http://localhost:3000/api/docs
+3. Use the "Authorize" button to add your JWT token
+4. Test endpoints directly from the interface
 
 ### Authentication
 - `POST /auth/login` - User login
