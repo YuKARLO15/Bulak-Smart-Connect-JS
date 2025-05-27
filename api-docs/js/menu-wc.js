@@ -337,6 +337,9 @@ customElements.define('compodoc-menu', class extends HTMLElement {
                                 <li class="link">
                                     <a href="injectables/JwtAuthGuard.html" data-type="entity-link" >JwtAuthGuard</a>
                                 </li>
+                                <li class="link">
+                                    <a href="injectables/MinioService.html" data-type="entity-link" >MinioService</a>
+                                </li>
                             </ul>
                         </li>
                     <li class="chapter">
