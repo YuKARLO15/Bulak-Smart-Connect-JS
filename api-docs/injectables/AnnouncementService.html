@@ -316,8 +316,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="24"
-                                    class="link-to-prism">src/modules/announcement/announcement.service.ts:24</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="20"
+                                    class="link-to-prism">src/modules/announcement/announcement.service.ts:20</a></div>
                         </td>
                     </tr>
 
@@ -355,8 +355,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="31"
-                                    class="link-to-prism">src/modules/announcement/announcement.service.ts:31</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="27"
+                                    class="link-to-prism">src/modules/announcement/announcement.service.ts:27</a></div>
                         </td>
                     </tr>
 
@@ -424,8 +424,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="59"
-                                    class="link-to-prism">src/modules/announcement/announcement.service.ts:59</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="52"
+                                    class="link-to-prism">src/modules/announcement/announcement.service.ts:52</a></div>
                         </td>
                     </tr>
 
@@ -497,8 +497,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="53"
-                                    class="link-to-prism">src/modules/announcement/announcement.service.ts:53</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="46"
+                                    class="link-to-prism">src/modules/announcement/announcement.service.ts:46</a></div>
                         </td>
                     </tr>
 
@@ -566,8 +566,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="43"
-                                    class="link-to-prism">src/modules/announcement/announcement.service.ts:43</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="39"
+                                    class="link-to-prism">src/modules/announcement/announcement.service.ts:39</a></div>
                         </td>
                     </tr>
 
@@ -645,12 +645,8 @@ export class AnnouncementService {
     private announcementRepository: Repository&lt;Announcement&gt;,
   ) {}
 
-  async create(
-    createAnnouncementDto: CreateAnnouncementDto,
-  ): Promise&lt;Announcement&gt; {
-    const announcement &#x3D; this.announcementRepository.create(
-      createAnnouncementDto,
-    );
+  async create(createAnnouncementDto: CreateAnnouncementDto): Promise&lt;Announcement&gt; {
+    const announcement &#x3D; this.announcementRepository.create(createAnnouncementDto);
     return await this.announcementRepository.save(announcement);
   }
 
@@ -665,20 +661,17 @@ export class AnnouncementService {
     const announcement &#x3D; await this.announcementRepository.findOne({
       where: { id, isActive: true },
     });
-
+    
     if (!announcement) {
       throw new NotFoundException(&#x60;Announcement with ID ${id} not found&#x60;);
     }
-
+    
     return announcement;
   }
 
-  async update(
-    id: number,
-    updateAnnouncementDto: UpdateAnnouncementDto,
-  ): Promise&lt;Announcement&gt; {
+  async update(id: number, updateAnnouncementDto: UpdateAnnouncementDto): Promise&lt;Announcement&gt; {
     const announcement &#x3D; await this.findOne(id);
-
+    
     Object.assign(announcement, updateAnnouncementDto);
     return await this.announcementRepository.save(announcement);
   }
