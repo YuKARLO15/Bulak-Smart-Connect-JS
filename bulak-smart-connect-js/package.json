@@ -9,6 +9,8 @@
     "start-frontend": "vite",
     "build": "vite build",
     "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "lint:fix-react": "npm run lint:fix && npm run fix-react-imports",
     "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx,json,css}\"",
     "preview": "vite preview",
     "test": "vitest run",
