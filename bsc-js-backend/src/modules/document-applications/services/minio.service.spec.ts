@@ -49,7 +49,7 @@ describe('MinioService (Document Applications)', () => {
     }).compile();
 
     service = module.get<MinioService>(MinioService);
-    
+
     // Mock the internal minio client
     (service as any).minioClient = mockMinioClient;
   });
@@ -68,7 +68,9 @@ describe('MinioService (Document Applications)', () => {
 
       await service.onModuleInit();
 
-      expect(mockMinioClient.bucketExists).toHaveBeenCalledWith('document-applications');
+      expect(mockMinioClient.bucketExists).toHaveBeenCalledWith(
+        'document-applications',
+      );
     });
 
     it('should create bucket if it does not exist', async () => {
@@ -77,8 +79,13 @@ describe('MinioService (Document Applications)', () => {
 
       await service.onModuleInit();
 
-      expect(mockMinioClient.bucketExists).toHaveBeenCalledWith('document-applications');
-      expect(mockMinioClient.makeBucket).toHaveBeenCalledWith('document-applications', 'us-east-1');
+      expect(mockMinioClient.bucketExists).toHaveBeenCalledWith(
+        'document-applications',
+      );
+      expect(mockMinioClient.makeBucket).toHaveBeenCalledWith(
+        'document-applications',
+        'us-east-1',
+      );
     });
   });
 

@@ -21,7 +21,7 @@ describe('MinioService', () => {
     }).compile();
 
     service = module.get<MinioService>(MinioService);
-    
+
     // Mock the internal minio client
     (service as any).minioClient = mockMinioClient;
   });
