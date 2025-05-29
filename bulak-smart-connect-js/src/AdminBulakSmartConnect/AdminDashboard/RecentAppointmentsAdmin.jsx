@@ -8,7 +8,7 @@ const RecentAppointmentsAdmin = () => {
   const navigate = useNavigate();
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
-
+  
   useEffect(() => {
     // Simulate loading delay to match your application's behavior
     const timer = setTimeout(() => {
@@ -37,6 +37,7 @@ const RecentAppointmentsAdmin = () => {
     );
   }
 
+
   return (
     <Card className="RecentAppointmentsAdminCard">
       <CardContent>
@@ -63,7 +64,7 @@ const RecentAppointmentsAdmin = () => {
                   </Typography>
                 </Box>
                 <Typography variant="body2" className="AppointmentNameAdmin">
-                  {appointment.name || "Anonymous User"}
+                  {appointment.firstName + ' ' + appointment.lastName || "Anonymous User"}
                 </Typography>
               </div>
               <Button

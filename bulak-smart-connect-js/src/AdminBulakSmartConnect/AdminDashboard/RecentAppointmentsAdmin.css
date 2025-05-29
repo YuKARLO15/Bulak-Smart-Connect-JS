@@ -29,6 +29,11 @@
   font-weight: 500 !important;
   color: #184a5b !important;
   margin-bottom: 2px !important;
+    min-width: 53vw;
+      width: auto; 
+        word-wrap: break-word;
+          flex: 1; 
+
 }
 
 .AppointmentDateTimeAdmin {
