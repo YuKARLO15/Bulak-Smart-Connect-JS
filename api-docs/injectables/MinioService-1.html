@@ -91,7 +91,7 @@
 
 <ol class="breadcrumb">
   <li class="breadcrumb-item">Injectables</li>
-  <li class="breadcrumb-item" >AnnouncementService</li>
+  <li class="breadcrumb-item" >MinioService</li>
 </ol>
 
 <ul class="nav nav-tabs" role="tablist">
@@ -115,7 +115,7 @@
             <h3>File</h3>
         </p>
         <p class="comment">
-            <code>src/modules/announcement/announcement.service.ts</code>
+            <code>src/modules/document-applications/services/minio.service.ts</code>
         </p>
 
 
@@ -126,6 +126,30 @@
     <h3 id="index">Index</h3>
     <table class="table table-sm table-bordered index-table">
         <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#bucketName" >bucketName</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                    <span class="modifier">Readonly</span>
+                                <a href="#logger" >logger</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#minioClient" >minioClient</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
 
                 <tr>
                     <td class="col-md-4">
@@ -137,27 +161,31 @@
                         <ul class="index-list">
                             <li>
                                     <span class="modifier">Async</span>
-                                <a href="#create" >create</a>
+                                <a href="#deleteFile" >deleteFile</a>
                             </li>
                             <li>
                                     <span class="modifier">Async</span>
-                                <a href="#findAll" >findAll</a>
+                                <a href="#ensureBucketExists" >ensureBucketExists</a>
                             </li>
                             <li>
                                     <span class="modifier">Async</span>
-                                <a href="#findOne" >findOne</a>
+                                <a href="#getFileInfo" >getFileInfo</a>
                             </li>
                             <li>
                                     <span class="modifier">Async</span>
-                                <a href="#getRecentAnnouncements" >getRecentAnnouncements</a>
+                                <a href="#getPresignedUrl" >getPresignedUrl</a>
                             </li>
                             <li>
                                     <span class="modifier">Async</span>
-                                <a href="#remove" >remove</a>
+                                <a href="#listFiles" >listFiles</a>
                             </li>
                             <li>
                                     <span class="modifier">Async</span>
-                                <a href="#update" >update</a>
+                                <a href="#onModuleInit" >onModuleInit</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#uploadFile" >uploadFile</a>
                             </li>
                         </ul>
                     </td>
@@ -177,12 +205,12 @@
             <tbody>
                 <tr>
                     <td class="col-md-4">
-<code>constructor(announcementRepository: <a href="../entitys/Announcement.html" target="_self">Repository&lt;Announcement&gt;</a>)</code>
+<code>constructor(configService: ConfigService)</code>
                     </td>
                 </tr>
                         <tr>
                             <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="9" class="link-to-prism">src/modules/announcement/announcement.service.ts:9</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="9" class="link-to-prism">src/modules/document-applications/services/minio.service.ts:9</a></div>
                             </td>
                         </tr>
 
@@ -200,10 +228,10 @@
                                         </thead>
                                         <tbody>
                                                 <tr>
-                                                        <td>announcementRepository</td>
+                                                        <td>configService</td>
                                                   
                                                         <td>
-                                                                        <code><a href="../entitys/Announcement.html" target="_self" >Repository&lt;Announcement&gt;</a></code>
+                                                                    <code>ConfigService</code>
                                                         </td>
                                                   
                                                     <td>
@@ -229,26 +257,26 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
-                    <a name="create"></a>
+                    <a name="deleteFile"></a>
                     <span class="name">
                             <span class="modifier">Async</span>
-                        <span ><b>create</b></span>
-                        <a href="#create"><span class="icon ion-ios-link"></span></a>
+                        <span ><b>deleteFile</b></span>
+                        <a href="#deleteFile"><span class="icon ion-ios-link"></span></a>
                     </span>
                 </td>
             </tr>
             <tr>
                 <td class="col-md-4">
                         <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>create(createAnnouncementDto: <a href="../classes/CreateAnnouncementDto.html" target="_self">CreateAnnouncementDto</a>)</code>
+                    <code>deleteFile(objectName: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
                 </td>
             </tr>
 
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="15"
-                                    class="link-to-prism">src/modules/announcement/announcement.service.ts:15</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="109"
+                                    class="link-to-prism">src/modules/document-applications/services/minio.service.ts:109</a></div>
                         </td>
                     </tr>
 
@@ -269,259 +297,9 @@
                                     </thead>
                                     <tbody>
                                         <tr>
-                                                <td>createAnnouncementDto</td>
+                                                <td>objectName</td>
                                             <td>
-                                                            <code><a href="../classes/CreateAnnouncementDto.html" target="_self" >CreateAnnouncementDto</a></code>
-                                            </td>
-
-                                            <td>
-                                                    No
-                                            </td>
-
-
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        <div class="io-description">
-                            <b>Returns : </b>        <code><a href="../entitys/Announcement.html" target="_self" >Promise&lt;Announcement&gt;</a></code>
-
-                        </div>
-                            <div class="io-description">
-                                
-                            </div>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    <table class="table table-sm table-bordered">
-        <tbody>
-            <tr>
-                <td class="col-md-4">
-                    <a name="findAll"></a>
-                    <span class="name">
-                            <span class="modifier">Async</span>
-                        <span ><b>findAll</b></span>
-                        <a href="#findAll"><span class="icon ion-ios-link"></span></a>
-                    </span>
-                </td>
-            </tr>
-            <tr>
-                <td class="col-md-4">
-                        <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>findAll()</code>
-                </td>
-            </tr>
-
-
-                    <tr>
-                        <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="24"
-                                    class="link-to-prism">src/modules/announcement/announcement.service.ts:24</a></div>
-                        </td>
-                    </tr>
-
-
-            <tr>
-                <td class="col-md-4">
-
-                        <div class="io-description">
-                            <b>Returns : </b>        <code><a href="../entitys/Announcement.html" target="_self" >Promise&lt;Announcement[]&gt;</a></code>
-
-                        </div>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    <table class="table table-sm table-bordered">
-        <tbody>
-            <tr>
-                <td class="col-md-4">
-                    <a name="findOne"></a>
-                    <span class="name">
-                            <span class="modifier">Async</span>
-                        <span ><b>findOne</b></span>
-                        <a href="#findOne"><span class="icon ion-ios-link"></span></a>
-                    </span>
-                </td>
-            </tr>
-            <tr>
-                <td class="col-md-4">
-                        <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>findOne(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
-                </td>
-            </tr>
-
-
-                    <tr>
-                        <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="31"
-                                    class="link-to-prism">src/modules/announcement/announcement.service.ts:31</a></div>
-                        </td>
-                    </tr>
-
-
-            <tr>
-                <td class="col-md-4">
-
-                            <div class="io-description">
-                                <b>Parameters :</b>
-                                
-                                <table class="params">
-                                    <thead>
-                                        <tr>
-                                            <td>Name</td>
-                                                <td>Type</td>
-                                            <td>Optional</td>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                                <td>id</td>
-                                            <td>
-                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
-                                            </td>
-
-                                            <td>
-                                                    No
-                                            </td>
-
-
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        <div class="io-description">
-                            <b>Returns : </b>        <code><a href="../entitys/Announcement.html" target="_self" >Promise&lt;Announcement&gt;</a></code>
-
-                        </div>
-                            <div class="io-description">
-                                
-                            </div>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    <table class="table table-sm table-bordered">
-        <tbody>
-            <tr>
-                <td class="col-md-4">
-                    <a name="getRecentAnnouncements"></a>
-                    <span class="name">
-                            <span class="modifier">Async</span>
-                        <span ><b>getRecentAnnouncements</b></span>
-                        <a href="#getRecentAnnouncements"><span class="icon ion-ios-link"></span></a>
-                    </span>
-                </td>
-            </tr>
-            <tr>
-                <td class="col-md-4">
-                        <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>getRecentAnnouncements(limit: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
-                </td>
-            </tr>
-
-
-                    <tr>
-                        <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="59"
-                                    class="link-to-prism">src/modules/announcement/announcement.service.ts:59</a></div>
-                        </td>
-                    </tr>
-
-
-            <tr>
-                <td class="col-md-4">
-
-                            <div class="io-description">
-                                <b>Parameters :</b>
-                                
-                                <table class="params">
-                                    <thead>
-                                        <tr>
-                                            <td>Name</td>
-                                                <td>Type</td>
-                                            <td>Optional</td>
-                                                <td>Default value</td>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                                <td>limit</td>
-                                            <td>
-                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
-                                            </td>
-
-                                            <td>
-                                                    No
-                                            </td>
-
-                                            <td>
-                                                    <code>5</code>
-                                            </td>
-
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        <div class="io-description">
-                            <b>Returns : </b>        <code><a href="../entitys/Announcement.html" target="_self" >Promise&lt;Announcement[]&gt;</a></code>
-
-                        </div>
-                            <div class="io-description">
-                                
-                            </div>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    <table class="table table-sm table-bordered">
-        <tbody>
-            <tr>
-                <td class="col-md-4">
-                    <a name="remove"></a>
-                    <span class="name">
-                            <span class="modifier">Async</span>
-                        <span ><b>remove</b></span>
-                        <a href="#remove"><span class="icon ion-ios-link"></span></a>
-                    </span>
-                </td>
-            </tr>
-            <tr>
-                <td class="col-md-4">
-                        <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>remove(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
-                </td>
-            </tr>
-
-
-                    <tr>
-                        <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="53"
-                                    class="link-to-prism">src/modules/announcement/announcement.service.ts:53</a></div>
-                        </td>
-                    </tr>
-
-
-            <tr>
-                <td class="col-md-4">
-
-                            <div class="io-description">
-                                <b>Parameters :</b>
-                                
-                                <table class="params">
-                                    <thead>
-                                        <tr>
-                                            <td>Name</td>
-                                                <td>Type</td>
-                                            <td>Optional</td>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                                <td>id</td>
-                                            <td>
-                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
                                             </td>
 
                                             <td>
@@ -548,26 +326,65 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
-                    <a name="update"></a>
+                    <a name="ensureBucketExists"></a>
                     <span class="name">
                             <span class="modifier">Async</span>
-                        <span ><b>update</b></span>
-                        <a href="#update"><span class="icon ion-ios-link"></span></a>
+                        <span ><b>ensureBucketExists</b></span>
+                        <a href="#ensureBucketExists"><span class="icon ion-ios-link"></span></a>
                     </span>
                 </td>
             </tr>
             <tr>
                 <td class="col-md-4">
                         <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>update(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, updateAnnouncementDto: <a href="../classes/UpdateAnnouncementDto.html" target="_self">UpdateAnnouncementDto</a>)</code>
+                    <code>ensureBucketExists()</code>
                 </td>
             </tr>
 
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="43"
-                                    class="link-to-prism">src/modules/announcement/announcement.service.ts:43</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="50"
+                                    class="link-to-prism">src/modules/document-applications/services/minio.service.ts:50</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;void&gt;</code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getFileInfo"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>getFileInfo</b></span>
+                        <a href="#getFileInfo"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>getFileInfo(objectName: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="119"
+                                    class="link-to-prism">src/modules/document-applications/services/minio.service.ts:119</a></div>
                         </td>
                     </tr>
 
@@ -588,21 +405,9 @@
                                     </thead>
                                     <tbody>
                                         <tr>
-                                                <td>id</td>
+                                                <td>objectName</td>
                                             <td>
-                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
-                                            </td>
-
-                                            <td>
-                                                    No
-                                            </td>
-
-
-                                        </tr>
-                                        <tr>
-                                                <td>updateAnnouncementDto</td>
-                                            <td>
-                                                            <code><a href="../classes/UpdateAnnouncementDto.html" target="_self" >UpdateAnnouncementDto</a></code>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
                                             </td>
 
                                             <td>
@@ -615,7 +420,283 @@
                                 </table>
                             </div>
                         <div class="io-description">
-                            <b>Returns : </b>        <code><a href="../entitys/Announcement.html" target="_self" >Promise&lt;Announcement&gt;</a></code>
+                            <b>Returns : </b>    <code>Promise&lt;any&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getPresignedUrl"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>getPresignedUrl</b></span>
+                        <a href="#getPresignedUrl"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>getPresignedUrl(objectName: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, expiry: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="93"
+                                    class="link-to-prism">src/modules/document-applications/services/minio.service.ts:93</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Default value</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>objectName</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+                                            <td>
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+                                                <td>expiry</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+                                            <td>
+                                                    <code>3600</code>
+                                            </td>
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;string&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="listFiles"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>listFiles</b></span>
+                        <a href="#listFiles"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>listFiles(prefix?: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="128"
+                                    class="link-to-prism">src/modules/document-applications/services/minio.service.ts:128</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>prefix</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    Yes
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;any[]&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="onModuleInit"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>onModuleInit</b></span>
+                        <a href="#onModuleInit"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>onModuleInit()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="46"
+                                    class="link-to-prism">src/modules/document-applications/services/minio.service.ts:46</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="uploadFile"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>uploadFile</b></span>
+                        <a href="#uploadFile"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>uploadFile(file: Express.Multer.File, objectName: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="65"
+                                    class="link-to-prism">src/modules/document-applications/services/minio.service.ts:65</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>file</td>
+                                            <td>
+                                                        <code>Express.Multer.File</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>objectName</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;string&gt;</code>
 
                         </div>
                             <div class="io-description">
@@ -626,74 +707,237 @@
         </tbody>
     </table>
 </section>
+            <section data-compodoc="block-properties">
+    
+    <h3 id="inputs">
+        Properties
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="bucketName"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>bucketName</b></span>
+                        <a href="#bucketName"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="9" class="link-to-prism">src/modules/document-applications/services/minio.service.ts:9</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="logger"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                            <span class="modifier">Readonly</span>
+                        <span ><b>logger</b></span>
+                        <a href="#logger"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>new Logger(MinioService.name)</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="7" class="link-to-prism">src/modules/document-applications/services/minio.service.ts:7</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="minioClient"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>minioClient</b></span>
+                        <a href="#minioClient"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>Minio.Client</code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="8" class="link-to-prism">src/modules/document-applications/services/minio.service.ts:8</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+</section>
 
     </div>
 
 
     <div class="tab-pane fade  tab-source-code" id="source">
-        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable, NotFoundException } from &#x27;@nestjs/common&#x27;;
-import { InjectRepository } from &#x27;@nestjs/typeorm&#x27;;
-import { Repository } from &#x27;typeorm&#x27;;
-import { Announcement } from &#x27;./entities/announcement.entity&#x27;;
-import { CreateAnnouncementDto } from &#x27;./dto/create-announcement.dto&#x27;;
-import { UpdateAnnouncementDto } from &#x27;./dto/update-announcement.dto&#x27;;
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable, Logger, OnModuleInit } from &#x27;@nestjs/common&#x27;;
+import { ConfigService } from &#x27;@nestjs/config&#x27;;
+import * as Minio from &#x27;minio&#x27;;
 
 @Injectable()
-export class AnnouncementService {
-  constructor(
-    @InjectRepository(Announcement)
-    private announcementRepository: Repository&lt;Announcement&gt;,
-  ) {}
+export class MinioService implements OnModuleInit {
+  private readonly logger &#x3D; new Logger(MinioService.name);
+  private minioClient: Minio.Client;
+  private bucketName: string;
 
-  async create(
-    createAnnouncementDto: CreateAnnouncementDto,
-  ): Promise&lt;Announcement&gt; {
-    const announcement &#x3D; this.announcementRepository.create(
-      createAnnouncementDto,
+  constructor(private configService: ConfigService) {
+    const endpoint &#x3D; this.configService.get&lt;string&gt;(
+      &#x27;MINIO_ENDPOINT&#x27;,
+      &#x27;localhost&#x27;,
     );
-    return await this.announcementRepository.save(announcement);
+    const port &#x3D; this.configService.get&lt;number&gt;(&#x27;MINIO_PORT&#x27;, 9000);
+    const useSSLValue &#x3D; this.configService
+      .get&lt;string&gt;(&#x27;MINIO_USE_SSL&#x27;, &#x27;false&#x27;)
+      .toLowerCase();
+    const useSSL &#x3D; [&#x27;true&#x27;, &#x27;1&#x27;, &#x27;yes&#x27;, &#x27;on&#x27;].includes(useSSLValue);
+    const accessKey &#x3D; this.configService.get&lt;string&gt;(
+      &#x27;MINIO_ACCESS_KEY&#x27;,
+      &#x27;minioadmin&#x27;,
+    );
+    const secretKey &#x3D; this.configService.get&lt;string&gt;(
+      &#x27;MINIO_SECRET_KEY&#x27;,
+      &#x27;minioadmin123&#x27;,
+    );
+
+    this.minioClient &#x3D; new Minio.Client({
+      endPoint: endpoint,
+      port: port,
+      useSSL: useSSL,
+      accessKey: accessKey,
+      secretKey: secretKey,
+    });
+
+    this.bucketName &#x3D; this.configService.get&lt;string&gt;(
+      &#x27;MINIO_BUCKET_NAME&#x27;,
+      &#x27;document-applications&#x27;,
+    );
+
+    this.logger.log(&#x60;MinIO configured with endpoint: ${endpoint}:${port}&#x60;);
   }
 
-  async findAll(): Promise&lt;Announcement[]&gt; {
-    return await this.announcementRepository.find({
-      where: { isActive: true },
-      order: { createdAt: &#x27;DESC&#x27; },
-    });
+  async onModuleInit() {
+    await this.ensureBucketExists();
   }
 
-  async findOne(id: number): Promise&lt;Announcement&gt; {
-    const announcement &#x3D; await this.announcementRepository.findOne({
-      where: { id, isActive: true },
-    });
-
-    if (!announcement) {
-      throw new NotFoundException(&#x60;Announcement with ID ${id} not found&#x60;);
+  async ensureBucketExists(): Promise&lt;void&gt; {
+    try {
+      const exists &#x3D; await this.minioClient.bucketExists(this.bucketName);
+      if (!exists) {
+        await this.minioClient.makeBucket(this.bucketName, &#x27;us-east-1&#x27;);
+        this.logger.log(&#x60;Bucket ${this.bucketName} created successfully&#x60;);
+      } else {
+        this.logger.log(&#x60;Bucket ${this.bucketName} already exists&#x60;);
+      }
+    } catch (error) {
+      this.logger.error(&#x27;Error ensuring bucket exists:&#x27;, error);
+      throw error;
     }
-
-    return announcement;
   }
 
-  async update(
-    id: number,
-    updateAnnouncementDto: UpdateAnnouncementDto,
-  ): Promise&lt;Announcement&gt; {
-    const announcement &#x3D; await this.findOne(id);
+  async uploadFile(
+    file: Express.Multer.File,
+    objectName: string,
+  ): Promise&lt;string&gt; {
+    try {
+      const metaData &#x3D; {
+        &#x27;Content-Type&#x27;: file.mimetype,
+        &#x27;Original-Name&#x27;: file.originalname,
+        &#x27;Upload-Date&#x27;: new Date().toISOString(),
+        &#x27;File-Size&#x27;: file.size.toString(),
+      };
 
-    Object.assign(announcement, updateAnnouncementDto);
-    return await this.announcementRepository.save(announcement);
+      await this.minioClient.putObject(
+        this.bucketName,
+        objectName,
+        file.buffer,
+        file.size,
+        metaData,
+      );
+
+      this.logger.log(&#x60;File uploaded successfully: ${objectName}&#x60;);
+      return objectName;
+    } catch (error) {
+      this.logger.error(&#x27;Error uploading file:&#x27;, error);
+      throw error;
+    }
   }
 
-  async remove(id: number): Promise&lt;void&gt; {
-    const announcement &#x3D; await this.findOne(id);
-    announcement.isActive &#x3D; false; // Soft delete
-    await this.announcementRepository.save(announcement);
+  async getPresignedUrl(
+    objectName: string,
+    expiry: number &#x3D; 3600,
+  ): Promise&lt;string&gt; {
+    try {
+      return await this.minioClient.presignedGetObject(
+        this.bucketName,
+        objectName,
+        expiry,
+      );
+    } catch (error) {
+      this.logger.error(&#x27;Error generating presigned URL:&#x27;, error);
+      throw error;
+    }
   }
 
-  async getRecentAnnouncements(limit: number &#x3D; 5): Promise&lt;Announcement[]&gt; {
-    return await this.announcementRepository.find({
-      where: { isActive: true },
-      order: { createdAt: &#x27;DESC&#x27; },
-      take: limit,
+  async deleteFile(objectName: string): Promise&lt;void&gt; {
+    try {
+      await this.minioClient.removeObject(this.bucketName, objectName);
+      this.logger.log(&#x60;File deleted successfully: ${objectName}&#x60;);
+    } catch (error) {
+      this.logger.error(&#x27;Error deleting file:&#x27;, error);
+      throw error;
+    }
+  }
+
+  async getFileInfo(objectName: string): Promise&lt;any&gt; {
+    try {
+      return await this.minioClient.statObject(this.bucketName, objectName);
+    } catch (error) {
+      this.logger.error(&#x27;Error getting file info:&#x27;, error);
+      throw error;
+    }
+  }
+
+  async listFiles(prefix?: string): Promise&lt;any[]&gt; {
+    return new Promise((resolve, reject) &#x3D;&gt; {
+      const files: any[] &#x3D; [];
+      const stream &#x3D; this.minioClient.listObjects(
+        this.bucketName,
+        prefix,
+        true,
+      );
+
+      stream.on(&#x27;data&#x27;, (obj) &#x3D;&gt; files.push(obj));
+      stream.on(&#x27;error&#x27;, reject);
+      stream.on(&#x27;end&#x27;, () &#x3D;&gt; resolve(files));
     });
   }
 }
@@ -740,7 +984,7 @@ export class AnnouncementService {
        <script>
             var COMPODOC_CURRENT_PAGE_DEPTH = 1;
             var COMPODOC_CURRENT_PAGE_CONTEXT = 'injectable';
-            var COMPODOC_CURRENT_PAGE_URL = 'AnnouncementService.html';
+            var COMPODOC_CURRENT_PAGE_URL = 'MinioService-1.html';
             var MAX_SEARCH_RESULTS = 15;
        </script>
 
