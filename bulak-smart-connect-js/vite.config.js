@@ -25,7 +25,7 @@ export default defineConfig({
     mockExtensions: ['.css', '.scss', '.less', '.sass'],
     // Add CSS mocking
     css: {
-      include: /\.css$/,
+      //include: /\.css$/, commented out to avoid issues with CSS imports
       modules: {
         classNameStrategy: 'non-scoped'
       }

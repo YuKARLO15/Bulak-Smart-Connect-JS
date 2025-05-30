@@ -38,14 +38,15 @@
     <table>
         <tbody>
             <tr>
-                <th colspan="5"><h3>Backend Technologies</h3></th>
+                <th colspan="6"><h3>Backend Technologies</h3></th>
             </tr>
             <tr>
                 <td><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/nestjs/nestjs-original.svg" alt="NestJS" width="60px" height="auto" /></td>
                 <td><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/mysql/mysql-original.svg" alt="MySQL" width="60px" height="auto" /></td>
                 <td><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/socketio/socketio-original.svg" alt="Socket.IO" width="60px" height="auto" /></td>
                 <td><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/jest/jest-plain.svg" alt="Jest" width="60px" height="auto" /></td>
-               <td><img src="https://static1.smartbear.co/swagger/media/assets/images/swagger_logo.svg" alt="Swagger" width="60px" height="auto" /></td>
+                <td><img src="https://static1.smartbear.co/swagger/media/assets/images/swagger_logo.svg" alt="Swagger" width="60px" height="auto" /></td>
+                <td><img src="https://github.com/minio/minio/raw/master/.github/logo.svg" alt="MinIO" width="60px" height="auto" /></td>
             </tr>
             <tr>
                 <td><p><b>NestJS</b></p></td>
@@ -53,6 +54,7 @@
                 <td><p><b>Socket.IO</b></p></td>
                 <td><p><b>Jest</b></p></td>
                 <td><p><b>Swagger</b></p></td>
+                <td><p><b>MinIO</b></p></td>
             </tr>
             <tr>
                 <td><p>Progressive Node.js framework</p></td>
@@ -60,6 +62,7 @@
                 <td><p>Real-time communication</p></td>
                 <td><p>Testing framework</p></td>
                 <td><p>API documentation</p></td>
+                <td><p>Object storage for documents</p></td>
             </tr>
         </tbody>
     </table>
@@ -69,21 +72,24 @@
     <table>
         <tbody>
             <tr>
-                <th colspan="4"><h3>Additional Technologies</h3></th>
+                <th colspan="5"><h3>Additional Technologies</h3></th>
             </tr>
             <tr>
+                <td><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/javascript/javascript-original.svg" alt="JavaScript" width="60px" height="auto" /></td>
                 <td><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/typescript/typescript-original.svg" alt="TypeScript" width="60px" height="auto" /></td>
                 <td><img src="https://jwt.io/img/pic_logo.svg" alt="JWT" width="60px" height="auto" /></td>
                 <td><img src="https://raw.githubusercontent.com/typeorm/typeorm/master/resources/logo_big.png" alt="TypeORM" width="60px" height="auto" /></td>
                 <td><img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub Actions" width="60px" height="auto" /></td>
             </tr>
             <tr>
+                <td><p><b>JavaScript</b></p></td>
                 <td><p><b>TypeScript</b></p></td>
                 <td><p><b>JWT</b></p></td>
                 <td><p><b>TypeORM</b></p></td>
                 <td><p><b>GitHub Actions</b></p></td>
             </tr>
             <tr>
+                <td><p>Core programming language</p></td>
                 <td><p>Type-safe JavaScript</p></td>
                 <td><p>Secure authentication</p></td>
                 <td><p>ORM for database interactions</p></td>
@@ -283,17 +289,314 @@ CREATE TABLE queues (
 > Export it if you make any changes on the database and/or to ensure we have a backup to match the proper database on the latest iterations 
 > Also ensure there is no personal information on the database before you export it, for our safety. Optionally, you can just export it without the data, only the schema.
 
+### MinIO Setup
+
+MinIO is an object storage solution used for storing and managing document files in the application.
+
+#### Option 1: Docker Installation (Recommended)
+
+1. **Install Docker** (if not already installed):
+   - Download from [https://www.docker.com/products/docker-desktop](https://www.docker.com/products/docker-desktop)
+   - Install and start Docker Desktop
+
+2. **Run MinIO using Docker**:
+```bash
+# Create a directory for MinIO data (optional)
+mkdir -p ~/minio/data
+
+# Run MinIO container
+docker run -d \
+  -p 9000:9000 \
+  -p 9001:9001 \
+  --name minio \
+  -v ~/minio/data:/data \
+  -e "MINIO_ROOT_USER=minioadmin" \
+  -e "MINIO_ROOT_PASSWORD=minioadmin123" \
+  quay.io/minio/minio server /data --console-address ":9001"
+```
+
+3. **Access MinIO Console**:
+   - Navigate to [http://localhost:9001](http://localhost:9001)
+   - Login with:
+     - **Username**: `minioadmin`
+     - **Password**: `minioadmin123`
+
+#### Option 2: Windows Binary Installation
+
+1. **Download MinIO**:
+   - Go to [https://min.io/download](https://min.io/download)
+   - Download the Windows binary (`minio.exe`)
+   - Or use PowerShell to download directly:
+   ```powershell
+   # Open PowerShell as Administrator
+   Invoke-WebRequest -Uri "https://dl.min.io/server/minio/release/windows-amd64/minio.exe" -OutFile "minio.exe"
+   ```
+
+2. **Create MinIO directory and setup**:
+```cmd
+# Create directory structure
+mkdir C:\minio
+mkdir C:\minio\data
+
+# Move the downloaded minio.exe to C:\minio\
+# Or download directly to the directory:
+cd C:\minio
+```
+
+If using PowerShell to download directly to the correct location:
+```powershell
+# Create directory and download in one go
+New-Item -ItemType Directory -Force -Path "C:\minio"
+New-Item -ItemType Directory -Force -Path "C:\minio\data"
+Invoke-WebRequest -Uri "https://dl.min.io/server/minio/release/windows-amd64/minio.exe" -OutFile "C:\minio\minio.exe"
+```
+
+3. **Create a startup batch file** (Recommended for easy management):
+
+Create a file named `start-minio.bat` in `C:\minio\` with the following content:
+```batch
+@echo off
+REM MinIO Server Startup Script
+REM Place this file in C:\minio\start-minio.bat
+
+echo ===============================================
+echo Starting MinIO Object Storage Server
+echo ===============================================
+
+REM Set MinIO credentials (change these for production)
+set MINIO_ROOT_USER=minioadmin
+set MINIO_ROOT_PASSWORD=minioadmin123
+
+REM Optional: Set additional MinIO configurations
+set MINIO_CONSOLE_ADDRESS=:9001
+
+echo.
+echo MinIO Configuration:
+echo - API Server: http://localhost:9000
+echo - Web Console: http://localhost:9001
+echo - Username: %MINIO_ROOT_USER%
+echo - Password: %MINIO_ROOT_PASSWORD%
+echo.
+echo Starting server...
+echo (Press Ctrl+C to stop the server)
+echo.
+
+REM Start MinIO server
+minio.exe server C:\minio\data --console-address ":9001"
+
+echo.
+echo MinIO server has stopped.
+pause
+```
+
+4. **Start MinIO Server**:
+
+**Method 1: Using the batch file (Recommended)**
+```cmd
+# Double-click start-minio.bat or run from command prompt:
+cd C:\minio
+start-minio.bat
+```
+
+**Method 2: Manual command line**
+```cmd
+cd C:\minio
+set MINIO_ROOT_USER=minioadmin
+set MINIO_ROOT_PASSWORD=minioadmin123
+minio.exe server C:\minio\data --console-address ":9001"
+```
+
+**Method 3: Using PowerShell**
+```powershell
+cd C:\minio
+$env:MINIO_ROOT_USER = "minioadmin"
+$env:MINIO_ROOT_PASSWORD = "minioadmin123"
+.\minio.exe server C:\minio\data --console-address ":9001"
+```
+
+#### Option 3: Using XAMPP/Alternative Setup
+
+If you're using XAMPP or prefer a different approach:
+
+1. Follow Option 1 (Docker) as it's platform-independent
+2. Alternatively, use MinIO's Windows Service installer from their official website
+
+#### (Optional) Install the MinIO Client
+
+The MinIO Client allows you to work with your MinIO volume from the command line for advanced operations.
+
+1. **Download MinIO Client**:
+   - Download from: [https://dl.min.io/client/mc/release/windows-amd64/mc.exe](https://dl.min.io/client/mc/release/windows-amd64/mc.exe)
+   - Or use PowerShell:
+   ```powershell
+   # Download to C:\minio\ directory
+   Invoke-WebRequest -Uri "https://dl.min.io/client/mc/release/windows-amd64/mc.exe" -OutFile "C:\minio\mc.exe"
+   ```
+
+2. **Set up MinIO Client**:
+```cmd
+# Navigate to MinIO directory
+cd C:\minio
+
+# Test the client
+mc.exe --help
+```
+
+3. **Configure MinIO Client alias**:
+```cmd
+# Set up alias for your local MinIO instance
+mc.exe alias set local http://127.0.0.1:9000 minioadmin minioadmin123
+
+# Test the connection
+mc.exe admin info local
+```
+
+4. **Common MinIO Client Commands**:
+```cmd
+# List buckets
+mc.exe ls local
+
+# Create a bucket
+mc.exe mb local/my-new-bucket
+
+# List files in a bucket
+mc.exe ls local/document-applications
+
+# Copy files
+mc.exe cp myfile.pdf local/document-applications/
+
+# Get bucket policy
+mc.exe policy get local/document-applications
+```
+
+#### Post-Installation Setup
+
+1. **Verify Installation**:
+   - MinIO API: [http://localhost:9000](http://localhost:9000)
+   - MinIO Console: [http://localhost:9001](http://localhost:9001)
+
+2. **Create Bucket** (if not auto-created):
+   - **Option A: Using Web Console**
+     - Login to MinIO Console
+     - Click "Create Bucket"
+     - Name: `document-applications` (or as specified in your `.env`)
+     - Set to public read if needed
+   
+   - **Option B: Using MinIO Client (if installed)**
+   ```cmd
+   mc.exe mb local/document-applications
+   ```
+
+3. **Update Environment Variables**:
+   ```bash
+   # In your .env file
+   MINIO_ENDPOINT=localhost
+   MINIO_PORT=9000
+   MINIO_USE_SSL=false
+   MINIO_ACCESS_KEY=minioadmin
+   MINIO_SECRET_KEY=minioadmin123
+   MINIO_BUCKET_NAME=document-applications
+   ```
+
+#### Troubleshooting
+
+- **Port Conflicts**: If port 9000 is in use, change to a different port:
+  ```bash
+  # For Docker
+  docker run -d -p 9002:9000 -p 9003:9001 --name minio ...
+  
+  # For Windows Binary - update your batch file:
+  minio.exe server C:\minio\data --address ":9002" --console-address ":9003"
+  
+  # Update .env file
+  MINIO_PORT=9002
+  ```
+
+- **Permission Issues**: 
+  - Ensure the data directory has proper read/write permissions
+  - Run Command Prompt as Administrator if needed
+  - Check Windows Defender/Antivirus isn't blocking minio.exe
+
+- **Docker Issues**: 
+  ```bash
+  # Stop existing container
+  docker stop minio
+  docker rm minio
+  
+  # Run new container
+  docker run -d ...
+  ```
+
+- **Windows Binary Issues**:
+  ```cmd
+  # Check if MinIO is running
+  netstat -an | findstr :9000
+  
+  # Kill existing MinIO process if needed
+  taskkill /f /im minio.exe
+  
+  # Restart using batch file
+  start-minio.bat
+  ```
+
+- **MinIO Client Issues**:
+  ```cmd
+  # Test client connectivity
+  mc.exe admin info local
+  
+  # Re-configure alias if needed
+  mc.exe alias remove local
+  mc.exe alias set local http://127.0.0.1:9000 minioadmin minioadmin123
+  ```
+
+- **Connection Testing**: The backend will automatically test MinIO connection on startup and provide helpful error messages.
+
+#### Production Considerations
+
+For production environments, consider:
+
+1. **Change Default Credentials**:
+   ```batch
+   # In start-minio.bat, update:
+   set MINIO_ROOT_USER=your_secure_username
+   set MINIO_ROOT_PASSWORD=your_secure_password_min_8_chars
+   ```
+
+2. **Use HTTPS/TLS**:
+   ```batch
+   # Add certificates and update:
+   set MINIO_USE_SSL=true
+   minio.exe server C:\minio\data --certs-dir C:\minio\certs --console-address ":9001"
+   ```
+
+3. **Run as Windows Service**: Consider using tools like NSSM (Non-Sucking Service Manager) to run MinIO as a Windows service.
+
+4. **Backup Strategy**: Regularly backup your `C:\minio\data` directory.
+```
+
 ## Environment Setup
 
 Create a `.env` file in the bsc-js-backend directory with:
 
 ```bash
+# Database Configuration
 DB_HOST=localhost
 DB_PORT=3306
 DB_USERNAME=root
 DB_PASSWORD=your_password
 DB_NAME=bulak_smart_connect
+
+# JWT Configuration
 JWT_SECRET=your_jwt_secret_key
+
+# MinIO Configuration
+MINIO_ENDPOINT=localhost
+MINIO_PORT=9000
+MINIO_USE_SSL=false
+MINIO_ACCESS_KEY=minioadmin
+MINIO_SECRET_KEY=your_password
+MINIO_BUCKET_NAME=bulak-smart-connect
+FILE_STORAGE_TYPE=minio
 ```
 
 Generate a secure JWT secret using:
@@ -382,6 +685,7 @@ npm run test:e2e            # Run end-to-end tests
 - ✅ Queue Management System
 - ✅ Appointment Scheduling
 - ✅ Announcements
+- ✅ Document Applications with MinIO Storage
 - ✅ Real-time WebSocket Gateway
 
 All modules include both unit tests and controller tests with proper mocking.
@@ -435,6 +739,21 @@ npm run start:dev
 - `GET /announcements` - Get all announcements
 - `GET /announcements/recent` - Get recent announcements
 
+### Document Applications
+- `GET /document-applications` - Get user's applications
+- `POST /document-applications` - Create new application
+- `POST /document-applications/:id/upload` - Upload document file
+- `GET /document-applications/files/:fileId/download` - Get file download URL
+- `PATCH /document-applications/:id` - Update application
+- `PATCH /document-applications/:id/status` - Update application status (Admin only)
+- `DELETE /document-applications/:id` - Delete application
+
+### File Storage
+- **MinIO Integration**: Secure document storage and retrieval
+- **File Upload**: Support for multiple document types (PDF, Images)
+- **Presigned URLs**: Secure file access with expiration
+- **Automatic Bucket Management**: Auto-creation and configuration
+
 For complete API documentation, check the Postman collection in `/docs/bulak-smart-connect-postman-collection.json`
 
 ## Test Accounts
@@ -468,7 +787,8 @@ Bulak-Smart-Connect-JS/
 │   │   ├── modules/
 │   │   │   ├── queue/         # Queue management
 │   │   │   ├── appointment/   # Appointment system
-│   │   │   └── announcement/  # Announcements
+│   │   │   ├── announcement/  # Announcements
+│   │   │   └── document-applications/ # Document applications with MinIO
 │   │   └── main.ts
 │   ├── test/                  # E2E tests
 │   ├── docs/                  # API documentation

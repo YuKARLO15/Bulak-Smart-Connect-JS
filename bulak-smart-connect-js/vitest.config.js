@@ -9,7 +9,10 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: ['./src/setupTests.js'],
     css: {
-      modules: false,
+      //modules: false, originally commented out to avoid issues with CSS imports
+      modules: {
+        classNameStrategy: 'non-scoped'
+      }
     },
     deps: {
       inline: [/@mui\/material/]
