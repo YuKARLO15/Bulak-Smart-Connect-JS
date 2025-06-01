@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Typography, Paper, Button, Divider, Alert, Snackbar } from '@mui/material';
 import { useNavigate, useLocation } from 'react-router-dom';
-import axios from 'axios'; // Import axios for direct API calls
 import './CopyBirthCertificate.css';
 // Import your document application service
 import { documentApplicationService } from '../../../../services/documentApplicationService';
