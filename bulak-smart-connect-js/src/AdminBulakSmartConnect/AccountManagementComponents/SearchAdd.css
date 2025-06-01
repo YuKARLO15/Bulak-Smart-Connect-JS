@@ -31,6 +31,7 @@
   border: 2px solid #24677a;
   border-radius: 9px;
   box-sizing: border-box;
+  background-color: #f5f5f5;
 }
 
 .search-user input:focus {
