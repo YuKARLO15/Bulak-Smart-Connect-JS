@@ -4,7 +4,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios'; // Import axios for direct API calls
 import './CopyBirthCertificate.css';
 // Import your document application service
-import { documentApplicationService } from '../../../../Services/documentApplicationService';
+import { documentApplicationService } from '../../../../services/documentApplicationService';
 
 const CopyBirthCertificate = ({ formData = {}, handleChange }) => {
   const navigate = useNavigate();
