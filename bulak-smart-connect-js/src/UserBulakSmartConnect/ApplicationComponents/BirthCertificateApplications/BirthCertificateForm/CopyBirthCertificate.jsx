@@ -1,32 +1,92 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Typography, Paper, Button, Divider } from '@mui/material';
+import { Box, Typography, Paper, Button, Divider, Alert, Snackbar } from '@mui/material';
 import { useNavigate, useLocation } from 'react-router-dom';
+import axios from 'axios'; // Import axios for direct API calls
 import './CopyBirthCertificate.css';
+// Import your document application service
+import { documentApplicationService } from '../../../../Services/documentApplicationService';
 
 const CopyBirthCertificate = ({ formData = {}, handleChange }) => {
   const navigate = useNavigate();
   const [showExtension, setShowExtension] = useState(formData.hasExtension || false);
-
   const [localFormData, setLocalFormData] = useState(formData || {});
+  const [errors, setErrors] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
+  const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'info' });
+  
   const requiredField = <span className="RequiredFieldCopyBirth">*</span>;
   const location = useLocation();
 
-  const [errors, setErrors] = useState({});
   const months = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December',
   ];
+  
+  const days = Array.from({ length: 31 }, (_, i) => i + 1);
+  const currentYear = new Date().getFullYear();
+  const years = Array.from({ length: 100 }, (_, i) => currentYear - i);
 
+  const isEditing = location.state?.isEditing || 
+                    localStorage.getItem('isEditingBirthApplication') === 'true';
+
+  // Show snackbar notification
+  const showNotification = (message, severity = 'info') => {
+    setSnackbar({
+      open: true,
+      message,
+      severity
+    });
+  };
+
+  // Close snackbar
+  const handleCloseSnackbar = () => {
+    setSnackbar(prev => ({ ...prev, open: false }));
+  };
+
+  useEffect(() => {
+    // Only load data if we're in editing mode
+    if (isEditing) {
+      try {
+        console.log("Loading data for editing...");
+        const editingId = localStorage.getItem('editingApplicationId');
+        console.log("Editing application ID:", editingId);
+        
+        // Get applications from localStorage
+        const applications = JSON.parse(localStorage.getItem('applications') || '[]');
+        const applicationToEdit = applications.find(app => app.id === editingId);
+        
+        if (applicationToEdit && applicationToEdit.formData) {
+          console.log("Found application to edit:", applicationToEdit);
+          setLocalFormData(applicationToEdit.formData);
+        } else {
+          // Fallback to direct form data if available
+          const savedFormData = localStorage.getItem('birthCertificateApplication');
+          if (savedFormData) {
+            setLocalFormData(JSON.parse(savedFormData));
+            console.log("Loaded form data from birthCertificateApplication");
+          } else {
+            console.warn("No application data found for editing");
+          }
+        }
+      } catch (error) {
+        console.error("Error loading data for editing:", error);
+      }
+    } else {
+      // If not editing, always start with empty form
+      console.log("Starting with new application - clearing form data");
+      setLocalFormData({});
+      localStorage.removeItem('birthCertificateApplication');
+    }
+    
+    // Cleanup function
+    return () => {
+      if (!isEditing) {
+        // Save draft data when leaving form
+        localStorage.setItem('birthCertificateApplication', JSON.stringify(formData));
+      }
+    };
+  }, [isEditing]);
+  
   const validateForm = () => {
     const newErrors = {};
     if (!localFormData.firstName?.trim()) newErrors.firstName = 'First name is required';
@@ -49,57 +109,6 @@ const CopyBirthCertificate = ({ formData = {}, handleChange }) => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const days = Array.from({ length: 31 }, (_, i) => i + 1);
-  const currentYear = new Date().getFullYear();
-  const years = Array.from({ length: 100 }, (_, i) => currentYear - i);
-
-    const isEditing = location.state?.isEditing || 
-                      localStorage.getItem('isEditingBirthApplication') === 'true';
-  
-                      useEffect(() => {
-                        // Only load data if we're in editing mode
-                        if (isEditing) {
-                          try {
-                            console.log("Loading data for editing...");
-                            const editingId = localStorage.getItem('editingApplicationId');
-                            console.log("Editing application ID:", editingId);
-                            
-                            // Get applications from localStorage
-                            const applications = JSON.parse(localStorage.getItem('applications') || '[]');
-                            const applicationToEdit = applications.find(app => app.id === editingId);
-                            
-                            if (applicationToEdit && applicationToEdit.formData) {
-                              console.log("Found application to edit:", applicationToEdit);
-                              setLocalFormData(applicationToEdit.formData);
-                            } else {
-                              // Fallback to direct form data if available
-                              const savedFormData = localStorage.getItem('birthCertificateApplication');
-                              if (savedFormData) {
-                                setLocalFormData(JSON.parse(savedFormData));
-                                console.log("Loaded form data from birthCertificateApplication");
-                              } else {
-                                console.warn("No application data found for editing");
-                              }
-                            }
-                          } catch (error) {
-                            console.error("Error loading data for editing:", error);
-                          }
-                        } else {
-                          // If not editing, always start with empty form
-                          console.log("Starting with new application - clearing form data");
-                          setLocalFormData({});
-                          localStorage.removeItem('birthCertificateApplication');
-                        }
-                        
-                        // Cleanup function
-                        return () => {
-                          if (!isEditing) {
-                            // Save draft data when leaving form
-                            localStorage.setItem('birthCertificateApplication', JSON.stringify(formData));
-                          }
-                        };
-                      }, [isEditing]);
-                    
   const handleLocalChange = e => {
     const { name, value } = e.target;
 
@@ -134,16 +143,74 @@ const CopyBirthCertificate = ({ formData = {}, handleChange }) => {
     }
   };
 
-  const handleNextClick = () => {
+  // Create application in backend database
+  const createApplicationInBackend = async (applicationId, formData) => {
+    try {
+      setIsLoading(true);
+      
+      // Get token from localStorage (if you have authentication)
+      const token = localStorage.getItem('authToken');
+      const headers = {};
+      
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+      }
+      
+      // Prepare data for backend API
+      const createDocumentApplicationDto = {
+        id: applicationId, // Use the generated ID
+        applicationType: 'BIRTH_CERTIFICATE', // Use enum from your backend
+        applicantName: `${formData.firstName} ${formData.lastName}`,
+        applicantDetails: JSON.stringify(formData),
+        status: 'PENDING', // Use enum from your backend
+        // Add any other fields your backend expects
+      };
+      
+      // API base URL
+      const apiBaseUrl = process.env.REACT_APP_API_URL || 'http://localhost:3000';
+      
+      // Call backend API to create application
+      const response = await axios.post(
+        `${apiBaseUrl}/document-applications`,
+        createDocumentApplicationDto,
+        { headers }
+      );
+      
+      console.log("Backend response:", response.data);
+      
+      // Mark application as created in backend
+      localStorage.setItem(`app_${applicationId}_created`, 'true');
+      
+      setIsLoading(false);
+      return response.data;
+    } catch (error) {
+      setIsLoading(false);
+      console.error("Error creating application in backend:", error);
+      
+      // Show error details
+      if (error.response) {
+        console.error("Server response:", error.response.status, error.response.data);
+        throw new Error(error.response.data.message || "Server error");
+      } else if (error.request) {
+        console.error("No response received:", error.request);
+        throw new Error("No response from server");
+      } else {
+        console.error("Request error:", error.message);
+        throw new Error(error.message);
+      }
+    }
+  };
+
+  const handleNextClick = async () => {
     if (!validateForm()) {
       console.log("Form validation failed");
- 
       window.scrollTo(0, 0);
       return;
     }
   
     try {
       console.log("Processing next button click...");
+      setIsLoading(true);
       
       let applicationId;
       
@@ -151,16 +218,14 @@ const CopyBirthCertificate = ({ formData = {}, handleChange }) => {
         applicationId = localStorage.getItem('editingApplicationId');
         console.log("Editing existing application:", applicationId);
       } else {
-
+        // Generate application ID with prefix and timestamp
         applicationId = 'BC-' + Date.now().toString().slice(-6);
         console.log("Creating new application:", applicationId);
       }
       
- 
       const dataToSave = { 
         ...localFormData,
         purpose: localFormData.purpose || '',
-    
         isCopyRequest: true 
       };
 
@@ -179,63 +244,81 @@ const CopyBirthCertificate = ({ formData = {}, handleChange }) => {
         lastUpdated: new Date().toISOString()
       };
       
-    
+      // Save to localStorage first (for local state management)
       const existingApplications = JSON.parse(localStorage.getItem('applications') || '[]');
       
-  
       if (isEditing) {
-   
         const appIndex = existingApplications.findIndex(app => app.id === applicationId);
         
         if (appIndex >= 0) {
-  
           existingApplications[appIndex] = applicationData;
           console.log('Updated existing application at index:', appIndex);
         } else {
-   
           existingApplications.push(applicationData);
           console.log('Added new application (was editing but not found):', applicationId);
         }
       } else {
-        
         existingApplications.push(applicationData);
         console.log('Added new application:', applicationId);
       }
       
-  
       localStorage.setItem('applications', JSON.stringify(existingApplications));
-      
-   
       localStorage.setItem('currentApplicationId', applicationId);
       localStorage.setItem('birthCertificateApplication', JSON.stringify(dataToSave));
       
-  
-      localStorage.removeItem('isEditingBirthApplication');
-      localStorage.removeItem('editingApplicationId');
-      localStorage.removeItem('editingApplication');
-      
-   
-      window.dispatchEvent(new Event('storage'));
-      
-      const customEvent = new CustomEvent('customStorageUpdate', { 
-        detail: { 
-          id: applicationId,
-          type: 'Birth Certificate', 
-          action: isEditing ? 'updated' : 'created' 
+      // Now create the application in the backend
+      try {
+        const backendResponse = await createApplicationInBackend(applicationId, dataToSave);
+        console.log("Application created in backend:", backendResponse);
+        
+        // If backend returns a different ID, update our records
+        if (backendResponse.id && backendResponse.id !== applicationId) {
+          console.log(`Backend assigned different ID: ${backendResponse.id} vs local ${applicationId}`);
+          localStorage.setItem('currentApplicationId', backendResponse.id);
+          
+          // Update the application ID in our local array
+          const updatedApplications = existingApplications.map(app => {
+            if (app.id === applicationId) {
+              return { ...app, id: backendResponse.id };
+            }
+            return app;
+          });
+          
+          localStorage.setItem('applications', JSON.stringify(updatedApplications));
         }
-      });
-      window.dispatchEvent(customEvent);
-      
-   
-      if (isEditing) {
-    
-        window.location.href = '/CTCBirthCertificate';
-      } else {
-        window.location.href = '/CTCBirthCertificate';
+        
+        showNotification("Application created successfully", "success");
+        
+        // Clean up editing flags
+        localStorage.removeItem('isEditingBirthApplication');
+        localStorage.removeItem('editingApplicationId');
+        localStorage.removeItem('editingApplication');
+        
+        // Trigger storage events
+        window.dispatchEvent(new Event('storage'));
+        
+        const customEvent = new CustomEvent('customStorageUpdate', { 
+          detail: { 
+            id: backendResponse.id || applicationId,
+            type: 'Birth Certificate', 
+            action: isEditing ? 'updated' : 'created' 
+          }
+        });
+        window.dispatchEvent(customEvent);
+        
+        // Navigate to upload page after successful creation
+        setTimeout(() => {
+          navigate('/CTCBirthCertificate');
+        }, 1000);
+      } catch (error) {
+        console.error("Backend creation failed:", error);
+        showNotification(`Failed to create application: ${error.message}`, "error");
+        setIsLoading(false);
       }
     } catch (err) {
+      setIsLoading(false);
       console.error('Error processing form:', err);
-      alert('There was a problem with your request. Please try again.');
+      showNotification('There was a problem with your request. Please try again.', 'error');
     }
   };
 
@@ -273,6 +356,7 @@ const CopyBirthCertificate = ({ formData = {}, handleChange }) => {
         </Typography>
 
         <Paper elevation={3} className="FormPaperCopyBirth">
+          {/* Form content remains the same - keeping your original form fields */}
           <Box className="FormSectionCopyBirth">
             <Typography variant="h6" className="SectionTitleCopyBirth">
               Personal Information
@@ -363,6 +447,7 @@ const CopyBirthCertificate = ({ formData = {}, handleChange }) => {
 
           <Divider className="SectionDividerCopyBirth" />
 
+          {/* Birth Information Section */}
           <Box className="FormSectionCopyBirth">
             <Typography variant="h6" className="SectionTitleCopyBirth">
               Birth Information
@@ -490,6 +575,7 @@ const CopyBirthCertificate = ({ formData = {}, handleChange }) => {
 
           <Divider className="SectionDividerCopyBirth" />
 
+          {/* Parents Information Section */}
           <Box className="FormSectionCopyBirth">
             <Typography variant="h6" className="SectionTitleCopyBirth">
               Parents Information
@@ -592,6 +678,7 @@ const CopyBirthCertificate = ({ formData = {}, handleChange }) => {
 
           <Divider className="SectionDividerCopyBirth" />
 
+          {/* Purpose of Request Section */}
           <Box className="FormSectionCopyBirth">
             <Typography variant="h6" className="SectionTitleCopyBirth">
               Purpose of Request
@@ -667,11 +754,28 @@ const CopyBirthCertificate = ({ formData = {}, handleChange }) => {
             onClick={handleNextClick}
             className="NextButtonCopyBirth"
             size="large"
+            disabled={isLoading}
           >
-            NEXT
+            {isLoading ? "Creating Application..." : "NEXT"}
           </Button>
         </Box>
       </Box>
+      
+      {/* Snackbar for notifications */}
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      >
+        <Alert 
+          onClose={handleCloseSnackbar} 
+          severity={snackbar.severity} 
+          sx={{ width: '100%' }}
+        >
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 };

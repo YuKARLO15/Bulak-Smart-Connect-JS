@@ -40,9 +40,9 @@ const FileUpload = ({ label, onUpload }) => {
       }
 
       // Check file type (only allow images)
-      const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg', "pdf"];
+      const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
       if (!allowedTypes.includes(file.type)) {
-        setError('Only JPEG, PNG or pdf files are allowed');
+        setError('Only JPEG and PNG files are allowed');
         setIsLoading(false);
         return;
       }
