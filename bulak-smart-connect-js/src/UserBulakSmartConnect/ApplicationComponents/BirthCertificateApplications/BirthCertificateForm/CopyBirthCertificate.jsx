@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Typography, Paper, Button, Divider, Alert, Snackbar } from '@mui/material';
 import { useNavigate, useLocation } from 'react-router-dom';
-import axios from 'axios'; // Import axios for direct API calls
 import './CopyBirthCertificate.css';
 // Import your document application service
 import { documentApplicationService } from '../../../../services/documentApplicationService';
@@ -175,6 +174,7 @@ const CopyBirthCertificate = ({ formData = {}, handleChange }) => {
         id: applicationId,
         type: 'Birth Certificate',
         applicationType: 'Request copy',
+        applicationSubtype: 'Copy of Birth Certificate',
         date: new Date().toLocaleDateString('en-US', {
           year: 'numeric',
           month: 'numeric',
@@ -212,6 +212,7 @@ const CopyBirthCertificate = ({ formData = {}, handleChange }) => {
         const backendApplicationData = {
           // Don't send 'id' - let the backend generate it with your format
           applicationType: 'Birth Certificate',
+          applicationSubtype: 'Copy of Birth Certificate',
           applicantName: `${dataToSave.firstName} ${dataToSave.lastName}`,
           applicantDetails:  JSON.stringify(dataToSave), // Backend expects JSON string
           formData: dataToSave, // Backend validation requires this as object
