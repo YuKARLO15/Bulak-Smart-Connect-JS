@@ -249,7 +249,6 @@ const CopyBirthCertificate = ({ formData = {}, handleChange }) => {
       
       if (isEditing) {
         const appIndex = existingApplications.findIndex(app => app.id === applicationId);
-        
         if (appIndex >= 0) {
           existingApplications[appIndex] = applicationData;
           console.log('Updated existing application at index:', appIndex);
@@ -266,26 +265,35 @@ const CopyBirthCertificate = ({ formData = {}, handleChange }) => {
       localStorage.setItem('currentApplicationId', applicationId);
       localStorage.setItem('birthCertificateApplication', JSON.stringify(dataToSave));
       
-      // Now create the application in the backend
+      // Now create the application in the backend using documentApplicationService
       try {
-        const backendResponse = await createApplicationInBackend(applicationId, dataToSave);
-        console.log("Application created in backend:", backendResponse);
+        const backendApplicationData = {
+          // Don't send 'id' - let the backend generate it with your format
+          applicationType: 'Birth Certificate',
+          applicantName: `${dataToSave.firstName} ${dataToSave.lastName}`,
+          applicantDetails:  JSON.stringify(dataToSave), // Backend expects JSON string
+          formData: dataToSave, // Backend validation requires this as object
+          status: 'PENDING'
+        };
+
+        console.log("Creating application in backend:", backendApplicationData);
+        const backendResponse = await documentApplicationService.createApplication(backendApplicationData);
+        console.log("Backend response:", backendResponse);
         
-        // If backend returns a different ID, update our records
-        if (backendResponse.id && backendResponse.id !== applicationId) {
-          console.log(`Backend assigned different ID: ${backendResponse.id} vs local ${applicationId}`);
-          localStorage.setItem('currentApplicationId', backendResponse.id);
-          
-          // Update the application ID in our local array
-          const updatedApplications = existingApplications.map(app => {
-            if (app.id === applicationId) {
-              return { ...app, id: backendResponse.id };
-            }
-            return app;
-          });
-          
-          localStorage.setItem('applications', JSON.stringify(updatedApplications));
-        }
+        // Backend will return an ID like BC-123456, which matches your frontend format
+        console.log("Application created in backend with ID:", backendResponse.id);
+        
+        // Update the current application ID to match backend
+        localStorage.setItem('currentApplicationId', backendResponse.id);
+        
+        // Update the applications array with the backend ID
+        const updatedApplications = existingApplications.map(app => {
+          if (app.id === applicationId) {
+            return { ...app, id: backendResponse.id };
+          }
+          return app;
+        });
+        localStorage.setItem('applications', JSON.stringify(updatedApplications));
         
         showNotification("Application created successfully", "success");
         
@@ -299,7 +307,7 @@ const CopyBirthCertificate = ({ formData = {}, handleChange }) => {
         
         const customEvent = new CustomEvent('customStorageUpdate', { 
           detail: { 
-            id: backendResponse.id || applicationId,
+            id: backendResponse.id,
             type: 'Birth Certificate', 
             action: isEditing ? 'updated' : 'created' 
           }
@@ -310,6 +318,7 @@ const CopyBirthCertificate = ({ formData = {}, handleChange }) => {
         setTimeout(() => {
           navigate('/CTCBirthCertificate');
         }, 1000);
+        
       } catch (error) {
         console.error("Backend creation failed:", error);
         showNotification(`Failed to create application: ${error.message}`, "error");

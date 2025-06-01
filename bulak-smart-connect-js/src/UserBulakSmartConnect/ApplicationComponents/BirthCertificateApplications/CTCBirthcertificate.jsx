@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Box, Typography, Button, Paper, Alert } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
@@ -85,15 +84,24 @@ const handleFileUpload = async (label, isUploaded, fileDataObj) => {
       const response = await documentApplicationService.uploadFile(applicationId, file, label);
       console.log("Upload response:", response);
       
+      alert(`"${label}" uploaded successfully!`);
+      
     } catch (error) {
       console.error(`Failed to upload "${label}":`, error);
       
-      // Show more detailed error information
+      // Show detailed error information
       if (error.response) {
         console.error("Server response:", error.response.status, error.response.data);
+        alert(`Failed to upload "${label}": ${error.response.data?.message || error.message}`);
+      } else {
+        alert(`Failed to upload "${label}": ${error.message}`);
       }
       
-      alert(`Failed to upload "${label}": ${error.message}`);
+      // Revert the upload state on error
+      setUploadedFiles(prevState => ({
+        ...prevState,
+        [label]: false,
+      }));
     }
   } else {
     setFileData(prevState => {
@@ -103,63 +111,86 @@ const handleFileUpload = async (label, isUploaded, fileDataObj) => {
     });
   }
 };
-  const handleSubmit = () => {
-    if (isFormComplete) {
-      try {
-        const applicationId = localStorage.getItem('currentApplicationId');
-        if (!applicationId) {
-          console.error("No application ID found");
-          alert("Application ID is missing. Cannot proceed.");
-          return;
-        }
-        const updatedFormData = {
-          ...formData,
-          uploadedFiles: fileData,
-        };
 
-        const applications = JSON.parse(localStorage.getItem('applications') || '[]');
-        const appIndex = applications.findIndex(app => app.id === applicationId);
+const handleSubmit = async () => {
+  if (!isFormComplete) {
+    alert('Please upload the required documents before submitting.');
+    return;
+  }
 
-        if (appIndex >= 0) {
-          applications[appIndex] = {
-            ...applications[appIndex],
-            formData: {
-              ...applications[appIndex].formData,
-              ...updatedFormData
-            },
-            lastUpdated: new Date().toISOString()
-          };
-        } else {
-          console.error(`Application ID ${applicationId} not found in applications array`);
-          alert("Could not find your application. Please try again.");
-          return;
-        }
-
-        localStorage.setItem('applications', JSON.stringify(applications));
-        localStorage.setItem('birthCertificateApplication', JSON.stringify(updatedFormData));
-
-        window.dispatchEvent(new Event('storage'));
-        window.dispatchEvent(new CustomEvent('customStorageUpdate', {
-          detail: {
-            id: applicationId,
-            action: 'updated',
-            type: 'Birth Certificate'
-          }
-        }));
-
-        setIsSubmitted(true);
-        setTimeout(() => {
-          navigate('/BirthApplicationSummary');
-        }, 2000);
-      } catch (error) {
-        console.error('Error submitting application:', error);
-        alert('Error submitting application. Please try again.');
-      }
-    } else {
-      alert('Please upload the required documents before submitting.');
+  try {
+    setIsSubmitted(true);
+    
+    const applicationId = localStorage.getItem('currentApplicationId');
+    if (!applicationId) {
+      console.error("No application ID found");
+      alert("Application ID is missing. Cannot proceed.");
+      return;
     }
-  };
 
+    // Update the backend application status to SUBMITTED
+    try {
+      await documentApplicationService.updateApplication(applicationId, {
+        status: 'SUBMITTED',
+        statusMessage: 'Application submitted with all required documents'
+      });
+      console.log('Application status updated in backend');
+    } catch (error) {
+      console.error('Failed to update backend status:', error);
+      // Continue with local update even if backend fails
+    }
+
+    // Update localStorage
+    const updatedFormData = {
+      ...formData,
+      uploadedFiles: fileData,
+      status: 'Submitted',
+      submittedAt: new Date().toISOString()
+    };
+
+    const applications = JSON.parse(localStorage.getItem('applications') || '[]');
+    const appIndex = applications.findIndex(app => app.id === applicationId);
+
+    if (appIndex >= 0) {
+      applications[appIndex] = {
+        ...applications[appIndex],
+        formData: {
+          ...applications[appIndex].formData,
+          ...updatedFormData
+        },
+        status: 'Submitted',
+        lastUpdated: new Date().toISOString()
+      };
+    } else {
+      console.error(`Application ID ${applicationId} not found in applications array`);
+      alert("Could not find your application. Please try again.");
+      return;
+    }
+
+    localStorage.setItem('applications', JSON.stringify(applications));
+    localStorage.setItem('birthCertificateApplication', JSON.stringify(updatedFormData));
+
+    window.dispatchEvent(new Event('storage'));
+    window.dispatchEvent(new CustomEvent('customStorageUpdate', {
+      detail: {
+        id: applicationId,
+        action: 'updated',
+        type: 'Birth Certificate'
+      }
+    }));
+
+    console.log('Application submitted successfully');
+    
+    setTimeout(() => {
+      navigate('/BirthApplicationSummary');
+    }, 2000);
+
+  } catch (error) {
+    console.error('Error submitting application:', error);
+    alert(`Error submitting application: ${error.message}`);
+    setIsSubmitted(false);
+  }
+};
   const handleBack = () => {
     navigate('/RequestACopyBirthCertificate');
   };
