@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import '../AccountManagementComponents/UserTable.css';
-import UploadProfile from './ProfileUpload';
+// import UploadProfile from './ProfileUpload';
 import { useNavigate } from 'react-router-dom';
 
 const UserTable = ({ users, handleUpload, removeUser }) => {
@@ -50,7 +50,7 @@ const UserTable = ({ users, handleUpload, removeUser }) => {
             <tr key={index}>
               <td>
                 <div className="user-info">
-                  <UploadProfile label="" onUpload={(file) => handleUpload(index, file)} />
+                  {/* <UploadProfile label="" onUpload={(file) => handleUpload(index, file)} /> */}
                   <span className="user-name">{user.name}</span>
                 </div>
               </td>

@@ -150,8 +150,10 @@ const AdminAnnouncement = () => {
 
   return (
     <div className="announcement-container">
-      <h2>Bulak LGU Smart Announcements</h2>
-      <NavBar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
+      <h1 className='announcement-h2'>Bulak LGU Smart Announcements
+        <NavBar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
+      </h1>
+      
       
       {loading && (
         <div style={{ textAlign: 'center', padding: '20px' }}>

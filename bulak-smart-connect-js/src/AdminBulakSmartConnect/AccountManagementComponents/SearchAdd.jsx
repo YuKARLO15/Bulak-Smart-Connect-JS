@@ -11,7 +11,7 @@ const SearchAddUser = () => {
 
   return (
     <div className="search-user">
-      <input type="text" placeholder="Search User..." />
+      <input className type="text" placeholder="Search User..." />
       <button className="add-user" onClick={handleAddUserClick}>
         Add User
       </button>
