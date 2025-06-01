@@ -4,7 +4,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios'; // Import axios for direct API calls
 import './CopyBirthCertificate.css';
 // Import your document application service
-import { documentApplicationService } from '../../../../Services/documentApplicationService';
+import { documentApplicationService } from '../../../../services/documentApplicationService';
 
 const CopyBirthCertificate = ({ formData = {}, handleChange }) => {
   const navigate = useNavigate();
@@ -143,64 +143,6 @@ const CopyBirthCertificate = ({ formData = {}, handleChange }) => {
     }
   };
 
-  // Create application in backend database
-  const createApplicationInBackend = async (applicationId, formData) => {
-    try {
-      setIsLoading(true);
-      
-      // Get token from localStorage (if you have authentication)
-      const token = localStorage.getItem('authToken');
-      const headers = {};
-      
-      if (token) {
-        headers['Authorization'] = `Bearer ${token}`;
-      }
-      
-      // Prepare data for backend API
-      const createDocumentApplicationDto = {
-        id: applicationId, // Use the generated ID
-        applicationType: 'BIRTH_CERTIFICATE', // Use enum from your backend
-        applicantName: `${formData.firstName} ${formData.lastName}`,
-        applicantDetails: JSON.stringify(formData),
-        status: 'PENDING', // Use enum from your backend
-        // Add any other fields your backend expects
-      };
-      
-      // API base URL
-      const apiBaseUrl = process.env.REACT_APP_API_URL || 'http://localhost:3000';
-      
-      // Call backend API to create application
-      const response = await axios.post(
-        `${apiBaseUrl}/document-applications`,
-        createDocumentApplicationDto,
-        { headers }
-      );
-      
-      console.log("Backend response:", response.data);
-      
-      // Mark application as created in backend
-      localStorage.setItem(`app_${applicationId}_created`, 'true');
-      
-      setIsLoading(false);
-      return response.data;
-    } catch (error) {
-      setIsLoading(false);
-      console.error("Error creating application in backend:", error);
-      
-      // Show error details
-      if (error.response) {
-        console.error("Server response:", error.response.status, error.response.data);
-        throw new Error(error.response.data.message || "Server error");
-      } else if (error.request) {
-        console.error("No response received:", error.request);
-        throw new Error("No response from server");
-      } else {
-        console.error("Request error:", error.message);
-        throw new Error(error.message);
-      }
-    }
-  };
-
   const handleNextClick = async () => {
     if (!validateForm()) {
       console.log("Form validation failed");
@@ -249,7 +191,6 @@ const CopyBirthCertificate = ({ formData = {}, handleChange }) => {
       
       if (isEditing) {
         const appIndex = existingApplications.findIndex(app => app.id === applicationId);
-        
         if (appIndex >= 0) {
           existingApplications[appIndex] = applicationData;
           console.log('Updated existing application at index:', appIndex);
@@ -266,26 +207,35 @@ const CopyBirthCertificate = ({ formData = {}, handleChange }) => {
       localStorage.setItem('currentApplicationId', applicationId);
       localStorage.setItem('birthCertificateApplication', JSON.stringify(dataToSave));
       
-      // Now create the application in the backend
+      // Now create the application in the backend using documentApplicationService
       try {
-        const backendResponse = await createApplicationInBackend(applicationId, dataToSave);
-        console.log("Application created in backend:", backendResponse);
+        const backendApplicationData = {
+          // Don't send 'id' - let the backend generate it with your format
+          applicationType: 'Birth Certificate',
+          applicantName: `${dataToSave.firstName} ${dataToSave.lastName}`,
+          applicantDetails:  JSON.stringify(dataToSave), // Backend expects JSON string
+          formData: dataToSave, // Backend validation requires this as object
+          status: 'PENDING'
+        };
+
+        console.log("Creating application in backend:", backendApplicationData);
+        const backendResponse = await documentApplicationService.createApplication(backendApplicationData);
+        console.log("Backend response:", backendResponse);
         
-        // If backend returns a different ID, update our records
-        if (backendResponse.id && backendResponse.id !== applicationId) {
-          console.log(`Backend assigned different ID: ${backendResponse.id} vs local ${applicationId}`);
-          localStorage.setItem('currentApplicationId', backendResponse.id);
-          
-          // Update the application ID in our local array
-          const updatedApplications = existingApplications.map(app => {
-            if (app.id === applicationId) {
-              return { ...app, id: backendResponse.id };
-            }
-            return app;
-          });
-          
-          localStorage.setItem('applications', JSON.stringify(updatedApplications));
-        }
+        // Backend will return an ID like BC-123456, which matches your frontend format
+        console.log("Application created in backend with ID:", backendResponse.id);
+        
+        // Update the current application ID to match backend
+        localStorage.setItem('currentApplicationId', backendResponse.id);
+        
+        // Update the applications array with the backend ID
+        const updatedApplications = existingApplications.map(app => {
+          if (app.id === applicationId) {
+            return { ...app, id: backendResponse.id };
+          }
+          return app;
+        });
+        localStorage.setItem('applications', JSON.stringify(updatedApplications));
         
         showNotification("Application created successfully", "success");
         
@@ -299,7 +249,7 @@ const CopyBirthCertificate = ({ formData = {}, handleChange }) => {
         
         const customEvent = new CustomEvent('customStorageUpdate', { 
           detail: { 
-            id: backendResponse.id || applicationId,
+            id: backendResponse.id,
             type: 'Birth Certificate', 
             action: isEditing ? 'updated' : 'created' 
           }
@@ -310,6 +260,7 @@ const CopyBirthCertificate = ({ formData = {}, handleChange }) => {
         setTimeout(() => {
           navigate('/CTCBirthCertificate');
         }, 1000);
+        
       } catch (error) {
         console.error("Backend creation failed:", error);
         showNotification(`Failed to create application: ${error.message}`, "error");
