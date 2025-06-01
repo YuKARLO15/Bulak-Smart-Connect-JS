@@ -175,6 +175,7 @@ const CopyBirthCertificate = ({ formData = {}, handleChange }) => {
         id: applicationId,
         type: 'Birth Certificate',
         applicationType: 'Request copy',
+        applicationSubtype: 'Copy of Birth Certificate',
         date: new Date().toLocaleDateString('en-US', {
           year: 'numeric',
           month: 'numeric',
@@ -212,6 +213,7 @@ const CopyBirthCertificate = ({ formData = {}, handleChange }) => {
         const backendApplicationData = {
           // Don't send 'id' - let the backend generate it with your format
           applicationType: 'Birth Certificate',
+          applicationSubtype: 'Copy of Birth Certificate',
           applicantName: `${dataToSave.firstName} ${dataToSave.lastName}`,
           applicantDetails:  JSON.stringify(dataToSave), // Backend expects JSON string
           formData: dataToSave, // Backend validation requires this as object
