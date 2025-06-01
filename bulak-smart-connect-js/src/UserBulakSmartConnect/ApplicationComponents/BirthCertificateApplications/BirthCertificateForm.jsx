@@ -171,14 +171,29 @@ const BirthCertificateForm = () => {
         console.log("Creating new application:", applicationId);
       }
       
-      // Get the selected application type
+      // Get the selected application type and map to subtype
       const selectedOption = localStorage.getItem('selectedBirthCertificateOption') || 'Regular application';
+
+      const getApplicationSubtype = (option) => {
+        const subtypeMap = {
+          'Regular application': 'Regular Application (0-1 month)',
+          'Above 18': 'Delayed Registration - Above 18',
+          'Below 18': 'Delayed Registration - Below 18', 
+          'Foreign Parent': 'Delayed Registration - Foreign Parent',
+          'Out of town': 'Out of Town Registration',
+          'Clerical Error': 'Correction - Clerical Errors',
+          'Sex DOB': 'Correction - Sex/Date of Birth',
+          'First Name': 'Correction - First Name'
+        };
+        return subtypeMap[option] || 'Regular Application (0-1 month)';
+      };
       
       // Prepare application data
       const applicationData = {
         id: applicationId,
         type: 'Birth Certificate',
         applicationType: selectedOption,
+        applicationSubtype: getApplicationSubtype(selectedOption), // Add this line
         date: new Date().toLocaleDateString('en-US', {
           year: 'numeric',
           month: 'numeric',
