@@ -1,0 +1,1 @@
+import"./iframe-CEcJomOG.js";import{d as m}from"./DefaultPropsProvider-CojlGyAE.js";import{T as o}from"./identifier-DYTbaeg1.js";import{u as r}from"./useTheme-BHD4hBFD.js";function f(){const e=r(m);return e[o]||e}export{f as u};
