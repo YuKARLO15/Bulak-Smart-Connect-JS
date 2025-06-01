@@ -17,6 +17,22 @@
   gap: 24px;
 }
 
+.announcement-h2{
+  /* background-color: #1c4d5a ;
+  color: #f9fafb;
+  font-size: xx-large; */
+    margin-bottom: 8px;
+  font-size: 28px;
+  color: #ffffff;
+  background-color: #0e4f57;
+  text-align: center;
+  padding: 10px 15px;
+  width: 100%;
+  box-sizing: border-box;
+  word-wrap: break-word;
+  font-size: clamp(20px, 5vw, 32px);
+}
+
 @media (min-width: 768px) {
   .announcement-main {
     flex-direction: row;
