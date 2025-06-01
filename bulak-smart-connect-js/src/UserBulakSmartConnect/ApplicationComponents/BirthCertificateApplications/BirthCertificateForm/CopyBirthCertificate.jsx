@@ -143,64 +143,6 @@ const CopyBirthCertificate = ({ formData = {}, handleChange }) => {
     }
   };
 
-  // Create application in backend database
-  const createApplicationInBackend = async (applicationId, formData) => {
-    try {
-      setIsLoading(true);
-      
-      // Get token from localStorage (if you have authentication)
-      const token = localStorage.getItem('authToken');
-      const headers = {};
-      
-      if (token) {
-        headers['Authorization'] = `Bearer ${token}`;
-      }
-      
-      // Prepare data for backend API
-      const createDocumentApplicationDto = {
-        id: applicationId, // Use the generated ID
-        applicationType: 'BIRTH_CERTIFICATE', // Use enum from your backend
-        applicantName: `${formData.firstName} ${formData.lastName}`,
-        applicantDetails: JSON.stringify(formData),
-        status: 'PENDING', // Use enum from your backend
-        // Add any other fields your backend expects
-      };
-      
-      // API base URL
-      const apiBaseUrl = process.env.REACT_APP_API_URL || 'http://localhost:3000';
-      
-      // Call backend API to create application
-      const response = await axios.post(
-        `${apiBaseUrl}/document-applications`,
-        createDocumentApplicationDto,
-        { headers }
-      );
-      
-      console.log("Backend response:", response.data);
-      
-      // Mark application as created in backend
-      localStorage.setItem(`app_${applicationId}_created`, 'true');
-      
-      setIsLoading(false);
-      return response.data;
-    } catch (error) {
-      setIsLoading(false);
-      console.error("Error creating application in backend:", error);
-      
-      // Show error details
-      if (error.response) {
-        console.error("Server response:", error.response.status, error.response.data);
-        throw new Error(error.response.data.message || "Server error");
-      } else if (error.request) {
-        console.error("No response received:", error.request);
-        throw new Error("No response from server");
-      } else {
-        console.error("Request error:", error.message);
-        throw new Error(error.message);
-      }
-    }
-  };
-
   const handleNextClick = async () => {
     if (!validateForm()) {
       console.log("Form validation failed");
