@@ -6,7 +6,7 @@ import FileUpload from '../FileUpload';
 import NavBar from '../../../NavigationComponents/NavSide';
 import BirthCertificateApplicationData from './BirthCertificateApplicationData';
 import './CTCBirthCertificate.css';
-import { documentApplicationService } from '../../../Services/documentApplicationService';
+import { documentApplicationService } from '../../../services/documentApplicationService';
 
 const CTCBirthCertificate = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
