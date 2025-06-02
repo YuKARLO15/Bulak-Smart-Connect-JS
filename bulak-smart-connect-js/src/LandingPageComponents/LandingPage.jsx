@@ -157,34 +157,43 @@ const LandingPage = () => {
           </Grid>
         </Box>
 
+<Box className="AboutSectionLanding" sx={{ py: 8 }}>
+  <Grid container spacing={4} alignItems="center" justifyContent="center">
+    <Grid item xs={12} md={3} sx={{ textAlign: { xs: 'center', md: 'right' } }}>
+      <img
+        src={BulakLGULogo}
+        alt="Municipal Civil Registrar Logo"
+        className="AboutIconLanding"
+      style={{ maxWidth: '100%', height: 'auto'  }}
+      />
+    </Grid>
 
-        <Box className="AboutSectionLanding">
-          <Grid container spacing={4} alignItems="center">
-            <Grid item xs={12} md={3}>
-              <Box className="AboutIconLanding">
-                <img src={BulakLGULogo} alt="Smart Connect Icon" />
-              </Box>
-            </Grid>
-            <Grid item xs={12} md={9}>
-              <Card className="AboutCardLanding">
-                <CardContent>
-                  <Typography variant="h5" className="AboutTitleLanding">
-                    ABOUT US:
-                  </Typography>
-                  <Typography variant="body1" className="AboutDescriptionLanding">
-                    Skip the long lines and handle your municipal transactions with ease! Bulak LGU
-                    Smart Connect is the official queuing and information system of the Municipal
-                    Civil Registrar of San Ildefonso, Bulacan. Secure your queue number online,
-                    track real-time queue number, schedule appointments, and submit documents for
-                    birth, marriage, and death certificates all from your phone or computer. Get
-                    real-time updates and enjoy a hassle-free, efficient government service. Your
-                    time matters make every visit smooth and stress-free!
-                  </Typography>
-                </CardContent>
-              </Card>
-            </Grid>
-          </Grid>
-        </Box>
+    <Grid item xs={12} md={9}>
+      <Card className="AboutCardLanding" sx={{
+        backgroundColor: '#1c4d5a',
+        color: 'white',
+        borderRadius: 2,
+        px: 4,
+        py: 3,
+        boxShadow: 2,
+        maxWidth: 700
+      }}>
+        <CardContent>
+          <Typography variant="h4" className="AboutTitleLanding" sx={{ fontWeight: 700, mb: 2 }}>
+            About Us
+          </Typography>
+          <Typography variant="body1" className="AboutDescriptionLanding" sx={{ lineHeight: 1.7 }}>
+            <b>Bulak LGU Smart Connect</b> is the official digital queue and information system for the Municipal Civil Registrar of San Ildefonso, Bulacan.
+            <br /><br />
+            Our mission is to provide fast, organized, and transparent public service. Residents can <b>secure queue numbers</b>, <b>track applications in real-time</b>, and <b>submit documents</b> online for birth, marriage, or death certificates, all from their computer or mobile device.
+            <br /><br />
+            <span style={{ color: "#d5dcdd", fontWeight: 500 }}>Enjoy efficient, hassle-free government service. Your time matters, make every visit smooth and stress-free!</span>
+          </Typography>
+        </CardContent>
+      </Card>
+    </Grid>
+  </Grid>
+</Box>
         <Box className="AnnouncementButtonContainer">
           <FloatingAnnouncementButton />
           </Box>

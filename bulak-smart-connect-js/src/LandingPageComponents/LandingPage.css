@@ -109,30 +109,37 @@ z-index: 1100 !important;
 }
 
 .AboutSectionLanding {
-  margin: 40px 0;
+  margin: 60px 0;
 }
-
-.AboutIconLanding img {
-  max-width: 350px !important;
-}
-
 .AboutCardLanding {
   background-color: #1c4d5a !important;
   color: white !important;
-  max-width: 45vw !important;
   border-radius: 16px !important;
-  margin-left: 170px;
-  padding: 20px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.10);
+  margin: 0 auto;
+  max-width: 700px !important;
+  padding: 30px;
 }
-
 .AboutTitleLanding {
-  margin-bottom: 20px !important;
-  font-weight: 600 !important;
-  margin-left: 50px !important;
+  margin-bottom: 18px !important;
+  font-weight: 700 !important;
 }
 .AboutDescriptionLanding {
-  margin-left: 50px !important;
-  margin-right: 50px !important;
+  margin-right: 0 !important;
+  font-size: 1.1rem;
+  line-height: 1.7;
+}
+.AboutIconLanding img {
+  max-width: 150px !important;
+}
+@media (max-width: 960px) {
+  .AboutSectionLanding {
+    text-align: center;
+  }
+  .AboutCardLanding {
+    max-width: 98vw !important;
+    padding: 15px;
+  }
 }
 .KeyFeaturesSectionLanding {
   margin: 60px 0;
