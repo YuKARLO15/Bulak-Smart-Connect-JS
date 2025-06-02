@@ -1,1 +1,0 @@
-import{j as n}from"./jsx-runtime-B2zRRsyC.js";import"./iframe-DFJbmHxV.js";import{A as t}from"./AnnouncementPost-BFGqUe5U.js";const m=({announcements:o,onEdit:s})=>n.jsx("div",{className:"announcement-feed",children:o.map(e=>n.jsx(t,{announcement:e,onEdit:s},e.id))});m.__docgenInfo={description:"",methods:[],displayName:"AnnouncementFeed"};export{m as A};
