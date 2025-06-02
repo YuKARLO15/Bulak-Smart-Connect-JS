@@ -45,7 +45,9 @@ const LandingPage = () => {
   return (
     <Box className="LandingContainer"
    >
-      <NavBar />
+    <Box className=" NavbarLanding">
+        <NavBar />
+        </Box>
 
       
       <div className="PhTimeComponent">

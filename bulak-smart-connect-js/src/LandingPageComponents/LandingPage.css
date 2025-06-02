@@ -5,6 +5,11 @@
   min-height: 100vh;
 }
 
+.NavbarLanding {
+  z-index: 1000 !important;
+  position: sticky;
+}
+
 .LandingContainer::before {
   content: "";
   position: fixed;
@@ -45,8 +50,8 @@ z-index: 1100 !important;
 }
 .HeaderLanding {
   padding: 20px 0;
-  z-index: 1000;
   position: relative;
+  z-index: -1;
 
 }
 

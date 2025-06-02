@@ -47,11 +47,11 @@ const NavBar = () => {
                   style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}
                   onClick={handleServicesClose}
                 >
-                  <MenuItem>
-                    <ListItemIcon>
+                  <MenuItem className='ServiceItem'>
+                    <ListItemIcon className='ServiceIcon'>
                       <DescriptionIcon fontSize="small" />
                     </ListItemIcon>
-                    <ListItemText primary="Document Application" />
+                    <ListItemText className='ServiceIcon' primary="Document Application" />
                   </MenuItem>
                 </RouterLink>
 
@@ -60,11 +60,11 @@ const NavBar = () => {
                   style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}
                   onClick={handleServicesClose}
                 >
-                  <MenuItem>
-                    <ListItemIcon>
+                  <MenuItem className='ServiceItem'>
+                    <ListItemIcon className='ServiceIcon'>
                       <CalendarTodayIcon fontSize="small" />
                     </ListItemIcon>
-                    <ListItemText primary="Appointment Booking" />
+                    <ListItemText className='ServiceIcon' primary="Appointment Booking" />
                   </MenuItem>
                 </RouterLink>
 
@@ -73,18 +73,15 @@ const NavBar = () => {
                   style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}
                   onClick={handleServicesClose}
                 >
-                  <MenuItem>
-                    <ListItemIcon>
+                  <MenuItem className='ServiceItem'>
+                    <ListItemIcon className='ServiceIcon'>
                       <DirectionsWalkOutlinedIcon fontSize="small" />
-                    </ListItemIcon>
-                    <ListItemText primary="Smart Walk-In Queue" />
+                    </ListItemIcon >
+                    <ListItemText className='ServiceIcon' primary="Smart Walk-In Queue" />
                   </MenuItem>
                 </RouterLink>
               </Menu>
 
-              <RouterLink to="/UserDashboard">
-                <Button>Dashboard</Button>
-              </RouterLink>
               <Button onClick={handleLogout}>Log Out</Button>
             </>
           ) : (
