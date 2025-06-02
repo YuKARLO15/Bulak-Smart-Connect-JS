@@ -15,6 +15,7 @@ import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { UpdateUserDto, AdminUpdateUserDto } from './dto/update-user.dto';
 import { Roles } from './decorators/roles.decorator';
 import { RolesGuard } from './guards/roles.guard';
+import { AuthenticatedUser } from './jwt.strategy';
 import {
   ApiTags,
   ApiOperation,
@@ -25,7 +26,7 @@ import {
 } from '@nestjs/swagger';
 
 interface RequestWithUser extends Request {
-  user: { sub: number; email: string; roles: string[] };
+  user: AuthenticatedUser; 
 }
 
 @ApiTags('Authentication')
@@ -110,10 +111,10 @@ export class AuthController {
   @Get('profile')
   getProfile(@Request() req: RequestWithUser) {
     // Add null check before converting to number
-    if (!req.user || req.user.sub === undefined || req.user.sub === null) {
+    if (!req.user || req.user.id === undefined || req.user.id === null) {
       throw new UnauthorizedException('Invalid user ID');
     }
-    return this.authService.getProfile(Number(req.user.sub));
+    return this.authService.getProfile(Number(req.user.id));
   }
   @ApiOperation({
     summary: 'Update user profile',
@@ -135,13 +136,13 @@ export class AuthController {
     @Body() updateUserDto: UpdateUserDto,
   ) {
     // Add null check before converting to number
-    if (!req.user || req.user.sub === undefined || req.user.sub === null) {
+    if (!req.user || req.user.id === undefined || req.user.id === null) {
       throw new UnauthorizedException('Invalid user ID');
     }
 
     try {
       return await this.authService.updateUserInfo(
-        Number(req.user.sub),
+        Number(req.user.id),
         updateUserDto,
       );
     } catch (error) {
@@ -185,13 +186,13 @@ export class AuthController {
     @Body() updateUserDto: AdminUpdateUserDto,
   ) {
     // Add null check before converting to number
-    if (!req.user || req.user.sub === undefined || req.user.sub === null) {
+    if (!req.user || req.user.id === undefined || req.user.id === null) {
       throw new UnauthorizedException('Invalid admin ID');
     }
 
     try {
       return await this.authService.adminUpdateUser(
-        Number(req.user.sub),
+        Number(req.user.id),
         Number(targetUserId),
         updateUserDto,
       );
