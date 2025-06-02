@@ -10,7 +10,7 @@ import {
   UploadedFile,
   Query,
   UseGuards,
-  Request,
+  //Request, // Uncomment if you need to use Request object
   BadRequestException,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -20,6 +20,8 @@ import { UpdateDocumentApplicationDto } from './dto/update-document-application.
 import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../../auth/guards/roles.guard';
 import { Roles } from '../../auth/decorators/roles.decorator';
+import { User } from '../../auth/decorators/user.decorator'; 
+import { AuthenticatedUser } from '../../auth/jwt.strategy'; 
 import { ApplicationStatus } from './entities/document-application.entity';
 import {
   ApiTags,
@@ -28,13 +30,6 @@ import {
   ApiBearerAuth,
   ApiConsumes,
 } from '@nestjs/swagger';
-
-interface AuthenticatedRequest extends Request {
-  user: {
-    userId: number;
-    roles: string[];
-  };
-}
 
 @ApiTags('Document Applications')
 @Controller('document-applications')
@@ -50,9 +45,9 @@ export class DocumentApplicationsController {
   @ApiResponse({ status: 201, description: 'Application created successfully' })
   async create(
     @Body() createDto: CreateDocumentApplicationDto,
-    @Request() req: AuthenticatedRequest,
+    @User() user: AuthenticatedUser, 
   ) {
-    return this.documentApplicationsService.create(createDto, req.user.userId);
+    return this.documentApplicationsService.create(createDto, user.id);
   }
 
   @Post(':id/files')
@@ -80,13 +75,13 @@ export class DocumentApplicationsController {
     @Param('id') id: string,
     @UploadedFile() file: Express.Multer.File,
     @Body('documentCategory') documentCategory: string,
-    @Request() req: AuthenticatedRequest,
+    @User() user: AuthenticatedUser, 
   ) {
     return this.documentApplicationsService.uploadFile(
       id,
       file,
       documentCategory,
-      req.user.userId,
+      user.id, 
     );
   }
 
@@ -94,20 +89,20 @@ export class DocumentApplicationsController {
   @ApiOperation({ summary: 'Get user applications' })
   async findAll(
     @Query('status') status?: string,
-    @Request() req?: AuthenticatedRequest,
+    @User() user?: AuthenticatedUser, 
   ) {
-    const userId = req?.user.roles.includes('admin')
+    const userId = user?.roles.some(role => role.name === 'admin')
       ? undefined
-      : req?.user.userId;
+      : user?.id; 
     return this.documentApplicationsService.findAll(userId);
   }
 
   @Get(':id')
   @ApiOperation({ summary: 'Get specific application' })
-  async findOne(@Param('id') id: string, @Request() req: AuthenticatedRequest) {
-    const userId = req.user.roles.includes('admin')
+  async findOne(@Param('id') id: string, @User() user: AuthenticatedUser) { 
+    const userId = user.roles.some(role => role.name === 'admin') 
       ? undefined
-      : req.user.userId;
+      : user.id; 
     return this.documentApplicationsService.findOne(id, userId);
   }
 
@@ -115,11 +110,11 @@ export class DocumentApplicationsController {
   @ApiOperation({ summary: 'Get file download URL' })
   async getFileDownloadUrl(
     @Param('fileId') fileId: string,
-    @Request() req: AuthenticatedRequest,
+    @User() user: AuthenticatedUser, 
   ) {
-    const userId = req.user.roles.includes('admin')
+    const userId = user.roles.some(role => role.name === 'admin') 
       ? undefined
-      : req.user.userId;
+      : user.id; 
     const url = await this.documentApplicationsService.getFileDownloadUrl(
       +fileId,
       userId,
@@ -132,13 +127,13 @@ export class DocumentApplicationsController {
   async update(
     @Param('id') id: string,
     @Body() updateDto: UpdateDocumentApplicationDto,
-    @Request() req: AuthenticatedRequest,
+    @User() user: AuthenticatedUser, 
   ) {
-    const userId = req.user.roles.includes('admin')
+    const userId = user.roles.some(role => role.name === 'admin') 
       ? undefined
-      : req.user.userId;
-    const adminId = req.user.roles.includes('admin')
-      ? req.user.userId
+      : user.id; 
+    const adminId = user.roles.some(role => role.name === 'admin') 
+      ? user.id 
       : undefined;
 
     return this.documentApplicationsService.update(
@@ -156,22 +151,22 @@ export class DocumentApplicationsController {
   async updateStatus(
     @Param('id') id: string,
     @Body() statusDto: { status: string; statusMessage?: string },
-    @Request() req: AuthenticatedRequest,
+    @User() user: AuthenticatedUser,
   ) {
     return this.documentApplicationsService.updateStatus(
       id,
       statusDto.status as ApplicationStatus,
       statusDto.statusMessage,
-      req.user.userId,
+      user.id,
     );
   }
 
   @Delete(':id')
   @ApiOperation({ summary: 'Delete application' })
-  async remove(@Param('id') id: string, @Request() req: AuthenticatedRequest) {
-    const userId = req.user.roles.includes('admin')
+  async remove(@Param('id') id: string, @User() user: AuthenticatedUser) { 
+    const userId = user.roles.some(role => role.name === 'admin') 
       ? undefined
-      : req.user.userId;
+      : user.id; 
     await this.documentApplicationsService.remove(id, userId);
     return { message: 'Application deleted successfully' };
   }
