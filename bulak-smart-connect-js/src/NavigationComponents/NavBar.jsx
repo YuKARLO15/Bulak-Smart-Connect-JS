@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { Box, Typography, Button, Menu, MenuItem, ListItemIcon, ListItemText } from '@mui/material';
 import './NavBar.css';
-import BulakLGULogo from '../LandingPageComponents/LandingPageAssets/BulakLGULogo.png';
+import  NavBulakLGU from './NavAssets/NavBulakLGU.png';
 import { useAuth } from '../context/AuthContext';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import DirectionsWalkOutlinedIcon from '@mui/icons-material/DirectionsWalkOutlined';
@@ -30,7 +30,7 @@ const NavBar = () => {
     <>
       <div className="NavBarContainer">
         <RouterLink to="/">
-          <img className="LogoNavBar" src={BulakLGULogo} alt="Bulak LGU Logo" />
+          <img className="LogoNavBar" src={NavBulakLGU} alt="Bulak LGU Logo" />
         </RouterLink>
 
         <div className="NavButtons">
