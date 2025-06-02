@@ -142,10 +142,13 @@
                         <ul class="index-list">
                             <li>
                                     <span class="modifier"></span>
+                                    <span class="modifier"></span>
+                                    <span class="modifier"></span>
                                     <span class="modifier">Async</span>
                                 <a href="#create" >create</a>
                             </li>
                             <li>
+                                    <span class="modifier"></span>
                                     <span class="modifier"></span>
                                     <span class="modifier"></span>
                                     <span class="modifier"></span>
@@ -238,6 +241,8 @@
                     <a name="create"></a>
                     <span class="name">
                             <span class="modifier"></span>
+                            <span class="modifier"></span>
+                            <span class="modifier"></span>
                             <span class="modifier">Async</span>
                         <span ><b>create</b></span>
                         <a href="#create"><span class="icon ion-ios-link"></span></a>
@@ -247,7 +252,7 @@
             <tr>
                 <td class="col-md-4">
                         <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>create(createAppointmentDto: <a href="../classes/CreateAppointmentDto.html" target="_self">CreateAppointmentDto</a>)</code>
+                    <code>create(createAppointmentDto: <a href="../classes/CreateAppointmentDto.html" target="_self">CreateAppointmentDto</a>, user: <a href="../interfaces/AuthenticatedUser.html" target="_self">AuthenticatedUser</a>)</code>
                 </td>
             </tr>
 
@@ -255,14 +260,14 @@
                 <td class="col-md-4">
                     <b>Decorators : </b>
                     <br />
-                    <code>@Post()<br /></code>
+                    <code>@Post()<br />@ApiOperation({summary: &#x27;Create new appointment&#x27;})<br />@ApiResponse({status: 201, description: &#x27;Appointment created successfully&#x27;})<br /></code>
                 </td>
             </tr>
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="33"
-                                    class="link-to-prism">src/modules/appointment/appointment.controller.ts:33</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="39"
+                                    class="link-to-prism">src/modules/appointment/appointment.controller.ts:39</a></div>
                         </td>
                     </tr>
 
@@ -294,6 +299,18 @@
 
 
                                         </tr>
+                                        <tr>
+                                                <td>user</td>
+                                            <td>
+                                                            <code><a href="../interfaces/AuthenticatedUser.html" target="_self" >AuthenticatedUser</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -317,6 +334,7 @@
                             <span class="modifier"></span>
                             <span class="modifier"></span>
                             <span class="modifier"></span>
+                            <span class="modifier"></span>
                             <span class="modifier">Async</span>
                         <span ><b>findAll</b></span>
                         <a href="#findAll"><span class="icon ion-ios-link"></span></a>
@@ -334,14 +352,14 @@
                 <td class="col-md-4">
                     <b>Decorators : </b>
                     <br />
-                    <code>@Get()<br />@UseGuards(JwtAuthGuard, RolesGuard)<br />@Roles(&#x27;admin&#x27;, &#x27;staff&#x27;)<br /></code>
+                    <code>@Get()<br />@UseGuards(RolesGuard)<br />@Roles(&#x27;admin&#x27;, &#x27;staff&#x27;)<br />@ApiOperation({summary: &#x27;Get all appointments (Admin/Staff only)&#x27;})<br /></code>
                 </td>
             </tr>
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="43"
-                                    class="link-to-prism">src/modules/appointment/appointment.controller.ts:43</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="54"
+                                    class="link-to-prism">src/modules/appointment/appointment.controller.ts:54</a></div>
                         </td>
                     </tr>
 
@@ -387,8 +405,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="109"
-                                    class="link-to-prism">src/modules/appointment/appointment.controller.ts:109</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="120"
+                                    class="link-to-prism">src/modules/appointment/appointment.controller.ts:120</a></div>
                         </td>
                     </tr>
 
@@ -464,8 +482,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="103"
-                                    class="link-to-prism">src/modules/appointment/appointment.controller.ts:103</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="114"
+                                    class="link-to-prism">src/modules/appointment/appointment.controller.ts:114</a></div>
                         </td>
                     </tr>
 
@@ -528,7 +546,7 @@
             <tr>
                 <td class="col-md-4">
                         <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>findUserAppointments(user: <a href="../entitys/User.html" target="_self">UserEntity</a>)</code>
+                    <code>findUserAppointments(user: <a href="../interfaces/AuthenticatedUser.html" target="_self">AuthenticatedUser</a>)</code>
                 </td>
             </tr>
 
@@ -536,14 +554,14 @@
                 <td class="col-md-4">
                     <b>Decorators : </b>
                     <br />
-                    <code>@Get(&#x27;mine&#x27;)<br />@UseGuards(JwtAuthGuard)<br /></code>
+                    <code>@Get(&#x27;mine&#x27;)<br />@ApiOperation({summary: &#x27;Get user appointments&#x27;})<br /></code>
                 </td>
             </tr>
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="50"
-                                    class="link-to-prism">src/modules/appointment/appointment.controller.ts:50</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="61"
+                                    class="link-to-prism">src/modules/appointment/appointment.controller.ts:61</a></div>
                         </td>
                     </tr>
 
@@ -566,7 +584,7 @@
                                         <tr>
                                                 <td>user</td>
                                             <td>
-                                                            <code><a href="../entitys/User.html" target="_self" >UserEntity</a></code>
+                                                            <code><a href="../interfaces/AuthenticatedUser.html" target="_self" >AuthenticatedUser</a></code>
                                             </td>
 
                                             <td>
@@ -619,8 +637,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="94"
-                                    class="link-to-prism">src/modules/appointment/appointment.controller.ts:94</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="105"
+                                    class="link-to-prism">src/modules/appointment/appointment.controller.ts:105</a></div>
                         </td>
                     </tr>
 
@@ -698,8 +716,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="66"
-                                    class="link-to-prism">src/modules/appointment/appointment.controller.ts:66</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="77"
+                                    class="link-to-prism">src/modules/appointment/appointment.controller.ts:77</a></div>
                         </td>
                     </tr>
 
@@ -777,8 +795,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="77"
-                                    class="link-to-prism">src/modules/appointment/appointment.controller.ts:77</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="88"
+                                    class="link-to-prism">src/modules/appointment/appointment.controller.ts:88</a></div>
                         </td>
                     </tr>
 
@@ -868,8 +886,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="58"
-                                    class="link-to-prism">src/modules/appointment/appointment.controller.ts:58</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="69"
+                                    class="link-to-prism">src/modules/appointment/appointment.controller.ts:69</a></div>
                         </td>
                     </tr>
 
@@ -903,7 +921,7 @@
             <tr>
                 <td class="col-md-4">
                         <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>remove(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, user: <a href="../entitys/User.html" target="_self">UserEntity</a>)</code>
+                    <code>remove(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, user: <a href="../interfaces/AuthenticatedUser.html" target="_self">AuthenticatedUser</a>)</code>
                 </td>
             </tr>
 
@@ -911,14 +929,14 @@
                 <td class="col-md-4">
                     <b>Decorators : </b>
                     <br />
-                    <code>@Delete(&#x27;:id&#x27;)<br />@HttpCode(HttpStatus.NO_CONTENT)<br />@UseGuards(JwtAuthGuard)<br /></code>
+                    <code>@Delete(&#x27;:id&#x27;)<br />@HttpCode(HttpStatus.NO_CONTENT)<br />@ApiOperation({summary: &#x27;Delete appointment&#x27;})<br /></code>
                 </td>
             </tr>
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="160"
-                                    class="link-to-prism">src/modules/appointment/appointment.controller.ts:160</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="171"
+                                    class="link-to-prism">src/modules/appointment/appointment.controller.ts:171</a></div>
                         </td>
                     </tr>
 
@@ -953,7 +971,7 @@
                                         <tr>
                                                 <td>user</td>
                                             <td>
-                                                            <code><a href="../entitys/User.html" target="_self" >UserEntity</a></code>
+                                                            <code><a href="../interfaces/AuthenticatedUser.html" target="_self" >AuthenticatedUser</a></code>
                                             </td>
 
                                             <td>
@@ -993,7 +1011,7 @@
             <tr>
                 <td class="col-md-4">
                         <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>update(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, updateAppointmentDto: <a href="../classes/UpdateAppointmentDto.html" target="_self">UpdateAppointmentDto</a>, user: <a href="../entitys/User.html" target="_self">UserEntity</a>)</code>
+                    <code>update(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, updateAppointmentDto: <a href="../classes/UpdateAppointmentDto.html" target="_self">UpdateAppointmentDto</a>, user: <a href="../interfaces/AuthenticatedUser.html" target="_self">AuthenticatedUser</a>)</code>
                 </td>
             </tr>
 
@@ -1001,14 +1019,14 @@
                 <td class="col-md-4">
                     <b>Decorators : </b>
                     <br />
-                    <code>@Patch(&#x27;:id&#x27;)<br />@UseGuards(JwtAuthGuard)<br /></code>
+                    <code>@Patch(&#x27;:id&#x27;)<br />@ApiOperation({summary: &#x27;Update appointment&#x27;})<br /></code>
                 </td>
             </tr>
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="116"
-                                    class="link-to-prism">src/modules/appointment/appointment.controller.ts:116</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="127"
+                                    class="link-to-prism">src/modules/appointment/appointment.controller.ts:127</a></div>
                         </td>
                     </tr>
 
@@ -1055,7 +1073,7 @@
                                         <tr>
                                                 <td>user</td>
                                             <td>
-                                                            <code><a href="../entitys/User.html" target="_self" >UserEntity</a></code>
+                                                            <code><a href="../interfaces/AuthenticatedUser.html" target="_self" >AuthenticatedUser</a></code>
                                             </td>
 
                                             <td>
@@ -1110,8 +1128,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="141"
-                                    class="link-to-prism">src/modules/appointment/appointment.controller.ts:141</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="152"
+                                    class="link-to-prism">src/modules/appointment/appointment.controller.ts:152</a></div>
                         </td>
                     </tr>
 
@@ -1196,34 +1214,45 @@ import { RolesGuard } from &#x27;../../auth/guards/roles.guard&#x27;;
 import { Roles } from &#x27;../../auth/decorators/roles.decorator&#x27;;
 import { AppointmentStatus } from &#x27;./entities/appointment.entity&#x27;;
 import { User } from &#x27;../../auth/decorators/user.decorator&#x27;;
-import { User as UserEntity } from &#x27;../../users/entities/user.entity&#x27;;
+import { AuthenticatedUser } from &#x27;../../auth/jwt.strategy&#x27;;
+import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from &#x27;@nestjs/swagger&#x27;;
 
+@ApiTags(&#x27;Appointments&#x27;)
 @Controller(&#x27;appointments&#x27;)
+@UseGuards(JwtAuthGuard) 
+@ApiBearerAuth(&#x27;JWT-auth&#x27;)
 export class AppointmentController {
   private readonly logger &#x3D; new Logger(AppointmentController.name);
 
   constructor(private readonly appointmentService: AppointmentService) {}
 
   @Post()
-  async create(@Body() createAppointmentDto: CreateAppointmentDto) {
-    this.logger.log(
-      &#x60;Creating appointment for ${createAppointmentDto.firstName} ${createAppointmentDto.lastName}&#x60;,
-    );
+  @ApiOperation({ summary: &#x27;Create new appointment&#x27; })
+  @ApiResponse({ status: 201, description: &#x27;Appointment created successfully&#x27; })
+  async create(
+    @Body() createAppointmentDto: CreateAppointmentDto,
+    @User() user: AuthenticatedUser, 
+  ) {
+    // Set the userId from the authenticated user
+    createAppointmentDto.userId &#x3D; user.id;
+
+    this.logger.log(&#x60;Creating appointment for user ${user.id}&#x60;);
     return this.appointmentService.create(createAppointmentDto);
   }
 
   @Get()
-  @UseGuards(JwtAuthGuard, RolesGuard)
+  @UseGuards(RolesGuard)
   @Roles(&#x27;admin&#x27;, &#x27;staff&#x27;)
+  @ApiOperation({ summary: &#x27;Get all appointments (Admin/Staff only)&#x27; })
   async findAll() {
     this.logger.log(&#x27;Fetching all appointments&#x27;);
     return this.appointmentService.findAll();
   }
 
   @Get(&#x27;mine&#x27;)
-  @UseGuards(JwtAuthGuard)
-  async findUserAppointments(@User() user: UserEntity) {
-    this.logger.log(&#x60;Fetching appointments for user: ${user.id}&#x60;);
+  @ApiOperation({ summary: &#x27;Get user appointments&#x27; })
+  async findUserAppointments(@User() user: AuthenticatedUser) {
+    this.logger.log(&#x60;Fetching appointments for user ${user.id}&#x60;);
     return this.appointmentService.findAllByUser(user.id);
   }
 
@@ -1287,11 +1316,11 @@ export class AppointmentController {
   }
 
   @Patch(&#x27;:id&#x27;)
-  @UseGuards(JwtAuthGuard)
+  @ApiOperation({ summary: &#x27;Update appointment&#x27; })
   async update(
     @Param(&#x27;id&#x27;) id: string,
     @Body() updateAppointmentDto: UpdateAppointmentDto,
-    @User() user: UserEntity,
+    @User() user: AuthenticatedUser, 
   ) {
     // Get the appointment to check if it belongs to the user
     const appointment &#x3D; await this.appointmentService.findOne(+id);
@@ -1331,8 +1360,11 @@ export class AppointmentController {
 
   @Delete(&#x27;:id&#x27;)
   @HttpCode(HttpStatus.NO_CONTENT)
-  @UseGuards(JwtAuthGuard)
-  async remove(@Param(&#x27;id&#x27;) id: string, @User() user: UserEntity) {
+  @ApiOperation({ summary: &#x27;Delete appointment&#x27; })
+  async remove(
+    @Param(&#x27;id&#x27;) id: string,
+    @User() user: AuthenticatedUser, 
+  ) {
     // Get the appointment to check if it belongs to the user
     const appointment &#x3D; await this.appointmentService.findOne(+id);
 
