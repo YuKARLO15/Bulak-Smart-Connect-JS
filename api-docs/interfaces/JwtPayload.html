@@ -290,6 +290,13 @@ interface JwtPayload {
   roles?: string[];
 }
 
+// Strategy for validating JWT tokens in NestJS
+export interface AuthenticatedUser {
+  id: number;
+  email: string;
+  roles: Array&lt;{ name: string }&gt;;
+}
+
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(private configService: ConfigService) {
@@ -306,7 +313,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  validate(payload: JwtPayload): JwtPayload {
+  validate(payload: JwtPayload): AuthenticatedUser {
     // Validation for the payload
     if (!payload || payload.sub &#x3D;&#x3D;&#x3D; undefined || isNaN(Number(payload.sub))) {
       throw new UnauthorizedException(&#x27;Invalid token payload&#x27;);
@@ -314,9 +321,15 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
     const userId &#x3D; Number(payload.sub);
     const email &#x3D; String(payload.email || &#x27;&#x27;);
-    const roles &#x3D; Array.isArray(payload.roles) ? payload.roles : [];
+    const roles &#x3D; Array.isArray(payload.roles)
+      ? payload.roles.map(role &#x3D;&gt; ({ name: role }))
+      : [];
 
-    return { sub: userId, email, roles };
+    return {
+      id: userId,
+      email,
+      roles
+    };
   }
 }
 </code></pre>

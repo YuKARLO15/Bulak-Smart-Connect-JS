@@ -234,7 +234,7 @@
                 <tr>
                     <td class="col-md-4">
                         <i>Default value : </i><code>createParamDecorator(
-  (data: unknown, ctx: ExecutionContext) &#x3D;&gt; {
+  (data: unknown, ctx: ExecutionContext): AuthenticatedUser &#x3D;&gt; {
     const request &#x3D; ctx.switchToHttp().getRequest&lt;RequestWithUser&gt;();
     return request.user;
   },
