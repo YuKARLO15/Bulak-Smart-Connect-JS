@@ -69,10 +69,29 @@
 .BackButtonCTCBirth,
 .SubmitButtonCTCBirth {
   min-width: 150px;
-}
 
+
+}
+.SubmitButtonCTCBirth {
+ background-color: #1c4d5a !important;
+ color: white !important;
+}
+.BackButtonCTCBirth {
+  color: #1c4d5a !important;
+  border-color: #1c4d5a !important;
+}
 .SuccessAlertCTCBirth {
   margin: 20px 0;
+}
+
+.MainContainerCTCBirth {
+  transition: margin-left ease;
+  margin-left: 0;
+}
+
+.MainContainerCTCBirth.sidebar-open {
+  margin-left: 250px;
+  width: 80vw;
 }
 
 @media (max-width: 600px) {
