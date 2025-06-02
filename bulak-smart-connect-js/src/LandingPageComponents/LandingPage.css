@@ -129,7 +129,6 @@
   margin-left: 50px !important;
   margin-right: 50px !important;
 }
-
 .KeyFeaturesSectionLanding {
   margin: 60px 0;
 }
@@ -137,45 +136,43 @@
 .KeyFeaturesTitleLanding {
   text-align: center;
   margin-bottom: 50px !important;
-  color: #1c4d5a;
+  color:#1c4d5a !important;
   font-size: 40px !important;
   font-weight: 600 !important;
+ background-color: #d5dcdd !important;
+  border-radius: 10px !important;
+  padding: 10px;
 }
-
 .FeatureItemLanding {
-  background-color: #1c4d5a;
-  color: white;
-  border-radius: 16px;
+  background-color: #1c4d5a !important;
+color: white !important;
+border-radius: 20px !important;
   padding: 30px;
   margin-bottom: 30px;
-}
-
-.FeatureIconContainerLanding {
+  transition: box-shadow 0.2s;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.04);
   display: flex;
-  justify-content: center;
   align-items: center;
-  background-color: white;
-  border-radius: 50%;
-  width: 100px;
-  height: 100px;
-  margin: 0 auto;
+  justify-content: center;
+}
+.FeatureItemLanding:hover,
+.FeatureItemLanding:focus-within  {
+  box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+  background-color: #d5dcdd !important;
+  color: #1c4d5a !important;
+  transition: color 0.2s;
+}
+.FeatureItemLanding:hover .FeatureIconLanding,
+.FeatureItemLanding:focus-within .FeatureIconLanding {
+  color: #1c4d5a !important;
+  transition: color 0.2s;
 }
 
 .FeatureIconLanding {
   font-size: 50px !important;
-  color: #1a3b5d !important;
+  color: #ffffff !important;
+  margin-right: 16px;
 }
-
-.FeatureTitleLanding {
-  margin-bottom: 30px !important;
-  font-weight: 600 !important;
-}
-
-.FeatureDescriptionLanding {
-  line-height: 1.6;
-}
-
-
 
 .HeroImageLanding img {
   width: 100%;

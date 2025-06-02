@@ -80,6 +80,82 @@ const LandingPage = () => {
   </Grid>
 </Box>
 
+          {/* Key Features */}
+        <Box className="KeyFeaturesSectionLanding" sx={{ mt: 10, mb: 8 }}>
+          <Typography
+            variant="h4"
+            className="KeyFeaturesTitleLanding"
+            sx={{ textAlign: 'center', fontWeight: 600, fontFamily: 'Roboto, Arial, sans-serif' }}
+            component="h2"
+          >
+            Key Features
+          </Typography>
+
+          {/* Feature Cards */}
+          <Grid container spacing={4}>
+            <Grid item xs={12} md={4}>
+              <Link to={isAuthenticated ? '/AppointmentForm' : '/LogIn'} style={{ textDecoration: 'none' }}>
+                <Card className="FeatureItemLanding" sx={{ minHeight: 240, boxShadow: 3 }}>
+                  <CardContent>
+                    <Box display="flex" alignItems="center">
+                      <CalendarTodayIcon className="FeatureIconLanding" sx={{ fontSize: 50, mr: 2 }} />
+                      <Box>
+                        <Typography variant="h6" className="FeatureTitleLanding" sx={{ fontWeight: 600 }}>
+                          Book an Appointment
+                        </Typography>
+                        <Typography variant="body2" className="FeatureDescriptionLanding">
+                          Schedule a slot online for birth, marriage, and death certificate applications. No more long waits!
+                        </Typography>
+                      </Box>
+                    </Box>
+                  </CardContent>
+                </Card>
+              </Link>
+            </Grid>
+
+            <Grid item xs={12} md={4}>
+              <Link to={isAuthenticated ? '/ApplicationForm' : '/LogIn'} style={{ textDecoration: 'none' }}>
+                <Card className="FeatureItemLanding" sx={{ minHeight: 240, boxShadow: 3 }}>
+                  <CardContent>
+                    <Box display="flex" alignItems="center">
+                      <DescriptionIcon className="FeatureIconLanding" sx={{ fontSize: 50, mr: 2 }} />
+                      <Box>
+                        <Typography variant="h6" className="FeatureTitleLanding" sx={{ fontWeight: 600 }}>
+                          Document Application
+                        </Typography>
+                        <Typography variant="body2" className="FeatureDescriptionLanding">
+                          Apply for certificates online, upload documents, and track application status in real time.
+                        </Typography>
+                      </Box>
+                    </Box>
+                  </CardContent>
+                </Card>
+              </Link>
+            </Grid>
+
+            <Grid item xs={12} md={4}>
+              <Link to={isAuthenticated ? '/WalkInForm' : '/LogIn'} style={{ textDecoration: 'none' }}>
+                <Card className="FeatureItemLanding" sx={{ minHeight: 240, boxShadow: 3 }}>
+                  <CardContent>
+                    <Box display="flex" alignItems="center">
+                      <DirectionsWalkOutlinedIcon className="FeatureIconLanding" sx={{ fontSize: 50, mr: 2 }} />
+                      <Box>
+                        <Typography variant="h6" className="FeatureTitleLanding" sx={{ fontWeight: 600 }}>
+                          Smart Walk-In Queue
+                        </Typography>
+                        <Typography variant="body2" className="FeatureDescriptionLanding">
+                          Get real-time queue updates and manage your time efficiently while waiting.
+                        </Typography>
+                      </Box>
+                    </Box>
+                  </CardContent>
+                </Card>
+              </Link>
+            </Grid>
+          </Grid>
+        </Box>
+
+
         <Box className="AboutSectionLanding">
           <Grid container spacing={4} alignItems="center">
             <Grid item xs={12} md={3}>
@@ -106,86 +182,6 @@ const LandingPage = () => {
               </Card>
             </Grid>
           </Grid>
-        </Box>
-
-        <Box className="KeyFeaturesSectionLanding">
-          <Typography variant="h5" className="KeyFeaturesTitleLanding">
-            KEY FEATURES
-          </Typography>
-          <Link to={isAuthenticated ? '/AppointmentForm' : '/LogIn'}>
-            <Box className="FeatureItemLanding">
-              <Grid container spacing={2} alignItems="center">
-                <Grid item xs={12} md={3}>
-                  <Box className="FeatureIconContainerLanding">
-                    <CalendarTodayIcon className="FeatureIconLanding" />
-                  </Box>
-                </Grid>
-                <Grid item xs={12} md={9}>
-                  <Box className="FeatureContentLanding">
-                    <Typography variant="h6" className="FeatureTitleLanding">
-                      BOOK AN APPOINTMENT
-                    </Typography>
-                    <Typography variant="body1" className="FeatureDescriptionLanding">
-                      Book a slot online for birth, marriage, and death certificate applications,
-                      eliminating the need for long waits.
-                    </Typography>
-                  </Box>
-                </Grid>
-              </Grid>
-            </Box>
-          </Link>
-
-          <Link to={isAuthenticated ? '/ApplicationForm' : '/LogIn'}>
-            <Box className="FeatureItemLanding">
-              <Grid container spacing={2} alignItems="center">
-                <Grid item xs={12} md={9}>
-                  <Box className="FeatureContentLanding">
-                    <Typography variant="h6" className="FeatureTitleLanding">
-                      DOCUMENT APPLICATION
-                    </Typography>
-                    <Typography variant="body1" className="FeatureDescriptionLanding">
-                      Apply for important documents with ease through Bulak LGU Smart Connect!
-                      Submit your birth, marriage, or death certificate application online, upload
-                      the required documents, and track your request in real time. Get notified once
-                      your application is processed and ready for pickup no more unnecessary visits
-                      or long waits. Convenient, efficient, and hassle-free!
-                    </Typography>
-                  </Box>
-                </Grid>
-                <Grid item xs={12} md={3}>
-                  <Box className="FeatureIconContainerLanding">
-                    <DescriptionIcon className="FeatureIconLanding" />
-                  </Box>
-                </Grid>
-              </Grid>
-            </Box>
-          </Link>
-
-     
-          <Link to={isAuthenticated ? '/WalkInForm' : '/LogIn'}>
-            <Box className="FeatureItemLanding">
-              <Grid container spacing={2} alignItems="center">
-                <Grid item xs={12} md={9}>
-                  <Box className="FeatureContentLanding">
-                    <Typography variant="h6" className="FeatureTitleLanding">
-                      SMART WALK-IN QUEUE
-                    </Typography>
-                    <Typography variant="body1" className="FeatureDescriptionLanding">
-                      The Smart Walk-In feature of Bulak LGU Smart Connect provides you real-time
-                      updates on the queue status, allowing you to see how many numbers are ahead of
-                      you. This ensures transparency, reduces waiting uncertainty, For you to manage
-                      your time efficiently while waiting for their turn.
-                    </Typography>
-                  </Box>
-                </Grid>
-                <Grid item xs={12} md={3}>
-                  <Box className="FeatureIconContainerLanding">
-                    <DirectionsWalkOutlinedIcon className="FeatureIconLanding" />
-                  </Box>
-                </Grid>
-              </Grid>
-            </Box>
-          </Link>
         </Box>
         <Box className="AnnouncementButtonContainer">
           <FloatingAnnouncementButton />
