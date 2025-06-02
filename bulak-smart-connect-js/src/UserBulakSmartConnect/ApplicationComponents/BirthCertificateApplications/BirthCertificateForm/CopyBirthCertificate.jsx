@@ -4,9 +4,11 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import './CopyBirthCertificate.css';
 // Import your document application service
 import { documentApplicationService } from '../../../../services/documentApplicationService';
+import NavBar from '../../../../NavigationComponents/NavSide';
 
 const CopyBirthCertificate = ({ formData = {}, handleChange }) => {
   const navigate = useNavigate();
+   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [showExtension, setShowExtension] = useState(formData.hasExtension || false);
   const [localFormData, setLocalFormData] = useState(formData || {});
   const [errors, setErrors] = useState({});
@@ -275,7 +277,9 @@ const CopyBirthCertificate = ({ formData = {}, handleChange }) => {
   };
 
   return (
-    <Box className="CopyBirthCertificateContainer">
+
+       <Box className={`CopyBirthCertificateContainer ${isSidebarOpen ? 'sidebar-open' : ''}`}>
+          <NavBar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
       {Object.keys(errors).length > 0 && (
         <div
           className="ErrorSummary"
