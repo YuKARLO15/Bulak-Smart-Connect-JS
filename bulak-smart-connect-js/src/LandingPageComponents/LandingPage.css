@@ -182,7 +182,13 @@
   height: auto;
   filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.2));
 }
+.AnnouncementButtonContainer {
+position: fixed;
+  bottom: 20px;
+  right: 30px;
 
+
+}
 @media (max-width: 960px) {
   .HeroLanding {
     text-align: center;
@@ -202,7 +208,7 @@ flex-direction: column;
   .FeatureIconContainerLanding {
     margin-bottom: 20px;
   }
-  .PhTimeComponent {
+  .AnnouncementBox , .PhTimeComponent {
     display: flex;
     position: relative;
   top: 0;

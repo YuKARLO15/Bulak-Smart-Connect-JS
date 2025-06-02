@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, Button, Container, Grid, Typography, Card, CardContent } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import './LandingPage.css';
@@ -14,16 +14,45 @@ import BulakLGULogo from './LandingPageAssets/BulakLGULogo.png';
 import HeroBg from './LandingPageAssets/HeroBg.JPEG';
 import PhTimeComponent from './PhTimeComponent';
 import { useAuth } from '../context/AuthContext';
+import { announcementService } from '../services/announcementService';
+import FloatingAnnouncementButton from './FloatingAnnouncement';
 
 const LandingPage = () => {
   const { isAuthenticated } = useAuth();
 
+
+    useEffect(() => {
+      loadRecentAnnouncements();
+    }, []);
+  
+    const loadRecentAnnouncements = async () => {
+      try {
+        setAnnouncementLoading(true);
+        const data = await announcementService.getRecentAnnouncements(3);
+        setAnnouncements(data);
+        setAnnouncementError(null);
+      } catch (error) {
+        console.error('Failed to load announcements:', error);
+        setAnnouncementError('Failed to load announcements');
+        // Keep empty array as fallback
+        setAnnouncements([]);
+      } finally {
+        setAnnouncementLoading(false);
+      }
+  };
+
+  
   return (
     <Box className="LandingContainer"
    >
       <NavBar />
+
+      
       <div className="PhTimeComponent">
+ 
         <PhTimeComponent />{' '}
+
+        
       </div>
       <Container className="">
 <Box className="HeroLanding">
@@ -158,6 +187,9 @@ const LandingPage = () => {
             </Box>
           </Link>
         </Box>
+        <Box className="AnnouncementButtonContainer">
+          <FloatingAnnouncementButton />
+          </Box>
       </Container>
       <Footer />
     </Box>
