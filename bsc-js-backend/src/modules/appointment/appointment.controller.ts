@@ -21,34 +21,45 @@ import { RolesGuard } from '../../auth/guards/roles.guard';
 import { Roles } from '../../auth/decorators/roles.decorator';
 import { AppointmentStatus } from './entities/appointment.entity';
 import { User } from '../../auth/decorators/user.decorator';
-import { User as UserEntity } from '../../users/entities/user.entity';
+import { AuthenticatedUser } from '../../auth/jwt.strategy';
+import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 
+@ApiTags('Appointments')
 @Controller('appointments')
+@UseGuards(JwtAuthGuard) 
+@ApiBearerAuth('JWT-auth')
 export class AppointmentController {
   private readonly logger = new Logger(AppointmentController.name);
 
   constructor(private readonly appointmentService: AppointmentService) {}
 
   @Post()
-  async create(@Body() createAppointmentDto: CreateAppointmentDto) {
-    this.logger.log(
-      `Creating appointment for ${createAppointmentDto.firstName} ${createAppointmentDto.lastName}`,
-    );
+  @ApiOperation({ summary: 'Create new appointment' })
+  @ApiResponse({ status: 201, description: 'Appointment created successfully' })
+  async create(
+    @Body() createAppointmentDto: CreateAppointmentDto,
+    @User() user: AuthenticatedUser, 
+  ) {
+    // Set the userId from the authenticated user
+    createAppointmentDto.userId = user.id;
+
+    this.logger.log(`Creating appointment for user ${user.id}`);
     return this.appointmentService.create(createAppointmentDto);
   }
 
   @Get()
-  @UseGuards(JwtAuthGuard, RolesGuard)
+  @UseGuards(RolesGuard)
   @Roles('admin', 'staff')
+  @ApiOperation({ summary: 'Get all appointments (Admin/Staff only)' })
   async findAll() {
     this.logger.log('Fetching all appointments');
     return this.appointmentService.findAll();
   }
 
   @Get('mine')
-  @UseGuards(JwtAuthGuard)
-  async findUserAppointments(@User() user: UserEntity) {
-    this.logger.log(`Fetching appointments for user: ${user.id}`);
+  @ApiOperation({ summary: 'Get user appointments' })
+  async findUserAppointments(@User() user: AuthenticatedUser) {
+    this.logger.log(`Fetching appointments for user ${user.id}`);
     return this.appointmentService.findAllByUser(user.id);
   }
 
@@ -112,11 +123,11 @@ export class AppointmentController {
   }
 
   @Patch(':id')
-  @UseGuards(JwtAuthGuard)
+  @ApiOperation({ summary: 'Update appointment' })
   async update(
     @Param('id') id: string,
     @Body() updateAppointmentDto: UpdateAppointmentDto,
-    @User() user: UserEntity,
+    @User() user: AuthenticatedUser, 
   ) {
     // Get the appointment to check if it belongs to the user
     const appointment = await this.appointmentService.findOne(+id);
@@ -156,8 +167,11 @@ export class AppointmentController {
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  @UseGuards(JwtAuthGuard)
-  async remove(@Param('id') id: string, @User() user: UserEntity) {
+  @ApiOperation({ summary: 'Delete appointment' })
+  async remove(
+    @Param('id') id: string,
+    @User() user: AuthenticatedUser, 
+  ) {
     // Get the appointment to check if it belongs to the user
     const appointment = await this.appointmentService.findOne(+id);
 
