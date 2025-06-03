@@ -1,15 +1,28 @@
 .QrCodeContainerAppointment {
   min-height: 100vh;
   width: 100vw;
-  padding: 30px;
   display: flex;
   justify-content: center;
+  align-items: center;
   background-color: #f5f7fa;
   transition: margin-left 0.3s ease;
+  display: flex;
+  flex-direction: column;
 }
 
 .QrCodeContainerAppointment.sidebar-open {
   margin-left: 250px;
+}
+
+.TitleNavAppointmenSummary {
+   background-color: #184a5b;
+  font-size: 25px !important;
+  justify-content: center;
+  font-weight: 600 !important;
+  display: flex;
+  padding: 3vh;
+  width: 100vw;
+  margin-bottom: 50px !important;
 }
 
 .QueueInfoAppointment {
@@ -17,10 +30,13 @@
   max-width: 800px;
   width: 100%;
   border-radius: 12px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+ box-shadow: 2px 10px 13px 0px rgba(28,77,90,0.25);
+-webkit-box-shadow: 2px 10px 13px 0px rgba(28,77,90,0.25);
+-moz-box-shadow: 2px 10px 13px 0px rgba(28,77,90,0.25);
   overflow: hidden;
   margin-top: 30px;
   padding: 30px;
+
 }
 
 .QueueInfoAppointment h2 {
@@ -111,6 +127,20 @@
   text-align: center;
   margin-top: 30px;
   padding: 14px 25px;
+  background-color: #ffffff;
+  color: #184a5b;
+  border-radius: 6px;
+  text-decoration: underline;
+  font-weight: 600;
+  font-size: 16px;
+box-shadow: none !important;
+  width: 100%;
+}
+.CompleteAppointment {
+    display: block;
+  text-align: center;
+  margin-top: 30px;
+  padding: 14px 25px;
   background-color: #184a5b;
   color: white;
   border-radius: 6px;
@@ -120,9 +150,9 @@
   transition: all 0.2s ease;
   width: 100%;
 }
-
 .RequirementsLinkAppointment:hover {
-  background-color: #0f3a48;
+  background-color: #e7f4f8;
+  color: #184a5b;
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
@@ -154,11 +184,12 @@
   margin: 0;
 }
 
+
+
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
-  .QrCodeContainerAppointment {
-    padding: 15px;
-  }
+ 
   
   .QueueInfoAppointment {
     padding: 20px;

@@ -6,6 +6,7 @@ import './AppointmentDashboard.css';
 import RecentAppointments from './RecentAppointment';
 import AppointmentContainer from './AppointmentContent';
 import { announcementService } from '../../services/announcementService';
+import FloatingAnnouncementButton from '../../LandingPageComponents/FloatingAnnouncement';
 
 const AppointmentDashboard = () => {
   const [showAppointmentContent, setShowAppointmentContent] = useState(false);
@@ -85,32 +86,11 @@ const AppointmentDashboard = () => {
                     Click on a date to book an appointment
                   </Typography>
                 </CardContent>
-              </Card>
+                </Card>
+                 <Box className="AnnouncementButtonContainer">
+          <FloatingAnnouncementButton />
+          </Box>
 
-              {/* Announcement */}
-              <Card className="AnnouncementAppointment">
-                <CardContent>
-                  <Typography variant="h6" className='SectionTitleAppointment'>ANNOUNCEMENT</Typography>
-                  {announcementLoading ? (
-                    <Typography variant="body1" className='AnnouncementTextAppointment'>Loading...</Typography>
-                  ) : announcements.length > 0 ? (
-                    announcements.map((announcement) => (
-                      <div key={announcement.id} style={{ marginBottom: '10px', padding: '10px', borderBottom: '1px solid #eee' }}>
-                        <Typography variant="subtitle2" style={{ fontWeight: 'bold' }} className='AnnouncementTextAppointment'>
-                          {announcement.title}
-                        </Typography>
-                        <Typography variant="body2" style={{ marginTop: '5px' }} className='AnnouncementTextAppointment'>
-                          {announcement.description}
-                        </Typography>
-                      </div>
-                    ))
-                  ) : (
-                    <Typography variant="body2" style={{ color: '#666', fontStyle: 'italic' }}>
-                      No announcements available
-                    </Typography>
-                  )}
-                </CardContent>
-              </Card>
             </Box>
           </Box>
         </>
