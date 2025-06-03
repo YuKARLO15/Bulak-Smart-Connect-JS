@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate} from 'react-router-dom';
 import { Radio, RadioGroup, FormControlLabel, Typography, Box, Paper, Button } from '@mui/material';
 import './BirthCertificateDashboard.css';
 import NavBar from '../../../NavigationComponents/NavSide';
@@ -9,8 +9,31 @@ const BirthCertificateDashboard = () => {
   const [selectedOption, setSelectedOption] = useState('');
   const [agreedPrivacy, setAgreedPrivacy] = useState(false);
   const [agreedTerms, setAgreedTerms] = useState(false);
-  const navigate = useNavigate();
+    const [hasVisitedPrivacyPolicy, setHasVisitedPrivacyPolicy] = useState(false);
 
+  const navigate = useNavigate();
+  useEffect(() => {
+    const visited = sessionStorage.getItem('visitedPrivacyPolicy');
+    if (visited === 'true') {
+      setHasVisitedPrivacyPolicy(true);
+    }
+  }, []);
+
+  const handlePrivacyPolicyClick = () => {
+    // Open the privacy policy in a new window
+    const policyWindow = window.open('/PrivacyPolicy', '_blank');
+    
+    // Set up a listener to detect when the window is closed
+    if (policyWindow) {
+      const checkClosed = setInterval(() => {
+        if (policyWindow.closed) {
+          clearInterval(checkClosed);
+          sessionStorage.setItem('visitedPrivacyPolicy', 'true');
+          setHasVisitedPrivacyPolicy(true);
+        }
+      }, 1000);
+    }
+  };
   const handleNext = () => {
     if (!selectedOption) {
       alert('Please select an option before proceeding.');
@@ -122,15 +145,46 @@ const BirthCertificateDashboard = () => {
           </RadioGroup>
         </Box>
 
-        <Box className="Section">
+  <Box className="Section">
           <Typography variant="h6" className="SectionTitle">
             Data Privacy Notice
           </Typography>
+          <Box sx={{ mb: 2 }}  className='dataPrivacyNoticeContainer' >
+            <Typography variant="body2" sx={{ mb: 1 }} className='dataPrivacyNotice'>
+              Please read our{' '}
+              <Button 
+                variant="text" 
+                color="primary" 
+                onClick={handlePrivacyPolicyClick}
+                sx={{ p: 0, textTransform: 'none', textDecoration: 'underline' }}
+                className='dataPrivacyNoticeLink'
+              >
+                Data Privacy Policy
+              </Button>{' '}
+              before proceeding.
+            </Typography>
+            {!hasVisitedPrivacyPolicy && (
+              <Typography variant="body2" color="error">
+                You must read the Privacy Policy before you can agree.
+              </Typography>
+            )}
+          </Box>
           <FormControlLabel
             control={
-              <Radio checked={agreedPrivacy} onChange={() => setAgreedPrivacy(!agreedPrivacy)} />
+              <Radio 
+                checked={agreedPrivacy} 
+                onChange={() => setAgreedPrivacy(!agreedPrivacy)}
+                disabled={!hasVisitedPrivacyPolicy}
+              />
             }
-            label="I agree to the Data Privacy Notice"
+            label={
+              <Typography 
+                variant="body1" 
+                color={!hasVisitedPrivacyPolicy ? "text.disabled" : "text.primary"}
+              >
+                I agree to the Data Privacy Notice
+              </Typography>
+            }
             className="BirthDashRadioGroup"
           />
         </Box>

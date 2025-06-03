@@ -1,13 +1,23 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './TermsAndCondition.css';
-// You can remove the backgroundImage import since we're using CSS now
-// import backgroundImage from './MunicipalImage/municipal.jpg';
+
 
 const PrivacyPolicy = () => {
+
+   useEffect(() => {
+  
+    sessionStorage.setItem('visitedPrivacyPolicy', 'true');
+    
+
+    if (window.opener) {
+   
+      window.opener.postMessage('visited-privacy-policy', '*');
+    }
+  }, []);
   return (
     <div className="page-container">
       <div className="privacy-container">
-        <h1>Privacy Policy</h1>
+        <h1> Data Privacy Policy</h1>
         <p>
           <strong>Bulak LGU Smart Connect</strong> Bulak LGU Smart Connect is committed to
           protecting and respecting your personal data privacy. This website is operated by the
