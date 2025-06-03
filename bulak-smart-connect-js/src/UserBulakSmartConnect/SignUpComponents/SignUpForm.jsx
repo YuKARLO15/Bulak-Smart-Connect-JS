@@ -147,7 +147,7 @@ const SignUpForm = () => {
       <div className="Navigation">
         <NavBar />
       </div>
-      <h2 className='signup-label'>Signup Form</h2>
+      <h2 className='signup-label'>Sign Up Form</h2>
 
       <form onSubmit={handleSubmit}>
         <FullNameSection
@@ -195,7 +195,7 @@ const SignUpForm = () => {
         )}
 
         <button type="submit" className="signup-btn">
-          Signup
+          Sign Up
         </button>
         <div className="footer">
           Already have an account? <Link to="/LogIn">Sign in</Link>
