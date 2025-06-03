@@ -1,6 +1,7 @@
 import React from 'react';
 import '../SignUpComponents/ContactInformation.css';
 import '../SignUpComponents/SignUpForm.css';
+import UpdatesCheckbox from './UpdateCheckbox';
 
 const ContactInformationSection = ({ formData, handleInputChange, errors }) => (
   <div className="form-group">
@@ -40,6 +41,9 @@ const ContactInformationSection = ({ formData, handleInputChange, errors }) => (
           required
         />
         {errors.email && <span className="error-message">{errors.email}</span>}
+          <div className="checkbox-wrapper">
+        <UpdatesCheckbox formData={formData} handleInputChange={handleInputChange} />
+      </div>
       </div>
     </div>
   </div>
