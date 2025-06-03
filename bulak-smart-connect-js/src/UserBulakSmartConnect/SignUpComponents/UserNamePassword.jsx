@@ -55,7 +55,7 @@ const UsernamePasswordSection = ({ formData, handleInputChange, errors, setError
         <input
           type="password"
           name="password"
-          placeholder="•••••••••"
+          placeholder="Create Password"
           value={formData.password}
           onChange={handleInputChange}
           required
@@ -71,7 +71,7 @@ const UsernamePasswordSection = ({ formData, handleInputChange, errors, setError
         <input
           type="password"
           name="confirmpassword"
-          placeholder="•••••••••"
+          placeholder="Confirm Password"
           value={formData.confirmpassword}
           onChange={handlePasswordValidation}
           required

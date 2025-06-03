@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import UsernamePasswordSection from './UserNamePassword';
 import FullNameSection from './FullName';
 import ContactInformationSection from './ContactInformation';
-import UpdatesCheckbox from './UpdateCheckbox';
+// import UpdatesCheckbox from './UpdateCheckbox';
 import NavBar from '../../NavigationComponents/NavBar';
 import DataPrivacy from './DataPrivacy';
 import '../SignUpComponents/ContactInformation.css';
@@ -147,7 +147,7 @@ const SignUpForm = () => {
       <div className="Navigation">
         <NavBar />
       </div>
-      <h2>Signup Form</h2>
+      <h2 className='signup-label'>Sign Up Form</h2>
 
       <form onSubmit={handleSubmit}>
         <FullNameSection
@@ -167,7 +167,7 @@ const SignUpForm = () => {
           errors={errors}
         />
         <DataPrivacy formData={formData} handleInputChange={handleInputChange} />
-        <UpdatesCheckbox formData={formData} handleInputChange={handleInputChange} />
+        {/* <UpdatesCheckbox formData={formData} handleInputChange={handleInputChange} /> */}
 
         {/* Visualization if working */}
         {isLoading && <div className="loading-message">Loading...</div>}
@@ -194,8 +194,8 @@ const SignUpForm = () => {
           </div>
         )}
 
-        <button type="submit" className="btn">
-          Signup
+        <button type="submit" className="signup-btn">
+          Sign Up
         </button>
         <div className="footer">
           Already have an account? <Link to="/LogIn">Sign in</Link>
