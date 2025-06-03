@@ -25,3 +25,9 @@ dist-ssr
 
 # Environment variables
 .env
+
+# PWA Development Files
+dev-dist/
+
+# PWA Build Files (if not already covered by dist/)
+dist/
