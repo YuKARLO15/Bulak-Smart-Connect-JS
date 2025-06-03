@@ -9,12 +9,14 @@
   box-shadow: 0px 4px 2px -2px rgb(228, 228, 228);
 }
 .LogoNavBar {
-  width: 50px;
+  width: 250px;
   margin-left: 50px;
 }
 .NavBarContainer Button {
   color: #184a5b;
   display: flex;
+    font-weight: 600 !important;
+    font-size: 16px !important;
 }
 .NavButtons {
   display: flex;
@@ -23,8 +25,25 @@
   justify-content: right;
   margin-left: auto;
   margin-right: 50px;
+  color: #184a5b !important;
+  font-weight: 600 !important;
 }
 .Logo {
   font-size: 2vw !important;
   color: #184a5b;
+}
+
+.ServiceIcon{
+  color: #184a5b !important;
+  font-weight: 600 !important;
+}
+.ServiceItem:hover {
+background-color: #d5dcdd!important;
+}
+.NavBarContainer a,
+.NavBarContainer a:visited,
+.NavBarContainer a:active,
+.NavBarContainer a:focus,
+.NavBarContainer a:hover {
+  text-decoration: none !important;
 }

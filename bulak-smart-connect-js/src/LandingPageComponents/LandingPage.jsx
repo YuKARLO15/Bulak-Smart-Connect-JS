@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, Button, Container, Grid, Typography, Card, CardContent } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import './LandingPage.css';
@@ -14,16 +14,47 @@ import BulakLGULogo from './LandingPageAssets/BulakLGULogo.png';
 import HeroBg from './LandingPageAssets/HeroBg.JPEG';
 import PhTimeComponent from './PhTimeComponent';
 import { useAuth } from '../context/AuthContext';
+import { announcementService } from '../services/announcementService';
+import FloatingAnnouncementButton from './FloatingAnnouncement';
 
 const LandingPage = () => {
   const { isAuthenticated } = useAuth();
 
+
+    useEffect(() => {
+      loadRecentAnnouncements();
+    }, []);
+  
+    const loadRecentAnnouncements = async () => {
+      try {
+        setAnnouncementLoading(true);
+        const data = await announcementService.getRecentAnnouncements(3);
+        setAnnouncements(data);
+        setAnnouncementError(null);
+      } catch (error) {
+        console.error('Failed to load announcements:', error);
+        setAnnouncementError('Failed to load announcements');
+        // Keep empty array as fallback
+        setAnnouncements([]);
+      } finally {
+        setAnnouncementLoading(false);
+      }
+  };
+
+  
   return (
     <Box className="LandingContainer"
    >
-      <NavBar />
+    <Box className=" NavbarLanding">
+        <NavBar />
+        </Box>
+
+      
       <div className="PhTimeComponent">
+ 
         <PhTimeComponent />{' '}
+
+        
       </div>
       <Container className="">
 <Box className="HeroLanding">
@@ -51,113 +82,121 @@ const LandingPage = () => {
   </Grid>
 </Box>
 
-        <Box className="AboutSectionLanding">
-          <Grid container spacing={4} alignItems="center">
-            <Grid item xs={12} md={3}>
-              <Box className="AboutIconLanding">
-                <img src={BulakLGULogo} alt="Smart Connect Icon" />
-              </Box>
+          {/* Key Features */}
+        <Box className="KeyFeaturesSectionLanding" sx={{ mt: 10, mb: 8 }}>
+          <Typography
+            variant="h4"
+            className="KeyFeaturesTitleLanding"
+            sx={{ textAlign: 'center', fontWeight: 600, fontFamily: 'Roboto, Arial, sans-serif' }}
+            component="h2"
+          >
+            Key Features
+          </Typography>
+
+          {/* Feature Cards */}
+          <Grid container spacing={4}>
+            <Grid item xs={12} md={4}>
+              <Link to={isAuthenticated ? '/AppointmentForm' : '/LogIn'} style={{ textDecoration: 'none' }}>
+                <Card className="FeatureItemLanding" sx={{ minHeight: 240, boxShadow: 3 }}>
+                  <CardContent>
+                    <Box display="flex" alignItems="center">
+                      <CalendarTodayIcon className="FeatureIconLanding" sx={{ fontSize: 50, mr: 2 }} />
+                      <Box>
+                        <Typography variant="h6" className="FeatureTitleLanding" sx={{ fontWeight: 600 }}>
+                          Book an Appointment
+                        </Typography>
+                        <Typography variant="body2" className="FeatureDescriptionLanding">
+                          Schedule a slot online for birth, marriage, and death certificate applications. No more long waits!
+                        </Typography>
+                      </Box>
+                    </Box>
+                  </CardContent>
+                </Card>
+              </Link>
             </Grid>
-            <Grid item xs={12} md={9}>
-              <Card className="AboutCardLanding">
-                <CardContent>
-                  <Typography variant="h5" className="AboutTitleLanding">
-                    ABOUT US:
-                  </Typography>
-                  <Typography variant="body1" className="AboutDescriptionLanding">
-                    Skip the long lines and handle your municipal transactions with ease! Bulak LGU
-                    Smart Connect is the official queuing and information system of the Municipal
-                    Civil Registrar of San Ildefonso, Bulacan. Secure your queue number online,
-                    track real-time queue number, schedule appointments, and submit documents for
-                    birth, marriage, and death certificates all from your phone or computer. Get
-                    real-time updates and enjoy a hassle-free, efficient government service. Your
-                    time matters make every visit smooth and stress-free!
-                  </Typography>
-                </CardContent>
-              </Card>
+
+            <Grid item xs={12} md={4}>
+              <Link to={isAuthenticated ? '/ApplicationForm' : '/LogIn'} style={{ textDecoration: 'none' }}>
+                <Card className="FeatureItemLanding" sx={{ minHeight: 240, boxShadow: 3 }}>
+                  <CardContent>
+                    <Box display="flex" alignItems="center">
+                      <DescriptionIcon className="FeatureIconLanding" sx={{ fontSize: 50, mr: 2 }} />
+                      <Box>
+                        <Typography variant="h6" className="FeatureTitleLanding" sx={{ fontWeight: 600 }}>
+                          Document Application
+                        </Typography>
+                        <Typography variant="body2" className="FeatureDescriptionLanding">
+                          Apply for certificates online, upload documents, and track application status in real time.
+                        </Typography>
+                      </Box>
+                    </Box>
+                  </CardContent>
+                </Card>
+              </Link>
+            </Grid>
+
+            <Grid item xs={12} md={4}>
+              <Link to={isAuthenticated ? '/WalkInForm' : '/LogIn'} style={{ textDecoration: 'none' }}>
+                <Card className="FeatureItemLanding" sx={{ minHeight: 240, boxShadow: 3 }}>
+                  <CardContent>
+                    <Box display="flex" alignItems="center">
+                      <DirectionsWalkOutlinedIcon className="FeatureIconLanding" sx={{ fontSize: 50, mr: 2 }} />
+                      <Box>
+                        <Typography variant="h6" className="FeatureTitleLanding" sx={{ fontWeight: 600 }}>
+                          Smart Walk-In Queue
+                        </Typography>
+                        <Typography variant="body2" className="FeatureDescriptionLanding">
+                          Get real-time queue updates and manage your time efficiently while waiting.
+                        </Typography>
+                      </Box>
+                    </Box>
+                  </CardContent>
+                </Card>
+              </Link>
             </Grid>
           </Grid>
         </Box>
 
-        <Box className="KeyFeaturesSectionLanding">
-          <Typography variant="h5" className="KeyFeaturesTitleLanding">
-            KEY FEATURES
+<Box className="AboutSectionLanding" sx={{ py: 8 }}>
+  <Grid container spacing={4} alignItems="center" justifyContent="center">
+    <Grid item xs={12} md={3} sx={{ textAlign: { xs: 'center', md: 'right' } }}>
+      <img
+        src={BulakLGULogo}
+        alt="Municipal Civil Registrar Logo"
+        className="AboutIconLanding"
+      style={{ maxWidth: '100%', height: 'auto'  }}
+      />
+    </Grid>
+
+    <Grid item xs={12} md={9}>
+      <Card className="AboutCardLanding" sx={{
+        backgroundColor: '#1c4d5a',
+        color: 'white',
+        borderRadius: 2,
+        px: 4,
+        py: 3,
+        boxShadow: 2,
+        maxWidth: 700
+      }}>
+        <CardContent>
+          <Typography variant="h4" className="AboutTitleLanding" sx={{ fontWeight: 700, mb: 2 }}>
+            About Us
           </Typography>
-          <Link to={isAuthenticated ? '/AppointmentForm' : '/LogIn'}>
-            <Box className="FeatureItemLanding">
-              <Grid container spacing={2} alignItems="center">
-                <Grid item xs={12} md={3}>
-                  <Box className="FeatureIconContainerLanding">
-                    <CalendarTodayIcon className="FeatureIconLanding" />
-                  </Box>
-                </Grid>
-                <Grid item xs={12} md={9}>
-                  <Box className="FeatureContentLanding">
-                    <Typography variant="h6" className="FeatureTitleLanding">
-                      BOOK AN APPOINTMENT
-                    </Typography>
-                    <Typography variant="body1" className="FeatureDescriptionLanding">
-                      Book a slot online for birth, marriage, and death certificate applications,
-                      eliminating the need for long waits.
-                    </Typography>
-                  </Box>
-                </Grid>
-              </Grid>
-            </Box>
-          </Link>
-
-          <Link to={isAuthenticated ? '/ApplicationForm' : '/LogIn'}>
-            <Box className="FeatureItemLanding">
-              <Grid container spacing={2} alignItems="center">
-                <Grid item xs={12} md={9}>
-                  <Box className="FeatureContentLanding">
-                    <Typography variant="h6" className="FeatureTitleLanding">
-                      DOCUMENT APPLICATION
-                    </Typography>
-                    <Typography variant="body1" className="FeatureDescriptionLanding">
-                      Apply for important documents with ease through Bulak LGU Smart Connect!
-                      Submit your birth, marriage, or death certificate application online, upload
-                      the required documents, and track your request in real time. Get notified once
-                      your application is processed and ready for pickup no more unnecessary visits
-                      or long waits. Convenient, efficient, and hassle-free!
-                    </Typography>
-                  </Box>
-                </Grid>
-                <Grid item xs={12} md={3}>
-                  <Box className="FeatureIconContainerLanding">
-                    <DescriptionIcon className="FeatureIconLanding" />
-                  </Box>
-                </Grid>
-              </Grid>
-            </Box>
-          </Link>
-
-     
-          <Link to={isAuthenticated ? '/WalkInForm' : '/LogIn'}>
-            <Box className="FeatureItemLanding">
-              <Grid container spacing={2} alignItems="center">
-                <Grid item xs={12} md={9}>
-                  <Box className="FeatureContentLanding">
-                    <Typography variant="h6" className="FeatureTitleLanding">
-                      SMART WALK-IN QUEUE
-                    </Typography>
-                    <Typography variant="body1" className="FeatureDescriptionLanding">
-                      The Smart Walk-In feature of Bulak LGU Smart Connect provides you real-time
-                      updates on the queue status, allowing you to see how many numbers are ahead of
-                      you. This ensures transparency, reduces waiting uncertainty, For you to manage
-                      your time efficiently while waiting for their turn.
-                    </Typography>
-                  </Box>
-                </Grid>
-                <Grid item xs={12} md={3}>
-                  <Box className="FeatureIconContainerLanding">
-                    <DirectionsWalkOutlinedIcon className="FeatureIconLanding" />
-                  </Box>
-                </Grid>
-              </Grid>
-            </Box>
-          </Link>
-        </Box>
+          <Typography variant="body1" className="AboutDescriptionLanding" sx={{ lineHeight: 1.7 }}>
+            <b>Bulak LGU Smart Connect</b> is the official digital queue and information system for the Municipal Civil Registrar of San Ildefonso, Bulacan.
+            <br /><br />
+            Our mission is to provide fast, organized, and transparent public service. Residents can <b>secure queue numbers</b>, <b>track applications in real-time</b>, and <b>submit documents</b> online for birth, marriage, or death certificates, all from their computer or mobile device.
+            <br /><br />
+            <span style={{ color: "#d5dcdd", fontWeight: 500 }}>Enjoy efficient, hassle-free government service. Your time matters, make every visit smooth and stress-free!</span>
+          </Typography>
+        </CardContent>
+      </Card>
+    </Grid>
+  </Grid>
+</Box>
+        <Box className="AnnouncementButtonContainer">
+          <FloatingAnnouncementButton />
+          </Box>
       </Container>
       <Footer />
     </Box>
