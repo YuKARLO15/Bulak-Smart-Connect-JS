@@ -5,6 +5,8 @@ import './App.css';
 import { AuthProvider } from './context/AuthContext';
 import PrivateRoute from './components/PrivateRoute';
 import Unauthorized from './components/Unauthorized';
+import InstallPrompt from './components/InstallPrompt';
+import OfflineIndicator from './components/OfflineIndicator';
 
 //-----------USER SIDE --------------//
 
@@ -152,6 +154,8 @@ function App() {
           <Route path="/PrivacyPolicy" element={<PrivacyPolicy />} />
         </Route>
       </Routes>
+      <InstallPrompt />
+      <OfflineIndicator />
     </AuthProvider>
   );
 }
