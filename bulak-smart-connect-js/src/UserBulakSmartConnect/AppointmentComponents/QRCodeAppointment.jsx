@@ -1,17 +1,22 @@
 import React, { useState } from 'react';
 import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import NavBar from '../../NavigationComponents/NavSide';
+import { Box, Typography } from '@mui/material';
 import './QrCodeAppointment.css';
 
 
 const QRCodeAppointment = () => {
   const { id } = useParams();
   const location = useLocation();
-  const { appointment } = location.state || {};
+  const { appointment, source } = location.state || {};
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-    const navigate = useNavigate();
-
-
+  const navigate = useNavigate();
+  
+const steps = [
+  { label: 'Book Appointment' },
+  { label: 'Save/Screenshot Summary' },
+  { label: 'Visit Registrar Office' }
+];
 
   const handleViewRequirements = () => {
     // Convert the appointment type to lowercase and check
@@ -29,6 +34,22 @@ const QRCodeAppointment = () => {
     }
   };
 
+
+
+  if (!appointment) return (
+    <div className="ErrorContainerAppointment">
+      <NavBar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
+      <div className="MessageContainerAppointment">
+        <h2>No appointment found.</h2>
+        <p>Please check your appointment details and try again.</p>
+      </div>
+    </div>
+  );
+ const getButtonText = () => {
+    // If source is 'appointmentForm', return 'Back' otherwise return 'Complete'
+    return source === 'appointmentDashboard' ? 'Back' : 'Complete';
+  };
+
   if (!appointment) return (
     <div className="ErrorContainerAppointment">
       <NavBar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
@@ -44,11 +65,31 @@ const QRCodeAppointment = () => {
     return new Date(dateString).toLocaleDateString(undefined, options);
   };
 
+    const Stepper = () => (
+      <div className="StepperContainerAppointForm">
+        {steps.map((step, idx) => (
+          <React.Fragment key={idx}>
+            <div className={`StepAppointForm${idx === 1 ? ' ActiveAppointForm' : ''}`}>
+              <div className="StepCircleAppointForm">{idx + 1}</div>
+              <div className="StepLabelAppointForm">{step.label}</div>
+            </div>
+            {idx !== steps.length - 1 && <div className="StepLineAppointForm" />}
+          </React.Fragment>
+        ))}
+      </div>
+    );
+
   return (
     <div className={`QrCodeContainerAppointment ${isSidebarOpen ? 'sidebar-open' : ''}`}>
+      
       <NavBar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
-
+       <Typography variant="h4" className="TitleNavAppointmenSummary">
+        {' '}
+        APPOINTMENT{' '}
+      </Typography>
+ <Stepper />
       <div className="QueueInfoAppointment">
+        
         <h2>
           Your appointment has been scheduled at{' '}
           <span className="HighlightAppointment">Civil Registrar Office</span>!
@@ -79,7 +120,12 @@ const QRCodeAppointment = () => {
             </p>
           </div>
         </div>
-
+   <a
+          onClick={handleViewRequirements} 
+          className="RequirementsLinkAppointment"
+        >
+          View Document Requirements
+        </a>
         <div className="NoteContainerAppointment">
           <h3 className="NoteTitleAppointment">Important Notes</h3>
           <ul className="NoteListAppointment">
@@ -97,10 +143,10 @@ const QRCodeAppointment = () => {
         </div>
 
         <button 
-          onClick={handleViewRequirements} 
-          className="RequirementsLinkAppointment"
+         onClick={() => navigate('/AppointmentForm')}
+          className="CompleteAppointment"
         >
-          View Document Requirements
+          {getButtonText()}
         </button>
       </div>
     </div>

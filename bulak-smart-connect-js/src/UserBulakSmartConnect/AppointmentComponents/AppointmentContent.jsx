@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-
 import DatePickerInputAppointForm from './DataPickerAppointmentForm';
-
 import './AppointmentContent.css';
 import { saveRecentAppointments } from './RecentAppointmentData';
 import { appointmentService } from '../../services/appointmentService'; 

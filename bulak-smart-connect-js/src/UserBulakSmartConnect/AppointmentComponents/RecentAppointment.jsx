@@ -84,12 +84,14 @@ const RecentAppointments = () => {
   const handleSeeMore = appointment => {
     console.log('Navigating to QRCodeAppointment with real appointment:', appointment);
     
-    // Use real appointment number if available
+ 
     const appointmentId = appointment.appointmentNumber || appointment.id;
     
     navigate(`/QRCodeAppointment/${appointmentId}`, { 
       state: { 
+          source: 'appointmentDashboard',
         appointment: {
+        
           id: appointmentId,
           appointmentNumber: appointment.appointmentNumber,
           type: appointment.reasonOfVisit || appointment.type,
@@ -109,6 +111,7 @@ const RecentAppointments = () => {
           createdAt: appointment.createdAt,
           updatedAt: appointment.updatedAt
         } 
+        
       }
     });
   };
