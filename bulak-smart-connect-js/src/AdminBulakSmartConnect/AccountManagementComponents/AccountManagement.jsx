@@ -52,8 +52,7 @@ const AdminAccountManagement = () => {
 
   return (
     <div className="admin-account-management">
-      <h1>User Management</h1>
-
+      <h2 className='label-usermanagement'>User Management</h2>
       <NavBar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
       <SearchAddUser />
       <UserTable 

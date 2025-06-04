@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import '../SignUpComponents/UpdateCheckbox.css';
 import '../SignUpComponents/SignUpForm.css';
 
@@ -13,7 +13,7 @@ const UpdatesCheckbox = ({ formData, handleInputChange }) => {
           checked={formData.updates}
           onChange={handleInputChange}
         />
-        I want to receive updates via email.
+        <span>I want to receive updates via email.</span>
       </label>
     </div>
   );

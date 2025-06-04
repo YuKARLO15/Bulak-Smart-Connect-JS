@@ -1,20 +1,50 @@
-/* Updatecheckbox.css */
+/* UpdateCheckbox.css - Fixed version */
 
-input[type='checkbox'].update-checkbox {
+.checkbox-wrapper {
+  margin-top: 15px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ReceiveUpdateText {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 16px;
+  color: #1c4d5a !important; /* Force the color to override any inherited styles */
+  cursor: pointer;
+  margin: 0;
+}
+
+.ReceiveUpdateText span {
+  color: #175176 !important; /* Ensure the text is dark gray/black */
+}
+
+input[type='checkbox'].update-checkbox,
+input[type='checkbox']#CheckBox {
   width: 20px;
   height: 20px;
-  border: 2px solid #007bff;
+  border: 2px solid #1c4d5a;
   background-color: #fff;
   cursor: pointer;
+  margin: 0;
+  flex-shrink: 0; /* Prevents checkbox from shrinking */
 }
 
-.update-checkbox:checked {
-  background-color: #007bff;
-  border-color: #007bff;
+.update-checkbox:checked,
+#CheckBox:checked {
+  background-color:#1c4d5a;
+  border-color: #1c4d5a;
 }
 
-.update-checkbox-label {
-  font-size: 16px;
-  margin-left: 10px;
-  color: #333;
+/* Remove any default margins/padding that might interfere */
+#updates-container {
+  margin: 0;
+  padding: 0;
+}
+
+.form-control {
+  margin: 0;
+  padding: 0;
 }
