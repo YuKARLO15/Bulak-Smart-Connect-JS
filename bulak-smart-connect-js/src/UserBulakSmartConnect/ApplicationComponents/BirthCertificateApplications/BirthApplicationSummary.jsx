@@ -120,8 +120,10 @@ const BirthApplicationSummary = () => {
         setApplicationId(currentId);
       }
       
-      // Then reload data
-      loadApplicationData();
+      // Then reload data (but only if we have an ID)
+      if (currentId) {
+        loadApplicationData();
+      }
     };
     
     // Listen for browser storage events
@@ -139,7 +141,7 @@ const BirthApplicationSummary = () => {
       window.removeEventListener('storage', handleStorageChange);
       window.removeEventListener('customStorageUpdate', customStorageHandler);
     };
-  }, [applicationId, updateTrigger]); 
+  }, []); // Remove applicationId and updateTrigger from dependencies to prevent infinite loop
 
   
   // Navigation handler
