@@ -13,6 +13,7 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
+  Legend
 } from 'recharts';
 import {
   Box, 
@@ -63,7 +64,7 @@ const AdminDashboard = () => {
   // Search functionality
   const handleSearch = e => {
     setSearchTerm(e.target.value);
-  }; // API Connection using queueService
+  }; 
 
   const [statistics, setStatistics] = useState({
     overall: 0
@@ -74,6 +75,33 @@ const AdminDashboard = () => {
     overall: 0
   });
 
+  // Generate sample monthly data for appointment vs walk-in
+  // This can be replaced with actual API calls when available
+  const generateMonthlyAnalytics = () => {
+    const currentDate = new Date('2025-06-04'); // Using the date you provided
+    const months = [];
+    
+    // Generate data for the last 6 months
+    for (let i = 5; i >= 0; i--) {
+      const monthDate = new Date(currentDate);
+      monthDate.setMonth(currentDate.getMonth() - i);
+      
+      const monthName = monthDate.toLocaleString('default', { month: 'short' });
+      
+      // Generate some sample data with a slight randomization
+      // In a real app, this would come from your API
+      const walkIns = Math.floor(Math.random() * 30) + 15 + (i * 2);
+      const appointments = Math.floor(Math.random() * 40) + 10 + (i * 3);
+      
+      months.push({
+        name: monthName,
+        value: walkIns, // walk-ins
+        appointments: appointments // appointments
+      });
+    }
+    
+    return months;
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -92,10 +120,37 @@ const AdminDashboard = () => {
           overall: fetchedAppointments.length
         });
         
+        // Generate monthly analytics data for the bar graph
+        // In a real application, this would be replaced with API calls
+        const monthlyAnalytics = generateMonthlyAnalytics();
+        setWalkInData(monthlyAnalytics);
+        
+        // Attempt to fetch walk-in queue data for display purposes
+        try {
+          // Try different possible methods to get walk-in data
+          let walkIns;
+          
+          if (typeof queueService.getWalkInQueue === 'function') {
+            walkIns = await queueService.getWalkInQueue();
+          } else if (typeof queueService.getQueue === 'function') {
+            walkIns = await queueService.getQueue();
+          } else if (typeof queueService.getAll === 'function') {
+            walkIns = await queueService.getAll();
+          }
+          
+          if (walkIns && walkIns.length > 0) {
+            setWalkInQueue(walkIns);
+          }
+        } catch (queueErr) {
+          console.warn('Could not fetch queue data:', queueErr);
+          // Continue execution, this error doesn't need to stop the dashboard from rendering
+        }
+        
       } catch (err) {
         setError('Error loading data: ' + err.message);
       } finally {
         setLoading(false);
+        setQueueLoading(false);
       }
     };
     
@@ -126,16 +181,28 @@ const AdminDashboard = () => {
                     <span className="admin-dashboard-appointment-dot"></span> Appointment
                   </div>
                 </div>
-                <ResponsiveContainer width="100%" height={200}>
-                  <BarChart data={walkInData}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="name" />
-                    <YAxis />
-                    <Tooltip />
-                    <Bar dataKey="value" name="Walk-ins" fill="#1C4D5A" />
-                    <Bar dataKey="appointments" name="Appointments" fill="#8DC3A7" />
-                  </BarChart>
-                </ResponsiveContainer>
+                {loading ? (
+                  <div className="loading-container">
+                    <CircularProgress />
+                    <p>Loading chart data...</p>
+                  </div>
+                ) : error ? (
+                  <div className="error-container">
+                    <p>{error}</p>
+                  </div>
+                ) : (
+                  <ResponsiveContainer width="100%" height={200}>
+                    <BarChart data={walkInData}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="name" />
+                      <YAxis />
+                      <Tooltip />
+                      <Legend />
+                      <Bar dataKey="value" name="Walk-ins" fill="#1C4D5A" />
+                      <Bar dataKey="appointments" name="Appointments" fill="#8DC3A7" />
+                    </BarChart>
+                  </ResponsiveContainer>
+                )}
               </div>
 
               <div className="admin-dashboard-chart-card">

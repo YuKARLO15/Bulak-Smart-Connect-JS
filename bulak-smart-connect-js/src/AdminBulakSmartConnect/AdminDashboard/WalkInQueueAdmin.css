@@ -208,20 +208,24 @@
   color: #666;
   font-style: italic;
 }
+*/
 
-/* Footer 
 .queue-footer {
   text-align: center;
-  margin-top: 16px;
   padding-top: 12px;
   border-top: 1px solid #e0e0e0;
-} */
+
+} 
 
 .view-all-btn {
   color: #1C4D5A;
   text-decoration: none;
-  font-size: 0.9rem;
   font-weight: 500;
+  border: 1px solid #8aacb5 !important;
+  text-transform: none !important;
+  font-size: 0.7rem !important;
+  padding: 2px 8px !important;
+  font-weight: 600 !important;
 }
 
 .view-all-btn:hover {

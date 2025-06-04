@@ -215,6 +215,7 @@ import {
 } from '@mui/material';
 import { getApplications } from '../../UserBulakSmartConnect/ApplicationComponents/ApplicationData';
 import './RecentApplicationsAdmin.css';
+import BirthCertLogo from "./AdminDashboardAssets/BirthCertificate.png";
 
 const RecentApplicationsAdmin = () => {
   const [applications, setApplications] = useState([]);
@@ -335,11 +336,22 @@ const RecentApplicationsAdmin = () => {
   return (
     <Card className="RecentAppsAdminCard">
       <CardContent>
-        <Box mb={2}>
+        <Box mb={2} className="RecentAppsAdminHeader">
           <Typography variant="h6" className="ApplicationStatsTitle">
             Document Application 
           </Typography>
+             <Box display="flex" justifyContent="end" mt={2}>
+          <Button
+            size="small"
+              onClick={() => navigate('/ApplicationAdmin')}
+              className='ApplicationStatsViewAllButton'
+       
+          >
+            View All Applications
+          </Button>
         </Box>
+        </Box>
+        
         <Container className="ApplicationStatsMainContainer">
         
         
@@ -347,11 +359,14 @@ const RecentApplicationsAdmin = () => {
            {/* Overall Stats */}
 
           {/* Birth Certificate Stats */}
-          <Grid item xs={120} md={60} className='StatsBirthContainer'>
-            <Paper className="StatCard" elevation={1}>
+            <Grid  className='StatsBirthContainer'>
+    
+              <Paper className="StatCard" elevation={1}>
+                
               <Typography variant="subtitle1" className="StatCardTitle">
                 Birth Certificate Applications
-              </Typography>
+                </Typography>
+                
               <Box className="StatNumbers">
                 <Box className="StatItem">
                   <Typography variant="body2">Pending:</Typography>
@@ -421,22 +436,7 @@ const RecentApplicationsAdmin = () => {
             
           </Container>
         
-        <Box display="flex" justifyContent="center" mt={2}>
-          <Button
-            size="small"
-            onClick={() => navigate('/ApplicationAdmin')}
-            sx={{
-              color: '#184a5b',
-              fontSize: '0.8rem',
-              textTransform: 'none',
-              '&:hover': {
-                backgroundColor: 'rgba(24, 74, 91, 0.04)'
-              }
-            }}
-          >
-            View All Applications
-          </Button>
-        </Box>
+     
       </CardContent>
     </Card>
   );

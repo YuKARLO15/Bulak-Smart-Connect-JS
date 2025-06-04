@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Box, Typography, Card, CardContent, Button, Grid, Paper, CircularProgress } from '@mui/material';
+import { Box, Typography, Card, CardContent, Button, Grid, Paper, CircularProgress, Container } from '@mui/material';
 import { getRecentAppointments } from '../../UserBulakSmartConnect/AppointmentComponents/RecentAppointmentData';
 import './RecentAppointmentsAdmin.css';
 
@@ -121,15 +121,28 @@ const RecentAppointmentsAdmin = () => {
 
   return (
     <Card className="RecentAppointmentsAdminCard">
+
+    
       <CardContent>
-        <Box mb={2}>
+        <Box mb={2} className="RecentApptAdminHeader">
+          <Container className='RecentApptAdminHeaderContainer'>
           <Typography variant="h6" className="RecentApptAdminTitle">
             Weekly Appointment Statistics
           </Typography>
           <Typography variant="body2" sx={{ color: '#666', display: 'flex', justifyContent: 'space-between' }}>
             <span>{currentDateTime} (UTC)</span>
            
-          </Typography>
+            </Typography>
+            </Container>
+            <Box display="flex" justifyContent="center" mt={3}>
+          <Button
+            size="small"
+            className="ViewDetailsButtonAdmin"
+            onClick={() => navigate('/AdminAppointmentDashboard')}
+          >
+            View All Appointments
+          </Button>
+        </Box>
         </Box>
 
         <Grid container spacing={2}>
@@ -358,15 +371,7 @@ const RecentAppointmentsAdmin = () => {
           </Grid>
         </Grid>
 
-        <Box display="flex" justifyContent="center" mt={3}>
-          <Button
-            size="small"
-            className="ViewDetailsButtonAdmin"
-            onClick={() => navigate('/AdminAppointmentDashboard')}
-          >
-            View All Appointments
-          </Button>
-        </Box>
+      
       </CardContent>
     </Card>
   );
