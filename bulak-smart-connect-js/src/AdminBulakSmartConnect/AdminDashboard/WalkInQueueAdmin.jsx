@@ -231,7 +231,7 @@ const fetchQueueData = useCallback(async () => {
         </div>
       )}
       
-      <div className="queue-content">
+      {/* <div className="queue-content">
         {loading ? (
           <div className="queue-loading">
             <div className="loading-spinner"></div>
@@ -248,7 +248,7 @@ const fetchQueueData = useCallback(async () => {
           </div>
         ) : (
           <div className="queue-list">
-            {/* Show only the first 5 items for preview */}
+            
             {getAllQueues().slice(0, 5).map(queue => (
               <div 
                 key={queue.id} 
@@ -290,7 +290,7 @@ const fetchQueueData = useCallback(async () => {
               </div>
             ))}
             
-            {/* Show a message if there are more items */}
+          
             {getAllQueues().length > 5 && (
               <div className="queue-more-info">
                 <p>+ {getAllQueues().length - 5} more queued visitors</p>
@@ -298,13 +298,13 @@ const fetchQueueData = useCallback(async () => {
             )}
           </div>
         )}
-        
+        */}
         <div className="queue-footer">
           <Link to="/AdminWalkInQueue" className="view-all-btn">
             View All Queues
           </Link>
-        </div>
-      </div>
+        </div> 
+   
     </div>
   );
 };
