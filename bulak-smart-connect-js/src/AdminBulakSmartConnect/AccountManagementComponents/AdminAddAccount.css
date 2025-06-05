@@ -17,17 +17,21 @@
   width: 100%;
 }
 
-h1 {
+.modifying-user {
   margin-bottom: 8px;
-  font-size: 28px;
+  font-size: 25px !important;
   color: #ffffff;
-  /* background-color: #0e4f57; */
+  background-color: #184a5b;
+  justify-content:center ;
   text-align: center;
-  padding: 10px 15px;
-  width: 100%;
+  font-weight: 600;
+  padding: 3vh;
+  padding: 20px 15px;
+  width: 100vw;
   box-sizing: border-box;
   word-wrap: break-word;
   font-size: clamp(20px, 5vw, 32px);
+    min-height: 70px;
 }
 
 .photo-upload {

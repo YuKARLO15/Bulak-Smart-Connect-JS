@@ -5,15 +5,41 @@ body {
 }
 
 .signup-container {
-  width: 100vw;
+  /* width: 100vw;
   height: 100vh;
   margin-top: 10vh;
   padding: 32px;
   color: #1c4d5a;
-  background: radial-gradient(ellipse at center, hsl(210, 100%, 97%), hsl(0, 0%, 100%));
+  /* background: radial-gradient(ellipse at center, hsl(210, 100%, 97%), hsl(0, 0%, 100%)); 
+  background-image: url('../LandingPageComponents/LandingPageAssets/HeroBg.JPEG');
   justify-content: center;
   align-items: center;
-  text-align: center;
+  text-align: center; */
+   /* width: 100vw;
+  height: 100vh;
+  margin-top: 0; /* Removed margin-top to allow full-page background */
+  /* padding: 32px;
+  position: relative; /* Needed for the ::before overlay  
+  color: #1c4d5a;
+  background-image: url('../LandingPageComponents/LandingPageAssets/HeroBg.JPEG');
+  background-size: cover;      
+  background-position: center;  
+  background-repeat: no-repeat;  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center; */
+}
+
+.signup-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.4); /* semi-transparent dark overlay */
+  z-index: -1;
 }
 
 form {
@@ -29,7 +55,7 @@ form {
   padding-top: 25px;
 }
 
-.signup-label{
+.signup-label {
   margin-top: 5vh;
 }
 
@@ -147,7 +173,7 @@ button.signup-btn {
   padding: 12px;
   margin-top: 20px;
   margin-bottom: 10px;
-  margin-left: 10vw;
+  margin-left: 2vw;
   font-size: 16px;
   color: #fff;
   background-color: #1c4d5a;

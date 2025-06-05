@@ -155,7 +155,7 @@ const AdminAddUser = () => {
     <div>
        <NavBar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
        
-      <h1>{isModifying ? 'Modify User' : 'Add User'}</h1>
+      <h2 className='modifying-user'>{isModifying ? 'Modify User' : 'Add User'}</h2>
       <div className="admin-add-user">
         <form 
           className="user-form" 

@@ -40,3 +40,21 @@ input[name='email'] {
   font-size: smaller;
 }
 
+
+/* Adjust width of the contact input group */
+.form-group.contactinformation .textbox div {
+  display: flex;
+  width: 100%;
+  gap: 10px;
+}
+
+/* Fix the +63 input width */
+.form-group.contactinformation input[disabled] {
+  width: 60px;
+}
+
+/* Make the 10-digit input longer */
+input[name='contact'] {
+  flex: 1;
+  padding-left: 10px;
+}

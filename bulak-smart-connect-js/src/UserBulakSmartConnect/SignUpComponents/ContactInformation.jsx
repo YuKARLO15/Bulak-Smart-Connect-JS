@@ -5,25 +5,33 @@ import UpdatesCheckbox from './UpdateCheckbox';
 
 const ContactInformationSection = ({ formData, handleInputChange, errors }) => (
   <div className="form-group">
-    {/* Contact Number Input */}
+    {/* Contact Number Inputs */}
     <div className="form-group contactinformation">
       <div className="textbox">
         <label className="label-in">
           Contact Number <span className="asterisk"> *</span>
         </label>
-        <input
-          type="text"
-          name="contact"
-          placeholder="Contact Number"
-          value={formData.contact}
-          onChange={event => {
-            const { name, value } = event.target;
-            const formattedValue = value.replace(/\D/g, '').slice(0, 11); // Only digits, max 11 chars
-            handleInputChange({ target: { name, value: formattedValue } });
-          }}
-          maxLength="13" // Allows space for hyphens in formatting
-          required
-        />
+        <div style={{ display: 'flex', gap: '8px' }}>
+          <input
+            type="text"
+            value="+63"
+            disabled
+            style={{ width: '60px' }}
+          />
+          <input
+            type="text"
+            name="contact"
+            placeholder="10-digit mobile number"
+            value={formData.contact}
+            onChange={(event) => {
+              const { name, value } = event.target;
+              const formattedValue = value.replace(/\D/g, '').slice(0, 10); // Only digits, max 10 digits
+              handleInputChange({ target: { name, value: formattedValue } });
+            }}
+            required
+          />
+        </div>
+        {errors.contact && <span className="error-message">{errors.contact}</span>}
       </div>
 
       {/* Email Address Input */}
@@ -41,9 +49,9 @@ const ContactInformationSection = ({ formData, handleInputChange, errors }) => (
           required
         />
         {errors.email && <span className="error-message">{errors.email}</span>}
-          <div className="checkbox-wrapper">
-        <UpdatesCheckbox formData={formData} handleInputChange={handleInputChange} />
-      </div>
+        <div className="checkbox-wrapper">
+          <UpdatesCheckbox formData={formData} handleInputChange={handleInputChange} />
+        </div>
       </div>
     </div>
   </div>
