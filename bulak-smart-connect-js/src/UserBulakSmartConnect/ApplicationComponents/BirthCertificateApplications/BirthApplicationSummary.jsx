@@ -38,10 +38,17 @@ const BirthApplicationSummary = () => {
     switch (status?.toLowerCase()) {
       case 'approved':
         return 'green';
+      case 'ready for pickup':
+        return '#4caf50';
       case 'pending':
         return '#ff9800';
+      case 'processing':
+        return '#2196f3'
+      case 'submitted':
+        return '#2196f3'; 
       case 'declined':
       case 'decline':
+      case 'rejected':
         return 'red';
       case 'requires additional info':
         return '#ff8c00';

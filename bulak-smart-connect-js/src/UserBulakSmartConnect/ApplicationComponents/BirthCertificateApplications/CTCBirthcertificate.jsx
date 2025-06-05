@@ -113,6 +113,20 @@ const handleFileUpload = async (label, isUploaded, fileDataObj) => {
   }
 };
 
+const mapStatusForBackend = (frontendStatus) => {
+  const statusMap = {
+    'Submitted': 'Pending',
+    'SUBMITTED': 'Pending',
+    'Pending': 'Pending',
+    'Approved': 'Approved',
+    'Rejected': 'Rejected',
+    'Declined': 'Rejected',
+    'Ready for Pickup': 'Ready for Pickup'
+  };
+  
+  return statusMap[frontendStatus] || 'Pending';
+};
+
 const handleSubmit = async () => {
   if (!isFormComplete) {
     alert('Please upload the required documents before submitting.');
@@ -132,7 +146,7 @@ const handleSubmit = async () => {
     // Update the backend application status to Pending
     try {
       await documentApplicationService.updateApplication(applicationId, {
-        status: 'Pending',
+        status: mapStatusForBackend('SUBMITTED'), // This will become 'Processing'
         statusMessage: 'Application submitted with all required documents'
       });
       console.log('Application status updated in backend');
