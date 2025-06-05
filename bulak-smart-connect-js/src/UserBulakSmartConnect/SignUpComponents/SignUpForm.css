@@ -5,42 +5,32 @@ body {
 }
 
 .signup-container {
+  /*
+  background-image: url('../LandingPageComponents/LandingPageAssets/HeroBg.JPEG');
   /* width: 100vw;
   height: 100vh;
-  margin-top: 10vh;
-  padding: 32px;
-  color: #1c4d5a;
-  /* background: radial-gradient(ellipse at center, hsl(210, 100%, 97%), hsl(0, 0%, 100%)); 
-  background-image: url('../LandingPageComponents/LandingPageAssets/HeroBg.JPEG');
-  justify-content: center;
-  align-items: center;
-  text-align: center; */
-   /* width: 100vw;
-  height: 100vh;
-  margin-top: 0; /* Removed margin-top to allow full-page background */
+  margin-top: 0; 
   /* padding: 32px;
-  position: relative; /* Needed for the ::before overlay  
+  position: relative; 
   color: #1c4d5a;
-  background-image: url('../LandingPageComponents/LandingPageAssets/HeroBg.JPEG');
   background-size: cover;      
   background-position: center;  
   background-repeat: no-repeat;  
-  display: flex;
   justify-content: center;
   align-items: center;
   text-align: center; */
+  background-image: url('../LandingPageComponents/LandingPageAssets/HeroBg.JPEG');
+  width: 100vw;
+  padding: 32px;
+  color: #1c4d5a;
+  margin-top: 0;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+
+
 }
 
-.signup-container::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 100%;
-  background-color: rgba(0, 0, 0, 0.4); /* semi-transparent dark overlay */
-  z-index: -1;
-}
 
 form {
   max-width: 95vw;
@@ -57,6 +47,11 @@ form {
 
 .signup-label {
   margin-top: 5vh;
+    margin-top: 18vh;
+  font-size: 2rem;
+  text-align: center;
+  color: #1c4d5a; /* same color used in h2 general styling */
+  z-index: 1;
 }
 
 .CategoryDivider h2 {
@@ -130,7 +125,7 @@ h2 {
   flex-grow: 1;
 }
 
-/* Username and Password Input Field Styles */
+
 #username-container,
 #password-container {
   display: flex;
@@ -169,11 +164,11 @@ h2 {
 /* signup button */
 
 button.signup-btn {
-  width: 50%;
+  width: 40%;
   padding: 12px;
   margin-top: 20px;
   margin-bottom: 10px;
-  margin-left: 2vw;
+  margin-left: 5vw;
   font-size: 16px;
   color: #fff;
   background-color: #1c4d5a;
@@ -216,4 +211,18 @@ button.btn:hover {
 
 #CheckBox {
   margin-right: 8px;
+}
+
+@media (max-width: 600px) {
+  .form-group input {
+    width: 100%;
+  }
+
+  form {
+    padding: 16px;
+  }
+
+  .form-group {
+    padding: 0 10px;
+  }
 }
