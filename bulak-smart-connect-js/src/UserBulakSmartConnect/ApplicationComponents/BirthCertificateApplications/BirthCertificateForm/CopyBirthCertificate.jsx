@@ -5,6 +5,7 @@ import './CopyBirthCertificate.css';
 // Import your document application service
 import { documentApplicationService } from '../../../../services/documentApplicationService';
 import NavBar from '../../../../NavigationComponents/NavSide';
+import { localStorageManager } from '../../../../services/localStorageManager';
 
 const CopyBirthCertificate = ({ formData = {}, handleChange }) => {
   const navigate = useNavigate();
@@ -154,7 +155,13 @@ const CopyBirthCertificate = ({ formData = {}, handleChange }) => {
     try {
       console.log("Processing next button click...");
       setIsLoading(true);
-      
+
+      const usage = localStorageManager.getCurrentUsage();
+      if (usage.isCritical) {
+        console.warn('Storage critical, performing cleanup before save...');
+        await localStorageManager.performCleanup(0.4);
+      }
+        
       let applicationId;
       
       if (isEditing) {
@@ -205,9 +212,10 @@ const CopyBirthCertificate = ({ formData = {}, handleChange }) => {
         console.log('Added new application:', applicationId);
       }
       
-      localStorage.setItem('applications', JSON.stringify(existingApplications));
-      localStorage.setItem('currentApplicationId', applicationId);
-      localStorage.setItem('birthCertificateApplication', JSON.stringify(dataToSave));
+      // Use localStorageManager.safeSetItem instead of localStorage.safeSetItem
+      await localStorageManager.safeSetItem('applications', JSON.stringify(existingApplications));
+      await localStorageManager.safeSetItem('currentApplicationId', applicationId);
+      await localStorageManager.safeSetItem('birthCertificateApplication', JSON.stringify(dataToSave));
       
       // Now create the application in the backend using documentApplicationService
       try {
