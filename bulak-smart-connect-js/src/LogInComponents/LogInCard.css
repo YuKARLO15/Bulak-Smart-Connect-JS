@@ -7,7 +7,8 @@
   gap: 16px;
   box-shadow: none !important;
   color: #184a5b;
-  border-left: 2px solid #184a5b;
+max-height:542px;
+
 }
 .LogIn {
   margin: 0vw;
@@ -20,7 +21,7 @@
 }
 
 .LogInTitle {
-  font-weight: bold;
+  font-weight: 600 !important;
   text-align: center;
   margin-bottom: 16px;
   color: #184a5b;
@@ -47,9 +48,15 @@
 }
 
 .forgot-password-link {
-  align-self: baseline;
+  align-self: start;
   color: #184a5b;
 }
+.ForgotPassword{
+  color: #184a5b !important;
+  text-align: start;
+  margin-top: 10px !important;
+}
+    
 #email {
   color: #ffffff;
 }

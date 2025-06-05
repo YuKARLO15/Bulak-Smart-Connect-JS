@@ -3,9 +3,35 @@
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  min-height: 95vh;
+  margin-top: 5vh;
+  min-height: 100vh;
   width: 100vw;
   text-align: center;
+}
+
+.LogIn::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('../LandingPageComponents/LandingPageAssets/HeroBG.JPEG');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  z-index: -2;
+}
+
+.LogIn::after {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(208, 215, 222, 0.7);
+  z-index: -1;
 }
 @media (max-width: 480px) {
   .LogInContainer {

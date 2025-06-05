@@ -79,7 +79,8 @@
   text-transform: none !important;
   font-size: 0.7rem !important;
   padding: 2px 8px !important;
-  min-width: 60px !important;
+  min-width: 10vw !important;
+  font-weight: 600 !important;
 }
 
 .ViewDetailsButtonAdmin:hover {
@@ -98,4 +99,13 @@
   justify-content: center;
   padding: 20px;
   min-height: 150px;
+}
+.RecentApptAdminHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.RecentApptAdminHeaderContainer {
+  display: flex;
+  flex-direction: column;
 }

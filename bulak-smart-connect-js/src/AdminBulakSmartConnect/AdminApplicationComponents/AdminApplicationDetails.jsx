@@ -18,6 +18,7 @@ import {
   InputLabel,
   Select,
   MenuItem,
+  InputAdornment,
 } from '@mui/material';
 import { useParams, useNavigate } from 'react-router-dom';
 import './AdminApplicationDetails.css';
@@ -38,6 +39,7 @@ const AdminApplicationDetails = () => {
   const [newStatus, setNewStatus] = useState('');
   const [statusMessage, setStatusMessage] = useState('');
   const [filterStatus, setFilterStatus] = useState('All');
+  const [filterCategory, setFilterCategory] = useState('All'); 
   const [showDocumentsTab, setShowDocumentsTab] = useState(false);
 
   useEffect(() => {
@@ -77,11 +79,11 @@ const AdminApplicationDetails = () => {
   const handleStorageUpdate = () => {
     try {
       const storedApplications = JSON.parse(localStorage.getItem('applications')) || [];
-      const birthApplications = storedApplications.filter(app => app.type === 'Birth Certificate');
-      setApplications(birthApplications);
+    
+      setApplications(storedApplications);
 
       if (selectedApplication) {
-        const updatedSelectedApp = birthApplications.find(app => app.id === selectedApplication.id);
+        const updatedSelectedApp = storedApplications.find(app => app.id === selectedApplication.id);
         if (updatedSelectedApp) {
           setSelectedApplication(updatedSelectedApp);
         }
@@ -104,7 +106,11 @@ const AdminApplicationDetails = () => {
   };
 
   const handleStatusChange = event => {
-    setNewStatus(event.target.value);
+    setFilterStatus(event.target.value);
+  };
+
+  const handleCategoryChange = event => {
+    setFilterCategory(event.target.value);
   };
 
   const handleMessageChange = event => {
@@ -137,12 +143,9 @@ const AdminApplicationDetails = () => {
 
       localStorage.setItem('applications', JSON.stringify(updatedApplications));
 
-      const updatedBirthApplications = updatedApplications.filter(
-        app => app.type === 'Birth Certificate'
-      );
-      setApplications(updatedBirthApplications);
+      setApplications(updatedApplications);
 
-      const updated = updatedBirthApplications.find(app => app.id === selectedApplication.id);
+      const updated = updatedApplications.find(app => app.id === selectedApplication.id);
       setSelectedApplication(updated);
 
       setStatusUpdateDialog(false);
@@ -160,8 +163,17 @@ const AdminApplicationDetails = () => {
   };
 
   const filteredApplications = applications.filter(app => {
-    if (filterStatus === 'All') return true;
-    return app.status === filterStatus;
+
+    if (filterStatus !== 'All' && app.status !== filterStatus) {
+      return false;
+    }
+    
+
+    if (filterCategory !== 'All' && app.type !== filterCategory) {
+      return false;
+    }
+    
+    return true;
   });
 
   if (loading) {
@@ -194,10 +206,23 @@ const AdminApplicationDetails = () => {
           <Paper elevation={3} className="ApplicationsListPaperAdminAppForm">
             <Box className="FilterContainerAdminAppForm">
               <Typography variant="h6">Filter Applications</Typography>
+              
+              {/* Category Filter */}
+              <FormControl fullWidth margin="normal">
+                <InputLabel>Category</InputLabel>
+                <Select value={filterCategory} onChange={handleCategoryChange} label="Category">
+                  <MenuItem value="All">All Categories</MenuItem>
+                  <MenuItem value="Birth Certificate">Birth Certificate</MenuItem>
+                  <MenuItem value="Marriage Certificate">Marriage Certificate</MenuItem>
+                  <MenuItem value="Marriage License">Marriage License</MenuItem>
+                </Select>
+              </FormControl>
+              
+              {/* Status Filter */}
               <FormControl fullWidth margin="normal">
                 <InputLabel>Status</InputLabel>
                 <Select value={filterStatus} onChange={handleFilterChange} label="Status">
-                  <MenuItem value="All">All</MenuItem>
+                  <MenuItem value="All">All Statuses</MenuItem>
                   <MenuItem value="Pending">Pending</MenuItem>
                   <MenuItem value="Approved">Approved</MenuItem>
                   <MenuItem value="Decline">Decline</MenuItem>
@@ -231,6 +256,9 @@ const AdminApplicationDetails = () => {
                     </Typography>
                     <Typography variant="body2" className="ApplicationDateAdminAppForm">
                       Submitted: {app.date}
+                    </Typography>
+                    <Typography variant="body2" style={{ marginTop: '4px' }}>
+                      Type: {app.type}
                     </Typography>
                     <Typography
                       variant="body2"

@@ -1,0 +1,343 @@
+.AdminMainContainerAdminAppForm {
+  width: 100vw;
+  margin: 0 auto;
+}
+
+.AdminTitleAdminAppForm {
+  margin-bottom: 24px;
+  background-color: #184a5b;
+  color: white;
+  font-size: 25px !important;
+  font-weight: 600 !important;
+  padding: 10px;
+}
+
+.ApplicationsListPaperAdminAppForm {
+  height: 100%;
+  min-height: 600px;
+  padding: 16px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.ApplicationsListTitleAdminAppForm {
+  margin-bottom: 16px;
+  font-weight: 500;
+}
+
+.ApplicationsListAdminAppForm {
+  overflow-y: auto;
+  flex-grow: 1;
+}
+
+.FilterContainerAdminAppForm {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.ApplicationListItemAdminAppForm {
+  padding: 16px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-left: 4px solid transparent;
+}
+
+.ApplicationListItemAdminAppForm:hover {
+  background-color: #f5f5f5;
+}
+
+.ApplicationListItemAdminAppForm.selectedAdminAppForm {
+  border-left: 4px solid #184a5b;
+  background-color: #e3f2fd;
+}
+
+.ApplicationNameAdminAppForm {
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.ApplicationIdAdminAppForm {
+  color: #666;
+  margin-bottom: 4px;
+}
+
+.ApplicationDateAdminAppForm {
+  color: #666;
+  margin-bottom: 4px;
+}
+
+/* New style for application type/category display */
+.ApplicationTypeAdminAppForm {
+  color: #184a5b;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.ApplicationStatusAdminAppForm {
+  font-weight: 500;
+}
+
+.status-pendingAdminAppForm {
+  color: #f57c00;
+}
+
+.status-in-progressAdminAppForm {
+  color: #0288d1;
+}
+
+.status-approvedAdminAppForm {
+  color: #2e7d32;
+}
+
+.status-declineAdminAppForm {
+  color: #d32f2f;
+}
+
+.status-requires-additional-infoAdminAppForm {
+  color: #7b1fa2;
+}
+
+.NoApplicationsMessageAdminAppForm {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  color: #757575;
+}
+
+.ApplicationDetailsPaperAdminAppForm {
+  padding: 24px;
+  min-height: 600px;
+}
+
+.ApplicationHeaderAdminAppForm {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.ApplicationDetailsTitleAdminAppForm {
+  font-weight: 600 !important;
+  margin-bottom: 8px;
+  color: #184a5b;
+}
+
+.ApplicationDetailsIdAdminAppForm {
+  color: #184a5b;
+}
+
+.StatusSectionAdminAppForm {
+  padding: 16px;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  min-width: 200px;
+  margin-top: 20px;
+}
+
+.StatusDisplayAdminAppForm {
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.StatusMessageAdminAppForm {
+  margin-bottom: 8px;
+  color: #555;
+  max-width: 300px;
+  word-break: break-word;
+}
+
+.LastUpdatedAdminAppForm {
+  color: #666;
+  font-style: italic;
+  margin-bottom: 16px;
+}
+
+.UpdateStatusButtonAdminAppForm {
+  margin-top: 8px;
+  background-color: #184a5b !important;
+}
+
+.DetailsDividerAdminAppForm {
+  margin: 24px 0;
+}
+
+.DetailsSectionAdminAppForm {
+  margin-bottom: 24px;
+}
+
+.SectionTitleAdminAppForm {
+  margin-top: 10px !important;
+  margin-bottom: 15px !important;
+  font-weight: 550 !important;
+  margin-bottom: 16px;
+  color: #184a5b;
+  text-align: center;
+}
+
+.DetailsGridAdminAppForm {
+  padding: 0 16px;
+}
+
+.DetailsLabelAdminAppForm {
+  font-weight: 500;
+  color: #555;
+  margin-bottom: 4px;
+}
+
+.DetailsValueAdminAppForm {
+  margin-bottom: 16px;
+}
+
+.AdminActionButtonsAdminAppForm {
+  display: flex;
+  justify-content: flex-start;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.NoApplicationSelectedPaperAdminAppForm {
+  padding: 48px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-height: 600px;
+}
+
+.LoadingContainerAdminAppForm {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  gap: 16px;
+}
+
+.ErrorContainerAdminAppForm {
+  padding: 24px;
+  max-width: 800px;
+  margin: 48px auto;
+}
+
+.ToggleBarAdminAppForm {
+  display: flex;
+  margin-bottom: 20px;
+  border-radius: 4px;
+  overflow: hidden;
+  background-color: #f5f5f5;
+}
+
+.ToggleBarAdminAppForm button {
+  flex: 1;
+  border-radius: 0;
+  padding: 10px 15px;
+  text-transform: none;
+  color: #555;
+}
+
+.ActiveToggleButtonAdminAppForm {
+  background-color: #184a5b !important;
+  color: white !important;
+}
+
+.DocumentPreviewContainerAdminAppForm {
+  padding: 15px;
+}
+
+.DocumentPreviewHeaderAdminAppForm {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.SubtitleAdminAppForm {
+  color: #555;
+  margin-bottom: 5px !important;
+}
+
+.ActionButtonsContainerAdminAppForm {
+  display: flex;
+  justify-content: center;
+  margin-top: 15px;
+}
+
+.StatusDisplayAdminAppForm {
+  font-weight: 600 !important;
+  font-size: 1.1rem !important;
+  margin-bottom: 5px !important;
+}
+
+.status-pendingAdminAppForm {
+  color: #ff9800 !important;
+}
+
+.status-approvedAdminAppForm {
+  color: #4caf50 !important;
+}
+
+.status-declineAdminAppForm {
+  color: #f44336 !important;
+}
+
+.status-requires-additional-infoAdminAppForm {
+  color: #2196f3 !important;
+}
+
+.StatusMessageAdminAppForm {
+  font-style: italic;
+  color: #616161;
+  max-width: 80%;
+  margin: 0 auto 10px !important;
+}
+
+.LastUpdatedAdminAppForm {
+  font-size: 0.8rem !important;
+  color: #757575;
+}
+
+/* Date Range Filter styles */
+.MuiDatePicker-root {
+  width: 100%;
+}
+
+/* Style the date picker container to match the form aesthetics */
+.FilterContainerAdminAppForm .MuiFormControl-root {
+  margin-bottom: 12px;
+}
+
+/* Ensure consistent spacing in filter section */
+.FilterContainerAdminAppForm .MuiTypography-subtitle1 {
+  font-weight: 500;
+  color: #555;
+}
+
+/* Style the clear filters button to match other controls */
+.FilterContainerAdminAppForm .MuiButton-root {
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+
+/* Enhance filter headers */
+.FilterContainerAdminAppForm h6 {
+  color: #184a5b;
+  border-bottom: 1px solid #e0e0e0;
+  padding-bottom: 8px;
+  margin-bottom: 16px;
+}
+
+.NoFormViewAvailableAdminAppForm {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 300px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  color: #757575;
+  text-align: center;
+  padding: 24px;
+}
