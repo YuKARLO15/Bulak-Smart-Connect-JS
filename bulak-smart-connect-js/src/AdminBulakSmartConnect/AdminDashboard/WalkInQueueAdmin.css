@@ -1,7 +1,7 @@
 .admin-walk-in-queue {
   display: flex;
   flex-direction: column;
-  height: 100%;
+
 }
 
 /* Queue Stats */
@@ -30,7 +30,7 @@
   color: #666;
 }
 
-.queue-content {
+/* .queue-content {
   flex: 1;
   overflow-y: auto;
   display: flex;
@@ -41,10 +41,10 @@
   flex: 1;
   overflow-y: auto;
   margin-bottom: 16px;
-}
+} */
 
 /* Queue items */
-.queue-item {
+/* .queue-item {
   display: flex;
   flex-direction: column;
   padding: 14px;
@@ -156,10 +156,10 @@
 
 .queue-action-btn.complete:hover {
   background-color: #218838;
-}
+} */
 
 /* Loading, error, empty states */
-.queue-loading,
+/* .queue-loading,
 .queue-error,
 .queue-empty {
   text-align: center;
@@ -195,10 +195,10 @@
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
-}
+} */
 
 /* More info message */
-.queue-more-info {
+/* .queue-more-info {
   text-align: center;
   padding: 10px;
   margin-top: 8px;
@@ -208,20 +208,24 @@
   color: #666;
   font-style: italic;
 }
+*/
 
-/* Footer */
 .queue-footer {
   text-align: center;
-  margin-top: 16px;
   padding-top: 12px;
   border-top: 1px solid #e0e0e0;
-}
+
+} 
 
 .view-all-btn {
   color: #1C4D5A;
   text-decoration: none;
-  font-size: 0.9rem;
   font-weight: 500;
+  border: 1px solid #8aacb5 !important;
+  text-transform: none !important;
+  font-size: 0.7rem !important;
+  padding: 2px 8px !important;
+  font-weight: 600 !important;
 }
 
 .view-all-btn:hover {

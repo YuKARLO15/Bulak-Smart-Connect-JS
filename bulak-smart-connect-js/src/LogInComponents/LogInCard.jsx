@@ -149,19 +149,7 @@ export default function LogInCard({ onLogin }) {
             <FormLabel htmlFor="email" className="LogInLabel">
               {getInputLabel()}
             </FormLabel>
-            <Button
-              onClick={toggleLoginType}
-              size="small"
-              color="primary"
-              sx={{ 
-                textTransform: 'none', 
-                padding: '0',
-                minWidth: 'auto',
-                fontSize: '0.85rem'
-              }}
-            >
-              Login with {loginType === 'email' ? 'username' : 'email'} instead
-            </Button>
+      
           </Box>
           <TextField
             error={emailError}
@@ -185,15 +173,7 @@ export default function LogInCard({ onLogin }) {
             <FormLabel htmlFor="password" className="LogInLabel">
               Password
             </FormLabel>
-            <Link
-              component="button"
-              type="button"
-              onClick={handleClickOpen}
-              variant="body2"
-              className="ForgotPassword"
-            >
-              Forgot your password?
-            </Link>
+           
           </Box>
           <TextField
             error={passwordError}
@@ -209,6 +189,15 @@ export default function LogInCard({ onLogin }) {
             value={password}
             onChange={e => setPassword(e.target.value)}
           />
+           <Link
+              component="button"
+              type="button"
+              onClick={handleClickOpen}
+              variant="body2"
+              className="ForgotPassword"
+            >
+              Forgot your password?
+            </Link>
         </FormControl>
         <FormControlLabel
           control={<Checkbox value="remember" color="#184a5b" />}

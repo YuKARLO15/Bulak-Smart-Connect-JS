@@ -5,6 +5,7 @@ import LogInContent from './LogInContent';
 import LogInCard from './LogInCard';
 import NavBar from '../NavigationComponents/NavBar';
 import { useAuth } from '../context/AuthContext'; // Import useAuth
+import HeroBG from '../LandingPageComponents/LandingPageAssets/HeroBG.JPEG';
 
 function LogIn() {
   const { isAuthenticated, user } = useAuth(); // Use the login function from AuthContext

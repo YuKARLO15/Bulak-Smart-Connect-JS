@@ -5,8 +5,11 @@
   justify-content: center;
   align-items: center;
   padding: 70px;
-
+background-color: #184a5b;
+  min-height:542px;
   text-align: center;
+  border-radius: 10px 0 0 10px;
+
 }
 
 .WelcomeMessage {
@@ -15,26 +18,27 @@
 
 .MainTitle {
   font-weight: bold;
-  color: #184a5b;
+  color: #fff;
   margin-bottom: 16px;
   font-size: 2rem; /* Default size for mobile */
+  font-weight: 600 !important;
 }
 
 .PlaceholderText {
-  color: #6c757d;
-  margin-bottom: 32px;
+  color: #c2c7cb;
+  margin-bottom: 32px !important;
   max-width: 500px;
   font-size: 1rem;
 }
 
 .SignUpText {
-  color: #6c757d;
+  color: #ffffff !important;
 }
 
 .SignUpButton {
   border-radius: 8px;
-  border-color: #184a5b !important;
-  color: #184a5b !important;
+  border-color: #ffffff !important;
+  color: #ffffff !important;
   text-transform: uppercase;
   padding: 12px 30px;
   font-size: 1rem;

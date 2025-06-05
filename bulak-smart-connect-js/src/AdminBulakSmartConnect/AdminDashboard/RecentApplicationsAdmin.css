@@ -1,32 +1,40 @@
+
 .RecentAppsAdminCard {
   width: 100%;
   border-radius: 8px;
   overflow: hidden;
+
 }
 
+.ApplicationStatsMainContainer {
+display: flex;
+flex-direction: row;
+width: 100vw !important;
+}
+
+.StatAppointmentTypeContainer {
+  display: flex !important;
+  flex-direction: column !important;
+  width: 100vw !important;
+}
+.StatsBirthContainer, .StatsMarriageContainer {
+margin-bottom: 20px !important;
+ border: 1px solid #e0e0e0;
+ width: 100% !important;
+ 
+}
+.OverAllStatContainer {
+  height: 20vh;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+
+}
 .RecentAppsAdminTitle {
   font-size: 1rem !important;
   font-weight: 600 !important;
   color: #184a5b !important;
   margin-bottom: 8px !important;
-}
-
-.RecentAppsAdminList {
-  max-height: 300px;
-  overflow-y: auto;
-}
-
-.RecentAppsAdminItem {
-  transition: all 0.2s ease;
-}
-
-.RecentAppsAdminItemCard {
-  transition: transform 0.2s;
-}
-
-.RecentAppsAdminItemCard:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
 }
 
 .RecentAppsAdminLoading, 
@@ -37,4 +45,84 @@
   justify-content: center;
   padding: 20px;
   min-height: 150px;
+}
+
+.ApplicationStatsTitle {
+  color: #184a5b;
+  font-weight: 600 !important;
+}
+
+.StatCard, .TotalStatCard {
+  padding: 16px;
+border-radius: 10px !important;
+  height: 100%;
+}
+
+.TotalStatCard{
+  background-color: rgba(55, 87, 101, 0.09) !important;
+  display: flex;
+  flex-direction: column; 
+  align-items: center;
+  justify-content: center;
+  margin-top: 150px;
+}
+.AllStatCardTitle {
+  color: #184a5b;
+  font-weight: 600 !important;
+  margin-bottom: 20px !important;
+}
+.ApplicationStatImage  {
+  width: 8vw;
+}
+
+.StatCardTitle {
+  color: #184a5b;
+  font-weight: 600 !important;
+  margin-bottom: 20px !important;
+
+}
+
+.StatNumbers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 5px;
+
+}
+
+.StatItem {
+  flex: 1;
+  min-width: 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.StatItem h6 {
+  font-weight: 600 !important;
+}
+.RecentAppsAdminHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.ApplicationStatsViewAllButton {
+
+   color: #184a5b !important;
+  border: 1px solid #8aacb5 !important;
+  text-transform: none !important;
+  font-size: 0.7rem !important;
+  padding: 2px 8px !important;
+  min-width: 10vw !important;
+  font-weight: 600 !important;
+
+}
+.ApplicationStatsViewAllButton:hover {
+  text-decoration: underline !important;
+background-color:  rgba(24, 74, 91, 0.05) !important;
+
+}
+.TotalStatCard {
+  text-align: center;
+  padding: 16px;
+  background-color: rgba(24, 74, 91, 0.05);
 }

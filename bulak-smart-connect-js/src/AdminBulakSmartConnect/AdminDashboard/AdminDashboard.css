@@ -1,77 +1,23 @@
+/* Base Layout */
 .admin-dashboard {
   min-height: 100vh;
- width: 100vw;
+  width: 100vw; 
   background: linear-gradient(180deg, #fff 70%, #f9f6f3 100%);
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-/* Center and constrain the dashboard content */
-.admin-dashboard-content-wrapper {
-  max-width: 100vw;
-  margin: 0 auto;
-  padding: 32px 16px 32px 16px;
-  display: flex;
-  flex-direction: column;
-  min-height: calc(100vh - 56px); /* 56px is the nav height */
-}
-
-/* Adjust .admin-dashboard-container to use full width of the wrapper */
-.admin-dashboard-container {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  width: 100%;
-  gap: 32px;
-  margin: 0;
-  box-sizing: border-box;
-}
-
-/* Make sure charts and cards fill available space */
-.admin-dashboard-main {
-  flex: 2;
-  min-width: 0;
-}
-
-.admin-dashboard-walk-in-queue {
-  flex: 1;
-  min-width: 260px;
-  max-width: 340px;
-}
-
-/* Responsive: stack on small screens */
-@media (max-width: 1100px) {
-  .admin-dashboard-content-wrapper {
-    max-width: 98vw;
-    padding: 16px 4px;
-  }
-  .admin-dashboard-container {
-    flex-direction: column;
-    gap: 0;
-  }
-  .admin-dashboard-walk-in-queue {
-    margin-top: 24px;
-    width: 100%;
-    max-width: 100%;
-  }
-}
-
-.admin-dashboard {
-  background: #fff;
-  min-height: 100vh;
-}
-
 /* Top Navigation Bar */
 .admin-dashboard-top-nav {
-  width: 100%;
-  background: #1C4D5A;
+  background-color: #184a5b;
+  font-size: 25px !important;
+  justify-content: center;
+  font-weight: 600 !important;
   display: flex;
+  padding: 10px !important;
+  width: 100vw;
   align-items: center;
-  justify-content: space-between;
-  padding: 35px;
-  height: 56px;
-  box-sizing: border-box;
 }
 
 .admin-dashboard-menu-icon {
@@ -80,15 +26,13 @@
   cursor: pointer;
 }
 
-.admin-dashboard-title {
+.admin-dashboard-top-title  {
   color: #fff;
-  font-size: 1.6rem;
-  font-weight: 700;
-  margin: 0;
-  flex: 1;
-  text-align: center;
-
-}
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-left: 16px;
+  background-color: none !important;
+} 
 
 .admin-dashboard-search-bar {
   width: 260px;
@@ -97,6 +41,7 @@
   padding: 6px 16px;
   display: flex;
   align-items: center;
+   height: 40px !important;
 }
 
 .admin-dashboard-search-bar input {
@@ -106,67 +51,62 @@
   width: 100%;
   font-size: 1rem;
   color: #495057;
+  height: 30px !important;
 }
 
-/* Main Dashboard Layout */
-.admin-dashboard-container {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  max-width: 1200px;
-  margin: 40px auto 0 auto;
+/* Content Wrapper */
+.admin-dashboard-content-wrapper {
   width: 100%;
-  gap: 32px;
-}
-.admin-dashboard-container.sidebar-open {
-  margin-left: 240px;
-}
-.admin-dashboard-main {
-  flex: 2;
-  min-width: 0;
-}
-
-.admin-dashboard-walk-in-queue {
-  flex: 1;
-  background: #f7f9fa;
-  border-radius: 14px;
-  padding: 18px;
-  min-width: 260px;
-  min-height: 500px;
-  box-shadow: none;
-  margin-top: 0;
-  height: fit-content;
-  font-weight: 600;
-  color: #1C4D5A;
-  font-size: 1.1rem;
+  max-width: 1400px;  /* Increased to allow for more content */
+  margin: 0 auto;
+  padding: 24px 16px;
   display: flex;
   flex-direction: column;
+  min-height: calc(100vh - 56px);
 }
 
-.admin-dashboard-walk-in-queue h2 {
-  color: #1C4D5A;
-  font-size: 1.1rem;
-  font-weight: 600;
-  margin-bottom: 10px;
+/* Main Container Layout - Matching Image */
+.admin-dashboard-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
+  gap: 24px;
+  margin: 0 auto;
+  box-sizing: border-box;
 }
 
-.admin-dashboard-queue-content {
-  min-height: 100px;
+/* Main Content Area */
+.admin-dashboard-main {
+  flex: 1;
+  max-width: calc(100% - 340px - 24px);  /* Account for sidebar width and gap */
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+   align-items: center;
 }
 
-/* Charts Section */
+/* Sidebar Area */
+.admin-dashboard-sidebar {
+  width: 340px;
+  min-width: 340px;
+
+}
+
+/* Charts Section - Two charts side by side */
 .admin-dashboard-charts {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 40px;
-  margin-bottom: 32px;
+  gap: 24px;
+  margin-bottom: 24px;
+  width: 100%;
 }
 
 .admin-dashboard-chart-card {
   background: #f7f9fa;
   border-radius: 14px;
-  padding: 22px 18px 12px 18px;
-  box-shadow: none;
+  padding: 20px 16px 12px 16px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
   min-width: 0;
 }
 
@@ -191,6 +131,7 @@
   background: #1C4D5A;
   margin-right: 6px;
 }
+
 .admin-dashboard-appointment-dot, .admin-dashboard-marriage-dot {
   display: inline-block;
   width: 12px;
@@ -201,144 +142,198 @@
   margin-right: 6px;
 }
 
-/* Section Containers */
-.admin-dashboard-section-container {
-  margin-bottom: 28px;
+/* Overall Appointment Stats - Matching Image */
+.admin-dashboard-appointment-stats {
+  background: #f7f9fa;
+  border-radius: 14px;
+  padding: 20px 16px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  margin-bottom: 24px;
+  width: 100%;
 }
 
-.admin-dashboard-section-container h2 {
+/* Walk-in Queue - Right sidebar */
+.admin-dashboard-walk-in-queue {
+  background: #f7f9fa;
+  border-radius: 14px;
+  padding: 20px 16px;
+  min-width: 260px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  
   color: #1C4D5A;
-  font-size: 1.15rem;
-  font-weight: 600;
-  margin-bottom: 14px;
-  margin-top: 0;
-}
-
-/* Document Applications & Pre-Appointments */
-.admin-dashboard-document-applications,
-.admin-dashboard-pre-appointments {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-}
-
-.admin-dashboard-application-card,
-.admin-dashboard-appointment-card {
-  background: #e9ecef;
-  border-radius: 12px;
-  padding: 14px 18px;
-  box-shadow: none;
+  font-size: 1.1rem;
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  margin-bottom: 24px;
+}
+
+.RecentAppointmentsAdminCard,
+.RecentAppsAdminCard {
+  margin-top: 0 !important;
+  margin-bottom: 24px;
+  width: 100%;
+}
+.RecentAppointmentsAdminCard,
+.RecentAppsAdminCard,
+.admin-dashboard-overall-appointment,
+.admin-dashboard-overall-application,
+.admin-dashboard-walk-in-queue {
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1) !important;
+}
+
+
+.admin-dashboard-walk-in-queue h2 {
+  color: #1C4D5A;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+/* Additional Stats Boxes */
+.overall-appointment-box, 
+.overall-application-box {
+  background: #f7f9fa;
+  border-radius: 14px;
+  padding: 20px 16px;
+  min-width: 260px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  margin-bottom: 24px;
+  width: 100%;
+}
+
+/* Applications Section */
+.admin-dashboard-applications {
+  background: #f7f9fa;
+  border-radius: 14px;
+  padding: 20px 16px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  margin-bottom: 24px;
+  width: 100%;
+}
+
+/* Responsive Sidebar */
+.admin-dashboard-container.sidebar-open {
+  margin-left: 240px;
+}
+
+/* Utility classes for components from image */
+.stats-container {
+  display: flex;
   justify-content: space-between;
-  min-width: 0;
-  transition: box-shadow 0.2s;
+  margin-bottom: 16px;
 }
 
-.admin-dashboard-application-info,
-.admin-dashboard-appointment-info {
+.stat-box {
+  background: white;
+  border-radius: 8px;
+  padding: 16px;
+  text-align: center;
   flex: 1;
-  min-width: 0;
+  margin: 0 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
 }
 
-.admin-dashboard-application-title,
-.admin-dashboard-appointment-title {
-  font-weight: 600;
-  color: #1C4D5A;
-  margin-bottom: 2px;
-  font-size: 1rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+.stat-box:first-child {
+  margin-left: 0;
 }
 
-.admin-dashboard-application-date,
-.admin-dashboard-appointment-date {
-  font-size: 0.85rem;
-  color: #6c757d;
-  margin-bottom: 2px;
+.stat-box:last-child {
+  margin-right: 0;
 }
 
-.admin-dashboard-application-status {
-  font-size: 0.85rem;
-  font-weight: 500;
+.application-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 12px;
 }
 
-.admin-dashboard-status-approved {
-  color: #2e8b57;
+.application-table th {
+  text-align: left;
+  padding: 12px 8px;
+  border-bottom: 1px solid #e0e0e0;
 }
 
-.admin-dashboard-status-declined {
-  color: #d9534f;
+.application-table td {
+  padding: 12px 8px;
+  border-bottom: 1px solid #e0e0e0;
 }
 
-.admin-dashboard-status-pending {
-  color: #bfa100;
+/* Ensure charts have proper height */
+.admin-dashboard-chart-card .recharts-responsive-container {
+  min-height: 220px;
 }
 
-.admin-dashboard-application-id,
-.admin-dashboard-appointment-id {
-  font-weight: 600;
-  color: #1C4D5A;
-  margin-left: 18px;
-  margin-right: 10px;
-  min-width: 60px;
-  text-align: right;
+/* Media query for large desktop screens */
+@media (min-width: 1601px) {
+  .admin-dashboard-content-wrapper {
+    max-width: 1600px;
+  }
 }
 
-.admin-dashboard-review-btn,
-.admin-dashboard-see-more-btn {
-  background: none;
-  border: none;
-  color: #1C4D5A;
-  cursor: pointer;
-  font-size: 0.85rem;
-  text-decoration: underline;
-  margin-left: 8px;
-  padding: 0;
+/* Media query for desktop screens */
+@media (min-width: 1201px) and (max-width: 1600px) {
+  .admin-dashboard-content-wrapper {
+    max-width: 1400px;
+  }
 }
 
-.admin-dashboard-client-name {
-  font-size: 0.95rem;
-  color: #495057;
+/* Media query for smaller desktop screens */
+@media (min-width: 992px) and (max-width: 1200px) {
+  .admin-dashboard-content-wrapper {
+    max-width: 1100px;
+  }
+  
+  .admin-dashboard-sidebar {
+    width: 300px;
+    min-width: 300px;
+  }
+  
+  .admin-dashboard-main {
+    max-width: calc(100% - 300px - 24px);
+  }
 }
 
-/* Responsive styles */
-@media (max-width: 1100px) {
+/* Media query for tablets and mobile - match your existing responsiveness */
+@media (max-width: 991px) {
   .admin-dashboard-container {
     flex-direction: column;
-    max-width: 98vw;
-    gap: 0;
   }
-  .admin-dashboard-walk-in-queue {
-    margin-top: 24px;
-    min-width: 0;
+  
+  .admin-dashboard-main,
+  .admin-dashboard-sidebar {
     width: 100%;
+    max-width: 100%;
+    min-width: 0;
   }
-}
-
-@media (max-width: 900px) {
-  .admin-dashboard-charts,
-  .admin-dashboard-document-applications,
-  .admin-dashboard-pre-appointments {
+  
+  .admin-dashboard-charts {
     grid-template-columns: 1fr;
   }
-  .admin-dashboard-container {
-    padding: 0 8px;
+  
+  .admin-dashboard-sidebar {
+    margin-top: 24px;
   }
 }
 
-/* Add to AdminDashboard.css */
-.admin-dashboard-side-nav {
-  position: fixed;
-  top: 0;
-  left: -260px;
-  width: 260px;
-  height: 100%;
-  background: #1C4D5A;
-  color: #fff;
-  z-index: 1000;
-  transition: left 0.3s;
-  padding-top: 56px;
-  box-shadow: 2px 0 8px rgba(0,0,0,0.08);
+/* Media query for mobile devices */
+@media (max-width: 767px) {
+  .admin-dashboard-top-nav {
+    padding: 0 16px;
+  }
+  
+  .admin-dashboard-search-bar {
+    width: 200px;
+  }
+  
+  .admin-dashboard-title {
+    font-size: 1.4rem;
+  }
+  
+  .stats-container {
+    flex-direction: column;
+  }
+  
+  .stat-box {
+    margin: 8px 0;
+  }
 }
