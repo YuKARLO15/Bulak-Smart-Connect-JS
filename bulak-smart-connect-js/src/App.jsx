@@ -1,4 +1,5 @@
 import { Route, Routes } from 'react-router-dom';
+import { useEffect } from 'react'; 
 import './App.css';
 
 //-----------COMPONENTS --------------//
@@ -7,6 +8,9 @@ import PrivateRoute from './components/PrivateRoute';
 import Unauthorized from './components/Unauthorized';
 import InstallPrompt from './components/InstallPrompt';
 import OfflineIndicator from './components/OfflineIndicator';
+
+//-----------SERVICES --------------//
+import { localStorageManager } from './services/localStorageManager';
 
 //-----------USER SIDE --------------//
 
@@ -81,6 +85,24 @@ import AdminWalkInDetails from './AdminBulakSmartConnect/AdminWalkInDetails/Admi
 import AdminAccount from './AdminBulakSmartConnect/AdminAccount/AdminAccount';
 
 function App() {
+
+  // Initialize localStorageManager
+  useEffect(() => {
+    // Start monitoring localStorage usage
+    localStorageManager.startMonitoring();
+    
+    // Log initial storage status
+    const report = localStorageManager.getUsageReport();
+    console.log('📊 Initial localStorage usage:', report);
+    
+    // Clean up on app start if needed
+    if (parseFloat(report.percentage) > 80) {
+      console.log('🧹 Performing initial cleanup...');
+      localStorageManager.performCleanup(0.3);
+    }
+  }, []);
+
+  // App Routes
   return (
     <AuthProvider>
       <Routes>
