@@ -48,8 +48,11 @@ margin-bottom: 20px !important;
 }
 
 .ApplicationStatsTitle {
-  color: #184a5b;
+  font-size: 1rem !important;
   font-weight: 600 !important;
+  color: #184a5b !important;
+  margin-bottom: 8px !important;
+    margin-left: 20px !important;
 }
 
 .StatCard, .TotalStatCard {
