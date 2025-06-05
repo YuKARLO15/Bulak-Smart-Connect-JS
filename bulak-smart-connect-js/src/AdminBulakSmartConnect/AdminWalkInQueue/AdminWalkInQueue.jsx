@@ -26,6 +26,7 @@ const AdminWalkInQueue = () => {
   const [currentQueues, setCurrentQueues] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [selectedQueue, setSelectedQueue] = useState(null);
   const navigate = useNavigate();
 
   // Current queue is the first in the serving queues
@@ -37,7 +38,9 @@ const AdminWalkInQueue = () => {
     formatWKNumber(pendingQueues[0].queueNumber || pendingQueues[0].id) : 'None';
   
   // Total queues count
-  const totalQueues = pendingQueues.length + currentQueues.length;  // Update queue status
+  const totalQueues = pendingQueues.length + currentQueues.length;  
+  
+  // Update queue status
   const updateQueueStatus = async (queueId, newStatus) => {
     try {
       console.log(`Attempting to update queue ${queueId} to status: ${newStatus}`);
@@ -60,10 +63,20 @@ const AdminWalkInQueue = () => {
         if (queueToMove) {
           setPendingQueues(prev => prev.filter(q => q.id !== queueId && q.id !== parsedQueueId));
           setCurrentQueues(prev => [...prev, {...queueToMove, status: mappedStatus}]);
+          
+          // Set selected queue to show details
+          setSelectedQueue({...queueToMove, status: mappedStatus});
+          
+          // Navigate to details view
+          navigate(`/AdminWalkInDetails/${queueId}`);
         }
       } else if (newStatus === 'completed') {
         // Remove from current
         setCurrentQueues(prev => prev.filter(q => q.id !== queueId && q.id !== parsedQueueId));
+        // Clear selected queue if it was completed
+        if (selectedQueue && (selectedQueue.id === queueId || selectedQueue.id === parsedQueueId)) {
+          setSelectedQueue(null);
+        }
       } else if (newStatus === 'pending') {
         // Move from current to pending
         const queueToMove = currentQueues.find(q => q.id === queueId || q.id === parsedQueueId);
@@ -81,6 +94,7 @@ const AdminWalkInQueue = () => {
       alert(`Failed to update queue status. Error: ${error.response?.data?.message || error.message}`);
     }
   };
+  
   // Function to fetch queue data - using queueService.fetchWalkInQueues
   const fetchQueueData = useCallback(async () => {
     setLoading(true);
@@ -127,6 +141,11 @@ const AdminWalkInQueue = () => {
   // View details of a specific queue
   const viewQueueDetails = (queueId) => {
     navigate(`/AdminWalkInDetails/${queueId}`);
+  };
+  
+  // Get all queues combined for rendering
+  const getAllQueues = () => {
+    return [...currentQueues, ...pendingQueues];
   };
   
   // Fetch data on component mount and refresh periodically
@@ -181,65 +200,82 @@ const AdminWalkInQueue = () => {
         <div className="admin-walkin-queue-list-section">
           <h2 className="admin-walkin-queue-list-title">Walk - In Queues</h2>
           
-          {loading ? (
-            <div style={{textAlign: 'center', padding: '20px'}}>
-              <div className="loading-spinner"></div>
-              <p>Loading queue data...</p>
-            </div>
-          ) : error ? (
-            <div style={{textAlign: 'center', padding: '20px', color: '#721c24'}}>
-              <p>{error}</p>
-            </div>
-          ) : pendingQueues.length === 0 && currentQueues.length === 0 ? (
-            <div style={{textAlign: 'center', padding: '20px', color: '#666'}}>
-              <p>No active walk-in queues</p>
-            </div>
-          ) : (
-            <div className="admin-walkin-queue-list">
-              {/* Show current queues first */}
-                {/*<button className="admin-walkin-queue-action-btn" onClick={getDetails}>
-                 View Details
-                </button>*/}
-              {currentQueues.map(queue => (
-                <div 
-                  key={queue.id} 
-                  className="admin-walkin-queue-item active-queue"
-                  onClick={() => viewQueueDetails(queue.id)}
-                >
-                  <div className="admin-walkin-queue-status-section">
-                    <div className="admin-walkin-queue-status">IN PROGRESS</div>
-                    <div className="admin-walkin-queue-date">
-                      {new Date(queue.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+          <div className="queue-content">
+            {loading ? (
+              <div className="queue-loading">
+                <div className="loading-spinner"></div>
+                <p>Loading queue data...</p>
+              </div>
+            ) : error ? (
+              <div className="queue-error">
+                <p>{error}</p>
+              </div>
+            ) : getAllQueues().length === 0 ? (
+              <div className="queue-empty">
+                <p>No active walk-in queue</p>
+                <small>When citizens create walk-in appointments, they'll appear here.</small>
+              </div>
+            ) : (
+              <div className="queue-list">
+                {getAllQueues().slice(0, 5).map(queue => (
+                  <div 
+                    key={queue.id} 
+                    className={`queue-item ${queue.status === 'serving' ? 'active-queue' : ''}`}
+                  >
+                    <div className="queue-top">
+                      <div className="queue-numberwalk">{queue.queueNumber}</div>
+                      <div className={`queue-status ${queue.status}`}>
+                        {queue.status === 'serving' ? 'in-progress' : queue.status}
+                      </div>
+                    </div>
+                    <div className="queue-details">
+                      <div className="queue-name">{`${queue.firstName} ${queue.lastName}`}</div>
+                      <div className="queue-reason">{queue.reasonOfVisit}</div>
+                    
+                    </div>
+                    <div className="queue-actions">
+                      {queue.status === 'pending' && (
+                        <button 
+                          className="queue-action-btn start"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            updateQueueStatus(queue.id, 'serving');
+                          }}
+                          aria-label="Start serving this client"
+                        >
+                          Start
+                        </button>
+                      )}
+                      {queue.status === 'serving' && (
+                        <>
+                          <button 
+                            className="queue-action-btn view"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              viewQueueDetails(queue.id);
+                            }}
+                            aria-label="View details of this client"
+                          >
+                            View Details
+                          </button>
+                          <button 
+                            className="queue-action-btn complete"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              updateQueueStatus(queue.id, 'completed');
+                            }}
+                            aria-label="Mark this appointment as completed"
+                          >
+                            Complete
+                          </button>
+                        </>
+                      )}
                     </div>
                   </div>
-                  <div className="admin-walkin-queue-applicant">
-                    {`${queue.firstName} ${queue.lastName}`}
-                  </div>
-                  <div className="admin-walkin-queue-id">{queue.queueNumber}</div>
-                </div>
-              ))}
-              
-              {/* Then show pending queues */}
-              {pendingQueues.map(queue => (
-                <div 
-                  key={queue.id} 
-                  className="admin-walkin-queue-item"
-                  onClick={() => viewQueueDetails(queue.id)}
-                >
-                  <div className="admin-walkin-queue-status-section">
-                    <div className="admin-walkin-queue-status">PENDING</div>
-                    <div className="admin-walkin-queue-date">
-                      {new Date(queue.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
-                    </div>
-                  </div>
-                  <div className="admin-walkin-queue-applicant">
-                    {`${queue.firstName} ${queue.lastName}`}
-                  </div>
-                  <div className="admin-walkin-queue-id">{queue.queueNumber}</div>
-                </div>
-              ))}
-            </div>
-          )}
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>
