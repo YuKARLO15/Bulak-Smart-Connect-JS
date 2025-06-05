@@ -27,6 +27,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import FileUploadPreview from './AdminFilePreview';
 import AdminMarriageApplicationView from './AdminMarriageApplicationView';
 import AdminMarriageLicensePreview from './AdminMarriageLicensePreview';
+import NavBar from '../../NavigationComponents/NavSide';
 
 const AdminApplicationDetails = () => {
   const { id } = useParams();
@@ -41,7 +42,7 @@ const AdminApplicationDetails = () => {
   const [filterStatus, setFilterStatus] = useState('All');
   const [filterCategory, setFilterCategory] = useState('All'); 
   const [showDocumentsTab, setShowDocumentsTab] = useState(false);
-
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   useEffect(() => {
     try {
       const storedApplications = JSON.parse(localStorage.getItem('applications')) || [];
@@ -106,7 +107,7 @@ const AdminApplicationDetails = () => {
   };
 
   const handleStatusChange = event => {
-    setFilterStatus(event.target.value);
+  setNewStatus(event.target.value);
   };
 
   const handleCategoryChange = event => {
@@ -194,7 +195,9 @@ const AdminApplicationDetails = () => {
   }
 
   return (
-    <Box className="AdminMainContainerAdminAppForm">
+
+      <Box className={`AdminMainContainerAdminAppForm ${isSidebarOpen ? 'sidebar-open' : ''}`}>
+            <NavBar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
       <Grid container spacing={2}>
         <Grid item xs={12}>
           <Typography variant="h4" className="AdminTitleAdminAppForm">
@@ -205,11 +208,11 @@ const AdminApplicationDetails = () => {
         <Grid item xs={12} md={4}>
           <Paper elevation={3} className="ApplicationsListPaperAdminAppForm">
             <Box className="FilterContainerAdminAppForm">
-              <Typography variant="h6">Filter Applications</Typography>
+              <h3 classname = "FilterTitleApplication"> Filter Applications </h3>
               
               {/* Category Filter */}
               <FormControl fullWidth margin="normal">
-                <InputLabel>Category</InputLabel>
+                <InputLabel className='InputLabelApplication'>Category</InputLabel>
                 <Select value={filterCategory} onChange={handleCategoryChange} label="Category">
                   <MenuItem value="All">All Categories</MenuItem>
                   <MenuItem value="Birth Certificate">Birth Certificate</MenuItem>
@@ -225,7 +228,7 @@ const AdminApplicationDetails = () => {
                   <MenuItem value="All">All Statuses</MenuItem>
                   <MenuItem value="Pending">Pending</MenuItem>
                   <MenuItem value="Approved">Approved</MenuItem>
-                  <MenuItem value="Decline">Decline</MenuItem>
+                  <MenuItem value="Decline">Declined</MenuItem>
                   <MenuItem value="Requires Additional Info">Requires Additional Info</MenuItem>
                 </Select>
               </FormControl>
@@ -251,21 +254,26 @@ const AdminApplicationDetails = () => {
                     <Typography variant="subtitle1" className="ApplicationNameAdminAppForm">
                       {app.formData.firstName} {app.formData.lastName}
                     </Typography>
+                    <Box className="ApplicationMetAdminAppForm">
                     <Typography variant="body2" className="ApplicationIdAdminAppForm">
                       ID: {app.id}
                     </Typography>
+                  
                     <Typography variant="body2" className="ApplicationDateAdminAppForm">
-                      Submitted: {app.date}
-                    </Typography>
-                    <Typography variant="body2" style={{ marginTop: '4px' }}>
-                      Type: {app.type}
-                    </Typography>
+                    Type: {app.type}   
+                      </Typography> </Box>
+                    <Box className="ApplicationDetailsAdminAppForm">
+                    <Typography variant="body2" style={{ marginTop: '4px'  } }>
+                        Submitted: {app.date}
+                      </Typography>
+                     
                     <Typography
                       variant="body2"
                       className={`ApplicationStatusAdminAppForm status-${app.status.toLowerCase().replace(/\s+/g, '-')}AdminAppForm`}
                     >
                       Status: {app.status}
-                    </Typography>
+                      </Typography>
+                      </Box>
                   </Paper>
                 ))}
               </Box>
