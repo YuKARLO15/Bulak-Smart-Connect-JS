@@ -77,6 +77,9 @@ import AdminAppointmentDashboard from './AdminBulakSmartConnect/AdminAppointment
 import AdminWalkInQueue from './AdminBulakSmartConnect/AdminWalkInQueue/AdminWalkInQueue';
 import AdminWalkInDetails from './AdminBulakSmartConnect/AdminWalkInDetails/AdminWalkInDetails';
 
+//Admin Account//
+import AdminAccount from './AdminBulakSmartConnect/AdminAccount/AdminAccount';
+
 function App() {
   return (
     <AuthProvider>
@@ -96,7 +99,11 @@ function App() {
 
           {/* Admin Announcement */}
           <Route path="/AdminAnnouncement" element={<AdminAnnouncement />} />
+
+          {/* Admin Account */}
+          <Route path="/AdminAccount" element={<AdminAccount />} />
         </Route>
+
 
         {/* Staff routes - Protected for staff, admin and super_admin */}
         <Route element={<PrivateRoute allowedRoles={['staff', 'admin', 'super_admin']} />}>
