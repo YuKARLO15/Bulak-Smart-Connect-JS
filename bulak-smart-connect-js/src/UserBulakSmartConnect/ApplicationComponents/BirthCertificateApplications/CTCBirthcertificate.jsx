@@ -6,6 +6,7 @@ import NavBar from '../../../NavigationComponents/NavSide';
 import BirthCertificateApplicationData from './BirthCertificateApplicationData';
 import './CTCBirthCertificate.css';
 import { documentApplicationService } from '../../../services/documentApplicationService';
+import { localStorageManager } from '../../../services/localStorageManager';
 
 const CTCBirthCertificate = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -112,6 +113,20 @@ const handleFileUpload = async (label, isUploaded, fileDataObj) => {
   }
 };
 
+const mapStatusForBackend = (frontendStatus) => {
+  const statusMap = {
+    'Submitted': 'Pending',
+    'SUBMITTED': 'Pending',
+    'Pending': 'Pending',
+    'Approved': 'Approved',
+    'Rejected': 'Rejected',
+    'Declined': 'Rejected',
+    'Ready for Pickup': 'Ready for Pickup'
+  };
+  
+  return statusMap[frontendStatus] || 'Pending';
+};
+
 const handleSubmit = async () => {
   if (!isFormComplete) {
     alert('Please upload the required documents before submitting.');
@@ -128,10 +143,10 @@ const handleSubmit = async () => {
       return;
     }
 
-    // Update the backend application status to SUBMITTED
+    // Update the backend application status to Pending
     try {
       await documentApplicationService.updateApplication(applicationId, {
-        status: 'SUBMITTED',
+        status: mapStatusForBackend('SUBMITTED'), // This will become 'Processing'
         statusMessage: 'Application submitted with all required documents'
       });
       console.log('Application status updated in backend');
@@ -140,11 +155,11 @@ const handleSubmit = async () => {
       // Continue with local update even if backend fails
     }
 
-    // Update localStorage
+    // Update localStorage with auto-cleanup support
     const updatedFormData = {
       ...formData,
       uploadedFiles: fileData,
-      status: 'Submitted',
+      status: 'Pending',
       submittedAt: new Date().toISOString()
     };
 
@@ -158,7 +173,7 @@ const handleSubmit = async () => {
           ...applications[appIndex].formData,
           ...updatedFormData
         },
-        status: 'Submitted',
+        status: 'Pending',
         lastUpdated: new Date().toISOString()
       };
     } else {
@@ -167,8 +182,21 @@ const handleSubmit = async () => {
       return;
     }
 
-    localStorage.setItem('applications', JSON.stringify(applications));
-    localStorage.setItem('birthCertificateApplication', JSON.stringify(updatedFormData));
+    // Use safe storage methods
+    const applicationsStored = await localStorageManager.safeSetItem(
+      'applications', 
+      JSON.stringify(applications)
+    );
+    
+    const formDataStored = await localStorageManager.safeSetItem(
+      'birthCertificateApplication', 
+      JSON.stringify(updatedFormData)
+    );
+
+    if (!applicationsStored || !formDataStored) {
+      // Show user-friendly message if storage failed
+      alert('Application submitted successfully! Note: Some data may not be saved locally due to storage limitations.');
+    }
 
     window.dispatchEvent(new Event('storage'));
     window.dispatchEvent(new CustomEvent('customStorageUpdate', {
@@ -194,6 +222,18 @@ const handleSubmit = async () => {
   const handleBack = () => {
     navigate('/RequestACopyBirthCertificate');
   };
+
+  // Add storage monitoring on component mount
+useEffect(() => {
+  // Check storage usage when component loads
+  const usage = localStorageManager.getCurrentUsage();
+  console.log(`📊 Current storage usage: ${usage.percentage.toFixed(1)}%`);
+  
+  if (usage.isNearFull) {
+    console.warn('⚠️ localStorage is getting full, performing cleanup...');
+    localStorageManager.performCleanup(0.2);
+  }
+}, []);
 
   return (
     <Box className={`MainContainerCTCBirth ${isSidebarOpen ? 'SidebarOpenCTCBirth' : ''}`}>
