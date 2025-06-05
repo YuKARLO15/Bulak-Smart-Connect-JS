@@ -19,26 +19,29 @@ import FloatingAnnouncementButton from './FloatingAnnouncement';
 
 const LandingPage = () => {
   const { isAuthenticated } = useAuth();
-
-
-    useEffect(() => {
-      loadRecentAnnouncements();
-    }, []);
   
-    const loadRecentAnnouncements = async () => {
-      try {
-        setAnnouncementLoading(true);
-        const data = await announcementService.getRecentAnnouncements(3);
-        setAnnouncements(data);
-        setAnnouncementError(null);
-      } catch (error) {
-        console.error('Failed to load announcements:', error);
-        setAnnouncementError('Failed to load announcements');
-        // Keep empty array as fallback
-        setAnnouncements([]);
-      } finally {
-        setAnnouncementLoading(false);
-      }
+  const [announcements, setAnnouncements] = useState([]);
+  const [announcementLoading, setAnnouncementLoading] = useState(true);
+  const [announcementError, setAnnouncementError] = useState(null);
+
+  useEffect(() => {
+    loadRecentAnnouncements();
+  }, []);
+
+  const loadRecentAnnouncements = async () => {
+    try {
+      setAnnouncementLoading(true);
+      const data = await announcementService.getRecentAnnouncements(3);
+      setAnnouncements(data);
+      setAnnouncementError(null);
+    } catch (error) {
+      console.error('Failed to load announcements:', error);
+      setAnnouncementError('Failed to load announcements');
+      // Keep empty array as fallback
+      setAnnouncements([]);
+    } finally {
+      setAnnouncementLoading(false);
+    }
   };
 
   
