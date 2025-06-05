@@ -386,12 +386,7 @@ const RecentApplicationsAdmin = () => {
                     {statistics.birthCertificate.declined}
                   </Typography>
                 </Box>
-                <Box className="StatItem">
-                  <Typography variant="body2">Total:</Typography>
-                  <Typography variant="h6" sx={{ color: '#184a5b' }}>
-                    {statistics.birthCertificate.total}
-                  </Typography>
-                </Box>
+             
               </Box>
             </Paper>
           </Grid>
@@ -421,12 +416,7 @@ const RecentApplicationsAdmin = () => {
                     {statistics.marriage.declined}
                   </Typography>
                 </Box>
-                <Box className="StatItem">
-                  <Typography variant="body2">Total:</Typography>
-                  <Typography variant="h6" sx={{ color: '#184a5b' }}>
-                    {statistics.marriage.total}
-                  </Typography>
-                </Box>
+          
               </Box>
             </Paper>
           </Grid>

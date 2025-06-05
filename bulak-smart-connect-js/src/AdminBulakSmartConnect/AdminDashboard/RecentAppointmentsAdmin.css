@@ -3,6 +3,7 @@
   border-radius: 8px;
   overflow: hidden;
   margin-top: 15px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
 }
 
 .RecentApptAdminTitle {
@@ -10,6 +11,7 @@
   font-weight: 600 !important;
   color: #184a5b !important;
   margin-bottom: 8px !important;
+
 }
 
 .AppointmentItemAdmin {
@@ -45,6 +47,7 @@
 .AppointmentDateAdmin, .AppointmentTimeAdmin {
   font-size: 0.75rem !important;
   color: #666 !important;
+
 }
 
 .AppointmentDateAdmin {
