@@ -46,6 +46,10 @@ margin-bottom: 20px !important;
   padding: 20px;
   min-height: 150px;
 }
+.css-5c1adp-MuiContainer-root {
+padding-left: 0% !important;
+padding-right: 1% !important;
+}
 
 .ApplicationStatsTitle {
   font-size: 1rem !important;
