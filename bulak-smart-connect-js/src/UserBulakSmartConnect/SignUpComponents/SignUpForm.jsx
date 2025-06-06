@@ -143,15 +143,14 @@ const SignUpForm = () => {
   };
 
   return (
-    <div
-      className="signup-container"
-      style={{
-        backgroundImage: `url(${HeroBg})`,
-      }}
-    >
-      <div className="Navigation">
-        <NavBar />
-      </div>
+   
+    <div className="signup-container">
+
+        <div className="Navigation">
+          <NavBar />
+        </div>
+
+
       <h2 className="signup-label">Sign Up Form</h2>
 
       <form onSubmit={handleSubmit}>
