@@ -5,7 +5,7 @@ const userService = {
   getAllUsers: async (params = {}) => {
     const queryParams = new URLSearchParams({
       page: params.page || 1,
-      limit: params.limit || 10,
+      limit: params.limit || 50,
       ...(params.search && { search: params.search }),
       ...(params.role && { role: params.role }),
     });
