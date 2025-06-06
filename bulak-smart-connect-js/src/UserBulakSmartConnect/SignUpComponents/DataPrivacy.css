@@ -17,10 +17,14 @@ body {
 }
 
 .privacy-text {
-  max-width: 900px;
+  max-width: 1000px;
   margin: 0 auto;
   text-align: center;
-  padding: 10px 10px;
+  padding: 20px;
+  background-color: #ffffff; /* White background */
+  border: 2px solid #1c4d5a; /* Green border */
+  border-radius: 8px;
+  color: #1c4d5a; /* Green text */
 }
 
 .privacy-text h2 {
@@ -32,7 +36,7 @@ body {
 
 .privacy-text p {
   font-size: 14px;
-  color: #444;
+  color: #1c4d5a;
   line-height: 1.5;
   margin-bottom: 20px;
 }
@@ -54,27 +58,55 @@ body {
   margin-top: 20px;
   margin-left: 25px;
 }
-.radio-group label {
+
+.radio-group label,
+.radio-group-2 label,
+.do-not {
   display: flex;
   align-items: center;
   font-size: 14px;
-  color: #1c4d5a;
+  color: #1c4d5a; /* Green text */
   cursor: pointer;
   max-width: 100%;
 }
 
-.radio-group input[type='radio'] {
-  margin-right: 10px;
-  transform: scale(1.2);
-  cursor: pointer;
-  color: #1c4d5a;
-}
+.radio-group input[type='radio'],
 .radio-group-2 input[type='radio'] {
   margin-right: 10px;
   transform: scale(1.2);
   cursor: pointer;
-  color: #1c4d5a;
+  accent-color: #1c4d5a !important;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 2px solid #1c4d5a;
+  border-radius: 50%;
+  position: relative;
+  background-color: transparent;
 }
+
+.radio-group input[type='radio']:checked,
+.radio-group-2 input[type='radio']:checked {
+  background-color: #1c4d5a;
+  border-color: #1c4d5a;
+}
+
+.radio-group input[type='radio']:checked::before,
+.radio-group-2 input[type='radio']:checked::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #ffffff; /* White inner dot */
+}
+
+/* Optional: Modal (if you are using it) */
 
 .modal-overlay {
   position: fixed;

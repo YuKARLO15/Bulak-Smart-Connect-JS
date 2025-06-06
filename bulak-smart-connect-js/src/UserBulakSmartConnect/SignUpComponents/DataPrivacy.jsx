@@ -23,6 +23,7 @@ const DataPrivacy = ({ onAgreeChange }) => {
         </p>
         <p>
          
+         <p><strong>Choose one | Pumili ng isa</strong></p>
         </p>
         <div className="radio-group">
           <label>
@@ -39,7 +40,7 @@ const DataPrivacy = ({ onAgreeChange }) => {
           </label>
           </div>
            <div className="radio-group-2">
-          <label>
+          <label className='do-not'>
             <input 
               type="radio"
               name="agree"

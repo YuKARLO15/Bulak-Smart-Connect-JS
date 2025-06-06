@@ -12,7 +12,7 @@
 .admin-dashboard-top-nav {
   background-color: #184a5b;
   font-size: 25px !important;
-  justify-content: center;
+  justify-content: space-between;
   font-weight: 600 !important;
   display: flex;
   padding: 10px !important;
@@ -26,12 +26,14 @@
   cursor: pointer;
 }
 
-.admin-dashboard-top-title  {
+.AdminDahboardHeader  {
   color: #fff;
   font-size: 1.5rem;
   font-weight: 600;
-  margin-left: 16px;
+  margin-left: 40vw;
   background-color: none !important;
+  padding: 20px !important;
+  text-align: center;
 } 
 
 .admin-dashboard-search-bar {
@@ -42,6 +44,7 @@
   display: flex;
   align-items: center;
    height: 40px !important;
+   margin-right: 20px;
 }
 
 .admin-dashboard-search-bar input {
@@ -262,7 +265,12 @@
 .admin-dashboard-chart-card .recharts-responsive-container {
   min-height: 220px;
 }
+.OverAllStatAppointContainer {
+  height: 20vh;
+  align-items: center;
+  justify-content: center;
 
+} 
 /* Media query for large desktop screens */
 @media (min-width: 1601px) {
   .admin-dashboard-content-wrapper {

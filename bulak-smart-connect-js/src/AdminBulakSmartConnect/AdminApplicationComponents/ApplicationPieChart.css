@@ -1,0 +1,47 @@
+.ApplicationPieChartContainer {
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  margin-bottom: 20px;
+}
+
+.ApplicationPieChartTitle {
+  font-size: 1.25rem;
+  font-weight: 550 !important;
+  margin-bottom: 16px;
+  color: #184a5b;
+  text-align: center;
+}
+
+.ApplicationPieChartNoData {
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+  font-style: italic;
+}
+
+.CustomTooltip {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 4px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.TooltipLabel {
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #333;
+}
+
+.TooltipData {
+  margin: 3px 0;
+  color: #555;
+}
+
+.recharts-legend-item-text {
+  color: #333 !important;
+}

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Radio, RadioGroup, FormControlLabel, Typography, Box, Paper, Button } from '@mui/material';
 import './BirthCertificateDashboard.css';
 import NavBar from '../../../NavigationComponents/NavSide';
@@ -9,7 +9,7 @@ const BirthCertificateDashboard = () => {
   const [selectedOption, setSelectedOption] = useState('');
   const [agreedPrivacy, setAgreedPrivacy] = useState(false);
   const [agreedTerms, setAgreedTerms] = useState(false);
-    const [hasVisitedPrivacyPolicy, setHasVisitedPrivacyPolicy] = useState(false);
+  const [hasVisitedPrivacyPolicy, setHasVisitedPrivacyPolicy] = useState(false);
 
   const navigate = useNavigate();
   useEffect(() => {
@@ -22,7 +22,7 @@ const BirthCertificateDashboard = () => {
   const handlePrivacyPolicyClick = () => {
     // Open the privacy policy in a new window
     const policyWindow = window.open('/PrivacyPolicy', '_blank');
-    
+
     // Set up a listener to detect when the window is closed
     if (policyWindow) {
       const checkClosed = setInterval(() => {
@@ -41,30 +41,24 @@ const BirthCertificateDashboard = () => {
     }
 
     localStorage.setItem('selectedBirthCertificateOption', selectedOption);
-    
+
     if (['Clerical Error', 'Sex DOB', 'First Name'].includes(selectedOption)) {
-   
       const correctionRoutes = {
         'Clerical Error': '/ClericalErrorApplication',
         'Sex DOB': '/SexDobCorrection',
-        'First Name': '/FirstNameCorrection'
+        'First Name': '/FirstNameCorrection',
       };
-      
-   
+
       navigate(correctionRoutes[selectedOption]);
       console.log(`Navigating to correction route: ${correctionRoutes[selectedOption]}`);
-    } 
-
-    else if (selectedOption === 'Request copy') {
+    } else if (selectedOption === 'Request copy') {
       localStorage.removeItem('isEditingBirthApplication');
       localStorage.removeItem('editingApplicationId');
       localStorage.removeItem('birthCertificateApplication');
       localStorage.removeItem('editingApplication');
       localStorage.removeItem('currentApplicationStatus');
       navigate('/RequestACopyBirthCertificate');
-    } 
-   
-    else {
+    } else {
       localStorage.removeItem('isEditingBirthApplication');
       localStorage.removeItem('editingApplicationId');
       localStorage.removeItem('birthCertificateApplication');
@@ -145,23 +139,34 @@ const BirthCertificateDashboard = () => {
           </RadioGroup>
         </Box>
 
-  <Box className="Section">
+        <Box className="Section">
           <Typography variant="h6" className="SectionTitle">
             Data Privacy Notice
           </Typography>
-          <Box sx={{ mb: 2 }}  className='dataPrivacyNoticeContainer' >
-            <Typography variant="body2" sx={{ mb: 1 }} className='dataPrivacyNotice'>
-              Please read our{' '}
-              <Button 
-                variant="text" 
-                color="primary" 
+          <Box sx={{ mb: 2 }} className="dataPrivacyNoticeContainer">
+            <Typography variant="body2" sx={{ mb: 1 }} className="dataPrivacyNotice">
+              Please <strong>click</strong> and <strong>read </strong> our{' '}
+              <Button
+                variant="text"
+                color="primary"
                 onClick={handlePrivacyPolicyClick}
                 sx={{ p: 0, textTransform: 'none', textDecoration: 'underline' }}
-                className='dataPrivacyNoticeLink'
+                className="dataPrivacyNoticeLink"
               >
                 Data Privacy Policy
               </Button>{' '}
-              before proceeding.
+              before proceeding. |{' '}
+              <span className="Privacy-TagalogNotice">
+                Pindutin at basahin ang aming   <Button
+                variant="text"
+                color="primary"
+                onClick={handlePrivacyPolicyClick}
+                sx={{ p: 0, textTransform: 'none', textDecoration: 'underline' }}
+                className="dataPrivacyNoticeLink"
+              >
+               Patakaran sa Pagkapribado ng Data
+              </Button>{' '} bago magpatuloy.
+              </span>
             </Typography>
             {!hasVisitedPrivacyPolicy && (
               <Typography variant="body2" color="error">
@@ -171,18 +176,18 @@ const BirthCertificateDashboard = () => {
           </Box>
           <FormControlLabel
             control={
-              <Radio 
-                checked={agreedPrivacy} 
+              <Radio
+                checked={agreedPrivacy}
                 onChange={() => setAgreedPrivacy(!agreedPrivacy)}
                 disabled={!hasVisitedPrivacyPolicy}
               />
             }
             label={
-              <Typography 
-                variant="body1" 
-                color={!hasVisitedPrivacyPolicy ? "text.disabled" : "text.primary"}
+              <Typography
+                variant="body1"
+                color={!hasVisitedPrivacyPolicy ? 'text.disabled' : 'text.primary'}
               >
-                I agree to the Data Privacy Notice
+                I agree to the Data Privacy Notice | Sumasang-ayon ako sa Data Privacy Notice
               </Typography>
             }
             className="BirthDashRadioGroup"
@@ -195,7 +200,7 @@ const BirthCertificateDashboard = () => {
           </Typography>
           <FormControlLabel
             control={<Radio checked={agreedTerms} onChange={() => setAgreedTerms(!agreedTerms)} />}
-            label="I agree to the terms and conditions"
+            label="I agree to the terms and conditions | Sumasang-ayon ako sa terms and conditions"
             className="BirthDashRadioGroup"
           />
         </Box>

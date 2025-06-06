@@ -222,83 +222,16 @@ const fetchQueueData = useCallback(async () => {
           </div>
           <div className="queue-stat">
             <span className="queue-stat-value">{pendingQueues.length}</span>
-            <span className="queue-stat-label">Waiting</span>
+            <span className="queue-stat-label-waiting">Waiting</span>
           </div>
           <div className="queue-stat">
             <span className="queue-stat-value">{currentQueues.length}</span>
-            <span className="queue-stat-label">In Progress</span>
+            <span className="queue-stat-labelprogress">In Progress</span>
           </div>
         </div>
       )}
       
-      {/* <div className="queue-content">
-        {loading ? (
-          <div className="queue-loading">
-            <div className="loading-spinner"></div>
-            <p>Loading queue data...</p>
-          </div>
-        ) : error ? (
-          <div className="queue-error">
-            <p>{error}</p>
-          </div>
-        ) : getAllQueues().length === 0 ? (
-          <div className="queue-empty">
-            <p>No active walk-in queue</p>
-            <small>When citizens create walk-in appointments, they'll appear here.</small>
-          </div>
-        ) : (
-          <div className="queue-list">
-            
-            {getAllQueues().slice(0, 5).map(queue => (
-              <div 
-                key={queue.id} 
-                className={`queue-item ${queue.status === 'in-progress' ? 'active-queue' : ''}`}
-              >
-                <div className="queue-top">
-                  <div className="queue-number">{queue.queueNumber}</div>
-                  <div className={`queue-status ${queue.status}`}>
-                    {queue.status}
-                  </div>
-                </div>
-                <div className="queue-details">
-                  <div className="queue-name">{`${queue.firstName} ${queue.lastName}`}</div>
-                  <div className="queue-reason">{queue.reasonOfVisit}</div>
-                  <div className="queue-time">
-                    {new Date(queue.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
-                  </div>
-                </div>
-                <div className="queue-actions">
-                  {queue.status === 'pending' && (
-                    <button 
-                      className="queue-action-btn start"
-                      onClick={() => updateQueueStatus(queue.id, 'in-progress')}
-                      aria-label="Start serving this client"
-                    >
-                      Start
-                    </button>
-                  )}
-                  {queue.status === 'in-progress' && (
-                    <button 
-                      className="queue-action-btn complete"
-                      onClick={() => updateQueueStatus(queue.id, 'completed')}
-                      aria-label="Mark this appointment as completed"
-                    >
-                      Complete
-                    </button>
-                  )}
-                </div>
-              </div>
-            ))}
-            
-          
-            {getAllQueues().length > 5 && (
-              <div className="queue-more-info">
-                <p>+ {getAllQueues().length - 5} more queued visitors</p>
-              </div>
-            )}
-          </div>
-        )}
-        */}
+
         <div className="queue-footer">
           <Link to="/AdminWalkInQueue" className="view-all-btn">
             View All Queues

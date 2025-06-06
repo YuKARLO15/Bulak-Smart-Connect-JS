@@ -84,6 +84,7 @@ async function bootstrap() {
     origin: 'http://localhost:5173', // Frontend IP
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
+    allowedHeaders: ['Content-Type', 'Authorization']
   });
 
   // Optional: Check and seed database before full startup
