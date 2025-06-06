@@ -1,70 +1,95 @@
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
   IsEmail,
   IsString,
   IsOptional,
+  MinLength,
   IsArray,
   IsNumber,
-  MinLength,
   IsNotEmpty,
 } from 'class-validator';
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class CreateUserDto {
-  @ApiProperty({ example: 'user@example.com' })
+  @ApiProperty({
+    example: 'john.doe@example.com',
+    description: 'User email address',
+  })
   @IsEmail()
   @IsNotEmpty()
   email: string;
 
-  @ApiPropertyOptional({ example: 'username123' })
-  @IsString()
+  @ApiPropertyOptional({
+    example: 'johndoe',
+    description: 'Username (optional, will use email if not provided)',
+  })
   @IsOptional()
+  @IsString()
   username?: string;
 
-  @ApiProperty({ example: 'securePassword123', minLength: 6 })
+  @ApiProperty({
+    example: 'password123',
+    description: 'User password (minimum 6 characters)',
+    minLength: 6,
+  })
   @IsString()
   @MinLength(6)
   password: string;
 
-  @ApiProperty({ example: 'John' })
+  @ApiProperty({
+    example: 'John',
+    description: 'User first name',
+  })
   @IsString()
   @IsNotEmpty()
   firstName: string;
 
-  @ApiPropertyOptional({ example: 'Michael' })
-  @IsString()
+  @ApiPropertyOptional({
+    example: 'Miguel',
+    description: 'User middle name (optional)',
+  })
   @IsOptional()
+  @IsString()
   middleName?: string;
 
-  @ApiProperty({ example: 'Doe' })
+  @ApiProperty({
+    example: 'Doe',
+    description: 'User last name',
+  })
   @IsString()
   @IsNotEmpty()
   lastName: string;
 
-  @ApiPropertyOptional({ example: 'Jr.' })
-  @IsString()
+  @ApiPropertyOptional({
+    example: 'Jr.',
+    description: 'Name extension (e.g., Jr., Sr., III)',
+  })
   @IsOptional()
+  @IsString()
   nameExtension?: string;
 
-  @ApiPropertyOptional({ example: '+639123456789' })
-  @IsString()
+  @ApiPropertyOptional({
+    example: '+639123456789',
+    description: 'Contact number',
+  })
   @IsOptional()
+  @IsString()
   contactNumber?: string;
 
-  @ApiPropertyOptional({ 
-    example: [1, 2], 
+  @ApiPropertyOptional({
+    example: [2, 3],
     description: 'Array of role IDs to assign to the user',
-    type: [Number]
+    type: [Number],
   })
+  @IsOptional()
   @IsArray()
   @IsNumber({}, { each: true })
-  @IsOptional()
   roleIds?: number[];
 
-  @ApiPropertyOptional({ 
-    example: 1, 
-    description: 'Default role ID for the user' 
+  @ApiPropertyOptional({
+    example: 4,
+    description: 'Default role ID for the user',
   })
-  @IsNumber()
   @IsOptional()
+  @IsNumber()
   defaultRoleId?: number;
 }

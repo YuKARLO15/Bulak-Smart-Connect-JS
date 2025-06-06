@@ -207,6 +207,8 @@ export class UsersService {
       lastName,
       nameExtension,
       contactNumber,
+      roleIds, // Add this
+      defaultRoleId, // Add this
     } = updateUserDto;
 
     // Check email uniqueness if being updated
@@ -238,9 +240,10 @@ export class UsersService {
     if (lastName) updateData.lastName = lastName;
     if (contactNumber) updateData.contactNumber = contactNumber;
     
-    // Handle optional fields - can be set to null/empty
+    // Handle optional fields
     if (middleName !== undefined) updateData.middleName = middleName;
     if (nameExtension !== undefined) updateData.nameExtension = nameExtension;
+    if (defaultRoleId !== undefined) updateData.defaultRoleId = defaultRoleId;
 
     // Hash new password if provided
     if (password) {
@@ -262,6 +265,21 @@ export class UsersService {
     }
 
     await this.usersRepository.update(id, updateData);
+
+    // Update roles if provided
+    if (roleIds !== undefined) {
+      // Remove existing roles and assign new ones
+      await this.usersRepository
+        .createQueryBuilder()
+        .relation(User, 'roles')
+        .of(id)
+        .remove(user.roles);
+
+      if (roleIds.length > 0) {
+        await this.rolesService.assignRolesToUser(id, roleIds);
+      }
+    }
+
     return this.findOne(id);
   }
 
