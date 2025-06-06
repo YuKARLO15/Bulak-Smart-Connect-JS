@@ -1,5 +1,5 @@
 import { Route, Routes } from 'react-router-dom';
-import { useEffect } from 'react'; 
+//import { useEffect } from 'react'; 
 import './App.css';
 
 //-----------COMPONENTS --------------//
@@ -10,7 +10,7 @@ import InstallPrompt from './components/InstallPrompt';
 import OfflineIndicator from './components/OfflineIndicator';
 
 //-----------SERVICES --------------//
-import { localStorageManager } from './services/localStorageManager';
+//import { localStorageManager } from './services/localStorageManager';
 
 //-----------USER SIDE --------------//
 
@@ -85,7 +85,7 @@ import AdminWalkInDetails from './AdminBulakSmartConnect/AdminWalkInDetails/Admi
 import AdminAccount from './AdminBulakSmartConnect/AdminAccount/AdminAccount';
 
 function App() {
-
+  /*
   // Initialize localStorageManager
   useEffect(() => {
     // Start monitoring localStorage usage
@@ -101,6 +101,7 @@ function App() {
       localStorageManager.performCleanup(0.3);
     }
   }, []);
+  */
 
   // App Routes
   return (
