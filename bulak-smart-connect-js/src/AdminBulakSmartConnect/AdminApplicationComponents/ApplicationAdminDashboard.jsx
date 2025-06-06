@@ -21,8 +21,7 @@ import './ApplicationAdminDashboard.css';
 import { getApplications } from '../../UserBulakSmartConnect/ApplicationComponents/ApplicationData';
 import { useNavigate } from 'react-router-dom';
 import NavBar from '../../NavigationComponents/NavSide';
-import ApplicationLineChart from '../AdminChartsComponent/ApplicationLineChart';
-
+import ApplicationPieChart from './ApplicationPieChart'; 
 
 const AdminApplicationDashboard = () => {
   const [filter, setFilter] = useState('All');
@@ -44,13 +43,6 @@ const AdminApplicationDashboard = () => {
       setLoading(false);
     }
   }, []);
-
-const [monthlyData, setMonthlyData] = useState({
-  Birth: [15, 20, 10, 25, 30, 22, 28, 35, 32, 40, 45, 50],
-  Marriage: [20, 25, 15, 18, 20, 25, 22, 28, 30, 32, 28, 35],
-});
-
-
 
   useEffect(() => {
     const handleStorageChange = e => {
@@ -95,8 +87,6 @@ const [monthlyData, setMonthlyData] = useState({
   const handleFilterClick = status => {
     setFilter(status);
   };
-
-
 
   const handleReviewApplication = application => {
     console.log('Reviewing application:', application.id);
@@ -148,10 +138,9 @@ const [monthlyData, setMonthlyData] = useState({
   }
 
   return (
-    
-          <Box className={`ApplicationDashContainer ${isSidebarOpen ? 'sidebar-open' : ''}`}>
-            <NavBar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
-   
+    <Box className={`ApplicationDashContainer ${isSidebarOpen ? 'sidebar-open' : ''}`}>
+      <NavBar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
+
       <Box className="ApplicationDashHeader">
         <Typography variant="h5" className="ApplicationDashTitle">
           Applications
@@ -205,34 +194,12 @@ const [monthlyData, setMonthlyData] = useState({
           </CardContent>
         </Card>
 
-        {/* Right Column: Line Chart */}
-        <Card className="ApplicationDashChart">
-  <CardContent>
-    <Typography variant="h6" className="ApplicationDashSectionTitle" gutterBottom>
-      Application Trends
-    </Typography>
-    <Typography variant="body2" sx={{ color: 'rgba(0,0,0,0.6)', marginBottom: 2 }}>
-      Monthly application statistics
-    </Typography>
-    
-   
-    <ApplicationLineChart 
-      data={[
-        { name: 'Feb', Birth: monthlyData.Birth[1], Marriage: monthlyData.Marriage[1] },
-        { name: 'Mar', Birth: monthlyData.Birth[2], Marriage: monthlyData.Marriage[2] },
-        { name: 'Apr', Birth: monthlyData.Birth[3], Marriage: monthlyData.Marriage[3] },
-        { name: 'May', Birth: monthlyData.Birth[4], Marriage: monthlyData.Marriage[4] },
-        { name: 'Jun', Birth: monthlyData.Birth[5], Marriage: monthlyData.Marriage[5] },
-        { name: 'Jul', Birth: monthlyData.Birth[6], Marriage: monthlyData.Marriage[6] },
-        { name: 'Aug', Birth: monthlyData.Birth[7], Marriage: monthlyData.Marriage[7] },
-        { name: 'Sep', Birth: monthlyData.Birth[8], Marriage: monthlyData.Marriage[8] },
-        { name: 'Oct', Birth: monthlyData.Birth[9], Marriage: monthlyData.Marriage[9] },
-        { name: 'Nov', Birth: monthlyData.Birth[10],Marriage: monthlyData.Marriage[10] },
-        { name: 'Dec', Birth: monthlyData.Birth[11],Marriage: monthlyData.Marriage[11] },
-      ]}
-    />
-  </CardContent>
-</Card>
+        {/* Pie chart component - replacing the line chart */}
+        <Card className="ApplicationDashPieChart">
+          <CardContent>
+            <ApplicationPieChart applications={applications} />
+          </CardContent>
+        </Card>
       </Box>
 
       <Box className="ApplicationDashTableSection" sx={{ maxWidth: '80vw', overflowX: 'hidden' }}>
@@ -313,5 +280,6 @@ const [monthlyData, setMonthlyData] = useState({
     </Box>
   );
 };
+
 
 export default AdminApplicationDashboard;

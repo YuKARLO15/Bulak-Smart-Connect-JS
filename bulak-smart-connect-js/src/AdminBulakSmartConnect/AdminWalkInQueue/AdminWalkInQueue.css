@@ -17,11 +17,7 @@
   font-size: 0.95rem;
   color: #b0c4ce;
 }
-.admin-walkin-queue-sidebar-nav {
-  margin-top: 32px;
-  display: flex;
-  flex-direction: column;
-}
+
 .admin-walkin-queue-nav-item {
   color: #fff;
   text-decoration: none;
@@ -65,12 +61,15 @@
   width: 100%;
   text-align: center;
   margin-bottom: 32px;
+  padding:20px !important;
+
 }
 .admin-walkin-queue-header h1 {
   color: #1C4D5A;
   font-size: 2rem;
   font-weight: 700;
   margin: 0;
+    padding:20px !important;
 }
 
 .admin-walkin-queue-header-bar {
@@ -79,9 +78,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 56px;
+
   position: relative;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+    padding:20px !important;
 }
 .admin-walkin-queue-menu-btn {
   position: absolute;

@@ -27,7 +27,7 @@ margin-bottom: 20px !important;
   height: 20vh;
   align-items: center;
   justify-content: center;
-  margin-top: 20px;
+margin-top: 20vh !important;
 
 }
 .RecentAppsAdminTitle {
@@ -132,4 +132,5 @@ background-color:  rgba(24, 74, 91, 0.05) !important;
   text-align: center;
   padding: 16px;
   background-color: rgba(24, 74, 91, 0.05);
+
 }
