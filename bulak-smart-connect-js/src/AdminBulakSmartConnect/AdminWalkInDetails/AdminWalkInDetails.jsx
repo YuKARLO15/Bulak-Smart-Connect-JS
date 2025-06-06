@@ -3,6 +3,9 @@ import { useNavigate, useParams } from 'react-router-dom';
 import './AdminWalkInDetails.css';
 import { queueService } from '../../services/queueService';
 import axios from 'axios';
+import NavBar from '../../NavigationComponents/NavSide';
+import MenuIcon from '@mui/icons-material/Menu';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'; // Optional - for back button
 
 const AdminWalkInDetails = () => {
   const navigate = useNavigate();
@@ -10,6 +13,7 @@ const AdminWalkInDetails = () => {
   const [queueDetails, setQueueDetails] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   
   // Format queue number to WK format
   const formatWKNumber = (queueNumber) => {
@@ -118,20 +122,13 @@ const AdminWalkInDetails = () => {
 
   return (
     <div>
+      {/* Add NavBar component */}
+      <NavBar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
+      
       {/* Header Bar */}
       <div className="admin-walkin-details-header-bar">
-        <button
-          className="admin-walkin-details-menu-btn"
-          onClick={() => navigate(-1)}
-          aria-label="Back"
-        >
-          <span className="admin-walkin-details-menu-icon">
-            <span className="admin-walkin-details-menu-bar"></span>
-            <span className="admin-walkin-details-menu-bar"></span>
-            <span className="admin-walkin-details-menu-bar"></span>
-          </span>
-        </button>
-        <h1 className="admin-walkin-details-header-title">Walk - in Details</h1>
+        
+        <h1 className="admin-walkin-details-header-title">Walk-in Details</h1>
       </div>
 
       <div className="admin-walkin-details-container">
