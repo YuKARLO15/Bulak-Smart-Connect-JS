@@ -7,8 +7,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, Like, In } from 'typeorm';
 import { User } from './entities/user.entity';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { AdminUpdateUserDto } from '../auth/dto/update-user.dto'; // Import from auth module
 import { RolesService } from '../roles/roles.service';
 import * as bcrypt from 'bcrypt';
 
@@ -34,96 +33,6 @@ export class UsersService {
     private usersRepository: Repository<User>,
     private rolesService: RolesService,
   ) {}
-
-  async create(createUserDto: CreateUserDto): Promise<any> {
-    const {
-      email,
-      username,
-      password,
-      firstName,
-      middleName,
-      lastName,
-      nameExtension,
-      contactNumber,
-      roleIds,
-      defaultRoleId,
-    } = createUserDto;
-
-    // Check if email already exists
-    const existingUserByEmail = await this.usersRepository.findOne({
-      where: { email },
-    });
-    if (existingUserByEmail) {
-      throw new ConflictException('Email already exists');
-    }
-
-    // Check if username already exists
-    if (username) {
-      const existingUserByUsername = await this.usersRepository.findOne({
-        where: { username },
-      });
-      if (existingUserByUsername) {
-        throw new ConflictException('Username already exists');
-      }
-    }
-
-    // Validate password
-    if (password.length < 6) {
-      throw new BadRequestException('Password must be at least 6 characters');
-    }
-
-    // Generate full name
-    const name = `${firstName} ${middleName ? middleName + ' ' : ''}${lastName}${nameExtension ? ' ' + nameExtension : ''}`;
-
-    // Hash password
-    const salt = await bcrypt.genSalt();
-    const hashedPassword = await bcrypt.hash(password, salt);
-
-    // Create user - handle optional fields properly
-    const userData: Partial<User> = {
-      email,
-      username: username || email, // Use email as username if not provided
-      password: hashedPassword,
-      firstName,
-      lastName,
-      name,
-      contactNumber: contactNumber || '', // Required field, use empty string if not provided
-      isActive: true,
-    };
-
-    // Only set optional fields if provided
-    if (middleName !== undefined) {
-      userData.middleName = middleName;
-    }
-    if (nameExtension !== undefined) {
-      userData.nameExtension = nameExtension;
-    }
-    if (defaultRoleId) {
-      userData.defaultRoleId = defaultRoleId;
-    }
-
-    // Create and save the user entity
-    const user = this.usersRepository.create(userData);
-    const savedUser = await this.usersRepository.save(user); // This returns a single User object
-
-    // Assign roles if provided
-    if (roleIds && roleIds.length > 0) {
-      await this.rolesService.assignRolesToUser(savedUser.id, roleIds);
-    } else {
-      // Default to citizen role
-      const citizenRole = await this.rolesService.findByName('citizen');
-      await this.rolesService.assignRolesToUser(savedUser.id, [citizenRole.id]);
-      
-      if (!defaultRoleId) {
-        // Update the saved user with the default role ID
-        await this.usersRepository.update(savedUser.id, { 
-          defaultRoleId: citizenRole.id 
-        });
-      }
-    }
-
-    return this.findOne(savedUser.id);
-  }
 
   async findAll(options: FindAllOptions) {
     const { page, limit, search, role } = options;
@@ -192,8 +101,12 @@ export class UsersService {
     };
   }
 
-  async update(id: number, updateUserDto: UpdateUserDto): Promise<any> {
-    const user = await this.usersRepository.findOne({ where: { id } });
+  // Admin-only update method
+  async adminUpdate(id: number, updateUserDto: AdminUpdateUserDto): Promise<any> {
+    const user = await this.usersRepository.findOne({ 
+      where: { id },
+      relations: ['roles']
+    });
     if (!user) {
       throw new NotFoundException(`User with ID ${id} not found`);
     }
@@ -201,14 +114,13 @@ export class UsersService {
     const {
       email,
       username,
-      password,
       firstName,
       middleName,
       lastName,
       nameExtension,
       contactNumber,
-      roleIds, // Add this
-      defaultRoleId, // Add this
+      roleIds,
+      defaultRoleId,
     } = updateUserDto;
 
     // Check email uniqueness if being updated
@@ -244,15 +156,6 @@ export class UsersService {
     if (middleName !== undefined) updateData.middleName = middleName;
     if (nameExtension !== undefined) updateData.nameExtension = nameExtension;
     if (defaultRoleId !== undefined) updateData.defaultRoleId = defaultRoleId;
-
-    // Hash new password if provided
-    if (password) {
-      if (password.length < 6) {
-        throw new BadRequestException('Password must be at least 6 characters');
-      }
-      const salt = await bcrypt.genSalt();
-      updateData.password = await bcrypt.hash(password, salt);
-    }
 
     // Update name if name components changed
     if (firstName || middleName !== undefined || lastName || nameExtension !== undefined) {
