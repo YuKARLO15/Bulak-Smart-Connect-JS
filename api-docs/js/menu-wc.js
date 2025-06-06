@@ -283,34 +283,6 @@ customElements.define('compodoc-menu', class extends HTMLElement {
                             </li>
                             <li class="link">
                                 <a href="modules/UsersModule.html" data-type="entity-link" >UsersModule</a>
-                                    <li class="chapter inner">
-                                        <div class="simple menu-toggler" data-bs-toggle="collapse" ${ isNormalMode ?
-                                            'data-bs-target="#controllers-links-module-UsersModule-a8d3a9295021e86c27b7904787905dfab7afcf29d15358f10699b673f25a7e46ba3e46e9b075133173299228236727491b4f153060b65022f9b85085bd44cdee"' : 'data-bs-target="#xs-controllers-links-module-UsersModule-a8d3a9295021e86c27b7904787905dfab7afcf29d15358f10699b673f25a7e46ba3e46e9b075133173299228236727491b4f153060b65022f9b85085bd44cdee"' }>
-                                            <span class="icon ion-md-swap"></span>
-                                            <span>Controllers</span>
-                                            <span class="icon ion-ios-arrow-down"></span>
-                                        </div>
-                                        <ul class="links collapse" ${ isNormalMode ? 'id="controllers-links-module-UsersModule-a8d3a9295021e86c27b7904787905dfab7afcf29d15358f10699b673f25a7e46ba3e46e9b075133173299228236727491b4f153060b65022f9b85085bd44cdee"' :
-                                            'id="xs-controllers-links-module-UsersModule-a8d3a9295021e86c27b7904787905dfab7afcf29d15358f10699b673f25a7e46ba3e46e9b075133173299228236727491b4f153060b65022f9b85085bd44cdee"' }>
-                                            <li class="link">
-                                                <a href="controllers/UsersController.html" data-type="entity-link" data-context="sub-entity" data-context-id="modules" >UsersController</a>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                <li class="chapter inner">
-                                    <div class="simple menu-toggler" data-bs-toggle="collapse" ${ isNormalMode ?
-                                        'data-bs-target="#injectables-links-module-UsersModule-a8d3a9295021e86c27b7904787905dfab7afcf29d15358f10699b673f25a7e46ba3e46e9b075133173299228236727491b4f153060b65022f9b85085bd44cdee"' : 'data-bs-target="#xs-injectables-links-module-UsersModule-a8d3a9295021e86c27b7904787905dfab7afcf29d15358f10699b673f25a7e46ba3e46e9b075133173299228236727491b4f153060b65022f9b85085bd44cdee"' }>
-                                        <span class="icon ion-md-arrow-round-down"></span>
-                                        <span>Injectables</span>
-                                        <span class="icon ion-ios-arrow-down"></span>
-                                    </div>
-                                    <ul class="links collapse" ${ isNormalMode ? 'id="injectables-links-module-UsersModule-a8d3a9295021e86c27b7904787905dfab7afcf29d15358f10699b673f25a7e46ba3e46e9b075133173299228236727491b4f153060b65022f9b85085bd44cdee"' :
-                                        'id="xs-injectables-links-module-UsersModule-a8d3a9295021e86c27b7904787905dfab7afcf29d15358f10699b673f25a7e46ba3e46e9b075133173299228236727491b4f153060b65022f9b85085bd44cdee"' }>
-                                        <li class="link">
-                                            <a href="injectables/UsersService.html" data-type="entity-link" data-context="sub-entity" data-context-id="modules" >UsersService</a>
-                                        </li>
-                                    </ul>
-                                </li>
                             </li>
                 </ul>
                 </li>
@@ -381,9 +353,6 @@ customElements.define('compodoc-menu', class extends HTMLElement {
                                 <a href="classes/CreateQueueDto.html" data-type="entity-link" >CreateQueueDto</a>
                             </li>
                             <li class="link">
-                                <a href="classes/CreateUserDto.html" data-type="entity-link" >CreateUserDto</a>
-                            </li>
-                            <li class="link">
                                 <a href="classes/DocumentApplication.html" data-type="entity-link" >DocumentApplication</a>
                             </li>
                             <li class="link">
@@ -391,9 +360,6 @@ customElements.define('compodoc-menu', class extends HTMLElement {
                             </li>
                             <li class="link">
                                 <a href="classes/LoginDto.html" data-type="entity-link" >LoginDto</a>
-                            </li>
-                            <li class="link">
-                                <a href="classes/PaginatedUsersResponseDto.html" data-type="entity-link" >PaginatedUsersResponseDto</a>
                             </li>
                             <li class="link">
                                 <a href="classes/QueueGateway.html" data-type="entity-link" >QueueGateway</a>
@@ -415,21 +381,6 @@ customElements.define('compodoc-menu', class extends HTMLElement {
                             </li>
                             <li class="link">
                                 <a href="classes/UpdateUserDto.html" data-type="entity-link" >UpdateUserDto</a>
-                            </li>
-                            <li class="link">
-                                <a href="classes/UpdateUserStatusDto.html" data-type="entity-link" >UpdateUserStatusDto</a>
-                            </li>
-                            <li class="link">
-                                <a href="classes/UserQueryDto.html" data-type="entity-link" >UserQueryDto</a>
-                            </li>
-                            <li class="link">
-                                <a href="classes/UserResponseDto.html" data-type="entity-link" >UserResponseDto</a>
-                            </li>
-                            <li class="link">
-                                <a href="classes/UsersByRoleDto.html" data-type="entity-link" >UsersByRoleDto</a>
-                            </li>
-                            <li class="link">
-                                <a href="classes/UserStatsResponseDto.html" data-type="entity-link" >UserStatsResponseDto</a>
                             </li>
                         </ul>
                     </li>
@@ -474,9 +425,6 @@ customElements.define('compodoc-menu', class extends HTMLElement {
                                 <a href="interfaces/AuthenticatedUser.html" data-type="entity-link" >AuthenticatedUser</a>
                             </li>
                             <li class="link">
-                                <a href="interfaces/FindAllOptions.html" data-type="entity-link" >FindAllOptions</a>
-                            </li>
-                            <li class="link">
                                 <a href="interfaces/JwtPayload.html" data-type="entity-link" >JwtPayload</a>
                             </li>
                             <li class="link">
@@ -490,9 +438,6 @@ customElements.define('compodoc-menu', class extends HTMLElement {
                             </li>
                             <li class="link">
                                 <a href="interfaces/RequestWithUser-2.html" data-type="entity-link" >RequestWithUser</a>
-                            </li>
-                            <li class="link">
-                                <a href="interfaces/UserStats.html" data-type="entity-link" >UserStats</a>
                             </li>
                         </ul>
                     </li>

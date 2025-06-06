@@ -24,10 +24,6 @@
 <title>cluster_AuthModule</title>
 <polygon fill="none" stroke="black" stroke-dasharray="1,5" points="49,-70 49,-268 447,-268 447,-70 49,-70"/>
 </g>
-<g id="clust4" class="cluster">
-<title>cluster_AuthModule_exports</title>
-<polygon fill="none" stroke="black" points="152,-208 152,-260 362,-260 362,-208 152,-208"/>
-</g>
 <g id="clust3" class="cluster">
 <title>cluster_AuthModule_imports</title>
 <polygon fill="none" stroke="black" points="331,-78 331,-130 439,-130 439,-78 331,-78"/>
@@ -35,6 +31,10 @@
 <g id="clust6" class="cluster">
 <title>cluster_AuthModule_providers</title>
 <polygon fill="none" stroke="black" points="57,-78 57,-130 323,-130 323,-78 57,-78"/>
+</g>
+<g id="clust4" class="cluster">
+<title>cluster_AuthModule_exports</title>
+<polygon fill="none" stroke="black" points="152,-208 152,-260 362,-260 362,-208 152,-208"/>
 </g>
 <!-- RolesModule -->
 <g id="node1" class="node">
