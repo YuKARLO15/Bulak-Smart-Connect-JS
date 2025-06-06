@@ -14,6 +14,8 @@ import { CreateQueueDto } from './dto/create-queue.dto';
 import { UpdateQueueDto } from './dto/update-queue.dto';
 import { QueueStatus } from './entities/queue.entity';
 import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
+import { User } from '../../auth/decorators/user.decorator';
+import { User as UserEntity } from '../../users/entities/user.entity';
 
 @Controller('queue')
 export class QueueController {
@@ -22,11 +24,13 @@ export class QueueController {
   @Post()
   @UseGuards(JwtAuthGuard)
   create(
-    @Request() req: { user?: { id: number } },
     @Body() createQueueDto: CreateQueueDto,
+    @User() user?: UserEntity,
   ) {
-    // Extract user ID from JWT token if authenticated
-    const userId = req.user?.id || null;
+    // Extract user ID from authenticated user
+    const userId = user?.id || null; 
+
+    console.log('Queue creation - User from JWT:', user); 
 
     // Override the userId in the DTO with the authenticated user's ID
     // This prevents users from creating queues for other users

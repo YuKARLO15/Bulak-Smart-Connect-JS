@@ -1,43 +1,144 @@
 .marriage-requirement-container {
-    padding: 20px;
-    max-width: 800px;
-    margin: 0 auto;
-  }
+  margin: 0 auto;
+  width: 100vw;
+}
+
+.marriage-requirement-paper {
+  padding: 0;
+}
+
+.marriage-requirement-main-title {
+  background-color: #184a5b;
+  color: white;
+  padding: 15px;
+  margin-bottom: 20px !important;
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.marriage-requirement-main-title .marriage-back-button {
+  position: absolute;
+  left: 40px;
+  background-color: #184a5b !important;
+  color: #f5f5f5 !important;
+  min-width: 85px !important;
+  padding: 5px 10px !important;
+  font-size: 0.85rem !important;
+}
+
+.marriage-requirement-main-title .marriage-back-button:hover {
+  background-color: #f0f0f0 !important;
+  color: #184a5b !important;
+}
+
+.marriage-requirement-main-title h5 {
+  margin: 0 auto;
+  font-weight: 600;
+  text-align: center;
+  flex-grow: 1;
+}
+
+.marriage-requirement-section {
+  margin-bottom: 24px;
+  padding: 30px;
+}
+
+.marriage-requirement-section-title {
+  background-color: #e7e7e7;
+  padding: 10px;
+  color: #184a5b;
+  font-weight: 600 !important;
+  text-align: center;
+  margin-bottom: 15px !important;
+}
+
+.marriage-requirement-subsection {
+  margin-bottom: 20px;
+  padding: 0 10px;
+}
+
+.marriage-requirement-subsection-title {
+  font-weight: 600 !important;
+  margin-bottom: 10px !important;
+  color: #1a5e63;
+}
+
+.marriage-requirement-subheading {
+  font-weight: 500 !important;
+  margin: 15px 0 5px 15px !important;
+  color: #333;
+  text-decoration: underline;
+}
+
+.marriage-requirement-list {
+  padding-left: 10px !important;
+}
+
+.marriage-requirement-list .MuiListItem-root {
+  align-items: flex-start;
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+.marriage-requirement-list .MuiListItemIcon-root {
+  min-width: 32px;
+  color: #184a5b;
+}
+
+.marriage-requirement-nested-list {
+  align-items: start !important; 
+  display: flex !important;
+  flex-direction: column !important;
+  text-align: left !important;
+}
+
+.marriage-requirement-note {
+  font-style: italic;
+  color: #666;
+  margin-top: 8px;
+  margin-left: 32px;
+}
+
+.marriage-requirement-note-box {
+  background-color: #f5f5f5;
+  padding: 15px;
+  border-left: 4px solid #184a5b;
+  margin: 20px 10px;
+  border-radius: 4px;
+}
+
+.marriage-requirement-note-title {
+  font-weight: 600 !important;
+  margin-bottom: 8px !important;
+  color: #333;
+}
+
+.marriage-requirement-divider {
+  margin: 30px 0 !important;
+}
+
+.marriage-requirement-subitem {
+  align-items: flex-start;
+  display: flex;
   
+  
+}
+
+@media screen and (max-width: 600px) {
   .marriage-requirement-paper {
-    padding: 24px;
+    padding: 12px;
   }
-  
+
   .marriage-requirement-main-title {
-    margin-bottom: 24px;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
+    font-size: 1.2rem !important;
   }
-  
-  .marriage-back-button {
-    align-self: flex-start !important;
-    background-color: #1976d2 !important;
-  }
-  
-  .marriage-requirement-section {
-    margin: 24px 0;
-  }
-  
+
   .marriage-requirement-section-title {
-    color: #1976d2;
-    margin-bottom: 16px !important;
+    font-size: 1.1rem !important;
   }
-  
-  .marriage-requirement-list {
-    padding-left: 16px;
+
+  .marriage-requirement-subsection-title {
+    font-size: 0.95rem !important;
   }
-  
-  .marriage-requirement-nested-list {
-    padding-left: 24px;
-    margin-top: -8px;
-  }
-  
-  .marriage-requirement-subitem {
-    padding-left: 8px;
-  }
+}
