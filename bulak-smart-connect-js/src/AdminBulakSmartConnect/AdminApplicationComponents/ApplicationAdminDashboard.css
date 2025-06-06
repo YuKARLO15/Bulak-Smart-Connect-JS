@@ -344,6 +344,26 @@
   scrollbar-color: #8aacb5 #f5f8fa;
 }
 
+.ApplicationDashContent {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.ApplicationDashOverview,
+.ApplicationDashChart,
+.ApplicationDashPieChart {
+  height: 100%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05) !important;
+  border-radius: 8px !important;
+  overflow: hidden;
+}
+
+.ApplicationDashPieChart {
+  background-color: white;
+}
+
 
 .ApplicationDashTableContent::-webkit-scrollbar {
   width: 8px;

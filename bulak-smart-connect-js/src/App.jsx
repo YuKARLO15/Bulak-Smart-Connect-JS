@@ -85,6 +85,7 @@ import AdminWalkInDetails from './AdminBulakSmartConnect/AdminWalkInDetails/Admi
 import AdminAccount from './AdminBulakSmartConnect/AdminAccount/AdminAccount';
 
 function App() {
+
   /*
   // Initialize localStorageManager
   useEffect(() => {
