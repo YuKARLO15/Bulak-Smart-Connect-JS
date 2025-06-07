@@ -3,6 +3,7 @@ import {
   Column,
   PrimaryGeneratedColumn,
   CreateDateColumn,
+  UpdateDateColumn,
   ManyToOne,
   JoinColumn,
   ManyToMany,
@@ -42,8 +43,14 @@ export class User {
   @Column({ name: 'contact_number', nullable: true })
   contactNumber: string;
 
+  @Column({ name: 'is_active', default: true })
+  isActive: boolean;
+
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
+
+  @UpdateDateColumn({ name: 'updated_at' })
+  updatedAt: Date;
 
   @ManyToOne(() => Role, { nullable: true })
   @JoinColumn({ name: 'default_role_id' })
