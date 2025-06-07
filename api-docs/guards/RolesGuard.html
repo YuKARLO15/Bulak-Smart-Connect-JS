@@ -164,7 +164,7 @@
                 </tr>
                         <tr>
                             <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="11" class="link-to-prism">src/auth/guards/roles.guard.ts:11</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="13" class="link-to-prism">src/auth/guards/roles.guard.ts:13</a></div>
                             </td>
                         </tr>
 
@@ -227,8 +227,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="14"
-                                    class="link-to-prism">src/auth/guards/roles.guard.ts:14</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="16"
+                                    class="link-to-prism">src/auth/guards/roles.guard.ts:16</a></div>
                         </td>
                     </tr>
 
@@ -285,7 +285,9 @@ import { ROLES_KEY } from &#x27;../decorators/roles.decorator&#x27;;
 
 // Define interface for request with user
 interface RequestWithUser extends Request {
-  user?: { roles?: string[] };
+  user?: { 
+    roles?: Array&lt;{ name: string }&gt; | string[];  // ← Support both formats
+  };
 }
 
 @Injectable()
@@ -304,7 +306,13 @@ export class RolesGuard implements CanActivate {
 
     const request &#x3D; context.switchToHttp().getRequest&lt;RequestWithUser&gt;();
     const userRoles &#x3D; request.user?.roles || [];
-    return requiredRoles.some((role) &#x3D;&gt; userRoles.includes(role));
+    
+    // Handle both string array and object array formats
+    const roleNames &#x3D; userRoles.map(role &#x3D;&gt; 
+      typeof role &#x3D;&#x3D;&#x3D; &#x27;string&#x27; ? role : role.name
+    );
+    
+    return requiredRoles.some((role) &#x3D;&gt; roleNames.includes(role));
   }
 }
 </code></pre>
