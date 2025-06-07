@@ -24,6 +24,13 @@ import NavBar from '../../NavigationComponents/NavSide';
 import ApplicationPieChart from './ApplicationPieChart';
 import { documentApplicationService } from '../../services/documentApplicationService';
 
+const STATUS_COLORS = {
+  Approved: '#4caf50', // green
+  Pending: '#ff9800',  // orange
+  Denied: '#f44336',   // red
+  Default: '#90a4ae'   // grey
+};
+
 const AdminApplicationDashboard = () => {
   const [filter, setFilter] = useState('All');
   const [applications, setApplications] = useState([]);
@@ -205,14 +212,17 @@ const AdminApplicationDashboard = () => {
 
   const getStatusClassName = status => {
     if (!status) return '';
-    
     status = status.toLowerCase();
-    
     if (status.includes('approved')) return 'Approved';
     if (status.includes('pending') || status.includes('submitted')) return 'Pending';
     if (status.includes('declined') || status.includes('denied') || status.includes('rejected')) return 'Denied';
-    
     return '';
+  };
+
+  // Get color by status
+  const getStatusColor = status => {
+    const className = getStatusClassName(status);
+    return STATUS_COLORS[className] || STATUS_COLORS.Default;
   };
 
   // Refresh button handler
@@ -263,43 +273,43 @@ const AdminApplicationDashboard = () => {
               Application Overview
             </Typography>
 
-            <Box className="ApplicationDashStats">
-              <Button
-                fullWidth
-                className={`ApplicationDashPendingCard ${filter === 'Pending' ? 'Active' : ''}`}
-                onClick={() => handleFilterClick('Pending')}
-              >
-                <Box className="ApplicationDashIcon Pending">
-                  <Box className="ApplicationDashCircleIcon Pending" />
-                </Box>
-                <Typography className="ApplicationDashLabel">APPLICATION PENDING</Typography>
-                <Typography className="ApplicationDashCount">{pendingCount}</Typography>
-              </Button>
+           <Box className="ApplicationDashStats">
+  <Button
+    fullWidth
+    className={`ApplicationDashPendingCard ${filter === 'Pending' ? 'active' : ''}`}
+    onClick={() => handleFilterClick('Pending')}
+  >
+    <Box className="ApplicationDashIcon Pending">
+      <span className="ApplicationDashCircleFilled Pending" />
+    </Box>
+    <Typography className="ApplicationDashLabel">APPLICATION PENDING</Typography>
+    <Typography className="ApplicationDashCount Pending">{pendingCount}</Typography>
+  </Button>
 
-              <Button
-                fullWidth
-                className={`ApplicationDashApprovedCard ${filter === 'Approved' ? 'Active' : ''}`}
-                onClick={() => handleFilterClick('Approved')}
-              >
-                <Box className="ApplicationDashIcon Approved">
-                  <Box className="ApplicationDashCircleIcon Approved" />
-                </Box>
-                <Typography className="ApplicationDashLabel">APPLICATION APPROVED</Typography>
-                <Typography className="ApplicationDashCount">{approvedCount}</Typography>
-              </Button>
+  <Button
+    fullWidth
+    className={`ApplicationDashApprovedCard ${filter === 'Approved' ? 'active' : ''}`}
+    onClick={() => handleFilterClick('Approved')}
+  >
+    <Box className="ApplicationDashIcon Approved">
+      <span className="ApplicationDashCircleFilled Approved" />
+    </Box>
+    <Typography className="ApplicationDashLabel">APPLICATION APPROVED</Typography>
+    <Typography className="ApplicationDashCount Approved">{approvedCount}</Typography>
+  </Button>
 
-              <Button
-                fullWidth
-                className={`ApplicationDashDeniedCard ${filter === 'Denied' ? 'Active' : ''}`}
-                onClick={() => handleFilterClick('Denied')}
-              >
-                <Box className="ApplicationDashIcon Denied">
-                  <Box className="ApplicationDashCircleIcon Denied" />
-                </Box>
-                <Typography className="ApplicationDashLabel">APPLICATION DENIED</Typography>
-                <Typography className="ApplicationDashCount">{deniedCount}</Typography>
-              </Button>
-            </Box>
+  <Button
+    fullWidth
+    className={`ApplicationDashDeniedCard ${filter === 'Denied' ? 'active' : ''}`}
+    onClick={() => handleFilterClick('Denied')}
+  >
+    <Box className="ApplicationDashIcon Denied">
+      <span className="ApplicationDashCircleFilled Denied" />
+    </Box>
+    <Typography className="ApplicationDashLabel">APPLICATION DENIED</Typography>
+    <Typography className="ApplicationDashCount Denied">{deniedCount}</Typography>
+  </Button>
+</Box>
           </CardContent>
         </Card>
 
@@ -316,9 +326,13 @@ const AdminApplicationDashboard = () => {
           <Typography variant="h6" className="ApplicationDashTableTitle">
             Submitted Applications
           </Typography>
+          <Button>
+          See All Applications
+          </Button>
           <IconButton className="ApplicationDashFilterButton" size="small">
             <FilterListIcon fontSize="small" />
           </IconButton>
+
         </Box>
 
         <Box className="ApplicationDashTableContent" sx={{ maxWidth: '80vw', overflowX: 'hidden' }}>
@@ -369,7 +383,8 @@ const AdminApplicationDashboard = () => {
                         {app.date || 'N/A'}
                       </TableCell>
                       <TableCell
-                        className={`ApplicationDashApplicationStatus ${getStatusClassName(app.status)}`}
+                        className={`ApplicationDashApplicationStatusPill ${getStatusClassName(app.status)}`}
+                        style={{ verticalAlign: 'middle' }}
                       >
                         {app.status || 'Pending'}
                       </TableCell>
