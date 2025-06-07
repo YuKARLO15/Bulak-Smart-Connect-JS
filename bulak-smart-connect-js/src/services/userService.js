@@ -1,8 +1,8 @@
 import axios from 'axios';
 
-// Create an axios instance with common configurations (same as documentApplicationService)
+// Create an axios instance with common configurations
 const apiClient = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || '/api',
+  baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000',
   withCredentials: true, // Include cookies in requests if needed
   timeout: 15000, // 15 second timeout
   headers: {
