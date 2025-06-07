@@ -35,10 +35,10 @@ const AdminAddUser = () => {
 
   // Available roles
   const availableRoles = [
-    { id: 1, name: 'admin' },
-    { id: 2, name: 'staff' },
-    { id: 3, name: 'super_admin' },
-    { id: 4, name: 'citizen' }
+    { id: 3, name: 'super_admin', displayName: 'Admin' },
+    { id: 1, name: 'admin', displayName: 'Manager' },
+    { id: 2, name: 'staff', displayName: 'Staff' },
+    { id: 4, name: 'citizen', displayName: 'Citizen' }
   ];
 
   // Populate form data if editing an existing user
@@ -86,8 +86,8 @@ const AdminAddUser = () => {
     try {
       let validationErrors = {};
 
-      // Basic validation
-      const requiredFields = ['email', 'firstName', 'lastName', 'role'];
+      // Basic validation 
+      const requiredFields = ['email', 'firstName', 'lastName', 'role', 'username', 'contact'];
       if (!isModifying) {
         requiredFields.push('password', 'confirmPassword');
       }
@@ -108,7 +108,7 @@ const AdminAddUser = () => {
         }
       }
 
-      // Contact number validation (optional)
+      // Contact number validation (now required)
       if (formData.contact && !/^\d{10}$/.test(formData.contact)) {
         validationErrors.contact = 'Contact number must be exactly 10 digits';
       }
@@ -116,6 +116,11 @@ const AdminAddUser = () => {
       // Email validation
       if (formData.email && !formData.email.includes('@')) {
         validationErrors.email = 'Please enter a valid email address';
+      }
+
+      // Username validation
+      if (formData.username && formData.username.length < 3) {
+        validationErrors.username = 'Username must be at least 3 characters';
       }
 
       setErrors(validationErrors);
@@ -126,12 +131,12 @@ const AdminAddUser = () => {
         // Prepare user data
         const userData = {
           email: formData.email,
-          username: formData.username || undefined,
+          username: formData.username,
           firstName: formData.firstName,
           middleName: formData.middleName || undefined,
           lastName: formData.lastName,
           nameExtension: formData.nameExtension || undefined,
-          contactNumber: formData.contact ? `+63${formData.contact}` : undefined,
+          contactNumber: `+63${formData.contact}`,
           name: `${formData.firstName} ${formData.middleName ? formData.middleName + ' ' : ''}${formData.lastName}${formData.nameExtension ? ' ' + formData.nameExtension : ''}`,
           role: formData.role,
           roles: [formData.role], // Array format
@@ -238,7 +243,7 @@ const AdminAddUser = () => {
               { label: 'Last Name', name: 'lastName' },
               { label: 'Middle Name', name: 'middleName', required: false },
               { label: 'Name Extension', name: 'nameExtension', required: false },
-              { label: 'Username', name: 'username', required: false },
+              { label: 'Username', name: 'username', required: true }, // Now required
               { label: 'Email', name: 'email', type: 'email' },
             ].map(({ label, name, type = 'text', required = true }) => (
               <div className="form-group" key={name}>
@@ -271,7 +276,7 @@ const AdminAddUser = () => {
                 <option value="">Select Role</option>
                 {availableRoles.map(role => (
                   <option key={role.id} value={role.name}>
-                    {role.name}
+                    {role.displayName}
                   </option>
                 ))}
               </select>
@@ -280,7 +285,9 @@ const AdminAddUser = () => {
 
             {/* Contact Number */}
             <div className="form-group contact-split">
-              <label>Contact Number</label>
+              <label>
+                Contact Number <span className="required">*</span>
+              </label>
               <div className="contact-input-wrapper">
                 <input type="text" value="+63" disabled className="country-code" />
                 <input
