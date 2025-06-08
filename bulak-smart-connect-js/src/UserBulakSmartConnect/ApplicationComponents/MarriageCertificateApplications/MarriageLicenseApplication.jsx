@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Box,
@@ -11,9 +11,10 @@ import {
   RadioGroup,
   FormControl,
 } from '@mui/material';
-import FileUpload from '../FileUpload';
 import NavBar from '../../../NavigationComponents/NavSide';
+import FileUpload from '../FileUpload';  // Add this import
 import './MarriageLicenseApplication.css';
+import { documentApplicationService } from '../../../services/documentApplicationService';
 
 const mandatoryDocuments = [
   'Birth / Baptismal Certificate',
@@ -28,6 +29,7 @@ const MarriageLicenseApplication = () => {
   const [widowWidower, setWidowWidower] = useState(false);
   const [annulled, setAnnulled] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState({});
+  const [fileData, setFileData] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   const [foreignNationalType, setForeignNationalType] = useState('');
@@ -37,11 +39,114 @@ const MarriageLicenseApplication = () => {
 
   const navigate = useNavigate();
 
-  const handleFileUpload = (label, isUploaded) => {
+  // Helper function to convert data URL to File object
+  function dataURLtoFile(dataurl, filename, type) {
+    try {
+      const arr = dataurl.split(',');
+      const mimeMatch = arr[0].match(/:(.*?);/);
+      const mime = mimeMatch ? mimeMatch[1] : type;
+      const bstr = atob(arr[1]);
+      let n = bstr.length;
+      const u8arr = new Uint8Array(n);
+      while (n--) u8arr[n] = bstr.charCodeAt(n);
+      return new File([u8arr], filename, { type: mime });
+    } catch (error) {
+      console.error('Error converting data URL to file:', error);
+      throw new Error('Invalid file format');
+    }
+  }
+
+  // Update the handleFileUpload function
+  const handleFileUpload = async (label, isUploaded, fileDataObj) => {
     setUploadedFiles(prevState => ({
       ...prevState,
       [label]: isUploaded,
     }));
+
+    if (isUploaded && fileDataObj) {
+      setFileData(prevState => ({
+        ...prevState,
+        [label]: fileDataObj,
+      }));
+
+      // Upload to backend
+      try {
+        const applicationId = localStorage.getItem('currentApplicationId');
+        if (!applicationId) {
+          alert("Application ID is missing. Please refresh the page and try again.");
+          return;
+        }
+        
+        console.log("Application ID:", applicationId);
+        console.log("Uploading file:", fileDataObj.name);
+        
+        // Check if application exists before uploading
+        try {
+          // Optional: check if application exists first
+          const appCheck = await documentApplicationService.getApplication(applicationId);
+          console.log("Application exists:", appCheck);
+        } catch (appError) {
+          console.error("Application doesn't exist:", appError);
+          
+          try {
+            // Create application if it doesn't exist
+            const newApp = await documentApplicationService.createApplication({
+              applicationType: 'Marriage License',
+              formData: {
+                applicantName: 'Applicant Name',
+                applicationDate: new Date().toISOString()
+              }
+            });
+            
+            // Log the full response to debug
+            console.log("Create application response:", newApp);
+            
+            // Handle different response structures
+            const newAppId = newApp.id || (newApp.data && newApp.data.id);
+            
+            if (!newAppId) {
+              throw new Error('Failed to get application ID from response');
+            }
+            
+            localStorage.setItem('currentApplicationId', newAppId);
+            console.log("Created new application with ID:", newAppId);
+          } catch (createError) {
+            console.error("Failed to create application:", createError);
+            alert("Failed to create application. Please refresh and try again.");
+            return;
+          }
+        }
+        
+        const file = dataURLtoFile(fileDataObj.data, fileDataObj.name, fileDataObj.type);
+        
+        const response = await documentApplicationService.uploadFile(applicationId, file, label);
+        console.log("Upload response:", response);
+        
+        alert(`"${label}" uploaded successfully!`);
+        
+      } catch (error) {
+        console.error(`Failed to upload "${label}":`, error);
+        
+        if (error.response) {
+          console.error("Server response:", error.response.status, error.response.data);
+          alert(`Failed to upload "${label}": ${error.response.data?.message || error.message}`);
+        } else {
+          alert(`Failed to upload "${label}": ${error.message}`);
+        }
+        
+        // Revert the upload state on error
+        setUploadedFiles(prevState => ({
+          ...prevState,
+          [label]: false,
+        }));
+      }
+    } else {
+      setFileData(prevState => {
+        const newState = { ...prevState };
+        delete newState[label];
+        return newState;
+      });
+    }
   };
 
   const isMandatoryComplete = mandatoryDocuments.every(doc => uploadedFiles[doc]);
@@ -52,15 +157,72 @@ const MarriageLicenseApplication = () => {
     (!widowWidower || widowWidowerType) &&
     (!annulled || annulledType);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (isFormComplete) {
       setIsSubmitted(true);
-      setTimeout(() => {
-        navigate('/MarriageLicenseSummary');
-      }, 2000);
+      
+      try {
+        const applicationId = localStorage.getItem('currentApplicationId');
+        if (applicationId) {
+          // Update the application status
+          await documentApplicationService.updateApplication(applicationId, {
+            status: 'Pending',
+            statusMessage: 'Marriage license application submitted with all required documents'
+          });
+        }
+        
+        setTimeout(() => {
+          navigate('/MarriageLicenseSummary');
+        }, 2000);
+      } catch (error) {
+        console.error('Error submitting application:', error);
+        alert(`Error submitting application: ${error.message}`);
+        setIsSubmitted(false);
+      }
     }
   };
 
+  // Add this useEffect to create the application when component mounts
+  useEffect(() => {
+    const createApplication = async () => {
+      try {
+        // Check if we already have an application ID
+        let applicationId = localStorage.getItem('currentApplicationId');
+        
+        if (!applicationId) {
+          // Create a new application
+          const response = await documentApplicationService.createApplication({
+            applicationType: 'Marriage License',  // Changed from type to applicationType
+            formData: {  // Changed from applicantInfo to formData
+              applicantName: 'Applicant Name',
+              applicationDate: new Date().toISOString()
+            }
+          });
+          
+          // Check the response structure
+          console.log('Create application response:', response);
+          
+          // Handle different response structures
+          applicationId = response.id || (response.data && response.data.id);
+          
+          if (!applicationId) {
+            throw new Error('Failed to get application ID from response');
+          }
+          
+          localStorage.setItem('currentApplicationId', applicationId);
+          console.log('Created new application with ID:', applicationId);
+        } else {
+          console.log('Using existing application ID:', applicationId);
+        }
+      } catch (error) {
+        console.error('Error creating application:', error);
+        alert('Failed to initialize application. Please try again.');
+      }
+    };
+    
+    createApplication();
+  }, []);
+  
   return (
     <div className={`MarriageLicenseContainer ${isSidebarOpen ? 'sidebar-open' : ''}`}>
       <NavBar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
@@ -96,7 +258,11 @@ const MarriageLicenseApplication = () => {
           Mandatory Documents:
         </Typography>
         {mandatoryDocuments.map((doc, index) => (
-          <FileUpload key={index} label={doc} onUpload={handleFileUpload} />
+          <FileUpload 
+            key={index} 
+            label={doc} 
+            onUpload={(isUploaded, fileDataObj) => handleFileUpload(doc, isUploaded, fileDataObj)} 
+          />
         ))}
       </Box>
 
@@ -119,9 +285,16 @@ const MarriageLicenseApplication = () => {
 
           <FileUpload
             label="Legal Capacity from their embassy (Manila)"
-            onUpload={handleFileUpload}
+            onUpload={(isUploaded, fileDataObj) => 
+              handleFileUpload("Legal Capacity from their embassy (Manila)", isUploaded, fileDataObj)
+            }
           />
-          <FileUpload label="Decree of Divorce from Court" onUpload={handleFileUpload} />
+          <FileUpload 
+            label="Decree of Divorce from Court" 
+            onUpload={(isUploaded, fileDataObj) => 
+              handleFileUpload("Decree of Divorce from Court", isUploaded, fileDataObj)
+            } 
+          />
         </Box>
       )}
 
@@ -145,7 +318,9 @@ const MarriageLicenseApplication = () => {
 
           <FileUpload
             label="Registered Death Certificate of Previous Spouse"
-            onUpload={handleFileUpload}
+            onUpload={(isUploaded, fileDataObj) => 
+              handleFileUpload("Registered Death Certificate of Previous Spouse", isUploaded, fileDataObj)
+            }
           />
         </Box>
       )}
@@ -166,7 +341,9 @@ const MarriageLicenseApplication = () => {
 
           <FileUpload
             label="Decree of Annulment from Court with FINALITY"
-            onUpload={handleFileUpload}
+            onUpload={(isUploaded, fileDataObj) => 
+              handleFileUpload("Decree of Annulment from Court with FINALITY", isUploaded, fileDataObj)
+            }
           />
         </Box>
       )}
