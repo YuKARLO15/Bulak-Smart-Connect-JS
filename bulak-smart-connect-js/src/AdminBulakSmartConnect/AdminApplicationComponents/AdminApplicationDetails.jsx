@@ -46,68 +46,158 @@ const AdminApplicationDetails = () => {
   const [filterCategory, setFilterCategory] = useState('All'); 
   const [showDocumentsTab, setShowDocumentsTab] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const currentUser = 'dennissegailfrancisco'; // Set the current user
+  
   useEffect(() => {
-  let isMounted = true;
-  setLoading(true);
+    let isMounted = true;
+    setLoading(true);
 
-  async function fetchApplications() {
-    try {
-     const storedApplications = await documentApplicationService.getAllApplications();
-      if (!isMounted) return;
+    async function fetchApplications() {
+      try {
+        // Use the documentApplicationService to fetch all applications
+        const storedApplications = await documentApplicationService.getAllApplications();
+        if (!isMounted) return;
 
-      setApplications(storedApplications);
+        // Process applications to ensure they have all required fields
+        const processedApplications = storedApplications.map(app => {
+          // Get the base type (Marriage Certificate, Birth Certificate, etc.)
+          let baseType = '';
+          let subtype = '';
+          
+          // Try to determine the base type
+          if (app.type) {
+            baseType = app.type;
+          } else if (app.applicationType) {
+            baseType = app.applicationType;
+          } else if (app.formData && app.formData.applicationType) {
+            baseType = app.formData.applicationType;
+          } else {
+            baseType = 'Document Application';
+          }
+          
+          // Try to determine the subtype
+          if (app.applicationSubtype) {
+            subtype = app.applicationSubtype;
+          } else if (app.formData && app.formData.applicationSubtype) {
+            subtype = app.formData.applicationSubtype;
+          } else if (app.subtype) {
+            subtype = app.subtype;
+          }
+          
+          // Special handling for Copy of Birth Certificate
+          if (subtype === 'Copy of Birth Certificate' || 
+              (app.type === 'Birth Certificate' && app.applicationType === 'Request copy')) {
+            subtype = 'Copy of Birth Certificate';
+          }
+          
+          return {
+            ...app,
+            type: baseType,
+            applicationSubtype: subtype || ''
+          };
+        });
 
-      let targetApp;
+        setApplications(processedApplications);
 
-      if (id) {
-        targetApp = storedApplications.find(app => app.id === id);
-      } else {
-        const currentAppId = localStorage.getItem('currentApplicationId');
-        if (currentAppId) {
-          targetApp = storedApplications.find(app => app.id === currentAppId);
+        let targetApp;
+
+        if (id) {
+          targetApp = processedApplications.find(app => app.id === id);
+        } else {
+          const currentAppId = localStorage.getItem('currentApplicationId');
+          if (currentAppId) {
+            targetApp = processedApplications.find(app => app.id === currentAppId);
+          }
         }
-      }
 
-      if (targetApp) {
-        setSelectedApplication(targetApp);
-      } else if (storedApplications.length > 0) {
-        setSelectedApplication(storedApplications[0]);
+        if (targetApp) {
+          setSelectedApplication(targetApp);
+        } else if (processedApplications.length > 0) {
+          setSelectedApplication(processedApplications[0]);
+        }
+      } catch (err) {
+        if (isMounted) {
+          setError('Error loading applications: ' + err.message);
+        }
+      } finally {
+        if (isMounted) setLoading(false);
       }
-    } catch (err) {
-      if (isMounted) {
-        setError('Error loading applications: ' + err.message);
-      }
-    } finally {
-      if (isMounted) setLoading(false);
     }
-  }
 
-  fetchApplications();
+    fetchApplications();
 
-  // Optionally, subscribe to updates if your service supports it
-  window.addEventListener('storage', handleStorageUpdate);
+    // Subscribe to updates
+    window.addEventListener('storage', handleStorageUpdate);
+    window.addEventListener('customStorageUpdate', handleCustomStorageUpdate);
 
-  return () => {
-    isMounted = false;
-    window.removeEventListener('storage', handleStorageUpdate);
-  };
-}, [id]);
+    return () => {
+      isMounted = false;
+      window.removeEventListener('storage', handleStorageUpdate);
+      window.removeEventListener('customStorageUpdate', handleCustomStorageUpdate);
+    };
+  }, [id]);
 
   const handleStorageUpdate = async () => {
-  try {
-   const storedApplications = await documentApplicationService.getAllApplications();
-    setApplications(storedApplications);
+    try {
+      const storedApplications = await documentApplicationService.getAllApplications();
+      
+      // Process applications to ensure they have all required fields
+      const processedApplications = storedApplications.map(app => {
+        // Get the base type (Marriage Certificate, Birth Certificate, etc.)
+        let baseType = '';
+        let subtype = '';
+        
+        // Try to determine the base type
+        if (app.type) {
+          baseType = app.type;
+        } else if (app.applicationType) {
+          baseType = app.applicationType;
+        } else if (app.formData && app.formData.applicationType) {
+          baseType = app.formData.applicationType;
+        } else {
+          baseType = 'Document Application';
+        }
+        
+        // Try to determine the subtype
+        if (app.applicationSubtype) {
+          subtype = app.applicationSubtype;
+        } else if (app.formData && app.formData.applicationSubtype) {
+          subtype = app.formData.applicationSubtype;
+        } else if (app.subtype) {
+          subtype = app.subtype;
+        }
+        
+        // Special handling for Copy of Birth Certificate
+        if (subtype === 'Copy of Birth Certificate' || 
+            (app.type === 'Birth Certificate' && app.applicationType === 'Request copy')) {
+          subtype = 'Copy of Birth Certificate';
+        }
+        
+        return {
+          ...app,
+          type: baseType,
+          applicationSubtype: subtype || ''
+        };
+      });
+      
+      setApplications(processedApplications);
 
-    if (selectedApplication) {
-      const updatedSelectedApp = storedApplications.find(app => app.id === selectedApplication.id);
-      if (updatedSelectedApp) {
-        setSelectedApplication(updatedSelectedApp);
+      if (selectedApplication) {
+        const updatedSelectedApp = processedApplications.find(app => app.id === selectedApplication.id);
+        if (updatedSelectedApp) {
+          setSelectedApplication(updatedSelectedApp);
+        }
       }
+    } catch (err) {
+      console.error('Error updating applications from service:', err);
     }
-  } catch (err) {
-    console.error('Error updating applications from service:', err);
-  }
-};
+  };
+
+  const handleCustomStorageUpdate = (event) => {
+    if (event.detail && event.detail.id) {
+      handleStorageUpdate();
+    }
+  };
 
   const handleApplicationClick = application => {
     setSelectedApplication(application);
@@ -122,7 +212,7 @@ const AdminApplicationDetails = () => {
   };
 
   const handleStatusChange = event => {
-  setNewStatus(event.target.value);
+    setNewStatus(event.target.value);
   };
 
   const handleCategoryChange = event => {
@@ -141,51 +231,81 @@ const AdminApplicationDetails = () => {
     setFilterStatus(event.target.value);
   };
 
-const handleUpdateStatus = async () => {
-  try {
-    await documentApplicationService.updateStatus(selectedApplication.id, newStatus, statusMessage);
+  const handleUpdateStatus = async () => {
+    try {
+      // Update status using the documentApplicationService
+      await documentApplicationService.updateApplication(selectedApplication.id, {
+        status: newStatus, 
+        statusMessage: statusMessage,
+        lastUpdated: new Date().toISOString()
+      });
 
-    // Refetch applications after update
-    const updatedApplications = await documentApplicationService.getAllApplications();
-    setApplications(updatedApplications);
-    const updated = updatedApplications.find(app => app.id === selectedApplication.id);
-    setSelectedApplication(updated);
+      // Refetch applications after update
+      const updatedApplications = await documentApplicationService.getAllApplications();
+      setApplications(updatedApplications);
+      const updated = updatedApplications.find(app => app.id === selectedApplication.id);
+      setSelectedApplication(updated);
 
-    setStatusUpdateDialog(false);
-    window.dispatchEvent(new Event('storage'));
-  } catch (err) {
-    console.error('Error updating application status:', err);
-    setError('Error updating application status: ' + err.message);
-  }
-};
+      setStatusUpdateDialog(false);
+      
+      // Notify other components of the change
+      window.dispatchEvent(new Event('storage'));
+    } catch (err) {
+      console.error('Error updating application status:', err);
+      setError('Error updating application status: ' + err.message);
+    }
+  };
 
   const formatDate = (month, day, year) => {
     if (!month || !day || !year) return 'N/A';
     return `${month} ${day}, ${year}`;
   };
+  
+  // Helper function to get application type safely
+  const getApplicationType = (app) => {
+    if (app.type) return app.type;
+    if (app.applicationType) return app.applicationType;
+    if (app.formData && app.formData.applicationType) return app.formData.applicationType;
+    return 'Document Application';
+  };
+  
+  // Helper function to get application subtype
+  const getApplicationSubtype = (app) => {
+    if (app.applicationSubtype) return app.applicationSubtype;
+    if (app.formData && app.formData.applicationSubtype) return app.formData.applicationSubtype;
+    if (app.subtype) return app.subtype;
+    return '';
+  };
+  
+  // Helper function to determine if it's a copy of birth certificate
+  const isCopyOfBirthCertificate = (app) => {
+    const subtype = getApplicationSubtype(app);
+    return subtype === 'Copy of Birth Certificate' || 
+      (getApplicationType(app) === 'Birth Certificate' && app.applicationType === 'Request copy');
+  };
 
   const filteredApplications = applications.filter(app => {
-  if (filterStatus !== 'All' && app.status !== filterStatus) {
-    return false;
-  }
-
-  if (filterCategory !== 'All') {
-   
-    if (filterCategory === 'Birth Certificate') {
-     
-      if (
-        app.type !== 'Birth Certificate' &&
-        app.type !== 'Copy of Birth Certificate'
-      ) {
-        return false;
-      }
-    } else if (app.type !== filterCategory) {
+    if (filterStatus !== 'All' && app.status !== filterStatus) {
       return false;
     }
-  }
 
-  return true;
-});
+    if (filterCategory !== 'All') {
+      const appType = getApplicationType(app);
+      
+      if (filterCategory === 'Birth Certificate') {
+        if (
+          appType !== 'Birth Certificate' &&
+          appType !== 'Copy of Birth Certificate'
+        ) {
+          return false;
+        }
+      } else if (appType !== filterCategory) {
+        return false;
+      }
+    }
+
+    return true;
+  });
 
   if (loading) {
     return (
@@ -205,9 +325,8 @@ const handleUpdateStatus = async () => {
   }
 
   return (
-
-      <Box className={`AdminMainContainerAdminAppForm ${isSidebarOpen ? 'sidebar-open' : ''}`}>
-            <NavBar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
+    <Box className={`AdminMainContainerAdminAppForm ${isSidebarOpen ? 'sidebar-open' : ''}`}>
+      <NavBar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
       <Grid container spacing={2}>
         <Grid item xs={12}>
           <Typography variant="h4" className="AdminTitleAdminAppForm">
@@ -218,7 +337,7 @@ const handleUpdateStatus = async () => {
         <Grid item xs={12} md={4}>
           <Paper elevation={3} className="ApplicationsListPaperAdminAppForm">
             <Box className="FilterContainerAdminAppForm">
-              <h3 className = "FilterTitleApplication"> Filter Applications </h3>
+              <h3 className="FilterTitleApplication"> Filter Applications </h3>
               
               {/* Category Filter */}
               <FormControl fullWidth margin="normal">
@@ -262,28 +381,30 @@ const handleUpdateStatus = async () => {
                     onClick={() => handleApplicationClick(app)}
                   >
                     <Typography variant="subtitle1" className="ApplicationNameAdminAppForm">
-                      {app.formData.firstName} {app.formData.lastName}
+                      {app.formData?.firstName || 'Unknown'} {app.formData?.lastName || ''}
                     </Typography>
                     <Box className="ApplicationMetAdminAppForm">
-                    <Typography variant="body2" className="ApplicationIdAdminAppForm">
-                      ID: {app.id}
-                    </Typography>
-                  
-                    <Typography variant="body2" className="ApplicationDateAdminAppForm">
-                    Type: {app.type}   
-                      </Typography> </Box>
+                      <Typography variant="body2" className="ApplicationIdAdminAppForm">
+                        ID: {app.id}
+                      </Typography>
+                      
+                      <Typography variant="body2" className="ApplicationDateAdminAppForm">
+                        {/* Display subtype if available, otherwise show the base type */}
+                        Type: {getApplicationSubtype(app) || getApplicationType(app)}
+                      </Typography> 
+                    </Box>
                     <Box className="ApplicationDetailsAdminAppForm">
-                    <Typography variant="body2" style={{ marginTop: '4px'  } }>
-                        Submitted: {app.date}
+                      <Typography variant="body2" style={{ marginTop: '4px' }}>
+                        Submitted: {app.date || new Date().toLocaleDateString()}
                       </Typography>
                      
-                    <Typography
-                      variant="body2"
-                      className={`ApplicationStatusAdminAppForm status-${app.status.toLowerCase().replace(/\s+/g, '-')}AdminAppForm`}
-                    >
-                      Status: {app.status}
+                      <Typography
+                        variant="body2"
+                        className={`ApplicationStatusAdminAppForm status-${(app.status || 'pending').toLowerCase().replace(/\s+/g, '-')}AdminAppForm`}
+                      >
+                        Status: {app.status || 'Pending'}
                       </Typography>
-                      </Box>
+                    </Box>
                   </Paper>
                 ))}
               </Box>
@@ -317,19 +438,16 @@ const handleUpdateStatus = async () => {
 
                 {!showDocumentsTab ? (
                   <>
-                     {selectedApplication.type === 'Marriage Certificate' ? (
+                    {getApplicationType(selectedApplication) === 'Marriage Certificate' ? (
                       <AdminMarriageApplicationView applicationData={selectedApplication} />
-                    ) : selectedApplication.type === 'Marriage License' ? (
-                        <AdminMarriageLicensePreview applicationData={selectedApplication} />
-                      )
-                        : selectedApplication.applicationSubtype === 'Copy of Birth Certificate' ? (
-                       <AdminCopyBirthPreview applicationData={selectedApplication} />
-                          
-  
-  ) : selectedApplication.type === 'Birth Certificate' ? (
-    <>
-                          
+                    ) : getApplicationType(selectedApplication) === 'Marriage License' ? (
+                      <AdminMarriageLicensePreview applicationData={selectedApplication} />
+                    ) : isCopyOfBirthCertificate(selectedApplication) ? (
+                      <AdminCopyBirthPreview applicationData={selectedApplication} />
+                    ) : getApplicationType(selectedApplication) === 'Birth Certificate' ? (
+                      <>
                         <Box className="certificateHeaderContainer">
+                   
                           <Typography variant="body2" className="DetailsLabelAdminAppForm">
                             Municipal Form No. 102
                           </Typography>
@@ -354,7 +472,7 @@ const handleUpdateStatus = async () => {
                                 Province
                               </Typography>
                               <Typography variant="body1" className="DetailsValueAdminAppForm">
-                                {selectedApplication.formData.province || 'N/A'}
+                                {selectedApplication.formData?.province || 'N/A'}
                               </Typography>
                             </Box>
                             <Box className="DetailsSectionAdminAppForm" style={{ padding: '5px' }}>
@@ -362,7 +480,7 @@ const handleUpdateStatus = async () => {
                                 City/Municipality
                               </Typography>
                               <Typography variant="body1" className="DetailsValueAdminAppForm">
-                                {selectedApplication.formData.city || 'N/A'}
+                                {selectedApplication.formData?.city || 'N/A'}
                               </Typography>
                             </Box>
                           </Grid>
@@ -428,7 +546,7 @@ const handleUpdateStatus = async () => {
                                       variant="body1"
                                       className="DetailsValueAdminAppForm"
                                     >
-                                      {selectedApplication.formData.firstName || 'N/A'}
+                                      {selectedApplication.formData?.firstName || 'N/A'}
                                     </Typography>
                                   </Grid>
                                   <Grid
@@ -446,7 +564,7 @@ const handleUpdateStatus = async () => {
                                       variant="body1"
                                       className="DetailsValueAdminAppForm"
                                     >
-                                      {selectedApplication.formData.middleName || 'N/A'}
+                                      {selectedApplication.formData?.middleName || 'N/A'}
                                     </Typography>
                                   </Grid>
                                   <Grid item xs={4} style={{ padding: '5px' }}>
@@ -460,7 +578,7 @@ const handleUpdateStatus = async () => {
                                       variant="body1"
                                       className="DetailsValueAdminAppForm"
                                     >
-                                      {selectedApplication.formData.lastName || 'N/A'}
+                                      {selectedApplication.formData?.lastName || 'N/A'}
                                     </Typography>
                                   </Grid>
                                 </Grid>
@@ -482,7 +600,7 @@ const handleUpdateStatus = async () => {
                                   2. SEX
                                 </Typography>
                                 <Typography variant="body1" className="DetailsValueAdminAppForm">
-                                  {selectedApplication.formData.sex || 'N/A'}
+                                  {selectedApplication.formData?.sex || 'N/A'}
                                 </Typography>
                               </Grid>
                               <Grid
@@ -510,7 +628,7 @@ const handleUpdateStatus = async () => {
                                       variant="body1"
                                       className="DetailsValueAdminAppForm"
                                     >
-                                      {selectedApplication.formData.birthDay || 'N/A'}
+                                      {selectedApplication.formData?.birthDay || 'N/A'}
                                     </Typography>
                                   </Grid>
                                   <Grid
@@ -528,7 +646,7 @@ const handleUpdateStatus = async () => {
                                       variant="body1"
                                       className="DetailsValueAdminAppForm"
                                     >
-                                      {selectedApplication.formData.birthMonth || 'N/A'}
+                                      {selectedApplication.formData?.birthMonth || 'N/A'}
                                     </Typography>
                                   </Grid>
                                   <Grid item xs={4} style={{ padding: '5px' }}>
@@ -542,7 +660,7 @@ const handleUpdateStatus = async () => {
                                       variant="body1"
                                       className="DetailsValueAdminAppForm"
                                     >
-                                      {selectedApplication.formData.birthYear || 'N/A'}
+                                      {selectedApplication.formData?.birthYear || 'N/A'}
                                     </Typography>
                                   </Grid>
                                 </Grid>
@@ -576,7 +694,7 @@ const handleUpdateStatus = async () => {
                                       variant="body1"
                                       className="DetailsValueAdminAppForm"
                                     >
-                                      {selectedApplication.formData.hospital || 'N/A'}
+                                      {selectedApplication.formData?.hospital || 'N/A'}
                                     </Typography>
                                   </Grid>
                                   <Grid
@@ -594,7 +712,7 @@ const handleUpdateStatus = async () => {
                                       variant="body1"
                                       className="DetailsValueAdminAppForm"
                                     >
-                                      {selectedApplication.formData.city || 'N/A'}
+                                      {selectedApplication.formData?.city || 'N/A'}
                                     </Typography>
                                   </Grid>
                                   <Grid item xs={4} style={{ padding: '5px' }}>
@@ -608,7 +726,7 @@ const handleUpdateStatus = async () => {
                                       variant="body1"
                                       className="DetailsValueAdminAppForm"
                                     >
-                                      {selectedApplication.formData.province || 'N/A'}
+                                      {selectedApplication.formData?.province || 'N/A'}
                                     </Typography>
                                   </Grid>
                                 </Grid>
@@ -629,7 +747,7 @@ const handleUpdateStatus = async () => {
                                   (Single, Twin, Triplet, etc.)
                                 </Typography>
                                 <Typography variant="body1" className="DetailsValueAdminAppForm">
-                                  {selectedApplication.formData.typeOfBirth || 'N/A'}
+                                  {selectedApplication.formData?.typeOfBirth || 'N/A'}
                                 </Typography>
                               </Grid>
                               <Grid
@@ -645,7 +763,7 @@ const handleUpdateStatus = async () => {
                                   (First, Second, Third, etc.)
                                 </Typography>
                                 <Typography variant="body1" className="DetailsValueAdminAppForm">
-                                  {selectedApplication.formData.multipleBirthOrder || 'N/A'}
+                                  {selectedApplication.formData?.multipleBirthOrder || 'N/A'}
                                 </Typography>
                               </Grid>
                               <Grid
@@ -665,7 +783,7 @@ const handleUpdateStatus = async () => {
                                   (Order of this birth in relation to all children born alive)
                                 </Typography>
                                 <Typography variant="body1" className="DetailsValueAdminAppForm">
-                                  {selectedApplication.formData.birthOrder || 'N/A'}
+                                  {selectedApplication.formData?.birthOrder || 'N/A'}
                                 </Typography>
                               </Grid>
                               <Grid
@@ -678,7 +796,7 @@ const handleUpdateStatus = async () => {
                                   6. WEIGHT AT BIRTH
                                 </Typography>
                                 <Typography variant="body1" className="DetailsValueAdminAppForm">
-                                  {selectedApplication.formData.birthWeight
+                                  {selectedApplication.formData?.birthWeight
                                     ? `${selectedApplication.formData.birthWeight} grams`
                                     : 'N/A'}
                                 </Typography>
@@ -737,7 +855,7 @@ const handleUpdateStatus = async () => {
                                       variant="body1"
                                       className="DetailsValueAdminAppForm"
                                     >
-                                      {selectedApplication.formData.motherFirstName || 'N/A'}
+                                      {selectedApplication.formData?.motherFirstName || 'N/A'}
                                     </Typography>
                                   </Grid>
                                   <Grid
@@ -755,7 +873,7 @@ const handleUpdateStatus = async () => {
                                       variant="body1"
                                       className="DetailsValueAdminAppForm"
                                     >
-                                      {selectedApplication.formData.motherMiddleName || 'N/A'}
+                                      {selectedApplication.formData?.motherMiddleName || 'N/A'}
                                     </Typography>
                                   </Grid>
                                   <Grid item xs={4} style={{ padding: '5px' }}>
@@ -769,7 +887,7 @@ const handleUpdateStatus = async () => {
                                       variant="body1"
                                       className="DetailsValueAdminAppForm"
                                     >
-                                      {selectedApplication.formData.motherLastName || 'N/A'}
+                                      {selectedApplication.formData?.motherLastName || 'N/A'}
                                     </Typography>
                                   </Grid>
                                 </Grid>
@@ -791,7 +909,7 @@ const handleUpdateStatus = async () => {
                                   8. CITIZENSHIP
                                 </Typography>
                                 <Typography variant="body1" className="DetailsValueAdminAppForm">
-                                  {selectedApplication.formData.motherCitizenship || 'N/A'}
+                                  {selectedApplication.formData?.motherCitizenship || 'N/A'}
                                 </Typography>
                               </Grid>
                               <Grid
@@ -804,7 +922,7 @@ const handleUpdateStatus = async () => {
                                   9. RELIGION/RELIGIOUS SECT
                                 </Typography>
                                 <Typography variant="body1" className="DetailsValueAdminAppForm">
-                                  {selectedApplication.formData.motherReligion || 'N/A'}
+                                  {selectedApplication.formData?.motherReligion || 'N/A'}
                                 </Typography>
                               </Grid>
                             </Grid>
@@ -824,7 +942,7 @@ const handleUpdateStatus = async () => {
                                   10a. Total number of children born alive
                                 </Typography>
                                 <Typography variant="body1" className="DetailsValueAdminAppForm">
-                                  {selectedApplication.formData.motherTotalChildren || 'N/A'}
+                                  {selectedApplication.formData?.motherTotalChildren || 'N/A'}
                                 </Typography>
                               </Grid>
                               <Grid
@@ -841,7 +959,7 @@ const handleUpdateStatus = async () => {
                                   10b. No. of children still living including this birth
                                 </Typography>
                                 <Typography variant="body1" className="DetailsValueAdminAppForm">
-                                  {selectedApplication.formData.motherLivingChildren || 'N/A'}
+                                  {selectedApplication.formData?.motherLivingChildren || 'N/A'}
                                 </Typography>
                               </Grid>
                               <Grid
@@ -858,7 +976,7 @@ const handleUpdateStatus = async () => {
                                   10c. No. of children born alive but are now dead
                                 </Typography>
                                 <Typography variant="body1" className="DetailsValueAdminAppForm">
-                                  {selectedApplication.formData.motherDeceasedChildren || 'N/A'}
+                                  {selectedApplication.formData?.motherDeceasedChildren || 'N/A'}
                                 </Typography>
                               </Grid>
                               <Grid
@@ -871,7 +989,7 @@ const handleUpdateStatus = async () => {
                                   11. OCCUPATION
                                 </Typography>
                                 <Typography variant="body1" className="DetailsValueAdminAppForm">
-                                  {selectedApplication.formData.motherOccupation || 'N/A'}
+                                  {selectedApplication.formData?.motherOccupation || 'N/A'}
                                 </Typography>
                               </Grid>
                             </Grid>
@@ -902,7 +1020,7 @@ const handleUpdateStatus = async () => {
                                       variant="body1"
                                       className="DetailsValueAdminAppForm"
                                     >
-                                      {selectedApplication.formData.motherStreet || 'N/A'}
+                                      {selectedApplication.formData?.motherStreet || 'N/A'}
                                     </Typography>
                                   </Grid>
                                   <Grid
@@ -920,7 +1038,7 @@ const handleUpdateStatus = async () => {
                                       variant="body1"
                                       className="DetailsValueAdminAppForm"
                                     >
-                                      {selectedApplication.formData.motherCity || 'N/A'}
+                                      {selectedApplication.formData?.motherCity || 'N/A'}
                                     </Typography>
                                   </Grid>
                                   <Grid
@@ -938,7 +1056,7 @@ const handleUpdateStatus = async () => {
                                       variant="body1"
                                       className="DetailsValueAdminAppForm"
                                     >
-                                      {selectedApplication.formData.motherProvince || 'N/A'}
+                                      {selectedApplication.formData?.motherProvince || 'N/A'}
                                     </Typography>
                                   </Grid>
                                   <Grid item xs={3} style={{ padding: '5px' }}>
@@ -952,7 +1070,7 @@ const handleUpdateStatus = async () => {
                                       variant="body1"
                                       className="DetailsValueAdminAppForm"
                                     >
-                                      {selectedApplication.formData.motherCountry || 'N/A'}
+                                      {selectedApplication.formData?.motherCountry || 'N/A'}
                                     </Typography>
                                   </Grid>
                                 </Grid>
@@ -1011,7 +1129,7 @@ const handleUpdateStatus = async () => {
                                       variant="body1"
                                       className="DetailsValueAdminAppForm"
                                     >
-                                      {selectedApplication.formData.fatherFirstName || 'N/A'}
+                                      {selectedApplication.formData?.fatherFirstName || 'N/A'}
                                     </Typography>
                                   </Grid>
                                   <Grid
@@ -1029,7 +1147,7 @@ const handleUpdateStatus = async () => {
                                       variant="body1"
                                       className="DetailsValueAdminAppForm"
                                     >
-                                      {selectedApplication.formData.fatherMiddleName || 'N/A'}
+                                      {selectedApplication.formData?.fatherMiddleName || 'N/A'}
                                     </Typography>
                                   </Grid>
                                   <Grid item xs={4} style={{ padding: '5px' }}>
@@ -1043,7 +1161,7 @@ const handleUpdateStatus = async () => {
                                       variant="body1"
                                       className="DetailsValueAdminAppForm"
                                     >
-                                      {selectedApplication.formData.fatherLastName || 'N/A'}
+                                      {selectedApplication.formData?.fatherLastName || 'N/A'}
                                     </Typography>
                                   </Grid>
                                 </Grid>
@@ -1065,7 +1183,7 @@ const handleUpdateStatus = async () => {
                                   15. CITIZENSHIP
                                 </Typography>
                                 <Typography variant="body1" className="DetailsValueAdminAppForm">
-                                  {selectedApplication.formData.fatherCitizenship || 'N/A'}
+                                  {selectedApplication.formData?.fatherCitizenship || 'N/A'}
                                 </Typography>
                               </Grid>
                               <Grid
@@ -1082,7 +1200,7 @@ const handleUpdateStatus = async () => {
                                   16. RELIGION/RELIGIOUS SECT
                                 </Typography>
                                 <Typography variant="body1" className="DetailsValueAdminAppForm">
-                                  {selectedApplication.formData.fatherReligion || 'N/A'}
+                                  {selectedApplication.formData?.fatherReligion || 'N/A'}
                                 </Typography>
                               </Grid>
                               <Grid
@@ -1095,7 +1213,7 @@ const handleUpdateStatus = async () => {
                                   17. OCCUPATION
                                 </Typography>
                                 <Typography variant="body1" className="DetailsValueAdminAppForm">
-                                  {selectedApplication.formData.fatherOccupation || 'N/A'}
+                                  {selectedApplication.formData?.fatherOccupation || 'N/A'}
                                 </Typography>
                               </Grid>
                             </Grid>
@@ -1126,7 +1244,7 @@ const handleUpdateStatus = async () => {
                                       variant="body1"
                                       className="DetailsValueAdminAppForm"
                                     >
-                                      {selectedApplication.formData.fatherStreet || 'N/A'}
+                                      {selectedApplication.formData?.fatherStreet || 'N/A'}
                                     </Typography>
                                   </Grid>
                                   <Grid
@@ -1144,7 +1262,7 @@ const handleUpdateStatus = async () => {
                                       variant="body1"
                                       className="DetailsValueAdminAppForm"
                                     >
-                                      {selectedApplication.formData.fatherCity || 'N/A'}
+                                      {selectedApplication.formData?.fatherCity || 'N/A'}
                                     </Typography>
                                   </Grid>
                                   <Grid
@@ -1162,7 +1280,7 @@ const handleUpdateStatus = async () => {
                                       variant="body1"
                                       className="DetailsValueAdminAppForm"
                                     >
-                                      {selectedApplication.formData.fatherProvince || 'N/A'}
+                                      {selectedApplication.formData?.fatherProvince || 'N/A'}
                                     </Typography>
                                   </Grid>
                                   <Grid item xs={3} style={{ padding: '5px' }}>
@@ -1176,7 +1294,7 @@ const handleUpdateStatus = async () => {
                                       variant="body1"
                                       className="DetailsValueAdminAppForm"
                                     >
-                                      {selectedApplication.formData.fatherCountry || 'N/A'}
+                                      {selectedApplication.formData?.fatherCountry || 'N/A'}
                                     </Typography>
                                   </Grid>
                                 </Grid>
@@ -1222,7 +1340,7 @@ const handleUpdateStatus = async () => {
                                   (Month)
                                 </Typography>
                                 <Typography variant="body1" className="DetailsValueAdminAppForm">
-                                  {selectedApplication.formData.marriageMonth || 'N/A'}
+                                  {selectedApplication.formData?.marriageMonth || 'N/A'}
                                 </Typography>
                               </Grid>
                               <Grid
@@ -1234,7 +1352,7 @@ const handleUpdateStatus = async () => {
                                   (Day)
                                 </Typography>
                                 <Typography variant="body1" className="DetailsValueAdminAppForm">
-                                  {selectedApplication.formData.marriageDay || 'N/A'}
+                                  {selectedApplication.formData?.marriageDay || 'N/A'}
                                 </Typography>
                               </Grid>
                               <Grid item xs={4} style={{ padding: '5px' }}>
@@ -1242,7 +1360,7 @@ const handleUpdateStatus = async () => {
                                   (Year)
                                 </Typography>
                                 <Typography variant="body1" className="DetailsValueAdminAppForm">
-                                  {selectedApplication.formData.marriageYear || 'N/A'}
+                                  {selectedApplication.formData?.marriageYear || 'N/A'}
                                 </Typography>
                               </Grid>
                             </Grid>
@@ -1261,7 +1379,7 @@ const handleUpdateStatus = async () => {
                                   (City/Municipality)
                                 </Typography>
                                 <Typography variant="body1" className="DetailsValueAdminAppForm">
-                                  {selectedApplication.formData.marriageCity || 'N/A'}
+                                  {selectedApplication.formData?.marriageCity || 'N/A'}
                                 </Typography>
                               </Grid>
                               <Grid
@@ -1273,7 +1391,7 @@ const handleUpdateStatus = async () => {
                                   (Province)
                                 </Typography>
                                 <Typography variant="body1" className="DetailsValueAdminAppForm">
-                                  {selectedApplication.formData.marriageProvince || 'N/A'}
+                                  {selectedApplication.formData?.marriageProvince || 'N/A'}
                                 </Typography>
                               </Grid>
                               <Grid item xs={4} style={{ padding: '5px' }}>
@@ -1281,17 +1399,31 @@ const handleUpdateStatus = async () => {
                                   (Country)
                                 </Typography>
                                 <Typography variant="body1" className="DetailsValueAdminAppForm">
-                                  {selectedApplication.formData.marriageCountry || 'N/A'}
+                                  {selectedApplication.formData?.marriageCountry || 'N/A'}
                                 </Typography>
                               </Grid>
                             </Grid>
+                          </Grid>
+                        </Grid>
+                        
+                        <Grid container>
+                          <Grid item xs={12} style={{ padding: '15px 5px 5px' }}>
+                            <Typography variant="body2" color="textSecondary">
+                              Application processed by: {currentUser}
+                            </Typography>
+                            <Typography variant="body2" color="textSecondary">
+                              Date: {new Date().toISOString().split('T')[0]}
+                            </Typography>
                           </Grid>
                         </Grid>
                       </>
                     ) : (
                       <Box className="NoFormViewAvailableAdminAppForm">
                         <Typography variant="h6">
-                          No form view available for this application type
+                          No form view available for this application type: {getApplicationType(selectedApplication)}
+                        </Typography>
+                        <Typography variant="body1">
+                          Subtype: {getApplicationSubtype(selectedApplication) || 'None specified'}
                         </Typography>
                       </Box>
                     )}
@@ -1302,9 +1434,12 @@ const handleUpdateStatus = async () => {
                       <Typography variant="h5" className="SectionTitleAdminAppForm">
                         Uploaded Documents
                       </Typography>
+                      <Typography variant="h6" color="primary">
+                        {getApplicationSubtype(selectedApplication) || getApplicationType(selectedApplication)}
+                      </Typography>
                       <Typography variant="body1" className="SubtitleAdminAppForm">
-                        Applicant: {selectedApplication.formData.firstName}{' '}
-                        {selectedApplication.formData.lastName}
+                        Applicant: {selectedApplication.formData?.firstName || 'Unknown'}{' '}
+                        {selectedApplication.formData?.lastName || ''}
                       </Typography>
                       <Typography variant="body2" className="SubtitleAdminAppForm">
                         Application ID: {selectedApplication.id}
@@ -1314,8 +1449,9 @@ const handleUpdateStatus = async () => {
                     <Divider style={{ margin: '10px 0 20px' }} />
 
                     <FileUploadPreview
-                      formData={selectedApplication.formData}
-                      applicationType={selectedApplication.applicationType || 'Regular application'}
+                      formData={selectedApplication.formData || {}}
+                      applicationType={getApplicationType(selectedApplication)}
+                      applicationSubtype={getApplicationSubtype(selectedApplication)}
                     />
                   </Box>
                 )}
@@ -1323,9 +1459,9 @@ const handleUpdateStatus = async () => {
                 <Box className="StatusSectionAdminAppForm">
                   <Typography
                     variant="subtitle1"
-                    className={`StatusDisplayAdminAppForm status-${selectedApplication.status.toLowerCase().replace(/\s+/g, '-')}AdminAppForm`}
+                    className={`StatusDisplayAdminAppForm status-${(selectedApplication.status || 'pending').toLowerCase().replace(/\s+/g, '-')}AdminAppForm`}
                   >
-                    Status: {selectedApplication.status}
+                    Status: {selectedApplication.status || 'Pending'}
                   </Typography>
 
                   {selectedApplication.statusMessage && (
@@ -1336,7 +1472,7 @@ const handleUpdateStatus = async () => {
 
                   {selectedApplication.lastUpdated && (
                     <Typography variant="body2" className="LastUpdatedAdminAppForm">
-                      Last Updated: {selectedApplication.lastUpdated}
+                      Last Updated: {new Date(selectedApplication.lastUpdated).toLocaleString()}
                     </Typography>
                   )}
 
@@ -1402,4 +1538,5 @@ const handleUpdateStatus = async () => {
     </Box>
   );
 };
+
 export default AdminApplicationDetails;

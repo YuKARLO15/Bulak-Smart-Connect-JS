@@ -21,7 +21,7 @@ const BirthCertificateForm = () => {
   const [isLoading, setIsLoading] = useState(false);
 const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'info' });
 
-// Optional helper function for showing notifications (if you want to use Material UI snackbars)
+
 const showNotification = (message, severity = 'info') => {
   setSnackbar({
     open: true,
@@ -30,7 +30,7 @@ const showNotification = (message, severity = 'info') => {
   });
 };
 
-// Handler for closing the snackbar
+
 const handleCloseSnackbar = () => {
   setSnackbar(prev => ({ ...prev, open: false }));
 };
@@ -39,14 +39,14 @@ const handleCloseSnackbar = () => {
                     localStorage.getItem('isEditingBirthApplication') === 'true';
 
                     useEffect(() => {
-                      // Only load data if we're in editing mode
+                      
                       if (isEditing) {
                         try {
                           console.log("Loading data for editing...");
                           const editingId = localStorage.getItem('editingApplicationId');
                           console.log("Editing application ID:", editingId);
                           
-                          // Get applications from localStorage
+                         
                           const applications = JSON.parse(localStorage.getItem('applications') || '[]');
                           const applicationToEdit = applications.find(app => app.id === editingId);
                           
@@ -54,7 +54,7 @@ const handleCloseSnackbar = () => {
                             console.log("Found application to edit:", applicationToEdit);
                             setFormData(applicationToEdit.formData);
                           } else {
-                            // Fallback to direct form data if available
+                            
                             const savedFormData = localStorage.getItem('birthCertificateApplication');
                             if (savedFormData) {
                               setFormData(JSON.parse(savedFormData));
@@ -67,16 +67,16 @@ const handleCloseSnackbar = () => {
                           console.error("Error loading data for editing:", error);
                         }
                       } else {
-                        // If not editing, always start with empty form
+                        
                         console.log("Starting with new application - clearing form data");
                         setFormData({});
                         localStorage.removeItem('birthCertificateApplication');
                       }
                       
-                      // Cleanup function
+                      
                       return () => {
                         if (!isEditing) {
-                          // Save draft data when leaving form
+                          
                           localStorage.setItem('birthCertificateApplication', JSON.stringify(formData));
                         }
                       };
@@ -89,7 +89,7 @@ const handleCloseSnackbar = () => {
                         [name]: type === 'checkbox' ? checked : value,
                       }));
                       
-                      // Save after each change to preserve data during navigation
+                     
                       if (Object.keys(formData).length > 0) {
                         localStorage.setItem('birthCertificateApplication', JSON.stringify({
                           ...formData,
@@ -182,9 +182,9 @@ const handleCloseSnackbar = () => {
   }
 
   try {
-    setIsLoading(true); // Add a loading state variable
+    setIsLoading(true); 
   
-    // Check storage usage (like in CopyBirthCertificate)
+    
     const usage = localStorageManager.getCurrentUsage();
     if (usage.isCritical) {
       console.warn('Storage critical, performing cleanup before save...');
@@ -197,13 +197,13 @@ const handleCloseSnackbar = () => {
       applicationId = localStorage.getItem('editingApplicationId');
       console.log("Editing existing application:", applicationId);
     } else {
-      // Generate a new application ID if not editing
+      
       applicationId = 'BC-' + Date.now().toString().slice(-6);
       console.log("Creating new application:", applicationId);
     }
     
-    // Get the selected application type and map to subtype
-    const selectedOption = localStorage.getItem('selectedBirthCertificateOption') || 'Regular application';
+    
+    const selectedOption = sessionStorage.getItem('selectedBirthCertificateOption') || 'Regular application';
 
     const getApplicationSubtype = (option) => {
       const subtypeMap = {
@@ -211,7 +211,7 @@ const handleCloseSnackbar = () => {
         'Above 18': 'Delayed Registration - Above 18',
         'Below 18': 'Delayed Registration - Below 18', 
         'Foreign Parent': 'Delayed Registration - Foreign Parent',
-        'Out of town': 'Out of Town Registration',
+        'Out of town': 'Delayed Registration - Out of Town',
         'Clerical Error': 'Correction - Clerical Errors',
         'Sex DOB': 'Correction - Sex/Date of Birth',
         'First Name': 'Correction - First Name'
@@ -339,12 +339,9 @@ const handleCloseSnackbar = () => {
     };
     
     // When editing, always go to summary if we already uploaded docs
-    if (isEditing) {
-      navigate('/BirthApplicationSummary');
-    } else {
-      // For new applications, follow the route map
+   
       navigate(routeMap[selectedOption] || '/BirthApplicationSummary');
-    }
+    
   } catch (err) {
     console.error('Error submitting form:', err);
     if (showNotification) {
