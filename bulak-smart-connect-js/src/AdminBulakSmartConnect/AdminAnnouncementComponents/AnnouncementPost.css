@@ -62,15 +62,17 @@
 .announcement-edit-btn {
   background: none;
   border: none;
-  color: #1d4ed8; 
-  text-decoration: underline;
+  color: #ede7e7; 
+  /* text-decoration: underline; */
   cursor: pointer;
   font-size: 1rem;
   padding: 4px 8px;
   transition: color 0.2s ease;
   margin-left: 10px;
+  background-color: #1e4e59;
+  border-radius: 3px;
 }
 
 .announcement-edit-btn:hover {
-  color: #2563eb; 
+  color: #ede7e7; 
 }

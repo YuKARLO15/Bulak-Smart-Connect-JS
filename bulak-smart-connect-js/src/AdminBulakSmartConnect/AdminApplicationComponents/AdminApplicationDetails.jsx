@@ -28,6 +28,9 @@ import FileUploadPreview from './AdminFilePreview';
 import AdminMarriageApplicationView from './AdminMarriageApplicationView';
 import AdminMarriageLicensePreview from './AdminMarriageLicensePreview';
 import NavBar from '../../NavigationComponents/NavSide';
+import { documentApplicationService } from '../../services/documentApplicationService';
+import AdminCopyBirthPreview from './AdminCopyBirthPreview';
+
 
 const AdminApplicationDetails = () => {
   const { id } = useParams();
@@ -44,9 +47,16 @@ const AdminApplicationDetails = () => {
   const [showDocumentsTab, setShowDocumentsTab] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   useEffect(() => {
+  let isMounted = true;
+  setLoading(true);
+
+  async function fetchApplications() {
     try {
-      const storedApplications = JSON.parse(localStorage.getItem('applications')) || [];
+     const storedApplications = await documentApplicationService.getAllApplications();
+      if (!isMounted) return;
+
       setApplications(storedApplications);
+
       let targetApp;
 
       if (id) {
@@ -64,35 +74,40 @@ const AdminApplicationDetails = () => {
         setSelectedApplication(storedApplications[0]);
       }
     } catch (err) {
-      console.error('Error loading applications:', err);
-      setError('Error loading applications: ' + err.message);
-    } finally {
-      setLoading(false);
-    }
-
-    window.addEventListener('storage', handleStorageUpdate);
-
-    return () => {
-      window.removeEventListener('storage', handleStorageUpdate);
-    };
-  }, [id]);
-
-  const handleStorageUpdate = () => {
-    try {
-      const storedApplications = JSON.parse(localStorage.getItem('applications')) || [];
-    
-      setApplications(storedApplications);
-
-      if (selectedApplication) {
-        const updatedSelectedApp = storedApplications.find(app => app.id === selectedApplication.id);
-        if (updatedSelectedApp) {
-          setSelectedApplication(updatedSelectedApp);
-        }
+      if (isMounted) {
+        setError('Error loading applications: ' + err.message);
       }
-    } catch (err) {
-      console.error('Error updating applications from storage:', err);
+    } finally {
+      if (isMounted) setLoading(false);
     }
+  }
+
+  fetchApplications();
+
+  // Optionally, subscribe to updates if your service supports it
+  window.addEventListener('storage', handleStorageUpdate);
+
+  return () => {
+    isMounted = false;
+    window.removeEventListener('storage', handleStorageUpdate);
   };
+}, [id]);
+
+  const handleStorageUpdate = async () => {
+  try {
+   const storedApplications = await documentApplicationService.getAllApplications();
+    setApplications(storedApplications);
+
+    if (selectedApplication) {
+      const updatedSelectedApp = storedApplications.find(app => app.id === selectedApplication.id);
+      if (updatedSelectedApp) {
+        setSelectedApplication(updatedSelectedApp);
+      }
+    }
+  } catch (err) {
+    console.error('Error updating applications from service:', err);
+  }
+};
 
   const handleApplicationClick = application => {
     setSelectedApplication(application);
@@ -126,37 +141,23 @@ const AdminApplicationDetails = () => {
     setFilterStatus(event.target.value);
   };
 
-  const handleUpdateStatus = () => {
-    try {
-      const allApplications = JSON.parse(localStorage.getItem('applications')) || [];
+const handleUpdateStatus = async () => {
+  try {
+    await documentApplicationService.updateStatus(selectedApplication.id, newStatus, statusMessage);
 
-      const updatedApplications = allApplications.map(app => {
-        if (app.id === selectedApplication.id) {
-          return {
-            ...app,
-            status: newStatus,
-            statusMessage: statusMessage,
-            lastUpdated: new Date().toLocaleDateString(),
-          };
-        }
-        return app;
-      });
+    // Refetch applications after update
+    const updatedApplications = await documentApplicationService.getAllApplications();
+    setApplications(updatedApplications);
+    const updated = updatedApplications.find(app => app.id === selectedApplication.id);
+    setSelectedApplication(updated);
 
-      localStorage.setItem('applications', JSON.stringify(updatedApplications));
-
-      setApplications(updatedApplications);
-
-      const updated = updatedApplications.find(app => app.id === selectedApplication.id);
-      setSelectedApplication(updated);
-
-      setStatusUpdateDialog(false);
-
-      window.dispatchEvent(new Event('storage'));
-    } catch (err) {
-      console.error('Error updating application status:', err);
-      setError('Error updating application status: ' + err.message);
-    }
-  };
+    setStatusUpdateDialog(false);
+    window.dispatchEvent(new Event('storage'));
+  } catch (err) {
+    console.error('Error updating application status:', err);
+    setError('Error updating application status: ' + err.message);
+  }
+};
 
   const formatDate = (month, day, year) => {
     if (!month || !day || !year) return 'N/A';
@@ -164,18 +165,27 @@ const AdminApplicationDetails = () => {
   };
 
   const filteredApplications = applications.filter(app => {
+  if (filterStatus !== 'All' && app.status !== filterStatus) {
+    return false;
+  }
 
-    if (filterStatus !== 'All' && app.status !== filterStatus) {
+  if (filterCategory !== 'All') {
+   
+    if (filterCategory === 'Birth Certificate') {
+     
+      if (
+        app.type !== 'Birth Certificate' &&
+        app.type !== 'Copy of Birth Certificate'
+      ) {
+        return false;
+      }
+    } else if (app.type !== filterCategory) {
       return false;
     }
-    
+  }
 
-    if (filterCategory !== 'All' && app.type !== filterCategory) {
-      return false;
-    }
-    
-    return true;
-  });
+  return true;
+});
 
   if (loading) {
     return (
@@ -208,7 +218,7 @@ const AdminApplicationDetails = () => {
         <Grid item xs={12} md={4}>
           <Paper elevation={3} className="ApplicationsListPaperAdminAppForm">
             <Box className="FilterContainerAdminAppForm">
-              <h3 classname = "FilterTitleApplication"> Filter Applications </h3>
+              <h3 className = "FilterTitleApplication"> Filter Applications </h3>
               
               {/* Category Filter */}
               <FormControl fullWidth margin="normal">
@@ -311,6 +321,9 @@ const AdminApplicationDetails = () => {
                       <AdminMarriageApplicationView applicationData={selectedApplication} />
                     ) : selectedApplication.type === 'Marriage License' ? (
                         <AdminMarriageLicensePreview applicationData={selectedApplication} />
+                      )
+                        : selectedApplication.applicationSubtype === 'Copy of Birth Certificate' ? (
+                       <AdminCopyBirthPreview applicationData={selectedApplication} />
                           
   
   ) : selectedApplication.type === 'Birth Certificate' ? (

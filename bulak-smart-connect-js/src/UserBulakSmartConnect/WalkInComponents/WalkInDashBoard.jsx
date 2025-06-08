@@ -4,6 +4,8 @@ import './WalkInQueue.css';
 import NavBar from '../../NavigationComponents/NavSide';
 import { io } from 'socket.io-client';
 import { queueService } from '../../services/queueService';
+import FloatingAnnouncementFab from '../../LandingPageComponents/FloatingAnnouncement';
+import { Box, Button, Container, Grid, Typography, Card, CardContent } from '@mui/material';
 
 // Format queue number to WK format
 const formatWKNumber = (queueNumber) => {
@@ -495,6 +497,9 @@ const getAllUserQueues = () => {
             )}
           </div>
         </div>
+          <Box className="AnnouncementButtonContainer">
+          <FloatingAnnouncementFab/>
+          </Box>
       </div>
     </div>
   );

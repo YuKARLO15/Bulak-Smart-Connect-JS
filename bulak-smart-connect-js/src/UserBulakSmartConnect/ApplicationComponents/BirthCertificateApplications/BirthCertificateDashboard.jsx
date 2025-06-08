@@ -143,6 +143,8 @@ const BirthCertificateDashboard = () => {
           <Typography variant="h6" className="SectionTitle">
             Data Privacy Notice
           </Typography>
+
+          {/* Data Privacy Notice */}
           <Box sx={{ mb: 2 }} className="dataPrivacyNoticeContainer">
             <Typography variant="body2" sx={{ mb: 1 }} className="dataPrivacyNotice">
               Please <strong>click</strong> and <strong>read </strong> our{' '}
@@ -157,15 +159,17 @@ const BirthCertificateDashboard = () => {
               </Button>{' '}
               before proceeding. |{' '}
               <span className="Privacy-TagalogNotice">
-                Pindutin at basahin ang aming   <Button
-                variant="text"
-                color="primary"
-                onClick={handlePrivacyPolicyClick}
-                sx={{ p: 0, textTransform: 'none', textDecoration: 'underline' }}
-                className="dataPrivacyNoticeLink"
-              >
-               Patakaran sa Pagkapribado ng Data
-              </Button>{' '} bago magpatuloy.
+                Pindutin at basahin ang aming{' '}
+                <Button
+                  variant="text"
+                  color="primary"
+                  onClick={handlePrivacyPolicyClick}
+                  sx={{ p: 0, textTransform: 'none', textDecoration: 'underline' }}
+                  className="dataPrivacyNoticeLink"
+                >
+                  Patakaran sa Pagkapribado ng Data
+                </Button>{' '}
+                bago magpatuloy.
               </span>
             </Typography>
             {!hasVisitedPrivacyPolicy && (
