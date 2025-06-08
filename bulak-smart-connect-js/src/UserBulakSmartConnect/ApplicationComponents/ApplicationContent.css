@@ -43,6 +43,16 @@
 
   align-self: center;
 }
+.ApplicationDescription {
+  font-size: 12px;
+  color: #6c757d;
+  margin-bottom: 10px;
+  white-space: normal;
+  word-wrap: break-word;
+  width: 15vw;
+  
+  
+}
 
 .CardTitle {
   font-size: 20px !important;
@@ -51,11 +61,14 @@
 }
 
 .Details {
+  display: flex;
   list-style: none;
   padding: 0;
   margin-top: 20vh;
   color: #6c757d;
   font-size: 14px;
+  align-items: center;
+  justify-content: center;
 }
 
 .Actions {

@@ -55,12 +55,12 @@ const NavBar = ({ isSidebarOpen, setIsSidebarOpen }) => {
     
           <div className="NavigationButtons">
             {/* Dashboard */}
-            <Link 
+            {/* <Link 
               to={getRoute('/UserDashboard', '/AdminDashboard')} 
               className={isActive(getRoute('/UserDashboard', '/AdminDashboard')) ? 'active' : ''}
             >
               <DashboardIcon /> Dashboard
-            </Link>
+            </Link> */}
             
             {/* Home */}
             <Link 
