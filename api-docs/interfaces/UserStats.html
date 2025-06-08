@@ -362,6 +362,7 @@ import { Repository, Like, In } from &#x27;typeorm&#x27;;
 import { User } from &#x27;./entities/user.entity&#x27;;
 import { AdminUpdateUserDto } from &#x27;../auth/dto/update-user.dto&#x27;; // Import from auth module
 import { RolesService } from &#x27;../roles/roles.service&#x27;;
+import { CreateUserDto } from &#x27;./dto/create-user.dto&#x27;; 
 import * as bcrypt from &#x27;bcrypt&#x27;;
 
 interface FindAllOptions {
@@ -613,6 +614,70 @@ export class UsersService {
       where: { username },
       relations: [&#x27;defaultRole&#x27;, &#x27;roles&#x27;],
     });
+  }
+
+  async create(createUserDto: CreateUserDto) {
+    const {
+      email,
+      username,
+      password,
+      firstName,
+      middleName,
+      lastName,
+      nameExtension,
+      contactNumber,
+      name,
+      roleIds,
+      defaultRoleId
+    } &#x3D; createUserDto;
+
+    // Generate full name if not provided
+    const fullName &#x3D; name || &#x60;${firstName} ${middleName ? middleName + &#x27; &#x27; : &#x27;&#x27;}${lastName}${nameExtension ? &#x27; &#x27; + nameExtension : &#x27;&#x27;}&#x60;;
+
+    // Check if user already exists
+    const existingUserByEmail &#x3D; await this.usersRepository.findOne({
+      where: { email },
+    });
+    if (existingUserByEmail) {
+      throw new ConflictException(&#x27;Email already exists&#x27;);
+    }
+
+    if (username) {
+      const existingUserByUsername &#x3D; await this.usersRepository.findOne({
+        where: { username },
+      });
+      if (existingUserByUsername) {
+        throw new ConflictException(&#x27;Username already exists&#x27;);
+      }
+    }
+
+    try {
+      // Create user
+      const user &#x3D; this.usersRepository.create({
+        email,
+        username,
+        password, // Should be hashed by the caller
+        firstName,
+        middleName,
+        lastName,
+        nameExtension,
+        contactNumber,
+        name: fullName,
+        defaultRoleId: defaultRoleId || 4, // Default to citizen
+      });
+
+      await this.usersRepository.save(user);
+
+      // Assign roles if provided
+      if (roleIds &amp;&amp; roleIds.length &gt; 0) {
+        await this.rolesService.assignRolesToUser(user.id, roleIds);
+      }
+
+      return user;
+    } catch (error) {
+      console.error(&#x27;Error creating user:&#x27;, error);
+      throw error;
+    }
   }
 }</code></pre>
     </div>

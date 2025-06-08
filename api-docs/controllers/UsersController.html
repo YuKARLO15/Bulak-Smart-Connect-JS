@@ -147,6 +147,15 @@
                                     <span class="modifier"></span>
                                     <span class="modifier"></span>
                                     <span class="modifier">Async</span>
+                                <a href="#adminCreateUser" >adminCreateUser</a>
+                            </li>
+                            <li>
+                                    <span class="modifier"></span>
+                                    <span class="modifier"></span>
+                                    <span class="modifier"></span>
+                                    <span class="modifier"></span>
+                                    <span class="modifier"></span>
+                                    <span class="modifier">Async</span>
                                 <a href="#findAll" >findAll</a>
                             </li>
                             <li>
@@ -226,6 +235,87 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
+                    <a name="adminCreateUser"></a>
+                    <span class="name">
+                            <span class="modifier"></span>
+                            <span class="modifier"></span>
+                            <span class="modifier"></span>
+                            <span class="modifier"></span>
+                            <span class="modifier"></span>
+                            <span class="modifier">Async</span>
+                        <span ><b>adminCreateUser</b></span>
+                        <a href="#adminCreateUser"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>adminCreateUser(createUserDto: <a href="../classes/CreateUserDto.html" target="_self">CreateUserDto</a>)</code>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <b>Decorators : </b>
+                    <br />
+                    <code>@Post(&#x27;admin-create&#x27;)<br />@UseGuards(JwtAuthGuard, RolesGuard)<br />@Roles(&#x27;admin&#x27;, &#x27;super_admin&#x27;)<br />@ApiOperation({summary: &#x27;Admin creates user with role assignment&#x27;})<br />@ApiResponse({status: 201, description: &#x27;User created successfully&#x27;, type: UserResponseDto})<br /></code>
+                </td>
+            </tr>
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="130"
+                                    class="link-to-prism">src/users/users.controller.ts:130</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>createUserDto</td>
+                                            <td>
+                                                            <code><a href="../classes/CreateUserDto.html" target="_self" >CreateUserDto</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="../classes/UserResponseDto.html" target="_self" >Promise&lt;UserResponseDto&gt;</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
                     <a name="findAll"></a>
                     <span class="name">
                             <span class="modifier"></span>
@@ -256,8 +346,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="35"
-                                    class="link-to-prism">src/users/users.controller.ts:35</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="38"
+                                    class="link-to-prism">src/users/users.controller.ts:38</a></div>
                         </td>
                     </tr>
 
@@ -350,8 +440,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="65"
-                                    class="link-to-prism">src/users/users.controller.ts:65</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="68"
+                                    class="link-to-prism">src/users/users.controller.ts:68</a></div>
                         </td>
                     </tr>
 
@@ -441,8 +531,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="46"
-                                    class="link-to-prism">src/users/users.controller.ts:46</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="49"
+                                    class="link-to-prism">src/users/users.controller.ts:49</a></div>
                         </td>
                     </tr>
 
@@ -522,8 +612,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="55"
-                                    class="link-to-prism">src/users/users.controller.ts:55</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="58"
+                                    class="link-to-prism">src/users/users.controller.ts:58</a></div>
                         </td>
                     </tr>
 
@@ -574,8 +664,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="101"
-                                    class="link-to-prism">src/users/users.controller.ts:101</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="104"
+                                    class="link-to-prism">src/users/users.controller.ts:104</a></div>
                         </td>
                     </tr>
 
@@ -668,8 +758,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="87"
-                                    class="link-to-prism">src/users/users.controller.ts:87</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="90"
+                                    class="link-to-prism">src/users/users.controller.ts:90</a></div>
                         </td>
                     </tr>
 
@@ -774,8 +864,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="114"
-                                    class="link-to-prism">src/users/users.controller.ts:114</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="117"
+                                    class="link-to-prism">src/users/users.controller.ts:117</a></div>
                         </td>
                     </tr>
 
@@ -870,6 +960,9 @@ import { JwtAuthGuard } from &#x27;../auth/guards/jwt-auth.guard&#x27;;
 import { RolesGuard } from &#x27;../auth/guards/roles.guard&#x27;;
 import { Roles } from &#x27;../auth/decorators/roles.decorator&#x27;;
 import { AuthenticatedUser } from &#x27;../auth/jwt.strategy&#x27;;
+import * as bcrypt from &#x27;bcrypt&#x27;;
+import { CreateUserDto } from &#x27;./dto/create-user.dto&#x27;;
+import { UserResponseDto } from &#x27;./dto/user-response.dto&#x27;;
 
 @ApiTags(&#x27;users&#x27;)
 @Controller(&#x27;users&#x27;)
@@ -968,6 +1061,38 @@ export class UsersController {
     @Request() req: { user: AuthenticatedUser },
   ) {
     return this.usersService.updateStatus(+id, updateStatusDto.isActive);
+  }
+
+  @Post(&#x27;admin-create&#x27;)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(&#x27;admin&#x27;, &#x27;super_admin&#x27;)
+  @ApiOperation({ summary: &#x27;Admin creates user with role assignment&#x27; })
+  @ApiResponse({ status: 201, description: &#x27;User created successfully&#x27;, type: UserResponseDto })
+  async adminCreateUser(@Body() createUserDto: CreateUserDto): Promise&lt;UserResponseDto&gt; {
+    try {
+      // Hash password
+      const salt &#x3D; await bcrypt.genSalt();
+      const hashedPassword &#x3D; await bcrypt.hash(createUserDto.password, salt);
+
+      // Create user with hashed password
+      const userWithHashedPassword &#x3D; {
+        ...createUserDto,
+        password: hashedPassword
+      };
+
+      const user &#x3D; await this.usersService.create(userWithHashedPassword);
+
+      // Return user without password
+      const { password, ...userWithoutPassword } &#x3D; user;
+      
+      // Get user with roles for response
+      const userWithRoles &#x3D; await this.usersService.findOne(user.id);
+      
+      return userWithRoles;
+    } catch (error) {
+      console.error(&#x27;Error in admin create user:&#x27;, error);
+      throw error;
+    }
   }
 }</code></pre>
     </div>
