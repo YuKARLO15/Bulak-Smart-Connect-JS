@@ -326,9 +326,7 @@ const AdminApplicationDashboard = () => {
           <Typography variant="h6" className="ApplicationDashTableTitle">
             Submitted Applications
           </Typography>
-          <Button>
-          See All Applications
-          </Button>
+        
           <IconButton className="ApplicationDashFilterButton" size="small">
             <FilterListIcon fontSize="small" />
           </IconButton>
