@@ -19,6 +19,9 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { AuthenticatedUser } from '../auth/jwt.strategy';
+import * as bcrypt from 'bcrypt';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UserResponseDto } from './dto/user-response.dto';
 
 @ApiTags('users')
 @Controller('users')
@@ -117,5 +120,37 @@ export class UsersController {
     @Request() req: { user: AuthenticatedUser },
   ) {
     return this.usersService.updateStatus(+id, updateStatusDto.isActive);
+  }
+
+  @Post('admin-create')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('admin', 'super_admin')
+  @ApiOperation({ summary: 'Admin creates user with role assignment' })
+  @ApiResponse({ status: 201, description: 'User created successfully', type: UserResponseDto })
+  async adminCreateUser(@Body() createUserDto: CreateUserDto): Promise<UserResponseDto> {
+    try {
+      // Hash password
+      const salt = await bcrypt.genSalt();
+      const hashedPassword = await bcrypt.hash(createUserDto.password, salt);
+
+      // Create user with hashed password
+      const userWithHashedPassword = {
+        ...createUserDto,
+        password: hashedPassword
+      };
+
+      const user = await this.usersService.create(userWithHashedPassword);
+
+      // Return user without password
+      const { password, ...userWithoutPassword } = user;
+      
+      // Get user with roles for response
+      const userWithRoles = await this.usersService.findOne(user.id);
+      
+      return userWithRoles;
+    } catch (error) {
+      console.error('Error in admin create user:', error);
+      throw error;
+    }
   }
 }

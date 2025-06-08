@@ -306,34 +306,74 @@ const userService = {
   // Register new user (admin creates user)
   createUser: async (userData) => {
     try {
-      const response = await apiClient.post('/auth/register', userData);
+      console.log('🔧 Creating user with userService:', userData);
       
-      // Also add to localStorage
-      try {
-        const localUsers = JSON.parse(localStorage.getItem('users') || '[]');
-        const newUser = {
-          id: Date.now(), // Temporary ID for localStorage
-          name: `${userData.firstName} ${userData.lastName}`,
-          username: userData.username || 'N/A',
+      // Check if this is an admin-created user (has roleIds)
+      if (userData.roleIds && userData.roleIds.length > 0) {
+        console.log('🔑 Using admin user creation endpoint');
+        
+        // Use admin endpoint for user creation with role assignment
+        const response = await apiClient.post('/users/admin-create', {
           email: userData.email,
-          contact: userData.contactNumber || 'N/A',
-          status: 'Not Logged In',
-          roles: userData.roleIds ? ['citizen'] : userData.roles || ['citizen'], // Default role
-          isActive: true,
+          username: userData.username,
           firstName: userData.firstName,
-          lastName: userData.lastName,
           middleName: userData.middleName,
-          nameExtension: userData.nameExtension
-        };
-        localUsers.push(newUser);
-        localStorage.setItem('users', JSON.stringify(localUsers));
-      } catch (localErr) {
-        console.warn('Failed to update localStorage:', localErr);
+          lastName: userData.lastName,
+          nameExtension: userData.nameExtension,
+          contactNumber: userData.contactNumber,
+          name: userData.name, // Include the generated full name
+          password: userData.password,
+          roleIds: userData.roleIds,
+          defaultRoleId: userData.defaultRoleId
+        });
+        
+        console.log('✅ Admin user creation successful:', response.data);
+        
+        // Update localStorage with the new user
+        try {
+          const localUsers = JSON.parse(localStorage.getItem('users') || '[]');
+          const newUser = {
+            id: response.data.id,
+            name: userData.name,
+            username: userData.username,
+            email: userData.email,
+            contact: userData.contactNumber,
+            status: 'Not Logged In',
+            roles: response.data.roles || [userData.role],
+            isActive: true,
+            firstName: userData.firstName,
+            lastName: userData.lastName,
+            middleName: userData.middleName,
+            nameExtension: userData.nameExtension
+          };
+          localUsers.push(newUser);
+          localStorage.setItem('users', JSON.stringify(localUsers));
+        } catch (localErr) {
+          console.warn('Failed to update localStorage:', localErr);
+        }
+        
+        return response.data;
+      } else {
+        console.log('👥 Using regular citizen registration endpoint');
+        
+        // Use regular registration endpoint for citizen users
+        const response = await apiClient.post('/auth/register', {
+          email: userData.email,
+          username: userData.username,
+          firstName: userData.firstName,
+          middleName: userData.middleName,
+          lastName: userData.lastName,
+          nameExtension: userData.nameExtension,
+          contactNumber: userData.contactNumber,
+          name: userData.name,
+          password: userData.password
+        });
+        
+        console.log('✅ Regular user creation successful:', response.data);
+        return response.data;
       }
-      
-      return response.data;
     } catch (error) {
-      console.error('Error creating user:', error);
+      console.error('❌ Error creating user:', error);
       throw error;
     }
   },
