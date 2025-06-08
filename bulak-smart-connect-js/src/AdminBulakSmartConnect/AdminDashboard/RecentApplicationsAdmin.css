@@ -9,7 +9,7 @@
 .ApplicationStatsMainContainer {
 display: flex;
 flex-direction: row;
-width: 100vw !important;
+width: 65vw !important;
 }
 
 .StatAppointmentTypeContainer {
