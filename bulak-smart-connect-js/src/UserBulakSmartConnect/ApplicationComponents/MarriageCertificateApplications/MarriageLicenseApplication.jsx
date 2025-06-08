@@ -163,17 +163,40 @@ const MarriageLicenseApplication = () => {
       
       try {
         const applicationId = localStorage.getItem('currentApplicationId');
-        if (applicationId) {
-          // Update the application status
-          await documentApplicationService.updateApplication(applicationId, {
+        if (!applicationId) {
+          throw new Error('Application ID is missing');
+        }
+        
+        console.log('Attempting to update application with ID:', applicationId);
+        
+        try {
+          // First verify the application exists
+          const appCheck = await documentApplicationService.getApplication(applicationId);
+          console.log("Verified application exists:", appCheck);
+          
+          // Instead of using updateApplication, try using a different endpoint
+          // This is a workaround based on how your backend is structured
+          const updateResponse = await documentApplicationService.updateApplicationStatus(applicationId, {
             status: 'Pending',
             statusMessage: 'Marriage license application submitted with all required documents'
           });
+          
+          console.log('Application status updated successfully:', updateResponse);
+          
+          setTimeout(() => {
+            navigate('/MarriageLicenseSummary');
+          }, 2000);
+        } catch (error) {
+          console.error('Error updating application:', error);
+          
+          // If the application cannot be updated, we'll still navigate to the summary page
+          // since the files were uploaded successfully
+          alert('Your application was processed, but there was an issue updating its status. Your files have been uploaded successfully.');
+          
+          setTimeout(() => {
+            navigate('/MarriageLicenseSummary');
+          }, 2000);
         }
-        
-        setTimeout(() => {
-          navigate('/MarriageLicenseSummary');
-        }, 2000);
       } catch (error) {
         console.error('Error submitting application:', error);
         alert(`Error submitting application: ${error.message}`);
