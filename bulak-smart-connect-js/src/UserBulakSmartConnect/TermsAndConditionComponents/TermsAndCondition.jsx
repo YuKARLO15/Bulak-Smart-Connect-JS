@@ -248,32 +248,30 @@ const PrivacyPolicy = () => {
               <h1>Terms and Conditions</h1>
 
               <p>
-                Welcome to Bulak LGU Smart Connect. These Terms and Conditions (“Terms”) govern your
-                use of the Bulak LGU Smart Connect website and services operated by the Municipal
-                Civil Registrar Office of San Ildefonso, Bulacan. By accessing or using this website
+                Welcome to <strong>Bulak LGU Smart Connect.</strong> These <strong>Terms and Conditions</strong> (“Terms”) govern your
+                use of the Bulak LGU Smart Connect website and services operated by the <strong>Municipal
+                Civil Registrar Office of San Ildefonso, Bulacan.</strong> By accessing or using this website
                 and services, you agree to comply with and be bound by these Terms.
               </p>
 
               <h2>1. Acceptance of Terms</h2>
               <p>
-                By using Bulak LGU Smart Connect, you acknowledge that you have read, understood,
-                and agree to be legally bound by these Terms and our Privacy Policy. If you do not
+                By using <strong> Bulak LGU Smart Connect</strong>, you acknowledge that you have to be legally bound by these Terms and our Privacy Policy. If you do not
                 agree with any part of these Terms or the Privacy Policy, please do not use the
                 service.
               </p>
 
               <h2>2. Eligibility</h2>
               <p>
-                You must be a qualified user as determined by the Municipal Civil Registrar Office
+                You must be a qualified user as determined by the <strong>Municipal Civil Registrar Office </strong>
                 to request civil registry documents through this platform. By using this service,
                 you affirm that you meet all eligibility requirements.
               </p>
 
               <h2>3. Use of Services</h2>
               <ul>
-                <li>
                   You may use the platform to submit requests for the following documents only:
-                </li>
+          
                 <ul>
                   <li>Certificate of Live Birth</li>
                   <li>Certificate of Marriage</li>
@@ -281,11 +279,9 @@ const PrivacyPolicy = () => {
                   <li>Certificate of Death</li>
                   <li>Fetal Death Certificate</li>
                 </ul>
-                <li>
                   All information you provide must be accurate, complete, and up to date. Providing
                   false or misleading information may result in rejection of your request or
                   suspension of your access to the service.
-                </li>
               </ul>
 
               <h2>4. User Responsibilities</h2>
@@ -305,11 +301,11 @@ const PrivacyPolicy = () => {
               <ul>
                 <li>
                   Submission of requests through the website does not complete the transaction. You
-                  are required to visit the Municipal Civil Registrar Office to pay the applicable
+                  are required to visit the <strong>Municipal Civil Registrar Office</strong> to pay the applicable
                   fees and claim your requested documents.
                 </li>
                 <li>
-                  The Municipal Civil Registrar Office reserves the right to refuse any requests if
+                  The <strong>Municipal Civil Registrar Office</strong> reserves the right to refuse any requests if
                   payments are not completed or if the documents are not claimed within the
                   specified time.
                 </li>
@@ -318,7 +314,7 @@ const PrivacyPolicy = () => {
               <h2>6. Intellectual Property</h2>
               <p>
                 All content, design, text, graphics, logos, and software on this website are the
-                property of the Municipal Civil Registrar Office of San Ildefonso or its licensors
+                property of the <strong>Municipal Civil Registrar Office of San Ildefonso</strong> or its licensors
                 and are protected by applicable intellectual property laws. You may not copy,
                 reproduce, distribute, or create derivative works without prior written permission.
               </p>
@@ -326,7 +322,7 @@ const PrivacyPolicy = () => {
               <h2>7. Limitation of Liability</h2>
               <ul>
                 <li>
-                  The Municipal Civil Registrar Office makes no guarantees about the accuracy,
+                  The <strong>Municipal Civil Registrar Office</strong> makes no guarantees about the accuracy,
                   reliability, or availability of the services.
                 </li>
                 <li>
@@ -599,20 +595,19 @@ const PrivacyPolicy = () => {
               <strong>Lokasyon:</strong> Municipal Hall, San Ildefonso, Bulacan
             </p> */}
             </div>
-
-            <div id="data-privacy">
+            <div id="terms-and-conditions">
               <h1>Mga Tuntunin at Kundisyon</h1>
               <p>
-                Maligayang pagdating sa Bulak LGU Smart Connect. Ang mga Tuntunin at Kundisyon na
+                Maligayang pagdating sa <strong>Bulak LGU Smart Connect.</strong> Ang mga Tuntunin at Kundisyon na
                 ito (“Tuntunin”) ay namamahala sa iyong paggamit ng website at mga serbisyong
-                iniaalok ng Tanggapan ng Municipal Civil Registrar ng San Ildefonso, Bulacan. Sa
+                iniaalok ng Tanggapan ng <strong>Municipal Civil Registrar ng San Ildefonso, Bulacan.</strong> Sa
                 pag-access o paggamit ng website at serbisyo, ikaw ay sumasang-ayon na sumunod at
                 mapailalim sa mga Tuntuning ito.
               </p>
 
               <h2>1. Pagtanggap sa mga Tuntunin</h2>
               <p>
-                Sa paggamit ng Bulak LGU Smart Connect, kinikilala mong nabasa mo, naintindihan, at
+                Sa paggamit ng <strong>Bulak LGU Smart Connect,</strong> kinikilala mong nabasa mo, naintindihan, at
                 sumasang-ayon kang legal na sumunod sa mga Tuntunin at aming Patakaran sa Privacy.
                 Kung hindi ka sumasang-ayon sa alinmang bahagi ng mga ito, mangyaring huwag gamitin
                 ang serbisyo.
@@ -620,17 +615,15 @@ const PrivacyPolicy = () => {
 
               <h2>2. Karapat-dapat na Gumamit</h2>
               <p>
-                Dapat ikaw ay kwalipikadong gumagamit ayon sa itinakda ng Tanggapan ng Municipal
-                Civil Registrar upang makapag-request ng mga dokumentong sibil sa platapormang ito.
+                Dapat ikaw ay kwalipikadong gumagamit ayon sa itinakda ng Tanggapan ng <strong>Municipal
+                Civil Registrar</strong> upang makapag-request ng mga dokumentong sibil sa platapormang ito.
                 Sa paggamit ng serbisyo, pinatutunayan mong ikaw ay kwalipikado.
               </p>
 
               <h2>3. Paggamit ng Serbisyo</h2>
               <ul>
-                <li>
                   Maaari mong gamitin ang plataporma upang mag-request ng mga sumusunod na dokumento
                   lamang:
-                </li>
                 <ul>
                   <li>Sertipiko ng Kapanganakan</li>
                   <li>Sertipiko ng Kasal</li>
@@ -638,11 +631,9 @@ const PrivacyPolicy = () => {
                   <li>Sertipiko ng Kamatayan</li>
                   <li>Sertipiko ng Pagkamatay ng Sanggol</li>
                 </ul>
-                <li>
                   Lahat ng impormasyong ibibigay mo ay dapat tama, kumpleto, at napapanahon. Ang
                   pagbibigay ng maling impormasyon ay maaaring humantong sa pagkakabigo ng request o
                   pagkaputol ng access mo sa serbisyo.
-                </li>
               </ul>
 
               <h2>4. Responsibilidad ng Gumagamit</h2>
@@ -666,7 +657,7 @@ const PrivacyPolicy = () => {
               <ul>
                 <li>
                   Ang pagsusumite ng request sa website ay hindi pa nangangahulugang tapos na ang
-                  transaksyon. Kailangan mong bumisita sa Tanggapan ng Municipal Civil Registrar
+                  transaksyon. Kailangan mong bumisita sa Tanggapan ng <strong>Municipal Civil Registrar</strong>
                   upang magbayad ng kaukulang bayarin at kunin ang mga dokumentong ni-request.
                 </li>
                 <li>
@@ -678,7 +669,7 @@ const PrivacyPolicy = () => {
               <h2>6. Karapatang Intelektwal</h2>
               <p>
                 Ang lahat ng nilalaman, disenyo, teksto, graphics, logo, at software sa website na
-                ito ay pag-aari ng Tanggapan ng Municipal Civil Registrar ng San Ildefonso o mga
+                ito ay pag-aari ng Tanggapan ng <strong>Municipal Civil Registrar ng San Ildefonso</strong> o mga
                 tagapaglisensya nito at protektado ng batas. Ipinagbabawal ang pagkopya o pamamahagi
                 nang walang pahintulot.
               </p>
@@ -738,20 +729,19 @@ const PrivacyPolicy = () => {
                 <br />
                 Lokasyon: Municipal Hall, San Ildefonso, Bulacan
               </p>
-            </div>
+              </div>
           </div>
         )}
 
         {/* Proceed Button */}
         <div className="proceed-button-container">
-          <button
+   <button
             className="proceed-button"
             onClick={() => {
               if (window.opener) {
-                window.opener.postMessage('visited-privacy-policy', '*');
+                window.opener.postMessage('visited-terms-and-conditions', '*');
                 window.close();
               } else {
-                // Fallback for when opened directly
                 window.location.href = '/BirthCertificateDashboard';
               }
             }}
