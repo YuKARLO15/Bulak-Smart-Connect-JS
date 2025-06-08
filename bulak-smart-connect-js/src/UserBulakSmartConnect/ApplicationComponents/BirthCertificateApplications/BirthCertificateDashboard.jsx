@@ -159,15 +159,17 @@ const BirthCertificateDashboard = () => {
               </Button>{' '}
               before proceeding. |{' '}
               <span className="Privacy-TagalogNotice">
-                Pindutin at basahin ang aming   <Button
-                variant="text"
-                color="primary"
-                onClick={handlePrivacyPolicyClick}
-                sx={{ p: 0, textTransform: 'none', textDecoration: 'underline' }}
-                className="dataPrivacyNoticeLink"
-              >
-               Patakaran sa Pagkapribado ng Data
-              </Button>{' '} bago magpatuloy.
+                Pindutin at basahin ang aming{' '}
+                <Button
+                  variant="text"
+                  color="primary"
+                  onClick={handlePrivacyPolicyClick}
+                  sx={{ p: 0, textTransform: 'none', textDecoration: 'underline' }}
+                  className="dataPrivacyNoticeLink"
+                >
+                  Patakaran sa Pagkapribado ng Data
+                </Button>{' '}
+                bago magpatuloy.
               </span>
             </Typography>
             {!hasVisitedPrivacyPolicy && (
@@ -195,7 +197,6 @@ const BirthCertificateDashboard = () => {
             className="BirthDashRadioGroup"
           />
         </Box>
-        
 
         <Box className="Section">
           <Typography variant="h6" className="SectionTitle">
