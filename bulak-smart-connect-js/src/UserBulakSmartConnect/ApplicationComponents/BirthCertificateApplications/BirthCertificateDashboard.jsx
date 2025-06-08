@@ -40,7 +40,7 @@ const BirthCertificateDashboard = () => {
       return;
     }
 
-    localStorage.setItem('selectedBirthCertificateOption', selectedOption);
+    sessionStorage.setItem('selectedBirthCertificateOption', selectedOption);
 
     if (['Clerical Error', 'Sex DOB', 'First Name'].includes(selectedOption)) {
       const correctionRoutes = {
