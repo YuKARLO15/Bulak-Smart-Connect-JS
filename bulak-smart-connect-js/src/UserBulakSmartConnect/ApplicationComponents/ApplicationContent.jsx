@@ -9,16 +9,18 @@ import DeathCertificateIcon from './ApplicationAssets/DeathCertificate.png';
 
 const ApplicationContent = () => {
   const certificates = [
-    { 
-      title: 'Birth Certificate', 
-      icon: BirthCertificateIcon, 
+    {
+      title: 'Birth Certificate',
+      icon: BirthCertificateIcon,
       route: '/BirthCertificateDashboard',
+      details: ['Easily request an official copy of your birth certificate online.'],
       requirementsRoute: '/RequirementBirthList'
     },
     {
       title: 'Marriage Certificate',
       icon: MarriageCertificateIcon,
       route: '/MarriageDashboard',
+      details: 'Apply for a certified copy of your marriage certificate quickly and conveniently.',
       requirementsRoute: '/RequirementMarriageList'
     }
   ];
@@ -42,10 +44,7 @@ const ApplicationContent = () => {
                       {cert.title}
                     </Typography>
                     <ul className="Details">
-                      <li>Lorem ipsum dolor sit amet</li>
-                      <li>Consectetur adipiscing elit</li>
-                      <li>Pellentesque vitae leo</li>
-                      <li>Proin ipsum velit, placerat a</li>
+                    <li className='ApplicationDescription' >{cert.details}</li>
                     </ul>
                     <div className="Actions">
                       <RouterLink to={cert.requirementsRoute}>

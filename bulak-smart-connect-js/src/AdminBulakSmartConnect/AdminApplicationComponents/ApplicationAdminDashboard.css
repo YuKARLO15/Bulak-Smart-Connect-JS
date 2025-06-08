@@ -37,7 +37,6 @@
   margin-left: 4rem !important;
 }
 
-
 .ApplicationDashContent {
   padding: 1.75rem;
   width: 92%;
@@ -47,7 +46,6 @@
   gap: 1.5rem;
   margin-top: 1rem;
 }
-
 
 .ApplicationDashOverview,
 .ApplicationDashChart {
@@ -72,7 +70,6 @@
   font-weight: 600 !important;
   color: #184a5b !important;
   font-size: 1.2rem !important;
-  margin-bottom: 1.25rem !important;
   position: relative;
   padding-bottom: 0.5rem;
 }
@@ -119,7 +116,6 @@
   transform: translateX(5px);
 }
 
-/* Active states for cards */
 .ApplicationDashPendingCard.active {
   border-color: orange;
   background-color: rgba(255, 152, 0, 0.08);
@@ -159,36 +155,31 @@
   border-radius: 10px;
 }
 
-.ApplicationDashIcon.pending {
-  background-color: rgba(255, 152, 0, 0.15);
-}
 
-.ApplicationDashIcon.approved {
-  background-color: rgba(76, 175, 80, 0.15);
-}
 
-.ApplicationDashIcon.denied {
-  background-color: rgba(244, 67, 54, 0.15);
-}
-
-.ApplicationDashCircleIcon {
-  height: 18px;
-  width: 18px;
+/* Filled circle with NO background, NO border, just color */
+.ApplicationDashCircleFilled {
+  display: inline-block;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
+  margin-right: 12px;
+}
+.ApplicationDashCircleFilled.Pending {
+  background: #ff9800;
+}
+.ApplicationDashCircleFilled.Approved {
+  background: #4caf50;
+}
+.ApplicationDashCircleFilled.Denied {
+  background: #f44336;
 }
 
-.ApplicationDashCircleIcon.pending {
-  background-color: orange;
+/* Remove any previous count circle or background from number */
+.ApplicationDashCircleIcon,
+.ApplicationDashCountCircle {
+  display: none !important;
 }
-
-.ApplicationDashCircleIcon.approved {
-  background-color: green;
-}
-
-.ApplicationDashCircleIcon.denied {
-  background-color: #d32f2f;
-}
-
 
 .ApplicationDashLabel {
   flex-grow: 1;
@@ -199,10 +190,24 @@
   letter-spacing: 0.5px;
 }
 
+/* Count: BOLD, colored, NO border or background */
 .ApplicationDashCount {
   font-weight: 700 !important;
   font-size: 1.5rem !important;
+  margin-left: 12px;
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
   color: #184a5b !important;
+}
+.ApplicationDashCount.Pending {
+  color: #ff9800 !important;
+}
+.ApplicationDashCount.Approved {
+  color: #4caf50 !important;
+}
+.ApplicationDashCount.Denied {
+  color: #f44336 !important;
 }
 
 /* Chart styling */
@@ -240,13 +245,6 @@
   border-radius: 50%;
 }
 
-.ApplicationDashChartLegendDot.approved {
-  background-color: green;
-}
-
-.ApplicationDashChartLegendDot.pending {
-  background-color: orange;
-}
 
 .ApplicationDashChartBody {
   position: relative;
@@ -290,11 +288,9 @@
   color: rgba(0, 0, 0, 0.5) !important;
 }
 
-
 .ApplicationDashTableSection {
   display: flex;
   flex-direction: column;
-  margin: 0.5rem 1.75rem 2rem;
   background-color: white;
   border-radius: 12px !important;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06) !important;
@@ -302,6 +298,7 @@
   max-width: 1400px;
   overflow: hidden;
   box-sizing: border-box;
+  margin-bottom: 50px;
 }
 
 .ApplicationDashTableHeader {
@@ -334,8 +331,7 @@
 }
 
 .ApplicationDashTableContent {
-
-  max-height: 450px;
+  max-height: 650px;
   overflow-y: auto;
   overflow-x: hidden;
   width: 100% !important;
@@ -363,7 +359,6 @@
 .ApplicationDashPieChart {
   background-color: white;
 }
-
 
 .ApplicationDashTableContent::-webkit-scrollbar {
   width: 8px;
@@ -398,26 +393,31 @@
   background-color: #f5f8fa;
 }
 
-.ApplicationDashApplicationStatus {
-  font-weight: 600 !important;
-  padding: 0.3rem 0.6rem !important;
-  border-radius: 6px;
+.ApplicationDashApplicationStatusPill {
   display: inline-block;
+  min-width: 100px;
+  text-align: center;
+  font-weight: 600;
+  border-radius: 999px;
+  padding: 0.42em 1.3em;
+  font-size: 0.98em;
+  letter-spacing: 0.01em;
+  margin: 4px 0;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+  transition: background 0.2s,color 0.2s;
+  border: none;
 }
+.ApplicationDashApplicationStatusPill.Approved {
 
-.ApplicationDashApplicationStatus.pending {
-  color: darkorange !important;
-  background-color: rgba(255, 152, 0, 0.08);
+  color: #219a2c;
 }
+.ApplicationDashApplicationStatusPill.Pending {
 
-.ApplicationDashApplicationStatus.approved {
-  color: green !important;
-  background-color: rgba(76, 175, 80, 0.08);
+  color: #e69500;
 }
+.ApplicationDashApplicationStatusPill.Denied {
 
-.ApplicationDashApplicationStatus.denied {
-  color: #d32f2f !important;
-  background-color: rgba(244, 67, 54, 0.08);
+  color: #d32f2f;
 }
 
 .ApplicationDashReviewButton {
@@ -445,12 +445,10 @@
   gap: 1rem;
 }
 
-
 .MuiTable-root {
   width: 100% !important;
   table-layout: fixed !important;
 }
-
 
 .MuiTableContainer-root {
   width: 100% !important;
@@ -458,12 +456,10 @@
   overflow-x: auto !important;
 }
 
-
 .MuiTableCell-root {
   word-wrap: break-word;
   overflow-wrap: break-word;
 }
-
 
 @media (max-width: 1200px) {
   .ApplicationDashContent {

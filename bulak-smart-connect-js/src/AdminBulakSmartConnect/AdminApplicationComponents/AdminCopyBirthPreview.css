@@ -1,0 +1,104 @@
+.AdminCopyBirthPreviewCBPreviewRoot {
+  background: #fff;
+  border-radius: 6px;
+  box-shadow: 0 1px 6px 0 rgba(60,72,88,0.05);
+  max-width: 920px;
+  margin: 0 auto 28px auto;
+  padding: 32px 36px 18px 36px;
+  font-family: 'Roboto', 'Arial', sans-serif;
+}
+
+.AdminCopyBirthPreviewCBPreviewHeader {
+  padding-bottom: 30px !important;
+}
+
+.AdminCopyBirthPreviewCBPreviewTitle {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #23465b;
+  margin-bottom: 0;
+}
+.AdminCopyBirthPreviewCBPreviewSubInfo {
+  color: #496387;
+  font-size: 1.05rem;
+  margin-top: 2px;
+  text-align: center;
+}
+
+.AdminCopyBirthPreviewCBPreviewDivider {
+  border: none;
+  border-top: 1px solid #e0e0e0;
+  margin: 16px 0 18px 0;
+}
+
+.AdminCopyBirthPreviewCBPreviewSection {
+  margin-bottom: 30px;
+}
+
+.AdminCopyBirthPreviewCBPreviewSectionTitle {
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: #23465b;
+  margin-bottom: 10px;
+}
+
+.AdminCopyBirthPreviewCBPreviewRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 32px;
+  margin-bottom: 8px;
+}
+.AdminCopyBirthPreviewCBPreviewCol {
+  min-width: 210px;
+  flex: 1;
+}
+
+.AdminCopyBirthPreviewCBPreviewLabel {
+  font-size: 0.97rem;
+  color: #35566e;
+  font-weight: 500;
+}
+.AdminCopyBirthPreviewCBPreviewValue {
+  font-size: 1.09rem;
+  color: #14334a;
+  font-weight: 400;
+  margin-top: 2px;
+  margin-bottom: 7px;
+  word-break: break-word;
+}
+
+.AdminCopyBirthPreviewCBPreviewFooter {
+  display: flex;
+  align-items: center;
+  margin-top: 22px;
+  font-size: 1rem;
+  color: #3d607c;
+  background: #f8fbfd;
+  padding: 10px 14px;
+  border-radius: 5px;
+  border-left: 4px solid #2196f3;
+}
+
+.AdminCopyBirthPreviewCBPreviewInfoIcon {
+  display: inline-block;
+  font-weight: bold;
+  color: #1976d2;
+  background: #e3f2fd;
+  border-radius: 50%;
+  width: 23px;
+  height: 23px;
+  text-align: center;
+  margin-right: 10px;
+  font-size: 1.1rem;
+  line-height: 23px;
+}
+
+@media (max-width: 700px) {
+  .AdminCopyBirthPreviewCBPreviewRoot {
+    padding: 18px 5vw;
+  }
+  .AdminCopyBirthPreviewCBPreviewRow {
+    flex-direction: column;
+    gap: 16px;
+  }
+}

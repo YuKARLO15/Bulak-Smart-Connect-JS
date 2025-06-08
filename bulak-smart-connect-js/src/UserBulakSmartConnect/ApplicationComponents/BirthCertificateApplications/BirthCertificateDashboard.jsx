@@ -143,6 +143,8 @@ const BirthCertificateDashboard = () => {
           <Typography variant="h6" className="SectionTitle">
             Data Privacy Notice
           </Typography>
+
+          {/* Data Privacy Notice */}
           <Box sx={{ mb: 2 }} className="dataPrivacyNoticeContainer">
             <Typography variant="body2" sx={{ mb: 1 }} className="dataPrivacyNotice">
               Please <strong>click</strong> and <strong>read </strong> our{' '}
@@ -193,6 +195,7 @@ const BirthCertificateDashboard = () => {
             className="BirthDashRadioGroup"
           />
         </Box>
+        
 
         <Box className="Section">
           <Typography variant="h6" className="SectionTitle">
