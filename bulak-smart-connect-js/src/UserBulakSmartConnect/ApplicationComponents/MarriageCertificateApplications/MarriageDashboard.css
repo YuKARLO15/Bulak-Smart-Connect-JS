@@ -1,5 +1,4 @@
 .ContainerMDashboard {
- 
     transition: margin-left 0.3s;
     margin-left: 0;
     width: 100vw;
@@ -7,7 +6,6 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-
   }
   
   .sidebar-openMDashboard {
@@ -65,3 +63,24 @@
     color: #666666 !important;
     width: 10vw !important;
   }
+
+  .dataPrivacyNoticeMDashboard {
+  font-size: 12px;
+  color: #1c4d5a;
+  font-weight: bold;
+  margin-top: 20px !important;
+ 
+}
+
+.dataPrivacyNoticeLinkMDashboard {
+  color: #184a5b !important;
+  font-weight: bold !important;
+}
+
+.dataPrivacyNoticeLinkMDashboard {
+  margin-left: 20px;
+}
+
+.Privacy-TagalogNoticeMDashboard {
+  color: rgb(72, 71, 71);
+}
