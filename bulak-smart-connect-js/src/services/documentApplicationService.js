@@ -152,11 +152,8 @@ export const documentApplicationService = {
   // Update application status (new method)
   updateApplicationStatus: async (applicationId, statusData) => {
     try {
-      // Try a different endpoint format that might work with your backend
-      const response = await apiClient.patch(
-        `/document-applications/${applicationId}/status`,
-        statusData
-      );
+      // Use the regular PATCH endpoint instead of the admin-only /status endpoint
+      const response = await apiClient.patch(`/document-applications/${applicationId}`, statusData);
 
       // Also update localStorage
       try {
