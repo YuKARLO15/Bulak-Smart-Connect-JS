@@ -1234,7 +1234,7 @@ export class DocumentApplicationsController {
     @Body() updateDto: UpdateDocumentApplicationDto,
     @User() user: AuthenticatedUser, 
   ) {
-    const userId &#x3D; user.roles.some(role &#x3D;&gt; role.name &#x3D;&#x3D;&#x3D; &#x27;admin&#x27;) 
+    const userId &#x3D; user.roles.some(role &#x3D;&gt; role.name &#x3D;&#x3D;&#x3D; &#x27;citizen&#x27;) 
       ? undefined
       : user.id; 
     const adminId &#x3D; user.roles.some(role &#x3D;&gt; role.name &#x3D;&#x3D;&#x3D; &#x27;admin&#x27;) 
