@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Box, Button, Typography, Alert, Paper, Snackbar, CircularProgress } from '@mui/material';
+import { Box, Button, Typography, Alert, Paper, Snackbar, CircularProgress, Container } from '@mui/material';
 import FileUpload from '../FileUpload';
 import './DelayedOutOfTown.css';
 import NavBar from '../../../NavigationComponents/NavSide';
@@ -537,7 +537,7 @@ const DelayedOutOfTownRegistration = () => {
             Mandatory Requirements:
           </Typography>
 
-          <Typography variant="body1" className="PersonalAppearance">
+          <Typography variant="body1" className="PersonalAppearanceOut">
             Personal Appearance of the Document Owner
           </Typography>
 
@@ -549,7 +549,7 @@ const DelayedOutOfTownRegistration = () => {
               </Typography>
             </Box>
           )}
-
+<Container className="DelayedOutOfTownUpload">
           <Box>
             {requiredDocuments.map((doc, index) => (
               <FileUpload 
@@ -599,7 +599,7 @@ const DelayedOutOfTownRegistration = () => {
               />
             ))}
           </Box>
-          
+          </Container>
           <Box className="ImportantNotes">
             <Typography variant="h6">IMPORTANT NOTES:</Typography>
             <Typography variant="body2">PAYMENT:</Typography>
