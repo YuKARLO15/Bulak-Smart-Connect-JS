@@ -150,9 +150,10 @@ const AdminAnnouncement = () => {
 
   return (
     <div className="announcement-container">
-      <h1 className='announcement-h2'>Bulak LGU Smart Announcements
+      <h2 className='label-announcement'>Admin Announcements
         <NavBar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
-      </h1>
+      </h2>
+
       
       
       {loading && (
