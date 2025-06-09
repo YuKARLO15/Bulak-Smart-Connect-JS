@@ -78,7 +78,7 @@ const WalkInQueueContainer = () => {
 const getAllUserQueues = () => {
   try {
     const userId = getCurrentUserId();
-    console.log('Getting queues for user:', userId);
+    console.log('Getting ALL queues for user:', userId);
     
     // Try user-specific storage first
     const userSpecificQueueKey = `userQueue_${userId}`;
@@ -89,7 +89,7 @@ const getAllUserQueues = () => {
     
     let userQueues = [];
     
-    // Parse the stored queue(s)
+    // Parse the stored queue(s) - PREFER MULTIPLE QUEUES
     if (storedUserQueues) {
       const parsedQueues = JSON.parse(storedUserQueues);
       if (Array.isArray(parsedQueues)) {
@@ -118,11 +118,12 @@ const getAllUserQueues = () => {
       }
     }
     
-    // Check if these queues belong to current user
+    // Filter queues that belong to current user
     userQueues = userQueues.filter(queue => 
       !queue.userId || queue.userId === userId
     );
     
+    console.log('Found user queues:', userQueues);
     return userQueues;
   } catch (err) {
     console.error('Error getting user queues:', err);
@@ -161,23 +162,38 @@ const getAllUserQueues = () => {
         }
       }
       
-      // Add position request if we have a user queue
-      if (userQueueData && (userQueueData.dbId || userQueueData.id)) {
-        const queueId = userQueueData.dbId || (userQueueData.id?.startsWith('WK') 
-          ? userQueueData.id.replace('WK', '') 
-          : userQueueData.id);
+      // Add position request if we have user queues - HANDLE MULTIPLE QUEUES
+      const userQueuesData = getAllUserQueues();
+      if (userQueuesData.length > 0) {
+        console.log('Found user queues for position lookup:', userQueuesData);
         
-        if (queueId) {
-          promises.push(
-            queueService.getQueuePosition(queueId)
-              .then(data => data)
-              .catch(() => ({ position: queuePosition }))
-          );
-        }
+        // Get position for the first pending queue (or all queues)
+        userQueuesData.forEach(userQueue => {
+          const queueId = userQueue.dbId || (userQueue.id?.startsWith('WK') 
+            ? userQueue.id.replace('WK', '') 
+            : userQueue.id);
+          
+          if (queueId) {
+            console.log('Adding position request for queue ID:', queueId);
+            promises.push(
+              queueService.getQueuePosition(queueId)
+                .then(data => ({ ...data, queueId, userQueue }))
+                .catch(err => {
+                  console.error(`Error fetching position for queue ${queueId}:`, err);
+                  return { position: null, queueId, userQueue };
+                })
+            );
+          }
+        });
+        
+        // Set user queue state
+        setUserQueue(userQueuesData);
+      } else {
+        setUserQueue(null);
       }
-      
+
       // Wait for all requests to complete
-      const [currentQueuesResponse, pendingQueuesResponse, positionResponse] = await Promise.all(promises);
+      const [currentQueuesResponse, pendingQueuesResponse, ...results] = await Promise.all(promises);
       
       // IMPORTANT: Clear localStorage if API returns empty arrays - the database has been cleared
       if (Array.isArray(currentQueuesResponse) && currentQueuesResponse.length === 0 && 
@@ -186,7 +202,7 @@ const getAllUserQueues = () => {
         localStorage.removeItem('currentQueue');
         localStorage.removeItem('pendingQueues');
         // Only remove userQueue if position API also returns no data
-        if (!positionResponse || positionResponse.position === undefined) {
+        if (!results.find(r => r && r.position !== undefined)) {
           localStorage.removeItem('userQueue');
         }
       }
@@ -244,26 +260,34 @@ const getAllUserQueues = () => {
         // Validate which user queues still exist in the system
         if (userQueuesData.length > 0) {
           validUserQueues = userQueuesData.filter(userQ => {
+            // Enhanced matching for multiple queue formats
             return formattedPendingQueues.some(pendingQ => 
               pendingQ.id === userQ.id || 
-              pendingQ.rawId === userQ.dbId
+              pendingQ.rawId === userQ.dbId ||
+              pendingQ.rawId === userQ.rawId ||
+              pendingQ.id === userQ.dbId?.toString() ||
+              pendingQ.id === `WK${String(userQ.dbId).padStart(3, '0')}`
             );
           });
           
-          // Update dates from API data
+          // Update dates from API data and preserve all ID formats
           validUserQueues = validUserQueues.map(userQ => {
             const matchingQueue = formattedPendingQueues.find(pendingQ => 
               pendingQ.id === userQ.id || 
-              pendingQ.rawId === userQ.dbId
+              pendingQ.rawId === userQ.dbId ||
+              pendingQ.rawId === userQ.rawId ||
+              pendingQ.id === userQ.dbId?.toString() ||
+              pendingQ.id === `WK${String(userQ.dbId).padStart(3, '0')}`
             );
             
             return {
               ...userQ,
-              date: matchingQueue ? matchingQueue.date : userQ.date
+              date: matchingQueue ? matchingQueue.date : userQ.date,
+              rawId: matchingQueue ? matchingQueue.rawId : userQ.rawId || userQ.dbId
             };
           });
           
-          console.log('Valid user queues:', validUserQueues);
+          console.log('Valid user queues after filtering:', validUserQueues);
           
           // In your fetchQueueData function, modify where you save user queues:
 
@@ -306,9 +330,30 @@ const getAllUserQueues = () => {
         }
       }
       
-      // Update position if we have data
-      if (positionResponse && positionResponse.position !== undefined) {
-        setQueuePosition(positionResponse.position);
+      // Process position responses for multiple queues
+      const positionResponses = results.slice(2); // Skip current and pending queue responses
+      
+      if (positionResponses.length > 0) {
+        // Find the best position (lowest non-zero position)
+        let bestPosition = null;
+        let activeQueue = null;
+        
+        positionResponses.forEach(response => {
+          if (response && response.position !== undefined && response.position > 0) {
+            if (bestPosition === null || response.position < bestPosition) {
+              bestPosition = response.position;
+              activeQueue = response.userQueue;
+            }
+          }
+        });
+        
+        console.log('Best position found:', bestPosition, 'for queue:', activeQueue);
+        setQueuePosition(bestPosition);
+        
+        // Set the active queue as the primary user queue
+        if (activeQueue) {
+          setUserQueue([activeQueue, ...userQueuesData.filter(q => q.id !== activeQueue.id)]);
+        }
       } else {
         setQueuePosition(null);
       }
@@ -449,14 +494,38 @@ const getAllUserQueues = () => {
           <div className="QueuePositionContainerWalkIn">
             <div className="QueuePositionLabelWalkIn">QUEUE POSITION</div>
             <div className="QueuePositionNumberWalkIn">
-              {loading ? '...' : (queuePosition || '-')}
+              {loading ? '...' : (queuePosition !== null && queuePosition > 0 ? queuePosition : '-')}
             </div>
             <div className="QueuePositionMessageWalkIn">
-              {loading ? 'Loading...' : "You'll be notified when it's almost your turn"}
+              {loading ? 'Loading...' : 
+                userQueue && Array.isArray(userQueue) && userQueue.length > 0 ? 
+                  (queuePosition !== null && queuePosition > 0 ? 
+                    `You are #${queuePosition} in line` : 
+                    `You have ${userQueue.length} queue${userQueue.length > 1 ? 's' : ''}`
+                  ) : 
+                  userQueue ?
+                    (queuePosition !== null && queuePosition > 0 ? 
+                      `You are #${queuePosition} in line` : 
+                      "You'll be notified when it's almost your turn"
+                    ) :
+                    'No active queue'
+              }
             </div>
-            {/* Debug info - remove in production */}
+            {/* Show user queue info if available */}
+            {userQueue && (
+              <div style={{fontSize: '12px', color: '#24536a', marginTop: '5px', fontWeight: 'bold'}}>
+                {Array.isArray(userQueue) && userQueue.length > 1 ? 
+                  `${userQueue.length} Active Queues: ${userQueue.map(q => q.id).join(', ')}` :
+                  `Your Queue: ${Array.isArray(userQueue) ? userQueue[0]?.id : userQueue.id}`
+                }
+              </div>
+            )}
+            {/* Debug info */}
             <div style={{fontSize: '10px', color: '#999', marginTop: '5px'}}>
-              {userQueue?.dbId ? `ID: ${userQueue.dbId}` : 'No queue ID found'}
+              {userQueue ? 
+                `Queues: ${Array.isArray(userQueue) ? userQueue.length : 1} | Position: ${queuePosition}` : 
+                'No queue found'
+              }
             </div>
           </div>
 
