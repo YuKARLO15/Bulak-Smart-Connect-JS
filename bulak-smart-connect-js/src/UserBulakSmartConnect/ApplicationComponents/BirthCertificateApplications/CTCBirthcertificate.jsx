@@ -248,19 +248,7 @@ useEffect(() => {
       </Typography>
 
       <Paper elevation={3} className="DocumentsPaperCTCBirth">
-        <Box className="ApplicantInfoCTCBirth">
-          <Typography variant="h6">Applicant Information</Typography>
-          <Typography variant="body1">
-            Name: {formData?.firstName || ''} {formData?.middleName || ''}{' '}
-            {formData?.lastName || ''}
-          </Typography>
-          <Typography variant="body1">
-            Date of Birth: {formData?.birthMonth || ''} {formData?.birthDay || ''},{' '}
-            {formData?.birthYear || ''}
-          </Typography>
-          <Typography variant="body1">Purpose: {formData?.purpose || 'Not specified'}</Typography>
-        </Box>
-
+       
         <Typography variant="h6" className="RequirementsHeaderCTCBirth">
           Required Documents
         </Typography>
