@@ -106,14 +106,7 @@
   justify-content: space-between;
 }
 
-.SampleLinkDelayedAbove18 {
-  font-size: 0.95rem;
-  color: #1976d2;
-  text-decoration: underline;
-  cursor: pointer;
-  margin-left: 14px;
-  font-weight: 400;
-}
+
 
 .FileUploadBoxDelayedAbove18 {
   border: 1.4px dashed #b1b1b1;
