@@ -93,7 +93,7 @@ const LandingPage = () => {
             sx={{ textAlign: 'center', fontWeight: 600, fontFamily: 'Roboto, Arial, sans-serif' }}
             component="h2"
           >
-            Key Features
+            Services
           </Typography>
 
           {/* Feature Cards */}

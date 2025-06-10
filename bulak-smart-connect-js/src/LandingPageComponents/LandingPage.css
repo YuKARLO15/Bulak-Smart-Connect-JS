@@ -79,14 +79,14 @@ z-index: 1100 !important;
 .HeroTitleLanding {
   color: #1c4d5a;
   font-weight: 700 !important;
-  margin-bottom: 16px;
+  margin-bottom: 40px !important; 
     margin-top: 5vw !important;
 }
 
 .HeroDescriptionLanding {
   margin-top: 25px !important;
   color: #1c4d5a;
-  
+  font-size: 18px !important;
   font-weight: 550 !important;
 }
 .LandingTitle {
