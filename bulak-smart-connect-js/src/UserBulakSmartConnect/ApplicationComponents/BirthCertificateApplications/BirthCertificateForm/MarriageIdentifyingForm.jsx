@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import {
   TextField,
   Typography,
@@ -16,47 +16,38 @@ import {
 import './MarriageIdentifyingForm.css';
 
 const MarriageInformationBirthForm = ({ formData, handleChange, errors }) => {
-  const [childStatus, setChildStatus] = useState('');
   const requiredField = <span style={{ color: 'red' }}>*</span>;
 
-  const handleChildStatusChange = event => {
-    setChildStatus(event.target.value);
-  };
-
   const currentYear = new Date().getFullYear();
-
   const years = Array.from({ length: 100 }, (_, i) => currentYear - i);
-
   const months = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December',
   ];
-
   const days = Array.from({ length: 31 }, (_, i) => i + 1);
-
+useEffect(() => {
+  if (formData.ParentsMarriage) {
+    localStorage.setItem('maritalStatus', formData.ParentsMarriage);
+  }
+}, [formData.ParentsMarriage]);
   return (
     <Box className="MarriageInformationBirthFormContainer">
       <Box className="MarriageChildStatusContainer">
         <Typography className="MarriageFormTitle">Child's Status</Typography>
         <FormControl component="fieldset" className="MarriageChildStatusFormControl">
-          <RadioGroup row name="childStatus" value={childStatus} onChange={handleChildStatusChange}>
+          <RadioGroup
+            row
+            name="ParentsMarriage"
+            value={formData.ParentsMarriage || ""}
+            onChange={handleChange}
+          >
             <FormControlLabel value="marital" control={<Radio />} label="Marital Child" />
-            <FormControlLabel value="nonMarital" control={<Radio />} label="Non-Marital Child" />
+            <FormControlLabel value="non-marital" control={<Radio />} label="Non-Marital Child" />
           </RadioGroup>
         </FormControl>
       </Box>
 
-      {childStatus === 'marital' && (
+      {formData.ParentsMarriage === 'marital' && (
         <>
           <Box className="MarriageFormHeader">
             <Typography className="MarriageFormTitle">IV. MARRIAGE OF PARENTS</Typography>

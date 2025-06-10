@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Box, Button, Typography, Alert, Paper, Snackbar, CircularProgress } from '@mui/material';
+import { Box, Button, Typography, Alert, Paper, Snackbar, CircularProgress, Container } from '@mui/material';
 import FileUpload from '../FileUpload';
 import './DelayedOutOfTown.css';
 import NavBar from '../../../NavigationComponents/NavSide';
@@ -537,7 +537,7 @@ const DelayedOutOfTownRegistration = () => {
             Mandatory Requirements:
           </Typography>
 
-          <Typography variant="body1" className="PersonalAppearance">
+          <Typography variant="body1" className="PersonalAppearanceOut">
             Personal Appearance of the Document Owner
           </Typography>
 
@@ -549,7 +549,7 @@ const DelayedOutOfTownRegistration = () => {
               </Typography>
             </Box>
           )}
-
+<Container className="DelayedOutOfTownUpload">
           <Box>
             {requiredDocuments.map((doc, index) => (
               <FileUpload 
@@ -599,15 +599,10 @@ const DelayedOutOfTownRegistration = () => {
               />
             ))}
           </Box>
-          
+          </Container>
           <Box className="ImportantNotes">
             <Typography variant="h6">IMPORTANT NOTES:</Typography>
-            <Typography variant="body2">PAYMENT:</Typography>
-            <Typography variant="body2">1. Filing Fee - PHP 300.00</Typography>
-            <Typography variant="body2">
-              2. Other Fees - PHP 200.00 (notarized, new PSA corrected copy)
-            </Typography>
-            <Typography variant="body2">PROCESSING DURATION: 3-4 months</Typography>
+            <Typography variant="body2">PROCESSING DURATION: 10 days </Typography>
             <Typography variant="body2">INQUIRY: 0936-541-0787 / slbncr@yahoo.com</Typography>
           </Box>
 

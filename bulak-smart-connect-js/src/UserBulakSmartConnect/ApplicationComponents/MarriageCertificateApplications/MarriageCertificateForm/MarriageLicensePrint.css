@@ -1,0 +1,309 @@
+/* Print-specific styles */
+@media print {
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  
+  .printable-content {
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Form document styles */
+  .FormDocumentMLSummary {
+    border: 1px solid #000;
+    padding: 15px;
+    margin-bottom: 20px;
+    background-color: white;
+    page-break-inside: avoid;
+  }
+  
+  /* Header styles */
+  .DocumentHeaderMLSummary {
+    position: relative;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  .FormNumberMLSummary {
+    position: absolute;
+    left: 0;
+    top: 0;
+    font-size: 10px;
+    font-weight: bold;
+  }
+  
+  .DocumentNoticeMLSummary {
+    font-size: 10px;
+    font-style: italic;
+    margin-bottom: 10px;
+  }
+  
+  .HeaderCenterMLSummary {
+    margin: 0 auto;
+    text-align: center;
+  }
+  
+  .RepublicTextMLSummary {
+    font-size: 14px;
+    font-weight: bold;
+  }
+  
+  .RegistrarTextMLSummary {
+    font-size: 14px;
+    font-weight: bold;
+  }
+  
+  .LicenseTitleMLSummary {
+    font-size: 16px;
+    font-weight: bold;
+    margin-top: 10px;
+    text-decoration: underline;
+  }
+  
+  /* Top grid styles */
+  .TopGridMLSummary {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  
+  .TopLeftMLSummary, .TopRightMLSummary {
+    width: 48%;
+  }
+  
+  .GridItemMLSummary {
+    display: flex;
+    margin-bottom: 5px;
+  }
+  
+  .ItemLabelMLSummary {
+    width: 150px;
+    font-weight: bold;
+    font-size: 12px;
+  }
+  
+  .ItemValueMLSummary {
+    flex-grow: 1;
+    border-bottom: 1px solid #000;
+    min-height: 18px;
+    padding: 0 5px;
+    font-size: 12px;
+  }
+  
+  /* Table styles */
+  .ApplicantTableMLSummary {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+  }
+  
+  .ColumnHeaderMLSummary {
+    text-align: center;
+    font-weight: bold;
+    padding: 5px;
+    border: 1px solid #000;
+    width: 50%;
+    background-color: #f0f0f0 !important;
+  }
+  
+  .TableCellMLSummary {
+    padding: 5px;
+    border: 1px solid #000;
+    vertical-align: top;
+  }
+  
+  /* Registration content styles */
+  .RegistrarTitleMLSummary {
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  
+  .RegistrarStatementMLSummary p {
+    margin: 5px 0;
+    text-align: justify;
+  }
+  
+  .UnderlinedTextMLSummary {
+    text-decoration: underline;
+    font-weight: bold;
+  }
+  
+  /* Field styles */
+  .FieldNumberMLSummary {
+    font-weight: bold;
+    float: left;
+    margin-right: 5px;
+  }
+  
+  .FieldLabelMLSummary {
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  
+  /* Name fields styles */
+  .NameFieldsWrapperMLSummary, .DateFieldsWrapperMLSummary, .PlaceFieldsWrapperMLSummary {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .NameFieldMLSummary, .DateFieldMLSummary, .PlaceFieldMLSummary {
+    flex: 1;
+    margin-right: 5px;
+    text-align: center;
+  }
+  
+  .NameValueMLSummary, .DateValueMLSummary, .PlaceValueMLSummary {
+    border-bottom: 1px solid #000;
+    min-height: 18px;
+    padding: 2px;
+  }
+  
+  .NameParenMLSummary, .DateParenMLSummary, .PlaceParenMLSummary {
+    font-size: 10px;
+    font-style: italic;
+  }
+  
+  /* Sex and citizenship styles */
+  .SexCitizenFieldsMLSummary {
+    display: flex;
+  }
+  
+  .SexFieldMLSummary {
+    width: 100px;
+    border-bottom: 1px solid #000;
+    margin-right: 20px;
+    padding: 2px;
+  }
+  
+  .CitizenFieldMLSummary {
+    flex-grow: 1;
+    border-bottom: 1px solid #000;
+    padding: 2px;
+  }
+  
+  /* Various field styles */
+  .ResidenceValueMLSummary, .ReligionValueMLSummary, .CivilStatusValueMLSummary,
+  .PreviousMarriageMLSummary, .RelationshipValueMLSummary, 
+  .FatherCitizenshipMLSummary, .FatherResidenceMLSummary,
+  .MotherCitizenshipMLSummary, .MotherResidenceMLSummary,
+  .ConsentPersonMLSummary, .ConsentCitizenshipMLSummary, .ConsentResidenceMLSummary {
+    border-bottom: 1px solid #000;
+    min-height: 18px;
+    padding: 2px;
+  }
+  
+  /* Dissolved place and date styles */
+  .PlaceDissolvedFieldsMLSummary, .DissolvedDateFieldsMLSummary {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .PlaceDissolvedValueMLSummary, .DissolvedDateValueMLSummary {
+    flex: 1;
+    border-bottom: 1px solid #000;
+    min-height: 18px;
+    margin-right: 5px;
+    padding: 2px;
+  }
+  
+  /* Parent name styles */
+  .ParentNameFieldsMLSummary {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .ParentFirstNameMLSummary, .ParentMiddleNameMLSummary, .ParentLastNameMLSummary {
+    flex: 1;
+    border-bottom: 1px solid #000;
+    min-height: 18px;
+    margin-right: 5px;
+    padding: 2px;
+    text-align: center;
+  }
+  
+  /* Signature section styles */
+  .SignatureBoxMLSummary {
+    position: relative;
+    height: 150px;
+  }
+  
+  .SignatureLineMLSummary {
+    width: 80%;
+    margin: 0 auto;
+    border-bottom: 1px solid #000;
+    margin-top: 50px;
+  }
+  
+  .SignatureLabelMLSummary {
+    text-align: center;
+    font-size: 10px;
+    margin-top: 5px;
+  }
+  
+  .SubscribedMLSummary {
+    margin-top: 20px;
+    font-size: 10px;
+  }
+  
+  .SubscribedTextMLSummary {
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  
+  .SubscribedDetailsMLSummary {
+    text-align: justify;
+  }
+  
+  .OfficialSignatureMLSummary {
+    position: absolute;
+    bottom: 10px;
+    width: 100%;
+  }
+  
+  .OfficialLineMLSummary {
+    width: 80%;
+    margin: 0 auto;
+    border-bottom: 1px solid #000;
+  }
+  
+  .OfficialLabelMLSummary {
+    text-align: center;
+    font-size: 10px;
+    margin-top: 5px;
+  }
+  
+  .DocStampMLSummary {
+    position: absolute;
+    right: 30px;
+    bottom: 40px;
+    border: 1px solid #000;
+    width: 60px;
+    height: 50px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .StampTextMLSummary {
+    font-size: 8px;
+    line-height: 1;
+  }
+  
+  /* Hide buttons and non-printable elements */
+  .ButtonContainerMLSummary,
+  button,
+  .ModifyButtonMLSummary,
+  .SubmitButtonMLSummary,
+  .BackButtonMLSummary,
+  .PrintButtonMLSummary {
+    display: none !important;
+  }
+}

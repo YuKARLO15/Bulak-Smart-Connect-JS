@@ -114,7 +114,10 @@ const Above18Registration = () => {
   }, [uploadedFiles]);
 
   useEffect(() => {
-    // Load data when component mounts
+      const  maritalSatus = localStorage.getItem('maritalStatus');
+    if (maritalSatus) {
+      setStatus(maritalSatus);
+    }
     const loadData = async () => {
       try {
         setIsInitializing(true);
@@ -544,11 +547,9 @@ const Above18Registration = () => {
     <div className={`DelayedAbove18Container ${isSidebarOpen ? 'sidebar-open' : ''}`}>
       <NavBar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
       <Typography variant="h5" className="TitleDelayedAbove18">
-        BIRTH CERTIFICATE APPLICATION
+       Application for Delayed Registration Above 18
       </Typography>
-      <Typography className="SubtitleDelayedAbove18">
-        Application for Delayed Registration Above 18
-      </Typography>
+    
 
       {isInitializing ? (
         <Box sx={{ display: 'flex', justifyContent: 'center', my: 4 }}>
@@ -556,26 +557,7 @@ const Above18Registration = () => {
         </Box>
       ) : (
         <Paper elevation={3} className="DocumentsPaperDelayedAbove18">
-          <Typography className="SubtitleDelayedAbove18">Select One / Pumili ng Isa</Typography>
-          <Box>
-            <FormControlLabel
-              control={
-                <Checkbox checked={status === 'marital'} onChange={() => setStatus('marital')} />
-              }
-              label="Marital Child"
-              className="CheckboxDelayedAbove18"
-            />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={status === 'non-marital'}
-                  onChange={() => setStatus('non-marital')}
-                />
-              }
-              label="Non-Marital Child"
-              className="CheckboxDelayedAbove18"
-            />
-          </Box>
+ 
 
           {status && (
             <Box>
@@ -643,15 +625,8 @@ const Above18Registration = () => {
           {status && (
             <Box className="ImportantNotes">
               <Typography variant="h6">IMPORTANT NOTES:</Typography>
-              <Typography variant="body2">PAYMENT:</Typography>
-              <Typography variant="body2">1. Filing Fee - PHP 300.00</Typography>
-              <Typography variant="body2">
-                2. Newspaper Publication - PHP 3,500.00 (or newspaper of your choice)
-              </Typography>
-              <Typography variant="body2">
-                3. Other Fees - PHP 500.00 (notarized, new PSA corrected copy)
-              </Typography>
-              <Typography variant="body2">PROCESSING DURATION: 4-6 months</Typography>
+
+              <Typography variant="body2">PROCESSING DURATION: 10 days </Typography>
               <Typography variant="body2">INQUIRY: 0936-541-0787 / slbncr@yahoo.com</Typography>
             </Box>
           )}

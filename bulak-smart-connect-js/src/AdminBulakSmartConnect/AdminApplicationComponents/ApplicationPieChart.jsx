@@ -9,17 +9,17 @@ const ApplicationPieChart = ({ applications }) => {
     const birthApproved = applications.filter(app => app.type === 'Birth Certificate' && app.status === 'Approved').length;
     const birthDenied = applications.filter(app => app.type === 'Birth Certificate' && (app.status === 'Denied' || app.status === 'Decline')).length;
     
-    const marriagePending = applications.filter(app => app.type === 'Marriage Certificate' || "Marriage License" && app.status === 'Pending').length;
-    const marriageApproved = applications.filter(app => app.type === 'Marriage Certificate'|| "Marriage License"   && app.status === 'Approved').length;
-    const marriageDenied = applications.filter(app => app.type === 'Marriage Certificate'  || "Marriage License"   && (app.status === 'Denied' || app.status === 'Decline')).length;
+    const marriagePending = applications.filter(app => (app.type === 'Marriage Certificate' || app.type == " Marriage License" )  && app.status === 'Pending' ).length  ;
+    const marriageApproved = applications.filter(app => app.type === 'Marriage Certificate'   && app.status === 'Approved').length;
+    const marriageDenied = applications.filter(app => app.type === 'Marriage Certificate'   && (app.status === 'Denied' || app.status === 'Decline')).length;
     
     return [
-      { name: 'Birth - Pending', value: birthPending, color: '#FFA726' }, // Orange for pending
-      { name: 'Birth - Approved', value: birthApproved, color: '#66BB6A' }, // Green for approved
-      { name: 'Birth - Denied', value: birthDenied, color: '#EF5350' }, // Red for denied
-      { name: 'Marriage - Pending', value: marriagePending, color: '#F7CB73' }, // Blue for pending
-      { name: 'Marriage - Approved', value: marriageApproved, color: '#8DC3A7' }, // Teal for approved
-      { name: 'Marriage - Denied', value: marriageDenied, color: '#D9512C' }, // Pink for denied
+      { name: 'Birth - Pending', value: birthPending, color: '#FFA726' }, 
+      { name: 'Birth - Approved', value: birthApproved, color: '#66BB6A' }, 
+      { name: 'Birth - Denied', value: birthDenied, color: '#EF5350' }, 
+      { name: 'Marriage - Pending', value: marriagePending, color: '#F7CB73' },
+      { name: 'Marriage - Approved', value: marriageApproved, color: '#8DC3A7' },
+      { name: 'Marriage - Denied', value: marriageDenied, color: '#D9512C' },
     ].filter(item => item.value > 0); // Only show segments that have data
   };
 
