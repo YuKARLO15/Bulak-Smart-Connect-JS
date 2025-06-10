@@ -183,6 +183,13 @@
                                     <span class="modifier"></span>
                                     <span class="modifier"></span>
                                     <span class="modifier">Optional</span>
+                                <a href="#name" >name</a>
+                            </li>
+                            <li>
+                                    <span class="modifier"></span>
+                                    <span class="modifier"></span>
+                                    <span class="modifier"></span>
+                                    <span class="modifier">Optional</span>
                                 <a href="#nameExtension" >nameExtension</a>
                             </li>
                             <li>
@@ -257,7 +264,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="76" class="link-to-prism">src/users/dto/create-user.dto.ts:76</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="84" class="link-to-prism">src/users/dto/create-user.dto.ts:84</a></div>
                         </td>
                     </tr>
 
@@ -296,7 +303,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="94" class="link-to-prism">src/users/dto/create-user.dto.ts:94</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="102" class="link-to-prism">src/users/dto/create-user.dto.ts:102</a></div>
                         </td>
                     </tr>
 
@@ -460,6 +467,45 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
+                    <a name="name"></a>
+                    <span class="name">
+                            <span class="modifier"></span>
+                            <span class="modifier"></span>
+                            <span class="modifier"></span>
+                            <span class="modifier">Optional</span>
+                        <span ><b>name</b></span>
+                        <a href="#name"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <b>Decorators : </b>
+                        <br />
+                        <code>
+                            @ApiPropertyOptional({example: &#x27;John Miguel Doe Jr.&#x27;, description: &#x27;Full name (auto-generated if not provided)&#x27;})<br />@IsString()<br />@IsOptional()<br />
+                        </code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="68" class="link-to-prism">src/users/dto/create-user.dto.ts:68</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
                     <a name="nameExtension"></a>
                     <span class="name">
                             <span class="modifier"></span>
@@ -488,7 +534,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="68" class="link-to-prism">src/users/dto/create-user.dto.ts:68</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="76" class="link-to-prism">src/users/dto/create-user.dto.ts:76</a></div>
                         </td>
                     </tr>
 
@@ -566,7 +612,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="86" class="link-to-prism">src/users/dto/create-user.dto.ts:86</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="94" class="link-to-prism">src/users/dto/create-user.dto.ts:94</a></div>
                         </td>
                     </tr>
 
@@ -684,6 +730,14 @@ export class CreateUserDto {
   @IsString()
   @IsNotEmpty()
   lastName: string;
+
+  @ApiPropertyOptional({
+    example: &#x27;John Miguel Doe Jr.&#x27;,
+    description: &#x27;Full name (auto-generated if not provided)&#x27;,
+  })
+  @IsString()
+  @IsOptional()
+  name?: string;
 
   @ApiPropertyOptional({
     example: &#x27;Jr.&#x27;,
