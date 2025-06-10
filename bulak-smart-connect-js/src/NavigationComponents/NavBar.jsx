@@ -34,9 +34,15 @@ const NavBar = () => {
         </RouterLink>
 
         <div className="NavButtons">
+
           <RouterLink to="/">
-            <Button>Home</Button>
+            <Button className='HomeButtonNav'>Home</Button>
           </RouterLink>
+          {/* put download link here */}
+          <RouterLink to=""> 
+            <Button > Download </Button>
+          </RouterLink>
+          
 
           {isAuthenticated ? (
             <>

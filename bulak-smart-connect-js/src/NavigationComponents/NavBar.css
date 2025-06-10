@@ -1,23 +1,31 @@
 .NavBarContainer {
   display: flex;
   flex-direction: row;
+  align-items: center;
   padding: 10px 20px;
   background-color: white;
   position: fixed;
   top: 0%;
   width: 100vw;
-  box-shadow: 0px 4px 2px -2px rgb(228, 228, 228);
+  box-shadow: 0px 4px 12px -2px rgba(50, 75, 100, 0.08);
+  z-index: 100;
 }
+
 .LogoNavBar {
   width: 250px;
   margin-left: 50px;
 }
-.NavBarContainer Button {
-  color: #184a5b;
-  display: flex;
-    font-weight: 600 !important;
-    font-size: 16px !important;
+
+/* Divider after logo */
+.LogoNavBar::after {
+  content: "";
+  display: inline-block;
+  vertical-align: middle;
+  height: 36px;
+  margin: 0 32px 0 18px;
+  border-left: 1.5px solid #e6ecf1;
 }
+
 .NavButtons {
   display: flex;
   align-items: center;
@@ -27,23 +35,69 @@
   margin-right: 50px;
   color: #184a5b !important;
   font-weight: 600 !important;
-}
-.Logo {
-  font-size: 2vw !important;
-  color: #184a5b;
+  gap: 10px;
 }
 
-.ServiceIcon{
-  color: #184a5b !important;
+.NavBarContainer Button {
+  color: #184a5b;
+  background: none;
+  border: none;
   font-weight: 600 !important;
+  font-size: 16px !important;
+  padding: 8px 22px;
+  margin: 0 2px;
+  border-radius: 22px;
+  transition: background 0.2s, box-shadow 0.2s, color 0.2s;
+  letter-spacing: 0.01em;
+  position: relative;
+  overflow: hidden;
+}
+
+.NavBarContainer Button:hover,
+.NavBarContainer Button:focus {
+  background: #e6f1f5;
+  color: #15516b;
+  box-shadow: 0 2px 8px 0 rgba(24,74,91,0.07);
+}
+
+.NavBarContainer a > .MuiButton-root::after,
+.NavBarContainer .HomeButtonNav::after {
+  content: '';
+  display: block;
+  margin: 0 auto;
+  width: 0%;
+  height: 2px;
+  background: #184a5b;
+  transition: width 0.25s;
+  border-radius: 1px;
+}
+.NavBarContainer a:hover > .MuiButton-root::after,
+.NavBarContainer .HomeButtonNav:hover::after {
+  width: 60%;
+}
+
+.MuiMenu-paper {
+  background: #f8fafc !important;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.09) !important;
+  border: 1px solid #e3e6e8 !important;
+  border-radius: 12px !important;
+  min-width: 220px !important;
+  padding: 8px 0;
+}
+
+.ServiceItem {
+  border-radius: 8px !important;
+  margin: 2px 0;
+  transition: background 0.1s;
 }
 .ServiceItem:hover {
-background-color: #d5dcdd!important;
+  background-color: #d5dcdd!important;
 }
-.NavBarContainer a,
-.NavBarContainer a:visited,
-.NavBarContainer a:active,
-.NavBarContainer a:focus,
-.NavBarContainer a:hover {
-  text-decoration: none !important;
+
+@media (max-width: 700px) {
+  .LogoNavBar { width: 160px; margin-left: 10px; }
+  .LogoNavBar::after { margin: 0 9px 0 6px; height: 24px; }
+  .NavBarContainer { padding: 8px 6vw; }
+  .NavButtons { margin-right: 4vw; gap: 2px; }
+  .NavBarContainer Button { padding: 6px 12px; font-size: 13px !important; }
 }
