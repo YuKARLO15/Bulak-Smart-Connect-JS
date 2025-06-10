@@ -35,9 +35,9 @@ const AdminAddUser = () => {
 
   // Available roles
   const availableRoles = [
-    { id: 3, name: 'super_admin', displayName: 'Admin' },
-    { id: 1, name: 'admin', displayName: 'Manager' },
-    { id: 2, name: 'staff', displayName: 'Staff' },
+    { id: 1, name: 'super_admin', displayName: 'Admin' },
+    { id: 2, name: 'admin', displayName: 'Manager' },
+    { id: 3, name: 'staff', displayName: 'Staff' },
     { id: 4, name: 'citizen', displayName: 'Citizen' }
   ];
 

@@ -2,18 +2,43 @@ import React from 'react';
 import './WalkInQueue.css';
 
 const WalkInQueueList = ({ pendingQueues, userQueue }) => {
-  // Convert single userQueue to array if needed
+  // Convert single userQueue to array if needed and handle multiple queues
   const userQueues = userQueue ? (Array.isArray(userQueue) ? userQueue : [userQueue]) : [];
   
-  // Get all user queue IDs for filtering
-  const userQueueIds = userQueues.map(q => q.id);
+  console.log('Processing user queues:', userQueues);
+  console.log('Processing pending queues:', pendingQueues);
   
-  // Filter out any queues that belong to the user
-  const filteredPendingQueues = pendingQueues.filter(queue => !userQueueIds.includes(queue.id));
-    // Sort all queues by queue number for sequential display
+  // Get all user queue IDs for filtering - COMPREHENSIVE MATCHING
+  const userQueueIds = userQueues.flatMap(q => [
+    q.id,                                    // Display ID (e.g., "WK008")
+    q.dbId,                                  // Database ID (e.g., 52)
+    q.rawId,                                 // Raw ID if present
+    q.id?.replace('WK', ''),                 // Number part without WK (e.g., "008")
+    parseInt(q.id?.replace('WK', ''), 10),   // Parsed number (e.g., 8)
+    q.queueNumber                            // Queue number field
+  ]).filter(val => val !== null && val !== undefined && val !== '');
+  
+  console.log('User queue IDs for filtering:', userQueueIds);
+  
+  // Enhanced filtering to catch all user queues
+  const filteredPendingQueues = pendingQueues.filter(queue => {
+    const isUserQueue = userQueueIds.includes(queue.id) || 
+                       userQueueIds.includes(queue.rawId) ||
+                       userQueueIds.includes(queue.dbId) ||
+                       userQueueIds.includes(queue.id?.replace('WK', '')) ||
+                       userQueueIds.includes(parseInt(queue.id?.replace('WK', ''), 10)) ||
+                       userQueueIds.includes(queue.queueNumber);
+    
+    if (isUserQueue) {
+      console.log(`✅ Filtering out user queue: ${queue.id} (rawId: ${queue.rawId})`);
+    }
+    
+    return !isUserQueue;
+  });
+
+  // Sort all queues by queue number for sequential display
   const sortByQueueNumber = (queues) => {
     return [...queues].sort((a, b) => {
-      // Ensure id is a string and handle WK prefix
       const idA = typeof a.id === 'string' ? a.id : a.id?.toString() || '';
       const idB = typeof b.id === 'string' ? b.id : b.id?.toString() || '';
       
@@ -32,9 +57,10 @@ const WalkInQueueList = ({ pendingQueues, userQueue }) => {
       ...queue,
       isUserQueue: false
     })),
-    ...sortedUserQueues.map(queue => ({
+    ...sortedUserQueues.map((queue, index) => ({
       ...queue,
-      isUserQueue: true
+      isUserQueue: true,
+      isPrimaryQueue: index === 0 // Mark the first queue as primary
     }))
   ];
   
@@ -56,6 +82,19 @@ const WalkInQueueList = ({ pendingQueues, userQueue }) => {
           </div>
           <div className="QueueIdContainerWalkIn">
             <span className="QueueListIdWalkIn">{queue.id}</span>
+            {queue.isUserQueue && (
+              <span style={{
+                marginLeft: '10px',
+                padding: '2px 8px',
+                background: queue.isPrimaryQueue ? '#4caf50' : '#24536a',
+                color: 'white',
+                borderRadius: '12px',
+                fontSize: '10px',
+                fontWeight: 'bold'
+              }}>
+                {queue.isPrimaryQueue ? 'ACTIVE' : 'YOUR QUEUE'}
+              </span>
+            )}
           </div>
         </div>
       ))}

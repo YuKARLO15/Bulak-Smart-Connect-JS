@@ -21,13 +21,20 @@ export const addUser = (userData) => {
     
     // Create new user object
     const newUser = {
+      id: Date.now(), 
       name: `${userData.firstName} ${userData.lastName}`,
       status: 'Not Logged In',
       roles: [userData.role],
       image: '',
-      username: userData.username,
+      username: userData.username, 
       email: userData.email,
-      contact: `+63${userData.contact}`,
+      contact: userData.contactNumber || `+63${userData.contact}`, 
+      firstName: userData.firstName,
+      lastName: userData.lastName,
+      middleName: userData.middleName,
+      nameExtension: userData.nameExtension,
+      isActive: userData.isActive || true,
+      defaultRole: userData.role,
       // Store additional user details for possible future use
       password: userData.password, // Consider encrypting this in a real app
       dateAdded: new Date().toISOString()
@@ -40,10 +47,10 @@ export const addUser = (userData) => {
     localStorage.setItem('users', JSON.stringify(updatedUsers));
     
     console.log('User added successfully:', newUser);
-    return true;
+    return { success: true, user: newUser };
   } catch (error) {
     console.error('Error adding user:', error);
-    return false;
+    return { success: false, message: 'Failed to add user' };
   }
 };
 
@@ -52,14 +59,20 @@ export const updateUser = (index, updatedData) => {
   try {
     const users = getUsers();
     if (index >= 0 && index < users.length) {
-      users[index] = { ...users[index], ...updatedData };
+      users[index] = { 
+        ...users[index], 
+        ...updatedData,
+        // Ensure contact and username are properly updated
+        contact: updatedData.contactNumber || updatedData.contact,
+        username: updatedData.username || users[index].username
+      };
       localStorage.setItem('users', JSON.stringify(users));
-      return true;
+      return { success: true };
     }
-    return false;
+    return { success: false, message: 'User not found' };
   } catch (error) {
     console.error("Error updating user:", error);
-    return false;
+    return { success: false, message: 'Failed to update user' };
   }
 };
 
@@ -78,7 +91,6 @@ export const updateUser = (index, updatedData) => {
 //     return false;
 //   }
 // };
-
 
 // Delete a user by index NEW and Working
 export const removeUser = (index) => {

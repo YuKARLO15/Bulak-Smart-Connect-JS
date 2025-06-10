@@ -9,6 +9,7 @@ import { Repository, Like, In } from 'typeorm';
 import { User } from './entities/user.entity';
 import { AdminUpdateUserDto } from '../auth/dto/update-user.dto'; // Import from auth module
 import { RolesService } from '../roles/roles.service';
+import { CreateUserDto } from './dto/create-user.dto'; 
 import * as bcrypt from 'bcrypt';
 
 interface FindAllOptions {
@@ -260,5 +261,69 @@ export class UsersService {
       where: { username },
       relations: ['defaultRole', 'roles'],
     });
+  }
+
+  async create(createUserDto: CreateUserDto) {
+    const {
+      email,
+      username,
+      password,
+      firstName,
+      middleName,
+      lastName,
+      nameExtension,
+      contactNumber,
+      name,
+      roleIds,
+      defaultRoleId
+    } = createUserDto;
+
+    // Generate full name if not provided
+    const fullName = name || `${firstName} ${middleName ? middleName + ' ' : ''}${lastName}${nameExtension ? ' ' + nameExtension : ''}`;
+
+    // Check if user already exists
+    const existingUserByEmail = await this.usersRepository.findOne({
+      where: { email },
+    });
+    if (existingUserByEmail) {
+      throw new ConflictException('Email already exists');
+    }
+
+    if (username) {
+      const existingUserByUsername = await this.usersRepository.findOne({
+        where: { username },
+      });
+      if (existingUserByUsername) {
+        throw new ConflictException('Username already exists');
+      }
+    }
+
+    try {
+      // Create user
+      const user = this.usersRepository.create({
+        email,
+        username,
+        password, // Should be hashed by the caller
+        firstName,
+        middleName,
+        lastName,
+        nameExtension,
+        contactNumber,
+        name: fullName,
+        defaultRoleId: defaultRoleId || 4, // Default to citizen
+      });
+
+      await this.usersRepository.save(user);
+
+      // Assign roles if provided
+      if (roleIds && roleIds.length > 0) {
+        await this.rolesService.assignRolesToUser(user.id, roleIds);
+      }
+
+      return user;
+    } catch (error) {
+      console.error('Error creating user:', error);
+      throw error;
+    }
   }
 }
