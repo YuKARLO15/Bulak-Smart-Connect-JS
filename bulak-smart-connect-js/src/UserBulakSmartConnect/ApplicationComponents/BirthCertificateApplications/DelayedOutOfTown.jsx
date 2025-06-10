@@ -602,12 +602,7 @@ const DelayedOutOfTownRegistration = () => {
           </Container>
           <Box className="ImportantNotes">
             <Typography variant="h6">IMPORTANT NOTES:</Typography>
-            <Typography variant="body2">PAYMENT:</Typography>
-            <Typography variant="body2">1. Filing Fee - PHP 300.00</Typography>
-            <Typography variant="body2">
-              2. Other Fees - PHP 200.00 (notarized, new PSA corrected copy)
-            </Typography>
-            <Typography variant="body2">PROCESSING DURATION: 3-4 months</Typography>
+            <Typography variant="body2">PROCESSING DURATION: 10 days </Typography>
             <Typography variant="body2">INQUIRY: 0936-541-0787 / slbncr@yahoo.com</Typography>
           </Box>
 

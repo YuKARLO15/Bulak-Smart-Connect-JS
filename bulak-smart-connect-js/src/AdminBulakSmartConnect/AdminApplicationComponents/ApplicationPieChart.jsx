@@ -9,7 +9,7 @@ const ApplicationPieChart = ({ applications }) => {
     const birthApproved = applications.filter(app => app.type === 'Birth Certificate' && app.status === 'Approved').length;
     const birthDenied = applications.filter(app => app.type === 'Birth Certificate' && (app.status === 'Denied' || app.status === 'Decline')).length;
     
-    const marriagePending = applications.filter(app => (app.type === 'Marriage Certificate' || app.type == " Marriahe License" )  && app.status === 'Pending' ).length  ;
+    const marriagePending = applications.filter(app => (app.type === 'Marriage Certificate' || app.type == " Marriage License" )  && app.status === 'Pending' ).length  ;
     const marriageApproved = applications.filter(app => app.type === 'Marriage Certificate'   && app.status === 'Approved').length;
     const marriageDenied = applications.filter(app => app.type === 'Marriage Certificate'   && (app.status === 'Denied' || app.status === 'Decline')).length;
     
