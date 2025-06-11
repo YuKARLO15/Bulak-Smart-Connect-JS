@@ -21,7 +21,20 @@
   margin-left: 250px;
   width: calc(100vw - 250px);
 }
-
+.DocumentsPaperDelayedOneParentForeigner {
+    width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  margin-top: 16px;
+  background: #fff;
+  border-radius: 9px;
+  border: 1.5px solid #b6c6d2;
+  box-shadow: 0px 2px 10px rgba(24,74,91,0.04);
+  padding: 36px 32px 32px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
 .TitleDelayedOneParentForeigner {
   font-weight: 600 !important;
   background-color: #184a5b;
@@ -34,11 +47,11 @@
 
 .SectionTitleForeigner {
   font-weight: 600 !important;
-  text-align: center;
-  color: #184a5b !important;
-  padding: 20px !important;
-  width: 50vw;
-  margin-bottom: 20px;
+  color: #184a5b;
+  font-size: 1.1rem;
+  text-align: left;
+  margin-bottom: 14px !important;
+  margin-top: 0 !important;
 }
 .SectionulForeigner {
   color: #13647d;
@@ -102,24 +115,7 @@
   padding: 5px;
 }
 
-.SubmitButton {
-  margin-top: 20px;
-  background-color: #184a5b !important;
-  color: white !important;
-  padding: 10px 20px;
-  font-size: 1rem;
-  font-weight: bold;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  width: 100%;
-  max-width: 800px;
-}
 
-.SubmitButton:disabled {
-  background-color: #ccc !important;
-  cursor: not-allowed;
-}
 
 .SubmitButton:hover:not(:disabled) {
   background-color: #13647d !important;
@@ -135,4 +131,32 @@
   font-weight: bold;
   width: 100%;
   max-width: 800px;
+}
+.BackButtonOneParentForeigner{
+    border-color: #184a5b !important;
+  color: #184a5b !important;
+  font-weight: 500 !important;
+  
+}
+.SubmitButtonOneParentForeigner {
+  background-color: #184a5b !important;
+  color: #fff !important;
+  font-weight: 600 !important;
+  border-radius: 6px !important;
+  min-width: 190px !important;
+  transition: background 0.23s;
+}
+.SubmitButtonOneParentForeigner:disabled {
+  background: #e0e0e0 !important;
+  color: #bdbdbd !important;
+  border: none !important;
+}
+.ButtonContainerDelayedOneParentForeigner {
+    display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-top: 36px;
+  width: 100%;
+  max-width: 900px;
 }
