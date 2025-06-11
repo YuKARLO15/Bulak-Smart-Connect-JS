@@ -240,4 +240,32 @@ export class DocumentApplicationsService {
 
     return stats as Array<{ type: string; status: string; count: string }>;
   }
+
+  async getApplicationFiles(applicationId: string, userId?: number): Promise<DocumentFile[]> {
+    // First, verify the application exists and user has access
+    const application = await this.findOne(applicationId, userId);
+    
+    // Return the files with presigned URLs for download
+    const filesWithUrls = await Promise.all(
+      application.files.map(async (file) => {
+        try {
+          const downloadUrl = await this.minioService.getPresignedUrl(file.minioObjectName);
+          return {
+            ...file,
+            url: downloadUrl,
+            downloadUrl: downloadUrl
+          };
+        } catch (error) {
+          console.warn(`Failed to generate URL for file ${file.id}:`, error);
+          return {
+            ...file,
+            url: null,
+            downloadUrl: null
+          };
+        }
+      })
+    );
+    
+    return filesWithUrls;
+  }
 }

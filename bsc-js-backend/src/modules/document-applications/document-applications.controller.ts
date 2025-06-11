@@ -97,6 +97,18 @@ export class DocumentApplicationsController {
     return this.documentApplicationsService.findAll(userId);
   }
 
+  @Get(':id/files')
+  @ApiOperation({ summary: 'Get application files' })
+  async getApplicationFiles(
+    @Param('id') id: string,
+    @User() user: AuthenticatedUser,
+  ) {
+    const userId = user.roles.some(role => role.name === 'admin') 
+      ? undefined
+      : user.id;
+    return await this.documentApplicationsService.getApplicationFiles(id, userId);
+  }
+
   @Get(':id')
   @ApiOperation({ summary: 'Get specific application' })
   async findOne(@Param('id') id: string, @User() user: AuthenticatedUser) { 

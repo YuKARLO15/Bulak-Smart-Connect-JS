@@ -31,18 +31,35 @@ const FileUploadPreview = ({ formData, applicationType, applicationSubtype }) =>
   const fetchApplicationFiles = async (applicationId) => {
     setLoading(true);
     try {
-      // Use the getApplicationFiles function from documentApplicationService
+      console.log(`Fetching files for application ID: ${applicationId}`);
+      
+      // Use the service to get files
       const files = await documentApplicationService.getApplicationFiles(applicationId);
       
+      console.log('Retrieved files:', files);
+      
       if (Array.isArray(files) && files.length > 0) {
-        setUploadedFiles(files);
+        // Transform the files to match expected format
+        const transformedFiles = files.map(file => ({
+          id: file.id,
+          name: file.fileName || file.name,
+          documentType: file.documentCategory || file.documentType,
+          url: file.url || file.downloadUrl,
+          contentType: file.fileType || getContentTypeFromName(file.fileName || file.name),
+          size: file.fileSize || file.size,
+          uploadedAt: file.uploadedAt,
+          uploaded: true,
+          isPlaceholder: false
+        }));
+        
+        setUploadedFiles(transformedFiles);
       } else {
-        // If no files returned, fall back to extracting from formData
+        console.log('No files returned from API, trying formData extraction...');
         extractFilesFromFormData();
       }
     } catch (error) {
       console.error('Error fetching application files:', error);
-      // Fall back to extracting from formData on error
+      // Fallback to extracting from formData
       extractFilesFromFormData();
     } finally {
       setLoading(false);

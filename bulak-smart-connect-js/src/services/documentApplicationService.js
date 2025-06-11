@@ -194,10 +194,20 @@ export const documentApplicationService = {
   // Get application files
   getApplicationFiles: async (applicationId) => {
     try {
+      console.log(`Fetching files for application ${applicationId}...`);
       const response = await apiClient.get(`/document-applications/${applicationId}/files`);
+      console.log('Files response:', response.data);
       return response.data;
     } catch (error) {
       console.error(`Error getting files for application ${applicationId}:`, error);
+      
+      // Fallback to localStorage if API fails
+      const localApps = JSON.parse(localStorage.getItem('applications') || '[]');
+      const app = localApps.find(a => a.id === applicationId);
+      if (app && app.formData) {
+        return extractFilesFromFormData(app.formData);
+      }
+      
       throw error;
     }
   },
@@ -214,6 +224,32 @@ export const documentApplicationService = {
       return JSON.parse(localStorage.getItem('applications') || '[]');
     }
   }
+};
+
+// Helper function to extract files from formData
+const extractFilesFromFormData = (formData) => {
+  const files = [];
+  
+  // Check uploadedFiles object
+  if (formData.uploadedFiles && typeof formData.uploadedFiles === 'object') {
+    Object.entries(formData.uploadedFiles).forEach(([docName, fileData]) => {
+      if (fileData) {
+        files.push({
+          name: docName,
+          documentType: docName,
+          url: typeof fileData === 'string' ? fileData : fileData.url || fileData.data,
+          contentType: typeof fileData === 'object' ? fileData.contentType : 'application/pdf'
+        });
+      }
+    });
+  }
+  
+  // Check uploads array
+  if (formData.uploads && Array.isArray(formData.uploads)) {
+    files.push(...formData.uploads);
+  }
+  
+  return files;
 };
 
 export default documentApplicationService;
