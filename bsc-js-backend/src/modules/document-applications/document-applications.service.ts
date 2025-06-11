@@ -243,6 +243,10 @@ export class DocumentApplicationsService {
 
   async getApplicationFiles(applicationId: string, userId?: number) {
     try {
+      console.log(
+        `Service: Getting files for application ${applicationId}, userId: ${userId}`,
+      );
+
       // First verify the application exists and user has access
       const application = await this.documentApplicationRepository.findOne({
         where: {
@@ -255,7 +259,16 @@ export class DocumentApplicationsService {
       });
 
       if (!application) {
-        throw new NotFoundException('Application not found');
+        throw new NotFoundException(`Application ${applicationId} not found`);
+      }
+
+      console.log(
+        `Service: Found application with ${application.files?.length || 0} files`,
+      );
+
+      if (!application.files || application.files.length === 0) {
+        console.log('Service: No files found for this application');
+        return [];
       }
 
       // Generate presigned URLs for each file
@@ -265,6 +278,7 @@ export class DocumentApplicationsService {
             const downloadUrl = await this.minioService.getPresignedUrl(
               file.minioObjectName,
             );
+            console.log(`Service: Generated URL for file ${file.fileName}`);
             return {
               id: file.id,
               fileName: file.fileName,
@@ -277,7 +291,7 @@ export class DocumentApplicationsService {
               downloadUrl: downloadUrl,
             };
           } catch (error) {
-            console.warn(`Failed to generate URL for file ${file.id}:`, error);
+            console.warn(`Service: Failed to generate URL for file ${file.id}:`, error);
             return {
               id: file.id,
               fileName: file.fileName,
@@ -293,9 +307,10 @@ export class DocumentApplicationsService {
         }),
       );
 
+      console.log(`Service: Returning ${filesWithUrls.length} files with URLs`);
       return filesWithUrls;
     } catch (error) {
-      console.error('Error getting application files:', error);
+      console.error('Service: Error getting application files:', error);
       throw error;
     }
   }
