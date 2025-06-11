@@ -60,21 +60,7 @@
   box-shadow: 0 2px 8px 0 rgba(24,74,91,0.07);
 }
 
-.NavBarContainer a > .MuiButton-root::after,
-.NavBarContainer .HomeButtonNav::after {
-  content: '';
-  display: block;
-  margin: 0 auto;
-  width: 0%;
-  height: 2px;
-  background: #184a5b;
-  transition: width 0.25s;
-  border-radius: 1px;
-}
-.NavBarContainer a:hover > .MuiButton-root::after,
-.NavBarContainer .HomeButtonNav:hover::after {
-  width: 60%;
-}
+
 
 .MuiMenu-paper {
   background: #f8fafc !important;
