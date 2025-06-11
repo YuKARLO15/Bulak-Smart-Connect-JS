@@ -60,6 +60,14 @@ export class CreateUserDto {
   lastName: string;
 
   @ApiPropertyOptional({
+    example: 'John Miguel Doe Jr.',
+    description: 'Full name (auto-generated if not provided)',
+  })
+  @IsString()
+  @IsOptional()
+  name?: string;
+
+  @ApiPropertyOptional({
     example: 'Jr.',
     description: 'Name extension (e.g., Jr., Sr., III)',
   })
