@@ -152,6 +152,10 @@
                                 <a href="#findOne" >findOne</a>
                             </li>
                             <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#getApplicationFiles" >getApplicationFiles</a>
+                            </li>
+                            <li>
                                     <span class="modifier">Private</span>
                                 <a href="#getApplicationPrefix" >getApplicationPrefix</a>
                             </li>
@@ -572,6 +576,87 @@
                             </div>
                         <div class="io-description">
                             <b>Returns : </b>        <code><a href="../classes/DocumentApplication.html" target="_self" >Promise&lt;DocumentApplication&gt;</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getApplicationFiles"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>getApplicationFiles</b></span>
+                        <a href="#getApplicationFiles"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>getApplicationFiles(applicationId: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, userId?: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="244"
+                                    class="link-to-prism">src/modules/document-applications/document-applications.service.ts:244</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>applicationId</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>userId</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                            </td>
+
+                                            <td>
+                                                    Yes
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
 
                         </div>
                             <div class="io-description">
@@ -1413,6 +1498,80 @@ export class DocumentApplicationsService {
       .getRawMany();
 
     return stats as Array&lt;{ type: string; status: string; count: string }&gt;;
+  }
+
+  async getApplicationFiles(applicationId: string, userId?: number) {
+    try {
+      console.log(
+        &#x60;Service: Getting files for application ${applicationId}, userId: ${userId}&#x60;,
+      );
+
+      // First verify the application exists and user has access
+      const application &#x3D; await this.documentApplicationRepository.findOne({
+        where: {
+          id: applicationId,
+          ...(userId &amp;&amp; { userId }), // Only filter by userId if provided (admin won&#x27;t have this filter)
+        },
+        relations: {
+          files: true, // Include related files
+        },
+      });
+
+      if (!application) {
+        throw new NotFoundException(&#x60;Application ${applicationId} not found&#x60;);
+      }
+
+      console.log(
+        &#x60;Service: Found application with ${application.files?.length || 0} files&#x60;,
+      );
+
+      if (!application.files || application.files.length &#x3D;&#x3D;&#x3D; 0) {
+        console.log(&#x27;Service: No files found for this application&#x27;);
+        return [];
+      }
+
+      // Generate presigned URLs for each file
+      const filesWithUrls &#x3D; await Promise.all(
+        application.files.map(async (file) &#x3D;&gt; {
+          try {
+            const downloadUrl &#x3D; await this.minioService.getPresignedUrl(
+              file.minioObjectName,
+            );
+            console.log(&#x60;Service: Generated URL for file ${file.fileName}&#x60;);
+            return {
+              id: file.id,
+              fileName: file.fileName,
+              fileType: file.fileType,
+              fileSize: file.fileSize,
+              documentCategory: file.documentCategory,
+              minioObjectName: file.minioObjectName,
+              uploadedAt: file.uploadedAt,
+              url: downloadUrl,
+              downloadUrl: downloadUrl,
+            };
+          } catch (error) {
+            console.warn(&#x60;Service: Failed to generate URL for file ${file.id}:&#x60;, error);
+            return {
+              id: file.id,
+              fileName: file.fileName,
+              fileType: file.fileType,
+              fileSize: file.fileSize,
+              documentCategory: file.documentCategory,
+              minioObjectName: file.minioObjectName,
+              uploadedAt: file.uploadedAt,
+              url: null,
+              downloadUrl: null,
+            };
+          }
+        }),
+      );
+
+      console.log(&#x60;Service: Returning ${filesWithUrls.length} files with URLs&#x60;);
+      return filesWithUrls;
+    } catch (error) {
+      console.error(&#x27;Service: Error getting application files:&#x27;, error);
+      throw error;
+    }
   }
 }
 </code></pre>
