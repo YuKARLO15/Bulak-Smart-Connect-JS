@@ -31,36 +31,59 @@ const FileUploadPreview = ({ formData, applicationType, applicationSubtype }) =>
   const fetchApplicationFiles = async (applicationId) => {
     setLoading(true);
     try {
-      console.log(`Fetching files for application ID: ${applicationId}`);
+      console.log(`AdminFilePreview: Fetching files for application ID: ${applicationId}`);
       
       // Use the service to get files
       const files = await documentApplicationService.getApplicationFiles(applicationId);
       
-      console.log('Retrieved files:', files);
+      console.log('AdminFilePreview: Retrieved files from backend:', files);
+      console.log('AdminFilePreview: Number of files:', files?.length || 0);
       
       if (Array.isArray(files) && files.length > 0) {
         // Transform the files to match expected format
-        const transformedFiles = files.map(file => ({
-          id: file.id,
-          name: file.fileName || file.name,
-          documentType: file.documentCategory || file.documentType,
-          url: file.url || file.downloadUrl,
-          contentType: file.fileType || getContentTypeFromName(file.fileName || file.name),
-          size: file.fileSize || file.size,
-          uploadedAt: file.uploadedAt,
-          uploaded: true,
-          isPlaceholder: false
-        }));
+        const transformedFiles = files.map(file => {
+          console.log('AdminFilePreview: Processing file:', file);
+          return {
+            id: file.id,
+            name: file.fileName || file.name,
+            documentType: file.documentCategory || file.documentType,
+            url: file.url || file.downloadUrl,
+            contentType: file.fileType || getContentTypeFromName(file.fileName || file.name),
+            size: file.fileSize || file.size,
+            uploadedAt: file.uploadedAt,
+            uploaded: true,
+            isPlaceholder: false,
+            placeholder: false // Make sure this is explicitly set to false
+          };
+        });
         
+        console.log('AdminFilePreview: Transformed files:', transformedFiles);
         setUploadedFiles(transformedFiles);
       } else {
-        console.log('No files returned from API, trying formData extraction...');
-        extractFilesFromFormData();
+        console.log('AdminFilePreview: No files returned from API, showing placeholders...');
+        // Create placeholders for required documents
+        const requiredDocs = getRequiredDocuments();
+        const placeholders = requiredDocs.map(doc => ({
+          name: doc,
+          documentType: doc,
+          placeholder: true,
+          uploaded: false,
+          url: null
+        }));
+        setUploadedFiles(placeholders);
       }
     } catch (error) {
-      console.error('Error fetching application files:', error);
-      // Fallback to extracting from formData
-      extractFilesFromFormData();
+      console.error('AdminFilePreview: Error fetching application files:', error);
+      // Show placeholders on error
+      const requiredDocs = getRequiredDocuments();
+      const placeholders = requiredDocs.map(doc => ({
+        name: doc,
+        documentType: doc,
+        placeholder: true,
+        uploaded: false,
+        url: null
+      }));
+      setUploadedFiles(placeholders);
     } finally {
       setLoading(false);
     }

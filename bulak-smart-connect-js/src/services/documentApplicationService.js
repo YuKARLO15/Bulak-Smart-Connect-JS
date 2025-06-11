@@ -194,18 +194,17 @@ export const documentApplicationService = {
   // Get application files
   getApplicationFiles: async (applicationId) => {
     try {
-      console.log(`Fetching files for application ${applicationId}...`);
+      console.log(`Frontend: Fetching files for application ${applicationId}...`);
       const response = await apiClient.get(`/document-applications/${applicationId}/files`);
-      console.log('Files response:', response.data);
+      console.log('Frontend: Files response:', response.data);
       return response.data;
     } catch (error) {
-      console.error(`Error getting files for application ${applicationId}:`, error);
+      console.error(`Frontend: Error getting files for application ${applicationId}:`, error);
       
-      // Fallback to localStorage if API fails
-      const localApps = JSON.parse(localStorage.getItem('applications') || '[]');
-      const app = localApps.find(a => a.id === applicationId);
-      if (app && app.formData) {
-        return extractFilesFromFormData(app.formData);
+      // If the API call fails, return empty array instead of throwing
+      if (error.response?.status === 404) {
+        console.log('Application or files not found, returning empty array');
+        return [];
       }
       
       throw error;

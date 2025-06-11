@@ -99,13 +99,18 @@ export class DocumentApplicationsController {
 
   @Get(':id/files')
   @ApiOperation({ summary: 'Get application files' })
+  @ApiResponse({ status: 200, description: 'Files retrieved successfully' })
+  @ApiResponse({ status: 404, description: 'Application not found' })
   async getApplicationFiles(
     @Param('id') id: string,
     @User() user: AuthenticatedUser,
   ) {
     const userId = user.roles.some(role => role.name === 'admin') 
-      ? undefined
-      : user.id;
+      ? undefined  // Admin can see any application
+      : user.id;   // Regular users can only see their own
+    
+    console.log(`Getting files for application ${id}, user: ${user.email}, isAdmin: ${!userId}`);
+    
     return await this.documentApplicationsService.getApplicationFiles(id, userId);
   }
 
