@@ -194,16 +194,15 @@ export const documentApplicationService = {
   // Get application files
   getApplicationFiles: async (applicationId) => {
     try {
-      console.log(`Frontend: Fetching files for application ${applicationId}...`);
+      console.log(`Frontend Service: Fetching files for application ${applicationId}...`);
       const response = await apiClient.get(`/document-applications/${applicationId}/files`);
-      console.log('Frontend: Files response:', response.data);
+      console.log('Frontend Service: Files response:', response.data);
       return response.data;
     } catch (error) {
-      console.error(`Frontend: Error getting files for application ${applicationId}:`, error);
+      console.error(`Frontend Service: Error getting files for application ${applicationId}:`, error);
       
-      // If the API call fails, return empty array instead of throwing
       if (error.response?.status === 404) {
-        console.log('Application or files not found, returning empty array');
+        console.log('Frontend Service: Application or files not found, returning empty array');
         return [];
       }
       
