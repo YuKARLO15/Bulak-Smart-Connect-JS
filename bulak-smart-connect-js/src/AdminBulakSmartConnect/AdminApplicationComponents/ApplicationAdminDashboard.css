@@ -2,9 +2,10 @@
 
 .ApplicationDashContainer {
   display: flex;
+
   width: 100%;
-  max-height: 120%;
-  min-height: 120vh;
+  max-height: 100%;
+  min-height: 100vh;
   flex-direction: column;
   align-items: center;
   transition: margin-left 0.3s ease;
@@ -296,9 +297,12 @@
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06) !important;
   width: 100%;
   max-width: 1400px;
+  height: 80vw;
   overflow: hidden;
   box-sizing: border-box;
   margin-bottom: 50px;
+  justify-content: center;
+  align-items: center;
 }
 
 .ApplicationDashTableHeader {
@@ -309,6 +313,10 @@
   border-bottom: 1px solid #f0f0f0;
   width: 100% !important;
   box-sizing: border-box;
+  
+}
+.ApplicationDashRowTitle{
+    font-weight: 600 !important;
 }
 
 .ApplicationDashTableTitle {
@@ -408,7 +416,7 @@
   border: none;
 }
 .ApplicationDashApplicationStatusPill.Approved {
-
+  
   color: #219a2c;
 }
 .ApplicationDashApplicationStatusPill.Pending {
