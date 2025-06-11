@@ -32,23 +32,6 @@ const FileUploadPreview = ({ formData, applicationType, applicationSubtype }) =>
       // Fallback to extracting files from formData if no ID
       extractFilesFromFormData();
     }
-
-    // Extract application ID from URL if not in formData
-    const urlPath = window.location.pathname;
-    const urlApplicationId = urlPath.split('/').pop(); // Get last segment of URL
-
-    // Use formData.id if available, otherwise use ID from URL
-    const applicationId = formData?.id || urlApplicationId;
-  
-    console.log("Using application ID:", applicationId);
-  
-    if (applicationId) {
-      fetchApplicationFiles(applicationId);
-    } else {
-      // Fallback to extracting files from formData if no ID
-      extractFilesFromFormData();
-    }
-    
   }, [formData, applicationType]);
   
   // Function to fetch files for a specific application using the documentApplicationService

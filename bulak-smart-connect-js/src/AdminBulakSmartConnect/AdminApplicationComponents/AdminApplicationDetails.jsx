@@ -1449,7 +1449,10 @@ const AdminApplicationDetails = () => {
                     <Divider style={{ margin: '10px 0 20px' }} />
 
                     <FileUploadPreview
-                      formData={selectedApplication.formData || {}}
+                      formData={{
+                        ...(selectedApplication.formData || {}),
+                        id: selectedApplication.id
+                      }}  
                       applicationType={getApplicationType(selectedApplication)}
                       applicationSubtype={getApplicationSubtype(selectedApplication)}
                     />
