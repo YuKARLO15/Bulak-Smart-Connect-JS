@@ -209,15 +209,16 @@ const DelayedOneParentForeignerRegistration = () => {
         Delayed Registration of Birth (One Parent is a Foreigner)
       </Typography>
 
-      <Typography variant="body1" className="SectionTitleDelayedOneParentForeigner">
-        Mandatory Requirements:
-      </Typography>
+    
       {isInitializing ? (
         <Box sx={{ display: 'flex', justifyContent: 'center', my: 4 }}>
           <CircularProgress />
         </Box>
       ) : (
-        <Paper elevation={3} className="DocumentsPaperDelayedOneParentForeigner">
+          <Paper elevation={3} className="DocumentsPaperDelayedOneParentForeigner">
+              <Typography variant="body1" className="SectionTitleForeigner">
+        Mandatory Requirements:
+      </Typography>
           <Box>
             {requiredDocuments.map((doc, index) => (
               <FileUpload key={index} label={doc} onUpload={fileUploadWrapper(doc)} disabled={isLoading} />
@@ -274,14 +275,23 @@ const DelayedOneParentForeignerRegistration = () => {
             </Alert>
           )}
 
-          <Box className="ButtonContainerDelayedOneParentForeigner">
+            <Box className="ButtonContainerDelayedOneParentForeigner">
+              <Button
+                              variant="outlined"
+                              color="primary"
+                              onClick={() => navigate(-1)}
+                              className="BackButtonOneParentForeigner"
+                             
+              >
+                              Back
+                            </Button>
             <Button
               variant="contained"
               color="primary"
               disabled={!isMandatoryComplete() || isLoading || isSubmitted}
               sx={{ marginTop: '20px' }}
               onClick={handleSubmit}
-              className="ButtonApplication"
+              className="SubmitButtonOneParentForeigner"
             >
               {isLoading ? "Submitting..." : "Submit"}
             </Button>

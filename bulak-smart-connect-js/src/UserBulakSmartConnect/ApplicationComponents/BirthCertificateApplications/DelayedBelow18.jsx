@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Box, Button, Checkbox, FormControlLabel, Typography, Alert, Paper, Snackbar, CircularProgress } from '@mui/material';
+import { Box, Button, Checkbox, FormControlLabel, Typography, Alert, Paper, Snackbar, CircularProgress, Container } from '@mui/material';
 import FileUpload from '../FileUpload';
 import './DelayedBelow18.css';
 import NavBar from '../../../NavigationComponents/NavSide';
@@ -15,7 +15,7 @@ const mandatoryDocuments = [
   'Documentary Evidence/s of Parents',
   'Barangay Certification of Residency',
   'National ID or ePhil ID',
-  'Affidavit of Whereabouts of the Mother',
+  
 ];
 
 const Below18Registration = () => {
@@ -32,12 +32,13 @@ const Below18Registration = () => {
   const [applicationId, setApplicationId] = useState(null);
   const [backendApplicationCreated, setBackendApplicationCreated] = useState(false);
   const [uploadedDocumentsCount, setUploadedDocumentsCount] = useState(0);
+   const [status, setStatus] = useState('');
   const navigate = useNavigate();
   const location = useLocation();
   
   const isEditing = location.state?.isEditing || 
                     localStorage.getItem('isEditingBirthApplication') === 'true';
-
+    const  maritalSatus = localStorage.getItem('maritalStatus');
   // Show snackbar notification
   const showNotification = (message, severity = 'info') => {
     setSnackbar({
@@ -108,7 +109,7 @@ const Below18Registration = () => {
   }, [uploadedFiles]);
 
   useEffect(() => {
-    // Load data when component mounts
+  
     const loadData = async () => {
       try {
         setIsInitializing(true);
@@ -549,11 +550,9 @@ const Below18Registration = () => {
     <div className={`FormContainerBelow18 ${isSidebarOpen ? 'SidebarOpenBelow18' : ''}`}>
       <NavBar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
       <Typography variant="h5" className="FormTitleBelow18">
-        Birth Certificate Application
+          Applying for Delayed Registration - Below 18 Years Old
       </Typography>
-      <Typography className="FormSubtitleBelow18">
-        Applying for Delayed Registration - Below 18 Years Old
-      </Typography>
+   
       
       {isInitializing ? (
         <Box sx={{ display: 'flex', justifyContent: 'center', my: 4 }}>
@@ -561,32 +560,9 @@ const Below18Registration = () => {
         </Box>
       ) : (
         <Paper elevation={3} className="DocumentsPaperBelow18">
-          <div className="checkboxBelow18top">
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={maritalStatus === 'marital'}
-                  onChange={() => setMaritalStatus('marital')}
-                  disabled={isLoading}
-                />
-              }
-              label="Marital"
-              className="CheckboxBelow18"
-            />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={maritalStatus === 'non-marital'}
-                  onChange={() => setMaritalStatus('non-marital')}
-                  disabled={isLoading}
-                />
-              }
-              label="Non-Marital"
-              className="CheckboxBelow18"
-            />
-          </div>
+         
 
-          {maritalStatus && (
+       
             <>
               <Box>
                 <Typography variant="body1" className="SectionTitleBelow18">
@@ -614,7 +590,7 @@ const Below18Registration = () => {
               </Box>
 
               <Box>
-                {maritalStatus === 'marital' && (
+                {maritalSatus === 'marital' && (
                   <FileUpload
                     label="Certificate of Marriage of Parents"
                     onUpload={(isUploaded, fileDataObj) =>
@@ -651,15 +627,7 @@ const Below18Registration = () => {
               
               <Box className="ImportantNotes">
                 <Typography variant="h6">IMPORTANT NOTES:</Typography>
-                <Typography variant="body2">PAYMENT:</Typography>
-                <Typography variant="body2">1. Filing Fee - PHP 300.00</Typography>
-                <Typography variant="body2">
-                  2. Newspaper Publication - PHP 3,500.00 (or newspaper of your choice)
-                </Typography>
-                <Typography variant="body2">
-                  3. Other Fees - PHP 500.00 (notarized, new PSA corrected copy)
-                </Typography>
-                <Typography variant="body2">PROCESSING DURATION: 4-6 months</Typography>
+                <Typography variant="body2">PROCESSING DURATION: 10 Days </Typography>
                 <Typography variant="body2">INQUIRY: 0936-541-0787 / slbncr@yahoo.com</Typography>
               </Box>
 
@@ -667,7 +635,8 @@ const Below18Registration = () => {
                 <Alert severity="success" sx={{ marginTop: '20px' }}>
                   Your application has been submitted successfully! Redirecting...
                 </Alert>
-              )}
+                )}
+         
 
               <Box className="ButtonContainerBelow18">
                 <Button
@@ -688,9 +657,10 @@ const Below18Registration = () => {
                 >
                   {isLoading ? "Submitting..." : "Submit Application"}
                 </Button>
-              </Box>
+                  </Box>
+                  
             </>
-          )}
+          
         </Paper>
       )}
 
