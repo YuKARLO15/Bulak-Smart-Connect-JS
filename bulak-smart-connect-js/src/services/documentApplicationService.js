@@ -213,7 +213,8 @@ export const documentApplicationService = {
   // Get user's applications (non-admin) 
   getUserApplications: async () => {
     try {
-      const response = await apiClient.get('/document-applications/user');
+      // Use the main endpoint - it automatically filters by user if not admin
+      const response = await apiClient.get('/document-applications');
       return response.data;
     } catch (error) {
       console.error('Error getting user applications:', error);
