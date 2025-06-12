@@ -10,11 +10,12 @@ import { localStorageManager } from '../../../services/localStorageManager';
 const mandatoryDocuments = [
   'Negative Certification from PSA',
   'Two (2) Documentary Evidences',
-  'Affidavit of Two (2) Disinterested Persons (Not Related)',
+  'Affidavit of Disinterested Person 1 (Not Related)',
+  'Affidavit of Disinterested Persons 2 (Not Related)',
   'Unedited Front-Facing Photo (2x2, White Background)',
   'Documentary Evidence/s of Parents',
   'Barangay Certification of Residency',
-  'National ID or ePhil ID',
+  'National ID or ePhil ID'
   
 ];
 
@@ -39,7 +40,7 @@ const Below18Registration = () => {
   const isEditing = location.state?.isEditing || 
                     localStorage.getItem('isEditingBirthApplication') === 'true';
     const  maritalSatus = localStorage.getItem('maritalStatus');
-  // Show snackbar notification
+
   const showNotification = (message, severity = 'info') => {
     setSnackbar({
       open: true,
@@ -351,10 +352,7 @@ const Below18Registration = () => {
   };
 
   const isMandatoryComplete = () => {
-    if (!maritalStatus) {
-      console.log("No marital status selected");
-      return false;
-    }
+
 
     // Check all required documents
     const allMandatoryDocsUploaded = mandatoryDocuments.every(doc => {
@@ -651,7 +649,7 @@ const Below18Registration = () => {
                 <Button
                   variant="contained"
                   color="primary"
-                  disabled={!(forceEnableSubmit) || isLoading || isSubmitted}
+                 disabled={!isMandatoryComplete() || isLoading || isSubmitted}
                   onClick={handleSubmit}
                   className="SubmitButtonBelow18"
                 >
