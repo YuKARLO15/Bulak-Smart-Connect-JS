@@ -75,13 +75,19 @@ export class DocumentApplicationsController {
     @Param('id') id: string,
     @UploadedFile() file: Express.Multer.File,
     @Body('documentCategory') documentCategory: string,
-    @User() user: AuthenticatedUser, 
+    @User() user: AuthenticatedUser,
   ) {
+    console.log('Received document category:', documentCategory); // Debug log
+    
+    if (!documentCategory) {
+      throw new BadRequestException('Document category is required');
+    }
+    
     return this.documentApplicationsService.uploadFile(
       id,
       file,
       documentCategory,
-      user.id, 
+      user.id,
     );
   }
 
