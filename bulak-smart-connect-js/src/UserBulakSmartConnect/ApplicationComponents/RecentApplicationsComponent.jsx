@@ -482,7 +482,7 @@ const RecentApplicationsComponent = () => {
                             '&:hover': { textDecoration: 'underline' }
                           }}
                         >
-                          {app.type}
+                          {app.applicationType || app.type || 'Failed Fetching Application'} {/* Fetching first from backend  */}
                         </Typography>
                         <Chip
                           label={app.status}
