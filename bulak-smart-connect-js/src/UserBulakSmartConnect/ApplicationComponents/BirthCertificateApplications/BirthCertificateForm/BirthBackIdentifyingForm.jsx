@@ -257,7 +257,7 @@ const AffidavitBirthForm = ({ formData, handleChange, isReadOnly = false }) => {
         person himself if 18 years old or over.)
       </div>
 
-      {/* Rest of the delayed registration form remains unchanged */}
+
       <div className="FormContentAffidavit">
         {/* Rest of your code remains the same */}
         <div className="FormSectionAffidavit">

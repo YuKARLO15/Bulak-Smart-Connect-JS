@@ -29,53 +29,54 @@ const AdminBirthAffidavitPreviewPage = ({ applicationId, currentUser }) => {
   };
 
   useEffect(() => {
-  const fetchData = async () => {
-    setLoading(true);
-    setError('');
-    try {
-      console.log("Fetching application with ID:", applicationId);
-      const application = await documentApplicationService.getApplication(applicationId);
-      console.log("Received application data:", application);
-      
-      // Combine form data from both sources to ensure we have all fields
-      const combinedFormData = {
-        ...application.formData || {},
-        ...application.affidavitData || {}
-      };
-      
-      console.log("Combined form data:", combinedFormData);
-      
-      setFormData(combinedFormData);
-      setOriginalData(combinedFormData);
-      
-      // Set specific affidavit fields from the application data
-      setRegistrationType(application.affidavitData?.registrationType || 'self');
-      setParentStatus(application.affidavitData?.parentStatus || 'married');
-      setMaritalStatus(application.affidavitData?.maritalStatus || 'single');
-      
-      setApplicationDetails({
-        submittedBy: application.submittedBy,
-        submittedAt: application.submittedAt,
-        status: application.status,
-      });
-    } catch (err) {
-      console.error("Error fetching application:", err);
-      setError('Failed to load application data: ' + (err.message || 'Unknown error'));
-    } finally {
-      setLoading(false);
-    }
-  };
+    const fetchData = async () => {
+      setLoading(true);
+      setError('');
+      try {
+        console.log("Fetching application with ID:", applicationId);
+        const application = await documentApplicationService.getApplication(applicationId);
+        console.log("Received application data:", application);
+        
+        // Combine form data from both sources to ensure we have all fields
+        const combinedFormData = {
+          ...application.formData || {},
+          ...application.affidavitData || {}
+        };
+        
+        console.log("Combined form data:", combinedFormData);
+        
+        setFormData(combinedFormData);
+        setOriginalData(combinedFormData);
+        
+        // Set specific affidavit fields from the application data
+        setRegistrationType(application.affidavitData?.registrationType || 'self');
+        setParentStatus(application.affidavitData?.parentStatus || 'married');
+        setMaritalStatus(application.affidavitData?.maritalStatus || 'single');
+        
+        setApplicationDetails({
+          submittedBy: application.submittedBy,
+          submittedAt: application.submittedAt,
+          status: application.status,
+        });
+      } catch (err) {
+        console.error("Error fetching application:", err);
+        setError('Failed to load application data: ' + (err.message || 'Unknown error'));
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  if (canView && applicationId) {
-    fetchData();
-  } else {
-    if (!applicationId) {
-      setError('No application ID provided.');
-    } else if (!canView) {
-      setError('Unauthorized access');
+    if (canView && applicationId) {
+      fetchData();
+    } else {
+      if (!applicationId) {
+        setError('No application ID provided.');
+      } else if (!canView) {
+        setError('Unauthorized access');
+      }
     }
-  }
-}, [applicationId, canView]);
+  }, [applicationId, canView]);
+
   const handleChange = (event) => {
     const { name, value } = event.target;
     setFormData(prevData => ({
@@ -153,6 +154,14 @@ const AdminBirthAffidavitPreviewPage = ({ applicationId, currentUser }) => {
     return fullName;
   };
 
+  const shouldShowPaternityAffidavit = () => {
+    // Hide if it's a marital child not acknowledged by father
+    if (formData?.maritalStatus == "marital" || formData?.fatherLastName == null)  {
+      return false;
+    }
+    return true;
+  };
+
   const getChildBirthDate = () => {
     const month = formData?.birthMonth || '';
     const day = formData?.birthDay || '';
@@ -173,8 +182,6 @@ const AdminBirthAffidavitPreviewPage = ({ applicationId, currentUser }) => {
       {/* Admin Information Header */}
       <div className="AdminInfoHeader">
         <div className="AdminInfoContent">
-       
-       
           <div className="AdminInfoRow">
             <span className="AdminInfoLabel">Application ID:</span>
             <span className="AdminInfoValue">{applicationId}</span>
@@ -240,229 +247,231 @@ const AdminBirthAffidavitPreviewPage = ({ applicationId, currentUser }) => {
       </div>
 
       {/* Affidavit Preview Content */}
-      <div className="BirthFormContainerAffidavit">
-        <div className="FormHeaderAffidavit">AFFIDAVIT OF ACKNOWLEDGMENT/ADMISSION OF PATERNITY</div>
-        <div className="SubHeaderAffidavit">(For births before 3 August 1988)</div>
-
-        <div className="FormContentAffidavit">
-          <div className="FormSectionAffidavit">
-            <div className="FormRowAffidavit">
-              <div className="AffidavitText">
-                I/We,
-                {isEditMode ? (
-                  <input
-                    type="text"
-                    name="affiantName1"
-                    value={formData?.affiantName1 || getFatherFullName()}
-                    onChange={handleChange}
-                    className="AffidavitUnderlineInput"
-                  />
-                ) : (
-                  <span className="AffidavitUnderlineInput ReadOnly">
-                    {formData?.affiantName1 || getFatherFullName()}
-                  </span>
-                )}
-                and
-                {isEditMode ? (
-                  <input
-                    type="text"
-                    name="affiantName2"
-                    value={formData?.affiantName2 || getMotherFullName()}
-                    onChange={handleChange}
-                    className="AffidavitUnderlineInput"
-                  />
-                ) : (
-                  <span className="AffidavitUnderlineInput ReadOnly">
-                    {formData?.affiantName2 || getMotherFullName()}
-                  </span>
-                )}
-                , who was born on
-                {isEditMode ? (
-                  <input
-                    type="text"
-                    name="affiantBirthDate"
-                    value={formData?.affiantBirthDate || ''}
-                    onChange={handleChange}
-                    className="AffidavitUnderlineInput"
-                  />
-                ) : (
-                  <span className="AffidavitUnderlineInput ReadOnly">
-                    {formData?.affiantBirthDate}
-                  </span>
-                )}
-                at
-                {isEditMode ? (
-                  <input
-                    type="text"
-                    name="affiantBirthPlace"
-                    value={formData?.affiantBirthPlace || ''}
-                    onChange={handleChange}
-                    className="AffidavitUnderlineInput"
-                  />
-                ) : (
-                  <span className="AffidavitUnderlineInput ReadOnly">
-                    {formData?.affiantBirthPlace}
-                  </span>
-                )}
-                of legal age, am/are the natural mother and/or father of
-                {isEditMode ? (
-                  <input
-                    type="text"
-                    name="childFullName"
-                    value={formData?.childFullName || getChildFullName()}
-                    onChange={handleChange}
-                    className="AffidavitUnderlineInput"
-                  />
-                ) : (
-                  <span className="AffidavitUnderlineInput ReadOnly">
-                    {formData?.childFullName || getChildFullName()}
-                  </span>
-                )}
-                .
-              </div>
-            </div>
-
-            <div className="FormRowAffidavit">
-              <div className="AffidavitText">
-                That I am / We are executing this affidavit to attest to the truthfulness of the
-                foregoing statements and for purposes of acknowledging my/our child.
-              </div>
-            </div>
-
-            <div className="FormRowAffidavit">
-              <div className="SignatureBlockAffidavit">
-                <div className="SignatureLine"></div>
-                <div className="SignatureCaption">(Signature Over Printed Name of Father)</div>
+      {shouldShowPaternityAffidavit() && (
+        <div className="BirthFormContainerAffidavit">
+          <div className="FormHeaderAffidavit">AFFIDAVIT OF ACKNOWLEDGMENT/ADMISSION OF PATERNITY</div>
+          <div className="FormContentAffidavit">
+            <div className="FormSectionAffidavit">
+              <div className="FormRowAffidavit">
+                <div className="AffidavitText">
+                  I/We,
+                  {isEditMode ? (
+                    <input
+                      type="text"
+                      name="affiantName1"
+                      value={formData?.affiantName1 || getFatherFullName()}
+                      onChange={handleChange}
+                      className="AffidavitUnderlineInput"
+                    />
+                  ) : (
+                    <span className="AffidavitUnderlineInput ReadOnly">
+                      {formData?.affiantName1 || getFatherFullName()}
+                    </span>
+                  )}
+                  and
+                  {isEditMode ? (
+                    <input
+                      type="text"
+                      name="affiantName2"
+                      value={formData?.affiantName2 || getMotherFullName()}
+                      onChange={handleChange}
+                      className="AffidavitUnderlineInput"
+                    />
+                  ) : (
+                    <span className="AffidavitUnderlineInput ReadOnly">
+                      {formData?.affiantName2 || getMotherFullName()}
+                    </span>
+                  )}
+                  , who was born on
+                  {isEditMode ? (
+                    <input
+                      type="text"
+                      name="affiantBirthDate"
+                      value={formData?.affiantBirthDate || ''}
+                      onChange={handleChange}
+                      className="AffidavitUnderlineInput"
+                    />
+                  ) : (
+                    <span className="AffidavitUnderlineInput ReadOnly">
+                      {formData?.affiantBirthDate}
+                    </span>
+                  )}
+                  at
+                  {isEditMode ? (
+                    <input
+                      type="text"
+                      name="affiantBirthPlace"
+                      value={formData?.affiantBirthPlace || ''}
+                      onChange={handleChange}
+                      className="AffidavitUnderlineInput"
+                    />
+                  ) : (
+                    <span className="AffidavitUnderlineInput ReadOnly">
+                      {formData?.affiantBirthPlace}
+                    </span>
+                  )}
+                  of legal age, am/are the natural mother and/or father of
+                  {isEditMode ? (
+                    <input
+                      type="text"
+                      name="childFullName"
+                      value={formData?.childFullName || getChildFullName()}
+                      onChange={handleChange}
+                      className="AffidavitUnderlineInput"
+                    />
+                  ) : (
+                    <span className="AffidavitUnderlineInput ReadOnly">
+                      {formData?.childFullName || getChildFullName()}
+                    </span>
+                  )}
+                  .
+                </div>
               </div>
 
-              <div className="SignatureBlockAffidavit">
-                <div className="SignatureLine"></div>
-                <div className="SignatureCaption">(Signature Over Printed Name of Mother)</div>
-              </div>
-            </div>
-
-            <div className="FormRowAffidavit">
-              <div className="AffidavitText">
-                <strong>SUBSCRIBED AND SWORN</strong> to before me this
-                {isEditMode ? (
-                  <input
-                    type="text"
-                    name="swornDay1"
-                    value={formData?.swornDay1 || ''}
-                    onChange={handleChange}
-                    className="AffidavitShortInput"
-                  />
-                ) : (
-                  <span className="AffidavitUnderlineInput ReadOnly">
-                    {formData?.swornDay1 || ''}
-                  </span>
-                )}
-                day of
-                {isEditMode ? (
-                  <input
-                    type="text"
-                    name="swornMonth1"
-                    value={formData?.swornMonth1 || ''}
-                    onChange={handleChange}
-                    className="AffidavitMediumInput"
-                  />
-                ) : (
-                  <span className="AffidavitUnderlineInput ReadOnly">
-                    {formData?.swornMonth1 || ''}
-                  </span>
-                )}
-                ,
-                {isEditMode ? (
-                  <input
-                    type="text"
-                    name="swornYear1"
-                    value={formData?.swornYear1 || ''}
-                    onChange={handleChange}
-                    className="AffidavitShortInput"
-                  />
-                ) : (
-                  <span className="AffidavitUnderlineInput ReadOnly">
-                    {formData?.swornYear1 || ''}
-                  </span>
-                )}
-                , by
-                {isEditMode ? (
-                  <input
-                    type="text"
-                    name="swornBy1"
-                    value={formData?.swornBy1 || ''}
-                    onChange={handleChange}
-                    className="AffidavitMediumInput"
-                  />
-                ) : (
-                  <span className="AffidavitUnderlineInput ReadOnly">
-                    {formData?.swornBy1 || ''}
-                  </span>
-                )}
-                , who exhibited to me (his/her) CTC/valid ID
-                {isEditMode ? (
-                  <input
-                    type="text"
-                    name="validID1"
-                    value={formData?.validID1 || ''}
-                    onChange={handleChange}
-                    className="AffidavitMediumInput"
-                  />
-                ) : (
-                  <span className="AffidavitUnderlineInput ReadOnly">
-                    {formData?.validID1 || ''}
-                  </span>
-                )}
-                issued on
-                {isEditMode ? (
-                  <input
-                    type="text"
-                    name="idIssueDate1"
-                    value={formData?.idIssueDate1 || ''}
-                    onChange={handleChange}
-                    className="AffidavitMediumInput"
-                  />
-                ) : (
-                  <span className="AffidavitUnderlineInput ReadOnly">
-                    {formData?.idIssueDate1 || ''}
-                  </span>
-                )}
-                at
-                {isEditMode ? (
-                  <input
-                    type="text"
-                    name="idIssuePlace1"
-                    value={formData?.idIssuePlace1 || ''}
-                    onChange={handleChange}
-                    className="AffidavitMediumInput"
-                  />
-                ) : (
-                  <span className="AffidavitUnderlineInput ReadOnly">
-                    {formData?.idIssuePlace1 || ''}
-                  </span>
-                )}
-                .
-              </div>
-            </div>
-
-            <div className="FormRowAffidavit">
-              <div className="SignatureBlockAffidavit">
-                <div className="SignatureLine"></div>
-                <div className="SignatureCaption">Signature of the Administering Officer</div>
-                <div className="SignatureLine"></div>
-                <div className="SignatureCaption">Name in Print</div>
+              <div className="FormRowAffidavit">
+                <div className="AffidavitText">
+                  That I am / We are executing this affidavit to attest to the truthfulness of the
+                  foregoing statements and for purposes of acknowledging my/our child.
+                </div>
               </div>
 
-              <div className="SignatureBlockAffidavit">
-                <div className="SignatureLine"></div>
-                <div className="SignatureCaption">Position / Title / Designation</div>
-                <div className="SignatureLine"></div>
-                <div className="SignatureCaption">Address</div>
+              <div className="FormRowAffidavit">
+                <div className="SignatureBlockAffidavit">
+                  <div className="SignatureLine"></div>
+                  <div className="SignatureCaption">(Signature Over Printed Name of Father)</div>
+                </div>
+
+                <div className="SignatureBlockAffidavit">
+                  <div className="SignatureLine"></div>
+                  <div className="SignatureCaption">(Signature Over Printed Name of Mother)</div>
+                </div>
+              </div>
+
+              <div className="FormRowAffidavit">
+                <div className="AffidavitText">
+                  <strong>SUBSCRIBED AND SWORN</strong> to before me this
+                  {isEditMode ? (
+                    <input
+                      type="text"
+                      name="swornDay1"
+                      value={formData?.swornDay1 || ''}
+                      onChange={handleChange}
+                      className="AffidavitShortInput"
+                    />
+                  ) : (
+                    <span className="AffidavitUnderlineInput ReadOnly">
+                      {formData?.swornDay1 || ''}
+                    </span>
+                  )}
+                  day of
+                  {isEditMode ? (
+                    <input
+                      type="text"
+                      name="swornMonth1"
+                      value={formData?.swornMonth1 || ''}
+                      onChange={handleChange}
+                      className="AffidavitMediumInput"
+                    />
+                  ) : (
+                    <span className="AffidavitUnderlineInput ReadOnly">
+                      {formData?.swornMonth1 || ''}
+                    </span>
+                  )}
+                  ,
+                  {isEditMode ? (
+                    <input
+                      type="text"
+                      name="swornYear1"
+                      value={formData?.swornYear1 || ''}
+                      onChange={handleChange}
+                      className="AffidavitShortInput"
+                    />
+                  ) : (
+                    <span className="AffidavitUnderlineInput ReadOnly">
+                      {formData?.swornYear1 || ''}
+                    </span>
+                  )}
+                  , by
+                  {isEditMode ? (
+                    <input
+                      type="text"
+                      name="swornBy1"
+                      value={formData?.swornBy1 || ''}
+                      onChange={handleChange}
+                      className="AffidavitMediumInput"
+                    />
+                  ) : (
+                    <span className="AffidavitUnderlineInput ReadOnly">
+                      {formData?.swornBy1 || ''}
+                    </span>
+                  )}
+                  , who exhibited to me (his/her) CTC/valid ID
+                  {isEditMode ? (
+                    <input
+                      type="text"
+                      name="validID1"
+                      value={formData?.validID1 || ''}
+                      onChange={handleChange}
+                      className="AffidavitMediumInput"
+                    />
+                  ) : (
+                    <span className="AffidavitUnderlineInput ReadOnly">
+                      {formData?.validID1 || ''}
+                    </span>
+                  )}
+                  issued on
+                  {isEditMode ? (
+                    <input
+                      type="text"
+                      name="idIssueDate1"
+                      value={formData?.idIssueDate1 || ''}
+                      onChange={handleChange}
+                      className="AffidavitMediumInput"
+                    />
+                  ) : (
+                    <span className="AffidavitUnderlineInput ReadOnly">
+                      {formData?.idIssueDate1 || ''}
+                    </span>
+                  )}
+                  at
+                  {isEditMode ? (
+                    <input
+                      type="text"
+                      name="idIssuePlace1"
+                      value={formData?.idIssuePlace1 || ''}
+                      onChange={handleChange}
+                      className="AffidavitMediumInput"
+                    />
+                  ) : (
+                    <span className="AffidavitUnderlineInput ReadOnly">
+                      {formData?.idIssuePlace1 || ''}
+                    </span>
+                  )}
+                  .
+                </div>
+              </div>
+
+              <div className="FormRowAffidavit">
+                <div className="SignatureBlockAffidavit">
+                  <div className="SignatureLine"></div>
+                  <div className="SignatureCaption">Signature of the Administering Officer</div>
+                  <div className="SignatureLine"></div>
+                  <div className="SignatureCaption">Name in Print</div>
+                </div>
+
+                <div className="SignatureBlockAffidavit">
+                  <div className="SignatureLine"></div>
+                  <div className="SignatureCaption">Position / Title / Designation</div>
+                  <div className="SignatureLine"></div>
+                  <div className="SignatureCaption">Address</div>
+                </div>
               </div>
             </div>
           </div>
         </div>
+      )}
 
+      <div className="BirthFormContainerAffidavit">
         <div className="FormHeaderAffidavit">AFFIDAVIT FOR DELAYED REGISTRATION OF BIRTH</div>
         <div className="SubHeaderAffidavit">
           (To be accomplished by the hospital/clinic administrator, father, mother, or guardian of the
