@@ -356,8 +356,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="90"
-                                    class="link-to-prism">src/modules/document-applications/document-applications.controller.ts:90</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="96"
+                                    class="link-to-prism">src/modules/document-applications/document-applications.controller.ts:96</a></div>
                         </td>
                     </tr>
 
@@ -446,8 +446,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="119"
-                                    class="link-to-prism">src/modules/document-applications/document-applications.controller.ts:119</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="125"
+                                    class="link-to-prism">src/modules/document-applications/document-applications.controller.ts:125</a></div>
                         </td>
                     </tr>
 
@@ -538,8 +538,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="196"
-                                    class="link-to-prism">src/modules/document-applications/document-applications.controller.ts:196</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="202"
+                                    class="link-to-prism">src/modules/document-applications/document-applications.controller.ts:202</a></div>
                         </td>
                     </tr>
 
@@ -588,8 +588,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="104"
-                                    class="link-to-prism">src/modules/document-applications/document-applications.controller.ts:104</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="110"
+                                    class="link-to-prism">src/modules/document-applications/document-applications.controller.ts:110</a></div>
                         </td>
                     </tr>
 
@@ -678,8 +678,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="128"
-                                    class="link-to-prism">src/modules/document-applications/document-applications.controller.ts:128</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="134"
+                                    class="link-to-prism">src/modules/document-applications/document-applications.controller.ts:134</a></div>
                         </td>
                     </tr>
 
@@ -770,8 +770,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="204"
-                                    class="link-to-prism">src/modules/document-applications/document-applications.controller.ts:204</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="210"
+                                    class="link-to-prism">src/modules/document-applications/document-applications.controller.ts:210</a></div>
                         </td>
                     </tr>
 
@@ -818,8 +818,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="183"
-                                    class="link-to-prism">src/modules/document-applications/document-applications.controller.ts:183</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="189"
+                                    class="link-to-prism">src/modules/document-applications/document-applications.controller.ts:189</a></div>
                         </td>
                     </tr>
 
@@ -908,8 +908,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="144"
-                                    class="link-to-prism">src/modules/document-applications/document-applications.controller.ts:144</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="150"
+                                    class="link-to-prism">src/modules/document-applications/document-applications.controller.ts:150</a></div>
                         </td>
                     </tr>
 
@@ -1012,8 +1012,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="168"
-                                    class="link-to-prism">src/modules/document-applications/document-applications.controller.ts:168</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="174"
+                                    class="link-to-prism">src/modules/document-applications/document-applications.controller.ts:174</a></div>
                         </td>
                     </tr>
 
@@ -1280,13 +1280,19 @@ export class DocumentApplicationsController {
     @Param(&#x27;id&#x27;) id: string,
     @UploadedFile() file: Express.Multer.File,
     @Body(&#x27;documentCategory&#x27;) documentCategory: string,
-    @User() user: AuthenticatedUser, 
+    @User() user: AuthenticatedUser,
   ) {
+    console.log(&#x27;Received document category:&#x27;, documentCategory); // Debug log
+    
+    if (!documentCategory) {
+      throw new BadRequestException(&#x27;Document category is required&#x27;);
+    }
+    
     return this.documentApplicationsService.uploadFile(
       id,
       file,
       documentCategory,
-      user.id, 
+      user.id,
     );
   }
 
