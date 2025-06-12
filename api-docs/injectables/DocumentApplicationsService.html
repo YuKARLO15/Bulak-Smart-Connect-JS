@@ -388,8 +388,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="49"
-                                    class="link-to-prism">src/modules/document-applications/document-applications.service.ts:49</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="51"
+                                    class="link-to-prism">src/modules/document-applications/document-applications.service.ts:51</a></div>
                         </td>
                     </tr>
 
@@ -457,8 +457,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="219"
-                                    class="link-to-prism">src/modules/document-applications/document-applications.service.ts:219</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="221"
+                                    class="link-to-prism">src/modules/document-applications/document-applications.service.ts:221</a></div>
                         </td>
                     </tr>
 
@@ -526,8 +526,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="62"
-                                    class="link-to-prism">src/modules/document-applications/document-applications.service.ts:62</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="64"
+                                    class="link-to-prism">src/modules/document-applications/document-applications.service.ts:64</a></div>
                         </td>
                     </tr>
 
@@ -607,8 +607,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="244"
-                                    class="link-to-prism">src/modules/document-applications/document-applications.service.ts:244</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="246"
+                                    class="link-to-prism">src/modules/document-applications/document-applications.service.ts:246</a></div>
                         </td>
                     </tr>
 
@@ -688,8 +688,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="192"
-                                    class="link-to-prism">src/modules/document-applications/document-applications.service.ts:192</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="194"
+                                    class="link-to-prism">src/modules/document-applications/document-applications.service.ts:194</a></div>
                         </td>
                     </tr>
 
@@ -757,8 +757,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="229"
-                                    class="link-to-prism">src/modules/document-applications/document-applications.service.ts:229</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="231"
+                                    class="link-to-prism">src/modules/document-applications/document-applications.service.ts:231</a></div>
                         </td>
                     </tr>
 
@@ -796,8 +796,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="159"
-                                    class="link-to-prism">src/modules/document-applications/document-applications.service.ts:159</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="161"
+                                    class="link-to-prism">src/modules/document-applications/document-applications.service.ts:161</a></div>
                         </td>
                     </tr>
 
@@ -877,8 +877,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="177"
-                                    class="link-to-prism">src/modules/document-applications/document-applications.service.ts:177</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="179"
+                                    class="link-to-prism">src/modules/document-applications/document-applications.service.ts:179</a></div>
                         </td>
                     </tr>
 
@@ -958,8 +958,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="84"
-                                    class="link-to-prism">src/modules/document-applications/document-applications.service.ts:84</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="86"
+                                    class="link-to-prism">src/modules/document-applications/document-applications.service.ts:86</a></div>
                         </td>
                     </tr>
 
@@ -1063,8 +1063,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="210"
-                                    class="link-to-prism">src/modules/document-applications/document-applications.service.ts:210</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="212"
+                                    class="link-to-prism">src/modules/document-applications/document-applications.service.ts:212</a></div>
                         </td>
                     </tr>
 
@@ -1168,8 +1168,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="111"
-                                    class="link-to-prism">src/modules/document-applications/document-applications.service.ts:111</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="113"
+                                    class="link-to-prism">src/modules/document-applications/document-applications.service.ts:113</a></div>
                         </td>
                     </tr>
 
@@ -1299,6 +1299,8 @@ export class DocumentApplicationsService {
     const application &#x3D; this.documentApplicationRepository.create({
       id: applicationId,
       userId,
+      status: ApplicationStatus.PENDING,
+      statusMessage: &#x27;Application submitted successfully&#x27;,
       ...createDto,
     });
 
