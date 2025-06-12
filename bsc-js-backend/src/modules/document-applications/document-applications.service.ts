@@ -40,6 +40,8 @@ export class DocumentApplicationsService {
     const application = this.documentApplicationRepository.create({
       id: applicationId,
       userId,
+      status: ApplicationStatus.PENDING,
+      statusMessage: 'Application submitted successfully',
       ...createDto,
     });
 
