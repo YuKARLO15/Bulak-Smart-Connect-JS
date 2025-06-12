@@ -173,20 +173,38 @@ export const documentApplicationService = {
     try {
       const formData = new FormData();
       formData.append('file', file);
-      formData.append('documentType', documentType);
+      
+      // Make sure documentCategory is properly set
+      if (documentType && documentType !== 'undefined') {
+        formData.append('documentCategory', documentType);
+      } else {
+        throw new Error('Document type/category is required');
+      }
+      
+      console.log('Uploading file with category:', documentType);
       
       const response = await apiClient.post(
-        `/document-applications/${applicationId}/files`, 
-        formData, 
+        `/document-applications/${applicationId}/files`,
+        formData,
         {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
+          timeout: 30000, // 30 second timeout for file uploads
         }
       );
+      
       return response.data;
     } catch (error) {
       console.error(`Error uploading file for application ${applicationId}:`, error);
+      
+      // Provide more specific error messages
+      if (error.response?.status === 500) {
+        throw new Error('Server error during file upload. Please try again.');
+      } else if (error.response?.status === 413) {
+        throw new Error('File too large. Please upload a smaller file.');
+      }
+      
       throw error;
     }
   },
