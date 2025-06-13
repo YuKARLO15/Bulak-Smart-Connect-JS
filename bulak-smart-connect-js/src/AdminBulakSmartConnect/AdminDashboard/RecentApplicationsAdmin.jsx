@@ -140,11 +140,13 @@ const RecentApplicationsAdmin = () => {
       let docCategory = null;
       
       // Determine the category based on application type
-      if (appType.includes('birth') || appType.includes('certificate')) {
-        docCategory = 'birthCertificate';
-      } else if (appType.includes('marriage') || appType.includes('wed')) {
+    
+     if (appType.includes('marriage') ) {
         docCategory = 'marriage';
       }
+      else if (appType.includes('birth') || appType.includes('certificate')) {
+        docCategory = 'birthCertificate';
+      } 
       
       // If we identified a category, update stats
       if (docCategory) {
