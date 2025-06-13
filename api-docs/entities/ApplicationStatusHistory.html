@@ -206,13 +206,13 @@
                         <b>Decorators : </b>
                         <br />
                         <code>
-                            @ManyToOne(undefined, app &#x3D;&gt; app.statusHistory, {onDelete: &#x27;CASCADE&#x27;})<br />@JoinColumn({name: &#x27;application_id&#x27;})<br />
+                            @ManyToOne(undefined, app &#x3D;&gt; app.statusHistory, {onDelete: &#x27;CASCADE&#x27;, nullable: false})<br />@JoinColumn({name: &#x27;application_id&#x27;})<br />
                         </code>
                     </td>
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="42" class="link-to-prism">src/modules/document-applications/entities/application-status-history.entity.ts:42</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="43" class="link-to-prism">src/modules/document-applications/entities/application-status-history.entity.ts:43</a></div>
                         </td>
                     </tr>
 
@@ -515,6 +515,7 @@ export class ApplicationStatusHistory {
   // Relations
   @ManyToOne(() &#x3D;&gt; DocumentApplication, (app) &#x3D;&gt; app.statusHistory, {
     onDelete: &#x27;CASCADE&#x27;,
+    nullable: false, 
   })
   @JoinColumn({ name: &#x27;application_id&#x27; })
   application: DocumentApplication;
