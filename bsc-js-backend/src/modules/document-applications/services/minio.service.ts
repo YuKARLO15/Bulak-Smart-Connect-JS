@@ -37,7 +37,7 @@ export class MinioService implements OnModuleInit {
 
     this.bucketName = this.configService.get<string>(
       'MINIO_BUCKET_NAME',
-      'document-applications',
+      'bulak-smart-connect',
     );
 
     this.logger.log(`MinIO configured with endpoint: ${endpoint}:${port}`);

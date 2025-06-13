@@ -625,7 +625,7 @@ const DelayedOutOfTownRegistration = () => {
             <Button
               variant="contained"
               color="primary"
-              disabled={!forceEnableSubmit || isLoading || isSubmitted}
+              disabled={!isMandatoryComplete() || isLoading || isSubmitted}
               onClick={handleSubmit}
               className="SubmitButtonOutOfTown"
             >

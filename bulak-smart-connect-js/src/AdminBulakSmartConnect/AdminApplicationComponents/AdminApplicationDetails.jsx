@@ -25,6 +25,7 @@ import './AdminApplicationDetails.css';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import FileUploadPreview from './AdminFilePreview';
+import AdminBirthAffidavitPreviewPage from './AdminAffidavitDetails';
 import AdminMarriageApplicationView from './AdminMarriageApplicationView';
 import AdminMarriageLicensePreview from './AdminMarriageLicensePreview';
 import NavBar from '../../NavigationComponents/NavSide';
@@ -46,6 +47,7 @@ const AdminApplicationDetails = () => {
   const [filterCategory, setFilterCategory] = useState('All'); 
   const [showDocumentsTab, setShowDocumentsTab] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+const [affidavit, setAffidavitTab] = useState(0);
   const currentUser = 'dennissegailfrancisco'; // Set the current user
   
   useEffect(() => {
@@ -198,12 +200,12 @@ const AdminApplicationDetails = () => {
       handleStorageUpdate();
     }
   };
-
-  const handleApplicationClick = application => {
-    setSelectedApplication(application);
-    setShowDocumentsTab(false);
-    navigate(`/ApplicationDetails/${application.id}`, { replace: true });
-  };
+const handleApplicationClick = application => {
+  setSelectedApplication(application);
+  setShowDocumentsTab(false);
+  setAffidavitTab(0); 
+  navigate(`/ApplicationDetails/${application.id}`, { replace: true });
+};
 
   const handleOpenStatusDialog = () => {
     setNewStatus(selectedApplication.status);
@@ -419,32 +421,66 @@ const AdminApplicationDetails = () => {
                 <Box className="ToggleBarAdminAppForm">
                   <Button
                     variant="contained"
-                    color={!showDocumentsTab ? 'primary' : 'inherit'}
-                    onClick={() => setShowDocumentsTab(false)}
-                    className={!showDocumentsTab ? 'ActiveToggleButtonAdminAppForm' : ''}
+                  color={!showDocumentsTab && affidavit === 0 ? 'primary' : 'inherit'}
+                    onClick={() => {
+                      setShowDocumentsTab(false);
+                      setAffidavitTab(0);
+                    }}
+
+                    className={!showDocumentsTab && affidavit === 0 ? 'ActiveToggleButtonAdminAppForm' : ''}
+
                   >
                     Application Form
                   </Button>
+   <Button
+    variant="contained"
+    color={affidavit === 1 ? 'primary' : 'inherit'}
+    onClick={() => {
+      setAffidavitTab(1);
+      setShowDocumentsTab(false);
+    }}
+    startIcon={<AttachFileIcon />}
+     className={affidavit === 1 ? 'ActiveToggleButtonAdminAppForm' : ''}
+  >
+    Affidavit
+  </Button>
+
                   <Button
                     variant="contained"
-                    color={showDocumentsTab ? 'primary' : 'inherit'}
+                         color={showDocumentsTab ? 'primary' : 'inherit'}
                     onClick={() => setShowDocumentsTab(true)}
                     startIcon={<AttachFileIcon />}
-                    className={showDocumentsTab ? 'ActiveToggleButtonAdminAppForm' : ''}
+                     className={showDocumentsTab && affidavit === 0 ? 'ActiveToggleButtonAdminAppForm' : ''}
+
                   >
                     Uploaded Documents
                   </Button>
+
                 </Box>
 
-                {!showDocumentsTab ? (
-                  <>
-                    {getApplicationType(selectedApplication) === 'Marriage Certificate' ? (
-                      <AdminMarriageApplicationView applicationData={selectedApplication} />
-                    ) : getApplicationType(selectedApplication) === 'Marriage License' ? (
-                      <AdminMarriageLicensePreview applicationData={selectedApplication} />
-                    ) : isCopyOfBirthCertificate(selectedApplication) ? (
-                      <AdminCopyBirthPreview applicationData={selectedApplication} />
-                    ) : getApplicationType(selectedApplication) === 'Birth Certificate' ? (
+                
+
+        {!showDocumentsTab ? (
+  <>
+    {affidavit === 1 ? (
+
+      <AdminBirthAffidavitPreviewPage 
+        applicationId={selectedApplication.id}
+        currentUser={{
+          login: 'dennissegailfrancisco',
+          role: 'super admin'
+        }}
+      />
+    ) : (
+    
+      <>
+        {getApplicationType(selectedApplication) === 'Marriage Certificate' ? (
+          <AdminMarriageApplicationView applicationData={selectedApplication} />
+        ) : getApplicationType(selectedApplication) === 'Marriage License' ? (
+          <AdminMarriageLicensePreview applicationData={selectedApplication} />
+        ) : isCopyOfBirthCertificate(selectedApplication) ? (
+          <AdminCopyBirthPreview applicationData={selectedApplication} />
+        ) : getApplicationType(selectedApplication) === 'Birth Certificate' ? (
                       <>
                         <Box className="certificateHeaderContainer">
                    
@@ -1427,8 +1463,10 @@ const AdminApplicationDetails = () => {
                         </Typography>
                       </Box>
                     )}
-                  </>
-                ) : (
+      </>
+    )}
+  </>
+) : (
                   <Box className="DocumentPreviewContainerAdminAppForm">
                     <Box className="DocumentPreviewHeaderAdminAppForm">
                       <Typography variant="h5" className="SectionTitleAdminAppForm">
@@ -1449,7 +1487,10 @@ const AdminApplicationDetails = () => {
                     <Divider style={{ margin: '10px 0 20px' }} />
 
                     <FileUploadPreview
-                      formData={selectedApplication.formData || {}}
+                      formData={{
+                        ...(selectedApplication.formData || {}),
+                        id: selectedApplication.id
+                      }}  
                       applicationType={getApplicationType(selectedApplication)}
                       applicationSubtype={getApplicationSubtype(selectedApplication)}
                     />

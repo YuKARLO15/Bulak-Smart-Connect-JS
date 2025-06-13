@@ -651,7 +651,7 @@ const Above18Registration = () => {
               <Button
                 variant="contained"
                 color="primary"
-                disabled={!(forceEnableSubmit) || isLoading || isSubmitted}
+                disabled={!isMandatoryComplete() || isLoading || isSubmitted}
                 onClick={handleSubmit}
                 className="SubmitButtonDelayedAbove18"
               >

@@ -15,7 +15,9 @@ import {
   TableRow,
   TableCell,
   TableBody,
-  Snackbar
+  Snackbar,
+  Menu,
+  MenuItem
 } from '@mui/material';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import './ApplicationAdminDashboard.css';
@@ -24,12 +26,12 @@ import NavBar from '../../NavigationComponents/NavSide';
 import ApplicationPieChart from './ApplicationPieChart';
 import { documentApplicationService } from '../../services/documentApplicationService';
 
-const STATUS_COLORS = {
-  Approved: '#4caf50', // green
-  Pending: '#ff9800',  // orange
-  Denied: '#f44336',   // red
-  Default: '#90a4ae'   // grey
-};
+const FILTER_OPTIONS = [
+  { label: 'All', value: 'All' },
+  { label: 'Pending', value: 'Pending' },
+  { label: 'Approved', value: 'Approved' },
+  { label: 'Denied', value: 'Denied' }
+];
 
 const AdminApplicationDashboard = () => {
   const [filter, setFilter] = useState('All');
@@ -37,133 +39,78 @@ const AdminApplicationDashboard = () => {
   const [filteredApplications, setFilteredApplications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const navigate = useNavigate();
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [dataSource, setDataSource] = useState('loading');
   const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'info' });
-  const [dataSource, setDataSource] = useState('loading'); // 'api', 'localStorage', or 'loading'
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const openFilterMenu = Boolean(anchorEl);
+  const navigate = useNavigate();
 
-  // Show snackbar notification
+  // Snackbar functions
   const showNotification = (message, severity = 'info') => {
-    setSnackbar({
-      open: true,
-      message,
-      severity
-    });
+    setSnackbar({ open: true, message, severity });
   };
+  const handleCloseSnackbar = () => setSnackbar(prev => ({ ...prev, open: false }));
 
-  // Close snackbar
-  const handleCloseSnackbar = () => {
-    setSnackbar(prev => ({ ...prev, open: false }));
-  };
-
-  // Convert data from any format to our standard format
+  // Data standardization
   const standardizeApplicationData = (apps) => {
-    if (!Array.isArray(apps)) {
-      console.error('Not an array:', apps);
-      return [];
-    }
-    
-    return apps.map(app => {
-      // Handle both API and localStorage data formats
-      return {
-        id: app.id || app._id || 'unknown-id',
-        type: app.applicationType || app.type || 'Document Application',
-        applicationType: app.applicationSubtype || app.applicationType || app.type || 'Unknown Type',
-        date: formatDate(app.createdAt || app.date || new Date()),
-        status: app.status || 'Pending',
-        message: app.statusMessage || app.message || `Application for ${app.applicantName || 'Unknown'}`,
-        applicantName: app.applicantName || `${app.firstName || ''} ${app.lastName || ''}`.trim() || 'Unknown',
-        // Store the original data
-        originalData: app
-      };
-    });
+    if (!Array.isArray(apps)) return [];
+    return apps.map(app => ({
+      id: app.id || app._id || 'unknown-id',
+      type: app.applicationType || app.type || 'Document Application',
+      applicationType: app.applicationSubtype || app.applicationType || app.type || 'Unknown Type',
+      date: formatDate(app.createdAt || app.date || new Date()),
+      status: app.status || 'Pending',
+      message: app.statusMessage || app.message || `Application for ${app.applicantName || 'Unknown'}`,
+      applicantName: app.applicantName || `${app.firstName || ''} ${app.lastName || ''}`.trim() || 'Unknown',
+      originalData: app
+    }));
   };
 
-  // Format date consistently
+  // Date formatting
   const formatDate = (dateInput) => {
     if (!dateInput) return 'N/A';
-    
     try {
       const date = new Date(dateInput);
-      return date.toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric'
-      });
-    } catch (err) {
-      return String(dateInput); // Return as string if parsing fails
+      return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+    } catch {
+      return String(dateInput);
     }
   };
 
-  // Fetch applications from backend or localStorage
+  // Fetch applications
   const fetchApplications = async () => {
+    setLoading(true);
     try {
-      setLoading(true);
-      console.log("Fetching applications from backend...");
-      
-      try {
-        // Try to get applications from service (which has its own fallbacks)
-        const response = await documentApplicationService.getAllApplications();
-        
-        // Make sure we have an array to work with
-        if (Array.isArray(response)) {
-          console.log("Applications fetched:", response);
-          
-          // Standardize the data format
-          const standardizedData = standardizeApplicationData(response);
-          setApplications(standardizedData);
-          setDataSource('api');
-          return standardizedData;
-        } else {
-          throw new Error('Invalid response format: Not an array');
-        }
-      } catch (apiError) {
-        console.error("API error:", apiError);
-        showNotification('Cannot load from API. Using local data.', 'warning');
-        
-        // Direct fallback to localStorage
-        const localData = JSON.parse(localStorage.getItem('applications') || '[]');
-        const standardizedData = standardizeApplicationData(localData);
+      const response = await documentApplicationService.getAllApplications();
+      if (Array.isArray(response)) {
+        const standardizedData = standardizeApplicationData(response);
         setApplications(standardizedData);
-        setDataSource('localStorage');
+        setDataSource('api');
         return standardizedData;
+      } else {
+        throw new Error('Invalid response format: Not an array');
       }
-    } catch (err) {
-      console.error("Error fetching applications:", err);
-      setError('Error loading applications: ' + err.message);
-      
-      // Final fallback - set empty array if all else fails
-      setApplications([]);
+    } catch (apiError) {
+      showNotification('Cannot load from API. Using local data.', 'warning');
+      const localData = JSON.parse(localStorage.getItem('applications') || '[]');
+      const standardizedData = standardizeApplicationData(localData);
+      setApplications(standardizedData);
       setDataSource('localStorage');
-      return [];
+      return standardizedData;
     } finally {
       setLoading(false);
     }
   };
 
+  // Initial fetch and polling
   useEffect(() => {
     fetchApplications();
-    
-    // Set up polling to refresh data at intervals - use a longer interval
-    const intervalId = setInterval(() => {
-      fetchApplications();
-    }, 120000); // refresh every 2 minutes to reduce load
-    
+    const intervalId = setInterval(fetchApplications, 120000);
     return () => clearInterval(intervalId);
   }, []);
 
-  // Calculate stats based on available data
-  const pendingCount = applications.filter(app => 
-    app.status?.toLowerCase() === 'pending' || app.status?.toLowerCase() === 'submitted').length;
-    
-  const approvedCount = applications.filter(app => 
-    app.status?.toLowerCase() === 'approved').length;
-    
-  const deniedCount = applications.filter(app => 
-    app.status?.toLowerCase() === 'rejected' || 
-    app.status?.toLowerCase() === 'declined' ||
-    app.status?.toLowerCase() === 'denied').length;
-
+  // Filtering logic
   useEffect(() => {
     try {
       if (filter === 'All') {
@@ -175,15 +122,13 @@ const AdminApplicationDashboard = () => {
         );
       } else if (filter === 'Approved') {
         setFilteredApplications(
-          applications.filter(app => 
-            app.status?.toLowerCase() === 'approved')
+          applications.filter(app => app.status?.toLowerCase() === 'approved')
         );
       } else if (filter === 'Denied') {
         setFilteredApplications(
-          applications.filter(app => 
-            app.status?.toLowerCase() === 'rejected' || 
-            app.status?.toLowerCase() === 'declined' || 
-            app.status?.toLowerCase() === 'denied')
+          applications.filter(app =>
+            ['rejected', 'declined', 'denied'].includes(app.status?.toLowerCase())
+          )
         );
       }
     } catch (err) {
@@ -191,25 +136,7 @@ const AdminApplicationDashboard = () => {
     }
   }, [filter, applications]);
 
-  const handleFilterClick = status => {
-    setFilter(status);
-  };
-
-  const handleReviewApplication = async application => {
-    console.log('Reviewing application:', application.id);
-
-    try {
-      // Store current application ID in localStorage for the details page
-      localStorage.setItem('currentApplicationId', application.id);
-      
-      // Navigate to the application details page
-      navigate('/ApplicationDetails/' + application.id);
-    } catch (err) {
-      console.error('Error preparing for review:', err);
-      showNotification('Error opening application details', 'error');
-    }
-  };
-
+  // Table status pill class
   const getStatusClassName = status => {
     if (!status) return '';
     status = status.toLowerCase();
@@ -219,13 +146,25 @@ const AdminApplicationDashboard = () => {
     return '';
   };
 
-  // Get color by status
-  const getStatusColor = status => {
-    const className = getStatusClassName(status);
-    return STATUS_COLORS[className] || STATUS_COLORS.Default;
+  // Review application
+  const handleReviewApplication = (application) => {
+    try {
+      localStorage.setItem('currentApplicationId', application.id);
+      navigate('/ApplicationDetails/' + application.id);
+    } catch (err) {
+      showNotification('Error opening application details', 'error');
+    }
   };
 
-  // Refresh button handler
+  // Dropdown logic
+  const handleFilterIconClick = (e) => setAnchorEl(e.currentTarget);
+  const handleFilterMenuClose = () => setAnchorEl(null);
+  const handleDropdownSelect = (status) => {
+    setFilter(status);
+    setAnchorEl(null);
+  };
+
+  // Refresh
   const handleRefresh = () => {
     fetchApplications();
     showNotification('Refreshing application data...', 'info');
@@ -239,7 +178,6 @@ const AdminApplicationDashboard = () => {
         <Typography variant="h5" className="ApplicationDashTitle">
           Applications
         </Typography>
-        
         <Button 
           variant="outlined" 
           onClick={handleRefresh}
@@ -266,109 +204,74 @@ const AdminApplicationDashboard = () => {
         </Alert>
       )}
 
-      <Box className="ApplicationDashContent">
-        <Card className="ApplicationDashOverview">
-          <CardContent>
-            <Typography variant="h6" className="ApplicationDashSectionTitle" gutterBottom>
-              Application Overview
-            </Typography>
+     
 
-           <Box className="ApplicationDashStats">
-  <Button
-    fullWidth
-    className={`ApplicationDashPendingCard ${filter === 'Pending' ? 'active' : ''}`}
-    onClick={() => handleFilterClick('Pending')}
-  >
-    <Box className="ApplicationDashIcon Pending">
-      <span className="ApplicationDashCircleFilled Pending" />
-    </Box>
-    <Typography className="ApplicationDashLabel">APPLICATION PENDING</Typography>
-    <Typography className="ApplicationDashCount Pending">{pendingCount}</Typography>
-  </Button>
-
-  <Button
-    fullWidth
-    className={`ApplicationDashApprovedCard ${filter === 'Approved' ? 'active' : ''}`}
-    onClick={() => handleFilterClick('Approved')}
-  >
-    <Box className="ApplicationDashIcon Approved">
-      <span className="ApplicationDashCircleFilled Approved" />
-    </Box>
-    <Typography className="ApplicationDashLabel">APPLICATION APPROVED</Typography>
-    <Typography className="ApplicationDashCount Approved">{approvedCount}</Typography>
-  </Button>
-
-  <Button
-    fullWidth
-    className={`ApplicationDashDeniedCard ${filter === 'Denied' ? 'active' : ''}`}
-    onClick={() => handleFilterClick('Denied')}
-  >
-    <Box className="ApplicationDashIcon Denied">
-      <span className="ApplicationDashCircleFilled Denied" />
-    </Box>
-    <Typography className="ApplicationDashLabel">APPLICATION DENIED</Typography>
-    <Typography className="ApplicationDashCount Denied">{deniedCount}</Typography>
-  </Button>
-</Box>
-          </CardContent>
-        </Card>
-
-        {/* Pie chart component */}
-        <Card className="ApplicationDashPieChart">
-          <CardContent>
-            <ApplicationPieChart applications={applications} />
-          </CardContent>
-        </Card>
-      </Box>
-
-      <Box className="ApplicationDashTableSection" sx={{ maxWidth: '80vw', overflowX: 'hidden' }}>
+      <Box className="ApplicationDashTableSection">
         <Box className="ApplicationDashTableHeader">
           <Typography variant="h6" className="ApplicationDashTableTitle">
             Submitted Applications
           </Typography>
-        
-          <IconButton className="ApplicationDashFilterButton" size="small">
+          <IconButton
+            className="ApplicationDashFilterButton"
+            size="small"
+            onClick={handleFilterIconClick}
+          >
             <FilterListIcon fontSize="small" />
           </IconButton>
-
+          <Menu
+            anchorEl={anchorEl}
+            open={openFilterMenu}
+            onClose={handleFilterMenuClose}
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'right',
+            }}
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'right',
+            }}
+            className="FilterDropdownMenu"
+          >
+            {FILTER_OPTIONS.map(option => (
+              <MenuItem
+                key={option.value}
+                selected={filter === option.value}
+                onClick={() => handleDropdownSelect(option.value)}
+              >
+                {option.label}
+              </MenuItem>
+            ))}
+          </Menu>
         </Box>
 
-        <Box className="ApplicationDashTableContent" sx={{ maxWidth: '80vw', overflowX: 'hidden' }}>
+        <Box className="ApplicationDashTableContent">
           {loading && applications.length === 0 ? (
             <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}>
               <CircularProgress />
             </Box>
           ) : filteredApplications.length === 0 ? (
             <Box className="ApplicationDashNoData">
-              {applications.length === 0 ? 
-                "No applications found. Try refreshing or check your connection." : 
-                "No applications found for the selected status."}
+              <img
+                src="https://cdn-icons-png.flaticon.com/512/4076/4076549.png"
+                alt="No data"
+                style={{ height: 80, opacity: 0.4, marginBottom: 16 }}
+              /><br />
+              <span>
+                {applications.length === 0 ? 
+                  "No applications found. Try refreshing or check your connection." : 
+                  "No applications found for the selected status."}
+              </span>
             </Box>
           ) : (
-            <TableContainer
-              component={Paper}
-              elevation={0}
-              sx={{
-                width: '100%',
-                maxWidth: '80vw',
-                overflowX: 'hidden',
-              }}
-            >
-              <Table
-                stickyHeader
-                sx={{
-                  width: '100%',
-                  tableLayout: 'fixed',
-                  maxWidth: '100%',
-                }}
-              >
+            <TableContainer component={Paper} elevation={0} sx={{ width: '100%', overflowX: 'hidden', background: 'transparent' }}>
+              <Table stickyHeader sx={{ width: '100%', tableLayout: 'fixed', maxWidth: '100%' }}>
                 <TableHead>
                   <TableRow>
-                    <TableCell>Type</TableCell>
-                    <TableCell>Submitted Date</TableCell>
-                    <TableCell>Status</TableCell>
-                    <TableCell>ID</TableCell>
-                    <TableCell align="right">Action</TableCell>
+                    <TableCell className='ApplicationDashRowTitle' >Type</TableCell>
+                    <TableCell className='ApplicationDashRowTitle' >Submitted Date</TableCell>
+                    <TableCell className='ApplicationDashRowTitle' >Status</TableCell>
+                    <TableCell className='ApplicationDashRowTitle' >ID</TableCell>
+                    <TableCell className='ApplicationDashRowTitle'  align="right">Action</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>

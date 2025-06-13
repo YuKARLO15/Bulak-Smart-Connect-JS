@@ -185,7 +185,7 @@ function App() {
           <Route path="/PrivacyPolicy" element={<PrivacyPolicy />} />
         </Route>
       </Routes>
-      <InstallPrompt />
+    
       <OfflineIndicator />
     </AuthProvider>
   );

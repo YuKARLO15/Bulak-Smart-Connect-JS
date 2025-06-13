@@ -75,13 +75,19 @@ export class DocumentApplicationsController {
     @Param('id') id: string,
     @UploadedFile() file: Express.Multer.File,
     @Body('documentCategory') documentCategory: string,
-    @User() user: AuthenticatedUser, 
+    @User() user: AuthenticatedUser,
   ) {
+    console.log('Received document category:', documentCategory); // Debug log
+    
+    if (!documentCategory) {
+      throw new BadRequestException('Document category is required');
+    }
+    
     return this.documentApplicationsService.uploadFile(
       id,
       file,
       documentCategory,
-      user.id, 
+      user.id,
     );
   }
 
@@ -95,6 +101,23 @@ export class DocumentApplicationsController {
       ? undefined
       : user?.id; 
     return this.documentApplicationsService.findAll(userId);
+  }
+
+  @Get(':id/files')
+  @ApiOperation({ summary: 'Get application files' })
+  @ApiResponse({ status: 200, description: 'Files retrieved successfully' })
+  @ApiResponse({ status: 404, description: 'Application not found' })
+  async getApplicationFiles(
+    @Param('id') id: string,
+    @User() user: AuthenticatedUser,
+  ) {
+    const userId = user.roles.some(role => role.name === 'admin') 
+      ? undefined  // Admin can see any application
+      : user.id;   // Regular users can only see their own
+    
+    console.log(`Getting files for application ${id}, user: ${user.email}, isAdmin: ${!userId}`);
+    
+    return await this.documentApplicationsService.getApplicationFiles(id, userId);
   }
 
   @Get(':id')

@@ -40,6 +40,8 @@ export class DocumentApplicationsService {
     const application = this.documentApplicationRepository.create({
       id: applicationId,
       userId,
+      status: ApplicationStatus.PENDING,
+      statusMessage: 'Application submitted successfully',
       ...createDto,
     });
 
@@ -239,5 +241,79 @@ export class DocumentApplicationsService {
       .getRawMany();
 
     return stats as Array<{ type: string; status: string; count: string }>;
+  }
+
+  async getApplicationFiles(applicationId: string, userId?: number) {
+    try {
+      console.log(
+        `Service: Getting files for application ${applicationId}, userId: ${userId}`,
+      );
+
+      // First verify the application exists and user has access
+      const application = await this.documentApplicationRepository.findOne({
+        where: {
+          id: applicationId,
+          ...(userId && { userId }), // Only filter by userId if provided (admin won't have this filter)
+        },
+        relations: {
+          files: true, // Include related files
+        },
+      });
+
+      if (!application) {
+        throw new NotFoundException(`Application ${applicationId} not found`);
+      }
+
+      console.log(
+        `Service: Found application with ${application.files?.length || 0} files`,
+      );
+
+      if (!application.files || application.files.length === 0) {
+        console.log('Service: No files found for this application');
+        return [];
+      }
+
+      // Generate presigned URLs for each file
+      const filesWithUrls = await Promise.all(
+        application.files.map(async (file) => {
+          try {
+            const downloadUrl = await this.minioService.getPresignedUrl(
+              file.minioObjectName,
+            );
+            console.log(`Service: Generated URL for file ${file.fileName}`);
+            return {
+              id: file.id,
+              fileName: file.fileName,
+              fileType: file.fileType,
+              fileSize: file.fileSize,
+              documentCategory: file.documentCategory,
+              minioObjectName: file.minioObjectName,
+              uploadedAt: file.uploadedAt,
+              url: downloadUrl,
+              downloadUrl: downloadUrl,
+            };
+          } catch (error) {
+            console.warn(`Service: Failed to generate URL for file ${file.id}:`, error);
+            return {
+              id: file.id,
+              fileName: file.fileName,
+              fileType: file.fileType,
+              fileSize: file.fileSize,
+              documentCategory: file.documentCategory,
+              minioObjectName: file.minioObjectName,
+              uploadedAt: file.uploadedAt,
+              url: null,
+              downloadUrl: null,
+            };
+          }
+        }),
+      );
+
+      console.log(`Service: Returning ${filesWithUrls.length} files with URLs`);
+      return filesWithUrls;
+    } catch (error) {
+      console.error('Service: Error getting application files:', error);
+      throw error;
+    }
   }
 }

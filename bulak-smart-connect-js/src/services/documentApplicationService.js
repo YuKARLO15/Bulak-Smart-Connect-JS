@@ -114,8 +114,8 @@ export const documentApplicationService = {
   // Update an application
   updateApplication: async (applicationId, updateData) => {
     try {
-      const response = await apiClient.put(`/document-applications/${applicationId}`, updateData);
-
+      const response = await apiClient.patch(`/document-applications/${applicationId}`, updateData);
+      
       // Also update localStorage
       try {
         const localApps = JSON.parse(localStorage.getItem('applications') || '[]');
@@ -214,8 +214,16 @@ export const documentApplicationService = {
     try {
       const formData = new FormData();
       formData.append('file', file);
-      formData.append('documentType', documentType);
-
+      
+      // Make sure documentCategory is properly set
+      if (documentType && documentType !== 'undefined') {
+        formData.append('documentCategory', documentType);
+      } else {
+        throw new Error('Document type/category is required');
+      }
+      
+      console.log('Uploading file with category:', documentType);
+      
       const response = await apiClient.post(
         `/document-applications/${applicationId}/files`,
         formData,
@@ -223,11 +231,21 @@ export const documentApplicationService = {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
+          timeout: 30000, // 30 second timeout for file uploads
         }
       );
+      
       return response.data;
     } catch (error) {
       console.error(`Error uploading file for application ${applicationId}:`, error);
+      
+      // Provide more specific error messages
+      if (error.response?.status === 500) {
+        throw new Error('Server error during file upload. Please try again.');
+      } else if (error.response?.status === 413) {
+        throw new Error('File too large. Please upload a smaller file.');
+      }
+      
       throw error;
     }
   },
@@ -235,10 +253,18 @@ export const documentApplicationService = {
   // Get application files
   getApplicationFiles: async applicationId => {
     try {
+      console.log(`Frontend Service: Fetching files for application ${applicationId}...`);
       const response = await apiClient.get(`/document-applications/${applicationId}/files`);
+      console.log('Frontend Service: Files response:', response.data);
       return response.data;
     } catch (error) {
-      console.error(`Error getting files for application ${applicationId}:`, error);
+      console.error(`Frontend Service: Error getting files for application ${applicationId}:`, error);
+      
+      if (error.response?.status === 404) {
+        console.log('Frontend Service: Application or files not found, returning empty array');
+        return [];
+      }
+      
       throw error;
     }
   },
@@ -246,7 +272,8 @@ export const documentApplicationService = {
   // Get user's applications (non-admin)
   getUserApplications: async () => {
     try {
-      const response = await apiClient.get('/document-applications/user');
+      // Use the main endpoint - it automatically filters by user if not admin
+      const response = await apiClient.get('/document-applications');
       return response.data;
     } catch (error) {
       console.error('Error getting user applications:', error);
@@ -254,7 +281,33 @@ export const documentApplicationService = {
       // Fallback to localStorage
       return JSON.parse(localStorage.getItem('applications') || '[]');
     }
-  },
+  }
+};
+
+// Helper function to extract files from formData
+const extractFilesFromFormData = (formData) => {
+  const files = [];
+  
+  // Check uploadedFiles object
+  if (formData.uploadedFiles && typeof formData.uploadedFiles === 'object') {
+    Object.entries(formData.uploadedFiles).forEach(([docName, fileData]) => {
+      if (fileData) {
+        files.push({
+          name: docName,
+          documentType: docName,
+          url: typeof fileData === 'string' ? fileData : fileData.url || fileData.data,
+          contentType: typeof fileData === 'object' ? fileData.contentType : 'application/pdf'
+        });
+      }
+    });
+  }
+  
+  // Check uploads array
+  if (formData.uploads && Array.isArray(formData.uploads)) {
+    files.push(...formData.uploads);
+  }
+  
+  return files;
 };
 
 export default documentApplicationService;

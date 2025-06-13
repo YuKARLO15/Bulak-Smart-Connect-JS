@@ -18,10 +18,17 @@ const FileUploadPreview = ({ formData, applicationType, applicationSubtype }) =>
   const currentUser = "dennissegailfrancisco"; // Current user's login
   
   useEffect(() => {
+    console.log('AdminFilePreview: useEffect triggered');
+    console.log('AdminFilePreview: formData:', formData);
+    console.log('AdminFilePreview: formData.id:', formData?.id);
+    console.log('AdminFilePreview: applicationType:', applicationType);
+    
     // Fetch files when component mounts or when formData changes
     if (formData && formData.id) {
+      console.log('AdminFilePreview: Calling fetchApplicationFiles with ID:', formData.id);
       fetchApplicationFiles(formData.id);
     } else {
+      console.log('AdminFilePreview: No formData.id, calling extractFilesFromFormData');
       // Fallback to extracting files from formData if no ID
       extractFilesFromFormData();
     }
@@ -31,19 +38,70 @@ const FileUploadPreview = ({ formData, applicationType, applicationSubtype }) =>
   const fetchApplicationFiles = async (applicationId) => {
     setLoading(true);
     try {
-      // Use the getApplicationFiles function from documentApplicationService
+      console.log(`AdminFilePreview: Fetching files for application ID: ${applicationId}`);
+      
+      // Use the service to get files
       const files = await documentApplicationService.getApplicationFiles(applicationId);
       
+      console.log('AdminFilePreview: Retrieved files from backend:', files);
+      console.log('AdminFilePreview: Number of files:', files?.length || 0);
+      console.log('AdminFilePreview: Files array check:', Array.isArray(files));
+      
       if (Array.isArray(files) && files.length > 0) {
-        setUploadedFiles(files);
+        console.log('AdminFilePreview: Processing files...');
+        // Transform the files to match expected format
+        const transformedFiles = files.map((file, index) => {
+          console.log(`AdminFilePreview: Processing file ${index + 1}:`, file);
+          const transformed = {
+            id: file.id,
+            name: file.fileName || file.name,
+            documentType: file.documentCategory || file.documentType,
+            url: file.url || file.downloadUrl,
+            contentType: file.fileType || getContentTypeFromName(file.fileName || file.name),
+            size: file.fileSize || file.size,
+            uploadedAt: file.uploadedAt,
+            uploaded: true,
+            isPlaceholder: false,
+            placeholder: false
+          };
+          console.log(`AdminFilePreview: Transformed file ${index + 1}:`, transformed);
+          return transformed;
+        });
+        
+        console.log('AdminFilePreview: Setting transformed files:', transformedFiles);
+        setUploadedFiles(transformedFiles);
       } else {
-        // If no files returned, fall back to extracting from formData
-        extractFilesFromFormData();
+        console.log('AdminFilePreview: No files returned from API, showing placeholders...');
+        const requiredDocs = getRequiredDocuments();
+        const placeholders = requiredDocs.map(doc => ({
+          name: doc,
+          documentType: doc,
+          placeholder: true,
+          uploaded: false,
+          url: null
+        }));
+        console.log('AdminFilePreview: Setting placeholders:', placeholders);
+        setUploadedFiles(placeholders);
       }
     } catch (error) {
-      console.error('Error fetching application files:', error);
-      // Fall back to extracting from formData on error
-      extractFilesFromFormData();
+      console.error('AdminFilePreview: Error fetching application files:', error);
+      console.error('AdminFilePreview: Error details:', {
+        message: error.message,
+        status: error.response?.status,
+        data: error.response?.data
+      });
+      
+      // Show placeholders on error
+      const requiredDocs = getRequiredDocuments();
+      const placeholders = requiredDocs.map(doc => ({
+        name: doc,
+        documentType: doc,
+        placeholder: true,
+        uploaded: false,
+        url: null
+      }));
+      console.log('AdminFilePreview: Setting error placeholders:', placeholders);
+      setUploadedFiles(placeholders);
     } finally {
       setLoading(false);
     }
