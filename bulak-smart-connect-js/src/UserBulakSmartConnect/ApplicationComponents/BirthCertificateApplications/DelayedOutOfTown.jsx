@@ -12,7 +12,7 @@ const requiredDocuments = [
   'Self-Affidavit of Out of Town Registration attested by 2 witnesses with ID',
   'Barangay Certification issued by the Punong Barangay as proof of residency and with statement on facts of birth',
   'National ID (if not registered, register first)',
-  'Unedited 2x2 front-facing photo (2 pcs) taken within 3 months, white background',
+  'Unedited 2x2 front-facing photo taken within 3 months, white background',
   'Transmittal through the PSO',
 ];
 
