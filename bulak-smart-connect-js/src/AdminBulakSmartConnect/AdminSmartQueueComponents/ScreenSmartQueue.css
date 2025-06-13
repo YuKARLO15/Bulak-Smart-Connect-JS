@@ -1,0 +1,132 @@
+/* Layout container */
+.screen-queue-container {
+  height: 100vh;
+  width: 100vw;
+  background: #fff;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* center vertically */
+  align-items: center;     /* center horizontally */
+  padding: 40px 20px;
+  box-sizing: border-box;
+}
+
+/* Header section */
+.screen-queue-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 40px;
+  width: 100%;
+  max-width: 600px;
+  margin-bottom: 40px;
+  background: #1C4D5A;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 24px 32px;
+}
+
+.screen-queue-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.queue-label {
+  color: #fff;
+  font-size: 1.4rem;
+  font-weight: 600;
+  text-align: center;
+  flex: 1;
+}
+
+/* Main values (current and next) */
+.screen-queue-main {
+  display: flex;
+  justify-content: space-between;
+  gap: 40px;
+  width: 100vw;
+  max-width: 600px;
+  margin-bottom: 50px;
+}
+
+.queue-value {
+  background: #f5f9fa;
+  color: #1C4D5A;
+  font-size: 3.5rem;
+  font-weight: 800;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(28, 77, 90, 0.1);
+  padding: 30px 40px;
+  text-align: center;
+  flex: 1;
+  transition: transform 0.2s;
+}
+
+.queue-value:hover {
+  transform: translateY(-5px);
+}
+
+/* In queue section */
+.in-queue-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1C4D5A;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.in-queue-list {
+display: flex;
+  flex-direction: row; /* explicitly set */
+  gap: 20px;
+  flex-wrap: wrap; /* keeps it on the same row unless space runs out */
+  justify-content: center;
+  width: 100%;
+  max-width: 600px;
+}
+
+.in-queue-item {
+  flex: 0 0 auto; /* prevent items from stretching */
+  background: #fcf8f6;
+  color: #1C4D5A;
+  font-size: 1.3rem;
+  font-weight: 600;
+  padding: 16px 260px;
+  border-radius: 12px;
+  border: 1px solid #1C4D5A;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  min-width: 100px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.in-queue-item:hover {
+  background: #1C4D5A;
+  color: white;
+  transform: scale(1.05);
+}
+
+/* Responsive styles */
+@media (max-width: 600px) {
+  .screen-queue-header,
+  .screen-queue-main {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .queue-value {
+    font-size: 2.5rem;
+    padding: 24px;
+  }
+
+  .queue-label {
+    font-size: 1.2rem;
+  }
+
+  .in-queue-item {
+    font-size: 1.1rem;
+    padding: 12px 18px;
+  }
+}
