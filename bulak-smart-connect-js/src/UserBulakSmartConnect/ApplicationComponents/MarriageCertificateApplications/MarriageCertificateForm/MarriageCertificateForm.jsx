@@ -387,9 +387,31 @@ const MarriageCertificateForm = () => {
 
       // Navigate based on application type
       if (selectedOption === 'Marriage License') {
-        navigate('/MarriageLicenseApplication');
+        // Store the application data for Marriage License
+        localStorage.setItem('marriageFormData', JSON.stringify(finalApplicationData.formData));
+        localStorage.setItem('currentApplicationId', applicationId);
+        
+        // Navigate with proper state - ADD THIS
+        navigate('/MarriageLicenseApplication', {
+          state: {
+            applicationId: applicationId,
+            formData: finalApplicationData.formData,
+            applicationType: 'Marriage License'
+          }
+        });
       } else {
-        navigate('/MarriageCertificateApplication');
+        // Store the application data for Marriage Certificate
+        localStorage.setItem('marriageFormData', JSON.stringify(finalApplicationData.formData));
+        localStorage.setItem('currentApplicationId', applicationId);
+        
+        // Navigate with proper state
+        navigate('/MarriageCertificateApplication', {
+          state: {
+            applicationId: applicationId,
+            formData: finalApplicationData.formData,
+            applicationType: 'Marriage Certificate'
+          }
+        });
       }
     } catch (error) {
       console.error('Error submitting form:', error);

@@ -147,6 +147,45 @@ export const documentApplicationService = {
     }
   },
 
+  // Update application status (new method)
+  updateApplicationStatus: async (applicationId, statusData) => {
+    try {
+      // Use the regular PATCH endpoint instead of the admin-only /status endpoint
+      const response = await apiClient.patch(`/document-applications/${applicationId}`, statusData);
+
+      // Also update localStorage
+      try {
+        const localApps = JSON.parse(localStorage.getItem('applications') || '[]');
+        const index = localApps.findIndex(a => a.id === applicationId);
+        if (index >= 0) {
+          localApps[index] = { ...localApps[index], ...statusData };
+          localStorage.setItem('applications', JSON.stringify(localApps));
+        }
+      } catch (localErr) {
+        console.warn('Failed to update localStorage:', localErr);
+      }
+
+      return response.data;
+    } catch (error) {
+      console.error(`Error updating application status ${applicationId}:`, error);
+
+      // Update localStorage even if API fails
+      try {
+        const localApps = JSON.parse(localStorage.getItem('applications') || '[]');
+        const index = localApps.findIndex(a => a.id === applicationId);
+        if (index >= 0) {
+          localApps[index] = { ...localApps[index], ...statusData };
+          localStorage.setItem('applications', JSON.stringify(localApps));
+          return localApps[index];
+        }
+      } catch (localErr) {
+        console.warn('Failed to update localStorage:', localErr);
+      }
+
+      throw error;
+    }
+  },
+
   // Delete an application
   deleteApplication: async (applicationId) => {
     try {
