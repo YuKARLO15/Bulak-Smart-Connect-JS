@@ -112,7 +112,7 @@ export const documentApplicationService = {
   // Update an application
   updateApplication: async (applicationId, updateData) => {
     try {
-      const response = await apiClient.put(`/document-applications/${applicationId}`, updateData);
+      const response = await apiClient.patch(`/document-applications/${applicationId}`, updateData);
       
       // Also update localStorage
       try {
