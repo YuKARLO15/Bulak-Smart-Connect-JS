@@ -19,7 +19,7 @@ import './MarriageLicenseApplication.css';
 import { documentApplicationService } from '../../../services/documentApplicationService';
 
 const mandatoryDocuments = [
-  'Birth / Baptismal Certificate',
+  'Birth - Baptismal Certificate',
   'Seminar Certificate (CSDW)',
   'Cenomar (PSA)',
   'Official Receipt',
