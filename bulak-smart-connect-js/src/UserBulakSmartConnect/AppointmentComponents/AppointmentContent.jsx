@@ -173,10 +173,14 @@ const AppointmentContainer = ({ onBack, preselectedDate }) => {
         address: formData.address,
         phoneNumber: formData.phoneNumber,
         reasonOfVisit: formData.reason, 
-        appointmentDate: selectedDate.toISOString().split('T')[0], 
+        appointmentDate: selectedDate.getFullYear() + '-' + 
+                         String(selectedDate.getMonth() + 1).padStart(2, '0') + '-' + 
+                         String(selectedDate.getDate()).padStart(2, '0'),
         appointmentTime: formData.time,
         isGuest: !isForSelf
       };
+
+      console.log('Sending appointment data with date:', appointmentData.appointmentDate);
 
       const result = await appointmentService.createAppointment(appointmentData);
 
