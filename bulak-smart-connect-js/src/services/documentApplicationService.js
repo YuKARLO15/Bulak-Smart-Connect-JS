@@ -171,8 +171,21 @@ export const documentApplicationService = {
   // Upload a file for an application
   uploadFile: async (applicationId, file, documentType) => {
     try {
+      // Sanitize filename to remove emojis and special characters
+      const sanitizedFileName = file.name
+        .replace(/[^\w\s.-]/g, '') // Remove special characters except word chars, spaces, dots, hyphens
+        .replace(/\s+/g, '_') // Replace spaces with underscores
+        .replace(/_{2,}/g, '_') // Replace multiple underscores with single
+        .trim();
+
+      // Create a new File object with sanitized name
+      const sanitizedFile = new File([file], sanitizedFileName, {
+        type: file.type,
+        lastModified: file.lastModified,
+      });
+
       const formData = new FormData();
-      formData.append('file', file);
+      formData.append('file', sanitizedFile);
       
       // Make sure documentCategory is properly set
       if (documentType && documentType !== 'undefined') {
@@ -182,6 +195,8 @@ export const documentApplicationService = {
       }
       
       console.log('Uploading file with category:', documentType);
+      console.log('Original filename:', file.name);
+      console.log('Sanitized filename:', sanitizedFileName);
       
       const response = await apiClient.post(
         `/document-applications/${applicationId}/files`,
