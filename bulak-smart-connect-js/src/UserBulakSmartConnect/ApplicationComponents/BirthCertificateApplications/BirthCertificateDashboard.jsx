@@ -205,7 +205,7 @@ const BirthCertificateDashboard = () => {
           <Button
             variant="contained"
             onClick={handleNext}
-            disabled={!selectedOption || !agreedPrivacy || !agreedTerms}
+            disabled={!selectedOption || !agreedPrivacy }
             className="BirthNextButton"
           >
             Next
