@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './ScreenSmartQueue.css';
 import { queueService } from '../../services/queueService';
 
-const formatQueueNumber = (queueNumber) => {
+const formatQueueNumber = queueNumber => {
   const num = parseInt(queueNumber?.split('-')[1] || queueNumber, 10) || 0;
   return `WK${String(num).padStart(3, '0')}`;
 };
@@ -34,26 +34,37 @@ const ScreenSmartQueue = () => {
 
   return (
     <div className="screen-queue-container">
-      <div className="screen-queue-header">
-        <div className="queue-label">Current Queue</div>
-        <div className="queue-label">Next Queue</div>
-      </div>
-      <div className="screen-queue-main">
-        <div className="queue-value">{currentQueue}</div>
-        <div className="queue-value">{nextQueue}</div>
-      </div>
+      <div className="screen-queue-body">
+        <div className="in-queue-section">
+          <div className="in-queue-title">In Queue</div>
+          <div className="in-queue-list">
+            {inQueueList.length > 0 ? (
+              inQueueList.map((q, i) => (
+                <div key={i} className="in-queue-item">
+                  {q}
+                </div>
+              ))
+            ) : (
+              <>
+                <div className="in-queue-item">—</div>
+                <div className="in-queue-item">—</div>
+                <div className="in-queue-item">—</div>
+              </>
+            )}
+          </div>
+        </div>
 
-      <div className="in-queue-title">In Queue</div>
-      <div className="in-queue-list">
-        {inQueueList.length > 0 ? (
-          inQueueList.map((q, i) => <div key={i} className="in-queue-item">{q}</div>)
-        ) : (
-          <>
-            <div className="in-queue-item">—</div>
-            <div className="in-queue-item">—</div>
-            <div className="in-queue-item">—</div>
-          </>
-        )}
+        <div className="screen-queue-main">
+          <div className="screen-queue-header">
+            <div className="queue-label">Current Queue</div>
+          </div>
+
+          <div className="queue-value">{currentQueue}</div>
+          <div className="screen-queue-header">
+            <div className="queue-label">Next Queue</div>
+          </div>
+          <div className="queue-value">{nextQueue}</div>
+        </div>
       </div>
     </div>
   );
