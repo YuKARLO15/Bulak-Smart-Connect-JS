@@ -82,7 +82,8 @@ export class DocumentApplication {
   files: DocumentFile[];
 
   @OneToMany(() => ApplicationStatusHistory, (history) => history.application, {
-    cascade: true,
+    cascade: false, 
+    eager: false,
   })
   statusHistory: ApplicationStatusHistory[];
 }
