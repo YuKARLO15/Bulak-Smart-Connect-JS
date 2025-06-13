@@ -19,6 +19,7 @@ const AllAppointmentsAdmin = () => {
     try {
       setLoading(true);
       const fetchedAppointments = await appointmentService.fetchAllAppointments();
+      console.log('Fetched appointments:', fetchedAppointments);
       setAppointments(fetchedAppointments);
       setFilteredAppointments(fetchedAppointments);
     } catch (error) {
@@ -39,13 +40,20 @@ const AllAppointmentsAdmin = () => {
       result = result.filter(appointment => appointment.status === statusFilter);
     }
     
-    // Apply type filter
+    // Apply type filter (using reasonOfVisit as type)
     if (typeFilter !== 'all') {
-      result = result.filter(appointment => appointment.type === typeFilter);
+      result = result.filter(appointment => {
+        const appointmentType = appointment.reasonOfVisit || appointment.type || appointment.appointmentType;
+        return appointmentType === typeFilter;
+      });
     }
     
     // Sort by date, most recent first
-    result.sort((a, b) => new Date(b.appointmentDate || b.date) - new Date(a.appointmentDate || a.date));
+    result.sort((a, b) => {
+      const dateA = new Date(a.appointmentDate || a.date || a.createdAt);
+      const dateB = new Date(b.appointmentDate || b.date || b.createdAt);
+      return dateB - dateA;
+    });
     
     setFilteredAppointments(result);
   }, [statusFilter, typeFilter, appointments]);
@@ -54,10 +62,50 @@ const AllAppointmentsAdmin = () => {
     navigate(`/AppointmentDetails/${appointment.id || appointment._id}`, { state: { appointment } });
   };
 
-  // Get unique appointment types for filter
+  // Get unique appointment types for filter (using reasonOfVisit)
   const appointmentTypes = appointments.length > 0 
-    ? ['all', ...new Set(appointments.map(app => app.type || app.appointmentType))]
+    ? ['all', ...new Set(appointments.map(app => app.reasonOfVisit || app.type || app.appointmentType || 'Unknown Type'))]
     : ['all'];
+
+  // Helper function to get appointment type (using reasonOfVisit)
+  const getAppointmentType = (appointment) => {
+    return appointment.reasonOfVisit || appointment.type || appointment.appointmentType || 'Unknown Type';
+  };
+
+  // Helper function to get client name
+  const getClientName = (appointment) => {
+    // Build full name from firstName, middleInitial, lastName
+    const firstName = appointment.firstName || '';
+    const middleInitial = appointment.middleInitial || '';
+    const lastName = appointment.lastName || '';
+    
+    const fullName = [firstName, middleInitial, lastName].filter(Boolean).join(' ');
+    
+    if (fullName) {
+      return fullName;
+    }
+    
+    // Fallback to other possible fields
+    return appointment.clientName || appointment.name || appointment.userName || appointment.email || "Anonymous User";
+  };
+
+  // Helper function to format date and time
+  const formatDateTime = (appointment) => {
+    const date = appointment.appointmentDate || appointment.date;
+    const time = appointment.appointmentTime || appointment.time;
+    
+    if (date) {
+      const formattedDate = new Date(date).toLocaleDateString();
+      return time ? `${formattedDate} | ${time}` : formattedDate;
+    }
+    
+    // Fallback to createdAt if no specific date
+    if (appointment.createdAt) {
+      return new Date(appointment.createdAt).toLocaleString();
+    }
+    
+    return 'Date not specified';
+  };
 
   if (loading) {
     return (
@@ -111,12 +159,14 @@ const AllAppointmentsAdmin = () => {
           {filteredAppointments.map((appointment, index) => (
             <div key={appointment.id || appointment._id || index} className="minimal-appointment-card">
               <div className="minimal-appointment-info">
-                <div className="minimal-appointment-type">{appointment.type || appointment.appointmentType || 'Unknown Type'}</div>
+                <div className="minimal-appointment-type">
+                  {getAppointmentType(appointment)}
+                </div>
                 <div className="minimal-appointment-datetime">
-                  {appointment.appointmentDate || appointment.date} | {appointment.appointmentTime || appointment.time || ''}
+                  {formatDateTime(appointment)}
                 </div>
                 <div className="minimal-appointment-user">
-                  {appointment.clientName || appointment.name || appointment.userName || "Anonymous User"}
+                  {getClientName(appointment)}
                 </div>
               </div>
               <button 

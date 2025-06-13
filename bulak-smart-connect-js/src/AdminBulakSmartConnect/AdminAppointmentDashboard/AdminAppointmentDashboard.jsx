@@ -27,6 +27,7 @@ const AdminAppointmentDashboard = () => {
   const fetchDashboardData = async () => {
     try {
       const appointments = await appointmentService.fetchAllAppointments();
+      console.log('Dashboard appointments:', appointments);
       setAppointmentsData(appointments);
       
       // Generate chart data
@@ -52,14 +53,25 @@ const AdminAppointmentDashboard = () => {
       date.setDate(date.getDate() - i);
       const dateString = date.toISOString().split('T')[0];
       
-      const dayAppointments = appointments.filter(app => 
-        (app.appointmentDate || app.date) === dateString
-      );
+      const dayAppointments = appointments.filter(app => {
+        const appDate = app.appointmentDate || app.date;
+        if (!appDate) return false;
+        const appDateString = new Date(appDate).toISOString().split('T')[0];
+        return appDateString === dateString;
+      });
+      
+      // For now, categorize by service type - you can adjust this logic
+      const certificateServices = ['Birth Certificate', 'Marriage Certificate', 'Death Certificate'];
       
       last7Days.push({
         name: date.toLocaleDateString('en-US', { weekday: 'short' }),
-        walkIn: dayAppointments.filter(app => (app.type || app.appointmentType) === 'walk-in').length,
-        appointment: dayAppointments.filter(app => (app.type || app.appointmentType) !== 'walk-in').length
+        walkIn: dayAppointments.filter(app => {
+          const service = app.reasonOfVisit || app.type || app.appointmentType;
+          return app.isGuest === true; // assuming walk-ins are guests
+        }).length,
+        appointment: dayAppointments.filter(app => {
+          return app.isGuest === false; // scheduled appointments
+        }).length
       });
     }
     
@@ -68,9 +80,12 @@ const AdminAppointmentDashboard = () => {
 
   const calculateCurrentQueue = (appointments) => {
     const today = new Date().toISOString().split('T')[0];
-    const todayAppointments = appointments.filter(app => 
-      (app.appointmentDate || app.date) === today && app.status === 'confirmed'
-    );
+    const todayAppointments = appointments.filter(app => {
+      const appDate = app.appointmentDate || app.date;
+      if (!appDate) return false;
+      const appDateString = new Date(appDate).toISOString().split('T')[0];
+      return appDateString === today && (app.status === 'confirmed' || app.status === 'pending');
+    });
     
     return {
       current: todayAppointments.length > 0 ? 1 : 0,
@@ -109,9 +124,12 @@ const AdminAppointmentDashboard = () => {
     for (let i = 1; i <= daysInMonth; i++) {
       const currentDate = new Date(year, month, i);
       const dateString = currentDate.toISOString().split('T')[0];
-      const dayAppointments = appointmentsData.filter(app => 
-        (app.appointmentDate || app.date) === dateString
-      );
+      const dayAppointments = appointmentsData.filter(app => {
+        const appDate = app.appointmentDate || app.date;
+        if (!appDate) return false;
+        const appDateString = new Date(appDate).toISOString().split('T')[0];
+        return appDateString === dateString;
+      });
       
       days.push(
         <div key={`day-${i}`} className={`admin-appointment-dashboard-calendar-day ${dayAppointments.length > 0 ? 'has-appointments' : ''}`}>
@@ -151,7 +169,7 @@ const AdminAppointmentDashboard = () => {
       <div className="admin-appointment-dashboard-header">
         <button
           className="admin-appointment-dashboard-menu-icon"
-          onClick={() => setNavOpen(true)}
+          onClick={() => setIsSidebarOpen(true)}
           aria-label="Open navigation"
         >
           <span>&#9776;</span>
