@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import {
   Box,
   Button,
@@ -43,6 +43,7 @@ const MarriageLicenseApplication = () => {
   const [widowWidowerType, setWidowWidowerType] = useState('');
   const [annulledType, setAnnulledType] = useState('');
 
+  const location = useLocation();
   const navigate = useNavigate();
 
   // Create application in backend
@@ -64,7 +65,7 @@ const MarriageLicenseApplication = () => {
         applicationType: 'Marriage License',  // Correct type
         applicationSubtype: 'Application for Marriage License',
         applicantName: getApplicantName(combinedFormData),
-        status: 'DRAFT',
+        status: 'Pending',
         formData: {
           ...combinedFormData,
           applicationId: newAppId,
@@ -127,6 +128,23 @@ const MarriageLicenseApplication = () => {
 
     const loadApplicationData = async () => {
       try {
+        // Check if we have state passed from the form
+        const stateData = location.state;
+        
+        if (stateData && stateData.applicationId && stateData.formData) {
+          console.log('Using state data from form:', stateData);
+          setApplicationId(stateData.applicationId);
+          setFormData(stateData.formData);
+          
+          // Also update localStorage for consistency
+          localStorage.setItem('currentApplicationId', stateData.applicationId);
+          localStorage.setItem('marriageFormData', JSON.stringify(stateData.formData));
+          
+          // Create backend application with the form data
+          await createBackendApplication(stateData.formData);
+          return;
+        }
+        
         // Check if we're editing an existing application
         const isEditing = localStorage.getItem('isEditingMarriageForm') === 'true';
         const editingId = localStorage.getItem('currentEditingApplicationId');
@@ -155,10 +173,10 @@ const MarriageLicenseApplication = () => {
           // Starting fresh - clear any old data
           startNewMarriageLicenseApplication();
           
-          // Load form data from localStorage
+          // Load form data from localStorage as fallback
           const storedFormData = JSON.parse(localStorage.getItem('marriageFormData') || '{}');
           if (Object.keys(storedFormData).length > 0) {
-            console.log('Loaded marriage form data:', storedFormData);
+            console.log('Loaded marriage form data from localStorage:', storedFormData);
             setFormData(storedFormData);
             
             // Create a new Marriage License application
@@ -172,7 +190,7 @@ const MarriageLicenseApplication = () => {
     };
 
     loadApplicationData();
-  }, []);
+  }, [location.state]); // Add location.state as dependency
 
   // Show snackbar notification
   const showNotification = (message, severity = 'info') => {
