@@ -26,7 +26,9 @@ export enum ApplicationStatus {
   PROCESSING = 'Processing',
   APPROVED = 'Approved',
   REJECTED = 'Rejected',
+  DECLINE = 'Decline',
   READY_FOR_PICKUP = 'Ready for Pickup',
+  REQUIRES_ADDITIONAL_INFO = 'Requires Additional Info', 
 }
 
 @Entity('document_applications')
