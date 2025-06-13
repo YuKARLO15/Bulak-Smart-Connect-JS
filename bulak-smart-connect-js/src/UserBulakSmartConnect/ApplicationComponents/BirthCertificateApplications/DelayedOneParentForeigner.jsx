@@ -161,10 +161,31 @@ const DelayedOneParentForeignerRegistration = () => {
   const fileUploadWrapper = label => (isUploaded, fileDataObj) =>
     handleFileUpload(label, isUploaded, fileDataObj);
 
-  // Validation
+  // Modified validation function to match Below18 behavior
   const isMandatoryComplete = () => {
-    // Only required docs for now; you can enhance this logic as Below18 if needed
-    return requiredDocuments.every(doc => uploadedFiles[doc] === true);
+    // Check if all required documents are uploaded - but only for logging purposes
+    const allRequiredDocsUploaded = requiredDocuments.every(doc => {
+      const isUploaded = uploadedFiles[doc] === true;
+      if (!isUploaded) {
+        console.log(`Missing document: ${doc}`);
+      }
+      return isUploaded;
+    });
+    
+    // Log the validation status
+    if (allRequiredDocsUploaded) {
+      console.log("All required documents uploaded.");
+    } else {
+      console.log("Missing some required documents.");
+    }
+    
+    // Enable the submit button if at least one document has been uploaded
+    if (uploadedDocumentsCount > 0) {
+      console.log("At least one document uploaded. Enabling submit button.");
+      return true;
+    }
+    
+    return allRequiredDocsUploaded;
   };
 
   // Submit handler (like Below18, but simpler: you can expand as needed)
@@ -258,6 +279,17 @@ const DelayedOneParentForeignerRegistration = () => {
             {additionalDocuments.map((doc, index) => (
               <FileUpload key={index} label={doc} onUpload={fileUploadWrapper(doc)} disabled={isLoading} />
             ))}
+          </Box>
+
+          {/* Debug info */}
+          <Box sx={{ mt: 2, p: 2, bgcolor: '#f5f5f5', borderRadius: 1 }}>
+            <Typography variant="caption">Form Status:</Typography>
+            <Typography variant="caption" component="div">
+              Documents uploaded: {uploadedDocumentsCount}
+            </Typography>
+            <Typography variant="caption" component="div">
+              Submit button enabled: {isMandatoryComplete() ? 'YES' : 'NO'}
+            </Typography>
           </Box>
 
           {isLoading && (

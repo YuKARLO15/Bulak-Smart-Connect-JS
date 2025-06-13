@@ -89,9 +89,10 @@ export class DocumentApplicationsService {
     userId?: number,
     adminId?: number,
   ): Promise<DocumentApplication> {
+    // First, verify the application exists and user has access
     const application = await this.findOne(id, userId);
 
-    // Track status changes
+    // Track status changes BEFORE doing any updates
     if (updateDto.status && updateDto.status !== application.status) {
       await this.statusHistoryRepository.save({
         applicationId: id,
@@ -102,12 +103,36 @@ export class DocumentApplicationsService {
       });
     }
 
-    Object.assign(application, updateDto);
+    // Use query builder to update only the application table directly
+    // This avoids TypeORM cascade relationship issues
+    const updateData: any = {};
+    
+    if (updateDto.status !== undefined) {
+      updateData.status = updateDto.status;
+    }
+    if (updateDto.statusMessage !== undefined) {
+      updateData.statusMessage = updateDto.statusMessage;
+    }
+    if (updateDto.formData !== undefined) {
+      updateData.formData = updateDto.formData;
+    }
+    if (updateDto.applicationSubtype !== undefined) {
+      updateData.applicationSubtype = updateDto.applicationSubtype;
+    }
     if (adminId) {
-      application.lastModifiedBy = adminId;
+      updateData.lastModifiedBy = adminId;
     }
 
-    return await this.documentApplicationRepository.save(application);
+    // Update using query builder to avoid relationship cascade issues
+    await this.documentApplicationRepository
+      .createQueryBuilder()
+      .update(DocumentApplication)
+      .set(updateData)
+      .where('id = :id', { id })
+      .execute();
+
+    // Return the updated application with fresh data
+    return await this.findOne(id, userId);
   }
 
   async uploadFile(

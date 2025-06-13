@@ -341,7 +341,7 @@ const DelayedOutOfTownRegistration = () => {
   };
 
   const isMandatoryComplete = () => {
-    // Check all required documents
+    // Check all required documents (for logging purposes only)
     const allMandatoryDocsUploaded = requiredDocuments.every(doc => {
       const isUploaded = uploadedFiles[doc] === true;
       if (!isUploaded) {
@@ -371,11 +371,18 @@ const DelayedOutOfTownRegistration = () => {
     // For debugging:
     if (allMandatoryDocsUploaded && parentDocsUploaded && evidenceUploaded) {
       console.log("All documents uploaded. Button should be enabled.");
-      return true;
     } else {
-      console.log("Missing documents. Button should be disabled.");
-      return false;
+      console.log("Missing some documents.");
     }
+    
+    // CHANGED: Enable the submit button if at least one document has been uploaded
+    if (uploadedDocumentsCount > 0) {
+      console.log("At least one document uploaded. Enabling submit button.");
+      return true;
+    }
+    
+    // Only require all documents if the above condition isn't met
+    return allMandatoryDocsUploaded && parentDocsUploaded && evidenceUploaded;
   };
 
   const mapStatusForBackend = (frontendStatus) => {
@@ -549,57 +556,69 @@ const DelayedOutOfTownRegistration = () => {
               </Typography>
             </Box>
           )}
-<Container className="DelayedOutOfTownUpload">
-          <Box>
-            {requiredDocuments.map((doc, index) => (
-              <FileUpload 
-                key={index} 
-                label={doc} 
-                onUpload={(isUploaded, fileDataObj) => 
-                  handleFileUpload(doc, isUploaded, fileDataObj)
-                }
-                required={true}
-                disabled={isLoading}
-              />
-            ))}
-          </Box>
+          <Container className="DelayedOutOfTownUpload">
+            <Box>
+              {requiredDocuments.map((doc, index) => (
+                <FileUpload 
+                  key={index} 
+                  label={doc} 
+                  onUpload={(isUploaded, fileDataObj) => 
+                    handleFileUpload(doc, isUploaded, fileDataObj)
+                  }
+                  required={true}
+                  disabled={isLoading}
+                />
+              ))}
+            </Box>
 
-          <Typography variant="body1" className="SectionTitleDelayedOutOfTown">
-            Any two (2) of the following documents of parents:
-          </Typography>
+            <Typography variant="body1" className="SectionTitleDelayedOutOfTown">
+              Any two (2) of the following documents of parents:
+            </Typography>
 
-          <Box>
-            {[...Array(2)].map((_, index) => (
-              <FileUpload
-                key={index}
-                label={`Parent Document ${index + 1}`}
-                onUpload={(isUploaded, fileDataObj) => 
-                  handleFileUpload(`Parent Document ${index + 1}`, isUploaded, fileDataObj)
-                }
-                required={true}
-                disabled={isLoading}
-              />
-            ))}
-          </Box>
+            <Box>
+              {[...Array(2)].map((_, index) => (
+                <FileUpload
+                  key={index}
+                  label={`Parent Document ${index + 1}`}
+                  onUpload={(isUploaded, fileDataObj) => 
+                    handleFileUpload(`Parent Document ${index + 1}`, isUploaded, fileDataObj)
+                  }
+                  required={true}
+                  disabled={isLoading}
+                />
+              ))}
+            </Box>
 
-          <Typography variant="body1" className="SectionTitleDelayedOutOfTown">
-            Any two (2) of the following documentary evidence:
-          </Typography>
+            <Typography variant="body1" className="SectionTitleDelayedOutOfTown">
+              Any two (2) of the following documentary evidence:
+            </Typography>
 
-          <Box>
-            {[...Array(2)].map((_, index) => (
-              <FileUpload
-                key={index}
-                label={`Documentary Evidence ${index + 1}`}
-                onUpload={(isUploaded, fileDataObj) => 
-                  handleFileUpload(`Documentary Evidence ${index + 1}`, isUploaded, fileDataObj)
-                }
-                required={true}
-                disabled={isLoading}
-              />
-            ))}
-          </Box>
+            <Box>
+              {[...Array(2)].map((_, index) => (
+                <FileUpload
+                  key={index}
+                  label={`Documentary Evidence ${index + 1}`}
+                  onUpload={(isUploaded, fileDataObj) => 
+                    handleFileUpload(`Documentary Evidence ${index + 1}`, isUploaded, fileDataObj)
+                  }
+                  required={true}
+                  disabled={isLoading}
+                />
+              ))}
+            </Box>
           </Container>
+          
+          {/* Debug info box */}
+          <Box sx={{ mt: 2, p: 2, bgcolor: '#f5f5f5', borderRadius: 1 }}>
+            <Typography variant="caption">Form Status:</Typography>
+            <Typography variant="caption" component="div">
+              Documents uploaded: {uploadedDocumentsCount}
+            </Typography>
+            <Typography variant="caption" component="div">
+              Submit button enabled: {isMandatoryComplete() ? 'YES' : 'NO'}
+            </Typography>
+          </Box>
+          
           <Box className="ImportantNotes">
             <Typography variant="h6">IMPORTANT NOTES:</Typography>
             <Typography variant="body2">PROCESSING DURATION: 10 days </Typography>

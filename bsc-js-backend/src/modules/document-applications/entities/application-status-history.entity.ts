@@ -37,6 +37,7 @@ export class ApplicationStatusHistory {
   // Relations
   @ManyToOne(() => DocumentApplication, (app) => app.statusHistory, {
     onDelete: 'CASCADE',
+    nullable: false, 
   })
   @JoinColumn({ name: 'application_id' })
   application: DocumentApplication;
