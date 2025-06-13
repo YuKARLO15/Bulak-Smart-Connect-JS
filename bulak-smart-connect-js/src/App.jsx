@@ -133,7 +133,7 @@ function App() {
         <Route element={<PrivateRoute allowedRoles={['staff', 'admin', 'super_admin']} />}>
           <Route path="/ApplicationAdmin" element={<AdminApplicationDashboard />} />
           <Route path="/ApplicationDetails/:id" element={<AdminApplicationForm />} />
-          <Route path="AppointmentDetailsCard" element={<AppointmentDetailsCard />} />
+          <Route path="/AppointmentDetails/:id" element={<AppointmentDetailsCard />} />
           <Route path="/AdminWalkInQueue" element={<AdminWalkInQueue />} />
           <Route path="/AdminHome" element={<AdminDashboard />} />
           <Route path="/AdminWalkInDetails" element={<AdminWalkInDetails />} />

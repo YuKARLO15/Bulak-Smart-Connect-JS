@@ -7,11 +7,20 @@
   color: #1c4d5a;
 }
 
+.appointment-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 50px;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
 .info-card h2 {
   font-size: 24px;
   font-weight: 700;
   color: #1c4d5a;
-  margin-bottom: 50px;
+  margin: 0;
 }
 
 .app-number {
@@ -19,14 +28,30 @@
   font-weight: 600;
 }
 
+.status-badge {
+  padding: 8px 16px;
+  border-radius: 20px;
+  color: white;
+  font-weight: bold;
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
 .details-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(200px, 1fr));
-  margin-bottom: 50px;
+  margin-bottom: 30px;
+  gap: 20px;
 }
+
 @media (max-width: 768px) {
   .details-grid {
     grid-template-columns: 1fr;
+  }
+  
+  .appointment-header {
+    flex-direction: column;
+    text-align: center;
   }
 }
 
@@ -39,7 +64,7 @@
 .details-grid strong {
   font-weight: 600;
   display: block;
-  margin-bottom: 20px;
+  margin-bottom: 8px;
   margin-top: 20px;
 }
 
@@ -48,10 +73,61 @@
   color: #7f8c8d;
 }
 
+.status-actions {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+}
+
+.status-actions button {
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.status-actions button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-confirm {
+  background-color: #27ae60;
+  color: white;
+}
+
+.btn-confirm:hover:not(:disabled) {
+  background-color: #229954;
+}
+
+.btn-cancel {
+  background-color: #e74c3c;
+  color: white;
+}
+
+.btn-cancel:hover:not(:disabled) {
+  background-color: #c0392b;
+}
+
+.btn-complete {
+  background-color: #3498db;
+  color: white;
+}
+
+.btn-complete:hover:not(:disabled) {
+  background-color: #2980b9;
+}
+
 .btn-group {
   display: flex;
   justify-content: flex-end;
   gap: 12px;
+  border-top: 1px solid #eee;
+  padding-top: 20px;
 }
 
 .btn-group .back,
@@ -83,4 +159,49 @@
 .btn-group .next:hover {
   background-color: #1e404b;
   filter: brightness(1.05);
+}
+
+/* Loading and Error States */
+.loading-content,
+.error-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #1c4d5a;
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #1c4d5a;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.error-content h2 {
+  color: #e74c3c;
+  margin-bottom: 1rem;
+}
+
+.back-btn {
+  padding: 10px 24px;
+  background-color: #326471;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.back-btn:hover {
+  background-color: #1e404b;
 }
