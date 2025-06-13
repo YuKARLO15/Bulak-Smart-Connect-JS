@@ -513,13 +513,13 @@
                         <b>Decorators : </b>
                         <br />
                         <code>
-                            @OneToMany(undefined, history &#x3D;&gt; history.application, {cascade: true})<br />
+                            @OneToMany(undefined, history &#x3D;&gt; history.application, {cascade: false, eager: false})<br />
                         </code>
                     </td>
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="87" class="link-to-prism">src/modules/document-applications/entities/document-application.entity.ts:87</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="88" class="link-to-prism">src/modules/document-applications/entities/document-application.entity.ts:88</a></div>
                         </td>
                     </tr>
 
@@ -760,7 +760,8 @@ export class DocumentApplication {
   files: DocumentFile[];
 
   @OneToMany(() &#x3D;&gt; ApplicationStatusHistory, (history) &#x3D;&gt; history.application, {
-    cascade: true,
+    cascade: false, 
+    eager: false,
   })
   statusHistory: ApplicationStatusHistory[];
 }

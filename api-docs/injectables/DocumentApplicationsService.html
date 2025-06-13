@@ -457,8 +457,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="221"
-                                    class="link-to-prism">src/modules/document-applications/document-applications.service.ts:221</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="246"
+                                    class="link-to-prism">src/modules/document-applications/document-applications.service.ts:246</a></div>
                         </td>
                     </tr>
 
@@ -607,8 +607,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="246"
-                                    class="link-to-prism">src/modules/document-applications/document-applications.service.ts:246</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="271"
+                                    class="link-to-prism">src/modules/document-applications/document-applications.service.ts:271</a></div>
                         </td>
                     </tr>
 
@@ -688,8 +688,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="194"
-                                    class="link-to-prism">src/modules/document-applications/document-applications.service.ts:194</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="219"
+                                    class="link-to-prism">src/modules/document-applications/document-applications.service.ts:219</a></div>
                         </td>
                     </tr>
 
@@ -757,8 +757,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="231"
-                                    class="link-to-prism">src/modules/document-applications/document-applications.service.ts:231</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="256"
+                                    class="link-to-prism">src/modules/document-applications/document-applications.service.ts:256</a></div>
                         </td>
                     </tr>
 
@@ -796,8 +796,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="161"
-                                    class="link-to-prism">src/modules/document-applications/document-applications.service.ts:161</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="186"
+                                    class="link-to-prism">src/modules/document-applications/document-applications.service.ts:186</a></div>
                         </td>
                     </tr>
 
@@ -877,8 +877,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="179"
-                                    class="link-to-prism">src/modules/document-applications/document-applications.service.ts:179</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="204"
+                                    class="link-to-prism">src/modules/document-applications/document-applications.service.ts:204</a></div>
                         </td>
                     </tr>
 
@@ -1063,8 +1063,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="212"
-                                    class="link-to-prism">src/modules/document-applications/document-applications.service.ts:212</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="237"
+                                    class="link-to-prism">src/modules/document-applications/document-applications.service.ts:237</a></div>
                         </td>
                     </tr>
 
@@ -1168,8 +1168,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="113"
-                                    class="link-to-prism">src/modules/document-applications/document-applications.service.ts:113</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="138"
+                                    class="link-to-prism">src/modules/document-applications/document-applications.service.ts:138</a></div>
                         </td>
                     </tr>
 
@@ -1348,9 +1348,10 @@ export class DocumentApplicationsService {
     userId?: number,
     adminId?: number,
   ): Promise&lt;DocumentApplication&gt; {
+    // First, verify the application exists and user has access
     const application &#x3D; await this.findOne(id, userId);
 
-    // Track status changes
+    // Track status changes BEFORE doing any updates
     if (updateDto.status &amp;&amp; updateDto.status !&#x3D;&#x3D; application.status) {
       await this.statusHistoryRepository.save({
         applicationId: id,
@@ -1361,12 +1362,36 @@ export class DocumentApplicationsService {
       });
     }
 
-    Object.assign(application, updateDto);
+    // Use query builder to update only the application table directly
+    // This avoids TypeORM cascade relationship issues
+    const updateData: any &#x3D; {};
+    
+    if (updateDto.status !&#x3D;&#x3D; undefined) {
+      updateData.status &#x3D; updateDto.status;
+    }
+    if (updateDto.statusMessage !&#x3D;&#x3D; undefined) {
+      updateData.statusMessage &#x3D; updateDto.statusMessage;
+    }
+    if (updateDto.formData !&#x3D;&#x3D; undefined) {
+      updateData.formData &#x3D; updateDto.formData;
+    }
+    if (updateDto.applicationSubtype !&#x3D;&#x3D; undefined) {
+      updateData.applicationSubtype &#x3D; updateDto.applicationSubtype;
+    }
     if (adminId) {
-      application.lastModifiedBy &#x3D; adminId;
+      updateData.lastModifiedBy &#x3D; adminId;
     }
 
-    return await this.documentApplicationRepository.save(application);
+    // Update using query builder to avoid relationship cascade issues
+    await this.documentApplicationRepository
+      .createQueryBuilder()
+      .update(DocumentApplication)
+      .set(updateData)
+      .where(&#x27;id &#x3D; :id&#x27;, { id })
+      .execute();
+
+    // Return the updated application with fresh data
+    return await this.findOne(id, userId);
   }
 
   async uploadFile(
