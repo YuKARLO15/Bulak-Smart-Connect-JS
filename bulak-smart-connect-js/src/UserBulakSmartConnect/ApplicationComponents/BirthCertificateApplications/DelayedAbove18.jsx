@@ -114,10 +114,12 @@ const Above18Registration = () => {
   }, [uploadedFiles]);
 
   useEffect(() => {
-      const  maritalSatus = localStorage.getItem('maritalStatus');
-    if (maritalSatus) {
-      setStatus(maritalSatus);
+    const maritalStatus = localStorage.getItem('maritalStatus');
+    if (maritalStatus) {
+      setStatus(maritalStatus);
+      console.log("Status loaded from localStorage:", maritalStatus);
     }
+    
     const loadData = async () => {
       try {
         setIsInitializing(true);
@@ -385,12 +387,9 @@ const Above18Registration = () => {
       console.log("Missing documents. Button should be disabled.");
     }
     
-    // Force enable the submit button if the user has attempted to upload all documents
-    if (status === 'marital' && uploadedDocumentsCount >= maritalDocuments.length + 2) {
-      console.log("All documents attempted to upload. Enabling submit button.");
-      return true;
-    } else if (status === 'non-marital' && uploadedDocumentsCount >= nonMaritalDocuments.length + 2) {
-      console.log("All documents attempted to upload. Enabling submit button.");
+    // Force enable the submit button if at least one document has been uploaded
+    if (uploadedDocumentsCount > 0) {
+      console.log("At least one document uploaded. Enabling submit button.");
       return true;
     }
     
@@ -540,7 +539,7 @@ const Above18Registration = () => {
     }
   };
 
-  // Override for Dennis - force enable the button
+  // Override for form submission - allows submitting when any document is uploaded
   const forceEnableSubmit = status && uploadedDocumentsCount > 0;
 
   return (
@@ -607,16 +606,16 @@ const Above18Registration = () => {
               </Box>
               
               {/* Debug info */}
-              <Box sx={{ mt: 2, p: 2, bgcolor: '#f5f5f5', borderRadius: 1, display: 'none' }}>
-                <Typography variant="caption">Debug Info:</Typography>
+              <Box sx={{ mt: 2, p: 2, bgcolor: '#f5f5f5', borderRadius: 1 }}>
+                <Typography variant="caption">Form Status:</Typography>
+                <Typography variant="caption" component="div">
+                  Status: {status || 'Not set'}
+                </Typography>
                 <Typography variant="caption" component="div">
                   Documents uploaded: {uploadedDocumentsCount}
                 </Typography>
                 <Typography variant="caption" component="div">
-                  Form validation: {isMandatoryComplete() ? 'PASS' : 'FAIL'}
-                </Typography>
-                <Typography variant="caption" component="div">
-                  Submit enabled: {forceEnableSubmit ? 'YES' : 'NO'}
+                  Submit button enabled: {isMandatoryComplete() ? 'YES' : 'NO'}
                 </Typography>
               </Box>
             </Box>
