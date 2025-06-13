@@ -16,20 +16,21 @@ const BirthCertificateDashboard = () => {
     const visited = sessionStorage.getItem('visitedPrivacyPolicy');
     if (visited === 'true') {
       setHasVisitedPrivacyPolicy(true);
+   
+      setAgreedPrivacy(true);
     }
   }, []);
 
   const handlePrivacyPolicyClick = () => {
-    // Open the privacy policy in a new window
     const policyWindow = window.open('/PrivacyPolicy', '_blank');
-
-    // Set up a listener to detect when the window is closed
     if (policyWindow) {
       const checkClosed = setInterval(() => {
         if (policyWindow.closed) {
           clearInterval(checkClosed);
           sessionStorage.setItem('visitedPrivacyPolicy', 'true');
           setHasVisitedPrivacyPolicy(true);
+  
+          setAgreedPrivacy(true);
         }
       }, 1000);
     }
@@ -129,7 +130,7 @@ const BirthCertificateDashboard = () => {
             <FormControlLabel
               value="Sex DOB"
               control={<Radio />}
-              label="Correction of Child’s Sex / Date of Birth-Day & Month"
+              label="Correction of Child's Sex / Date of Birth-Day & Month"
             />
             <FormControlLabel
               value="First Name"
@@ -155,7 +156,7 @@ const BirthCertificateDashboard = () => {
                 sx={{ p: 0, textTransform: 'none', textDecoration: 'underline' }}
                 className="dataPrivacyNoticeLink"
               >
-                Data Privacy Policy
+                Data Privacy Policy and Terms and Conditions
               </Button>{' '}
               before proceeding. |{' '}
               <span className="Privacy-TagalogNotice">
@@ -191,23 +192,14 @@ const BirthCertificateDashboard = () => {
                 variant="body1"
                 color={!hasVisitedPrivacyPolicy ? 'text.disabled' : 'text.primary'}
               >
-                I agree to the Data Privacy Notice | Sumasang-ayon ako sa Data Privacy Notice
+                I agree to the Data Privacy Notice and Terms and Conditions | Sumasang-ayon ako sa Data Privacy Notice at Terms and Conditions 
               </Typography>
             }
             className="BirthDashRadioGroup"
           />
         </Box>
 
-        <Box className="Section">
-          <Typography variant="h6" className="SectionTitle">
-            Terms and Conditions
-          </Typography>
-          <FormControlLabel
-            control={<Radio checked={agreedTerms} onChange={() => setAgreedTerms(!agreedTerms)} />}
-            label="I agree to the terms and conditions | Sumasang-ayon ako sa terms and conditions"
-            className="BirthDashRadioGroup"
-          />
-        </Box>
+      
 
         <Box className="Section">
           <Button
