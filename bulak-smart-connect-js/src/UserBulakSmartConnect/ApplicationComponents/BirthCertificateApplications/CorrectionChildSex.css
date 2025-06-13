@@ -44,9 +44,9 @@
 
 .SectionTitleDOBCorrection {
   font-weight: 550 !important;
-  margin-bottom: 10px;
+  margin-bottom: 56px;
   color: #184a5b;
-  margin-top: 5vh !important;
+  margin-top: 1vh !important;
   font-size: 1.2vw;
 }
 
@@ -81,4 +81,19 @@
 .CorrectionContainer.sidebar-open {
   margin-left: 250px;
   width: 100vw;
+}
+
+.DocumentsPaperCorrection {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  margin-top: 8px;
+  background: #fff;
+  border-radius: 9px;
+  border: 1.5px solid #b6c6d2;
+  box-shadow: 0px 2px 10px rgba(24,74,91,0.04);
+  padding: 36px 32px 32px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
 }
