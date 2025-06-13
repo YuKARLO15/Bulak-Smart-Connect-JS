@@ -75,3 +75,18 @@
   margin-left: 250px;
   width: 100vw;
 }
+
+.DocumentsPaperClerical {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  margin-top: 16px;
+  background: #fff;
+  border-radius: 9px;
+  border: 1.5px solid #b6c6d2;
+  box-shadow: 0px 2px 10px rgba(24,74,91,0.04);
+  padding: 36px 32px 32px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
