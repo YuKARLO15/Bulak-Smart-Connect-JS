@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getRecentAppointments } from '../../UserBulakSmartConnect/AppointmentComponents/RecentAppointmentData';
+import { appointmentService } from '../../services/appointmentService';
 import './AllAppointmentAdmin.css';
 
 const AllAppointmentsAdmin = () => {
@@ -12,17 +12,23 @@ const AllAppointmentsAdmin = () => {
   const [typeFilter, setTypeFilter] = useState('all');
 
   useEffect(() => {
-    // Use a timeout to simulate loading
-    const timer = setTimeout(() => {
-      // Get appointments directly from localStorage using the existing function
-      const fetchedAppointments = getRecentAppointments();
+    fetchAppointments();
+  }, []);
+
+  const fetchAppointments = async () => {
+    try {
+      setLoading(true);
+      const fetchedAppointments = await appointmentService.fetchAllAppointments();
       setAppointments(fetchedAppointments);
       setFilteredAppointments(fetchedAppointments);
+    } catch (error) {
+      console.error('Error fetching appointments:', error);
+      setAppointments([]);
+      setFilteredAppointments([]);
+    } finally {
       setLoading(false);
-    }, 500);
-
-    return () => clearTimeout(timer);
-  }, []);
+    }
+  };
 
   // Apply filters when filter values change
   useEffect(() => {
@@ -39,18 +45,18 @@ const AllAppointmentsAdmin = () => {
     }
     
     // Sort by date, most recent first
-    result.sort((a, b) => new Date(b.date) - new Date(a.date));
+    result.sort((a, b) => new Date(b.appointmentDate || b.date) - new Date(a.appointmentDate || a.date));
     
     setFilteredAppointments(result);
   }, [statusFilter, typeFilter, appointments]);
 
   const handleViewDetails = (appointment) => {
-    navigate(`/AppointmentDetails/${appointment.id}`, { state: { appointment } });
+    navigate(`/AppointmentDetails/${appointment.id || appointment._id}`, { state: { appointment } });
   };
 
   // Get unique appointment types for filter
   const appointmentTypes = appointments.length > 0 
-    ? ['all', ...new Set(appointments.map(app => app.type))]
+    ? ['all', ...new Set(appointments.map(app => app.type || app.appointmentType))]
     : ['all'];
 
   if (loading) {
@@ -103,14 +109,14 @@ const AllAppointmentsAdmin = () => {
       ) : (
         <div className="minimal-appointments-list">
           {filteredAppointments.map((appointment, index) => (
-            <div key={index} className="minimal-appointment-card">
+            <div key={appointment.id || appointment._id || index} className="minimal-appointment-card">
               <div className="minimal-appointment-info">
-                <div className="minimal-appointment-type">{appointment.type}</div>
+                <div className="minimal-appointment-type">{appointment.type || appointment.appointmentType || 'Unknown Type'}</div>
                 <div className="minimal-appointment-datetime">
-                  {appointment.date} | {appointment.time || ''}
+                  {appointment.appointmentDate || appointment.date} | {appointment.appointmentTime || appointment.time || ''}
                 </div>
                 <div className="minimal-appointment-user">
-                  {appointment.clientName || appointment.name || "Anonymous User"}
+                  {appointment.clientName || appointment.name || appointment.userName || "Anonymous User"}
                 </div>
               </div>
               <button 
