@@ -60,13 +60,13 @@ const [affidavit, setAffidavitTab] = useState(0);
         const storedApplications = await documentApplicationService.getAllApplications();
         if (!isMounted) return;
 
-        // Process applications to ensure they have all required fields
+
         const processedApplications = storedApplications.map(app => {
-          // Get the base type (Marriage Certificate, Birth Certificate, etc.)
+         
           let baseType = '';
           let subtype = '';
           
-          // Try to determine the base type
+      
           if (app.type) {
             baseType = app.type;
           } else if (app.applicationType) {
@@ -77,7 +77,7 @@ const [affidavit, setAffidavitTab] = useState(0);
             baseType = 'Document Application';
           }
           
-          // Try to determine the subtype
+      
           if (app.applicationSubtype) {
             subtype = app.applicationSubtype;
           } else if (app.formData && app.formData.applicationSubtype) {
@@ -86,7 +86,6 @@ const [affidavit, setAffidavitTab] = useState(0);
             subtype = app.subtype;
           }
           
-          // Special handling for Copy of Birth Certificate
           if (subtype === 'Copy of Birth Certificate' || 
               (app.type === 'Birth Certificate' && app.applicationType === 'Request copy')) {
             subtype = 'Copy of Birth Certificate';
@@ -128,7 +127,7 @@ const [affidavit, setAffidavitTab] = useState(0);
 
     fetchApplications();
 
-    // Subscribe to updates
+  
     window.addEventListener('storage', handleStorageUpdate);
     window.addEventListener('customStorageUpdate', handleCustomStorageUpdate);
 
@@ -149,7 +148,7 @@ const [affidavit, setAffidavitTab] = useState(0);
         let baseType = '';
         let subtype = '';
         
-        // Try to determine the base type
+   
         if (app.type) {
           baseType = app.type;
         } else if (app.applicationType) {
@@ -160,7 +159,7 @@ const [affidavit, setAffidavitTab] = useState(0);
           baseType = 'Document Application';
         }
         
-        // Try to determine the subtype
+      
         if (app.applicationSubtype) {
           subtype = app.applicationSubtype;
         } else if (app.formData && app.formData.applicationSubtype) {
@@ -169,7 +168,7 @@ const [affidavit, setAffidavitTab] = useState(0);
           subtype = app.subtype;
         }
         
-        // Special handling for Copy of Birth Certificate
+      
         if (subtype === 'Copy of Birth Certificate' || 
             (app.type === 'Birth Certificate' && app.applicationType === 'Request copy')) {
           subtype = 'Copy of Birth Certificate';
@@ -235,14 +234,14 @@ const handleApplicationClick = application => {
 
   const handleUpdateStatus = async () => {
     try {
-      // Update status using the documentApplicationService
+
       await documentApplicationService.updateApplication(selectedApplication.id, {
         status: newStatus, 
         statusMessage: statusMessage,
         lastUpdated: new Date().toISOString()
       });
 
-      // Refetch applications after update
+ 
       const updatedApplications = await documentApplicationService.getAllApplications();
       setApplications(updatedApplications);
       const updated = updatedApplications.find(app => app.id === selectedApplication.id);
@@ -250,7 +249,7 @@ const handleApplicationClick = application => {
 
       setStatusUpdateDialog(false);
       
-      // Notify other components of the change
+      
       window.dispatchEvent(new Event('storage'));
     } catch (err) {
       console.error('Error updating application status:', err);
@@ -432,18 +431,22 @@ const handleApplicationClick = application => {
                   >
                     Application Form
                   </Button>
-   <Button
-    variant="contained"
-    color={affidavit === 1 ? 'primary' : 'inherit'}
-    onClick={() => {
-      setAffidavitTab(1);
-      setShowDocumentsTab(false);
-    }}
-    startIcon={<AttachFileIcon />}
-     className={affidavit === 1 ? 'ActiveToggleButtonAdminAppForm' : ''}
-  >
-    Affidavit
-  </Button>
+    {!(getApplicationSubtype(selectedApplication) === 'Copy of Birth Certificate' || 
+     (getApplicationType(selectedApplication) === 'Birth Certificate' && 
+      selectedApplication.applicationType === 'Request copy')) && (
+    <Button
+      variant="contained"
+      color={affidavit === 1 ? 'primary' : 'inherit'}
+      onClick={() => {
+        setAffidavitTab(1);
+        setShowDocumentsTab(false);
+      }}
+      startIcon={<AttachFileIcon />}
+      className={affidavit === 1 ? 'ActiveToggleButtonAdminAppForm' : ''}
+    >
+      Affidavit
+    </Button>
+  )}
 
                   <Button
                     variant="contained"
@@ -1444,9 +1447,7 @@ const handleApplicationClick = application => {
                         
                         <Grid container>
                           <Grid item xs={12} style={{ padding: '15px 5px 5px' }}>
-                            <Typography variant="body2" color="textSecondary">
-                              Application processed by: {currentUser}
-                            </Typography>
+                     
                             <Typography variant="body2" color="textSecondary">
                               Date: {new Date().toISOString().split('T')[0]}
                             </Typography>
