@@ -24,6 +24,9 @@
   flex-direction: column;
 }
 
+
+
+
 .ApplicationsListTitleAdminAppForm {
  
   font-weight:600 !important;
@@ -34,7 +37,34 @@
 .ApplicationsListAdminAppForm {
   overflow-y: auto;
   flex-grow: 1;
+   height: 150vh;
+    direction: rtl; 
 }
+/* Additional wrapper for content to fix text direction */
+.ApplicationsListAdminAppForm > * {
+  direction: ltr; /* Reset text direction for content */
+}
+
+/* Custom scrollbar styling - smaller size */
+.ApplicationsListAdminAppForm::-webkit-scrollbar {
+  width: 5px; /* Small width of scrollbar */
+}
+
+.ApplicationsListAdminAppForm::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Track color */
+  border-radius: 5px;
+}
+
+.ApplicationsListAdminAppForm::-webkit-scrollbar-thumb {
+  background: #184a5b; /* Thumb color matching your system color */
+  border-radius: 5px;
+}
+
+.ApplicationsListAdminAppForm::-webkit-scrollbar-thumb:hover {
+  background: #1a5b70; /* Slightly lighter on hover */
+}
+
+
 
 .FilterContainerAdminAppForm {
   margin-bottom: 20px;

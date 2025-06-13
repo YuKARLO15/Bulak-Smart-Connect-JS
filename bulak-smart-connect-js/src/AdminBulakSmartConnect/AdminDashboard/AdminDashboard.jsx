@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import './AdminDashboard.css';
 import axios from 'axios';
 import { queueService } from '../../services/queueService';
+import { documentApplicationService } from '../../services/documentApplicationService'; // Add this import
 import {
   LineChart,
   Line,
@@ -24,13 +25,13 @@ import {
   CircularProgress,
   Grid,
   Paper,
-  Container
+  Container,
+  Alert
 } from '@mui/material';
 import NavBar from '../../NavigationComponents/NavSide';
 import RecentApplicationsAdmin from './RecentApplicationsAdmin';
 import RecentAppointmentsAdmin from './RecentAppointmentsAdmin';
 import WalkInQueueAdmin from './WalkInQueueAdmin';
-import { getApplications } from '../../UserBulakSmartConnect/ApplicationComponents/ApplicationData';
 import { getRecentAppointments } from '../../UserBulakSmartConnect/AppointmentComponents/RecentAppointmentData';
 import ApplicationPieChart from '../AdminApplicationComponents/ApplicationPieChart'; 
 
@@ -61,6 +62,7 @@ const AdminDashboard = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [queueLoading, setQueueLoading] = useState(true);
   const [queueError, setQueueError] = useState(null);
+  const [dataSource, setDataSource] = useState('loading');
 
   // Search functionality
   const handleSearch = e => {
@@ -68,7 +70,12 @@ const AdminDashboard = () => {
   }; 
 
   const [statistics, setStatistics] = useState({
-    overall: 0
+    overall: 0,
+    birthCertificate: 0,
+    marriage: 0,
+    pending: 0,
+    approved: 0,
+    declined: 0
   });
   
   // Add appointment statistics state
@@ -102,37 +109,141 @@ const AdminDashboard = () => {
     return months;
   };
 
-  // Fetch applications data - create a separate function for clarity
+  // Standardize application data
+  const standardizeApplicationData = (apps) => {
+    if (!Array.isArray(apps)) return [];
+    return apps.map(app => ({
+      id: app.id || app._id || 'unknown-id',
+      type: app.applicationType || app.type || 'Document Application',
+      applicationType: app.applicationSubtype || app.applicationType || app.type || 'Unknown Type',
+      date: formatDate(app.createdAt || app.date || new Date()),
+      status: app.status || 'Pending',
+      message: app.statusMessage || app.message || '',
+      applicantName: app.applicantName || `${app.firstName || ''} ${app.lastName || ''}`.trim() || 'Unknown',
+      originalData: app
+    }));
+  };
+
+  // Date formatting helper
+  const formatDate = (dateInput) => {
+    if (!dateInput) return 'N/A';
+    try {
+      const date = new Date(dateInput);
+      return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+    } catch {
+      return String(dateInput);
+    }
+  };
+
+  // Fetch applications data - updated to use documentApplicationService
   const fetchApplicationData = useCallback(async () => {
     try {
-      // For localStorage-based data (replace with API call when ready)
-      const fetchedApplications = getApplications();
+      setLoading(true);
+      console.log('Fetching applications for dashboard statistics...');
       
-      // Store the full applications array in state
-      setApplications(fetchedApplications);
+      // Use the service to get applications from the database
+      const response = await documentApplicationService.getAllApplications();
+      console.log('API response:', response);
       
-      // Update statistics count
-      setStatistics({
-        overall: fetchedApplications.length
-      });
-      
-      return fetchedApplications;
+      if (Array.isArray(response)) {
+        // Standardize the data to ensure consistent structure
+        const standardizedData = standardizeApplicationData(response);
+        setApplications(standardizedData);
+        setDataSource('api');
+        
+        // Calculate detailed statistics
+        const stats = {
+          overall: standardizedData.length,
+          birthCertificate: 0,
+          marriage: 0,
+          pending: 0,
+          approved: 0,
+          declined: 0
+        };
+        
+        standardizedData.forEach(app => {
+          // Count by type
+          const appType = (app.type || '').toLowerCase();
+          if (appType.includes('birth') || appType.includes('certificate')) {
+            stats.birthCertificate++;
+          } else if (appType.includes('marriage') || appType.includes('wed')) {
+            stats.marriage++;
+          }
+          
+          // Count by status
+          const status = (app.status || '').toLowerCase();
+          if (status.includes('pending') || status.includes('submitted') || status === '') {
+            stats.pending++;
+          } else if (status.includes('approved') || status.includes('accept')) {
+            stats.approved++;
+          } else if (status.includes('declined') || status.includes('denied') || status.includes('reject')) {
+            stats.declined++;
+          }
+        });
+        
+        console.log('Calculated application statistics:', stats);
+        setStatistics(stats);
+        
+        return standardizedData;
+      } else {
+        throw new Error('Invalid response format: Not an array');
+      }
     } catch (err) {
       console.error("Error fetching application data:", err);
       setError('Error loading application data: ' + err.message);
-      return [];
+      
+      // Fallback to localStorage
+      try {
+        console.log('Falling back to localStorage for applications...');
+        const localData = JSON.parse(localStorage.getItem('applications') || '[]');
+        const standardizedData = standardizeApplicationData(localData);
+        setApplications(standardizedData);
+        setDataSource('localStorage');
+        
+        // Update statistics based on local data
+        setStatistics({
+          overall: standardizedData.length,
+          birthCertificate: standardizedData.filter(app => 
+            (app.type || '').toLowerCase().includes('birth') || 
+            (app.type || '').toLowerCase().includes('certificate')
+          ).length,
+          marriage: standardizedData.filter(app => 
+            (app.type || '').toLowerCase().includes('marriage') || 
+            (app.type || '').toLowerCase().includes('wed')
+          ).length,
+          pending: standardizedData.filter(app => 
+            (app.status || '').toLowerCase().includes('pending') || 
+            (app.status || '').toLowerCase().includes('submitted') || 
+            (app.status || '') === ''
+          ).length,
+          approved: standardizedData.filter(app => 
+            (app.status || '').toLowerCase().includes('approved') || 
+            (app.status || '').toLowerCase().includes('accept')
+          ).length,
+          declined: standardizedData.filter(app => 
+            (app.status || '').toLowerCase().includes('declined') || 
+            (app.status || '').toLowerCase().includes('denied') || 
+            (app.status || '').toLowerCase().includes('reject')
+          ).length
+        });
+        
+        return standardizedData;
+      } catch (localErr) {
+        console.error('Failed to load from localStorage:', localErr);
+        return [];
+      }
+    } finally {
+      setLoading(false);
     }
   }, []);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        setLoading(true);
-        
-        // Fetch applications data using the separate function
+        // Fetch applications data using the updated function
         await fetchApplicationData();
         
-        // Fetch appointments data
+        // Fetch appointments data - keep using the existing logic for now
         const fetchedAppointments = getRecentAppointments();
         setAppointmentStats({
           overall: fetchedAppointments.length
@@ -181,6 +292,11 @@ const AdminDashboard = () => {
     return () => clearInterval(intervalId);
   }, [fetchApplicationData]);
 
+  // Manual refresh function
+  const handleRefresh = () => {
+    fetchApplicationData();
+  };
+
   return (
     <div className={`admin-dashboard ${isSidebarOpen ? 'sidebar-open' : ''}`}>
       <NavBar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
@@ -190,12 +306,28 @@ const AdminDashboard = () => {
         <h1 className="AdminDahboardHeader">Dashboard</h1>
         <div className="admin-dashboard-search-bar">
           <input type="text" placeholder="Search" value={searchTerm} onChange={handleSearch} />
+          <Button 
+            variant="contained" 
+            onClick={handleRefresh}
+            size="small"
+            disabled={loading}
+            sx={{ ml: 1, bgcolor: '#184a5b', '&:hover': { bgcolor: '#0f323d' } }}
+          >
+            {loading ? <CircularProgress size={24} sx={{ color: '#fff' }} /> : 'Refresh'}
+          </Button>
         </div>
       </div>
 
       <div className="admin-dashboard-content-wrapper">
         <div className="admin-dashboard-container">
           <div className="admin-dashboard-main">
+            {/* Show data source if it's from localStorage */}
+            {dataSource === 'localStorage' && (
+              <Alert severity="info" sx={{ mb: 2 }}>
+                Using local data. API connection failed or returned forbidden.
+              </Alert>
+            )}
+
             {/* Charts Section */}
             <div className="admin-dashboard-charts">
               <div className="admin-dashboard-chart-card">
@@ -270,7 +402,7 @@ const AdminDashboard = () => {
               </Paper>
             </Container>
               
-            {/* Applications Overall Stat */}
+            {/* Applications Overall Stat - Updated with database information */}
             <Container className='OverAllStatContainer'>
               <Paper className="TotalStatCard" elevation={1}>
                 <Typography variant="subtitle1" className="AllStatCardTitle">
@@ -279,6 +411,8 @@ const AdminDashboard = () => {
                 <Typography variant="h4" sx={{ color: '#184a5b', fontWeight: 600 }}>
                   {statistics.overall}
                 </Typography>
+                
+              
               </Paper>
             </Container>
           </div>
