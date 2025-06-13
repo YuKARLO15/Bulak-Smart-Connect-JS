@@ -33,87 +33,132 @@ const MarriageCertificateApplication = () => {
   const navigate = useNavigate();
   
   // Create application in backend
-  const createBackendApplication = async () => {
+  const createBackendApplication = async (existingFormData = {}) => {
     try {
-      console.log("Creating application in backend...");
+      console.log("Creating NEW Marriage Certificate application in backend...");
       
-      // Generate application ID with prefix and timestamp
-      const appId = 'MC-' + Date.now().toString().slice(-6);
-      console.log("Generated new application ID:", appId);
+      // Generate a unique application ID specifically for Marriage Certificate
+      const newAppId = 'MC-' + Date.now().toString().slice(-6);
       
-      // Save to local state
-      setApplicationId(appId);
-      localStorage.setItem('currentApplicationId', appId);
-
-      // Prepare data for backend
-      const husbandName = formData.husbandFirstName && formData.husbandLastName ? 
-        `${formData.husbandFirstName} ${formData.husbandLastName}` : 
-        'Groom';
+      // Combine form data
+      const combinedFormData = {
+        ...existingFormData,
+        ...formData
+      };
       
-      const wifeName = formData.wifeFirstName && formData.wifeLastName ? 
-        `${formData.wifeFirstName} ${formData.wifeLastName}` : 
-        'Bride';
-      
+      // Prepare data for backend - Marriage Certificate specific
       const backendApplicationData = {
-        applicationType: 'Marriage Certificate',
+        applicationType: 'Marriage Certificate',  // Correct type
         applicationSubtype: 'Request for Marriage Certificate',
-        applicantName: `${husbandName} and ${wifeName}`,
-        applicantDetails: JSON.stringify(formData),
-        status: 'DRAFT',
-        formData: formData // Backend validation requires this as object
+        applicantName: getApplicantName(combinedFormData),
+        status: 'Pending',
+        formData: {
+          ...combinedFormData,
+          applicationId: newAppId,
+          certificateType: 'Marriage Certificate',
+          sessionId: Date.now().toString()
+        }
       };
 
-      console.log("Creating application with data:", backendApplicationData);
+      console.log("Creating Marriage Certificate application with data:", backendApplicationData);
       
       // Call API to create application
       const response = await documentApplicationService.createApplication(backendApplicationData);
-      console.log("Backend created application:", response);
+      console.log("Backend created Marriage Certificate application:", response);
       
-      // Store the backend ID
+      // Store the NEW backend ID
       if (response && response.id) {
-        localStorage.setItem('currentApplicationId', response.id);
         setApplicationId(response.id);
         setBackendApplicationCreated(true);
+        
+        // Store in localStorage
+        localStorage.setItem('currentApplicationId', response.id);
+        localStorage.setItem('marriageApplicationId', response.id);
+        
+        console.log("NEW Marriage Certificate Application ID set:", response.id);
       }
       
       return response;
     } catch (error) {
-      console.error("Failed to create application in backend:", error);
-      showNotification(`Failed to create application: ${error.message}. Please try again.`, "error");
+      console.error("Failed to create Marriage Certificate application:", error);
+      showNotification(`Failed to create application: ${error.message}`, "error");
       return null;
     }
   };
 
+  // Helper function to get applicant name from form data
+  const getApplicantName = (data) => {
+    const husbandName = data.husbandFirstName && data.husbandLastName ? 
+      `${data.husbandFirstName} ${data.husbandLastName}` : 
+      'Groom';
+    
+    const wifeName = data.wifeFirstName && data.wifeLastName ? 
+      `${data.wifeFirstName} ${data.wifeLastName}` : 
+      'Bride';
+    
+    return `${husbandName} and ${wifeName}`;
+  };
+
   useEffect(() => {
-    try {
-      const storedFormData = JSON.parse(localStorage.getItem('marriageFormData') || '{}');
-      setFormData(storedFormData);
+    const startNewMarriageCertificateApplication = () => {
+      // Clear any existing application data that might interfere
+      const keysToRemove = [
+        'currentApplicationId',  // This was causing the Birth Cert ID to be reused
+        'marriageApplicationId',
+        'currentEditingApplicationId'
+      ];
       
-      // Get application ID from localStorage
-      const currentApplicationId = localStorage.getItem('currentApplicationId');
-      if (currentApplicationId) {
-        setApplicationId(currentApplicationId);
+      keysToRemove.forEach(key => localStorage.removeItem(key));
+      console.log('Cleared interfering application IDs');
+    };
+
+    const loadApplicationData = async () => {
+      try {
+        // Check if we're editing an existing application
+        const isEditing = localStorage.getItem('isEditingMarriageForm') === 'true';
+        const editingId = localStorage.getItem('currentEditingApplicationId');
         
-        // Check if this application exists in backend
-        documentApplicationService.getApplication(currentApplicationId)
-          .then(backendApp => {
-            if (backendApp) {
-              console.log("Application exists in backend:", backendApp);
+        if (isEditing && editingId) {
+          console.log('Loading existing application for editing:', editingId);
+          setApplicationId(editingId);
+          localStorage.setItem('currentApplicationId', editingId);
+          
+          // Try to load from backend
+          try {
+            const backendApp = await documentApplicationService.getApplication(editingId);
+            if (backendApp && backendApp.applicationType === 'Marriage Certificate') {
               setBackendApplicationCreated(true);
+              console.log("Found existing Marriage Certificate application:", backendApp);
+              
+              if (backendApp.formData) {
+                setFormData(backendApp.formData);
+                localStorage.setItem('marriageFormData', JSON.stringify(backendApp.formData));
+              }
             }
-          })
-          .catch(error => {
-            console.warn("Application may not exist in backend:", error);
-            // If app doesn't exist in backend but we have an ID, create it
-            createBackendApplication();
-          });
-      } else if (storedFormData && Object.keys(storedFormData).length > 0) {
-        // If we have form data but no application ID, create one
-        createBackendApplication();
+          } catch (error) {
+            console.warn("Could not load existing application:", error);
+          }
+        } else {
+          // Starting fresh - clear any old data
+          startNewMarriageCertificateApplication();
+          
+          // Load form data from localStorage
+          const storedFormData = JSON.parse(localStorage.getItem('marriageFormData') || '{}');
+          if (Object.keys(storedFormData).length > 0) {
+            console.log('Loaded marriage form data:', storedFormData);
+            setFormData(storedFormData);
+            
+            // Create a new Marriage Certificate application
+            await createBackendApplication(storedFormData);
+          }
+        }
+      } catch (error) {
+        console.error('Error loading application data:', error);
+        showNotification('Error loading application data', 'error');
       }
-    } catch (error) {
-      console.error('Error loading form data:', error);
-    }
+    };
+
+    loadApplicationData();
   }, []);
 
   // Show snackbar notification
@@ -269,8 +314,12 @@ const MarriageCertificateApplication = () => {
       setIsLoading(true);
       setIsSubmitted(true);
       
-      const currentAppId = applicationId || localStorage.getItem('currentApplicationId');
-      if (!currentAppId) {
+      // Get the effective application ID
+      const effectiveAppId = applicationId || 
+                            localStorage.getItem('marriageApplicationId') || 
+                            localStorage.getItem('currentApplicationId');
+      
+      if (!effectiveAppId) {
         console.error('No application ID found');
         showNotification('Error submitting application: No application ID found.', 'error');
         setIsLoading(false);
@@ -279,19 +328,48 @@ const MarriageCertificateApplication = () => {
         return;
       }
 
-      // Skip updating the backend status since it's already set to "Pending" at creation
-      // and the update endpoint might be admin-only
-      console.log('Application already has Pending status in backend');
+      // Make sure we update the backend with ALL form data
+      const storedFormData = JSON.parse(localStorage.getItem('marriageFormData') || '{}');
+      
+      // Combine with uploaded files information
+      const completeFormData = {
+        ...storedFormData,
+        documents: Object.keys(uploadedFiles).filter(key => uploadedFiles[key]),
+        submissionDate: new Date().toISOString(),
+        lastStep: 'MarriageCertificateApplication'
+      };
+      
+      // Save the complete data back to localStorage
+      localStorage.setItem('marriageFormData', JSON.stringify(completeFormData));
+      
+      try {
+        // Update application in backend with complete data
+        await documentApplicationService.updateApplication(effectiveAppId, {
+          status: 'Pending',
+          statusMessage: 'Marriage certificate application submitted with all required documents',
+          formData: completeFormData
+        });
+        
+        console.log('Application updated in backend with complete data');
+      } catch (updateError) {
+        console.warn('Could not update application in backend:', updateError);
+        // Continue anyway since files were uploaded
+      }
       
       // Store only the minimal required data in localStorage
-      localStorage.setItem('currentApplicationId', currentAppId);
-      localStorage.removeItem('marriageFormData');
+      localStorage.setItem('currentApplicationId', effectiveAppId);
+      localStorage.setItem('marriageApplicationId', effectiveAppId);
       
       showNotification('Application submitted successfully!', 'success');
 
       // Navigate to summary page after a short delay
       setTimeout(() => {
-        navigate('/MarriageSummaryForm');
+        navigate('/MarriageSummaryForm', {
+          state: {
+            applicationId: effectiveAppId,
+            formData: completeFormData
+          }
+        });
       }, 2000);
     } catch (error) {
       console.error('Error submitting application:', error);
@@ -305,6 +383,39 @@ const MarriageCertificateApplication = () => {
   
   const handleBack = () => {
     navigate('/MarriageCertificateForm');
+  };
+
+  // When navigating between form steps
+  const navigateToNextStep = (nextStep, currentFormData) => {
+    // Combine with any existing data
+    const existingData = JSON.parse(localStorage.getItem('marriageFormData') || '{}');
+    const mergedData = {
+      ...existingData,
+      ...currentFormData,
+      lastStep: 'CurrentStepName'  // Add metadata about the form flow
+    };
+    
+    // Save to localStorage
+    localStorage.setItem('marriageFormData', JSON.stringify(mergedData));
+    
+    // Get the application ID
+    const appId = localStorage.getItem('marriageApplicationId') || 
+                 localStorage.getItem('currentApplicationId');
+    
+    if (appId) {
+      // Update the application in backend if possible
+      documentApplicationService.updateApplication(appId, {
+        formData: mergedData
+      }).catch(error => console.warn('Could not update application:', error));
+    }
+    
+    // Navigate to next step
+    navigate(nextStep, {
+      state: {
+        applicationId: appId,
+        formData: mergedData
+      }
+    });
   };
 
   return (

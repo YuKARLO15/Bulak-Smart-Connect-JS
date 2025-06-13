@@ -824,7 +824,7 @@ const MarriageAffidavitForm = ({
       </form>
 
       {/* Add CSS for error styling */}
-      <style jsx>{`
+      <style>{`
         .required-indicator {
           color: red;
           margin-left: 3px;
