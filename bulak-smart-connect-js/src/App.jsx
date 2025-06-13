@@ -84,6 +84,10 @@ import AdminWalkInDetails from './AdminBulakSmartConnect/AdminWalkInDetails/Admi
 //Admin Account//
 import AdminAccount from './AdminBulakSmartConnect/AdminAccount/AdminAccount';
 
+//Admin ScreenSmartQueue//
+
+import ScreenSmartQueue from './AdminBulakSmartConnect/AdminSmartQueueComponents/ScreenSmartQueue';
+
 function App() {
 
   /*
@@ -113,6 +117,7 @@ function App() {
         <Route path="/LogIn" element={<LogIn />} />
         <Route path="/SignUpForm" element={<SignUpForm />} />
         <Route path="/unauthorized" element={<Unauthorized />} />
+        <Route path="/ScreenSmartQueue" element={<ScreenSmartQueue/> } />
 
         {/* Admin routes - Protected for admin and super_admin */}
         <Route element={<PrivateRoute allowedRoles={['admin', 'super_admin']} />}>
