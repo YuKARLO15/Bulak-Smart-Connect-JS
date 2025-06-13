@@ -62,30 +62,47 @@ export class MinioService implements OnModuleInit {
     }
   }
 
+  private sanitizeObjectName(objectName: string): string {
+    return objectName
+      .replace(/\//g, '-')           // Replace forward slashes with hyphens
+      .replace(/\\/g, '-')           // Replace backslashes with hyphens
+      .replace(/[<>:"|?*]/g, '')     // Remove other problematic characters
+      .replace(/\s+/g, '_')          // Replace spaces with underscores
+      .replace(/_{2,}/g, '_')        // Replace multiple underscores with single
+      .trim();
+  }
+
   async uploadFile(
     file: Express.Multer.File,
     objectName: string,
   ): Promise<string> {
     try {
+      // Sanitize the object name to prevent path issues
+      const sanitizedObjectName = this.sanitizeObjectName(objectName);
+      
       const metaData = {
         'Content-Type': file.mimetype,
         'Original-Name': file.originalname,
         'Upload-Date': new Date().toISOString(),
         'File-Size': file.size.toString(),
+        'Original-Object-Name': objectName, // Store original name for reference
       };
 
       await this.minioClient.putObject(
         this.bucketName,
-        objectName,
+        sanitizedObjectName,
         file.buffer,
         file.size,
         metaData,
       );
 
-      this.logger.log(`File uploaded successfully: ${objectName}`);
-      return objectName;
+      this.logger.log(`File uploaded successfully: ${sanitizedObjectName}`);
+      this.logger.log(`Original object name: ${objectName}`);
+      
+      return sanitizedObjectName;
     } catch (error) {
       this.logger.error('Error uploading file:', error);
+      this.logger.error(`Failed object name: ${objectName}`);
       throw error;
     }
   }

@@ -210,11 +210,27 @@ export const documentApplicationService = {
   // Upload a file for an application
   uploadFile: async (applicationId, file, documentType) => {
     try {
+      console.log(`Frontend Service: Uploading file for application ${applicationId}...`);
+      console.log('File details:', { name: file.name, size: file.size, type: file.type });
+      console.log('Document type:', documentType);
+      
+      // Enhanced sanitization for document labels/types
+      const sanitizeDocumentType = (docType) => {
+        return docType
+          .replace(/\//g, '-')           // Replace forward slashes with hyphens
+          .replace(/\\/g, '-')           // Replace backslashes with hyphens  
+          .replace(/[<>:"|?*]/g, '')     // Remove other problematic characters
+          .replace(/\s+/g, '_')          // Replace spaces with underscores
+          .trim();
+      };
+
       // Sanitize filename to remove emojis and special characters
       const sanitizedFileName = file.name
         .replace(/[^\w\s.-]/g, '') // Remove special characters except word chars, spaces, dots, hyphens
-        .replace(/\s+/g, '_') // Replace spaces with underscores
-        .replace(/_{2,}/g, '_') // Replace multiple underscores with single
+        .replace(/\//g, '-')       // Replace forward slashes with hyphens
+        .replace(/\\/g, '-')       // Replace backslashes with hyphens
+        .replace(/\s+/g, '_')      // Replace spaces with underscores
+        .replace(/_{2,}/g, '_')    // Replace multiple underscores with single
         .trim();
 
       // Create a new File object with sanitized name
@@ -226,9 +242,12 @@ export const documentApplicationService = {
       const formData = new FormData();
       formData.append('file', sanitizedFile);
       
-      // Make sure documentCategory is properly set
+      // Sanitize and validate document type
       if (documentType && documentType !== 'undefined') {
-        formData.append('documentCategory', documentType);
+        const sanitizedDocType = sanitizeDocumentType(documentType);
+        formData.append('documentCategory', sanitizedDocType);
+        console.log('Original document type:', documentType);
+        console.log('Sanitized document type:', sanitizedDocType);
       } else {
         throw new Error('Document type/category is required');
       }
