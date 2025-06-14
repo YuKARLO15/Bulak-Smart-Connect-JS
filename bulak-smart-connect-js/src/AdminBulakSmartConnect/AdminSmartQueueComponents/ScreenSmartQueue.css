@@ -1,0 +1,140 @@
+/* Layout container */
+.screen-queue-container {
+  height: 100vh;
+  width: 100vw;
+  background: #fff;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 20px;
+  box-sizing: border-box;
+}
+
+/* Header */
+.screen-queue-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  max-width: 600px;
+  margin-bottom: 10px;
+  background: #1C4D5A;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 24px 32px;
+}
+
+
+.queue-label {
+  color: #fff;
+  font-size: 1.4rem;
+  font-weight: 600;
+  text-align: center;
+  flex: 1;
+}
+
+/* NEW: Wrap main and in-queue sections side by side */
+.screen-queue-body {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 60px;
+  width: 100%;
+  max-width: 1200px;
+}
+
+/* Queue values */
+.screen-queue-main {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 600px;
+  width: 100%;
+}
+
+.queue-value {
+  background: #f5f9fa;
+  color: #1C4D5A;
+  font-size: 3.5rem;
+  font-weight: 800;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(28, 77, 90, 0.1);
+  padding: 30px 40px;
+  text-align: center;
+  transition: transform 0.2s;
+}
+
+.queue-value:hover {
+  transform: translateY(-5px);
+}
+
+/* In-queue section */
+.in-queue-section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  max-width: 500px;
+  width: 100%;
+}
+
+.in-queue-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1C4D5A;
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.in-queue-list {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: flex-start;
+  width: 100%;
+}
+
+.in-queue-item {
+  flex: 0 0 auto;
+  background: #fcf8f6;
+  color: #1C4D5A;
+  font-size: 1.3rem;
+  font-weight: 600;
+  padding: 16px 24px;
+  border-radius: 12px;
+  border: 1px solid #1C4D5A;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.in-queue-item:hover {
+  background: #1C4D5A;
+  color: white;
+  transform: scale(1.05);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .screen-queue-body {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .screen-queue-main,
+  .in-queue-section {
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .queue-value {
+    font-size: 2.5rem;
+    padding: 24px;
+  }
+
+  .in-queue-item {
+    font-size: 1.1rem;
+    padding: 12px 18px;
+  }
+}

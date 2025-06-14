@@ -1,22 +1,97 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './AdminAppointmentDashboard.css';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import NavBar from '../../NavigationComponents/NavSide';
 import AllAppointmentsAdmin from './AllAppointmentsAdmin';
-
-
+import { appointmentService } from '../../services/appointmentService';
 
 const AdminAppointmentDashboard = () => {
-  // Empty data arrays
-  const appointmentsData = [];
-  const chartData = [];
+  // State for appointments data
+  const [appointmentsData, setAppointmentsData] = useState([]);
+  const [chartData, setChartData] = useState([]);
+  const [currentQueue, setCurrentQueue] = useState({ current: 0, next: 0 });
 
   // Calendar state
   const [currentMonth, setCurrentMonth] = useState(new Date());
 
   // Sidebar state
   const [navOpen, setNavOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  // Fetch appointments data on component mount
+  useEffect(() => {
+    fetchDashboardData();
+  }, []);
+
+  const fetchDashboardData = async () => {
+    try {
+      const appointments = await appointmentService.fetchAllAppointments();
+      console.log('Dashboard appointments:', appointments);
+      setAppointmentsData(appointments);
+      
+      // Generate chart data
+      const chart = generateChartData(appointments);
+      setChartData(chart);
+      
+      // Calculate current queue
+      const queue = calculateCurrentQueue(appointments);
+      setCurrentQueue(queue);
+      
+    } catch (error) {
+      console.error('Error fetching dashboard data:', error);
+    }
+  };
+
+  const generateChartData = (appointments) => {
+    // Group appointments by date for the last 7 days
+    const last7Days = [];
+    const today = new Date();
+    
+    for (let i = 6; i >= 0; i--) {
+      const date = new Date(today);
+      date.setDate(date.getDate() - i);
+      const dateString = date.toISOString().split('T')[0];
+      
+      const dayAppointments = appointments.filter(app => {
+        const appDate = app.appointmentDate || app.date;
+        if (!appDate) return false;
+        const appDateString = new Date(appDate).toISOString().split('T')[0];
+        return appDateString === dateString;
+      });
+      
+      // For now, categorize by service type - you can adjust this logic
+      const certificateServices = ['Birth Certificate', 'Marriage Certificate', 'Death Certificate'];
+      
+      last7Days.push({
+        name: date.toLocaleDateString('en-US', { weekday: 'short' }),
+        walkIn: dayAppointments.filter(app => {
+          const service = app.reasonOfVisit || app.type || app.appointmentType;
+          return app.isGuest === true; // assuming walk-ins are guests
+        }).length,
+        appointment: dayAppointments.filter(app => {
+          return app.isGuest === false; // scheduled appointments
+        }).length
+      });
+    }
+    
+    return last7Days;
+  };
+
+  const calculateCurrentQueue = (appointments) => {
+    const today = new Date().toISOString().split('T')[0];
+    const todayAppointments = appointments.filter(app => {
+      const appDate = app.appointmentDate || app.date;
+      if (!appDate) return false;
+      const appDateString = new Date(appDate).toISOString().split('T')[0];
+      return appDateString === today && (app.status === 'confirmed' || app.status === 'pending');
+    });
+    
+    return {
+      current: todayAppointments.length > 0 ? 1 : 0,
+      next: todayAppointments.length > 1 ? 2 : 0
+    };
+  };
 
   // Calendar navigation functions
   const nextMonth = () => {
@@ -47,9 +122,21 @@ const AdminAppointmentDashboard = () => {
 
     // Days of the month
     for (let i = 1; i <= daysInMonth; i++) {
+      const currentDate = new Date(year, month, i);
+      const dateString = currentDate.toISOString().split('T')[0];
+      const dayAppointments = appointmentsData.filter(app => {
+        const appDate = app.appointmentDate || app.date;
+        if (!appDate) return false;
+        const appDateString = new Date(appDate).toISOString().split('T')[0];
+        return appDateString === dateString;
+      });
+      
       days.push(
-        <div key={`day-${i}`} className="admin-appointment-dashboard-calendar-day">
+        <div key={`day-${i}`} className={`admin-appointment-dashboard-calendar-day ${dayAppointments.length > 0 ? 'has-appointments' : ''}`}>
           {i}
+          {dayAppointments.length > 0 && (
+            <div className="appointment-indicator">{dayAppointments.length}</div>
+          )}
         </div>
       );
     }
@@ -74,7 +161,6 @@ const AdminAppointmentDashboard = () => {
   ];
   const monthName = monthNames[currentMonth.getMonth()];
   const year = currentMonth.getFullYear();
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   
   return (
     <div className="admin-appointment-dashboard">
@@ -83,7 +169,7 @@ const AdminAppointmentDashboard = () => {
       <div className="admin-appointment-dashboard-header">
         <button
           className="admin-appointment-dashboard-menu-icon"
-          onClick={() => setNavOpen(true)}
+          onClick={() => setIsSidebarOpen(true)}
           aria-label="Open navigation"
         >
           <span>&#9776;</span>
@@ -96,10 +182,10 @@ const AdminAppointmentDashboard = () => {
           {/* Current Queue Card */}
           <div className="admin-appointment-dashboard-current-queue-card">
             <h2 className="admin-appointment-dashboard-card-title">CURRENT QUEUE</h2>
-            <div className="admin-appointment-dashboard-current-queue-number"></div>
+            <div className="admin-appointment-dashboard-current-queue-number">{currentQueue.current}</div>
             <div className="admin-appointment-dashboard-next-queue">
               Next on Queue
-              <div className="admin-appointment-dashboard-next-queue-number"></div>
+              <div className="admin-appointment-dashboard-next-queue-number">{currentQueue.next}</div>
             </div>
           </div>
 

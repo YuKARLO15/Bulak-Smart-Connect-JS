@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Box, Typography, Card, CardContent, Button, CircularProgress } from '@mui/material';
-import { getRecentAppointments } from './RecentAppointmentData';
+import { getRecentAppointments, saveRecentAppointments } from './RecentAppointmentData'; 
 import { appointmentService } from '../../services/appointmentService'; 
 import './RecentAppointment.css';
 
