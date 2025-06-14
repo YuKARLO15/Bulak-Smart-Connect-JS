@@ -369,14 +369,15 @@ const getAllUserQueues = () => {
       }
       
       // Process position responses for multiple queues
-      const positionResponses = results.slice(2); // Skip current and pending queue responses
+      const positionResponses = await Promise.all(promises); // Change this line
+      const actualPositionResponses = positionResponses.slice(2); // Skip current and pending queue responses
       
-      if (positionResponses.length > 0) {
+      if (actualPositionResponses.length > 0) {
         // Find the best position (lowest non-zero position)
         let bestPosition = null;
         let activeQueue = null;
         
-        positionResponses.forEach(response => {
+        actualPositionResponses.forEach(response => {
           if (response && response.position !== undefined && response.position > 0) {
             if (bestPosition === null || response.position < bestPosition) {
               bestPosition = response.position;
