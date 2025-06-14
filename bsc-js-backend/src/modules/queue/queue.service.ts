@@ -484,7 +484,6 @@ export class QueueService {
     // Convert string userId to number since the database expects a number
     const userIdNumber = parseInt(userId, 10);
     
-    // Check if conversion is valid
     if (isNaN(userIdNumber)) {
       console.error('Invalid userId provided:', userId);
       return [];
@@ -493,7 +492,7 @@ export class QueueService {
     // First, let's find the user's queue details that contain the userId
     const userDetails = await this.queueDetailsRepository.find({
       where: { 
-        userId: userIdNumber // Use number instead of string
+        userId: userIdNumber
       },
       relations: ['queue'],
     });
@@ -505,11 +504,12 @@ export class QueueService {
       return [];
     }
 
-    // Now find the actual queues with those IDs that are active
+    // Find ALL queues (including completed ones) but filter them in the frontend
+    // Change this to include completed queues temporarily so we can clear them
     return await this.queueRepository.find({
       where: { 
         id: In(queueIds),
-        status: In([QueueStatus.PENDING, QueueStatus.SERVING])
+        // Remove status filter to get all queues including completed ones
       },
       relations: ['details'],
       order: { createdAt: 'ASC' }

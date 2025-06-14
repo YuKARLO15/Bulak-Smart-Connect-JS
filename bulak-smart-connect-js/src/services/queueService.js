@@ -169,4 +169,17 @@ export const queueService = {
       throw error;
     }
   },
+
+  // Add method to get queue details including status
+  getQueueDetails: async (queueId) => {
+    try {
+      console.log(`Making request to: ${API_URL}/queues/${queueId}`);
+      const response = await axios.get(`${API_URL}/queues/${queueId}`);
+      console.log('Queue details API response:', response.data);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching queue details:', error);
+      throw error;
+    }
+  },
 };
