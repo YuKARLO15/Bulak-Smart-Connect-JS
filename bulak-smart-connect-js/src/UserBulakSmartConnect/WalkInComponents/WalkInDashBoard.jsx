@@ -195,13 +195,24 @@ const getAllUserQueues = () => {
           status: queue.status
         }));
         
+        console.log('Valid user queues after filtering:', validUserQueues);
         setUserQueue(validUserQueues);
         
-        // Get position for user's active queue
+        // Get position for user's active queue - FIX: Check for pending status correctly
         const activeQueue = validUserQueues.find(q => q.status === 'pending');
         if (activeQueue) {
-          const positionData = await queueService.getQueuePosition(activeQueue.dbId);
-          setQueuePosition(positionData.position);
+          console.log('Found active queue, getting position for:', activeQueue.dbId);
+          try {
+            const positionData = await queueService.getQueuePosition(activeQueue.dbId);
+            console.log('Position data received:', positionData);
+            setQueuePosition(positionData.position);
+          } catch (error) {
+            console.error('Error fetching position:', error);
+            setQueuePosition(null);
+          }
+        } else {
+          console.log('No active queue found (status should be pending)');
+          setQueuePosition(null);
         }
       } else if (localUserQueueData) {
         // Fallback to localStorage if backend has no data
@@ -211,192 +222,103 @@ const getAllUserQueues = () => {
         // Try to get position for localStorage queue
         const userQueuesData = getAllUserQueues();
         if (userQueuesData.length > 0) {
-          userQueuesData.forEach(userQueue => {
-            const queueId = userQueue.dbId || (userQueue.id?.startsWith('WK') 
-              ? userQueue.id.replace('WK', '') 
-              : userQueue.id);
-            
-            if (queueId) {
-              promises.push(
-                queueService.getQueuePosition(queueId)
-                  .then(data => ({ ...data, queueId, userQueue }))
-                  .catch(err => {
-                    console.error(`Error fetching position for queue ${queueId}:`, err);
-                    return { position: null, queueId, userQueue };
-                  })
-              );
+          // REMOVE THIS SECTION - it's causing the position to be reset to null
+          // The position fetching logic should only be in the backend section above
+          
+          // Instead, just try to get position for the first queue
+          const firstQueue = userQueuesData[0];
+          if (firstQueue && firstQueue.dbId) {
+            try {
+              const positionData = await queueService.getQueuePosition(firstQueue.dbId);
+              setQueuePosition(positionData.position);
+            } catch (error) {
+              console.error('Error fetching position for localStorage queue:', error);
+              setQueuePosition(null);
             }
-          });
+          }
         }
       } else {
         setUserQueue(null);
         setQueuePosition(null);
       }
       
-      // IMPORTANT: Clear localStorage if API returns empty arrays - the database has been cleared
-      if (Array.isArray(currentQueuesResponse) && currentQueuesResponse.length === 0 && 
-          Array.isArray(pendingQueuesResponse) && pendingQueuesResponse.length === 0) {
-        console.log('API returned empty data - clearing localStorage cache');
-        localStorage.removeItem('currentQueue');
-        localStorage.removeItem('pendingQueues');
-        // Only remove userQueue if position API also returns no data
-        if (!results.find(r => r && r.position !== undefined)) {
-          localStorage.removeItem('userQueue');
-        }
-      }
-      
-      // Process current queue data with detailed logging
-      console.log('Raw current queues data:', currentQueuesResponse);
-      
-      // Always update state with latest API data, even if empty
-      if (Array.isArray(currentQueuesResponse)) {
-        const formattedCurrentQueues = currentQueuesResponse.length > 0 
-          ? currentQueuesResponse.map(queue => {
-              const queueNumber = queue.queueNumber || queue.number || queue.id;
-              const counterNumber = queue.counterNumber || queue.counter || '1';
-              
-              return {
-                id: formatWKNumber(queueNumber),
-                counter: `COUNTER ${counterNumber}`
-              };
-            })
-          : [];
+      // Process other queues (keep existing logic)
+      if (currentQueuesResponse && Array.isArray(currentQueuesResponse)) {
+        console.log('Raw current queues data:', currentQueuesResponse);
         
-        console.log('Setting current queues to:', formattedCurrentQueues);
-        setCurrentQueue(formattedCurrentQueues);
-        
-        // Store in localStorage ONLY if there's actual data
-        if (formattedCurrentQueues.length > 0) {
-          localStorage.setItem('currentQueue', JSON.stringify(formattedCurrentQueues));
-        } else {
-          localStorage.removeItem('currentQueue');
-        }
-      }
-      
-      // Process pending queues - ENSURE user's queue is filtered out
-      if (Array.isArray(pendingQueuesResponse)) {
-        // First format all pending queues
-        const formattedPendingQueues = pendingQueuesResponse.length > 0
-          ? pendingQueuesResponse.map(queue => {
-              const queueId = formatWKNumber(queue.queueNumber || queue.id);
-              return {
-                id: queueId,
-                rawId: queue.id, // Store the raw ID for comparison
-                date: new Date(queue.createdAt || Date.now()).toLocaleDateString('en-US', {
-                  month: '2-digit', day: '2-digit', year: '2-digit'
-                })
-              };
-            })
-          : [];
-        
-        console.log('All pending queues before filtering:', formattedPendingQueues);
-        
-        // Get all user queues from localStorage
-        const userQueuesData = getAllUserQueues();
-        let validUserQueues = [];
-        
-        // Validate which user queues still exist in the system
-        if (userQueuesData.length > 0) {
-          validUserQueues = userQueuesData.filter(userQ => {
-            // Enhanced matching for multiple queue formats
-            return formattedPendingQueues.some(pendingQ => 
-              pendingQ.id === userQ.id || 
-              pendingQ.rawId === userQ.dbId ||
-              pendingQ.rawId === userQ.rawId ||
-              pendingQ.id === userQ.dbId?.toString() ||
-              pendingQ.id === `WK${String(userQ.dbId).padStart(3, '0')}`
-            );
-          });
+        const formattedCurrentQueues = currentQueuesResponse.map(queue => {
+          const details = Array.isArray(queue.details) ? queue.details[0] : queue.details;
           
-          // Update dates from API data and preserve all ID formats
-          validUserQueues = validUserQueues.map(userQ => {
-            const matchingQueue = formattedPendingQueues.find(pendingQ => 
-              pendingQ.id === userQ.id || 
-              pendingQ.rawId === userQ.dbId ||
-              pendingQ.rawId === userQ.rawId ||
-              pendingQ.id === userQ.dbId?.toString() ||
-              pendingQ.id === `WK${String(userQ.dbId).padStart(3, '0')}`
-            );
-            
-            return {
-              ...userQ,
-              date: matchingQueue ? matchingQueue.date : userQ.date,
-              rawId: matchingQueue ? matchingQueue.rawId : userQ.rawId || userQ.dbId
-            };
-          });
-          
-          console.log('Valid user queues after filtering:', validUserQueues);
-          
-          // In your fetchQueueData function, modify where you save user queues:
-
-          if (validUserQueues.length > 0) {
-            const userId = getCurrentUserId();
-            
-            // Update state
-            setUserQueue(validUserQueues);
-            
-            // Add userId to queue objects
-            const userQueuesWithId = validUserQueues.map(q => ({
-              ...q,
-              userId: userId,
-              isUserQueue: true
-            }));
-            
-            // Store with user-specific keys
-            localStorage.setItem(`userQueue_${userId}`, JSON.stringify(userQueuesWithId[0]));
-            localStorage.setItem(`userQueues_${userId}`, JSON.stringify(userQueuesWithId));
-            
-            // For backward compatibility
-            localStorage.setItem('userQueue', JSON.stringify(userQueuesWithId[0]));
-          } else {
-            const userId = getCurrentUserId();
-            setUserQueue(null);
-            localStorage.removeItem(`userQueue_${userId}`);
-            localStorage.removeItem(`userQueues_${userId}`);
-            localStorage.removeItem('userQueue'); // Clean up legacy storage
-          }
-        }
-        
-        // Set all pending queues (will be filtered by the WalkInQueueList component)
-        setPendingQueues(formattedPendingQueues);
-        
-        // Store in localStorage
-        if (formattedPendingQueues.length > 0) {
-          localStorage.setItem('pendingQueues', JSON.stringify(formattedPendingQueues));
-        } else {
-          localStorage.removeItem('pendingQueues');
-        }
-      }
-      
-      // Process position responses for multiple queues
-      const positionResponses = await Promise.all(promises); // Change this line
-      const actualPositionResponses = positionResponses.slice(2); // Skip current and pending queue responses
-      
-      if (actualPositionResponses.length > 0) {
-        // Find the best position (lowest non-zero position)
-        let bestPosition = null;
-        let activeQueue = null;
-        
-        actualPositionResponses.forEach(response => {
-          if (response && response.position !== undefined && response.position > 0) {
-            if (bestPosition === null || response.position < bestPosition) {
-              bestPosition = response.position;
-              activeQueue = response.userQueue;
+          return {
+            id: formatWKNumber(queue.queueNumber || queue.id),
+            dbId: queue.id,
+            queueNumber: formatWKNumber(queue.queueNumber || queue.id),
+            firstName: details?.firstName || 'N/A',
+            lastName: details?.lastName || 'N/A',
+            counterNumber: queue.counterNumber || 'N/A',
+            status: queue.status,
+            userData: {
+              firstName: details?.firstName,
+              lastName: details?.lastName,
+              reasonOfVisit: details?.reasonOfVisit
             }
-          }
+          };
         });
         
-        console.log('Best position found:', bestPosition, 'for queue:', activeQueue);
-        setQueuePosition(bestPosition);
-        
-        // Set the active queue as the primary user queue
-        if (activeQueue) {
-          setUserQueue([activeQueue, ...userQueuesData.filter(q => q.id !== activeQueue.id)]);
-        }
+        console.log('Setting current queues to:', formattedCurrentQueues);
+        setCurrentQueues(formattedCurrentQueues);
       } else {
-        setQueuePosition(null);
+        setCurrentQueues([]);
       }
-      
+
+      if (pendingQueuesResponse && Array.isArray(pendingQueuesResponse)) {
+        console.log('All pending queues before filtering:', pendingQueuesResponse);
+        
+        const userQueuesData = getAllUserQueues();
+        
+        const filteredPendingQueues = pendingQueuesResponse.filter(queue => {
+          const queueDbId = queue.id;
+          const formattedQueueNumber = formatWKNumber(queue.queueNumber || queue.id);
+          
+          // Check if this queue belongs to the current user
+          const isUserQueue = userQueuesData.some(userQueue => {
+            const userDbId = userQueue.dbId;
+            const userFormattedNumber = userQueue.id || userQueue.queueNumber;
+            
+            return userDbId === queueDbId || userFormattedNumber === formattedQueueNumber;
+          });
+          
+          return !isUserQueue;
+        });
+
+        const formattedPendingQueues = filteredPendingQueues.map(queue => {
+          const details = Array.isArray(queue.details) ? queue.details[0] : queue.details;
+          
+          return {
+            id: formatWKNumber(queue.queueNumber || queue.id),
+            dbId: queue.id,
+            queueNumber: formatWKNumber(queue.queueNumber || queue.id),
+            date: new Date(queue.createdAt).toLocaleDateString('en-US', {
+              month: '2-digit', 
+              day: '2-digit', 
+              year: '2-digit'
+            }),
+            firstName: details?.firstName || 'N/A',
+            lastName: details?.lastName || 'N/A',
+            reasonOfVisit: details?.reasonOfVisit || 'N/A',
+            userData: {
+              firstName: details?.firstName,
+              lastName: details?.lastName,
+              reasonOfVisit: details?.reasonOfVisit
+            }
+          };
+        });
+
+        setPendingQueues(formattedPendingQueues);
+      } else {
+        setPendingQueues([]);
+      }
+
       setLoading(false);
     } catch (error) {
       console.error('Failed to fetch queue data:', error);
