@@ -204,11 +204,31 @@ export class QueueService {
   }
 
   async getQueuePosition(queueId: number) {
+    console.log(`Getting position for queue ID: ${queueId}`);
+    
     const queue = await this.findOne(queueId);
+    console.log(`Found queue:`, queue);
 
-    // If the queue is not pending, it's not in line
-    if (queue.status !== QueueStatus.PENDING) {
+    // If the queue doesn't exist, return position 0
+    if (!queue) {
+      console.log('Queue not found');
       return { position: 0 };
+    }
+
+    // If the queue is not pending, return special position values
+    if (queue.status === QueueStatus.SERVING) {
+      console.log('Queue is currently being served');
+      return { position: 0, status: 'serving' };
+    }
+    
+    if (queue.status === QueueStatus.COMPLETED) {
+      console.log('Queue is completed');
+      return { position: 0, status: 'completed' };
+    }
+    
+    if (queue.status !== QueueStatus.PENDING) {
+      console.log(`Queue status is ${queue.status}, not pending`);
+      return { position: 0, status: queue.status };
     }
 
     // Count serving queues (they are ahead of all pending queues)
@@ -217,19 +237,22 @@ export class QueueService {
         status: QueueStatus.SERVING,
       },
     });
+    console.log(`Serving queues count: ${servingCount}`);
 
-    // Count how many pending queues are ahead of this one
+    // Count how many pending queues are ahead of this one (created earlier)
     const pendingAheadCount = await this.queueRepository.count({
       where: {
         status: QueueStatus.PENDING,
-        id: LessThan(queueId), // Queues with lower ID numbers (created earlier)
+        createdAt: LessThan(queue.createdAt), // Queues created before this one
       },
     });
+    console.log(`Pending queues ahead: ${pendingAheadCount}`);
 
     // Total position = serving queues + pending queues ahead + 1
     const position = servingCount + pendingAheadCount + 1;
+    console.log(`Calculated position: ${position}`);
     
-    return { position };
+    return { position, status: 'pending' };
   }
   async getDetailsForMultipleQueues(queueIds: number[]) {
     console.log('Getting details for queue IDs:', queueIds);

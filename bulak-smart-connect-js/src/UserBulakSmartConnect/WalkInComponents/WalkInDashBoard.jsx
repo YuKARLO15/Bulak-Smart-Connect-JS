@@ -36,7 +36,7 @@ const getCurrentUserId = () => {
 
 const WalkInQueueContainer = () => {
   const [queuePosition, setQueuePosition] = useState(null); 
-  const [currentQueue, setCurrentQueue] = useState([]); 
+  const [currentQueue, setCurrentQueue] = useState([]); // Make sure this is currentQueue, not currentQueues
   const [pendingQueues, setPendingQueues] = useState([]);
   const [userQueue, setUserQueue] = useState(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -140,7 +140,7 @@ const getAllUserQueues = () => {
       // Get current user
       const currentUser = getCurrentUserId();
       
-      // Make API calls in parallel - ADD user queues fetch
+      // Make API calls in parallel
       const promises = [
         queueService.fetchCurrentQueues().catch(err => {
           console.error('Error fetching current queues:', err);
@@ -150,14 +150,13 @@ const getAllUserQueues = () => {
           console.error('Error fetching pending queues:', err);
           return [];
         }),
-        // ADD THIS: Fetch user queues from backend
         queueService.fetchUserQueues(currentUser).catch(err => {
           console.error('Error fetching user queues:', err);
           return [];
         })
       ];
       
-      // Get stored user queue after API calls (keep for fallback)
+      // Get stored user queue for fallback
       const storedUserQueue = localStorage.getItem('userQueue');
       let localUserQueueData = null;
       
@@ -198,21 +197,39 @@ const getAllUserQueues = () => {
         console.log('Valid user queues after filtering:', validUserQueues);
         setUserQueue(validUserQueues);
         
-        // Get position for user's active queue - FIX: Check for pending status correctly
+        // Get position for user's active queue
         const activeQueue = validUserQueues.find(q => q.status === 'pending');
         if (activeQueue) {
           console.log('Found active queue, getting position for:', activeQueue.dbId);
           try {
             const positionData = await queueService.getQueuePosition(activeQueue.dbId);
             console.log('Position data received:', positionData);
-            setQueuePosition(positionData.position);
+            
+            // Handle different position responses
+            if (positionData.status === 'serving') {
+              setQueuePosition('NOW SERVING');
+            } else if (positionData.status === 'completed') {
+              setQueuePosition('COMPLETED');
+              // Remove completed queue from user queue
+              setUserQueue(prev => Array.isArray(prev) ? prev.filter(q => q.dbId !== activeQueue.dbId) : null);
+            } else if (positionData.position > 0) {
+              setQueuePosition(positionData.position);
+            } else {
+              setQueuePosition(null);
+            }
           } catch (error) {
             console.error('Error fetching position:', error);
             setQueuePosition(null);
           }
         } else {
-          console.log('No active queue found (status should be pending)');
-          setQueuePosition(null);
+          // Check if user has a serving queue
+          const servingQueue = validUserQueues.find(q => q.status === 'serving');
+          if (servingQueue) {
+            setQueuePosition('NOW SERVING');
+          } else {
+            console.log('No active queue found (status should be pending)');
+            setQueuePosition(null);
+          }
         }
       } else if (localUserQueueData) {
         // Fallback to localStorage if backend has no data
@@ -222,10 +239,6 @@ const getAllUserQueues = () => {
         // Try to get position for localStorage queue
         const userQueuesData = getAllUserQueues();
         if (userQueuesData.length > 0) {
-          // REMOVE THIS SECTION - it's causing the position to be reset to null
-          // The position fetching logic should only be in the backend section above
-          
-          // Instead, just try to get position for the first queue
           const firstQueue = userQueuesData[0];
           if (firstQueue && firstQueue.dbId) {
             try {
@@ -242,7 +255,7 @@ const getAllUserQueues = () => {
         setQueuePosition(null);
       }
       
-      // Process other queues (keep existing logic)
+      // Process current queues - FIX: Use setCurrentQueue instead of setCurrentQueues
       if (currentQueuesResponse && Array.isArray(currentQueuesResponse)) {
         console.log('Raw current queues data:', currentQueuesResponse);
         
@@ -266,11 +279,12 @@ const getAllUserQueues = () => {
         });
         
         console.log('Setting current queues to:', formattedCurrentQueues);
-        setCurrentQueues(formattedCurrentQueues);
+        setCurrentQueue(formattedCurrentQueues); // FIXED: Use setCurrentQueue
       } else {
-        setCurrentQueues([]);
+        setCurrentQueue([]); // FIXED: Use setCurrentQueue
       }
 
+      // Process pending queues
       if (pendingQueuesResponse && Array.isArray(pendingQueuesResponse)) {
         console.log('All pending queues before filtering:', pendingQueuesResponse);
         
@@ -324,7 +338,7 @@ const getAllUserQueues = () => {
       console.error('Failed to fetch queue data:', error);
       setLoading(false);
     }
-  }, [queuePosition]);
+  }, []);
 
   // Add this function and call it periodically
   const syncWithOtherTabs = useCallback(() => {
@@ -400,6 +414,21 @@ const getAllUserQueues = () => {
 
       socket.on('queueUpdate', (data) => {
         console.log('Queue update event received:', data);
+        
+        // If user's queue was completed, remove it from localStorage
+        if (data.status === 'completed' && userQueue) {
+          const userQueueArray = Array.isArray(userQueue) ? userQueue : [userQueue];
+          const completedQueue = userQueueArray.find(q => q.dbId === data.queueId);
+          
+          if (completedQueue) {
+            console.log('User queue completed, removing from localStorage');
+            localStorage.removeItem('userQueue');
+            const userId = getCurrentUserId();
+            localStorage.removeItem(`userQueue_${userId}`);
+            localStorage.removeItem(`userQueues_${userId}`);
+          }
+        }
+        
         fetchQueueData();
       });
 
