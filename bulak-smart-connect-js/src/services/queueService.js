@@ -156,4 +156,17 @@ export const queueService = {
       throw error;
     }
   },
+
+  // New method to fetch user queues from backend
+  fetchUserQueues: async (userId) => {
+    try {
+      console.log(`Making request to: ${API_URL}/queues/user/${userId}`);
+      const response = await axios.get(`${API_URL}/queues/user/${userId}`);
+      console.log('User queues API response:', response.data);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching user queues:', error);
+      throw error;
+    }
+  },
 };

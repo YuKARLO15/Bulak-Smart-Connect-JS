@@ -137,7 +137,10 @@ const getAllUserQueues = () => {
     try {
       setLoading(true);
       
-      // Make API calls in parallel
+      // Get current user
+      const currentUser = getCurrentUserId();
+      
+      // Make API calls in parallel - ADD user queues fetch
       const promises = [
         queueService.fetchCurrentQueues().catch(err => {
           console.error('Error fetching current queues:', err);
@@ -146,54 +149,89 @@ const getAllUserQueues = () => {
         queueService.fetchPendingQueues().catch(err => {
           console.error('Error fetching pending queues:', err);
           return [];
+        }),
+        // ADD THIS: Fetch user queues from backend
+        queueService.fetchUserQueues(currentUser).catch(err => {
+          console.error('Error fetching user queues:', err);
+          return [];
         })
       ];
       
-      // Get stored user queue after API calls (to possibly clear it)
+      // Get stored user queue after API calls (keep for fallback)
       const storedUserQueue = localStorage.getItem('userQueue');
-      let userQueueData = null;
+      let localUserQueueData = null;
       
       if (storedUserQueue) {
         try {
-          userQueueData = JSON.parse(storedUserQueue);
-          setUserQueue(userQueueData);
+          localUserQueueData = JSON.parse(storedUserQueue);
         } catch (e) {
           console.error('Error parsing user queue from localStorage:', e);
         }
       }
-      
-      // Add position request if we have user queues - HANDLE MULTIPLE QUEUES
-      const userQueuesData = getAllUserQueues();
-      if (userQueuesData.length > 0) {
-        console.log('Found user queues for position lookup:', userQueuesData);
-        
-        // Get position for the first pending queue (or all queues)
-        userQueuesData.forEach(userQueue => {
-          const queueId = userQueue.dbId || (userQueue.id?.startsWith('WK') 
-            ? userQueue.id.replace('WK', '') 
-            : userQueue.id);
-          
-          if (queueId) {
-            console.log('Adding position request for queue ID:', queueId);
-            promises.push(
-              queueService.getQueuePosition(queueId)
-                .then(data => ({ ...data, queueId, userQueue }))
-                .catch(err => {
-                  console.error(`Error fetching position for queue ${queueId}:`, err);
-                  return { position: null, queueId, userQueue };
-                })
-            );
-          }
-        });
-        
-        // Set user queue state
-        setUserQueue(userQueuesData);
-      } else {
-        setUserQueue(null);
-      }
 
       // Wait for all requests to complete
-      const [currentQueuesResponse, pendingQueuesResponse, ...results] = await Promise.all(promises);
+      const [currentQueuesResponse, pendingQueuesResponse, userQueuesResponse] = await Promise.all(promises);
+      
+      // Process user queues from backend FIRST, fallback to localStorage
+      if (userQueuesResponse && userQueuesResponse.length > 0) {
+        console.log('Using user queues from backend:', userQueuesResponse);
+        
+        const validUserQueues = userQueuesResponse.map(queue => ({
+          id: formatWKNumber(queue.queueNumber || queue.id),
+          dbId: queue.id,
+          queueNumber: formatWKNumber(queue.queueNumber || queue.id),
+          date: new Date(queue.createdAt).toLocaleDateString('en-US', {
+            month: '2-digit', 
+            day: '2-digit', 
+            year: '2-digit'
+          }),
+          userData: {
+            firstName: queue.firstName,
+            lastName: queue.lastName,
+            reasonOfVisit: queue.reasonOfVisit
+          },
+          userId: currentUser,
+          isUserQueue: true,
+          status: queue.status
+        }));
+        
+        setUserQueue(validUserQueues);
+        
+        // Get position for user's active queue
+        const activeQueue = validUserQueues.find(q => q.status === 'pending');
+        if (activeQueue) {
+          const positionData = await queueService.getQueuePosition(activeQueue.dbId);
+          setQueuePosition(positionData.position);
+        }
+      } else if (localUserQueueData) {
+        // Fallback to localStorage if backend has no data
+        console.log('Using user queue from localStorage as fallback');
+        setUserQueue(localUserQueueData);
+        
+        // Try to get position for localStorage queue
+        const userQueuesData = getAllUserQueues();
+        if (userQueuesData.length > 0) {
+          userQueuesData.forEach(userQueue => {
+            const queueId = userQueue.dbId || (userQueue.id?.startsWith('WK') 
+              ? userQueue.id.replace('WK', '') 
+              : userQueue.id);
+            
+            if (queueId) {
+              promises.push(
+                queueService.getQueuePosition(queueId)
+                  .then(data => ({ ...data, queueId, userQueue }))
+                  .catch(err => {
+                    console.error(`Error fetching position for queue ${queueId}:`, err);
+                    return { position: null, queueId, userQueue };
+                  })
+              );
+            }
+          });
+        }
+      } else {
+        setUserQueue(null);
+        setQueuePosition(null);
+      }
       
       // IMPORTANT: Clear localStorage if API returns empty arrays - the database has been cleared
       if (Array.isArray(currentQueuesResponse) && currentQueuesResponse.length === 0 && 
