@@ -4,19 +4,26 @@ import { Radio, RadioGroup, FormControlLabel, Typography, Box, Paper, Button } f
 import './BirthCertificateDashboard.css';
 import NavBar from '../../../NavigationComponents/NavSide';
 
+const applicationTypeMap = {
+  'Request copy': 'Copy',
+  'Clerical Error': 'Clerical Error',
+  'Sex DOB': 'Sex DOB',
+  'First Name': 'First Name',
+  // Add other mappings as needed
+};
+
 const BirthCertificateDashboard = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState('');
   const [agreedPrivacy, setAgreedPrivacy] = useState(false);
-  const [agreedTerms, setAgreedTerms] = useState(false);
   const [hasVisitedPrivacyPolicy, setHasVisitedPrivacyPolicy] = useState(false);
 
   const navigate = useNavigate();
+
   useEffect(() => {
     const visited = sessionStorage.getItem('visitedPrivacyPolicy');
     if (visited === 'true') {
       setHasVisitedPrivacyPolicy(true);
-   
       setAgreedPrivacy(true);
     }
   }, []);
@@ -29,44 +36,39 @@ const BirthCertificateDashboard = () => {
           clearInterval(checkClosed);
           sessionStorage.setItem('visitedPrivacyPolicy', 'true');
           setHasVisitedPrivacyPolicy(true);
-  
           setAgreedPrivacy(true);
         }
       }, 1000);
     }
   };
+
   const handleNext = () => {
     if (!selectedOption) {
       alert('Please select an option before proceeding.');
       return;
     }
-
     sessionStorage.setItem('selectedBirthCertificateOption', selectedOption);
 
-    if (['Clerical Error', 'Sex DOB', 'First Name'].includes(selectedOption)) {
-      const correctionRoutes = {
-        'Clerical Error': '/ClericalErrorApplication',
-        'Sex DOB': '/SexDobCorrection',
-        'First Name': '/FirstNameCorrection',
-      };
-
-      navigate(correctionRoutes[selectedOption]);
-      console.log(`Navigating to correction route: ${correctionRoutes[selectedOption]}`);
-    } else if (selectedOption === 'Request copy') {
+    // Route all copy/correction actions to the same form, passing type in state
+    if (applicationTypeMap[selectedOption]) {
       localStorage.removeItem('isEditingBirthApplication');
       localStorage.removeItem('editingApplicationId');
       localStorage.removeItem('birthCertificateApplication');
       localStorage.removeItem('editingApplication');
       localStorage.removeItem('currentApplicationStatus');
-      navigate('/RequestACopyBirthCertificate');
-    } else {
-      localStorage.removeItem('isEditingBirthApplication');
-      localStorage.removeItem('editingApplicationId');
-      localStorage.removeItem('birthCertificateApplication');
-      localStorage.removeItem('editingApplication');
-      localStorage.removeItem('currentApplicationStatus');
-      navigate('/BirthCertificateForm');
+      navigate('/RequestACopyBirthCertificate', { 
+        state: { correctionType: applicationTypeMap[selectedOption] } 
+      });
+      return;
     }
+
+    // For other options (if any)
+    localStorage.removeItem('isEditingBirthApplication');
+    localStorage.removeItem('editingApplicationId');
+    localStorage.removeItem('birthCertificateApplication');
+    localStorage.removeItem('editingApplication');
+    localStorage.removeItem('currentApplicationStatus');
+    navigate('/BirthCertificateForm');
   };
 
   return (
@@ -88,7 +90,7 @@ const BirthCertificateDashboard = () => {
             <FormControlLabel
               value="Request copy"
               control={<Radio />}
-              label="Regular application  (0 - 1 month after birth) or request a copy of birth certificate"
+              label="Regular application (0 - 1 month after birth) or request a copy of birth certificate"
             />
             <Typography variant="subtitle1" className="SubTitleBirthCertificate">
               Delayed registration (More than 1 month after birth)
@@ -139,13 +141,10 @@ const BirthCertificateDashboard = () => {
             />
           </RadioGroup>
         </Box>
-
         <Box className="Section">
           <Typography variant="h6" className="SectionTitle">
             Data Privacy Notice
           </Typography>
-
-          {/* Data Privacy Notice */}
           <Box sx={{ mb: 2 }} className="dataPrivacyNoticeContainer">
             <Typography variant="body2" sx={{ mb: 1 }} className="dataPrivacyNotice">
               Please <strong>click</strong> and <strong>read </strong> our{' '}
@@ -198,14 +197,11 @@ const BirthCertificateDashboard = () => {
             className="BirthDashRadioGroup"
           />
         </Box>
-
-      
-
         <Box className="Section">
           <Button
             variant="contained"
             onClick={handleNext}
-            disabled={!selectedOption || !agreedPrivacy }
+            disabled={!selectedOption || !agreedPrivacy}
             className="BirthNextButton"
           >
             Next
