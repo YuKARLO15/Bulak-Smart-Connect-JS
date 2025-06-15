@@ -48,15 +48,14 @@ const AdminApplicationDetails = () => {
   const [showDocumentsTab, setShowDocumentsTab] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 const [affidavit, setAffidavitTab] = useState(0);
-  const currentUser = 'dennissegailfrancisco'; // Set the current user
-  
+  const currentUser = 'dennissegailfrancisco'; 
   useEffect(() => {
     let isMounted = true;
     setLoading(true);
 
     async function fetchApplications() {
       try {
-        // Use the documentApplicationService to fetch all applications
+   
         const storedApplications = await documentApplicationService.getAllApplications();
         if (!isMounted) return;
 

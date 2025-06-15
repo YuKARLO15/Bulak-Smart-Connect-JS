@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Box, Typography, Card, CardContent, Button, Grid, Paper, CircularProgress, Container } from '@mui/material';
-import { getRecentAppointments } from '../../UserBulakSmartConnect/AppointmentComponents/RecentAppointmentData';
+import { appointmentService } from '../../services/appointmentService'; // Update with correct path
 import './RecentAppointmentsAdmin.css';
 
 const RecentAppointmentsAdmin = () => {
   const navigate = useNavigate();
-  const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [statistics, setStatistics] = useState({
     todayTotal: 0,
@@ -15,15 +14,16 @@ const RecentAppointmentsAdmin = () => {
     weekCanceled: 0
   });
   
-  const [currentDateTime, setCurrentDateTime] = useState('');
-    useEffect(() => {
-     
+  const [currentDateTime, setCurrentDateTime] = useState('2025-06-13 19:08:28'); // Set initial date from your system
+  
+  useEffect(() => {
+    // Update current time
     const updateCurrentTime = () => {
       const now = new Date();
       
       // Format as YYYY-MM-DD HH:MM:SS
       const year = now.getUTCFullYear();
-      const month = String(now.getUTCMonth() + 1).padStart(2, '0'); // Months are 0-based
+      const month = String(now.getUTCMonth() + 1).padStart(2, '0');
       const day = String(now.getUTCDate()).padStart(2, '0');
       const hours = String(now.getUTCHours()).padStart(2, '0');
       const minutes = String(now.getUTCMinutes()).padStart(2, '0');
@@ -31,81 +31,50 @@ const RecentAppointmentsAdmin = () => {
       
       const formattedDateTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
       setCurrentDateTime(formattedDateTime);
-      };
-    
+    };
     
     // Update the time immediately
-      updateCurrentTime();
-      
-     
+    updateCurrentTime();
     
     // Update the time every second
     const timeInterval = setInterval(updateCurrentTime, 1000);
     
-    // Fetch appointments data
-    const timer = setTimeout(() => {
-      const fetchedAppointments = getRecentAppointments();
-      setAppointments(fetchedAppointments);
-      
-      // Calculate statistics
-      calculateStatistics(fetchedAppointments);
-      setLoading(false);
-    }, 500);
-
+    // Fetch appointment statistics from the API
+    const fetchStatistics = async () => {
+      try {
+        // Use getAppointmentStats method to fetch formatted statistics
+        const stats = await appointmentService.getAppointmentStats();
+        console.log('Fetched appointment statistics:', stats);
+        
+        setStatistics({
+          todayTotal: stats.todayTotal || 0,
+          weekPending: stats.weekPending || 0,
+          weekCompleted: stats.weekCompleted || 0,
+          weekCanceled: stats.weekCanceled || 0
+        });
+        
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching appointment statistics:', error);
+        // Fall back to 0 values if there's an error
+        setStatistics({
+          todayTotal: 0,
+          weekPending: 0,
+          weekCompleted: 0,
+          weekCanceled: 0
+        });
+        setLoading(false);
+      }
+    };
+    
+    fetchStatistics();
+    
     return () => {
-      clearTimeout(timer);
-      clearInterval(timeInterval); // Clean up the interval
+      clearInterval(timeInterval);
     };
   }, []);
-  const calculateStatistics = (appointments) => {
-    // Parse the current date and time
-    const today = new Date('2025-06-04');
-    const todayString = today.toISOString().split('T')[0]; // YYYY-MM-DD format
-    
-    // Get start of week (Sunday) and end of week (Saturday)
-    const startOfWeek = new Date(today);
-    startOfWeek.setDate(today.getDate() - today.getDay()); // Go to the start of the week (Sunday)
-    const endOfWeek = new Date(today);
-    endOfWeek.setDate(startOfWeek.getDate() + 6); // Go to the end of the week (Saturday)
-    
-    // Count appointments
-    let todayTotal = 0;
-    let weekPending = 0;
-    let weekCompleted = 0;
-    let weekCanceled = 0;
-    
-    appointments.forEach(appointment => {
-      // Extract the date part from appointment.date
-      const appointmentDate = new Date(appointment.date);
-      const appointmentDateString = appointmentDate.toISOString().split('T')[0];
-      
-      // Check if appointment is today
-      if (appointmentDateString === todayString) {
-        todayTotal++;
-      }
-      
-      // Check if appointment is within this week
-      if (appointmentDate >= startOfWeek && appointmentDate <= endOfWeek) {
-        // Count by status for the week
-        if (appointment.status?.toLowerCase() === 'pending') {
-          weekPending++;
-        } else if (appointment.status?.toLowerCase() === 'completed') {
-          weekCompleted++;
-        } else if (appointment.status?.toLowerCase() === 'canceled' || 
-                  appointment.status?.toLowerCase() === 'cancelled') {
-          weekCanceled++;
-        }
-      }
-    });
-    
-    setStatistics({
-      todayTotal,
-      weekPending,
-      weekCompleted,
-      weekCanceled
-    });
-  };
 
+  // The rest of your component remains the same
   if (loading) {
     return (
       <Card className="RecentAppointmentsAdminCard">
@@ -121,8 +90,6 @@ const RecentAppointmentsAdmin = () => {
 
   return (
     <Card className="RecentAppointmentsAdminCard">
-
-    
       <CardContent>
         <Box mb={2} className="RecentApptAdminHeader">
           <Container className='RecentApptAdminHeaderContainer'>
@@ -370,8 +337,6 @@ const RecentAppointmentsAdmin = () => {
             </Paper>
           </Grid>
         </Grid>
-
-      
       </CardContent>
     </Card>
   );

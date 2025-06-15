@@ -1,37 +1,72 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Typography, Paper, Button, Divider, Alert, Snackbar } from '@mui/material';
+import { Box, Typography, Paper, Button, Divider, Alert, Snackbar, CircularProgress } from '@mui/material';
 import { useNavigate, useLocation } from 'react-router-dom';
 import './CopyBirthCertificate.css';
-// Import your document application service
-import { documentApplicationService } from '../../../../services/documentApplicationService';
 import NavBar from '../../../../NavigationComponents/NavSide';
+import { documentApplicationService } from '../../../../services/documentApplicationService';
 import { localStorageManager } from '../../../../services/localStorageManager';
 
-const CopyBirthCertificate = ({ formData = {}, handleChange }) => {
+
+const backendTypeMap = {
+  'Copy': {
+    applicationType: 'Birth Certificate',
+    applicationSubtype: 'Request a Copy of Birth Certificate'
+  },
+  'Clerical Error': {
+    applicationType: 'Birth Certificate',
+    applicationSubtype: 'Correction - Clerical Errors'
+  },
+  'Sex DOB': {
+    applicationType: 'Birth Certificate',
+    applicationSubtype: 'Correction - Sex/Date of Birth'
+  },
+  'First Name': {
+    applicationType: 'Birth Certificate',
+    applicationSubtype: 'Correction - First Name'
+  }
+};
+const uiTitleMap = {
+  'Copy': 'Request a Copy of Birth Certificate',
+  'Clerical Error': 'Correction of Clerical Error',
+  'Sex DOB': "Correction of Child's Sex / Date of Birth",
+  'First Name': 'Correction of First Name'
+};
+
+const CopyBirthCertificate = ({ formData = {}, handleChange, correctionType }) => {
   const navigate = useNavigate();
-   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [showExtension, setShowExtension] = useState(formData.hasExtension || false);
+  const location = useLocation();
+
+
+  const selectedKind =
+    correctionType ||
+    location?.state?.correctionType ||
+    location?.state?.applicationType ||
+    'Copy';
+  const backendType = backendTypeMap[selectedKind] || backendTypeMap['Copy'];
+  const uiTitle = uiTitleMap[selectedKind] || uiTitleMap['Copy'];
+
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [localFormData, setLocalFormData] = useState(formData || {});
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'info' });
-  
+  const [debugInfo, setDebugInfo] = useState(null);
+
   const requiredField = <span className="RequiredFieldCopyBirth">*</span>;
-  const location = useLocation();
 
   const months = [
     'January', 'February', 'March', 'April', 'May', 'June',
     'July', 'August', 'September', 'October', 'November', 'December',
   ];
-  
   const days = Array.from({ length: 31 }, (_, i) => i + 1);
   const currentYear = new Date().getFullYear();
   const years = Array.from({ length: 100 }, (_, i) => currentYear - i);
 
-  const isEditing = location.state?.isEditing || 
-                    localStorage.getItem('isEditingBirthApplication') === 'true';
+  const isEditing =
+    location.state?.isEditing ||
+    localStorage.getItem('isEditingBirthApplication') === 'true';
 
-  // Show snackbar notification
+
   const showNotification = (message, severity = 'info') => {
     setSnackbar({
       open: true,
@@ -40,55 +75,35 @@ const CopyBirthCertificate = ({ formData = {}, handleChange }) => {
     });
   };
 
-  // Close snackbar
+
   const handleCloseSnackbar = () => {
     setSnackbar(prev => ({ ...prev, open: false }));
   };
 
+  // Load editing data if needed
   useEffect(() => {
-    // Only load data if we're in editing mode
     if (isEditing) {
       try {
-        console.log("Loading data for editing...");
         const editingId = localStorage.getItem('editingApplicationId');
-        console.log("Editing application ID:", editingId);
-        
-        // Get applications from localStorage
         const applications = JSON.parse(localStorage.getItem('applications') || '[]');
         const applicationToEdit = applications.find(app => app.id === editingId);
-        
         if (applicationToEdit && applicationToEdit.formData) {
-          console.log("Found application to edit:", applicationToEdit);
           setLocalFormData(applicationToEdit.formData);
         } else {
-          // Fallback to direct form data if available
           const savedFormData = localStorage.getItem('birthCertificateApplication');
-          if (savedFormData) {
-            setLocalFormData(JSON.parse(savedFormData));
-            console.log("Loaded form data from birthCertificateApplication");
-          } else {
-            console.warn("No application data found for editing");
-          }
+          if (savedFormData) setLocalFormData(JSON.parse(savedFormData));
         }
       } catch (error) {
-        console.error("Error loading data for editing:", error);
+        console.error("Error loading application data:", error);
       }
     } else {
-      // If not editing, always start with empty form
-      console.log("Starting with new application - clearing form data");
       setLocalFormData({});
       localStorage.removeItem('birthCertificateApplication');
     }
-    
-    // Cleanup function
-    return () => {
-      if (!isEditing) {
-        // Save draft data when leaving form
-        localStorage.setItem('birthCertificateApplication', JSON.stringify(formData));
-      }
-    };
+   
   }, [isEditing]);
-  
+
+
   const validateForm = () => {
     const newErrors = {};
     if (!localFormData.firstName?.trim()) newErrors.firstName = 'First name is required';
@@ -102,7 +117,6 @@ const CopyBirthCertificate = ({ formData = {}, handleChange }) => {
       newErrors.motherFirstName = "Mother's first name is required";
     if (!localFormData.motherLastName?.trim())
       newErrors.motherLastName = "Mother's last name is required";
-
     if (!localFormData.purpose) newErrors.purpose = 'Purpose is required';
     if (localFormData.purpose === 'Others' && !localFormData.otherPurpose?.trim()) {
       newErrors.otherPurpose = 'Please specify purpose';
@@ -133,161 +147,162 @@ const CopyBirthCertificate = ({ formData = {}, handleChange }) => {
     }
   };
 
-  const handleExtensionChange = e => {
-    setShowExtension(e.target.checked);
-    if (typeof handleChange === 'function') {
-      handleChange({
-        target: {
-          name: 'hasExtension',
-          value: e.target.checked,
-        },
-      });
-    }
-  };
-
+  // Submit handler
   const handleNextClick = async () => {
     if (!validateForm()) {
-      console.log("Form validation failed");
       window.scrollTo(0, 0);
       return;
     }
-  
     try {
-      console.log("Processing next button click...");
       setIsLoading(true);
-
+      setDebugInfo(null);
+      
       const usage = localStorageManager.getCurrentUsage();
       if (usage.isCritical) {
-        console.warn('Storage critical, performing cleanup before save...');
         await localStorageManager.performCleanup(0.4);
       }
-        
+
+     
       let applicationId;
-      
       if (isEditing) {
         applicationId = localStorage.getItem('editingApplicationId');
-        console.log("Editing existing application:", applicationId);
       } else {
-        // Generate application ID with prefix and timestamp
-        applicationId = 'BC-' + Date.now().toString().slice(-6);
-        console.log("Creating new application:", applicationId);
+        applicationId =
+          (backendType.applicationSubtype.startsWith('Request a Copy') ? 'BC-' : 'BCC-') +
+          Date.now().toString().slice(-6);
       }
-      
-      const dataToSave = { 
+
+      const dataToSave = {
         ...localFormData,
         purpose: localFormData.purpose || '',
-        isCopyRequest: true 
+        isCopyRequest: backendType.applicationSubtype.startsWith('Request a Copy')
       };
 
+ 
       const applicationData = {
         id: applicationId,
-        type: 'Birth Certificate',
-        applicationType: 'Request copy',
-        applicationSubtype: 'Copy of Birth Certificate',
+        type: backendType.applicationType,
+        applicationType: backendType.applicationType,
+        applicationSubtype: backendType.applicationSubtype,
         date: new Date().toLocaleDateString('en-US', {
           year: 'numeric',
           month: 'numeric',
           day: 'numeric',
         }),
         status: isEditing ? localStorage.getItem('currentApplicationStatus') || 'Pending' : 'Pending',
-        message: `Copy of Birth Certificate request for ${dataToSave.firstName || ''} ${dataToSave.lastName || ''}`,
+        message: `${backendType.applicationSubtype} for ${dataToSave.firstName || ''} ${dataToSave.lastName || ''}`,
         formData: dataToSave,
         lastUpdated: new Date().toISOString()
       };
-      
-      // Save to localStorage first (for local state management)
+
+
       const existingApplications = JSON.parse(localStorage.getItem('applications') || '[]');
-      
       if (isEditing) {
         const appIndex = existingApplications.findIndex(app => app.id === applicationId);
         if (appIndex >= 0) {
           existingApplications[appIndex] = applicationData;
-          console.log('Updated existing application at index:', appIndex);
         } else {
           existingApplications.push(applicationData);
-          console.log('Added new application (was editing but not found):', applicationId);
         }
       } else {
         existingApplications.push(applicationData);
-        console.log('Added new application:', applicationId);
       }
       
-      // Use localStorageManager.safeSetItem instead of localStorage.safeSetItem
       await localStorageManager.safeSetItem('applications', JSON.stringify(existingApplications));
       await localStorageManager.safeSetItem('currentApplicationId', applicationId);
       await localStorageManager.safeSetItem('birthCertificateApplication', JSON.stringify(dataToSave));
-      
-      // Now create the application in the backend using documentApplicationService
+
       try {
+   
         const backendApplicationData = {
-          // Don't send 'id' - let the backend generate it with your format
-          applicationType: 'Birth Certificate',
-          applicationSubtype: 'Copy of Birth Certificate',
-          applicantName: `${dataToSave.firstName} ${dataToSave.lastName}`,
-          applicantDetails:  JSON.stringify(dataToSave), // Backend expects JSON string
-          formData: dataToSave, // Backend validation requires this as object
+          applicationType: backendType.applicationType,
+          applicationSubtype: backendType.applicationSubtype,
+          applicantName: `${dataToSave.firstName || ''} ${dataToSave.lastName || ''}`,
+          applicantDetails: JSON.stringify(dataToSave),
+          formData: dataToSave,
           status: 'PENDING'
         };
+        
 
-        console.log("Creating application in backend:", backendApplicationData);
+        console.log('Creating backend application with:', backendApplicationData);
+        
+
         const backendResponse = await documentApplicationService.createApplication(backendApplicationData);
-        console.log("Backend response:", backendResponse);
+        console.log('Backend application created:', backendResponse);
         
-        // Backend will return an ID like BC-123456, which matches your frontend format
-        console.log("Application created in backend with ID:", backendResponse.id);
+
+        if (!backendResponse || !backendResponse.id) {
+          throw new Error('Backend did not return a valid application ID');
+        }
         
-        // Update the current application ID to match backend
-        localStorage.setItem('currentApplicationId', backendResponse.id);
+
+        const backendId = backendResponse.id;
+        localStorage.setItem('currentApplicationId', backendId);
         
-        // Update the applications array with the backend ID
-        const updatedApplications = existingApplications.map(app => {
-          if (app.id === applicationId) {
-            return { ...app, id: backendResponse.id };
-          }
-          return app;
-        });
+
+        const updatedApplications = existingApplications.map(app =>
+          app.id === applicationId ? { ...app, id: backendId } : app
+        );
         localStorage.setItem('applications', JSON.stringify(updatedApplications));
         
         showNotification("Application created successfully", "success");
         
-        // Clean up editing flags
+ 
         localStorage.removeItem('isEditingBirthApplication');
         localStorage.removeItem('editingApplicationId');
         localStorage.removeItem('editingApplication');
-        
-        // Trigger storage events
+
         window.dispatchEvent(new Event('storage'));
-        
-        const customEvent = new CustomEvent('customStorageUpdate', { 
-          detail: { 
-            id: backendResponse.id,
-            type: 'Birth Certificate', 
-            action: isEditing ? 'updated' : 'created' 
+        const customEvent = new CustomEvent('customStorageUpdate', {
+          detail: {
+            id: backendId,
+            type: backendType.applicationType,
+            action: isEditing ? 'updated' : 'created'
           }
         });
         window.dispatchEvent(customEvent);
-        
-        // Navigate to upload page after successful creation
+
+  
         setTimeout(() => {
-          navigate('/CTCBirthCertificate');
+          if (backendType.applicationSubtype.startsWith('Correction')) {
+   
+            if (selectedKind === 'Clerical Error') {
+              navigate('/ClericalErrorApplication');
+            } else if (selectedKind === 'Sex DOB') {
+              navigate('/SexDobCorrection');
+            } else if (selectedKind === 'First Name') {
+              navigate('/FirstNameCorrection');
+            } else {
+              navigate('/BirthApplicationSummary');
+            }
+          } else {
+           
+            navigate('/BirthApplicationSummary');
+          }
         }, 1000);
-        
       } catch (error) {
-        console.error("Backend creation failed:", error);
+        console.error('Backend error:', error);
+        setDebugInfo({
+          message: error.message,
+          response: error.response?.data,
+          status: error.response?.status
+        });
+        
         showNotification(`Failed to create application: ${error.message}`, "error");
         setIsLoading(false);
       }
     } catch (err) {
+      console.error('General error:', err);
       setIsLoading(false);
-      console.error('Error processing form:', err);
       showNotification('There was a problem with your request. Please try again.', 'error');
     }
   };
 
   return (
-
-       <Box className={`CopyBirthCertificateContainer ${isSidebarOpen ? 'sidebar-open' : ''}`}>
-          <NavBar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
+    <Box className={`CopyBirthCertificateContainer ${isSidebarOpen ? 'sidebar-open' : ''}`}>
+      <NavBar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
+      
+      {/* Error summary */}
       {Object.keys(errors).length > 0 && (
         <div
           className="ErrorSummary"
@@ -311,16 +326,28 @@ const CopyBirthCertificate = ({ formData = {}, handleChange }) => {
           </ul>
         </div>
       )}
+      
+      {/* Debug info display */}
+      {debugInfo && (
+        <Alert severity="error" sx={{ mb: 2 }}>
+          <Typography variant="subtitle2">Debug Information:</Typography>
+          <pre style={{ whiteSpace: 'pre-wrap', fontSize: '0.75rem' }}>
+            {JSON.stringify(debugInfo, null, 2)}
+          </pre>
+        </Alert>
+      )}
+      
       <Typography variant="h5" className="FormTitleCopyBirth">
-        Request a Copy of Birth Certificate
+        {uiTitle}
       </Typography>
+      
       <Box className="CopyBirthCertificateContainerCopyBirth">
         <Typography variant="body1" className="FormSubtitleCopyBirth">
           Please provide the information exactly as it appears on your birth certificate
         </Typography>
 
         <Paper elevation={3} className="FormPaperCopyBirth">
-          {/* Form content remains the same - keeping your original form fields */}
+          {/* Personal Information Section */}
           <Box className="FormSectionCopyBirth">
             <Typography variant="h6" className="SectionTitleCopyBirth">
               Personal Information
@@ -343,7 +370,6 @@ const CopyBirthCertificate = ({ formData = {}, handleChange }) => {
                   </span>
                 )}
               </div>
-
               <div className="FormGroupChild">
                 <label className="FormLabelChild">Middle Name</label>
                 <input
@@ -354,7 +380,6 @@ const CopyBirthCertificate = ({ formData = {}, handleChange }) => {
                   className="FormInputChild"
                 />
               </div>
-
               <div className="FormGroupChild">
                 <label className="FormLabelChild">Last Name {requiredField}</label>
                 <input
@@ -372,41 +397,6 @@ const CopyBirthCertificate = ({ formData = {}, handleChange }) => {
                 )}
               </div>
             </div>
-
-            <div className="FormRowChild">
-              <div className="CheckboxContainerChild">
-                <input
-                  type="checkbox"
-                  id="extensionCheckbox"
-                  checked={showExtension}
-                  onChange={handleExtensionChange}
-                  className="CheckboxInputChild"
-                />
-                <label htmlFor="extensionCheckbox" className="CheckboxLabelChild">
-                  I have an extension name (Jr., Sr., III, etc.)
-                </label>
-              </div>
-
-              {showExtension && (
-                <div className="ExtensionContainerChild">
-                  <span className="ExtensionLabelChild">Extension</span>
-                  <select
-                    name="extension"
-                    value={localFormData.extension || ''}
-                    onChange={handleLocalChange}
-                    className="SelectInputChild"
-                  >
-                    <option value="">Select</option>
-                    <option value="Jr.">Jr.</option>
-                    <option value="Sr.">Sr.</option>
-                    <option value="II">II</option>
-                    <option value="III">III</option>
-                    <option value="IV">IV</option>
-                    <option value="V">V</option>
-                  </select>
-                </div>
-              )}
-            </div>
           </Box>
 
           <Divider className="SectionDividerCopyBirth" />
@@ -416,11 +406,9 @@ const CopyBirthCertificate = ({ formData = {}, handleChange }) => {
             <Typography variant="h6" className="SectionTitleCopyBirth">
               Birth Information
             </Typography>
-
             <Typography variant="subtitle1" className="SubSectionTitleCopyBirth">
               Date of Birth {requiredField}
             </Typography>
-
             <div className="DateInputsRowChild">
               <div className="FormGroupChild">
                 <label className="FormLabelChild">Month</label>
@@ -444,7 +432,6 @@ const CopyBirthCertificate = ({ formData = {}, handleChange }) => {
                   </span>
                 )}
               </div>
-
               <div className="FormGroupChild">
                 <label className="FormLabelChild">Day</label>
                 <select
@@ -467,7 +454,6 @@ const CopyBirthCertificate = ({ formData = {}, handleChange }) => {
                   </span>
                 )}
               </div>
-
               <div className="FormGroupChild">
                 <label className="FormLabelChild">Year</label>
                 <select
@@ -491,7 +477,6 @@ const CopyBirthCertificate = ({ formData = {}, handleChange }) => {
                 )}
               </div>
             </div>
-
             <Typography
               variant="subtitle1"
               className="SubSectionTitleCopyBirth"
@@ -499,7 +484,6 @@ const CopyBirthCertificate = ({ formData = {}, handleChange }) => {
             >
               Place of Birth {requiredField}
             </Typography>
-
             <div className="FormRowChild">
               <div className="FormGroupChild">
                 <label className="FormLabelChild">City/Municipality {requiredField}</label>
@@ -517,7 +501,6 @@ const CopyBirthCertificate = ({ formData = {}, handleChange }) => {
                   </span>
                 )}
               </div>
-
               <div className="FormGroupChild">
                 <label className="FormLabelChild">Province {requiredField}</label>
                 <input
@@ -544,11 +527,9 @@ const CopyBirthCertificate = ({ formData = {}, handleChange }) => {
             <Typography variant="h6" className="SectionTitleCopyBirth">
               Parents Information
             </Typography>
-
             <Typography variant="subtitle1" className="SubSectionTitleCopyBirth">
               Mother's Maiden Name {requiredField}
             </Typography>
-
             <div className="FormRowChild">
               <div className="FormGroupChild">
                 <label className="FormLabelChild">First Name {requiredField}</label>
@@ -566,7 +547,6 @@ const CopyBirthCertificate = ({ formData = {}, handleChange }) => {
                   </span>
                 )}
               </div>
-
               <div className="FormGroupChild">
                 <label className="FormLabelChild">Middle Name</label>
                 <input
@@ -577,7 +557,6 @@ const CopyBirthCertificate = ({ formData = {}, handleChange }) => {
                   className="FormInputChild"
                 />
               </div>
-
               <div className="FormGroupChild">
                 <label className="FormLabelChild">Last Name {requiredField}</label>
                 <input
@@ -595,7 +574,6 @@ const CopyBirthCertificate = ({ formData = {}, handleChange }) => {
                 )}
               </div>
             </div>
-
             <Typography
               variant="subtitle1"
               className="SubSectionTitleCopyBirth"
@@ -603,7 +581,6 @@ const CopyBirthCertificate = ({ formData = {}, handleChange }) => {
             >
               Father's Name
             </Typography>
-
             <div className="FormRowChild">
               <div className="FormGroupChild">
                 <label className="FormLabelChild">First Name</label>
@@ -615,7 +592,6 @@ const CopyBirthCertificate = ({ formData = {}, handleChange }) => {
                   className="FormInputChild"
                 />
               </div>
-
               <div className="FormGroupChild">
                 <label className="FormLabelChild">Middle Name</label>
                 <input
@@ -626,7 +602,6 @@ const CopyBirthCertificate = ({ formData = {}, handleChange }) => {
                   className="FormInputChild"
                 />
               </div>
-
               <div className="FormGroupChild">
                 <label className="FormLabelChild">Last Name</label>
                 <input
@@ -676,7 +651,6 @@ const CopyBirthCertificate = ({ formData = {}, handleChange }) => {
                 )}
               </div>
             </div>
-
             {localFormData.purpose === 'Others' && (
               <div className="FormRowChild">
                 <div className="FormGroupChild" style={{ width: '100%' }}>
@@ -720,11 +694,17 @@ const CopyBirthCertificate = ({ formData = {}, handleChange }) => {
             size="large"
             disabled={isLoading}
           >
-            {isLoading ? "Creating Application..." : "NEXT"}
+            {isLoading ? (
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <CircularProgress size={20} sx={{ mr: 1, color: 'white' }} />
+                Creating Application...
+              </Box>
+            ) : (
+              "NEXT"
+            )}
           </Button>
         </Box>
       </Box>
-      
       {/* Snackbar for notifications */}
       <Snackbar
         open={snackbar.open}
@@ -732,9 +712,9 @@ const CopyBirthCertificate = ({ formData = {}, handleChange }) => {
         onClose={handleCloseSnackbar}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
       >
-        <Alert 
-          onClose={handleCloseSnackbar} 
-          severity={snackbar.severity} 
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity={snackbar.severity}
           sx={{ width: '100%' }}
         >
           {snackbar.message}

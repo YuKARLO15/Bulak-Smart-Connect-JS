@@ -33,7 +33,12 @@ const BirthApplicationSummary = () => {
   const [statusMessage, setStatusMessage] = useState('');
   const [updateTrigger, setUpdateTrigger] = useState(0);
 
-  // Function to get status color based on status
+const uiTitleMap = {
+  'Request a Copy of Birth Certificate': 'Copy of Birth Certificate Request',
+  'Correction - Clerical Errors': 'Correction of Clerical Error',
+  'Correction - Sex/Date of Birth': "Correction of Child's Sex / Date of Birth",
+  'Correction - First Name': 'Correction of First Name'
+};
   const getStatusColor = (status) => {
     switch (status?.toLowerCase()) {
       case 'approved':
@@ -59,11 +64,14 @@ const BirthApplicationSummary = () => {
     }
   };
 
+  
+
   const loadApplicationData = () => {
     try {
       setLoading(true);
       const currentId = localStorage.getItem('currentApplicationId');
       console.log("Loading application data for ID:", currentId);
+      
 
       if (!currentId) {
         setError('No application ID found. Please select or create an application.');
@@ -88,7 +96,10 @@ const BirthApplicationSummary = () => {
         // Set status values
         setApplicationStatus(application.status || 'Pending');
         setStatusMessage(application.statusMessage || '');
-        
+          const applicationSubtype = application.applicationSubtype;
+  const title = uiTitleMap[applicationSubtype] || 'Birth Certificate Application';
+  // Store the title in state for use in rendering
+  setApplicationTitle(title);
         // Set form data
         setFormData(formDataCopy);
         setIsCopyRequest(!!formDataCopy.purpose);
@@ -308,6 +319,7 @@ const BirthApplicationSummary = () => {
       );
     }
   };
+  const [applicationTitle, setApplicationTitle] = useState('Birth Certificate Application');
   const renderReadOnlyAffidavit = () => {
     return (
       <Box className="MainContainerSummaryBirth">
@@ -377,7 +389,7 @@ const BirthApplicationSummary = () => {
         <Paper elevation={3} className="SummaryPaperSummaryBirth">
           <Box className="HeaderSummaryBirth">
             <Typography variant="h4" className="TitleSummaryBirth">
-              Copy of Birth Certificate Request
+              {applicationTitle}
             </Typography>
             <Typography variant="body1" className="SubtitleSummaryBirth">
               Application ID: {applicationId} | Status: {applicationStatus}
@@ -485,38 +497,7 @@ const BirthApplicationSummary = () => {
                 </Typography>
               </Grid>
 
-              <Grid item xs={12} md={6}>
-                <Typography variant="subtitle2" className="FieldLabelSummaryBirth">
-                  <Grid item xs={12}>
-  <Typography variant="subtitle1">Uploaded Documents:</Typography>
-  {formData?.uploadedFiles?.['Valid ID'] ? (
-    <Box>
-      <Typography variant="subtitle2">Valid ID:</Typography>
-      {renderUploadedFile(formData.uploadedFiles['Valid ID'])}
-    </Box>
-  ) : (
-    <Typography variant="body2">No Valid ID uploaded</Typography>
-  )}
-  
-  {formData?.uploadedFiles?.['Authorization Letter (if applicable)'] && (
-    <Box>
-      <Typography variant="subtitle2">Authorization Letter:</Typography>
-      {renderUploadedFile(formData.uploadedFiles['Authorization Letter (if applicable)'])}
-    </Box>
-  )}
-</Grid>
-                </Typography>
-                <ul className="DocumentListSummaryBirth">
-                
-                  {formData?.uploadedFiles?.['Authorization Letter (if applicable)'] && (
-                    <li>Authorization Letter</li>
-                  )}
-                  {!formData?.uploadedFiles?.['Valid ID'] &&
-                    !formData?.uploadedFiles?.['Authorization Letter (if applicable)'] && (
-                      <Typography variant="body2">No documents uploaded</Typography>
-                    )}
-                </ul>
-              </Grid>
+           
             </Grid>
           </Box>
 
