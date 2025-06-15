@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Param } from '@nestjs/common';
 import { QueueService } from './queue.service';
 import { QueueStatus } from './entities/queue.entity';
 
@@ -66,6 +66,76 @@ export class QueuesController {
       return result;
     } catch (err: unknown) {
       console.error('Error fetching walk-in queues:', err);
+      throw err;
+    }
+  }
+
+  @Get('user/:userId')
+  async getUserQueues(@Param('userId') userId: string) {
+    console.log('GET /queues/user/' + userId + ' endpoint called');
+    try {
+      // Find queues for the specific user that are not completed
+      const userQueues = await this.queueService.findByUserIdWithDetails(userId);
+      
+      console.log('Found user queues:', userQueues.length);
+      
+      const result = userQueues.map((queue) => {
+        const details = Array.isArray(queue.details) 
+          ? queue.details[0] 
+          : queue.details;
+
+        return {
+          id: queue.id,
+          queueNumber: queue.queueNumber,
+          status: queue.status,
+          counterNumber: queue.counterNumber,
+          createdAt: queue.createdAt,
+          completedAt: queue.completedAt,
+          firstName: details?.firstName || null,
+          lastName: details?.lastName || null,
+          reasonOfVisit: details?.reasonOfVisit || null,
+        };
+      });
+
+      return result;
+    } catch (err) {
+      console.error('Error fetching user queues:', err);
+      throw err;
+    }
+  }
+
+  @Get(':id')
+  async getQueueById(@Param('id') id: string) {
+    console.log('GET /queues/' + id + ' endpoint called');
+    try {
+      const queueId = parseInt(id, 10);
+      if (isNaN(queueId)) {
+        throw new Error('Invalid queue ID');
+      }
+
+      const queue = await this.queueService.findOne(queueId);
+      
+      if (!queue) {
+        throw new Error('Queue not found');
+      }
+
+      const details = Array.isArray(queue.details) 
+        ? queue.details[0] 
+        : queue.details;
+
+      return {
+        id: queue.id,
+        queueNumber: queue.queueNumber,
+        status: queue.status,
+        counterNumber: queue.counterNumber,
+        createdAt: queue.createdAt,
+        completedAt: queue.completedAt,
+        firstName: details?.firstName || null,
+        lastName: details?.lastName || null,
+        reasonOfVisit: details?.reasonOfVisit || null,
+      };
+    } catch (err) {
+      console.error('Error fetching queue:', err);
       throw err;
     }
   }

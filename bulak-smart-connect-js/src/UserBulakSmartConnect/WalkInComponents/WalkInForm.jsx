@@ -81,29 +81,50 @@ const WalkInForm = () => {
     setShowDialog(false);
     setShowForm(true);
 
+    // Clear the form if user chooses to enter new details (guest)
+    if (!isOwner) {
+      setFormData({
+        lastName: '',
+        firstName: '',
+        middleInitial: '',
+        address: '',
+        phoneNumber: '',
+        reasonOfVisit: '',
+      });
+    }
+
     setAppointmentType(isOwner ? 'self' : 'other');
+    
+    // Add console log to verify the state
+    console.log('Dialog response - isAccountOwner:', isOwner, 'will be guest:', !isOwner);
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     
     try {
-      // Log user information more explicitly
-      console.log('Creating queue for authenticated user:', user);
+      console.log('=== QUEUE CREATION DEBUG ===');
+      console.log('User object:', user);
+      console.log('isAccountOwner state:', isAccountOwner);
       
       // Make the userId more explicit at the top level
       const actualUserId = user?.id || null;
       
-      // Set isGuest based on dialog choice
+      // FIXED: Set isGuest based on dialog choice
       // If user selected "Yes, use my details" (isAccountOwner = true), isGuest = false (0)
       // If user selected "No, enter new details" (isAccountOwner = false), isGuest = true (1)
       const isGuest = !isAccountOwner;
       
-      console.log('Queue creation with userId:', actualUserId, 'isGuest:', isGuest);
+      console.log('Final values:');
+      console.log('- actualUserId:', actualUserId);
+      console.log('- isAccountOwner:', isAccountOwner);
+      console.log('- isGuest (will be sent as):', isGuest);
+      console.log('- isGuest numeric value:', isGuest ? 1 : 0);
       
-      const response = await queueService.createQueue({
+      const requestPayload = {
         // Make userId the first property so it's more noticeable in logs
         userId: actualUserId, 
-        isGuest: isGuest,
+        isGuest: isGuest ? 1 : 0, // Explicitly convert to 1 or 0
         
         // Other data
         firstName: formData.firstName,
@@ -113,11 +134,18 @@ const WalkInForm = () => {
         phoneNumber: formData.phoneNumber || '',
         reasonOfVisit: formData.reasonOfVisit,
         appointmentType: formData.reasonOfVisit
-      });
+      };
+      
+      console.log('Request payload being sent:', requestPayload);
+      
+      const response = await queueService.createQueue(requestPayload);
+      
+      console.log('Queue creation response:', response);
       
       // Format the queue number to WK format for display
       const queueNumber = formatWKNumber(response.queue.queueNumber);
-        // Create the new queue with user ID
+      
+      // Create the new queue with user ID
       const newQueue = {
         id: queueNumber,
         dbId: response.queue.id,
@@ -130,8 +158,8 @@ const WalkInForm = () => {
         userData: formData,
         appointmentType: formData.reasonOfVisit,
         isUserQueue: true,
-        userId: actualUserId, // Use the same variable
-        isGuest: !isAccountOwner // Track if this queue is for someone else
+        userId: actualUserId,
+        isGuest: isGuest ? 1 : 0 // Store the explicit numeric value
       };
 
       // Store with user-specific keys
@@ -156,7 +184,8 @@ const WalkInForm = () => {
       window.location.href = '/WalkInDetails';
     } catch (error) {
       console.error('Error creating queue:', error);
-      // Handle error display
+      console.error('Error details:', error.response?.data || error.message);
+      alert('Failed to create queue. Please try again.');
     }
   };
 

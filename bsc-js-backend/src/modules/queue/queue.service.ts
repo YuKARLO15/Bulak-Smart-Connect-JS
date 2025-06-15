@@ -6,7 +6,7 @@ import {
   forwardRef,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, LessThanOrEqual, In } from 'typeorm';
+import { Repository, LessThanOrEqual, LessThan, In } from 'typeorm';
 import { Queue, QueueStatus } from './entities/queue.entity';
 import { QueueDetails } from './entities/queue-details.entity';
 import {
@@ -204,23 +204,55 @@ export class QueueService {
   }
 
   async getQueuePosition(queueId: number) {
+    console.log(`Getting position for queue ID: ${queueId}`);
+    
     const queue = await this.findOne(queueId);
+    console.log(`Found queue:`, queue);
 
-    // If the queue is not pending, it's not in line
-    if (queue.status !== QueueStatus.PENDING) {
-      return 0;
+    // If the queue doesn't exist, return position 0
+    if (!queue) {
+      console.log('Queue not found');
+      return { position: 0 };
     }
 
-    // Count how many pending queues are ahead of this one
-    const position = await this.queueRepository.count({
+    // If the queue is not pending, return special position values
+    if (queue.status === QueueStatus.SERVING) {
+      console.log('Queue is currently being served');
+      return { position: 0, status: 'serving' };
+    }
+    
+    if (queue.status === QueueStatus.COMPLETED) {
+      console.log('Queue is completed');
+      return { position: 0, status: 'completed' };
+    }
+    
+    if (queue.status !== QueueStatus.PENDING) {
+      console.log(`Queue status is ${queue.status}, not pending`);
+      return { position: 0, status: queue.status };
+    }
+
+    // Count serving queues (they are ahead of all pending queues)
+    const servingCount = await this.queueRepository.count({
       where: {
-        status: QueueStatus.PENDING,
-        createdAt: LessThanOrEqual(queue.createdAt),
-        id: LessThanOrEqual(queueId), // Break ties using ID
+        status: QueueStatus.SERVING,
       },
     });
+    console.log(`Serving queues count: ${servingCount}`);
 
-    return position;
+    // Count how many pending queues are ahead of this one (created earlier)
+    const pendingAheadCount = await this.queueRepository.count({
+      where: {
+        status: QueueStatus.PENDING,
+        createdAt: LessThan(queue.createdAt), // Queues created before this one
+      },
+    });
+    console.log(`Pending queues ahead: ${pendingAheadCount}`);
+
+    // Total position = serving queues + pending queues ahead + 1
+    const position = servingCount + pendingAheadCount + 1;
+    console.log(`Calculated position: ${position}`);
+    
+    return { position, status: 'pending' };
   }
   async getDetailsForMultipleQueues(queueIds: number[]) {
     console.log('Getting details for queue IDs:', queueIds);
@@ -446,5 +478,41 @@ export class QueueService {
       where: { id },
     });
     return !!queue;
+  }
+
+  async findByUserIdWithDetails(userId: string) {
+    // Convert string userId to number since the database expects a number
+    const userIdNumber = parseInt(userId, 10);
+    
+    if (isNaN(userIdNumber)) {
+      console.error('Invalid userId provided:', userId);
+      return [];
+    }
+
+    // First, let's find the user's queue details that contain the userId
+    const userDetails = await this.queueDetailsRepository.find({
+      where: { 
+        userId: userIdNumber
+      },
+      relations: ['queue'],
+    });
+
+    // Extract queue IDs from the details
+    const queueIds = userDetails.map(detail => detail.queue.id);
+
+    if (queueIds.length === 0) {
+      return [];
+    }
+
+    // Find ALL queues (including completed ones) but filter them in the frontend
+    // Change this to include completed queues temporarily so we can clear them
+    return await this.queueRepository.find({
+      where: { 
+        id: In(queueIds),
+        // Remove status filter to get all queues including completed ones
+      },
+      relations: ['details'],
+      order: { createdAt: 'ASC' }
+    });
   }
 }
