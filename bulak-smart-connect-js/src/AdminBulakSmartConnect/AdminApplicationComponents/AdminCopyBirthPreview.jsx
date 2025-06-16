@@ -3,6 +3,13 @@ import { useParams } from "react-router-dom";
 import { documentApplicationService } from "../../services/documentApplicationService";
 import "./AdminCopyBirthPreview.css";
 
+const uiTitleMap = {
+  "Copy of Birth Certificate": "Copy of Birth Certificate Request",
+  "Correction - Clerical Errors": "Correction of Clerical Error",
+  "Correction - Sex/Date of Birth": "Correction of Child's Sex / Date of Birth",
+  "Correction - First Name": "Correction of First Name"
+};
+
 const AdminCopyBirthPreview = () => {
   const { id } = useParams();
   const [application, setApplication] = useState(null);
@@ -39,19 +46,26 @@ const AdminCopyBirthPreview = () => {
   }
 
   const { formData } = application;
-    const fullName = [formData?.firstName, formData?.lastName].filter(Boolean).join(' ');
-    const motherMaidenName = [formData?.motherFirstName, formData?.motherMiddleName, formData?.motherLastName ].filter(Boolean).join(' ')
-  const fatherName = [formData?.fatherFirstName, formData?.fatherMiddleName, formData?.fatherLastName ].filter(Boolean).join(' ')
-    const dob = formData?.birthMonth && formData?.birthDay && formData?.birthYear
+  const fullName = [formData?.firstName, formData?.lastName].filter(Boolean).join(' ');
+  const motherMaidenName = [formData?.motherFirstName, formData?.motherMiddleName, formData?.motherLastName].filter(Boolean).join(' ')
+  const fatherName = [formData?.fatherFirstName, formData?.fatherMiddleName, formData?.fatherLastName].filter(Boolean).join(' ')
+  const dob = formData?.birthMonth && formData?.birthDay && formData?.birthYear
     ? `${formData.birthMonth} ${formData.birthDay}, ${formData.birthYear}`
     : '';
   const placeOfBirth = [formData?.city, formData?.province].filter(Boolean).join(', ');
+
+  const appSubtype =
+    application.applicationSubtype ||
+    (application.formData && application.formData.applicationSubtype) ||
+    application.subtype ||
+    "Copy of Birth Certificate";
+  const title = uiTitleMap[appSubtype] || "Copy of Birth Certificate Request";
 
   return (
     <div className="AdminCopyBirthPreviewCBPreviewRoot">
       <div className="AdminCopyBirthPreviewCBPreviewHeader">
         <h2 className="AdminCopyBirthPreviewCBPreviewTitle">
-          Copy of Birth Certificate Request
+          {title}
         </h2>
         <div className="AdminCopyBirthPreviewCBPreviewSubInfo">
           Application ID: {application.id || 'N/A'} | Status: {application.status || 'N/A'}
@@ -115,12 +129,7 @@ const AdminCopyBirthPreview = () => {
         </div>
       </div>
 
-      <div className="AdminCopyBirthPreviewCBPreviewFooter">
-        <span className="AdminCopyBirthPreviewCBPreviewInfoIcon">i</span>
-        <span>
-          Your request for a copy of birth certificate is being processed. Please wait for approval. You will be notified once your request has been processed.
-        </span>
-      </div>
+      
     </div>
   );
 };
