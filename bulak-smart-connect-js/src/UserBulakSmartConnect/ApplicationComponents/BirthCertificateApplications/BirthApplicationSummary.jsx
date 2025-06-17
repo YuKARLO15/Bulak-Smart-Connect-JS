@@ -19,6 +19,7 @@ import './BirthApplicationSummary.css';
 import AffidavitBirthForm from './BirthCertificateForm/BirthBackIdentifyingForm';
 import EditIcon from '@mui/icons-material/Edit';
 import { getApplications } from '../ApplicationData';
+import { documentApplicationService } from '../../../services/documentApplicationService';
 
 const BirthApplicationSummary = () => {
   const [formData, setFormData] = useState(null);
@@ -66,58 +67,50 @@ const uiTitleMap = {
 
   
 
-  const loadApplicationData = () => {
-    try {
-      setLoading(true);
-      const currentId = localStorage.getItem('currentApplicationId');
-      console.log("Loading application data for ID:", currentId);
-      
-
-      if (!currentId) {
-        setError('No application ID found. Please select or create an application.');
-        setLoading(false);
-        return;
-      }
-
-      setApplicationId(currentId);
-      
-      // Get applications from storage - force fresh data
-      const applications = JSON.parse(localStorage.getItem('applications') || '[]');
-      console.log("Applications retrieved:", applications.length);
-      
-      // Find application
-      const application = applications.find(app => app.id === currentId);
-      console.log("Found application:", application);
-
-      if (application && application.formData) {
-        // Make deep copy of formData to avoid reference issues
-        const formDataCopy = JSON.parse(JSON.stringify(application.formData));
-        
-        // Set status values
-        setApplicationStatus(application.status || 'Pending');
-        setStatusMessage(application.statusMessage || '');
-          const applicationSubtype = application.applicationSubtype;
-  const title = uiTitleMap[applicationSubtype] || 'Birth Certificate Application';
-  // Store the title in state for use in rendering
-  setApplicationTitle(title);
-        // Set form data
-        setFormData(formDataCopy);
-        setIsCopyRequest(!!formDataCopy.purpose);
-        console.log('Application data loaded successfully:', formDataCopy);
-        
-        // Force update to ensure re-render
-        setUpdateTrigger(prev => prev + 1);
-      } else {
-        console.warn("Application not found in main storage, trying fallback");
-        // Rest of your fallback code...
-      }
-    } catch (err) {
-      console.error('Error loading application data:', err);
-      setError('Error loading application data: ' + err.message);
-    } finally {
+ const loadApplicationData = async () => {
+  try {
+    setLoading(true);
+    const currentId = localStorage.getItem('currentApplicationId');
+    if (!currentId) {
+      setError('No application ID found. Please select or create an application.');
       setLoading(false);
+      return;
     }
-  };
+    setApplicationId(currentId);
+    let application = null;
+
+    // FIRST: Try backend via documentApplicationService
+    try {
+      application = await documentApplicationService.getApplication(currentId);
+    } catch (backendErr) {
+      // If backend fails, fallback to local storage
+      const applications = JSON.parse(localStorage.getItem('applications') || '[]');
+      application = applications.find(app => app.id === currentId);
+    }
+
+    if (application && application.formData) {
+      const formDataCopy = JSON.parse(JSON.stringify(application.formData));
+      setApplicationStatus(application.status || 'Pending');
+      setStatusMessage(application.statusMessage || '');
+      const applicationSubtype = application.applicationSubtype;
+      setApplicationTitle(uiTitleMap[applicationSubtype] || 'Birth Certificate Application');
+      // Robust check for copy/correction
+      const appSubtype = (applicationSubtype || '').trim().toLowerCase();
+      setIsCopyRequest(
+        appSubtype === 'request a copy of birth certificate' ||
+        appSubtype.startsWith('correction')
+      );
+      setFormData(formDataCopy);
+      setUpdateTrigger(prev => prev + 1);
+    } else {
+      setError("Application not found.");
+    }
+  } catch (err) {
+    setError('Error loading application data: ' + err.message);
+  } finally {
+    setLoading(false);
+  }
+};
 
   // Enhanced event listener
   useEffect(() => {
