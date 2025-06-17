@@ -482,8 +482,21 @@ const RecentApplicationsComponent = () => {
                             '&:hover': { textDecoration: 'underline' }
                           }}
                         >
-                          {app.applicationType || app.type || 'Failed Fetching Application'} {/* Fetching first from backend  */}
+                                       {app.applicationType || app.type || 'Failed Fetching Application'}
                         </Typography>
+                                             <Chip
+      label={app.applicationSubtype || app.subType}
+      size="medium"
+      sx={{
+        ml: 1,
+        backgroundColor: '#EAF6F7',
+        color: '#20505C',
+        fontSize: '0.8rem',
+        fontWeight: 500,
+        borderRadius: '4px',
+        '& .MuiChip-label': { px: 1 }
+      }}
+    />
                         <Chip
                           label={app.status}
                           size="small"
@@ -498,15 +511,20 @@ const RecentApplicationsComponent = () => {
                             '& .MuiChip-label': { px: 1 }
                           }}
                         />
+                      
                       </Box>
                       
-                      <Box display="flex" alignItems="center" mb={0.5}>
+                 <Box display="flex" alignItems="left" mb={0.5} flexDirection={{ xs: 'column' }}>
+                        <Typography sx={{ fontSize: '0.8rem', color: '#184a5b', fontWeight: 400 }}>
+    Applicant: {app.formData?.firstName || ''} {app.formData?.middleName || ''} {app.formData?.lastName || ''}
+  </Typography>
                         <Typography className="ApplicationId" sx={{ fontSize: '0.75rem', color: '#666', mr: 1.5 }}>
                           ID: {app.id || 'N/A'}
                         </Typography>
                         <Typography className="ApplicationDate" sx={{ fontSize: '0.75rem', color: '#666' }}>
                           {app.date}
                         </Typography>
+         
                       </Box>
                       
                       {app.message && (

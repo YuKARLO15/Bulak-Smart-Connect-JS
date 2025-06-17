@@ -6,7 +6,6 @@ import NavBar from '../../../../NavigationComponents/NavSide';
 import { documentApplicationService } from '../../../../services/documentApplicationService';
 import { localStorageManager } from '../../../../services/localStorageManager';
 
-
 const backendTypeMap = {
   'Copy': {
     applicationType: 'Birth Certificate',
@@ -35,15 +34,16 @@ const uiTitleMap = {
 const CopyBirthCertificate = ({ formData = {}, handleChange, correctionType }) => {
   const navigate = useNavigate();
   const location = useLocation();
+  
 
-
-  const selectedKind =
+  const [selectedKind, setSelectedKind] = useState(
     correctionType ||
     location?.state?.correctionType ||
     location?.state?.applicationType ||
-    'Copy';
-  const backendType = backendTypeMap[selectedKind] || backendTypeMap['Copy'];
-  const uiTitle = uiTitleMap[selectedKind] || uiTitleMap['Copy'];
+    'Copy'
+  );
+const backendType = backendTypeMap[selectedKind] || backendTypeMap['Copy'];
+const uiTitle = uiTitleMap[selectedKind] || uiTitleMap['Copy'];
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [localFormData, setLocalFormData] = useState(formData || {});
@@ -62,11 +62,7 @@ const CopyBirthCertificate = ({ formData = {}, handleChange, correctionType }) =
   const currentYear = new Date().getFullYear();
   const years = Array.from({ length: 100 }, (_, i) => currentYear - i);
 
-  const isEditing =
-    location.state?.isEditing ||
-    localStorage.getItem('isEditingBirthApplication') === 'true';
-
-
+  
   const showNotification = (message, severity = 'info') => {
     setSnackbar({
       open: true,
@@ -75,34 +71,58 @@ const CopyBirthCertificate = ({ formData = {}, handleChange, correctionType }) =
     });
   };
 
-
   const handleCloseSnackbar = () => {
     setSnackbar(prev => ({ ...prev, open: false }));
   };
 
-  // Load editing data if needed
+   const editingApplicationId = localStorage.getItem('editingApplicationId');
+  const isEditing =
+    location.state?.isEditing ||
+    localStorage.getItem('isEditingBirthApplication') === 'true';
+
+
   useEffect(() => {
-    if (isEditing) {
-      try {
-        const editingId = localStorage.getItem('editingApplicationId');
-        const applications = JSON.parse(localStorage.getItem('applications') || '[]');
-        const applicationToEdit = applications.find(app => app.id === editingId);
-        if (applicationToEdit && applicationToEdit.formData) {
-          setLocalFormData(applicationToEdit.formData);
-        } else {
+    const fetchData = async () => {
+      if (isEditing && editingApplicationId) {
+        try {
+          const backendApp = await documentApplicationService.getApplication(editingApplicationId);
+          if (backendApp && backendApp.formData) {
+            setLocalFormData(backendApp.formData);
+
+            // --- FIX: Set selectedKind based on backend subtype ---
+            let subType = (backendApp.applicationSubtype || '').trim();
+            let kind = 'Copy';
+            if (subType === 'Correction - Clerical Errors') kind = 'Clerical Error';
+            else if (subType === 'Correction - Sex/Date of Birth') kind = 'Sex DOB';
+            else if (subType === 'Correction - First Name') kind = 'First Name';
+            else if (subType === 'Request a Copy of Birth Certificate') kind = 'Copy';
+            setSelectedKind(kind);
+
+          } else {
+            const savedFormData = localStorage.getItem('birthCertificateApplication');
+            if (savedFormData) setLocalFormData(JSON.parse(savedFormData));
+            // fallback to Copy if missing
+            setSelectedKind('Copy');
+          }
+        } catch (err) {
           const savedFormData = localStorage.getItem('birthCertificateApplication');
           if (savedFormData) setLocalFormData(JSON.parse(savedFormData));
+          setSelectedKind('Copy');
         }
-      } catch (error) {
-        console.error("Error loading application data:", error);
+      } else {
+        setLocalFormData({});
+        localStorage.removeItem('birthCertificateApplication');
+        setSelectedKind(
+          correctionType ||
+          location?.state?.correctionType ||
+          location?.state?.applicationType ||
+          'Copy'
+        );
       }
-    } else {
-      setLocalFormData({});
-      localStorage.removeItem('birthCertificateApplication');
-    }
-   
-  }, [isEditing]);
+    };
+    fetchData();
 
+  }, [isEditing, editingApplicationId]);
 
   const validateForm = () => {
     const newErrors = {};
@@ -117,10 +137,12 @@ const CopyBirthCertificate = ({ formData = {}, handleChange, correctionType }) =
       newErrors.motherFirstName = "Mother's first name is required";
     if (!localFormData.motherLastName?.trim())
       newErrors.motherLastName = "Mother's last name is required";
+     if (!hidePurposeSection) {
     if (!localFormData.purpose) newErrors.purpose = 'Purpose is required';
     if (localFormData.purpose === 'Others' && !localFormData.otherPurpose?.trim()) {
       newErrors.otherPurpose = 'Please specify purpose';
     }
+  }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -153,32 +175,51 @@ const CopyBirthCertificate = ({ formData = {}, handleChange, correctionType }) =
       window.scrollTo(0, 0);
       return;
     }
-    try {
-      setIsLoading(true);
-      setDebugInfo(null);
-      
-      const usage = localStorageManager.getCurrentUsage();
-      if (usage.isCritical) {
-        await localStorageManager.performCleanup(0.4);
-      }
+    setIsLoading(true);
+    setDebugInfo(null);
 
-     
-      let applicationId;
-      if (isEditing) {
-        applicationId = localStorage.getItem('editingApplicationId');
+    let applicationId = editingApplicationId;
+    let dataToSave = {
+      ...localFormData,
+      purpose: localFormData.purpose || '',
+      isCopyRequest: backendType.applicationSubtype.startsWith('Request a Copy')
+    };
+
+    try {
+      let backendResponse;
+      if (isEditing && editingApplicationId) {
+       backendResponse = await documentApplicationService.updateApplication(editingApplicationId, {
+          formData: dataToSave,
+          applicantName: `${dataToSave.firstName || ''} ${dataToSave.lastName || ''}`,
+          type: backendType.applicationType,
+          applicationType: backendType.applicationType,
+          applicationSubtype: backendType.applicationSubtype,
+          lastUpdated: new Date().toISOString()
+        });
+        applicationId = backendResponse.id || editingApplicationId;
+        showNotification("Application updated successfully", "success");
       } else {
+
         applicationId =
           (backendType.applicationSubtype.startsWith('Request a Copy') ? 'BC-' : 'BCC-') +
           Date.now().toString().slice(-6);
+        const backendApplicationData = {
+          applicationType: backendType.applicationType,
+          applicationSubtype: backendType.applicationSubtype,
+          applicantName: `${dataToSave.firstName || ''} ${dataToSave.lastName || ''}`,
+          applicantDetails: JSON.stringify(dataToSave),
+          formData: dataToSave,
+          status: 'PENDING'
+        };
+        backendResponse = await documentApplicationService.createApplication(backendApplicationData);
+        if (!backendResponse || !backendResponse.id) throw new Error('Backend did not return a valid application ID');
+        applicationId = backendResponse.id;
+        showNotification("Application created successfully", "success");
       }
 
-      const dataToSave = {
-        ...localFormData,
-        purpose: localFormData.purpose || '',
-        isCopyRequest: backendType.applicationSubtype.startsWith('Request a Copy')
-      };
-
- 
+      // Keep localStorage for fallback/offline, but always prefer backend
+      const existingApplications = JSON.parse(localStorage.getItem('applications') || '[]');
+      const appIndex = existingApplications.findIndex(app => app.id === applicationId);
       const applicationData = {
         id: applicationId,
         type: backendType.applicationType,
@@ -194,109 +235,60 @@ const CopyBirthCertificate = ({ formData = {}, handleChange, correctionType }) =
         formData: dataToSave,
         lastUpdated: new Date().toISOString()
       };
-
-
-      const existingApplications = JSON.parse(localStorage.getItem('applications') || '[]');
-      if (isEditing) {
-        const appIndex = existingApplications.findIndex(app => app.id === applicationId);
-        if (appIndex >= 0) {
-          existingApplications[appIndex] = applicationData;
-        } else {
-          existingApplications.push(applicationData);
-        }
+      if (appIndex >= 0) {
+        existingApplications[appIndex] = applicationData;
       } else {
         existingApplications.push(applicationData);
       }
-      
-      await localStorageManager.safeSetItem('applications', JSON.stringify(existingApplications));
-      await localStorageManager.safeSetItem('currentApplicationId', applicationId);
-      await localStorageManager.safeSetItem('birthCertificateApplication', JSON.stringify(dataToSave));
+      localStorage.setItem('applications', JSON.stringify(existingApplications));
+      localStorage.setItem('currentApplicationId', applicationId);
+      localStorage.setItem('birthCertificateApplication', JSON.stringify(dataToSave));
 
-      try {
-   
-        const backendApplicationData = {
-          applicationType: backendType.applicationType,
-          applicationSubtype: backendType.applicationSubtype,
-          applicantName: `${dataToSave.firstName || ''} ${dataToSave.lastName || ''}`,
-          applicantDetails: JSON.stringify(dataToSave),
-          formData: dataToSave,
-          status: 'PENDING'
-        };
-        
-
-        console.log('Creating backend application with:', backendApplicationData);
-        
-
-        const backendResponse = await documentApplicationService.createApplication(backendApplicationData);
-        console.log('Backend application created:', backendResponse);
-        
-
-        if (!backendResponse || !backendResponse.id) {
-          throw new Error('Backend did not return a valid application ID');
-        }
-        
-
-        const backendId = backendResponse.id;
-        localStorage.setItem('currentApplicationId', backendId);
-        
-
-        const updatedApplications = existingApplications.map(app =>
-          app.id === applicationId ? { ...app, id: backendId } : app
-        );
-        localStorage.setItem('applications', JSON.stringify(updatedApplications));
-        
-        showNotification("Application created successfully", "success");
-        
- 
+      // Clean up edit flags
+      if (isEditing) {
         localStorage.removeItem('isEditingBirthApplication');
         localStorage.removeItem('editingApplicationId');
         localStorage.removeItem('editingApplication');
+      }
 
-        window.dispatchEvent(new Event('storage'));
-        const customEvent = new CustomEvent('customStorageUpdate', {
-          detail: {
-            id: backendId,
-            type: backendType.applicationType,
-            action: isEditing ? 'updated' : 'created'
-          }
-        });
-        window.dispatchEvent(customEvent);
+      // Fire events
+      window.dispatchEvent(new Event('storage'));
+      window.dispatchEvent(new CustomEvent('customStorageUpdate', {
+        detail: {
+          id: applicationId,
+          type: backendType.applicationType,
+          action: isEditing ? 'updated' : 'created'
+        }
+      }));
 
-  
-        setTimeout(() => {
-          if (backendType.applicationSubtype.startsWith('Correction')) {
-   
-            if (selectedKind === 'Clerical Error') {
-              navigate('/ClericalErrorApplication');
-            } else if (selectedKind === 'Sex DOB') {
-              navigate('/SexDobCorrection');
-            } else if (selectedKind === 'First Name') {
-              navigate('/FirstNameCorrection');
-            } else {
-              navigate('/BirthApplicationSummary');
-            }
+      setTimeout(() => {
+        if (backendType.applicationSubtype.startsWith('Correction')) {
+          if (selectedKind === 'Clerical Error') {
+            navigate('/ClericalErrorApplication');
+          } else if (selectedKind === 'Sex DOB') {
+            navigate('/SexDobCorrection');
+          } else if (selectedKind === 'First Name') {
+            navigate('/FirstNameCorrection');
           } else {
-           
             navigate('/BirthApplicationSummary');
           }
-        }, 1000);
-      } catch (error) {
-        console.error('Backend error:', error);
-        setDebugInfo({
-          message: error.message,
-          response: error.response?.data,
-          status: error.response?.status
-        });
-        
-        showNotification(`Failed to create application: ${error.message}`, "error");
-        setIsLoading(false);
-      }
-    } catch (err) {
-      console.error('General error:', err);
-      setIsLoading(false);
-      showNotification('There was a problem with your request. Please try again.', 'error');
+        } else {
+          navigate('/BirthApplicationSummary');
+        }
+      }, 1000);
+
+    } catch (error) {
+      setDebugInfo({
+        message: error.message,
+        response: error.response?.data,
+        status: error.response?.status
+      });
+      showNotification(`Failed to ${isEditing ? "update" : "create"} application: ${error.message}`, "error");
     }
+    setIsLoading(false);
   };
+  // Hide purpose section for Correction types
+  const hidePurposeSection = backendType.applicationSubtype.startsWith('Correction');
 
   return (
     <Box className={`CopyBirthCertificateContainer ${isSidebarOpen ? 'sidebar-open' : ''}`}>
@@ -618,60 +610,62 @@ const CopyBirthCertificate = ({ formData = {}, handleChange, correctionType }) =
           <Divider className="SectionDividerCopyBirth" />
 
           {/* Purpose of Request Section */}
-          <Box className="FormSectionCopyBirth">
-            <Typography variant="h6" className="SectionTitleCopyBirth">
-              Purpose of Request
-            </Typography>
+          {!hidePurposeSection && (
+            <Box className="FormSectionCopyBirth">
+              <Typography variant="h6" className="SectionTitleCopyBirth">
+                Purpose of Request
+              </Typography>
 
-            <div className="FormRowChild">
-              <div className="FormGroupChild" style={{ width: '100%' }}>
-                <label className="FormLabelChild">Purpose {requiredField}</label>
-                <select
-                  name="purpose"
-                  value={localFormData.purpose || ''}
-                  onChange={handleLocalChange}
-                  className={`SelectInputChild ${errors.purpose ? 'InputError' : ''}`}
-                  style={{ width: '100%' }}
-                  required
-                >
-                  <option value="">Select</option>
-                  <option value="Passport Application">Passport Application</option>
-                  <option value="School Requirements">School Requirements</option>
-                  <option value="Employment">Employment</option>
-                  <option value="Claim Benefits/Loan">Claim Benefits/Loan</option>
-                  <option value="Marriage License">Marriage License</option>
-                  <option value="Legal Purposes">Legal Purposes</option>
-                  <option value="Travel">Travel</option>
-                  <option value="Others">Others</option>
-                </select>
-                {errors.purpose && (
-                  <span className="ErrorText" style={{ color: '#d32f2f', fontSize: '0.75rem' }}>
-                    {errors.purpose}
-                  </span>
-                )}
-              </div>
-            </div>
-            {localFormData.purpose === 'Others' && (
               <div className="FormRowChild">
                 <div className="FormGroupChild" style={{ width: '100%' }}>
-                  <label className="FormLabelChild">Specify Purpose {requiredField}</label>
-                  <input
-                    type="text"
-                    name="otherPurpose"
-                    value={localFormData.otherPurpose || ''}
+                  <label className="FormLabelChild">Purpose {requiredField}</label>
+                  <select
+                    name="purpose"
+                    value={localFormData.purpose || ''}
                     onChange={handleLocalChange}
-                    className={`FormInputChild ${errors.otherPurpose ? 'InputError' : ''}`}
+                    className={`SelectInputChild ${errors.purpose ? 'InputError' : ''}`}
+                    style={{ width: '100%' }}
                     required
-                  />
-                  {errors.otherPurpose && (
+                  >
+                    <option value="">Select</option>
+                    <option value="Passport Application">Passport Application</option>
+                    <option value="School Requirements">School Requirements</option>
+                    <option value="Employment">Employment</option>
+                    <option value="Claim Benefits/Loan">Claim Benefits/Loan</option>
+                    <option value="Marriage License">Marriage License</option>
+                    <option value="Legal Purposes">Legal Purposes</option>
+                    <option value="Travel">Travel</option>
+                    <option value="Others">Others</option>
+                  </select>
+                  {errors.purpose && (
                     <span className="ErrorText" style={{ color: '#d32f2f', fontSize: '0.75rem' }}>
-                      {errors.otherPurpose}
+                      {errors.purpose}
                     </span>
                   )}
                 </div>
               </div>
-            )}
-          </Box>
+              {localFormData.purpose === 'Others' && (
+                <div className="FormRowChild">
+                  <div className="FormGroupChild" style={{ width: '100%' }}>
+                    <label className="FormLabelChild">Specify Purpose {requiredField}</label>
+                    <input
+                      type="text"
+                      name="otherPurpose"
+                      value={localFormData.otherPurpose || ''}
+                      onChange={handleLocalChange}
+                      className={`FormInputChild ${errors.otherPurpose ? 'InputError' : ''}`}
+                      required
+                    />
+                    {errors.otherPurpose && (
+                      <span className="ErrorText" style={{ color: '#d32f2f', fontSize: '0.75rem' }}>
+                        {errors.otherPurpose}
+                      </span>
+                    )}
+                  </div>
+                </div>
+              )}
+            </Box>
+          )}
 
           <Box className="FormNoteCopyBirth">
             <Typography variant="body2">
