@@ -85,7 +85,7 @@ const [affidavit, setAffidavitTab] = useState(0);
             subtype = app.subtype;
           }
           
-          if (subtype === 'Copy of Birth Certificate' || 
+          if (subtype === 'Request a Copy of Birth Certificate' || 
               (app.type === 'Birth Certificate' && app.applicationType === 'Request copy')) {
             subtype = 'Copy of Birth Certificate';
           }
