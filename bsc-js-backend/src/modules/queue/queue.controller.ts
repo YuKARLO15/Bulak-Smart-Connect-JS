@@ -30,17 +30,27 @@ export class QueueController {
     // Extract user ID from authenticated user
     const userId = user?.id || null; 
 
+    console.log('=== QUEUE CREATION BACKEND DEBUG ===');
     console.log('Queue creation - User from JWT:', user); 
+    console.log('Original DTO received:', createQueueDto);
+    console.log('DTO isGuest value:', createQueueDto.isGuest);
+    console.log('DTO isGuest type:', typeof createQueueDto.isGuest);
 
-    // Override the userId in the DTO with the authenticated user's ID
-    // This prevents users from creating queues for other users
+    // Set userId and respect the isGuest boolean from frontend
     if (userId) {
       createQueueDto.userId = userId;
-      createQueueDto.isGuest = false;
+      // If isGuest is not provided, default to false for authenticated users
+      if (createQueueDto.isGuest === undefined) {
+        createQueueDto.isGuest = false;
+      }
     } else {
       createQueueDto.userId = undefined;
       createQueueDto.isGuest = true;
     }
+
+    console.log('Final DTO values:');
+    console.log('- userId:', createQueueDto.userId);
+    console.log('- isGuest:', createQueueDto.isGuest);
 
     return this.queueService.create(createQueueDto);
   }
