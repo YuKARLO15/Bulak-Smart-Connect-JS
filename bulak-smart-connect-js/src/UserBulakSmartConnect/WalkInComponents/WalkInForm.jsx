@@ -103,30 +103,26 @@ const WalkInForm = () => {
     e.preventDefault();
     
     try {
-      console.log('=== QUEUE CREATION DEBUG ===');
+      console.log('=== FRONTEND QUEUE CREATION DEBUG ===');
       console.log('User object:', user);
       console.log('isAccountOwner state:', isAccountOwner);
       
-      // Make the userId more explicit at the top level
       const actualUserId = user?.id || null;
       
-      // FIXED: Set isGuest based on dialog choice
-      // If user selected "Yes, use my details" (isAccountOwner = true), isGuest = false (0)
-      // If user selected "No, enter new details" (isAccountOwner = false), isGuest = true (1)
-      const isGuest = !isAccountOwner;
+      // FIXED: Send boolean instead of number
+      // When user clicks "Yes, use my details" -> isAccountOwner = true -> isGuest = false
+      // When user clicks "No, enter new details" -> isAccountOwner = false -> isGuest = true
+      const isGuestValue = !isAccountOwner; // Direct boolean conversion
       
       console.log('Final values:');
       console.log('- actualUserId:', actualUserId);
       console.log('- isAccountOwner:', isAccountOwner);
-      console.log('- isGuest (will be sent as):', isGuest);
-      console.log('- isGuest numeric value:', isGuest ? 1 : 0);
+      console.log('- isGuestValue (boolean):', isGuestValue);
       
       const requestPayload = {
-        // Make userId the first property so it's more noticeable in logs
         userId: actualUserId, 
-        isGuest: isGuest ? 1 : 0, // Explicitly convert to 1 or 0
+        isGuest: isGuestValue,  // Send as boolean
         
-        // Other data
         firstName: formData.firstName,
         lastName: formData.lastName,
         middleInitial: formData.middleInitial || '',
@@ -145,7 +141,6 @@ const WalkInForm = () => {
       // Format the queue number to WK format for display
       const queueNumber = formatWKNumber(response.queue.queueNumber);
       
-      // Create the new queue with user ID
       const newQueue = {
         id: queueNumber,
         dbId: response.queue.id,
@@ -159,13 +154,12 @@ const WalkInForm = () => {
         appointmentType: formData.reasonOfVisit,
         isUserQueue: true,
         userId: actualUserId,
-        isGuest: isGuest ? 1 : 0 // Store the explicit numeric value
+        isGuest: isGuestValue
       };
 
-      // Store with user-specific keys
+      // Store in localStorage
       localStorage.setItem(`userQueue_${actualUserId}`, JSON.stringify(newQueue));
       
-      // Also add to user-specific queues array
       try {
         const storedQueues = localStorage.getItem(`userQueues_${actualUserId}`);
         let userQueues = storedQueues ? JSON.parse(storedQueues) : [];
@@ -173,8 +167,6 @@ const WalkInForm = () => {
         
         userQueues.push(newQueue);
         localStorage.setItem(`userQueues_${actualUserId}`, JSON.stringify(userQueues));
-        
-        // For backward compatibility
         localStorage.setItem('userQueue', JSON.stringify(newQueue));
       } catch (e) {
         console.error('Error updating user queues:', e);
