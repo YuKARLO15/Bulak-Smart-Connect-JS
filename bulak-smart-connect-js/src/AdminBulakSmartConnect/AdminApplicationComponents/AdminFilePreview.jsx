@@ -285,31 +285,46 @@ const FileUploadPreview = ({ formData, applicationType, applicationSubtype }) =>
       case 'Correction - Clerical Errors':
       case 'Clerical Error':
         return [
-          'Original Birth Certificate with error',
-          'Valid ID',
-          'Annotated Birth Certificate',
-          'Affidavit of Correction',
-          'Publication Certificate',
+          'PSA copy of wrong document',
+  'MCA copy of wrong document',
+  'Church record document owner & relatives',
+  'School record document owner & relatives',
+  'Marriage certificate document owner (if married) & relatives',
+  'Birth certificate document owner & relatives',
+  'Comelec record document owner & relatives',
+  'Identification cards',
+  'Others',
         ];
       case 'Correction - Sex/Date of Birth':
       case 'Sex DOB':
         return [
-          'Original Birth Certificate',
-          'Valid ID',
-          'Medical Certification',
-          'Affidavit of Support',
-          'Two Documentary Evidences',
-          'Publication Certificate',
+   'NBI Clearance',
+  'PNP Clearance',
+  'Employer Clearance (no pending case) OR business records or affidavid of unempployment with no pending case',
+  'Earliest church record/s or certificate of no church record/s available and affidavit of no church record/s available',
+  'Eariest school record (form 137A) OR certificate of no school record/s available AND affidavid of no school record available',
+  'Medical record/s OR affidavit of no medical record/s available',
+  'Other school records-transcript, dimploma, certificates',
+  'Birth and/or Church Certificates of Child/Children',
+  'Voters Record',
+  'Employment Records',
+  'Identification Cards - National ID, Drivers License, Seniors ID, etc.',
+          'Others - Passport, Insurance Documents, Members Data Record',
+  
         ];
       case 'Correction - First Name':
       case 'First Name':
         return [
-          'Original Birth Certificate',
-          'Valid ID',
-          'Baptismal Certificate',
-          'School Records',
-          'Publication Certificate',
-          'Affidavit of Correction',
+          'NBI Clearance',
+  'PNP Clearance',
+          'Employers Clearance / Business Records / Affidavit of Unemployment',
+   'School Records',
+  'Church Records',
+  'Birth and/or Church Certificates of Child/Children',
+  'Voters Record',
+  'Employment Records',
+  'Identification Cards - National ID, Driver License, Senior ID, etc.',
+  'Others - Passport, Insurance Documents, Members Data Record',
         ];
       case 'Marriage Certificate':
         return [

@@ -307,6 +307,16 @@ const handleApplicationClick = application => {
     return true;
   });
 
+  const isCopyOrCorrectionOfBirthCertificate = (app) => {
+  const subtype = getApplicationSubtype(app);
+  return [
+    'Copy of Birth Certificate',
+    'Correction - Clerical Errors',
+    'Correction - Sex/Date of Birth',
+    'Correction - First Name'
+  ].includes(subtype);
+};
+
   if (loading) {
     return (
       <Box className="LoadingContainerAdminAppForm">
@@ -430,7 +440,7 @@ const handleApplicationClick = application => {
                   >
                     Application Form
                   </Button>
-    {!(getApplicationSubtype(selectedApplication) === 'Copy of Birth Certificate' || 
+    { (!isCopyOrCorrectionOfBirthCertificate(selectedApplication) || 
      (getApplicationType(selectedApplication) === 'Birth Certificate' && 
       selectedApplication.applicationType === 'Request copy')) && (
     <Button
@@ -480,7 +490,7 @@ const handleApplicationClick = application => {
           <AdminMarriageApplicationView applicationData={selectedApplication} />
         ) : getApplicationType(selectedApplication) === 'Marriage License' ? (
           <AdminMarriageLicensePreview applicationData={selectedApplication} />
-        ) : isCopyOfBirthCertificate(selectedApplication) ? (
+         ) : isCopyOrCorrectionOfBirthCertificate(selectedApplication) ? (
           <AdminCopyBirthPreview applicationData={selectedApplication} />
         ) : getApplicationType(selectedApplication) === 'Birth Certificate' ? (
                       <>

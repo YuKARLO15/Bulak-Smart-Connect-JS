@@ -2,6 +2,19 @@ import React from 'react';
 import './MarriageCertificateForm.css';
 
 const MarriageDetailsForm = ({ formData, handleChange, errors }) => {
+  // Create arrays for dropdown options
+  const months = [
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'
+  ];
+  
+  // Days 1-31
+  const days = Array.from({ length: 31 }, (_, i) => i + 1);
+  
+  // Years (current year down to 100 years ago)
+  const currentYear = new Date().getFullYear();
+  const years = Array.from({ length: 100 }, (_, i) => currentYear - i);
+
   return (
     <section className="section">
       <h3>III. MARRIAGE DETAILS</h3>
@@ -67,37 +80,55 @@ const MarriageDetailsForm = ({ formData, handleChange, errors }) => {
         </div>
       </div>
 
-      {/* Date of Marriage */}
+      {/* Date of Marriage - CONVERTED TO DROPDOWNS */}
       <label>16. DATE OF MARRIAGE *</label>
       <div className="input-group">
         <div className="input-container">
-          <input
-            type="text"
+          <select
             name="marriageMonth"
-            placeholder="Month"
             value={formData.marriageMonth || ''}
             onChange={handleChange}
-          />
+            className="form-select"
+          >
+            <option value="">Select Month</option>
+            {months.map(month => (
+              <option key={month} value={month}>
+                {month}
+              </option>
+            ))}
+          </select>
           {errors.marriageMonth && <span className="error-message">{errors.marriageMonth}</span>}
         </div>
         <div className="input-container">
-          <input
-            type="text"
+          <select
             name="marriageDay"
-            placeholder="Day"
             value={formData.marriageDay || ''}
             onChange={handleChange}
-          />
+            className="form-select"
+          >
+            <option value="">Select Day</option>
+            {days.map(day => (
+              <option key={day} value={day}>
+                {day}
+              </option>
+            ))}
+          </select>
           {errors.marriageDay && <span className="error-message">{errors.marriageDay}</span>}
         </div>
         <div className="input-container">
-          <input
-            type="text"
+          <select
             name="marriageYear"
-            placeholder="Year"
             value={formData.marriageYear || ''}
             onChange={handleChange}
-          />
+            className="form-select"
+          >
+            <option value="">Select Year</option>
+            {years.map(year => (
+              <option key={year} value={year}>
+                {year}
+              </option>
+            ))}
+          </select>
           {errors.marriageYear && <span className="error-message">{errors.marriageYear}</span>}
         </div>
       </div>
