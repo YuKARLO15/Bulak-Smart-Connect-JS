@@ -219,7 +219,8 @@ const getAllUserQueues = () => {
             },
             userId: currentUser,
             isUserQueue: true,
-            status: queue.status
+            status: queue.status, 
+            isPrimaryQueue: true  
           }));
           
           console.log('Valid active user queues:', validUserQueues);
@@ -238,7 +239,9 @@ const getAllUserQueues = () => {
               const positionData = await queueService.getQueuePosition(pendingQueue.dbId);
               console.log('Position data received:', positionData);
               
-              if (positionData.position > 0) {
+              if (positionData.status === 'serving') {
+                setQueuePosition('NOW SERVING');
+              } else if (positionData.position > 0) {
                 setQueuePosition(positionData.position);
               } else {
                 setQueuePosition(null);
@@ -541,21 +544,20 @@ const getAllUserQueues = () => {
           <div className="QueuePositionContainerWalkIn">
             <div className="QueuePositionLabelWalkIn">QUEUE POSITION</div>
             <div className="QueuePositionNumberWalkIn">
-              {loading ? '...' : (queuePosition !== null && queuePosition > 0 ? queuePosition : '-')}
+              {loading ? '...' : 
+                queuePosition === 'NOW SERVING' ? 'NOW SERVING' :
+                (queuePosition !== null && queuePosition > 0 ? queuePosition : '-')
+              }
             </div>
             <div className="QueuePositionMessageWalkIn">
               {loading ? 'Loading...' : 
+                queuePosition === 'NOW SERVING' ? 'Please proceed to the counter' :
                 userQueue && Array.isArray(userQueue) && userQueue.length > 0 ? 
                   (queuePosition !== null && queuePosition > 0 ? 
                     `You are #${queuePosition} in line` : 
                     `You have ${userQueue.length} queue${userQueue.length > 1 ? 's' : ''}`
                   ) : 
-                  userQueue ?
-                    (queuePosition !== null && queuePosition > 0 ? 
-                      `You are #${queuePosition} in line` : 
-                      "You'll be notified when it's almost your turn"
-                    ) :
-                    'No active queue'
+                  "You'll be notified when it's almost your turn"
               }
             </div>
             {/* Show user queue info if available */}
