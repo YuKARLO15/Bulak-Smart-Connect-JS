@@ -557,7 +557,7 @@ const FileUploadPreview = ({ formData, applicationType, applicationSubtype }) =>
         <List className="documentList">
           {displayedDocs.map((doc, index) => {
             const docNumber = index + 1;
-            const docNote = getDocumentNote(doc.name || doc.documentType);
+            const docNote = getDocumentNote(doc.name || documentType);
             const isUploaded = !doc.placeholder || doc.uploaded;
 
             return (
@@ -566,7 +566,7 @@ const FileUploadPreview = ({ formData, applicationType, applicationSubtype }) =>
                   <Box className="documentItemContent">
                     <Box className="documentHeader">
                       <Typography className="documentNumberTitle">
-                        {docNumber}. {doc.name || doc.documentType}
+                        {docNumber}. { doc.documentType}
                       </Typography>
                     </Box>
 
