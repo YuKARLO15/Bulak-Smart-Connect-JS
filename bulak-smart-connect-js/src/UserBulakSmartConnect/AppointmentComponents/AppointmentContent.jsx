@@ -355,12 +355,21 @@ const AppointmentContainer = ({ onBack, preselectedDate }) => {
               <div className="FormGroupAppointForm SlotGroupAppointForm">
                 <div className="InputWrapperAppointForm AppointTimeAppointForm">
                   <label>Reason for Visit</label>
-                  <select name="reason" value={formData.reason} onChange={handleChange}>
-                    <option value="">Select a Reason</option>
-                    <option value="Birth Certificate">Birth Certificate</option>
-                    <option value="Marriage Certificate">Marriage Certificate</option>
-                    <option value="Death Certificate">Death Certificate</option>
-                  </select>
+                  
+                     <select name="reason" value={formData.reason} onChange={handleChange}>
+                    <optgroup label="Birth Certificate">
+    <option value="Birth Certificate - Regular/Copy">Regular/Copy for Birth Certificate</option>
+    <option value="Birth Certificate - Delayed Registration">Delayed Registration</option>
+    <option value="Birth Certificate - Correction">Correction for Birth Certificate</option>
+  </optgroup>
+  
+  <optgroup label="Marriage">
+    <option value="Marriage - License">Marriage License</option>
+    <option value="Marriage - Certificate">Marriage Certificate</option>
+  </optgroup>
+  
+  <option value="Death Certificate"> Death Certificate</option>
+</select>
                   {errors.reason && <span className="ErrorTextAppointForm">{errors.reason}</span>}
                 </div>
                 <div className="InputWrapperAppointForm AppointTimeAppointForm">
