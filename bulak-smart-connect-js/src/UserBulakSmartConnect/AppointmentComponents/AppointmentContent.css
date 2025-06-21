@@ -404,6 +404,67 @@ width: 80vw  !important;
 .FormGroupAppointForm {
   width: 100%;
 }
+/* Add these rules to remove the dashed border */
+.DatePickerInputAppointForm {
+  border: none !important;
+  outline: none !important;
+}
+
+/* Remove any dashed borders from date inputs */
+input[type="date"],
+.DateInputWrapperAppointForm {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Target the specific date input container */
+.InputWrapperAppointForm > .DatePickerInputAppointForm {
+  border: none !important;
+}
+/* Styles for disabled time slots */
+select option:disabled {
+  color: #bbbbbb !important;
+  background-color: #f0f0f0 !important;
+  font-style: italic;
+  text-decoration: line-through;
+}
+
+/* Additional styling for Firefox which has different behavior with disabled options */
+@-moz-document url-prefix() {
+  select option:disabled {
+    display: none;
+  }
+}
+
+/* For all browsers that support it */
+select.time-select option.booked-slot {
+  display: none; /* Hide booked slots completely in supporting browsers */
+}
+
+/* For Chrome and other browsers that don't properly apply styles to disabled options */
+select.time-select {
+  background-color: white;
+  color: black;
+}
+/* Remove dashed borders from the parent containers */
+[class*="AppointForm"] > div > input[type="date"],
+div:has(.DatePickerInputAppointForm) {
+  border: none !important;
+}
+
+/* Override any dashed outlines that might be applied */
+.AppointmentFormSectionAppointForm input[type="date"],
+.AppointmentFormSectionAppointForm .DatePickerInputAppointForm {
+  outline: none !important;
+  border: none !important;
+}
+
+/* Target the specific date selector container in your UI */
+.FormGroupAppointForm .DatePickerInputAppointForm,
+.AppointmentLayoutAppointForm .DatePickerInputAppointForm {
+  border: none !important;
+}
 
 /* Make the summary panel below the form, centered, not to the right */
 .AppointmentSummaryPanelAppointForm {
@@ -425,6 +486,7 @@ width: 80vw  !important;
   position: relative;
   width: 100%;
   margin-bottom: 10px;
+  border: none !important;
 }
 .DateInputWrapperAppointForm {
   display: flex;
