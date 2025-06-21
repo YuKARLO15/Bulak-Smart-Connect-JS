@@ -5,6 +5,7 @@ import './AppointmentContent.css';
 import { saveRecentAppointments } from './RecentAppointmentData';
 import { appointmentService } from '../../services/appointmentService'; 
 import axios from 'axios';
+import { FormControl, InputLabel, Select, MenuItem, FormHelperText } from '@mui/material';
 
 const steps = [
   { label: 'Book Appointment' },
@@ -18,7 +19,30 @@ const AppointmentContainer = ({ onBack, preselectedDate }) => {
   const [isForSelf, setIsForSelf] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [fetchingUserData, setFetchingUserData] = useState(false);
-
+  const [bookedSlots, setBookedSlots] = useState([]);
+  const [isLoadingSlots, setIsLoadingSlots] = useState(false);
+  
+  const allTimeSlots = [
+    '8:00 AM - 8:30 AM',
+    '8:30 AM - 9:00 AM',
+    '9:00 AM - 9:30 AM',
+    '9:30 AM - 10:00 AM',
+    '10:00 AM - 10:30 AM',
+    '10:30 AM - 11:00 AM',
+    '11:00 AM - 11:30 AM',
+    '11:30 AM - 12:00 PM',
+    '12:00 PM - 12:30 PM',
+    '12:30 PM - 1:00 PM',
+    '1:00 PM - 1:30 PM',
+    '1:30 PM - 2:00 PM',
+    '2:00 PM - 2:30 PM',
+    '2:30 PM - 3:00 PM',
+    '3:00 PM - 3:30 PM',
+    '3:30 PM - 4:00 PM',
+    '4:00 PM - 4:30 PM',
+    '4:30 PM - 5:00 PM'
+  ];
+  
   const [userData, setUserData] = useState({
     lastName: '',
     firstName: '',
@@ -41,8 +65,8 @@ const AppointmentContainer = ({ onBack, preselectedDate }) => {
   const [errors, setErrors] = useState({});
   const [selectedDate, setSelectedDate] = useState(preselectedDate || null);
   const [tooltip, setTooltip] = useState(false);
-  const [availableSlots, setAvailableSlots] = useState([]); 
-  const [loadingSlots, setLoadingSlots] = useState(false); 
+  const [availableSlots, setAvailableSlots] = useState([]);
+  const [loadingSlots, setLoadingSlots] = useState(false);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -60,11 +84,12 @@ const AppointmentContainer = ({ onBack, preselectedDate }) => {
             firstName: user.firstName || '',
             middleInitial: user.middleInitial || '',
             address: user.address || '',
-            phoneNumber: user.phoneNumber || user.contactNumber || '', 
+            phoneNumber: user.phoneNumber || user.contactNumber || '',
           });
         }
-      } catch {}
-      finally {
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      } finally {
         setFetchingUserData(false);
       }
     };
@@ -72,23 +97,55 @@ const AppointmentContainer = ({ onBack, preselectedDate }) => {
   }, []);
 
   useEffect(() => {
-    if (selectedDate) fetchAvailableSlots();
-
+    if (selectedDate) {
+      fetchAvailableTimeSlots();
+    } else {
+      setAvailableSlots([]);
+    }
   }, [selectedDate]);
 
-  const fetchAvailableSlots = async () => {
-    try {
-      setLoadingSlots(true);
-      const dateStr = selectedDate.toISOString().split('T')[0]; 
-      const slots = await appointmentService.fetchAvailableSlots(dateStr);
-      setAvailableSlots(slots);
-    } catch {
-      setAvailableSlots(generateTimeSlots());
-    } finally {
-      setLoadingSlots(false);
-    }
-  };
+ const fetchAvailableTimeSlots = async () => {
+  if (!selectedDate) return;
+  
+  setLoadingSlots(true);
+  try {
 
+    const formattedDate = selectedDate instanceof Date
+      ? `${selectedDate.getFullYear()}-${String(selectedDate.getMonth() + 1).padStart(2, '0')}-${String(selectedDate.getDate()).padStart(2, '0')}`
+      : selectedDate;
+    
+    console.log("Fetching available slots for date:", formattedDate);
+    
+ 
+    const response = await appointmentService.fetchAvailableSlots(formattedDate);
+    
+    console.log("API Response:", response);
+    
+ 
+    if (Array.isArray(response)) {
+      setAvailableSlots(response);
+      console.log("Available slots from API:", response);
+    } 
+
+    else if (response && response.availableSlots && Array.isArray(response.availableSlots)) {
+      setAvailableSlots(response.availableSlots);
+      console.log("Available slots from API:", response.availableSlots);
+    } 
+  
+    else {
+      console.warn("Invalid available slots data from API:", response);
+  
+      setAvailableSlots([...allTimeSlots]);
+    }
+  } catch (error) {
+    console.error("Error fetching available slots:", error);
+    
+   
+    setAvailableSlots([...allTimeSlots]);
+  } finally {
+    setLoadingSlots(false);
+  }
+};
   const handleDialogChoice = forSelf => {
     setIsForSelf(forSelf);
     setShowDialog(false);
@@ -97,30 +154,12 @@ const AppointmentContainer = ({ onBack, preselectedDate }) => {
         ...formData,
         lastName: userData.lastName,
         firstName: userData.firstName,
-        middleInitial: userData.middleInitial  || '',
+        middleInitial: userData.middleInitial || '',
         address: userData.address,
         phoneNumber: userData.phoneNumber,
       });
     }
   };
-
-  const generateTimeSlots = () => {
-    const slots = [];
-    let hour = 8, minute = 0;
-    while (hour < 17) {
-      let startTime = `${hour === 12 ? 12 : hour % 12}:${minute === 0 ? '00' : '30'} ${hour < 12 ? 'AM' : 'PM'}`;
-      minute += 30;
-      if (minute === 60) {
-        minute = 0;
-        hour += 1;
-      }
-      let endTime = `${hour === 12 ? 12 : hour % 12}:${minute === 0 ? '00' : '30'} ${hour < 12 ? 'AM' : 'PM'}`;
-      slots.push(`${startTime} - ${endTime}`);
-    }
-    return slots;
-  };
-
-  const timeSlots = availableSlots.length > 0 ? availableSlots : generateTimeSlots();
 
   const handleChange = e => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -140,26 +179,34 @@ const AppointmentContainer = ({ onBack, preselectedDate }) => {
     else {
       setTooltip(false);
       setSelectedDate(date);
-      setFormData({ ...formData, date: date.toLocaleDateString() });
-      if (errors.date) setErrors({ ...errors, date: null });
+      setFormData(prev => ({ ...prev, date: date.toLocaleDateString(), time: '' }));
+      if (errors.date) setErrors({ ...errors, date: null, time: null });
     }
   };
 
-  const handleSubmit = async () => { 
-   let newErrors = {};
-  Object.keys(formData).forEach(key => {
-    if (!formData[key] && key !== 'middleInitial') {
-      
-      if (key === 'date' && !selectedDate) {
-        newErrors[key] = 'Please select a date.';
-      } else if (key !== 'date') {
-        newErrors[key] = 'This field is required.';
+  const handleSubmit = async () => {
+    let newErrors = {};
+    Object.keys(formData).forEach(key => {
+      if (!formData[key] && key !== 'middleInitial') {
+        
+        if (key === 'date' && !selectedDate) {
+          newErrors[key] = 'Please select a date.';
+        } else if (key !== 'date') {
+          newErrors[key] = 'This field is required.';
+        }
       }
-    }
-  });
+    });
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
+      return;
+    }
+
+    
+    if (!availableSlots.includes(formData.time)) {
+      setErrors(prev => ({ ...prev, time: 'This time slot is no longer available. Please select another time.' }));
+      
+      fetchAvailableTimeSlots();
       return;
     }
 
@@ -172,7 +219,7 @@ const AppointmentContainer = ({ onBack, preselectedDate }) => {
         middleInitial: formData.middleInitial || '',
         address: formData.address,
         phoneNumber: formData.phoneNumber,
-        reasonOfVisit: formData.reason, 
+        reasonOfVisit: formData.reason,
         appointmentDate: selectedDate.getFullYear() + '-' + 
                          String(selectedDate.getMonth() + 1).padStart(2, '0') + '-' + 
                          String(selectedDate.getDate()).padStart(2, '0'),
@@ -233,7 +280,7 @@ const AppointmentContainer = ({ onBack, preselectedDate }) => {
     }
   };
 
-   const dialogPrompt = (
+  const dialogPrompt = (
     <div className="DialogBoxAppointForm">
       {onBack && (
         <button className="DialogBackButtonAppointForm" onClick={onBack} aria-label="Go back">
@@ -259,7 +306,8 @@ const AppointmentContainer = ({ onBack, preselectedDate }) => {
       </div>
     </div>
   );
-   const Stepper = () => (
+  
+  const Stepper = () => (
     <div className="StepperContainerAppointForm">
       {steps.map((step, idx) => (
         <React.Fragment key={idx}>
@@ -272,26 +320,21 @@ const AppointmentContainer = ({ onBack, preselectedDate }) => {
       ))}
     </div>
   );
- 
 
   return (
-    
     <div className="AppointmentFormsContainerAppointForm ProStyledAppointForm">
-        {showDialog && (
+      {showDialog && (
         <div className="DialogOverlayAppointForm">{dialogPrompt}</div>
       )}
 
-
-    
       {!showDialog && (
-        
         <div className="AppointmentFContainerAppointForm">
-                <div className="BackButtonWrapperAppointForm">
-        <button className="ActualBackButtonAppointForm" onClick={onBack}>
-          &larr; Back
-        </button>
-      </div>
-      <Stepper />
+          <div className="BackButtonWrapperAppointForm">
+            <button className="ActualBackButtonAppointForm" onClick={onBack}>
+              &larr; Back
+            </button>
+          </div>
+          <Stepper />
 
           <h2 className="AppointmentTitleAppointForm">Booking Appointment</h2>
       
@@ -335,7 +378,13 @@ const AppointmentContainer = ({ onBack, preselectedDate }) => {
               <div className="FormGroupAppointForm RowGroupAppointForm">
                 <div className="InputWrapperAppointForm LargeInputAppointForm">
                   <label>Address</label>
-                  <input type="text" name="address" value={formData.address} onChange={handleChange} autoComplete="street-address" />
+                  <input 
+                    type="text" 
+                    name="address" 
+                    value={formData.address} 
+                    onChange={handleChange} 
+                    autoComplete="street-address" 
+                  />
                   {errors.address && <span className="ErrorTextAppointForm">{errors.address}</span>}
                 </div>
                 <div className="InputWrapperAppointForm">
@@ -355,75 +404,96 @@ const AppointmentContainer = ({ onBack, preselectedDate }) => {
               <div className="FormGroupAppointForm SlotGroupAppointForm">
                 <div className="InputWrapperAppointForm AppointTimeAppointForm">
                   <label>Reason for Visit</label>
-                  
-                     <select name="reason" value={formData.reason} onChange={handleChange}>
+                  <select name="reason" value={formData.reason} onChange={handleChange}>
+                    <option value="">Select a Reason</option>
                     <optgroup label="Birth Certificate">
-    <option value="Birth Certificate - Regular/Copy">Regular/Copy for Birth Certificate</option>
-    <option value="Birth Certificate - Delayed Registration">Delayed Registration</option>
-    <option value="Birth Certificate - Correction">Correction for Birth Certificate</option>
-  </optgroup>
-  
-  <optgroup label="Marriage">
-    <option value="Marriage - License">Marriage License</option>
-    <option value="Marriage - Certificate">Marriage Certificate</option>
-  </optgroup>
-  
-  <option value="Death Certificate"> Death Certificate</option>
-</select>
+                      <option value="Birth Certificate - Regular/Copy">Regular/Copy for Birth Certificate</option>
+                      <option value="Birth Certificate - Delayed Registration">Delayed Registration</option>
+                      <option value="Birth Certificate - Correction">Correction for Birth Certificate</option>
+                    </optgroup>
+                    
+                    <optgroup label="Marriage">
+                      <option value="Marriage - License">Marriage License</option>
+                      <option value="Marriage - Certificate">Marriage Certificate</option>
+                    </optgroup>
+                    
+                    <option value="Death Certificate">Death Certificate</option>
+                    <option value="Others">Others</option>
+                  </select>
                   {errors.reason && <span className="ErrorTextAppointForm">{errors.reason}</span>}
                 </div>
-                <div className="InputWrapperAppointForm AppointTimeAppointForm">
-                  <label className="AppointTimeSelectedAppointForm">Select Time</label>
-                  <select 
-                    name="time" 
-                    value={formData.time} 
-                    onChange={handleChange}
-                    disabled={loadingSlots}
-                  >
-                    <option value="">
-                      {loadingSlots ? 'Loading available times...' : 'Select a Time Slot'}
-                    </option>
-                    {timeSlots.map((slot, index) => (
-                      <option key={index} value={slot}>
-                        {slot}
-                      </option>
-                    ))}
-                  </select>
-                  {errors.time && <span className="ErrorTextAppointForm">{errors.time}</span>}
-                  {loadingSlots && <span className="InfoTextAppointForm">Fetching real-time availability...</span>}
+                <div className="InputWrapperAppointForm">
+                  <label>Select Date of Visit</label>
+                  <DatePickerInputAppointForm
+                    value={selectedDate}
+                    onChange={date => {
+                      setTooltip(false);
+                      setSelectedDate(date);
+                      setFormData({
+                        ...formData,
+                        date: date ? date.toLocaleDateString() : "",
+                        time: "" 
+                      });
+                      if (errors.date) setErrors({ ...errors, date: null });
+                    }}
+                    error={errors.date}
+                    placeholder="Select date"
+                  />
                 </div>
               </div>
               <div className="FormGroupAppointForm RowGroupAppointForm">
-                <div className="InputWrapperAppointForm">
-                  <label>Select Date of Visit</label>
-   <DatePickerInputAppointForm
-    value={selectedDate}
-    onChange={date => {
-      setTooltip(false);
-      setSelectedDate(date);
-      setFormData({
-        ...formData,
-        date: date ? date.toLocaleDateString() : ""
-      });
-      if (errors.date) setErrors({ ...errors, date: null });
-    }}
-    error={errors.date}
-    placeholder="Select date"
-  />
-                </div>
-                 </div>
-                <div className="ConfirmContainerAppointForm">
-                  <button 
-                    className="ConfirmButtonAppointForm" 
-                    onClick={handleSubmit}
-                    disabled={isSubmitting || loadingSlots}
-                  >
-                    {isSubmitting ? 'Booking Appointment...' : 'Confirm Appointment'}
-                  </button>
-                </div>
-              
+               <div className="InputWrapperAppointForm AppointTimeAppointForm">
+  <label className="AppointTimeSelectedAppointForm">Select Time</label>
+  <select 
+    name="time" 
+    value={formData.time} 
+    onChange={handleChange}
+    disabled={!selectedDate || loadingSlots}
+    className="time-select"
+  >
+    <option value="">
+      {loadingSlots 
+        ? 'Loading available times...' 
+        : !selectedDate 
+          ? 'Select a date first'
+          : availableSlots.length === 0 
+            ? 'No available slots for this date' 
+            : 'Select a Time Slot'
+      }
+    </option>
+
+   
+    {availableSlots.length > 0 ? (
+      availableSlots.map((slot, index) => {
+        console.log("Rendering slot:", slot);
+        return (
+          <option key={index} value={slot}>
+            {slot}
+          </option>
+        );
+      })
+    ) : (
+      <option disabled value="">No available slots</option>
+    )}
+  </select>
+  {errors.time && <span className="ErrorTextAppointForm">{errors.time}</span>}
+  {loadingSlots && <span className="InfoTextAppointForm">Fetching real-time availability...</span>}
+  {availableSlots.length === 0 && selectedDate && !loadingSlots && (
+    <span className="InfoTextAppointForm">No available slots for this date. Please select another date.</span>
+  )}
+</div>
+              </div>
+              <div className="ConfirmContainerAppointForm">
+                <button 
+                  className="ConfirmButtonAppointForm" 
+                  onClick={handleSubmit}
+                  disabled={isSubmitting || loadingSlots || !selectedDate || !formData.time}
+                >
+                  {isSubmitting ? 'Booking Appointment...' : 'Confirm Appointment'}
+                </button>
+              </div>
             </div>
-            {/* Summary/Instruction Panel */}
+     
             <div className="AppointmentSummaryPanelAppointForm">
               <h4 className="SummaryTitleAppointForm">How to Book Your Appointment</h4>
               <ol className="SummaryStepsAppointForm">
