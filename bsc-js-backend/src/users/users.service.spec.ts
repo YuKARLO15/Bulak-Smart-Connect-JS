@@ -30,14 +30,14 @@ describe('UsersService', () => {
       select: jest.fn().mockReturnThis(),
       addSelect: jest.fn().mockReturnThis(),
       groupBy: jest.fn().mockReturnThis(),
-      getManyAndCount: jest.fn(),
-      getRawMany: jest.fn(),
+      getManyAndCount: jest.fn().mockResolvedValue([[], 0]),
+      getRawMany: jest.fn().mockResolvedValue([]),
     })),
   };
 
   const mockRolesService = {
     findByName: jest.fn(),
-    assignRolesToUser: jest.fn(),
+    assignRolesToUser: jest.fn().mockResolvedValue(undefined),
   };
 
   beforeEach(async () => {
@@ -58,6 +58,10 @@ describe('UsersService', () => {
     service = module.get<UsersService>(UsersService);
     userRepository = module.get<Repository<User>>(getRepositoryToken(User));
     rolesService = module.get<RolesService>(RolesService);
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
   it('should be defined', () => {
@@ -81,8 +85,7 @@ describe('UsersService', () => {
       mockUserRepository.create.mockReturnValue(mockUser);
       mockUserRepository.save.mockResolvedValue(mockUser);
       mockRolesService.findByName.mockResolvedValue(mockCitizenRole);
-      mockRolesService.assignRolesToUser.mockResolvedValue(undefined);
-
+      
       // Mock findOne for the return call
       jest.spyOn(service, 'findOne').mockResolvedValue({
         ...mockUser,
