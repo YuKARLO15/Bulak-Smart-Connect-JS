@@ -31,7 +31,6 @@ jobs:
       run: |
         docker run -d \
           --name minio \
-          --network ${{ job.container.network }} \
           -p 9000:9000 \
           -p 9001:9001 \
           -e MINIO_ROOT_USER=minioadmin \
@@ -69,11 +68,15 @@ jobs:
         echo "MINIO_SECRET_KEY=minioadmin123" >> .env.test
         echo "MINIO_BUCKET_NAME=bulak-smart-connect" >> .env.test
 
-    - name: Wait for services
+    - name: Wait for services and setup database
       run: |
         # Wait for MySQL
-        while ! mysqladmin ping -h"127.0.0.1" -P3306 -uroot -ptest_password --silent; do
-          echo "Waiting for MySQL..."
+        for i in {1..30}; do
+          if mysqladmin ping -h"127.0.0.1" -P3306 -uroot -ptest_password --silent; then
+            echo "MySQL is ready!"
+            break
+          fi
+          echo "Waiting for MySQL... (attempt $i/30)"
           sleep 2
         done
         
@@ -91,9 +94,14 @@ jobs:
           sleep 3
         done
 
-    - name: Run tests
+    - name: Run unit tests
       working-directory: ./bsc-js-backend
       run: npm test
+
+    - name: Clean database before e2e tests
+      run: |
+        mysql -h127.0.0.1 -P3306 -uroot -ptest_password -e "DROP DATABASE IF EXISTS bsc_test;"
+        mysql -h127.0.0.1 -P3306 -uroot -ptest_password -e "CREATE DATABASE bsc_test;"
 
     - name: Run e2e tests
       working-directory: ./bsc-js-backend

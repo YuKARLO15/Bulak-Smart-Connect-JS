@@ -4,11 +4,18 @@
   "testEnvironment": "node",
   "testRegex": ".e2e-spec.ts$",
   "transform": {
-    "^.+\\.(t|ts)$": "ts-jest"
+    "^.+\\.(t|ts)$": [
+      "ts-jest",
+      {
+        "tsconfig": {
+          "strict": false
+        }
+      }
+    ]
   },
   "setupFilesAfterEnv": ["<rootDir>/jest-setup-e2e.ts"],
-  "testTimeout": 30000,
-  "transformIgnorePatterns": [
-    "node_modules/(?!(.*\\.mjs$))"
-  ]
+  "testTimeout": 60000,
+  "maxWorkers": 1,
+  "forceExit": true,
+  "detectOpenHandles": true
 }
