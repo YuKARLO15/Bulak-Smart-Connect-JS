@@ -24,51 +24,58 @@ const UserInfoCard = ({ data, onBack, onNext, onStatusUpdate }) => {
   };
 
   const getStatusActions = () => {
-    if (!data?.status) return null;
+  if (!data?.status) return null;
 
-    switch (data.status.toLowerCase()) {
-      case 'pending':
-        return (
-          <div className="status-actions">
-            <button 
-              className="btn-confirm"
-              onClick={() => handleStatusUpdate('confirmed')}
-              disabled={updating}
-            >
-              {updating ? 'Updating...' : 'Confirm'}
-            </button>
-            <button 
-              className="btn-cancel"
-              onClick={() => handleStatusUpdate('cancelled')}
-              disabled={updating}
-            >
-              {updating ? 'Updating...' : 'Cancel'}
-            </button>
-          </div>
-        );
-      case 'confirmed':
-        return (
-          <div className="status-actions">
-            <button 
-              className="btn-complete"
-              onClick={() => handleStatusUpdate('completed')}
-              disabled={updating}
-            >
-              {updating ? 'Updating...' : 'Complete'}
-            </button>
-            <button 
-              className="btn-cancel"
-              onClick={() => handleStatusUpdate('cancelled')}
-              disabled={updating}
-            >
-              {updating ? 'Updating...' : 'Cancel'}
-            </button>
-          </div>
-        );
-      default:
-        return null;
-    }
-  };
+  const status = data.status.toLowerCase();
+  
+  // Only show status update buttons for pending or confirmed statuses
+  if (status === 'pending' || status === 'confirmed') {
+    const actionText = status === 'pending' ? 'Confirm' : 'Complete';
+    const actionStatus = status === 'pending' ? 'confirmed' : 'completed';
+    const buttonClass = status === 'pending' ? 'btn-confirm' : 'btn-complete';
+    
+    return (
+      <div className="status-actions">
+        <button 
+          className={buttonClass}
+          onClick={() => handleStatusUpdate(actionStatus)}
+          disabled={updating}
+        >
+          {updating ? 'Updating...' : actionText}
+        </button>
+        <button 
+          className="btn-cancel"
+          onClick={() => handleStatusUpdate('cancelled')}
+          disabled={updating}
+        >
+          {updating ? 'Updating...' : 'Cancel'}
+        </button>
+      </div>
+    );
+  } else if (status === 'completed') {
+    // Show navigation buttons when completed
+    return (
+      <div className="status-actions">
+        <button 
+          className="btn-back"
+          onClick={onBack}
+          disabled={updating}
+        >
+          Back
+        </button>
+        <button 
+          className="btn-next"
+          onClick={onNext}
+          disabled={updating}
+        >
+          Next
+        </button>
+      </div>
+    );
+  }
+  
+  return null;
+};
 
   return (
     <div className="info-card">
@@ -116,16 +123,7 @@ const UserInfoCard = ({ data, onBack, onNext, onStatusUpdate }) => {
       </div>
 
       {getStatusActions()}
-
-      <div className="btn-group">
-        <button className="back" onClick={onBack}>
-          Back
-        </button>
-        <button className="next" onClick={onNext}>
-          {data.status === 'pending' ? 'Quick Confirm' : 
-           data.status === 'confirmed' ? 'Quick Complete' : 'Next'}
-        </button>
-      </div>
+      
     </div>
   );
 };
