@@ -77,6 +77,10 @@ jobs:
           sleep 2
         done
         
+        # Clean up any existing test database
+        mysql -h127.0.0.1 -P3306 -uroot -ptest_password -e "DROP DATABASE IF EXISTS bsc_test;"
+        mysql -h127.0.0.1 -P3306 -uroot -ptest_password -e "CREATE DATABASE bsc_test;"
+        
         # Wait for MinIO
         for i in {1..30}; do
           if curl -f http://localhost:9000/minio/health/live 2>/dev/null; then
