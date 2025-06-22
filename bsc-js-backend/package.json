@@ -85,15 +85,32 @@
       "json",
       "ts"
     ],
-    "rootDir": "src",
+    "rootDir": ".",
+    "testEnvironment": "node",
     "testRegex": ".*\\.spec\\.ts$",
     "transform": {
-      "^.+\\.(t|j)s$": "ts-jest"
+      "^.+\\.(t|ts)$": "ts-jest"
     },
     "collectCoverageFrom": [
-      "**/*.(t|j)s"
+      "src/**/*.(t|j)s",
+      "!src/**/*.spec.ts",
+      "!src/**/*.e2e-spec.ts"
     ],
     "coverageDirectory": "../coverage",
-    "testEnvironment": "node"
+    "setupFilesAfterEnv": [
+      "<rootDir>/test/jest-setup.ts"
+    ],
+    "testPathIgnorePatterns": [
+      "<rootDir>/test/.*\\.e2e-spec\\.ts$"
+    ],
+    "globals": {
+      "ts-jest": {
+        "tsconfig": {
+          "compilerOptions": {
+            "strict": false
+          }
+        }
+      }
+    }
   }
 }
