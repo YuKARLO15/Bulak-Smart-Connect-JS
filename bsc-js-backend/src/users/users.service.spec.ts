@@ -170,8 +170,21 @@ describe('UsersService', () => {
         },
       ];
 
-      const queryBuilder = mockUserRepository.createQueryBuilder();
-      queryBuilder.getManyAndCount.mockResolvedValueOnce([mockUsers, 2]);
+      // Override the mock for this specific test
+      mockUserRepository.createQueryBuilder.mockReturnValueOnce({
+        leftJoinAndSelect: jest.fn().mockReturnThis(),
+        leftJoin: jest.fn().mockReturnThis(),
+        where: jest.fn().mockReturnThis(),
+        andWhere: jest.fn().mockReturnThis(),
+        orderBy: jest.fn().mockReturnThis(),
+        skip: jest.fn().mockReturnThis(),
+        take: jest.fn().mockReturnThis(),
+        select: jest.fn().mockReturnThis(),
+        addSelect: jest.fn().mockReturnThis(),
+        groupBy: jest.fn().mockReturnThis(),
+        getManyAndCount: jest.fn().mockResolvedValue([mockUsers, 2]),
+        getRawMany: jest.fn().mockResolvedValue([]),
+      });
 
       const result = await service.findAll({ page: 1, limit: 10 });
 
@@ -180,7 +193,6 @@ describe('UsersService', () => {
       expect(result.page).toBe(1);
       expect(result.limit).toBe(10);
       expect(result.totalPages).toBe(1);
-      // Remove password assertions since findAll returns sanitized users without password
       expect(result.users[0].roles).toEqual(['citizen']);
       expect(result.users[1].roles).toEqual(['admin']);
     });
@@ -211,11 +223,24 @@ describe('UsersService', () => {
         .mockResolvedValueOnce(10) // total users
         .mockResolvedValueOnce(8); // active users
 
-      const queryBuilder = mockUserRepository.createQueryBuilder();
-      queryBuilder.getRawMany.mockResolvedValueOnce([
-        { roleName: 'citizen', count: '5' },
-        { roleName: 'admin', count: '3' },
-      ]);
+      // Override the mock for this specific test
+      mockUserRepository.createQueryBuilder.mockReturnValueOnce({
+        leftJoinAndSelect: jest.fn().mockReturnThis(),
+        leftJoin: jest.fn().mockReturnThis(),
+        where: jest.fn().mockReturnThis(),
+        andWhere: jest.fn().mockReturnThis(),
+        orderBy: jest.fn().mockReturnThis(),
+        skip: jest.fn().mockReturnThis(),
+        take: jest.fn().mockReturnThis(),
+        select: jest.fn().mockReturnThis(),
+        addSelect: jest.fn().mockReturnThis(),
+        groupBy: jest.fn().mockReturnThis(),
+        getManyAndCount: jest.fn().mockResolvedValue([[], 0]),
+        getRawMany: jest.fn().mockResolvedValue([
+          { roleName: 'citizen', count: '5' },
+          { roleName: 'admin', count: '3' },
+        ]),
+      });
 
       mockUserRepository.find.mockResolvedValueOnce([
         { 
