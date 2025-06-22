@@ -55,6 +55,40 @@ export class QueueController {
     return this.queueService.create(createQueueDto);
   }
 
+  @Post('manual')
+  @UseGuards(JwtAuthGuard)
+  async createManualQueue(
+    @Body() createQueueDto: CreateQueueDto,
+    @User() user?: UserEntity,
+  ) {
+    try {
+      console.log('Manual queue creation by admin:', user?.id);
+      console.log('Received DTO:', createQueueDto);
+      
+      // Set default values for manual/guest queues
+      const queueData: CreateQueueDto = {
+        ...createQueueDto,
+        userId: undefined, // Manual queues don't have user IDs
+        isGuest: true, // Always true for manual queues
+        // Don't override appointmentType - let it come from the frontend
+      };
+
+      console.log('Processed queue data:', queueData);
+
+      const result = await this.queueService.create(queueData);
+      
+      return {
+        success: true,
+        queue: result.queue || result,
+        details: result.details,
+        message: 'Manual queue created successfully'
+      };
+    } catch (error) {
+      console.error('Error creating manual queue:', error);
+      throw error;
+    }
+  }
+
   @Get()
   findAll() {
     return this.queueService.findAll();

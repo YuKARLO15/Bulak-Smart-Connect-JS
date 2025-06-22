@@ -453,53 +453,305 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
-/* Responsive */
-@media (max-width: 900px) {
-  .admin-walkin-queue-main-content,
-  .admin-walkin-queue-list-section {
-    max-width: 100%;
-    width: 100%;
-    padding: 20px;
+/* Manual Queue Button */
+.manual-queue-btn {
+  position: absolute;
+  right: 24px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: linear-gradient(135deg, #28a745, #20c997);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 18px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 3px 8px rgba(40, 167, 69, 0.3);
+}
+
+.manual-queue-btn:hover {
+  background: linear-gradient(135deg, #218838, #1ea080);
+  transform: translateY(-50%) translateY(-2px);
+  box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4);
+}
+
+.manual-queue-btn:active {
+  transform: translateY(-50%) translateY(0px);
+  box-shadow: 0 2px 5px rgba(40, 167, 69, 0.3);
+}
+
+/* Modal Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(2px);
+}
+
+.modal-content {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  min-width: 550px;
+  max-width: 650px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: modalSlideIn 0.3s ease-out;
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-50px) scale(0.9);
   }
-  .admin-walkin-queue-summary-row {
-    flex-direction: column;
-    gap: 24px;
-    align-items: center;
-  }
-  .admin-walkin-queue-summary-card {
-    min-width: 0;
-    width: 100%;
-  }
-  .queue-actions {
-    flex-direction: column;
-  }
-  .queue-action-btn {
-    width: 100%;
-  }
-  .admin-walkin-queue-main {
-    padding: 0 12px;
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
   }
 }
 
-@media (max-width: 600px) {
-  .admin-walkin-queue-header-title {
-    font-size: 1.6rem;
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 28px 20px 28px;
+  border-bottom: 2px solid #f0f0f0;
+  background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+  border-radius: 16px 16px 0 0;
+}
+
+.modal-header h3 {
+  margin: 0;
+  color: #1C4D5A;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  font-size: 28px;
+  color: #666;
+  cursor: pointer;
+  padding: 0;
+  width: 35px;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s;
+}
+
+.modal-close:hover {
+  background: rgba(220, 53, 69, 0.1);
+  color: #dc3545;
+  transform: scale(1.1);
+}
+
+.modal-body {
+  padding: 28px;
+}
+
+.modal-body p {
+  margin: 0 0 24px 0;
+  color: #666;
+  line-height: 1.6;
+  font-size: 1rem;
+}
+
+.queue-options {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.quick-queue-btn,
+.custom-queue-btn {
+  background: linear-gradient(135deg, #1C4D5A, #2c5f72);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 16px 24px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(28, 77, 90, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.quick-queue-btn:hover,
+.custom-queue-btn:hover {
+  background: linear-gradient(135deg, #164250, #245561);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(28, 77, 90, 0.4);
+}
+
+.quick-queue-btn:disabled,
+.custom-queue-btn:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.or-divider {
+  text-align: center;
+  color: #999;
+  font-size: 0.9rem;
+  position: relative;
+  margin: 16px 0;
+  font-weight: 500;
+}
+
+.or-divider::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(to right, transparent, #ddd, transparent);
+  z-index: 1;
+}
+
+.or-divider::after {
+  content: 'or';
+  background: white;
+  padding: 0 16px;
+  position: relative;
+  z-index: 2;
+}
+
+/* Custom Form Styles */
+.custom-form {
+  border: 2px solid #e9ecef;
+  border-radius: 12px;
+  padding: 24px;
+  background: linear-gradient(135deg, #f8f9fa, #ffffff);
+}
+
+.custom-form h4 {
+  margin: 0 0 20px 0;
+  color: #1C4D5A;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.form-row {
+  display: flex;
+  gap: 16px;
+}
+
+.form-group {
+  margin-bottom: 18px;
+  flex: 1;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  color: #333;
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid #e9ecef;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+  background: white;
+  box-sizing: border-box;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: #1C4D5A;
+  box-shadow: 0 0 0 3px rgba(28, 77, 90, 0.1);
+  transform: translateY(-1px);
+}
+
+.custom-queue-btn {
+  margin-top: 20px;
+  width: 100%;
+}
+
+.modal-footer {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid #f0f0f0;
+  text-align: center;
+}
+
+.modal-footer small {
+  color: #666;
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .modal-content {
+    min-width: 300px;
+    margin: 20px;
   }
-  .admin-walkin-queue-summary-title {
-    font-size: 1.1rem;
+  
+  .manual-queue-btn {
+    position: static;
+    transform: none;
+    margin-left: auto;
+    margin-top: 12px;
+    font-size: 0.8rem;
+    padding: 10px 14px;
   }
-  .admin-walkin-queue-summary-number {
-    font-size: 2.4rem;
-  }
-  .queue-item {
-    padding: 16px;
-  }
-  .queue-top {
+  
+  .admin-walkin-queue-header-bar {
     flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
+    align-items: stretch;
+    padding: 15px 20px;
   }
-  .queue-status {
-    align-self: flex-start;
+  
+  .form-row {
+    flex-direction: column;
+    gap: 0;
+  }
+  
+  .modal-body {
+    padding: 20px;
+  }
+  
+  .modal-header {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .modal-content {
+    min-width: 280px;
+  }
+  
+  .quick-queue-btn,
+  .custom-queue-btn {
+    padding: 14px 20px;
+    font-size: 0.9rem;
   }
 }
