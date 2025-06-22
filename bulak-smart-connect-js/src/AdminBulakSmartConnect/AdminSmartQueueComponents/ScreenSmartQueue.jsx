@@ -20,7 +20,7 @@ const ScreenSmartQueue = () => {
 
       setCurrentQueue(serving ? formatQueueNumber(serving.queueNumber || serving.id) : '—');
       setNextQueue(pending[0] ? formatQueueNumber(pending[0].queueNumber || pending[0].id) : '—');
-      setInQueueList(pending.slice(1, 4).map(q => formatQueueNumber(q.queueNumber || q.id)));
+      setInQueueList(pending.slice(1, 13).map(q => formatQueueNumber(q.queueNumber || q.id)));
     } catch (err) {
       console.error('Failed to fetch queue data:', err);
     }
@@ -46,6 +46,15 @@ const ScreenSmartQueue = () => {
               ))
             ) : (
               <>
+                <div className="in-queue-item">—</div>
+                <div className="in-queue-item">—</div>
+                <div className="in-queue-item">—</div>
+                <div className="in-queue-item">—</div>
+                <div className="in-queue-item">—</div>
+                <div className="in-queue-item">—</div>
+                <div className="in-queue-item">—</div>
+                <div className="in-queue-item">—</div>
+                <div className="in-queue-item">—</div>
                 <div className="in-queue-item">—</div>
                 <div className="in-queue-item">—</div>
                 <div className="in-queue-item">—</div>
