@@ -34,11 +34,22 @@ jobs:
           --health-interval=30s
           --health-timeout=20s
           --health-retries=3
+          --entrypoint=""
         ports:
           - 9000:9000
+          - 9001:9001
 
     steps:
     - uses: actions/checkout@v4
+
+    - name: Start MinIO Server
+      run: |
+        docker run -d \
+          --name minio-server \
+          --network container:minio \
+          -e MINIO_ROOT_USER=minioadmin \
+          -e MINIO_ROOT_PASSWORD=minioadmin123 \
+          minio/minio:latest server /data --console-address ":9001"
 
     - name: Use Node.js
       uses: actions/setup-node@v4
@@ -74,10 +85,15 @@ jobs:
           echo "Waiting for MySQL..."
           sleep 2
         done
-        # Wait for MinIO
-        while ! curl -f http://localhost:9000/minio/health/live; do
-          echo "Waiting for MinIO..."
-          sleep 2
+        
+        # Wait for MinIO (check if it's responding)
+        for i in {1..30}; do
+          if curl -f http://localhost:9000/minio/health/live 2>/dev/null; then
+            echo "MinIO is ready!"
+            break
+          fi
+          echo "Waiting for MinIO... (attempt $i/30)"
+          sleep 3
         done
 
     - name: Run tests
