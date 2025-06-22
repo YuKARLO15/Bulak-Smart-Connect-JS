@@ -89,7 +89,14 @@
     "testEnvironment": "node",
     "testRegex": ".*\\.spec\\.ts$",
     "transform": {
-      "^.+\\.(t|ts)$": "ts-jest"
+      "^.+\\.(t|ts)$": [
+        "ts-jest",
+        {
+          "tsconfig": {
+            "strict": false
+          }
+        }
+      ]
     },
     "collectCoverageFrom": [
       "src/**/*.(t|j)s",
@@ -102,15 +109,6 @@
     ],
     "testPathIgnorePatterns": [
       "<rootDir>/test/.*\\.e2e-spec\\.ts$"
-    ],
-    "globals": {
-      "ts-jest": {
-        "tsconfig": {
-          "compilerOptions": {
-            "strict": false
-          }
-        }
-      }
-    }
+    ]
   }
 }
