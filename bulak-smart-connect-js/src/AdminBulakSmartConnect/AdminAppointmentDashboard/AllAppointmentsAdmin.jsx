@@ -10,6 +10,7 @@ const AllAppointmentsAdmin = () => {
   const [loading, setLoading] = useState(true);
   const [statusFilter, setStatusFilter] = useState('all');
   const [typeFilter, setTypeFilter] = useState('all');
+  const [dateFilter, setDateFilter] = useState('');
 
   useEffect(() => {
     fetchAppointments();
@@ -31,16 +32,13 @@ const AllAppointmentsAdmin = () => {
     }
   };
 
-  // Apply filters when filter values change
   useEffect(() => {
     let result = [...appointments];
     
-    // Apply status filter
     if (statusFilter !== 'all') {
       result = result.filter(appointment => appointment.status === statusFilter);
     }
     
-    // Apply type filter (using reasonOfVisit as type)
     if (typeFilter !== 'all') {
       result = result.filter(appointment => {
         const appointmentType = appointment.reasonOfVisit || appointment.type || appointment.appointmentType;
@@ -48,33 +46,55 @@ const AllAppointmentsAdmin = () => {
       });
     }
     
-    // Sort by date, most recent first
+    if (dateFilter) {
+      const filterDate = new Date(dateFilter);
+      filterDate.setHours(0, 0, 0, 0); 
+      
+      const nextDay = new Date(filterDate);
+      nextDay.setDate(nextDay.getDate() + 1); 
+      
+      result = result.filter(appointment => {
+        const appDate = new Date(appointment.appointmentDate || appointment.date || appointment.createdAt);
+        return appDate >= filterDate && appDate < nextDay;
+      });
+    }
+    
     result.sort((a, b) => {
+      if ((a.status === 'completed') !== (b.status === 'completed')) {
+        return a.status === 'completed' ? 1 : -1; 
+      }
+      
       const dateA = new Date(a.appointmentDate || a.date || a.createdAt);
       const dateB = new Date(b.appointmentDate || b.date || b.createdAt);
-      return dateB - dateA;
+      
+      if (dateA.toDateString() === dateB.toDateString()) {
+        const timeA = a.appointmentTime || '';
+        const timeB = b.appointmentTime || '';
+        
+        if (timeA && timeB) {
+          return timeA.localeCompare(timeB);
+        }
+      }
+      
+      return dateA - dateB; 
     });
     
     setFilteredAppointments(result);
-  }, [statusFilter, typeFilter, appointments]);
+  }, [statusFilter, typeFilter, dateFilter, appointments]);
 
   const handleViewDetails = (appointment) => {
     navigate(`/AppointmentDetails/${appointment.id || appointment._id}`, { state: { appointment } });
   };
 
-  // Get unique appointment types for filter (using reasonOfVisit)
   const appointmentTypes = appointments.length > 0 
     ? ['all', ...new Set(appointments.map(app => app.reasonOfVisit || app.type || app.appointmentType || 'Unknown Type'))]
     : ['all'];
 
-  // Helper function to get appointment type (using reasonOfVisit)
   const getAppointmentType = (appointment) => {
     return appointment.reasonOfVisit || appointment.type || appointment.appointmentType || 'Unknown Type';
   };
 
-  // Helper function to get client name
   const getClientName = (appointment) => {
-    // Build full name from firstName, middleInitial, lastName
     const firstName = appointment.firstName || '';
     const middleInitial = appointment.middleInitial || '';
     const lastName = appointment.lastName || '';
@@ -85,11 +105,9 @@ const AllAppointmentsAdmin = () => {
       return fullName;
     }
     
-    // Fallback to other possible fields
     return appointment.clientName || appointment.name || appointment.userName || appointment.email || "Anonymous User";
   };
 
-  // Helper function to format date and time
   const formatDateTime = (appointment) => {
     const date = appointment.appointmentDate || appointment.date;
     const time = appointment.appointmentTime || appointment.time;
@@ -99,7 +117,6 @@ const AllAppointmentsAdmin = () => {
       return time ? `${formattedDate} | ${time}` : formattedDate;
     }
     
-    // Fallback to createdAt if no specific date
     if (appointment.createdAt) {
       return new Date(appointment.createdAt).toLocaleString();
     }
@@ -121,7 +138,17 @@ const AllAppointmentsAdmin = () => {
       <div className="all-appointments-filters">
         <div className="filter-group">
           <label htmlFor="status-filter">Status:</label>
-  
+          <select 
+            id="status-filter"
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+          >
+            <option value="all">All Statuses</option>
+            <option value="pending">Pending</option>
+            <option value="confirmed">Confirmed</option>
+            <option value="completed">Completed</option>
+            <option value="cancelled">Cancelled</option>
+          </select>
         </div>
         
         <div className="filter-group">
@@ -138,6 +165,24 @@ const AllAppointmentsAdmin = () => {
             ))}
           </select>
         </div>
+        
+        <div className="filter-group">
+          <label htmlFor="date-filter">Date:</label>
+          <input
+            type="date"
+            id="date-filter"
+            value={dateFilter}
+            onChange={(e) => setDateFilter(e.target.value)}
+          />
+          {dateFilter && (
+            <button 
+              className="clear-date-filter"
+              onClick={() => setDateFilter('')}
+            >
+              Clear
+            </button>
+          )}
+        </div>
       </div>
 
       {filteredAppointments.length === 0 ? (
@@ -147,7 +192,10 @@ const AllAppointmentsAdmin = () => {
       ) : (
         <div className="minimal-appointments-list">
           {filteredAppointments.map((appointment, index) => (
-            <div key={appointment.id || appointment._id || index} className="minimal-appointment-card">
+            <div 
+              key={appointment.id || appointment._id || index} 
+              className={`minimal-appointment-card ${appointment.status === 'completed' ? 'completed-appointment' : ''}`}
+            >
               <div className="minimal-appointment-info">
                 <div className="minimal-appointment-type">
                   {getAppointmentType(appointment)}
@@ -157,6 +205,9 @@ const AllAppointmentsAdmin = () => {
                 </div>
                 <div className="minimal-appointment-user">
                   {getClientName(appointment)}
+                </div>
+                <div className="minimal-appointment-status">
+                  {appointment.status || 'pending'}
                 </div>
               </div>
               <button 

@@ -78,6 +78,7 @@
   gap: 12px;
   margin-bottom: 30px;
   flex-wrap: wrap;
+  justify-content: end;
 }
 
 .status-actions button {
