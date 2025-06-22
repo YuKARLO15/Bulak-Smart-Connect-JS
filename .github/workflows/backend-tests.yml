@@ -24,31 +24,22 @@ jobs:
         ports:
           - 3306:3306
 
-      minio:
-        image: minio/minio:latest
-        env:
-          MINIO_ROOT_USER: minioadmin
-          MINIO_ROOT_PASSWORD: minioadmin123
-        options: >-
-          --health-cmd="curl -f http://localhost:9000/minio/health/live"
-          --health-interval=30s
-          --health-timeout=20s
-          --health-retries=3
-          --entrypoint=""
-        ports:
-          - 9000:9000
-          - 9001:9001
-
     steps:
     - uses: actions/checkout@v4
 
-    - name: Start MinIO Server
+    - name: Start MinIO
       run: |
         docker run -d \
-          --name minio-server \
-          --network container:minio \
+          --name minio \
+          --network ${{ job.container.network }} \
+          -p 9000:9000 \
+          -p 9001:9001 \
           -e MINIO_ROOT_USER=minioadmin \
           -e MINIO_ROOT_PASSWORD=minioadmin123 \
+          --health-cmd="curl -f http://localhost:9000/minio/health/live" \
+          --health-interval=10s \
+          --health-timeout=5s \
+          --health-retries=5 \
           minio/minio:latest server /data --console-address ":9001"
 
     - name: Use Node.js
@@ -76,7 +67,7 @@ jobs:
         echo "MINIO_USE_SSL=false" >> .env.test
         echo "MINIO_ACCESS_KEY=minioadmin" >> .env.test
         echo "MINIO_SECRET_KEY=minioadmin123" >> .env.test
-        echo "MINIO_BUCKET_NAME=test-bucket" >> .env.test
+        echo "MINIO_BUCKET_NAME=bulak-smart-connect" >> .env.test
 
     - name: Wait for services
       run: |
@@ -86,7 +77,7 @@ jobs:
           sleep 2
         done
         
-        # Wait for MinIO (check if it's responding)
+        # Wait for MinIO
         for i in {1..30}; do
           if curl -f http://localhost:9000/minio/health/live 2>/dev/null; then
             echo "MinIO is ready!"
