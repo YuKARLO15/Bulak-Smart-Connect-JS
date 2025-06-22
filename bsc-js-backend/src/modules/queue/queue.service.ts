@@ -57,7 +57,7 @@ export class QueueService {
 
     const savedQueue = await this.queueRepository.save(queue);
 
-    // Simplify the user ID handling - trust what the controller provided
+    // Simplify the user ID handling
     const userId =
       typeof createQueueDto.userId === 'number'
         ? createQueueDto.userId
@@ -66,19 +66,22 @@ export class QueueService {
           ? Number(createQueueDto.userId)
           : undefined;
 
-    const isGuest = createQueueDto.isGuest || !userId;
+    // isGuest is already a boolean from the DTO validation
+    const isGuest = createQueueDto.isGuest ?? !userId;
 
     // Log for debugging
+    console.log('=== QUEUE SERVICE CREATE DEBUG ===');
     console.log('Creating queue details with:', {
       providedUserId: createQueueDto.userId,
       parsedUserId: userId,
-      isGuest,
+      providedIsGuest: createQueueDto.isGuest,
+      finalIsGuest: isGuest,
     });
 
-    // Create queue details using the simplified userId
+    // Create queue details
     const queueDetails = this.queueDetailsRepository.create({
       queueId: savedQueue.id,
-      userId: userId, // Use the simplified userId
+      userId: userId,
       firstName: createQueueDto.firstName,
       lastName: createQueueDto.lastName,
       middleInitial: createQueueDto.middleInitial,
@@ -92,12 +95,14 @@ export class QueueService {
     // Set the queue relation
     queueDetails.queue = savedQueue;
 
-    await this.queueDetailsRepository.save(queueDetails);
+    const savedDetails = await this.queueDetailsRepository.save(queueDetails);
+    
+    console.log('Queue details saved with isGuest:', savedDetails.isGuest);
 
     // Get queue position
     const position = await this.getQueuePosition(savedQueue.id);
 
-    const result = { queue: savedQueue, details: queueDetails, position };
+    const result = { queue: savedQueue, details: savedDetails, position };
 
     // Notify all clients that a new queue has been created
     this.queueGateway.server.emit('queueListUpdate', {

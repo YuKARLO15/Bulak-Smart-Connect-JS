@@ -86,13 +86,16 @@ const WalkInQueueList = ({ pendingQueues, userQueue }) => {
               <span style={{
                 marginLeft: '10px',
                 padding: '2px 8px',
-                background: queue.isPrimaryQueue ? '#4caf50' : '#24536a',
+                background: queue.status === 'serving' ? '#ff6b35' : 
+                           queue.isPrimaryQueue ? '#4caf50' : '#24536a',
                 color: 'white',
                 borderRadius: '12px',
                 fontSize: '10px',
-                fontWeight: 'bold'
+                fontWeight: 'bold',
+                animation: queue.status === 'serving' ? 'pulse 1.5s infinite' : 'none'
               }}>
-                {queue.isPrimaryQueue ? 'ACTIVE' : 'YOUR QUEUE'}
+                {queue.status === 'serving' ? 'NOW SERVING' :
+                 queue.isPrimaryQueue ? 'ACTIVE' : 'YOUR QUEUE'}
               </span>
             )}
           </div>
