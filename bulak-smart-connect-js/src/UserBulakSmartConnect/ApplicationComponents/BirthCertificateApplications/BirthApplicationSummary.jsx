@@ -826,13 +826,23 @@ const uiTitleMap = {
                 <Typography variant="body1">{formData?.motherDeceasedChildren || 'N/A'}</Typography>
               </Grid>
               <Grid item xs={3} className="fieldGroupNoBorder">
-                <Typography variant="body2" className="fieldLabel">
-                  11. OCCUPATION
-                </Typography>
-                <Typography variant="body1">{formData?.motherOccupation || 'N/A'}</Typography>
-              </Grid>
-            </Grid>
+  <Typography variant="body2" className="fieldLabel">
+    11. OCCUPATION
+  </Typography>
+  <Typography variant="body1">{formData?.motherOccupation || 'N/A'}</Typography>
+</Grid>
+</Grid>
 
+<Grid container>
+  <Grid item xs={12} className="fieldGroup">
+    <Typography variant="body2" className="fieldLabel">
+      12. AGE AT THE TIME OF THIS BIRTH
+    </Typography>
+    <Typography variant="body1">
+      {formData?.motherAge ? `${formData.motherAge} years` : 'N/A'}
+    </Typography>
+  </Grid>
+</Grid>
             <Grid container>
               <Grid item xs={12} className="fieldContainer">
                 <Typography variant="body2" className="fieldLabel">
@@ -877,7 +887,7 @@ const uiTitleMap = {
             </Grid>
 
             <Grid container>
-              <Grid item xs={4} className="fieldGroup">
+              <Grid item xs={3} className="fieldGroup">
                 <Typography variant="body2" className="fieldLabel">
                   15. CITIZENSHIP
                 </Typography>
@@ -889,13 +899,22 @@ const uiTitleMap = {
                 </Typography>
                 <Typography variant="body1">{formData?.fatherReligion || 'N/A'}</Typography>
               </Grid>
-              <Grid item xs={4} className="fieldGroupNoBorder">
-                <Typography variant="body2" className="fieldLabel">
-                  17. OCCUPATION
-                </Typography>
-                <Typography variant="body1">{formData?.fatherOccupation || 'N/A'}</Typography>
-              </Grid>
-            </Grid>
+              <Grid item xs={2} className="fieldGroup">
+  <Typography variant="body2" className="fieldLabel">
+    17. OCCUPATION
+  </Typography>
+  <Typography variant="body1">{formData?.fatherOccupation || 'N/A'}</Typography>
+</Grid>
+  <Grid item xs={3} className="fieldGroup">
+    <Typography variant="body2" className="fieldLabel">
+      18. AGE AT THE TIME OF THIS BIRTH
+    </Typography>
+    <Typography variant="body1">
+      {formData?.fatherAge ? `${formData.fatherAge} years` : 'N/A'}
+    </Typography>
+  </Grid>
+
+                </Grid>
 
             <Grid container>
               <Grid item xs={12} className="fieldContainer">
