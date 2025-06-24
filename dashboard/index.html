@@ -1,0 +1,1092 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bulak Smart Connect - Live Dashboard</title>
+    <link rel="icon" href="https://github.com/YuKARLO15/Bulak-Smart-Connect-JS/blob/main/bulak-smart-connect-js/src/LandingPageComponents/LandingPageAssets/BulakLGULogo.png?raw=true" type="image/png">
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2rem;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .title-section h1 {
+            color: #2c3e50;
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        .title-section p {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            margin-top: 0.2rem;
+        }
+
+        .last-updated {
+            background: #e8f5e8;
+            color: #27ae60;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #f8f9fa;
+        }
+
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .status-badge {
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .status-running {
+            background: #cce5ff;
+            color: #004085;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .workflow-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .workflow-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .workflow-item:hover {
+            background: #e9ecef;
+            transform: translateX(5px);
+        }
+
+        .workflow-item.success {
+            border-left-color: #28a745;
+        }
+
+        .workflow-item.warning {
+            border-left-color: #ffc107;
+        }
+
+        .workflow-item.error {
+            border-left-color: #dc3545;
+        }
+
+        .workflow-item.running {
+            border-left-color: #007bff;
+        }
+
+        .workflow-name {
+            font-weight: 500;
+            color: #495057;
+        }
+
+        .workflow-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .status-icon {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .icon-success { background: #28a745; }
+        .icon-warning { background: #ffc107; }
+        .icon-error { background: #dc3545; }
+        .icon-running { 
+            background: #007bff; 
+            animation: pulse 1.5s infinite;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .metric-item {
+            text-align: center;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .metric-item:hover {
+            border-color: #007bff;
+            background: #e7f1ff;
+        }
+
+        .metric-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #2c3e50;
+            display: block;
+        }
+
+        .metric-label {
+            font-size: 0.85rem;
+            color: #6c757d;
+            margin-top: 0.3rem;
+        }
+
+        .chart-container {
+            height: 300px;
+            margin-top: 1rem;
+        }
+
+        .links-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .link-item {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 10px;
+            text-decoration: none;
+            color: #495057;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .link-item:hover {
+            background: #e9ecef;
+            border-color: #007bff;
+            color: #007bff;
+            transform: translateY(-2px);
+        }
+
+        .link-icon {
+            width: 40px;
+            height: 40px;
+            background: #007bff;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        .security-alerts {
+            margin-top: 1rem;
+        }
+
+        .alert {
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 0.8rem;
+            border-left: 4px solid;
+            display: flex;
+            align-items: start;
+            gap: 0.8rem;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            border-left-color: #28a745;
+            color: #155724;
+        }
+
+        .alert-warning {
+            background: #fff3cd;
+            border-left-color: #ffc107;
+            color: #856404;
+        }
+
+        .alert-error {
+            background: #f8d7da;
+            border-left-color: #dc3545;
+            color: #721c24;
+        }
+
+        .alert-icon {
+            font-size: 1.2rem;
+            margin-top: 0.1rem;
+        }
+
+        .workflow-detail {
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #007bff;
+        }
+
+        .workflow-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .workflow-header h4 {
+            color: #2c3e50;
+            margin: 0;
+        }
+
+        .workflow-meta {
+            font-size: 0.85rem;
+            color: #6c757d;
+        }
+
+        .workflow-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .info-item {
+            font-size: 0.9rem;
+            color: #495057;
+        }
+
+        .workflow-link {
+            color: #007bff;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .workflow-link:hover {
+            text-decoration: underline;
+        }
+
+        .footer {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 2rem 0;
+            margin-top: 3rem;
+            text-align: center;
+            color: #6c757d;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: #007bff;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: #0056b3;
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                padding: 0 1rem;
+            }
+
+            .metrics-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .links-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-links {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo-section">
+                <img src="https://github.com/YuKARLO15/Bulak-Smart-Connect-JS/blob/main/bulak-smart-connect-js/src/LandingPageComponents/LandingPageAssets/BulakLGULogo.png?raw=true" alt="Bulak LGU Logo" class="logo">
+                <div class="title-section">
+                    <h1>Bulak Smart Connect Dashboard</h1>
+                    <p>Live CI/CD Pipeline & Project Health Monitor</p>
+                </div>
+            </div>
+            <div class="last-updated">
+                🔄 Last updated: 6/24/2025, 9:28:26 AM
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Pipeline Overview -->
+        <div class="dashboard-grid">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">
+                        🚀 Pipeline Status
+                    </h2>
+                    <span class="status-badge status-warning">Minor Issues</span>
+                </div>
+                <div class="workflow-list">
+                    
+      <div class="workflow-item running">
+        <div class="workflow-name">CI</div>
+        <div class="workflow-status">
+          <div class="status-icon icon-running"></div>
+          <span>15s ago</span>
+        </div>
+      </div>
+      <div class="workflow-item running">
+        <div class="workflow-name">Backend Tests</div>
+        <div class="workflow-status">
+          <div class="status-icon icon-running"></div>
+          <span>18s ago</span>
+        </div>
+      </div>
+      <div class="workflow-item running">
+        <div class="workflow-name">MySQL Authentication CI</div>
+        <div class="workflow-status">
+          <div class="status-icon icon-running"></div>
+          <span>18s ago</span>
+        </div>
+      </div>
+      <div class="workflow-item running">
+        <div class="workflow-name">Code Quality and Security</div>
+        <div class="workflow-status">
+          <div class="status-icon icon-running"></div>
+          <span>12s ago</span>
+        </div>
+      </div>
+      <div class="workflow-item running">
+        <div class="workflow-name">CodeQL</div>
+        <div class="workflow-status">
+          <div class="status-icon icon-running"></div>
+          <span>22s ago</span>
+        </div>
+      </div>
+      <div class="workflow-item running">
+        <div class="workflow-name">End-to-End Tests</div>
+        <div class="workflow-status">
+          <div class="status-icon icon-running"></div>
+          <span>22s ago</span>
+        </div>
+      </div>
+      <div class="workflow-item success">
+        <div class="workflow-name">Dependency Security Scan</div>
+        <div class="workflow-status">
+          <div class="status-icon icon-success"></div>
+          <span>10s ago</span>
+        </div>
+      </div>
+      <div class="workflow-item running">
+        <div class="workflow-name">API Security Scanning</div>
+        <div class="workflow-status">
+          <div class="status-icon icon-running"></div>
+          <span>18s ago</span>
+        </div>
+      </div>
+      <div class="workflow-item running">
+        <div class="workflow-name">Browser Compatibility Testing</div>
+        <div class="workflow-status">
+          <div class="status-icon icon-running"></div>
+          <span>22s ago</span>
+        </div>
+      </div>
+      <div class="workflow-item running">
+        <div class="workflow-name">Accessibility Testing</div>
+        <div class="workflow-status">
+          <div class="status-icon icon-running"></div>
+          <span>18s ago</span>
+        </div>
+      </div>
+      <div class="workflow-item success">
+        <div class="workflow-name">API Documentation</div>
+        <div class="workflow-status">
+          <div class="status-icon icon-success"></div>
+          <span>1d ago</span>
+        </div>
+      </div>
+      <div class="workflow-item error">
+        <div class="workflow-name">Frontend Documentation</div>
+        <div class="workflow-status">
+          <div class="status-icon icon-error"></div>
+          <span>1d ago</span>
+        </div>
+      </div>
+      <div class="workflow-item error">
+        <div class="workflow-name">PR Checks</div>
+        <div class="workflow-status">
+          <div class="status-icon icon-error"></div>
+          <span>12s ago</span>
+        </div>
+      </div>
+      <div class="workflow-item warning">
+        <div class="workflow-name">Auto Dependabot</div>
+        <div class="workflow-status">
+          <div class="status-icon icon-warning"></div>
+          <span>32s ago</span>
+        </div>
+      </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">
+                        📊 Quality Metrics
+                    </h2>
+                </div>
+                <div class="metrics-grid">
+                    <div class="metric-item">
+                        <span class="metric-value">14%</span>
+                        <span class="metric-label">Success Rate</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="metric-value">0.1m</span>
+                        <span class="metric-label">Avg Build Time</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="metric-value">14</span>
+                        <span class="metric-label">Total Workflows</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="metric-value">2</span>
+                        <span class="metric-label">GitHub Stars</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">
+                        🔒 Security Status
+                    </h2>
+                </div>
+                <div class="security-alerts">
+                    
+      <div class="alert alert-success">
+        <span class="alert-icon">✅</span>
+        <div>
+          <strong>No Critical Security Issues</strong><br>
+          All security scans passed successfully
+        </div>
+      </div>
+      <div class="alert alert-warning">
+        <span class="alert-icon">⚠️</span>
+        <div>
+          <strong>2 Workflow Issues</strong><br>
+          Frontend Documentation, PR Checks need attention
+        </div>
+      </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">
+                        📈 Build Trends
+                    </h2>
+                </div>
+                <div class="chart-container">
+                    <canvas id="buildTrendsChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Links -->
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">
+                    🔗 Quick Access
+                </h2>
+            </div>
+            <div class="links-grid">
+                <a href="https://github.com/YuKARLO15/Bulak-Smart-Connect-JS/actions" class="link-item" target="_blank">
+                    <div class="link-icon">⚡</div>
+                    <div>
+                        <strong>GitHub Actions</strong><br>
+                        <small>View live workflow runs</small>
+                    </div>
+                </a>
+                <a href="https://yukarlo15.github.io/Bulak-Smart-Connect-JS/" class="link-item" target="_blank">
+                    <div class="link-icon">📚</div>
+                    <div>
+                        <strong>Documentation Hub</strong><br>
+                        <small>Complete project docs</small>
+                    </div>
+                </a>
+                <a href="https://yukarlo15.github.io/Bulak-Smart-Connect-JS/frontend-docs/" class="link-item" target="_blank">
+                    <div class="link-icon">🎨</div>
+                    <div>
+                        <strong>Storybook</strong><br>
+                        <small>Component library</small>
+                    </div>
+                </a>
+                <a href="https://yukarlo15.github.io/Bulak-Smart-Connect-JS/api-docs/" class="link-item" target="_blank">
+                    <div class="link-icon">🔌</div>
+                    <div>
+                        <strong>API Documentation</strong><br>
+                        <small>Backend API reference</small>
+                    </div>
+                </a>
+                <a href="https://github.com/YuKARLO15/Bulak-Smart-Connect-JS" class="link-item" target="_blank">
+                    <div class="link-icon">📂</div>
+                    <div>
+                        <strong>Source Code</strong><br>
+                        <small>GitHub repository</small>
+                    </div>
+                </a>
+                <a href="https://github.com/YuKARLO15/Bulak-Smart-Connect-JS/issues" class="link-item" target="_blank">
+                    <div class="link-icon">🐛</div>
+                    <div>
+                        <strong>Issues & Bugs</strong><br>
+                        <small>Report problems</small>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <!-- Detailed Workflow Status -->
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">
+                    🔍 Detailed Workflow Status
+                </h2>
+            </div>
+            <div id="detailedWorkflows">
+                
+    <div class="workflow-detail">
+      <div class="workflow-header">
+        <h4>🔄 CI</h4>
+        <span class="workflow-meta">Run #1403 • 15s ago</span>
+      </div>
+      <div class="workflow-info">
+        <div class="info-item">
+          <strong>Status:</strong> in_progress
+        </div>
+        <div class="info-item">
+          <strong>Duration:</strong> 0m
+        </div>
+        <div class="info-item">
+          <strong>Commit:</strong> 28a4963
+        </div>
+        <div class="info-item">
+          <strong>Triggered by:</strong> push (YuKARLO15)
+        </div>
+        <div class="info-item">
+          <a href="https://github.com/YuKARLO15/Bulak-Smart-Connect-JS/actions/runs/15846673512" target="_blank" class="workflow-link">View Details →</a>
+        </div>
+      </div>
+    </div>
+    <div class="workflow-detail">
+      <div class="workflow-header">
+        <h4>🔄 Backend Tests</h4>
+        <span class="workflow-meta">Run #458 • 18s ago</span>
+      </div>
+      <div class="workflow-info">
+        <div class="info-item">
+          <strong>Status:</strong> in_progress
+        </div>
+        <div class="info-item">
+          <strong>Duration:</strong> 0m
+        </div>
+        <div class="info-item">
+          <strong>Commit:</strong> 28a4963
+        </div>
+        <div class="info-item">
+          <strong>Triggered by:</strong> push (YuKARLO15)
+        </div>
+        <div class="info-item">
+          <a href="https://github.com/YuKARLO15/Bulak-Smart-Connect-JS/actions/runs/15846673474" target="_blank" class="workflow-link">View Details →</a>
+        </div>
+      </div>
+    </div>
+    <div class="workflow-detail">
+      <div class="workflow-header">
+        <h4>🔄 MySQL Authentication CI</h4>
+        <span class="workflow-meta">Run #1246 • 18s ago</span>
+      </div>
+      <div class="workflow-info">
+        <div class="info-item">
+          <strong>Status:</strong> in_progress
+        </div>
+        <div class="info-item">
+          <strong>Duration:</strong> 0m
+        </div>
+        <div class="info-item">
+          <strong>Commit:</strong> 28a4963
+        </div>
+        <div class="info-item">
+          <strong>Triggered by:</strong> push (YuKARLO15)
+        </div>
+        <div class="info-item">
+          <a href="https://github.com/YuKARLO15/Bulak-Smart-Connect-JS/actions/runs/15846673472" target="_blank" class="workflow-link">View Details →</a>
+        </div>
+      </div>
+    </div>
+    <div class="workflow-detail">
+      <div class="workflow-header">
+        <h4>🔄 Code Quality and Security</h4>
+        <span class="workflow-meta">Run #1416 • 12s ago</span>
+      </div>
+      <div class="workflow-info">
+        <div class="info-item">
+          <strong>Status:</strong> in_progress
+        </div>
+        <div class="info-item">
+          <strong>Duration:</strong> 0m
+        </div>
+        <div class="info-item">
+          <strong>Commit:</strong> 28a4963
+        </div>
+        <div class="info-item">
+          <strong>Triggered by:</strong> push (YuKARLO15)
+        </div>
+        <div class="info-item">
+          <a href="https://github.com/YuKARLO15/Bulak-Smart-Connect-JS/actions/runs/15846673525" target="_blank" class="workflow-link">View Details →</a>
+        </div>
+      </div>
+    </div>
+    <div class="workflow-detail">
+      <div class="workflow-header">
+        <h4>🔄 CodeQL</h4>
+        <span class="workflow-meta">Run #1417 • 22s ago</span>
+      </div>
+      <div class="workflow-info">
+        <div class="info-item">
+          <strong>Status:</strong> in_progress
+        </div>
+        <div class="info-item">
+          <strong>Duration:</strong> 0m
+        </div>
+        <div class="info-item">
+          <strong>Commit:</strong> 28a4963
+        </div>
+        <div class="info-item">
+          <strong>Triggered by:</strong> push (YuKARLO15)
+        </div>
+        <div class="info-item">
+          <a href="https://github.com/YuKARLO15/Bulak-Smart-Connect-JS/actions/runs/15846673481" target="_blank" class="workflow-link">View Details →</a>
+        </div>
+      </div>
+    </div>
+    <div class="workflow-detail">
+      <div class="workflow-header">
+        <h4>🔄 End-to-End Tests</h4>
+        <span class="workflow-meta">Run #1406 • 22s ago</span>
+      </div>
+      <div class="workflow-info">
+        <div class="info-item">
+          <strong>Status:</strong> in_progress
+        </div>
+        <div class="info-item">
+          <strong>Duration:</strong> 0m
+        </div>
+        <div class="info-item">
+          <strong>Commit:</strong> 28a4963
+        </div>
+        <div class="info-item">
+          <strong>Triggered by:</strong> push (YuKARLO15)
+        </div>
+        <div class="info-item">
+          <a href="https://github.com/YuKARLO15/Bulak-Smart-Connect-JS/actions/runs/15846673482" target="_blank" class="workflow-link">View Details →</a>
+        </div>
+      </div>
+    </div>
+    <div class="workflow-detail">
+      <div class="workflow-header">
+        <h4>✅ Dependency Security Scan</h4>
+        <span class="workflow-meta">Run #652 • 10s ago</span>
+      </div>
+      <div class="workflow-info">
+        <div class="info-item">
+          <strong>Status:</strong> success
+        </div>
+        <div class="info-item">
+          <strong>Duration:</strong> 0m
+        </div>
+        <div class="info-item">
+          <strong>Commit:</strong> 28a4963
+        </div>
+        <div class="info-item">
+          <strong>Triggered by:</strong> push (YuKARLO15)
+        </div>
+        <div class="info-item">
+          <a href="https://github.com/YuKARLO15/Bulak-Smart-Connect-JS/actions/runs/15846673478" target="_blank" class="workflow-link">View Details →</a>
+        </div>
+      </div>
+    </div>
+    <div class="workflow-detail">
+      <div class="workflow-header">
+        <h4>🔄 API Security Scanning</h4>
+        <span class="workflow-meta">Run #1399 • 18s ago</span>
+      </div>
+      <div class="workflow-info">
+        <div class="info-item">
+          <strong>Status:</strong> in_progress
+        </div>
+        <div class="info-item">
+          <strong>Duration:</strong> 0m
+        </div>
+        <div class="info-item">
+          <strong>Commit:</strong> 28a4963
+        </div>
+        <div class="info-item">
+          <strong>Triggered by:</strong> push (YuKARLO15)
+        </div>
+        <div class="info-item">
+          <a href="https://github.com/YuKARLO15/Bulak-Smart-Connect-JS/actions/runs/15846673491" target="_blank" class="workflow-link">View Details →</a>
+        </div>
+      </div>
+    </div>
+    <div class="workflow-detail">
+      <div class="workflow-header">
+        <h4>🔄 Browser Compatibility Testing</h4>
+        <span class="workflow-meta">Run #1415 • 22s ago</span>
+      </div>
+      <div class="workflow-info">
+        <div class="info-item">
+          <strong>Status:</strong> in_progress
+        </div>
+        <div class="info-item">
+          <strong>Duration:</strong> 0m
+        </div>
+        <div class="info-item">
+          <strong>Commit:</strong> 28a4963
+        </div>
+        <div class="info-item">
+          <strong>Triggered by:</strong> push (YuKARLO15)
+        </div>
+        <div class="info-item">
+          <a href="https://github.com/YuKARLO15/Bulak-Smart-Connect-JS/actions/runs/15846673504" target="_blank" class="workflow-link">View Details →</a>
+        </div>
+      </div>
+    </div>
+    <div class="workflow-detail">
+      <div class="workflow-header">
+        <h4>🔄 Accessibility Testing</h4>
+        <span class="workflow-meta">Run #1412 • 18s ago</span>
+      </div>
+      <div class="workflow-info">
+        <div class="info-item">
+          <strong>Status:</strong> in_progress
+        </div>
+        <div class="info-item">
+          <strong>Duration:</strong> 0m
+        </div>
+        <div class="info-item">
+          <strong>Commit:</strong> 28a4963
+        </div>
+        <div class="info-item">
+          <strong>Triggered by:</strong> push (YuKARLO15)
+        </div>
+        <div class="info-item">
+          <a href="https://github.com/YuKARLO15/Bulak-Smart-Connect-JS/actions/runs/15846673489" target="_blank" class="workflow-link">View Details →</a>
+        </div>
+      </div>
+    </div>
+    <div class="workflow-detail">
+      <div class="workflow-header">
+        <h4>✅ API Documentation</h4>
+        <span class="workflow-meta">Run #190 • 1d ago</span>
+      </div>
+      <div class="workflow-info">
+        <div class="info-item">
+          <strong>Status:</strong> success
+        </div>
+        <div class="info-item">
+          <strong>Duration:</strong> 1m
+        </div>
+        <div class="info-item">
+          <strong>Commit:</strong> d270cc4
+        </div>
+        <div class="info-item">
+          <strong>Triggered by:</strong> push (YuKARLO15)
+        </div>
+        <div class="info-item">
+          <a href="https://github.com/YuKARLO15/Bulak-Smart-Connect-JS/actions/runs/15810447411" target="_blank" class="workflow-link">View Details →</a>
+        </div>
+      </div>
+    </div>
+    <div class="workflow-detail">
+      <div class="workflow-header">
+        <h4>❌ Frontend Documentation</h4>
+        <span class="workflow-meta">Run #485 • 1d ago</span>
+      </div>
+      <div class="workflow-info">
+        <div class="info-item">
+          <strong>Status:</strong> failure
+        </div>
+        <div class="info-item">
+          <strong>Duration:</strong> 1m
+        </div>
+        <div class="info-item">
+          <strong>Commit:</strong> d270cc4
+        </div>
+        <div class="info-item">
+          <strong>Triggered by:</strong> push (YuKARLO15)
+        </div>
+        <div class="info-item">
+          <a href="https://github.com/YuKARLO15/Bulak-Smart-Connect-JS/actions/runs/15810447412" target="_blank" class="workflow-link">View Details →</a>
+        </div>
+      </div>
+    </div>
+    <div class="workflow-detail">
+      <div class="workflow-header">
+        <h4>❌ PR Checks</h4>
+        <span class="workflow-meta">Run #418 • 12s ago</span>
+      </div>
+      <div class="workflow-info">
+        <div class="info-item">
+          <strong>Status:</strong> failure
+        </div>
+        <div class="info-item">
+          <strong>Duration:</strong> 0m
+        </div>
+        <div class="info-item">
+          <strong>Commit:</strong> 558c10b
+        </div>
+        <div class="info-item">
+          <strong>Triggered by:</strong> pull_request (YuKARLO15)
+        </div>
+        <div class="info-item">
+          <a href="https://github.com/YuKARLO15/Bulak-Smart-Connect-JS/actions/runs/15846671137" target="_blank" class="workflow-link">View Details →</a>
+        </div>
+      </div>
+    </div>
+    <div class="workflow-detail">
+      <div class="workflow-header">
+        <h4>⚠️ Auto Dependabot</h4>
+        <span class="workflow-meta">Run #408 • 32s ago</span>
+      </div>
+      <div class="workflow-info">
+        <div class="info-item">
+          <strong>Status:</strong> skipped
+        </div>
+        <div class="info-item">
+          <strong>Duration:</strong> 0m
+        </div>
+        <div class="info-item">
+          <strong>Commit:</strong> 558c10b
+        </div>
+        <div class="info-item">
+          <strong>Triggered by:</strong> pull_request (YuKARLO15)
+        </div>
+        <div class="info-item">
+          <a href="https://github.com/YuKARLO15/Bulak-Smart-Connect-JS/actions/runs/15846671111" target="_blank" class="workflow-link">View Details →</a>
+        </div>
+      </div>
+    </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="https://github.com/YuKARLO15">YuKARLO15</a>
+                <a href="https://github.com/dennissegailfrancisco">dennissegailfrancisco</a>
+                <a href="https://github.com/jhazminereigne">jhazminereigne</a>
+                <a href="https://github.com/Astriaaa">Astriaaa</a>
+            </div>
+            <p>&copy; 2024 Bulak LGU Smart Connect - Information and Queuing Management System</p>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize build trends chart
+        function initializeBuildTrendsChart() {
+            const ctx = document.getElementById('buildTrendsChart').getContext('2d');
+            
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ["Jun 18","Jun 19","Jun 20","Jun 21","Jun 22","Jun 23","Jun 24"],
+                    datasets: [{
+                        label: 'Successful Builds',
+                        data: [16,18,15,20,19,21,22],
+                        borderColor: '#28a745',
+                        backgroundColor: 'rgba(40, 167, 69, 0.1)',
+                        fill: true,
+                        tension: 0.4
+                    }, {
+                        label: 'Failed Builds',
+                        data: [2,2,1,3,3,1,1],
+                        borderColor: '#dc3545',
+                        backgroundColor: 'rgba(220, 53, 69, 0.1)',
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.1)'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.1)'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', initializeBuildTrendsChart);
+    </script>
+</body>
+</html>
