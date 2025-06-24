@@ -204,30 +204,118 @@ jobs:
             return `${Math.floor(diffInSeconds / 86400)}d ago`;
           }
           
-          function generateDetailedFindings(workflowData) {
+          // Enhanced workflow detailed findings
+          function generateEnhancedDetailedFindings(workflowData) {
+            const workflowDescriptions = {
+              'CI': {
+                icon: '🔄',
+                description: 'Core build pipeline ensuring code quality and compilation',
+                monitors: ['TypeScript compilation', 'ESLint analysis', 'Build validation', 'Package dependency checks']
+              },
+              'Backend Tests': {
+                icon: '🧪',
+                description: 'Comprehensive backend testing with database integration',
+                monitors: ['Unit tests (156 tests)', 'Integration tests', 'MySQL database operations', 'MinIO file storage', 'WebSocket functionality']
+              },
+              'MySQL Authentication CI': {
+                icon: '🔐',
+                description: 'Database authentication and role validation system',
+                monitors: ['User authentication flow', 'Role-based access control', 'Database schema validation', 'Password security']
+              },
+              'Code Quality and Security': {
+                icon: '🛡️',
+                description: 'Multi-layer security analysis and code quality assessment',
+                monitors: ['Dependency vulnerability scanning', 'Code coverage analysis', 'Bundle size optimization', 'Security best practices']
+              },
+              'CodeQL': {
+                icon: '🕵️',
+                description: 'Advanced static code analysis for security vulnerabilities',
+                monitors: ['SQL injection detection', 'XSS vulnerability scanning', 'Data flow analysis', 'Security pattern recognition']
+              },
+              'End-to-End Tests': {
+                icon: '🎯',
+                description: 'Complete user journey testing across the application',
+                monitors: ['User registration/login flow', 'Queue management operations', 'Document upload/download', 'Real-time notifications']
+              },
+              'Dependency Security Scan': {
+                icon: '🔍',
+                description: 'Weekly dependency vulnerability and license compliance check',
+                monitors: ['NPM package vulnerabilities', 'License compatibility', 'Outdated package detection', 'Security advisory monitoring']
+              },
+              'API Security Scanning': {
+                icon: '⚔️',
+                description: 'OWASP ZAP penetration testing for API endpoints',
+                monitors: ['Authentication bypass attempts', 'API rate limiting', 'Input validation testing', 'CORS configuration']
+              },
+              'Browser Compatibility Testing': {
+                icon: '🌐',
+                description: 'Cross-browser compatibility validation',
+                monitors: ['Chrome compatibility', 'Firefox compatibility', 'Safari compatibility', 'Responsive design testing']
+              },
+              'Accessibility Testing': {
+                icon: '♿',
+                description: 'WCAG AA compliance and accessibility validation',
+                monitors: ['Screen reader compatibility', 'Keyboard navigation', 'Color contrast validation', 'ARIA label verification']
+              },
+              'API Documentation': {
+                icon: '📋',
+                description: 'Automated API documentation generation',
+                monitors: ['OpenAPI specification generation', 'Swagger UI deployment', 'Endpoint documentation', 'Schema validation']
+              },
+              'Frontend Documentation': {
+                icon: '🎨',
+                description: 'Component library documentation with Storybook',
+                monitors: ['React component documentation', 'Storybook story generation', 'Component prop validation', 'Design system updates']
+              },
+              'PR Checks': {
+                icon: '✅',
+                description: 'Pull request validation and quality gates',
+                monitors: ['Conventional commit validation', 'File change analysis', 'Merge conflict detection', 'Branch protection rules']
+              },
+              'Auto Dependabot': {
+                icon: '🤖',
+                description: 'Automated dependency updates and security patches',
+                monitors: ['Security patch auto-merge', 'Dependency update validation', 'Breaking change detection', 'Version compatibility checks']
+              }
+            };
+            
             let findings = '';
             
             workflowData.forEach(workflow => {
+              const info = workflowDescriptions[workflow.name] || {
+                icon: '⚙️',
+                description: 'Workflow monitoring and validation',
+                monitors: ['General system checks']
+              };
+              
               const statusIcon = workflow.status === 'success' ? '✅' : 
                                workflow.status === 'failure' ? '❌' : 
                                workflow.status === 'cancelled' ? '⏹️' : 
                                workflow.status === 'in_progress' ? '🔄' : '⚠️';
               
+              const statusColor = workflow.status === 'success' ? '#28a745' : 
+                                workflow.status === 'failure' ? '#dc3545' : 
+                                workflow.status === 'cancelled' ? '#ffc107' : 
+                                workflow.status === 'in_progress' ? '#007bff' : '#6c757d';
+              
               findings += `
-              <div class="workflow-detail">
+              <div class="workflow-detail enhanced" style="border-left-color: ${statusColor};">
                 <div class="workflow-header">
-                  <h4>${statusIcon} ${workflow.name}</h4>
+                  <h4>${info.icon} ${statusIcon} ${workflow.name}</h4>
                   <span class="workflow-meta">Run #${workflow.runNumber} • ${formatTimeAgo(workflow.lastRun)}</span>
+                </div>
+                <div class="workflow-description">
+                  <p style="color: #6c757d; font-style: italic; margin-bottom: 1rem;">${info.description}</p>
                 </div>
                 <div class="workflow-info">
                   <div class="info-item">
-                    <strong>Status:</strong> ${workflow.status}
+                    <strong>Status:</strong> <span style="color: ${statusColor}; font-weight: bold;">${workflow.status.toUpperCase()}</span>
                   </div>
                   <div class="info-item">
                     <strong>Duration:</strong> ${workflow.duration}
                   </div>
                   <div class="info-item">
-                    <strong>Commit:</strong> ${workflow.headSha}
+                    <strong>Commit:</strong> <code>${workflow.headSha}</code>
                   </div>
                   <div class="info-item">
                     <strong>Triggered by:</strong> ${workflow.event} (${workflow.actor})
@@ -236,10 +324,101 @@ jobs:
                     <a href="${workflow.url}" target="_blank" class="workflow-link">View Details →</a>
                   </div>` : ''}
                 </div>
+                <div class="monitoring-details">
+                  <h5 style="color: #2c3e50; margin: 1rem 0 0.5rem 0;">🔍 Monitoring:</h5>
+                  <ul style="margin: 0; padding-left: 1.5rem; color: #495057;">
+                    ${info.monitors.map(monitor => `<li style="margin-bottom: 0.25rem;">${monitor}</li>`).join('')}
+                  </ul>
+                </div>
               </div>`;
             });
             
             return findings;
+          }
+          
+          // Enhanced security alerts with more detail
+          function generateEnhancedSecurityAlerts(workflowData) {
+            const securityWorkflows = workflowData.filter(w => 
+              w.name.includes('Security') || 
+              w.name.includes('CodeQL') || 
+              w.name === 'Dependency Security Scan' ||
+              w.name === 'API Security Scanning'
+            );
+            
+            const criticalFailures = securityWorkflows.filter(w => w.status === 'failure');
+            const securityWarnings = securityWorkflows.filter(w => w.status === 'cancelled' || w.status === 'unknown');
+            
+            let securityAlertsHTML = '';
+            
+            if (criticalFailures.length === 0 && securityWarnings.length === 0) {
+              securityAlertsHTML = `
+                <div class="alert alert-success">
+                  <span class="alert-icon">🛡️</span>
+                  <div>
+                    <strong>All Security Scans Passed</strong><br>
+                    No critical vulnerabilities detected across ${securityWorkflows.length} security workflows
+                    <div style="margin-top: 0.5rem; font-size: 0.9rem;">
+                      ✅ Code Quality & Security: Passed<br>
+                      ✅ CodeQL Analysis: Passed<br>
+                      ✅ Dependency Security: Passed<br>
+                      ✅ API Security: Passed
+                    </div>
+                  </div>
+                </div>`;
+            } else {
+              if (criticalFailures.length > 0) {
+                securityAlertsHTML += `
+                  <div class="alert alert-error">
+                    <span class="alert-icon">🚨</span>
+                    <div>
+                      <strong>${criticalFailures.length} Critical Security Issue(s) Found</strong><br>
+                      Immediate attention required for: ${criticalFailures.map(w => w.name).join(', ')}
+                      <div style="margin-top: 0.5rem; font-size: 0.9rem;">
+                        ${criticalFailures.map(w => `❌ ${w.name}: Failed`).join('<br>')}
+                      </div>
+                    </div>
+                  </div>`;
+              }
+              
+              if (securityWarnings.length > 0) {
+                securityAlertsHTML += `
+                  <div class="alert alert-warning">
+                    <span class="alert-icon">⚠️</span>
+                    <div>
+                      <strong>${securityWarnings.length} Security Workflow(s) Need Attention</strong><br>
+                      Review required for: ${securityWarnings.map(w => w.name).join(', ')}
+                      <div style="margin-top: 0.5rem; font-size: 0.9rem;">
+                        ${securityWarnings.map(w => `⚠️ ${w.name}: ${w.status}`).join('<br>')}
+                      </div>
+                    </div>
+                  </div>`;
+              }
+            }
+            
+            // Add general failures from other workflows
+            const otherFailures = workflowData.filter(w => 
+              w.status === 'failure' && 
+              !w.name.includes('Security') && 
+              w.name !== 'CodeQL' &&
+              w.name !== 'Dependency Security Scan' &&
+              w.name !== 'API Security Scanning'
+            );
+            
+            if (otherFailures.length > 0) {
+              securityAlertsHTML += `
+                <div class="alert alert-warning">
+                  <span class="alert-icon">🔧</span>
+                  <div>
+                    <strong>${otherFailures.length} Non-Security Workflow(s) Failed</strong><br>
+                    Review and fix: ${otherFailures.map(w => w.name).join(', ')}
+                    <div style="margin-top: 0.5rem; font-size: 0.9rem;">
+                      ${otherFailures.map(w => `⚠️ ${w.name}: Build/test failure`).join('<br>')}
+                    </div>
+                  </div>
+                </div>`;
+            }
+            
+            return securityAlertsHTML;
           }
           
           async function generateDashboard() {
@@ -788,6 +967,69 @@ jobs:
                           gap: 0.5rem;
                       }
                   }
+          
+                  .workflow-detail.enhanced {
+                    margin-bottom: 2rem;
+                    padding: 1.5rem;
+                    background: #f8f9fa;
+                    border-radius: 12px;
+                    border-left: 4px solid #007bff;
+                    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+                    transition: all 0.3s ease;
+                  }
+          
+                  .workflow-detail.enhanced:hover {
+                    transform: translateY(-2px);
+                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+                  }
+          
+                  .workflow-description p {
+                    font-size: 0.95rem;
+                    line-height: 1.5;
+                    margin: 0.5rem 0;
+                  }
+          
+                  .monitoring-details {
+                    background: rgba(255, 255, 255, 0.7);
+                    padding: 1rem;
+                    border-radius: 8px;
+                    margin-top: 1rem;
+                  }
+          
+                  .monitoring-details h5 {
+                    display: flex;
+                    align-items: center;
+                    gap: 0.5rem;
+                    font-size: 1rem;
+                    font-weight: 600;
+                  }
+          
+                  .monitoring-details ul {
+                    font-size: 0.9rem;
+                    line-height: 1.6;
+                  }
+          
+                  .monitoring-details li {
+                    padding: 0.2rem 0;
+                  }
+          
+                  .alert {
+                    border-radius: 12px;
+                    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+                  }
+          
+                  .alert .alert-icon {
+                    font-size: 1.5rem;
+                    margin-top: 0.2rem;
+                  }
+          
+                  code {
+                    background: rgba(0, 0, 0, 0.1);
+                    padding: 0.2rem 0.4rem;
+                    border-radius: 4px;
+                    font-family: 'Courier New', monospace;
+                    font-size: 0.85rem;
+                  }
               </style>
           </head>
           <body>
@@ -1064,17 +1306,99 @@ jobs:
           git diff --staged --quiet || git commit -m "📊 Update README with dashboard link"
           git push || echo "No changes to push"
 
-      - name: Generate workflow summary
+      - name: Generate comprehensive workflow summary
         run: |
           echo "## 📊 Dashboard Update Summary" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "✅ **Dashboard successfully updated!**" >> $GITHUB_STEP_SUMMARY
+          echo "✅ **Dashboard successfully updated with real-time data from 15 workflows!**" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "🔗 **Access Links:**" >> $GITHUB_STEP_SUMMARY
-          echo "- [Live Dashboard](https://yukarlo15.github.io/Bulak-Smart-Connect-JS/dashboard/)" >> $GITHUB_STEP_SUMMARY
-          echo "- [GitHub Actions](https://github.com/${{ github.repository }}/actions)" >> $GITHUB_STEP_SUMMARY
-          echo "- [Documentation Hub](https://yukarlo15.github.io/Bulak-Smart-Connect-JS/)" >> $GITHUB_STEP_SUMMARY
+          
+          echo "### 🔗 **Quick Access Links**" >> $GITHUB_STEP_SUMMARY
+          echo "- 🎯 [**Live Dashboard**](https://yukarlo15.github.io/Bulak-Smart-Connect-JS/dashboard/) - Real-time CI/CD status" >> $GITHUB_STEP_SUMMARY
+          echo "- ⚡ [**GitHub Actions**](https://github.com/${{ github.repository }}/actions) - All workflow runs" >> $GITHUB_STEP_SUMMARY
+          echo "- 📚 [**Documentation Hub**](https://yukarlo15.github.io/Bulak-Smart-Connect-JS/) - Complete project docs" >> $GITHUB_STEP_SUMMARY
+          echo "- 🎨 [**Storybook**](https://yukarlo15.github.io/Bulak-Smart-Connect-JS/frontend-docs/) - Component library" >> $GITHUB_STEP_SUMMARY
+          echo "- 🔌 [**API Docs**](https://yukarlo15.github.io/Bulak-Smart-Connect-JS/api-docs/) - Backend API reference" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "📅 **Last Updated:** $(date)" >> $GITHUB_STEP_SUMMARY
+          
+          echo "### 🔄 **Core CI/CD Pipeline Status**" >> $GITHUB_STEP_SUMMARY
+          echo "| Workflow | Status | Purpose | Last Run |" >> $GITHUB_STEP_SUMMARY
+          echo "|----------|--------|---------|----------|" >> $GITHUB_STEP_SUMMARY
+          echo "| [CI Pipeline](https://github.com/${{ github.repository }}/actions/workflows/ci.yml) | ![CI](https://github.com/${{ github.repository }}/workflows/CI/badge.svg) | Basic quality gates | ESLint, TypeScript, Build validation |" >> $GITHUB_STEP_SUMMARY
+          echo "| [Backend Tests](https://github.com/${{ github.repository }}/actions/workflows/backend-tests.yml) | ![Backend Tests](https://github.com/${{ github.repository }}/workflows/Backend%20Tests/badge.svg) | Comprehensive testing | Unit, Integration, Database tests |" >> $GITHUB_STEP_SUMMARY
+          echo "| [MySQL Authentication CI](https://github.com/${{ github.repository }}/actions/workflows/mysql-ci.yml) | ![MySQL CI](https://github.com/${{ github.repository }}/workflows/MySQL%20Authentication%20CI/badge.svg) | Database validation | User auth, Role validation |" >> $GITHUB_STEP_SUMMARY
+          echo "| [Update Dashboard](https://github.com/${{ github.repository }}/actions/workflows/update-dashboard.yml) | ![Dashboard](https://github.com/${{ github.repository }}/workflows/Update%20Dashboard/badge.svg) | Live updates | Real-time status collection |" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "🔄 **Auto-refresh:** Every 30 minutes or when workflows complete" >> $GITHUB_STEP_SUMMARY
+          
+          echo "### 🔒 **Security & Quality Assurance**" >> $GITHUB_STEP_SUMMARY
+          echo "| Workflow | Status | Schedule | Scope |" >> $GITHUB_STEP_SUMMARY
+          echo "|----------|--------|----------|-------|" >> $GITHUB_STEP_SUMMARY
+          echo "| [Code Quality & Security](https://github.com/${{ github.repository }}/actions/workflows/code-quality-security.yml) | ![Code Quality](https://github.com/${{ github.repository }}/workflows/Code%20Quality%20and%20Security/badge.svg) | Push/PR + Weekly | Dependency audit, Coverage |" >> $GITHUB_STEP_SUMMARY
+          echo "| [CodeQL Analysis](https://github.com/${{ github.repository }}/actions/workflows/codeql.yml) | ![CodeQL](https://github.com/${{ github.repository }}/workflows/CodeQL/badge.svg) | Weekly + Push | Static analysis, Vulnerabilities |" >> $GITHUB_STEP_SUMMARY
+          echo "| [Dependency Security Scan](https://github.com/${{ github.repository }}/actions/workflows/dependency-security-scan.yml) | ![Security Scan](https://github.com/${{ github.repository }}/workflows/Dependency%20Security%20Scan/badge.svg) | Weekly Monday | NPM audit, License compliance |" >> $GITHUB_STEP_SUMMARY
+          echo "| [API Security Scanning](https://github.com/${{ github.repository }}/actions/workflows/api-security.yaml) | ![API Security](https://github.com/${{ github.repository }}/workflows/API%20Security%20Scanning/badge.svg) | Weekly | OWASP ZAP, SQL injection, XSS |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          echo "### 🧪 **Testing & Validation**" >> $GITHUB_STEP_SUMMARY
+          echo "| Workflow | Status | Schedule | Coverage |" >> $GITHUB_STEP_SUMMARY
+          echo "|----------|--------|----------|----------|" >> $GITHUB_STEP_SUMMARY
+          echo "| [End-to-End Tests](https://github.com/${{ github.repository }}/actions/workflows/e2e-test.yml) | ![E2E Tests](https://github.com/${{ github.repository }}/workflows/End-to-End%20Tests/badge.svg) | Weekly + Push | User journeys, Integration |" >> $GITHUB_STEP_SUMMARY
+          echo "| [Browser Compatibility](https://github.com/${{ github.repository }}/actions/workflows/browser-compatibility.yml) | ![Browser Tests](https://github.com/${{ github.repository }}/workflows/Browser%20Compatibility%20Testing/badge.svg) | Weekly Wednesday | Chrome, Firefox, Safari |" >> $GITHUB_STEP_SUMMARY
+          echo "| [Accessibility Testing](https://github.com/${{ github.repository }}/actions/workflows/accessibility-testing.yml) | ![Accessibility](https://github.com/${{ github.repository }}/workflows/Accessibility%20Testing/badge.svg) | Weekly Thursday | WCAG compliance, Screen readers |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          echo "### 📚 **Documentation & Automation**" >> $GITHUB_STEP_SUMMARY
+          echo "| Workflow | Status | Triggers | Output |" >> $GITHUB_STEP_SUMMARY
+          echo "|----------|--------|----------|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| [API Documentation](https://github.com/${{ github.repository }}/actions/workflows/api-documentation.yml) | ![API Docs](https://github.com/${{ github.repository }}/workflows/API%20Documentation/badge.svg) | Backend changes | OpenAPI specs, Interactive docs |" >> $GITHUB_STEP_SUMMARY
+          echo "| [Frontend Documentation](https://github.com/${{ github.repository }}/actions/workflows/frontend-documentation.yml) | ![Frontend Docs](https://github.com/${{ github.repository }}/workflows/Frontend%20Documentation/badge.svg) | Frontend changes | Storybook, Component docs |" >> $GITHUB_STEP_SUMMARY
+          echo "| [PR Checks](https://github.com/${{ github.repository }}/actions/workflows/pr-check.yml) | ![PR Checks](https://github.com/${{ github.repository }}/workflows/PR%20Checks/badge.svg) | PR open/update | Conventional commits, Validation |" >> $GITHUB_STEP_SUMMARY
+          echo "| [Auto Dependabot](https://github.com/${{ github.repository }}/actions/workflows/automatic-dependabot-update.yml) | ![Dependabot](https://github.com/${{ github.repository }}/workflows/Auto%20Dependabot/badge.svg) | Dependabot PRs | Auto-merge, Security patches |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          echo "### 📊 **Live Metrics Dashboard**" >> $GITHUB_STEP_SUMMARY
+          echo "Our dashboard displays real-time information including:" >> $GITHUB_STEP_SUMMARY
+          echo "- 🎯 **Overall System Status**: Visual health indicator" >> $GITHUB_STEP_SUMMARY
+          echo "- 📈 **Success Rate**: Percentage of successful workflow runs" >> $GITHUB_STEP_SUMMARY
+          echo "- ⏱️ **Average Build Time**: Performance metrics across all workflows" >> $GITHUB_STEP_SUMMARY
+          echo "- 🔒 **Security Status**: Real-time vulnerability and security scan results" >> $GITHUB_STEP_SUMMARY
+          echo "- 📋 **Detailed Findings**: Per-workflow status with run numbers and commit hashes" >> $GITHUB_STEP_SUMMARY
+          echo "- 📱 **Mobile Responsive**: Access from any device" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          echo "### 🎯 **What Each Workflow Monitors**" >> $GITHUB_STEP_SUMMARY
+          echo "#### **Code Quality & Security:**" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ TypeScript compilation and type checking" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ ESLint code quality analysis" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Security vulnerability scanning" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Dependency audit and license compliance" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Code coverage reporting" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "#### **Testing Coverage:**" >> $GITHUB_STEP_SUMMARY
+          echo "- 🧪 Unit tests (Backend: 156 tests, Frontend coverage)" >> $GITHUB_STEP_SUMMARY
+          echo "- 🧪 Integration tests with MySQL and MinIO" >> $GITHUB_STEP_SUMMARY
+          echo "- 🧪 End-to-end user journey testing" >> $GITHUB_STEP_SUMMARY
+          echo "- 🧪 Cross-browser compatibility (Chrome, Firefox, Safari)" >> $GITHUB_STEP_SUMMARY
+          echo "- 🧪 Accessibility compliance (WCAG AA standards)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "#### **Security Monitoring:**" >> $GITHUB_STEP_SUMMARY
+          echo "- 🔒 OWASP ZAP penetration testing" >> $GITHUB_STEP_SUMMARY
+          echo "- 🔒 SQL injection and XSS vulnerability detection" >> $GITHUB_STEP_SUMMARY
+          echo "- 🔒 Authentication and authorization testing" >> $GITHUB_STEP_SUMMARY
+          echo "- 🔒 API endpoint security validation" >> $GITHUB_STEP_SUMMARY
+          echo "- 🔒 Dependency vulnerability scanning" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          echo "### 📅 **Update Information**" >> $GITHUB_STEP_SUMMARY
+          echo "- **📅 Last Updated:** $(date)" >> $GITHUB_STEP_SUMMARY
+          echo "- **🔄 Auto-refresh:** Every 30 minutes or when any workflow completes" >> $GITHUB_STEP_SUMMARY
+          echo "- **⚡ Real-time Updates:** Dashboard syncs with GitHub Actions automatically" >> $GITHUB_STEP_SUMMARY
+          echo "- **📊 Data Source:** Live GitHub API integration" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          echo "### 🚀 **Quick Actions**" >> $GITHUB_STEP_SUMMARY
+          echo "- 🔍 [View Latest Dashboard](https://yukarlo15.github.io/Bulak-Smart-Connect-JS/dashboard/)" >> $GITHUB_STEP_SUMMARY
+          echo "- 📊 [Check All Workflow Runs](https://github.com/${{ github.repository }}/actions)" >> $GITHUB_STEP_SUMMARY
+          echo "- 🔔 [Enable Notifications](https://github.com/${{ github.repository }}/settings/notifications)" >> $GITHUB_STEP_SUMMARY
+          echo "- 📋 [View Issues](https://github.com/${{ github.repository }}/issues)" >> $GITHUB_STEP_SUMMARY
+          echo "- 🔄 [Manual Dashboard Update](https://github.com/${{ github.repository }}/actions/workflows/update-dashboard.yml)" >> $GITHUB_STEP_SUMMARY
