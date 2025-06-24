@@ -265,7 +265,7 @@
                   </div>
               </div>
               <div class="last-updated">
-                  🔄 Last updated: 6/24/2025, 10:18:52 AM
+                  🔄 Last updated: 6/24/2025, 10:18:59 AM
               </div>
           </div>
       </header>
@@ -282,7 +282,7 @@
           <div class="workflow-name">CI</div>
           <div class="workflow-status">
             <div class="status-icon icon-error"></div>
-            <span>41s ago</span>
+            <span>48s ago</span>
           </div>
         </div>
         <div class="workflow-item running">
@@ -292,18 +292,18 @@
             <span>1m ago</span>
           </div>
         </div>
-        <div class="workflow-item running">
+        <div class="workflow-item warning">
           <div class="workflow-name">MySQL Authentication CI</div>
           <div class="workflow-status">
-            <div class="status-icon icon-running"></div>
-            <span>1m ago</span>
+            <div class="status-icon icon-warning"></div>
+            <span>6s ago</span>
           </div>
         </div>
         <div class="workflow-item running">
           <div class="workflow-name">Code Quality and Security</div>
           <div class="workflow-status">
             <div class="status-icon icon-running"></div>
-            <span>48s ago</span>
+            <span>55s ago</span>
           </div>
         </div>
         <div class="workflow-item running">
@@ -324,7 +324,7 @@
           <div class="workflow-name">Dependency Security Scan</div>
           <div class="workflow-status">
             <div class="status-icon icon-success"></div>
-            <span>56s ago</span>
+            <span>1m ago</span>
           </div>
         </div>
         <div class="workflow-item running">
@@ -345,7 +345,7 @@
           <div class="workflow-name">Accessibility Testing</div>
           <div class="workflow-status">
             <div class="status-icon icon-success"></div>
-            <span>7s ago</span>
+            <span>14s ago</span>
           </div>
         </div>
         <div class="workflow-item success">
@@ -388,7 +388,7 @@
                           <span class="metric-label">Success Rate</span>
                       </div>
                       <div class="metric-item">
-                          <span class="metric-value">0.3m</span>
+                          <span class="metric-value">0.4m</span>
                           <span class="metric-label">Avg Build Time</span>
                       </div>
                       <div class="metric-item">
@@ -482,7 +482,7 @@
     <div class="workflow-detail enhanced" style="border-left-color: #dc3545;">
       <div class="workflow-header">
         <h4>🔄 ❌ CI</h4>
-        <span class="workflow-meta">Run #1412 • 41s ago</span>
+        <span class="workflow-meta">Run #1412 • 48s ago</span>
       </div>
       <div class="workflow-description">
         <p style="color: #6c757d; font-style: italic; margin-bottom: 1rem;">Core build pipeline ensuring code quality and compilation</p>
@@ -543,20 +543,20 @@
         </ul>
       </div>
     </div>
-    <div class="workflow-detail enhanced" style="border-left-color: #007bff;">
+    <div class="workflow-detail enhanced" style="border-left-color: #6c757d;">
       <div class="workflow-header">
-        <h4>🔐 🔄 MySQL Authentication CI</h4>
-        <span class="workflow-meta">Run #1255 • 1m ago</span>
+        <h4>🔐 ⚠️ MySQL Authentication CI</h4>
+        <span class="workflow-meta">Run #1255 • 6s ago</span>
       </div>
       <div class="workflow-description">
         <p style="color: #6c757d; font-style: italic; margin-bottom: 1rem;">Database authentication and role validation system</p>
       </div>
       <div class="workflow-info">
         <div class="info-item">
-          <strong>Status:</strong> <span style="color: #007bff; font-weight: bold;">IN_PROGRESS</span>
+          <strong>Status:</strong> <span style="color: #6c757d; font-weight: bold;">QUEUED</span>
         </div>
         <div class="info-item">
-          <strong>Duration:</strong> 0m
+          <strong>Duration:</strong> 1m
         </div>
         <div class="info-item">
           <strong>Commit:</strong> <code>b10709f</code>
@@ -578,7 +578,7 @@
     <div class="workflow-detail enhanced" style="border-left-color: #007bff;">
       <div class="workflow-header">
         <h4>🛡️ 🔄 Code Quality and Security</h4>
-        <span class="workflow-meta">Run #1425 • 48s ago</span>
+        <span class="workflow-meta">Run #1425 • 55s ago</span>
       </div>
       <div class="workflow-description">
         <p style="color: #6c757d; font-style: italic; margin-bottom: 1rem;">Multi-layer security analysis and code quality assessment</p>
@@ -674,7 +674,7 @@
     <div class="workflow-detail enhanced" style="border-left-color: #28a745;">
       <div class="workflow-header">
         <h4>🔍 ✅ Dependency Security Scan</h4>
-        <span class="workflow-meta">Run #658 • 56s ago</span>
+        <span class="workflow-meta">Run #658 • 1m ago</span>
       </div>
       <div class="workflow-description">
         <p style="color: #6c757d; font-style: italic; margin-bottom: 1rem;">Weekly dependency vulnerability and license compliance check</p>
@@ -770,7 +770,7 @@
     <div class="workflow-detail enhanced" style="border-left-color: #28a745;">
       <div class="workflow-header">
         <h4>♿ ✅ Accessibility Testing</h4>
-        <span class="workflow-meta">Run #1421 • 7s ago</span>
+        <span class="workflow-meta">Run #1421 • 14s ago</span>
       </div>
       <div class="workflow-description">
         <p style="color: #6c757d; font-style: italic; margin-bottom: 1rem;">WCAG AA compliance and accessibility validation</p>
@@ -951,14 +951,14 @@
                       labels: ["Jun 18","Jun 19","Jun 20","Jun 21","Jun 22","Jun 23","Jun 24"],
                       datasets: [{
                           label: 'Successful Builds',
-                          data: [23,19,15,16,18,23,23],
+                          data: [24,24,18,17,15,23,21],
                           borderColor: '#28a745',
                           backgroundColor: 'rgba(40, 167, 69, 0.1)',
                           fill: true,
                           tension: 0.4
                       }, {
                           label: 'Failed Builds',
-                          data: [2,1,2,1,3,2,2],
+                          data: [1,3,1,3,3,1,2],
                           borderColor: '#dc3545',
                           backgroundColor: 'rgba(220, 53, 69, 0.1)',
                           fill: true,
