@@ -58,16 +58,18 @@ const AffidavitBirthForm = ({ formData, handleChange, isReadOnly = false }) => {
     }
     return '';
   };
-  const getChildBirthPlace = () => {
-    const hospital = formData?.hospital || '';
-const city = formData?.city || '';
-    const province = formData?.province || '';
-
-    if (hospital && city && province) {
-      return `${hospital}, ${city}, ${province}`;
-    }
-    return '';
-  };
+const getChildBirthPlace = () => {
+  const hospital = formData?.hospital || '';
+  const city = formData?.city || '';
+  const province = formData?.province || '';
+  
+  let birthPlace = [];
+  if (hospital) birthPlace.push(hospital);
+  if (city) birthPlace.push(city);
+  if (province) birthPlace.push(province);
+  
+  return birthPlace.join(', ');
+};
 
   const [registrationType, setRegistrationType] = useState('self');
   const [parentStatus, setParentStatus] = useState(null);
@@ -577,82 +579,82 @@ const city = formData?.city || '';
             </div>
           </div>
 
-          <div className="FormRowAffidavit">
-            <div className="CheckboxContainerAffidavit">
-              <input
-                type="checkbox"
-                id="selfBirthCheckbox"
-                checked={registrationType === 'self'}
-                onChange={() => handleRegistrationTypeChange('self')}
-                className="CheckboxInputAffidavit"
-                disabled={isReadOnly}
-              />
-              <label htmlFor="selfBirthCheckbox" className="CheckboxLabelAffidavit">
-                my birth in
-                <input
-                  type="text"
-                  name="selfBirthPlace"
-                  value={registrationType === 'self' ? formData?.selfBirthPlace || '' : ''}
-                  onChange={handleChange}
-                  className="AffidavitMediumInput"
-                  disabled={registrationType !== 'self'}
-                />
-                on
-                <input
-                  type="text"
-                  name="selfBirthDate"
-                  value={registrationType === 'self' ? formData?.selfBirthDate || '' : ''}
-                  onChange={handleChange}
-                  className="AffidavitMediumInput"
-                  disabled={registrationType !== 'self'}
-                />
-                .
-              </label>
-            </div>
-          </div>
+         <div className="FormRowAffidavit">
+  <div className="CheckboxContainerAffidavit">
+    <input
+      type="checkbox"
+      id="selfBirthCheckbox"
+      checked={registrationType === 'self'}
+      onChange={() => handleRegistrationTypeChange('self')}
+      className="CheckboxInputAffidavit"
+      disabled={isReadOnly}
+    />
+    <label htmlFor="selfBirthCheckbox" className="CheckboxLabelAffidavit">
+      my birth in
+      <input
+        type="text"
+        name="selfBirthPlace"
+        value={registrationType == 'self'? getChildBirthPlace():''}
+        onChange={handleChange}
+        className="AffidavitMediumInput"
+        disabled={registrationType !== 'self' || isReadOnly}
+      />
+      on
+      <input
+        type="text"
+        name="selfBirthDate"
+        value={registrationType == 'self'? getChildBirthDate():''}
+        onChange={handleChange}
+        className="AffidavitMediumInput"
+        disabled={registrationType !== 'self' || isReadOnly}
+      />
+      .
+    </label>
+  </div>
+</div>
 
-          <div className="FormRowAffidavit">
-            <div className="CheckboxContainerAffidavit">
-              <input
-                type="checkbox"
-                id="otherBirthCheckbox"
-                checked={registrationType === 'other'}
-                onChange={() => handleRegistrationTypeChange('other')}
-                className="CheckboxInputAffidavit"
-                disabled={isReadOnly}
-              />
-              <label htmlFor="otherBirthCheckbox" className="CheckboxLabelAffidavit">
-                the birth of
-                <input
-                  type="text"
-                  name="otherPersonName"
-                  value={registrationType === 'other' ? (formData?.otherPersonName || getChildFullName()) : ''}
-                  onChange={handleChange}
-                  className="AffidavitMediumInput"
-                  disabled={registrationType !== 'other'}
-                />
-                who was born in
-                <input
-                  type="text"
-                  name="otherBirthPlace"
-                  value={registrationType === 'other' ? formData?.otherBirthPlace || '' : ''}
-                  onChange={handleChange}
-                  className="AffidavitMediumInput"
-                  disabled={registrationType !== 'other'}
-                />
-                on
-                <input
-                  type="text"
-                  name="otherBirthDate"
-                  value={registrationType === 'other' ? (formData?.otherBirthDate || getChildBirthDate()) : ''}
-                  onChange={handleChange}
-                  className="AffidavitMediumInput"
-                  disabled={registrationType !== 'other'}
-                />
-                .
-              </label>
-            </div>
-          </div>
+<div className="FormRowAffidavit">
+  <div className="CheckboxContainerAffidavit">
+    <input
+      type="checkbox"
+      id="otherBirthCheckbox"
+      checked={registrationType === 'other'}
+      onChange={() => handleRegistrationTypeChange('other')}
+      className="CheckboxInputAffidavit"
+      disabled={isReadOnly}
+    />
+    <label htmlFor="otherBirthCheckbox" className="CheckboxLabelAffidavit">
+      the birth of
+      <input
+        type="text"
+        name="otherPersonName"
+        value={registrationType === 'other' ? formData?.otherPersonName || getChildFullName() : ''}
+        onChange={handleChange}
+        className="AffidavitMediumInput"
+        disabled={registrationType !== 'other' || isReadOnly}
+      />
+      who was born in
+      <input
+        type="text"
+        name="otherBirthPlace"
+        value={registrationType === 'other' ? formData?.otherBirthPlace || getChildBirthPlace() : ''}
+        onChange={handleChange}
+        className="AffidavitMediumInput"
+        disabled={registrationType !== 'other' || isReadOnly}
+      />
+      on
+      <input
+        type="text"
+        name="otherBirthDate"
+        value={registrationType === 'other' ? formData?.otherBirthDate || getChildBirthDate() : ''}
+        onChange={handleChange}
+        className="AffidavitMediumInput"
+        disabled={registrationType !== 'other' || isReadOnly}
+      />
+      .
+    </label>
+  </div>
+</div>
           <div className="FormRowAffidavit">
             <div className="AffidavitText">
               2. That I/he/she was attended at birth by
