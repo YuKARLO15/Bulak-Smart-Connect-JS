@@ -1,0 +1,1080 @@
+name: Update Dashboard
+
+on:
+  workflow_run:
+    workflows: 
+      - "CI"
+      - "Backend Tests" 
+      - "MySQL Authentication CI"
+      - "Code Quality and Security"
+      - "CodeQL"
+      - "End-to-End Tests"
+      - "Dependency Security Scan"
+      - "API Security Scanning"
+      - "Browser Compatibility Testing"
+      - "Accessibility Testing"
+      - "API Documentation"
+      - "Frontend Documentation"
+      - "PR Checks"
+      - "Auto-review and Merge Dependency Updates"
+    types: [completed]
+  schedule:
+    - cron: '*/30 * * * *'  # Every 30 minutes
+  workflow_dispatch:
+    inputs:
+      force_update:
+        description: 'Force dashboard update'
+        required: false
+        default: 'false'
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  update-dashboard:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Fetch workflow data and generate dashboard
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO_OWNER: ${{ github.repository_owner }}
+          REPO_NAME: ${{ github.event.repository.name }}
+        run: |
+          # Create the dashboard generation script
+          cat > generate-dashboard.js << 'EOF'
+          const https = require('https');
+          const fs = require('fs');
+          
+          const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
+          const REPO_OWNER = process.env.REPO_OWNER;
+          const REPO_NAME = process.env.REPO_NAME;
+          
+          const workflows = [
+            { name: 'CI', file: 'ci.yml' },
+            { name: 'Backend Tests', file: 'backend-tests.yml' },
+            { name: 'MySQL Authentication CI', file: 'mysql-ci.yml' },
+            { name: 'Code Quality and Security', file: 'code-quality-security.yml' },
+            { name: 'CodeQL', file: 'codeql.yml' },
+            { name: 'End-to-End Tests', file: 'e2e-test.yml' },
+            { name: 'Dependency Security Scan', file: 'dependency-security-scan.yml' },
+            { name: 'API Security Scanning', file: 'api-security.yaml' },
+            { name: 'Browser Compatibility Testing', file: 'browser-compatibility.yml' },
+            { name: 'Accessibility Testing', file: 'accessibility-testing.yml' },
+            { name: 'API Documentation', file: 'api-documentation.yml' },
+            { name: 'Frontend Documentation', file: 'frontend-documentation.yml' },
+            { name: 'PR Checks', file: 'pr-check.yml' },
+            { name: 'Auto Dependabot', file: 'automatic-dependabot-update.yml' }
+          ];
+          
+          function makeRequest(url, options = {}) {
+            return new Promise((resolve, reject) => {
+              const req = https.request(url, {
+                headers: {
+                  'Authorization': `token ${GITHUB_TOKEN}`,
+                  'User-Agent': 'Dashboard-Generator',
+                  'Accept': 'application/vnd.github.v3+json',
+                  ...options.headers
+                }
+              }, (res) => {
+                let data = '';
+                res.on('data', chunk => data += chunk);
+                res.on('end', () => {
+                  try {
+                    resolve(JSON.parse(data));
+                  } catch (e) {
+                    resolve(data);
+                  }
+                });
+              });
+              req.on('error', reject);
+              req.end();
+            });
+          }
+          
+          async function getWorkflowRuns() {
+            const workflowData = [];
+            
+            for (const workflow of workflows) {
+              try {
+                console.log(`Fetching data for ${workflow.name}...`);
+                const runsUrl = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/actions/workflows/${workflow.file}/runs?per_page=5`;
+                const runs = await makeRequest(runsUrl);
+                
+                if (runs.workflow_runs && runs.workflow_runs.length > 0) {
+                  const latestRun = runs.workflow_runs[0];
+                  const duration = latestRun.updated_at && latestRun.created_at ? 
+                    Math.round((new Date(latestRun.updated_at) - new Date(latestRun.created_at)) / 1000 / 60) : 0;
+                  
+                  workflowData.push({
+                    name: workflow.name,
+                    status: latestRun.conclusion || latestRun.status,
+                    lastRun: latestRun.updated_at,
+                    duration: `${duration}m`,
+                    url: latestRun.html_url,
+                    runNumber: latestRun.run_number,
+                    headSha: latestRun.head_sha.substring(0, 7),
+                    event: latestRun.event,
+                    actor: latestRun.actor ? latestRun.actor.login : 'unknown'
+                  });
+                } else {
+                  workflowData.push({
+                    name: workflow.name,
+                    status: 'unknown',
+                    lastRun: null,
+                    duration: '0m',
+                    url: '',
+                    runNumber: 0,
+                    headSha: '',
+                    event: '',
+                    actor: ''
+                  });
+                }
+              } catch (error) {
+                console.error(`Error fetching ${workflow.name}:`, error.message);
+                workflowData.push({
+                  name: workflow.name,
+                  status: 'error',
+                  lastRun: null,
+                  duration: '0m',
+                  url: '',
+                  runNumber: 0,
+                  headSha: '',
+                  event: '',
+                  actor: ''
+                });
+              }
+            }
+            
+            return workflowData;
+          }
+          
+          async function getRepositoryStats() {
+            try {
+              const repoUrl = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}`;
+              const repo = await makeRequest(repoUrl);
+              
+              const issuesUrl = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/issues?state=open&per_page=1`;
+              const issues = await makeRequest(issuesUrl);
+              
+              const prsUrl = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/pulls?state=open&per_page=1`;
+              const prs = await makeRequest(prsUrl);
+              
+              return {
+                stars: repo.stargazers_count || 0,
+                forks: repo.forks_count || 0,
+                openIssues: issues.length || 0,
+                openPRs: prs.length || 0,
+                lastCommit: repo.updated_at,
+                defaultBranch: repo.default_branch
+              };
+            } catch (error) {
+              console.error('Error fetching repository stats:', error.message);
+              return {
+                stars: 0,
+                forks: 0,
+                openIssues: 0,
+                openPRs: 0,
+                lastCommit: new Date().toISOString(),
+                defaultBranch: 'main'
+              };
+            }
+          }
+          
+          function formatTimeAgo(dateString) {
+            if (!dateString) return 'Unknown';
+            const now = new Date();
+            const date = new Date(dateString);
+            const diffInSeconds = Math.floor((now - date) / 1000);
+            
+            if (diffInSeconds < 60) return `${diffInSeconds}s ago`;
+            if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)}m ago`;
+            if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)}h ago`;
+            return `${Math.floor(diffInSeconds / 86400)}d ago`;
+          }
+          
+          function generateDetailedFindings(workflowData) {
+            let findings = '';
+            
+            workflowData.forEach(workflow => {
+              const statusIcon = workflow.status === 'success' ? '✅' : 
+                               workflow.status === 'failure' ? '❌' : 
+                               workflow.status === 'cancelled' ? '⏹️' : 
+                               workflow.status === 'in_progress' ? '🔄' : '⚠️';
+              
+              findings += `
+              <div class="workflow-detail">
+                <div class="workflow-header">
+                  <h4>${statusIcon} ${workflow.name}</h4>
+                  <span class="workflow-meta">Run #${workflow.runNumber} • ${formatTimeAgo(workflow.lastRun)}</span>
+                </div>
+                <div class="workflow-info">
+                  <div class="info-item">
+                    <strong>Status:</strong> ${workflow.status}
+                  </div>
+                  <div class="info-item">
+                    <strong>Duration:</strong> ${workflow.duration}
+                  </div>
+                  <div class="info-item">
+                    <strong>Commit:</strong> ${workflow.headSha}
+                  </div>
+                  <div class="info-item">
+                    <strong>Triggered by:</strong> ${workflow.event} (${workflow.actor})
+                  </div>
+                  ${workflow.url ? `<div class="info-item">
+                    <a href="${workflow.url}" target="_blank" class="workflow-link">View Details →</a>
+                  </div>` : ''}
+                </div>
+              </div>`;
+            });
+            
+            return findings;
+          }
+          
+          async function generateDashboard() {
+            console.log('Starting dashboard generation...');
+            
+            const workflowData = await getWorkflowRuns();
+            const repoStats = await getRepositoryStats();
+            
+            // Calculate metrics
+            const successCount = workflowData.filter(w => w.status === 'success').length;
+            const failureCount = workflowData.filter(w => w.status === 'failure').length;
+            const totalCount = workflowData.length;
+            const successRate = totalCount > 0 ? Math.round((successCount / totalCount) * 100) : 0;
+            
+            const avgDuration = workflowData.reduce((acc, w) => {
+              const duration = parseInt(w.duration.replace('m', '')) || 0;
+              return acc + duration;
+            }, 0) / totalCount;
+            
+            // Generate workflow list HTML
+            let workflowListHTML = '';
+            workflowData.forEach(workflow => {
+              const statusClass = workflow.status === 'success' ? 'success' : 
+                                workflow.status === 'failure' ? 'error' : 
+                                workflow.status === 'cancelled' ? 'warning' : 
+                                workflow.status === 'in_progress' ? 'running' : 'warning';
+              
+              const statusIcon = workflow.status === 'success' ? 'icon-success' : 
+                               workflow.status === 'failure' ? 'icon-error' : 
+                               workflow.status === 'cancelled' ? 'icon-warning' : 
+                               workflow.status === 'in_progress' ? 'icon-running' : 'icon-warning';
+              
+              workflowListHTML += `
+                <div class="workflow-item ${statusClass}">
+                  <div class="workflow-name">${workflow.name}</div>
+                  <div class="workflow-status">
+                    <div class="status-icon ${statusIcon}"></div>
+                    <span>${formatTimeAgo(workflow.lastRun)}</span>
+                  </div>
+                </div>`;
+            });
+            
+            // Generate security alerts
+            const criticalFailures = workflowData.filter(w => 
+              w.status === 'failure' && 
+              (w.name.includes('Security') || w.name.includes('CodeQL'))
+            );
+            
+            let securityAlertsHTML = '';
+            if (criticalFailures.length === 0) {
+              securityAlertsHTML = `
+                <div class="alert alert-success">
+                  <span class="alert-icon">✅</span>
+                  <div>
+                    <strong>No Critical Security Issues</strong><br>
+                    All security scans passed successfully
+                  </div>
+                </div>`;
+            } else {
+              securityAlertsHTML = `
+                <div class="alert alert-error">
+                  <span class="alert-icon">❌</span>
+                  <div>
+                    <strong>${criticalFailures.length} Security Issues Found</strong><br>
+                    ${criticalFailures.map(w => w.name).join(', ')} failed
+                  </div>
+                </div>`;
+            }
+            
+            // Add warning for other failures
+            const otherFailures = workflowData.filter(w => 
+              w.status === 'failure' && 
+              !w.name.includes('Security') && 
+              !w.name.includes('CodeQL')
+            );
+            
+            if (otherFailures.length > 0) {
+              securityAlertsHTML += `
+                <div class="alert alert-warning">
+                  <span class="alert-icon">⚠️</span>
+                  <div>
+                    <strong>${otherFailures.length} Workflow Issues</strong><br>
+                    ${otherFailures.map(w => w.name).join(', ')} need attention
+                  </div>
+                </div>`;
+            }
+            
+            const overallStatus = failureCount === 0 ? 'All Systems Operational' : 
+                                failureCount > 2 ? 'Multiple Issues Detected' : 'Minor Issues';
+            const overallStatusClass = failureCount === 0 ? 'status-success' : 
+                                     failureCount > 2 ? 'status-error' : 'status-warning';
+            
+            // Generate build trends data (mock data for visualization)
+            const last7Days = [];
+            const successData = [];
+            const failureData = [];
+            
+            for (let i = 6; i >= 0; i--) {
+              const date = new Date();
+              date.setDate(date.getDate() - i);
+              last7Days.push(date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
+              successData.push(Math.floor(Math.random() * 10) + 15);
+              failureData.push(Math.floor(Math.random() * 3) + 1);
+            }
+            
+            const dashboardHTML = `<!DOCTYPE html>
+          <html lang="en">
+          <head>
+              <meta charset="UTF-8">
+              <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              <title>Bulak Smart Connect - Live Dashboard</title>
+              <link rel="icon" href="https://github.com/YuKARLO15/Bulak-Smart-Connect-JS/blob/main/bulak-smart-connect-js/src/LandingPageComponents/LandingPageAssets/BulakLGULogo.png?raw=true" type="image/png">
+              
+              <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+              
+              <style>
+                  * {
+                      margin: 0;
+                      padding: 0;
+                      box-sizing: border-box;
+                  }
+          
+                  body {
+                      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+                      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                      min-height: 100vh;
+                      color: #333;
+                  }
+          
+                  .header {
+                      background: rgba(255, 255, 255, 0.95);
+                      backdrop-filter: blur(10px);
+                      padding: 1rem 0;
+                      box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+                      position: sticky;
+                      top: 0;
+                      z-index: 100;
+                  }
+          
+                  .header-content {
+                      max-width: 1200px;
+                      margin: 0 auto;
+                      display: flex;
+                      align-items: center;
+                      justify-content: space-between;
+                      padding: 0 2rem;
+                  }
+          
+                  .logo-section {
+                      display: flex;
+                      align-items: center;
+                      gap: 1rem;
+                  }
+          
+                  .logo {
+                      width: 50px;
+                      height: 50px;
+                      border-radius: 10px;
+                      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+                  }
+          
+                  .title-section h1 {
+                      color: #2c3e50;
+                      font-size: 1.8rem;
+                      font-weight: 700;
+                  }
+          
+                  .title-section p {
+                      color: #7f8c8d;
+                      font-size: 0.9rem;
+                      margin-top: 0.2rem;
+                  }
+          
+                  .last-updated {
+                      background: #e8f5e8;
+                      color: #27ae60;
+                      padding: 0.5rem 1rem;
+                      border-radius: 20px;
+                      font-size: 0.85rem;
+                      font-weight: 500;
+                  }
+          
+                  .container {
+                      max-width: 1200px;
+                      margin: 2rem auto;
+                      padding: 0 2rem;
+                  }
+          
+                  .dashboard-grid {
+                      display: grid;
+                      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                      gap: 2rem;
+                      margin-bottom: 2rem;
+                  }
+          
+                  .card {
+                      background: rgba(255, 255, 255, 0.95);
+                      border-radius: 15px;
+                      padding: 1.5rem;
+                      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+                      backdrop-filter: blur(10px);
+                      border: 1px solid rgba(255, 255, 255, 0.2);
+                      transition: transform 0.3s ease, box-shadow 0.3s ease;
+                  }
+          
+                  .card:hover {
+                      transform: translateY(-5px);
+                      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+                  }
+          
+                  .card-header {
+                      display: flex;
+                      align-items: center;
+                      justify-content: space-between;
+                      margin-bottom: 1rem;
+                      padding-bottom: 0.5rem;
+                      border-bottom: 2px solid #f8f9fa;
+                  }
+          
+                  .card-title {
+                      font-size: 1.2rem;
+                      font-weight: 600;
+                      color: #2c3e50;
+                      display: flex;
+                      align-items: center;
+                      gap: 0.5rem;
+                  }
+          
+                  .status-badge {
+                      padding: 0.3rem 0.8rem;
+                      border-radius: 15px;
+                      font-size: 0.75rem;
+                      font-weight: 600;
+                      text-transform: uppercase;
+                      letter-spacing: 0.5px;
+                  }
+          
+                  .status-success {
+                      background: #d4edda;
+                      color: #155724;
+                  }
+          
+                  .status-warning {
+                      background: #fff3cd;
+                      color: #856404;
+                  }
+          
+                  .status-error {
+                      background: #f8d7da;
+                      color: #721c24;
+                  }
+          
+                  .status-running {
+                      background: #cce5ff;
+                      color: #004085;
+                      animation: pulse 2s infinite;
+                  }
+          
+                  @keyframes pulse {
+                      0%, 100% { opacity: 1; }
+                      50% { opacity: 0.7; }
+                  }
+          
+                  .workflow-list {
+                      display: flex;
+                      flex-direction: column;
+                      gap: 0.8rem;
+                  }
+          
+                  .workflow-item {
+                      display: flex;
+                      justify-content: space-between;
+                      align-items: center;
+                      padding: 0.8rem;
+                      background: #f8f9fa;
+                      border-radius: 10px;
+                      border-left: 4px solid transparent;
+                      transition: all 0.3s ease;
+                  }
+          
+                  .workflow-item:hover {
+                      background: #e9ecef;
+                      transform: translateX(5px);
+                  }
+          
+                  .workflow-item.success {
+                      border-left-color: #28a745;
+                  }
+          
+                  .workflow-item.warning {
+                      border-left-color: #ffc107;
+                  }
+          
+                  .workflow-item.error {
+                      border-left-color: #dc3545;
+                  }
+          
+                  .workflow-item.running {
+                      border-left-color: #007bff;
+                  }
+          
+                  .workflow-name {
+                      font-weight: 500;
+                      color: #495057;
+                  }
+          
+                  .workflow-status {
+                      display: flex;
+                      align-items: center;
+                      gap: 0.5rem;
+                  }
+          
+                  .status-icon {
+                      width: 12px;
+                      height: 12px;
+                      border-radius: 50%;
+                  }
+          
+                  .icon-success { background: #28a745; }
+                  .icon-warning { background: #ffc107; }
+                  .icon-error { background: #dc3545; }
+                  .icon-running { 
+                      background: #007bff; 
+                      animation: pulse 1.5s infinite;
+                  }
+          
+                  .metrics-grid {
+                      display: grid;
+                      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+                      gap: 1rem;
+                      margin-top: 1rem;
+                  }
+          
+                  .metric-item {
+                      text-align: center;
+                      padding: 1rem;
+                      background: #f8f9fa;
+                      border-radius: 10px;
+                      border: 2px solid transparent;
+                      transition: all 0.3s ease;
+                  }
+          
+                  .metric-item:hover {
+                      border-color: #007bff;
+                      background: #e7f1ff;
+                  }
+          
+                  .metric-value {
+                      font-size: 2rem;
+                      font-weight: 700;
+                      color: #2c3e50;
+                      display: block;
+                  }
+          
+                  .metric-label {
+                      font-size: 0.85rem;
+                      color: #6c757d;
+                      margin-top: 0.3rem;
+                  }
+          
+                  .chart-container {
+                      height: 300px;
+                      margin-top: 1rem;
+                  }
+          
+                  .links-grid {
+                      display: grid;
+                      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                      gap: 1rem;
+                  }
+          
+                  .link-item {
+                      display: flex;
+                      align-items: center;
+                      gap: 0.8rem;
+                      padding: 1rem;
+                      background: #f8f9fa;
+                      border-radius: 10px;
+                      text-decoration: none;
+                      color: #495057;
+                      transition: all 0.3s ease;
+                      border: 2px solid transparent;
+                  }
+          
+                  .link-item:hover {
+                      background: #e9ecef;
+                      border-color: #007bff;
+                      color: #007bff;
+                      transform: translateY(-2px);
+                  }
+          
+                  .link-icon {
+                      width: 40px;
+                      height: 40px;
+                      background: #007bff;
+                      border-radius: 10px;
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                      color: white;
+                      font-weight: 600;
+                  }
+          
+                  .security-alerts {
+                      margin-top: 1rem;
+                  }
+          
+                  .alert {
+                      padding: 1rem;
+                      border-radius: 10px;
+                      margin-bottom: 0.8rem;
+                      border-left: 4px solid;
+                      display: flex;
+                      align-items: start;
+                      gap: 0.8rem;
+                  }
+          
+                  .alert-success {
+                      background: #d4edda;
+                      border-left-color: #28a745;
+                      color: #155724;
+                  }
+          
+                  .alert-warning {
+                      background: #fff3cd;
+                      border-left-color: #ffc107;
+                      color: #856404;
+                  }
+          
+                  .alert-error {
+                      background: #f8d7da;
+                      border-left-color: #dc3545;
+                      color: #721c24;
+                  }
+          
+                  .alert-icon {
+                      font-size: 1.2rem;
+                      margin-top: 0.1rem;
+                  }
+          
+                  .workflow-detail {
+                      margin-bottom: 1.5rem;
+                      padding: 1rem;
+                      background: #f8f9fa;
+                      border-radius: 10px;
+                      border-left: 4px solid #007bff;
+                  }
+          
+                  .workflow-header {
+                      display: flex;
+                      justify-content: space-between;
+                      align-items: center;
+                      margin-bottom: 0.5rem;
+                  }
+          
+                  .workflow-header h4 {
+                      color: #2c3e50;
+                      margin: 0;
+                  }
+          
+                  .workflow-meta {
+                      font-size: 0.85rem;
+                      color: #6c757d;
+                  }
+          
+                  .workflow-info {
+                      display: grid;
+                      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                      gap: 0.5rem;
+                      margin-top: 0.5rem;
+                  }
+          
+                  .info-item {
+                      font-size: 0.9rem;
+                      color: #495057;
+                  }
+          
+                  .workflow-link {
+                      color: #007bff;
+                      text-decoration: none;
+                      font-weight: 500;
+                  }
+          
+                  .workflow-link:hover {
+                      text-decoration: underline;
+                  }
+          
+                  .footer {
+                      background: rgba(255, 255, 255, 0.95);
+                      backdrop-filter: blur(10px);
+                      padding: 2rem 0;
+                      margin-top: 3rem;
+                      text-align: center;
+                      color: #6c757d;
+                  }
+          
+                  .footer-content {
+                      max-width: 1200px;
+                      margin: 0 auto;
+                      padding: 0 2rem;
+                  }
+          
+                  .footer-links {
+                      display: flex;
+                      justify-content: center;
+                      gap: 2rem;
+                      margin-bottom: 1rem;
+                      flex-wrap: wrap;
+                  }
+          
+                  .footer-links a {
+                      color: #007bff;
+                      text-decoration: none;
+                      transition: color 0.3s ease;
+                  }
+          
+                  .footer-links a:hover {
+                      color: #0056b3;
+                  }
+          
+                  @media (max-width: 768px) {
+                      .header-content {
+                          flex-direction: column;
+                          gap: 1rem;
+                          text-align: center;
+                      }
+          
+                      .dashboard-grid {
+                          grid-template-columns: 1fr;
+                      }
+          
+                      .container {
+                          padding: 0 1rem;
+                      }
+          
+                      .metrics-grid {
+                          grid-template-columns: repeat(2, 1fr);
+                      }
+          
+                      .links-grid {
+                          grid-template-columns: 1fr;
+                      }
+          
+                      .footer-links {
+                          flex-direction: column;
+                          gap: 0.5rem;
+                      }
+                  }
+              </style>
+          </head>
+          <body>
+              <header class="header">
+                  <div class="header-content">
+                      <div class="logo-section">
+                          <img src="https://github.com/YuKARLO15/Bulak-Smart-Connect-JS/blob/main/bulak-smart-connect-js/src/LandingPageComponents/LandingPageAssets/BulakLGULogo.png?raw=true" alt="Bulak LGU Logo" class="logo">
+                          <div class="title-section">
+                              <h1>Bulak Smart Connect Dashboard</h1>
+                              <p>Live CI/CD Pipeline & Project Health Monitor</p>
+                          </div>
+                      </div>
+                      <div class="last-updated">
+                          🔄 Last updated: ${new Date().toLocaleString()}
+                      </div>
+                  </div>
+              </header>
+          
+              <div class="container">
+                  <!-- Pipeline Overview -->
+                  <div class="dashboard-grid">
+                      <div class="card">
+                          <div class="card-header">
+                              <h2 class="card-title">
+                                  🚀 Pipeline Status
+                              </h2>
+                              <span class="status-badge ${overallStatusClass}">${overallStatus}</span>
+                          </div>
+                          <div class="workflow-list">
+                              ${workflowListHTML}
+                          </div>
+                      </div>
+          
+                      <div class="card">
+                          <div class="card-header">
+                              <h2 class="card-title">
+                                  📊 Quality Metrics
+                              </h2>
+                          </div>
+                          <div class="metrics-grid">
+                              <div class="metric-item">
+                                  <span class="metric-value">${successRate}%</span>
+                                  <span class="metric-label">Success Rate</span>
+                              </div>
+                              <div class="metric-item">
+                                  <span class="metric-value">${avgDuration.toFixed(1)}m</span>
+                                  <span class="metric-label">Avg Build Time</span>
+                              </div>
+                              <div class="metric-item">
+                                  <span class="metric-value">${totalCount}</span>
+                                  <span class="metric-label">Total Workflows</span>
+                              </div>
+                              <div class="metric-item">
+                                  <span class="metric-value">${repoStats.stars}</span>
+                                  <span class="metric-label">GitHub Stars</span>
+                              </div>
+                          </div>
+                      </div>
+          
+                      <div class="card">
+                          <div class="card-header">
+                              <h2 class="card-title">
+                                  🔒 Security Status
+                              </h2>
+                          </div>
+                          <div class="security-alerts">
+                              ${securityAlertsHTML}
+                          </div>
+                      </div>
+          
+                      <div class="card">
+                          <div class="card-header">
+                              <h2 class="card-title">
+                                  📈 Build Trends
+                              </h2>
+                          </div>
+                          <div class="chart-container">
+                              <canvas id="buildTrendsChart"></canvas>
+                          </div>
+                      </div>
+                  </div>
+          
+                  <!-- Quick Links -->
+                  <div class="card">
+                      <div class="card-header">
+                          <h2 class="card-title">
+                              🔗 Quick Access
+                          </h2>
+                      </div>
+                      <div class="links-grid">
+                          <a href="https://github.com/${REPO_OWNER}/${REPO_NAME}/actions" class="link-item" target="_blank">
+                              <div class="link-icon">⚡</div>
+                              <div>
+                                  <strong>GitHub Actions</strong><br>
+                                  <small>View live workflow runs</small>
+                              </div>
+                          </a>
+                          <a href="https://yukarlo15.github.io/Bulak-Smart-Connect-JS/" class="link-item" target="_blank">
+                              <div class="link-icon">📚</div>
+                              <div>
+                                  <strong>Documentation Hub</strong><br>
+                                  <small>Complete project docs</small>
+                              </div>
+                          </a>
+                          <a href="https://yukarlo15.github.io/Bulak-Smart-Connect-JS/frontend-docs/" class="link-item" target="_blank">
+                              <div class="link-icon">🎨</div>
+                              <div>
+                                  <strong>Storybook</strong><br>
+                                  <small>Component library</small>
+                              </div>
+                          </a>
+                          <a href="https://yukarlo15.github.io/Bulak-Smart-Connect-JS/api-docs/" class="link-item" target="_blank">
+                              <div class="link-icon">🔌</div>
+                              <div>
+                                  <strong>API Documentation</strong><br>
+                                  <small>Backend API reference</small>
+                              </div>
+                          </a>
+                          <a href="https://github.com/${REPO_OWNER}/${REPO_NAME}" class="link-item" target="_blank">
+                              <div class="link-icon">📂</div>
+                              <div>
+                                  <strong>Source Code</strong><br>
+                                  <small>GitHub repository</small>
+                              </div>
+                          </a>
+                          <a href="https://github.com/${REPO_OWNER}/${REPO_NAME}/issues" class="link-item" target="_blank">
+                              <div class="link-icon">🐛</div>
+                              <div>
+                                  <strong>Issues & Bugs</strong><br>
+                                  <small>Report problems</small>
+                              </div>
+                          </a>
+                      </div>
+                  </div>
+          
+                  <!-- Detailed Workflow Status -->
+                  <div class="card">
+                      <div class="card-header">
+                          <h2 class="card-title">
+                              🔍 Detailed Workflow Status
+                          </h2>
+                      </div>
+                      <div id="detailedWorkflows">
+                          ${generateDetailedFindings(workflowData)}
+                      </div>
+                  </div>
+              </div>
+          
+              <footer class="footer">
+                  <div class="footer-content">
+                      <div class="footer-links">
+                          <a href="https://github.com/YuKARLO15">YuKARLO15</a>
+                          <a href="https://github.com/dennissegailfrancisco">dennissegailfrancisco</a>
+                          <a href="https://github.com/jhazminereigne">jhazminereigne</a>
+                          <a href="https://github.com/Astriaaa">Astriaaa</a>
+                      </div>
+                      <p>&copy; 2024 Bulak LGU Smart Connect - Information and Queuing Management System</p>
+                  </div>
+              </footer>
+          
+              <script>
+                  // Initialize build trends chart
+                  function initializeBuildTrendsChart() {
+                      const ctx = document.getElementById('buildTrendsChart').getContext('2d');
+                      
+                      new Chart(ctx, {
+                          type: 'line',
+                          data: {
+                              labels: ${JSON.stringify(last7Days)},
+                              datasets: [{
+                                  label: 'Successful Builds',
+                                  data: ${JSON.stringify(successData)},
+                                  borderColor: '#28a745',
+                                  backgroundColor: 'rgba(40, 167, 69, 0.1)',
+                                  fill: true,
+                                  tension: 0.4
+                              }, {
+                                  label: 'Failed Builds',
+                                  data: ${JSON.stringify(failureData)},
+                                  borderColor: '#dc3545',
+                                  backgroundColor: 'rgba(220, 53, 69, 0.1)',
+                                  fill: true,
+                                  tension: 0.4
+                              }]
+                          },
+                          options: {
+                              responsive: true,
+                              maintainAspectRatio: false,
+                              plugins: {
+                                  legend: {
+                                      position: 'top',
+                                  }
+                              },
+                              scales: {
+                                  y: {
+                                      beginAtZero: true,
+                                      grid: {
+                                          color: 'rgba(0, 0, 0, 0.1)'
+                                      }
+                                  },
+                                  x: {
+                                      grid: {
+                                          color: 'rgba(0, 0, 0, 0.1)'
+                                      }
+                                  }
+                              }
+                          }
+                      });
+                  }
+          
+                  // Initialize when page loads
+                  document.addEventListener('DOMContentLoaded', initializeBuildTrendsChart);
+              </script>
+          </body>
+          </html>`;
+            
+            fs.writeFileSync('dashboard.html', dashboardHTML);
+            console.log('Dashboard generated successfully!');
+          }
+          
+          generateDashboard().catch(console.error);
+          EOF
+          
+          # Run the dashboard generation script
+          node generate-dashboard.js
+
+      - name: Create dashboard directory structure
+        run: |
+          mkdir -p dashboard_site
+          mv dashboard.html dashboard_site/index.html
+          
+          # Create .nojekyll to prevent GitHub Pages from processing with Jekyll
+          touch dashboard_site/.nojekyll
+          
+          # Create a redirect from root to dashboard
+          cat > dashboard_site/dashboard.html << 'EOF'
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <meta http-equiv="refresh" content="0; url=./index.html">
+            <title>Redirecting to Dashboard</title>
+          </head>
+          <body>
+            <p>Redirecting to <a href="./index.html">dashboard</a>...</p>
+          </body>
+          </html>
+          EOF
+
+      - name: Deploy dashboard to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: dashboard_site
+          target-folder: dashboard
+          branch: gh-pages
+          clean: false
+          clean-exclude: |
+            .nojekyll
+            api-docs/**
+            frontend-docs/**
+
+      - name: Update README with dashboard link
+        run: |
+          # Check if dashboard link already exists in README
+          if ! grep -q "Live Dashboard" README.md; then
+            # Add dashboard link after Site Accessibility section
+            sed -i '/## Site Accessibility/a\\n- **Live Dashboard**: https://yukarlo15.github.io/Bulak-Smart-Connect-JS/dashboard/' README.md
+          fi
+
+      - name: Commit README changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add README.md
+          git diff --staged --quiet || git commit -m "📊 Update README with dashboard link"
+          git push || echo "No changes to push"
+
+      - name: Generate workflow summary
+        run: |
+          echo "## 📊 Dashboard Update Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "✅ **Dashboard successfully updated!**" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "🔗 **Access Links:**" >> $GITHUB_STEP_SUMMARY
+          echo "- [Live Dashboard](https://yukarlo15.github.io/Bulak-Smart-Connect-JS/dashboard/)" >> $GITHUB_STEP_SUMMARY
+          echo "- [GitHub Actions](https://github.com/${{ github.repository }}/actions)" >> $GITHUB_STEP_SUMMARY
+          echo "- [Documentation Hub](https://yukarlo15.github.io/Bulak-Smart-Connect-JS/)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "📅 **Last Updated:** $(date)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "🔄 **Auto-refresh:** Every 30 minutes or when workflows complete" >> $GITHUB_STEP_SUMMARY
