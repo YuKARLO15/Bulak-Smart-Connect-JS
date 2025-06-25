@@ -41,13 +41,13 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     const userId = Number(payload.sub);
     const email = String(payload.email || '');
     const roles = Array.isArray(payload.roles)
-      ? payload.roles.map(role => ({ name: role }))
+      ? payload.roles.map((role) => ({ name: role }))
       : [];
 
     return {
       id: userId,
       email,
-      roles
+      roles,
     };
   }
 }

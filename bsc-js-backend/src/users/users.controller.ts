@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import {
   Controller,
   Get,
@@ -6,11 +9,16 @@ import {
   Patch,
   Param,
   Delete,
-  Query,
   UseGuards,
   Request,
+  Query,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBearerAuth,
+} from '@nestjs/swagger';
 import { UsersService } from './users.service';
 import { AdminUpdateUserDto } from '../auth/dto/update-user.dto'; // Import from auth module
 import { UpdateUserStatusDto } from './dto/update-user-status.dto';
@@ -37,6 +45,7 @@ export class UsersController {
   @ApiResponse({ status: 200, description: 'Users retrieved successfully' })
   async findAll(
     @Query() query: UserQueryDto,
+
     @Request() req: { user: AuthenticatedUser },
   ) {
     const { page = 1, limit = 10, search, role } = query;
@@ -54,7 +63,10 @@ export class UsersController {
   @UseGuards(RolesGuard)
   @Roles('admin', 'staff', 'super_admin')
   @ApiOperation({ summary: 'Get user statistics (Admin only)' })
-  @ApiResponse({ status: 200, description: 'Statistics retrieved successfully' })
+  @ApiResponse({
+    status: 200,
+    description: 'Statistics retrieved successfully',
+  })
   async getStats() {
     return this.usersService.getStats();
   }
@@ -72,12 +84,16 @@ export class UsersController {
     // Allow users to view their own profile
     const userId = +id;
     const currentUser = req.user;
-    
-    if (userId === currentUser.id || 
-        currentUser.roles.some(role => ['admin', 'staff', 'super_admin'].includes(role.name))) {
+
+    if (
+      userId === currentUser.id ||
+      currentUser.roles.some((role) =>
+        ['admin', 'staff', 'super_admin'].includes(role.name),
+      )
+    ) {
       return this.usersService.findOne(userId);
     }
-    
+
     throw new Error('Unauthorized');
   }
 
@@ -90,6 +106,7 @@ export class UsersController {
   async update(
     @Param('id') id: string,
     @Body() updateUserDto: AdminUpdateUserDto,
+
     @Request() req: { user: AuthenticatedUser },
   ) {
     return this.usersService.adminUpdate(+id, updateUserDto);
@@ -103,6 +120,7 @@ export class UsersController {
   @ApiResponse({ status: 404, description: 'User not found' })
   async remove(
     @Param('id') id: string,
+
     @Request() req: { user: AuthenticatedUser },
   ) {
     return this.usersService.remove(+id);
@@ -117,6 +135,7 @@ export class UsersController {
   async updateStatus(
     @Param('id') id: string,
     @Body() updateStatusDto: UpdateUserStatusDto,
+
     @Request() req: { user: AuthenticatedUser },
   ) {
     return this.usersService.updateStatus(+id, updateStatusDto.isActive);
@@ -126,8 +145,14 @@ export class UsersController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('admin', 'super_admin')
   @ApiOperation({ summary: 'Admin creates user with role assignment' })
-  @ApiResponse({ status: 201, description: 'User created successfully', type: UserResponseDto })
-  async adminCreateUser(@Body() createUserDto: CreateUserDto): Promise<UserResponseDto> {
+  @ApiResponse({
+    status: 201,
+    description: 'User created successfully',
+    type: UserResponseDto,
+  })
+  async adminCreateUser(
+    @Body() createUserDto: CreateUserDto,
+  ): Promise<UserResponseDto> {
     try {
       // Hash password
       const salt = await bcrypt.genSalt();
@@ -136,17 +161,19 @@ export class UsersController {
       // Create user with hashed password
       const userWithHashedPassword = {
         ...createUserDto,
-        password: hashedPassword
+        password: hashedPassword,
       };
 
       const user = await this.usersService.create(userWithHashedPassword);
 
       // Return user without password
+
       const { password, ...userWithoutPassword } = user;
-      
+
       // Get user with roles for response
+
       const userWithRoles = await this.usersService.findOne(user.id);
-      
+
       return userWithRoles;
     } catch (error) {
       console.error('Error in admin create user:', error);

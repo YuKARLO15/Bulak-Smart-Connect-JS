@@ -75,13 +75,14 @@ export class QueuesController {
     console.log('GET /queues/user/' + userId + ' endpoint called');
     try {
       // Find queues for the specific user that are not completed
-      const userQueues = await this.queueService.findByUserIdWithDetails(userId);
-      
+      const userQueues =
+        await this.queueService.findByUserIdWithDetails(userId);
+
       console.log('Found user queues:', userQueues.length);
-      
+
       const result = userQueues.map((queue) => {
-        const details = Array.isArray(queue.details) 
-          ? queue.details[0] 
+        const details = Array.isArray(queue.details)
+          ? queue.details[0]
           : queue.details;
 
         return {
@@ -114,13 +115,13 @@ export class QueuesController {
       }
 
       const queue = await this.queueService.findOne(queueId);
-      
+
       if (!queue) {
         throw new Error('Queue not found');
       }
 
-      const details = Array.isArray(queue.details) 
-        ? queue.details[0] 
+      const details = Array.isArray(queue.details)
+        ? queue.details[0]
         : queue.details;
 
       return {
