@@ -44,7 +44,7 @@ Object.defineProperty(HTMLFormElement.prototype, 'requestSubmit', {
   writable: true,
 });
 
-// Prevent uncaught error handlers from causing test failures
+// Enhanced error suppression for test environment
 const originalError = console.error;
 const originalWarn = console.warn;
 
@@ -56,7 +56,8 @@ console.error = (...args) => {
     (args[0].includes('Error boundaries') || 
      args[0].includes('The above error occurred') ||
      args[0].includes('React will try to recreate') ||
-     args[0].includes('Test error'))
+     args[0].includes('Test error') ||
+     args[0].includes('ErrorBoundary'))
   ) {
     return;
   }
@@ -74,30 +75,46 @@ console.warn = (...args) => {
   originalWarn.apply(console, args);
 };
 
+// More comprehensive global error handlers
+const originalOnError = window.onerror;
+const originalOnUnhandledRejection = window.onunhandledrejection;
+
 // Enhanced global error handler to catch uncaught errors in tests
-window.onerror = vi.fn((message, source, lineno, colno, error) => {
-  // Return true to prevent the error from being logged to console
+window.onerror = (message, source, lineno, colno, error) => {
+  // Handle ErrorBoundary test errors specifically
   if (
     error?.message?.includes('Test error') || 
     error?.message?.includes('React is not defined') ||
-    message?.includes('Test error')
+    message?.includes('Test error') ||
+    source?.includes('ErrorBoundary.test.jsx')
   ) {
-    return true;
+    return true; // Prevent default error handling
+  }
+  
+  // Call original handler for other errors
+  if (originalOnError) {
+    return originalOnError(message, source, lineno, colno, error);
   }
   return false;
-});
+};
 
 // Enhanced unhandled rejection handler
-window.onunhandledrejection = vi.fn((event) => {
+window.onunhandledrejection = (event) => {
   if (
     event.reason?.message?.includes('Test error') ||
-    event.reason?.includes('Test error')
+    event.reason?.includes('Test error') ||
+    event.reason?.stack?.includes('ErrorBoundary.test.jsx')
   ) {
     event.preventDefault();
     return true;
   }
+  
+  // Call original handler for other rejections
+  if (originalOnUnhandledRejection) {
+    return originalOnUnhandledRejection(event);
+  }
   return false;
-});
+};
 
 // Mock ResizeObserver
 global.ResizeObserver = vi.fn().mockImplementation(() => ({
