@@ -64,22 +64,18 @@ describe('ErrorBoundary', () => {
   });
 
   it('renders error message when child component throws', () => {
-    // Use a custom wrapper to catch the error
-    const ErrorWrapper = () => {
-      try {
-        return (
-          <ErrorBoundary>
-            <ThrowError shouldError={true} />
-          </ErrorBoundary>
-        );
-      } catch (error) {
-        // Error is caught by boundary, not here
-        return null;
-      }
-    };
-
-    render(<ErrorWrapper />);
+    // Suppress React error boundary warnings for this specific test
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    
+    render(
+      <ErrorBoundary>
+        <ThrowError shouldError={true} />
+      </ErrorBoundary>
+    );
 
     expect(screen.getByText('Something went wrong.')).toBeInTheDocument();
+    
+    // Restore console.error
+    consoleSpy.mockRestore();
   });
 });
