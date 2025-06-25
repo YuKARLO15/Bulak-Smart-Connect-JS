@@ -56,7 +56,7 @@ const AdminBirthAffidavitPreviewPage = ({ applicationId, currentUser }) => {
       if (!applicationId) setError('No application ID provided.');
       else if (!canView) setError('Unauthorized access');
     }
-    // eslint-disable-next-line
+     
   }, [applicationId, canView]);
 
   // Form field change handler
