@@ -48,9 +48,10 @@ describe('Accessibility tests', () => {
     
     const results = await axe(container);
     
-    // Save results to file for CI workflow
-    const fs = require('fs');
-    fs.writeFileSync('a11y-results.json', JSON.stringify(results, null, 2));
+    // Log results for debugging instead of writing to file
+    if (results.violations.length > 0) {
+      console.log('Accessibility violations found:', JSON.stringify(results.violations, null, 2));
+    }
     
     expect(results).toHaveNoViolations();
   });
