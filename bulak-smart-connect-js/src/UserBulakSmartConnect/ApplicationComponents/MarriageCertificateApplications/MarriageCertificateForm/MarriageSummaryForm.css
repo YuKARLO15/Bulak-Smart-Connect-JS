@@ -191,28 +191,86 @@
     right: 10px;
     font-size: 11px;
     font-weight: normal;
+
   }
+  .ActionButtonContainerMSummary {
+  position: fixed;
+  right: 38%;
+  top: 95%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  z-index: 1000;
+
+}
+
+.ActionButtonMSummary {
+  border-radius: 10% !important; /* Make buttons circular */
+  width: 100px !important;
+  height: 45px !important;
+  min-width: unset !important;
+  padding: 0 !important;
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2) !important;
+  transition: all 0.2s ease !important;
   
-  .ActionsContainerMSummary {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 20px;
-  }
-  
-  .BackButtonMSummary {
-    padding: 8px 16px;
-    background-color: #184a5b;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: bold;
-  }
-  
-  .BackButtonMSummary:hover {
-    background-color: #184a6a;
-  }
-  
+}
+
+.ActionButtonMSummary .MuiButton-startIcon {
+  margin: 0 !important;
+}
+
+.ActionButtonMSummary .MuiButton-startIcon svg {
+  font-size: 24px !important;
+}
+
+/* Hide text, only show on hover */
+.ActionButtonMSummary .MuiButton-endIcon,
+.ActionButtonMSummary .MuiButton-startIcon + span {
+  display: none;
+}
+
+/* Show tooltip on hover */
+.ActionButtonMSummary::after {
+  content: attr(aria-label);
+  position: absolute;
+  right: 70px;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 14px;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.2s;
+  pointer-events: none;
+}
+
+.ActionButtonMSummary:hover::after {
+  opacity: 1;
+}
+
+/* Button specific styles */
+.cancelButton.ActionButtonMSummary {
+  background-color: #d32f2f !important;
+}
+
+.backButton.ActionButtonMSummary {
+  background-color: #f5f5f5 !important;
+  color: #333 !important;
+}
+
+.modifyButton.ActionButtonMSummary {
+  background-color: #5c8d99 !important;
+  color: white !important;
+}
+
+.doneButton.ActionButtonMSummary {
+  background-color: #0f4c5c !important;
+  color: white !important;
+}
+
+
   @media print {
     .MarriageSummaryContainerMSummary {
       margin: 0;
@@ -224,6 +282,9 @@
     .BackButtonMSummary, .ActionsContainerMSummary {
       display: none;
     }
+     .ActionButtonContainerMSummary {
+    display: none !important;
+  }
     
     table, td, th {
       border-color: #000 !important;
