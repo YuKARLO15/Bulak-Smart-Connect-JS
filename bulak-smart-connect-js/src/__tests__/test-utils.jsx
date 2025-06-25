@@ -1,24 +1,29 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
-import { AuthProvider } from '../context/AuthContext';
+import { vi } from 'vitest';
+
+// Create a proper mock AuthContext
+const AuthContext = React.createContext(null);
 
 // Mock AuthProvider for tests
 const MockAuthProvider = ({ children, value }) => {
   const defaultValue = {
-    login: jest.fn(),
-    logout: jest.fn(),
-    hasRole: jest.fn(() => false),
+    login: vi.fn().mockResolvedValue({ success: true }),
+    logout: vi.fn(),
+    hasRole: vi.fn(() => false),
     isStaff: false,
     user: null,
     isAuthenticated: false,
+    loading: false,
+    error: null,
     ...value,
   };
 
   return (
-    <AuthProvider value={defaultValue}>
+    <AuthContext.Provider value={defaultValue}>
       {children}
-    </AuthProvider>
+    </AuthContext.Provider>
   );
 };
 

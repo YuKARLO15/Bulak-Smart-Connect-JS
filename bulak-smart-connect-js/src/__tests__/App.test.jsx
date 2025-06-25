@@ -1,24 +1,23 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
+import { vi } from 'vitest';
 import App from '../App';
-import * as AuthContext from '../context/AuthContext';
 
 // Mock the AuthContext
 const mockAuthContextValue = {
-  login: jest.fn(),
-  logout: jest.fn(),
-  hasRole: jest.fn(() => false),
+  login: vi.fn(),
+  logout: vi.fn(),
+  hasRole: vi.fn(() => false),
   isStaff: false,
   user: null,
   isAuthenticated: false,
+  loading: false,
+  error: null,
 };
 
-jest.spyOn(AuthContext, 'useAuth').mockReturnValue(mockAuthContextValue);
-
-// Mock the AuthProvider
-jest.mock('../context/AuthContext', () => ({
-  ...jest.requireActual('../context/AuthContext'),
+// Mock the AuthProvider and useAuth hook
+vi.mock('../context/AuthContext', () => ({
   AuthProvider: ({ children }) => children,
   useAuth: () => mockAuthContextValue,
 }));

@@ -1,22 +1,27 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
+import { vi } from 'vitest';
 import LogInCard from '../LogInComponents/LogInCard';
-import * as AuthContext from '../context/AuthContext';
 
 // Mock the AuthContext
-const mockLogin = jest.fn();
+const mockLogin = vi.fn();
 const mockAuthContextValue = {
   login: mockLogin,
-  hasRole: jest.fn(() => false),
+  hasRole: vi.fn(() => false),
   isStaff: false,
   user: null,
   isAuthenticated: false,
-  logout: jest.fn(),
+  logout: vi.fn(),
+  loading: false,
+  error: null,
 };
 
 // Mock the useAuth hook
-jest.spyOn(AuthContext, 'useAuth').mockReturnValue(mockAuthContextValue);
+vi.mock('../context/AuthContext', () => ({
+  useAuth: () => mockAuthContextValue,
+  AuthProvider: ({ children }) => children,
+}));
 
 const renderWithRouter = (component) => {
   return render(
@@ -28,7 +33,7 @@ const renderWithRouter = (component) => {
 
 describe('LogInCard component', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('renders login form elements', () => {
