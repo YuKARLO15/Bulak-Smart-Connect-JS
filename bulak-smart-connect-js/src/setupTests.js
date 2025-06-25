@@ -11,11 +11,11 @@ vi.mock('*.scss', () => ({}));
 vi.mock('*.sass', () => ({}));
 vi.mock('*.less', () => ({}));
 
-// Fix window.matchMedia mock
+// Fix window.matchMedia mock - ensure it returns false by default
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
   value: vi.fn((query) => ({
-    matches: false,
+    matches: false, // Default to false
     media: query,
     onchange: null,
     addListener: vi.fn(),
@@ -29,7 +29,7 @@ Object.defineProperty(window, 'matchMedia', {
 // Mock navigator.standalone for PWA tests
 Object.defineProperty(window.navigator, 'standalone', {
   writable: true,
-  value: false,
+  value: false, // Default to false
 });
 
 // Mock beforeinstallprompt and other events
@@ -55,7 +55,8 @@ console.error = (...args) => {
     typeof args[0] === 'string' && 
     (args[0].includes('Error boundaries') || 
      args[0].includes('The above error occurred') ||
-     args[0].includes('React will try to recreate'))
+     args[0].includes('React will try to recreate') ||
+     args[0].includes('Test error'))
   ) {
     return;
   }
@@ -73,19 +74,29 @@ console.warn = (...args) => {
   originalWarn.apply(console, args);
 };
 
-// Global error handler to catch uncaught errors in tests
+// Enhanced global error handler to catch uncaught errors in tests
 window.onerror = vi.fn((message, source, lineno, colno, error) => {
   // Return true to prevent the error from being logged to console
-  if (error?.message?.includes('Test error') || 
-      error?.message?.includes('React is not defined')) {
+  if (
+    error?.message?.includes('Test error') || 
+    error?.message?.includes('React is not defined') ||
+    message?.includes('Test error')
+  ) {
     return true;
   }
   return false;
 });
 
+// Enhanced unhandled rejection handler
 window.onunhandledrejection = vi.fn((event) => {
-  event.preventDefault();
-  return true;
+  if (
+    event.reason?.message?.includes('Test error') ||
+    event.reason?.includes('Test error')
+  ) {
+    event.preventDefault();
+    return true;
+  }
+  return false;
 });
 
 // Mock ResizeObserver
@@ -111,15 +122,6 @@ HTMLCanvasElement.prototype.getContext = vi.fn();
 
 // Mock fetch for network requests
 global.fetch = vi.fn();
-
-// Mock the usePWA hook directly
-vi.mock('./hooks/usePWA', () => ({
-  default: () => ({
-    isInstalled: false,
-    deferredPrompt: null,
-    showInstallPrompt: vi.fn(),
-  }),
-}));
 
 // Mock React Scan
 vi.mock('react-scan', () => ({

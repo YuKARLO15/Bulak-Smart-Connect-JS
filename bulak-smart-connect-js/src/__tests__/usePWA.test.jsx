@@ -24,11 +24,11 @@ const usePWA = () => {
   };
 };
 
-// Mock window.matchMedia
+// Mock window.matchMedia - ensure it returns false by default
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
   value: vi.fn((query) => ({
-    matches: query === '(display-mode: standalone)', // Only match standalone
+    matches: false, // Always return false initially
     media: query,
     onchange: null,
     addListener: vi.fn(),
@@ -39,7 +39,7 @@ Object.defineProperty(window, 'matchMedia', {
   })),
 });
 
-// Mock navigator
+// Mock navigator.standalone - ensure it's false by default
 Object.defineProperty(window.navigator, 'standalone', {
   writable: true,
   value: false,
@@ -50,6 +50,19 @@ describe('usePWA', () => {
     vi.clearAllMocks();
     window.addEventListener = vi.fn();
     window.removeEventListener = vi.fn();
+    
+    // Reset mocks to default state
+    window.navigator.standalone = false;
+    window.matchMedia = vi.fn((query) => ({
+      matches: false,
+      media: query,
+      onchange: null,
+      addListener: vi.fn(),
+      removeListener: vi.fn(),
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+      dispatchEvent: vi.fn(),
+    }));
   });
 
   it('initializes with correct default values', () => {
@@ -61,9 +74,18 @@ describe('usePWA', () => {
   });
 
   it('detects standalone mode', () => {
-    // Set up standalone mode
+    // Set up standalone mode BEFORE rendering the hook
     window.navigator.standalone = true;
-    window.matchMedia = vi.fn(() => ({ matches: true }));
+    window.matchMedia = vi.fn((query) => ({ 
+      matches: query === '(display-mode: standalone)',
+      media: query,
+      onchange: null,
+      addListener: vi.fn(),
+      removeListener: vi.fn(),
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+      dispatchEvent: vi.fn(),
+    }));
     
     const { result } = renderHook(() => usePWA());
 

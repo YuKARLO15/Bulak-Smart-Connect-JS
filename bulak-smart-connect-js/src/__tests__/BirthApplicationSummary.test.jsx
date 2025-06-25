@@ -10,17 +10,16 @@ const MockBirthApplicationSummary = ({ mockData = null, shouldTimeout = false })
   const [error, setError] = React.useState(null);
 
   React.useEffect(() => {
-    // Simulate actual localStorage behavior
-    const mockLocalStorage = window.localStorage;
-    
     const timeoutId = setTimeout(() => {
       if (shouldTimeout) {
         setLoading(true); // Keep loading forever
         return;
       }
 
+      // Always call localStorage.getItem to simulate real behavior
+      const storedData = window.localStorage.getItem('applications');
+      
       if (mockData) {
-        mockLocalStorage.getItem('applications');
         setData(mockData);
         setLoading(false);
       } else {
@@ -114,12 +113,15 @@ describe('BirthApplicationSummary', () => {
   });
 
   it('loads application data from localStorage', async () => {
-    renderWithRouter(<MockBirthApplicationSummary shouldTimeout={true} />);
+    renderWithRouter(<MockBirthApplicationSummary mockData={{ id: 'test-123' }} />);
     
-    // Wait for the effect to run
+    // Wait for the component to finish loading and call localStorage
     await waitFor(() => {
-      expect(mockLocalStorage.getItem).toHaveBeenCalled();
-    }, { timeout: 100 });
+      expect(screen.getByText(/birth certificate application summary/i)).toBeInTheDocument();
+    });
+    
+    // localStorage.getItem should have been called during the effect
+    expect(mockLocalStorage.getItem).toHaveBeenCalledWith('applications');
   });
 
   it('handles missing application data gracefully', async () => {
