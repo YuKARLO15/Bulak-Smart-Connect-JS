@@ -3,7 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import { Button, Typography, Box } from '@mui/material';
 import './MarriageLicenseSummary.css';
 import EditIcon from '@mui/icons-material/Edit';
-
+import CheckIcon from '@mui/icons-material/Check';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import CancelIcon from '@mui/icons-material/Cancel';
 const MarriageLicenseSummary = () => {
   const [formData, setFormData] = useState({});
   const [loading, setLoading] = useState(true);
@@ -660,48 +662,41 @@ useEffect(() => {
           </tbody>
         </table>
       </div>
-      
-      <div className="ButtonContainerMLSummary">
-        <Button 
-          variant="contained" 
-          onClick={handleBackToForm}
-          className="BackButtonMLSummary"
-          sx={{
-            backgroundColor: '#e0e0e0',
-            color: '#333333'
-          }}
-        >
-          Back to Form
-        </Button>
-
-          <Button 
+      // Replace the ButtonContainerMLSummary div with this code
+<div className="ActionButtonContainerMLSummary">
+  <Button
+    variant="contained"
+    color="error"
+    startIcon={<CancelIcon />}
+    onClick={() => setConfirmCancelDialog ? setConfirmCancelDialog(true) : navigate('/ApplicationForm')}
+    className="ActionButtonMLSummary cancelButton"
+    aria-label="Cancel Application"
+  >
+    Cancel
+  </Button>
+  
+ 
+  <Button
     variant="contained" 
-    onClick={handleModify}
-    className="ModifyButtonMLSummary"
     startIcon={<EditIcon />}
-    sx={{
-      backgroundColor: '#8aacb5',
-      color: 'white',
-      marginRight: '10px',
-      '&:hover': {
-        backgroundColor: '#6d8a91',
-      }
-    }}
+    onClick={handleModify}
+    className="ActionButtonMLSummary modifyButton"
+    aria-label="Modify Form"
   >
     Modify
   </Button>
-        <Button 
-          variant="contained" 
-          onClick={handleSubmit}
-          className="SubmitButtonMLSummary"
-          sx={{
-            backgroundColor: '#184a5b', 
-            color: 'white'
-          }}
-        >
-          Done
-        </Button>
-      </div>
+  
+  <Button
+    variant="contained"
+    startIcon={<CheckIcon />}
+    onClick={handleSubmit}
+    className="ActionButtonMLSummary doneButton"
+    aria-label="Done"
+  >
+    Done
+  </Button>
+</div>
+      
     </div>
   );
 };

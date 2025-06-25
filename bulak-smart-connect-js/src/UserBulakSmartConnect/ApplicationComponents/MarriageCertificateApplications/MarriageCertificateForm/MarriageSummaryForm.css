@@ -234,7 +234,7 @@
 .ActionButtonMSummary::after {
   content: attr(aria-label);
   position: absolute;
-  right: 70px;
+  bottom:60px;
   background-color: rgba(0, 0, 0, 0.7);
   color: white;
   padding: 5px 10px;

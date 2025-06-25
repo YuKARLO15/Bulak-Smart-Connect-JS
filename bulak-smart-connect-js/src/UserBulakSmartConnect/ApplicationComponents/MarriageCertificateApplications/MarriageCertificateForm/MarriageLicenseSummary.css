@@ -381,6 +381,87 @@
   animation: wiggle 0.5s ease;
 }
 
+.ActionButtonContainerMLSummary {
+  position: fixed;
+  right: 38%;
+  top: 95%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  z-index: 1000;
+}
+
+.ActionButtonMLSummary {
+  border-radius: 10% !important; /* Make buttons circular */
+  width: 100px !important;
+  height: 45px !important;
+  min-width: unset !important;
+  padding: 0 !important;
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2) !important;
+  transition: all 0.2s ease !important;
+}
+
+.ActionButtonMLSummary .MuiButton-startIcon {
+  margin: 0 !important;
+}
+
+.ActionButtonMLSummary .MuiButton-startIcon svg {
+  font-size: 24px !important;
+}
+
+/* Hide text, only show on hover */
+.ActionButtonMLSummary .MuiButton-endIcon,
+.ActionButtonMLSummary .MuiButton-startIcon + span {
+  display: none;
+}
+
+/* Show tooltip on hover */
+.ActionButtonMLSummary::after {
+  content: attr(aria-label);
+  position: absolute;
+  bottom:60px;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 14px;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.2s;
+  pointer-events: none;
+}
+
+.ActionButtonMLSummary:hover::after {
+  opacity: 1;
+}
+
+/* Button specific styles */
+.cancelButton.ActionButtonMLSummary {
+  background-color: #d32f2f !important;
+}
+
+.backButton.ActionButtonMLSummary {
+  background-color: #f5f5f5 !important;
+  color: #333 !important;
+}
+
+.modifyButton.ActionButtonMLSummary {
+  background-color: #5c8d99 !important;
+  color: white !important;
+}
+
+.doneButton.ActionButtonMLSummary {
+  background-color: #0f4c5c !important;
+  color: white !important;
+}
+
+/* Hide during print */
+@media print {
+  .ActionButtonContainerMLSummary {
+    display: none !important;
+  }
+}
 @keyframes wiggle {
   0%, 100% { transform: rotate(0deg); }
   25% { transform: rotate(-10deg); }
