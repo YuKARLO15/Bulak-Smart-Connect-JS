@@ -304,6 +304,13 @@
 .MarriageCertificateFormButton {
   margin-top: 1rem !important;
   margin-right: 1rem !important;
+background-color: #1c4d5a !important;
+}
+.MarriageCertificateFormButtonContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
 }
 
 
