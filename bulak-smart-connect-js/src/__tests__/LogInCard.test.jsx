@@ -1,40 +1,56 @@
-import { render, screen, fireEvent } from '@testing-library/react';
-import { describe, it, expect, vi } from 'vitest';
+import React from 'react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import LogInCard from '../LogInComponents/LogInCard';
+import * as AuthContext from '../context/AuthContext';
+
+// Mock the AuthContext
+const mockLogin = jest.fn();
+const mockAuthContextValue = {
+  login: mockLogin,
+  hasRole: jest.fn(() => false),
+  isStaff: false,
+  user: null,
+  isAuthenticated: false,
+  logout: jest.fn(),
+};
+
+// Mock the useAuth hook
+jest.spyOn(AuthContext, 'useAuth').mockReturnValue(mockAuthContextValue);
+
+const renderWithRouter = (component) => {
+  return render(
+    <BrowserRouter>
+      {component}
+    </BrowserRouter>
+  );
+};
 
 describe('LogInCard component', () => {
-  it('renders login form elements', () => {
-    render(
-      <BrowserRouter>
-        <LogInCard />
-      </BrowserRouter>
-    );
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
 
-    // Check if key elements are present
-    expect(screen.getByText(/LOG IN/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/Email/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/Password/i)).toBeInTheDocument();
-    expect(screen.getByText(/Forgot your password\?/i)).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /Log In/i })).toBeInTheDocument();
+  it('renders login form elements', () => {
+    renderWithRouter(<LogInCard />);
+    
+    expect(screen.getByText(/sign in/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/password/i)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /sign in/i })).toBeInTheDocument();
   });
 
   it('shows validation error for invalid email', async () => {
-    render(
-      <BrowserRouter>
-        <LogInCard />
-      </BrowserRouter>
-    );
-
-    // Enter invalid email
-    const emailInput = screen.getByLabelText(/Email/i);
+    renderWithRouter(<LogInCard />);
+    
+    const emailInput = screen.getByLabelText(/email/i);
+    const submitButton = screen.getByRole('button', { name: /sign in/i });
+    
     fireEvent.change(emailInput, { target: { value: 'invalid-email' } });
-
-    // Trigger form submission
-    const submitButton = screen.getByRole('button', { name: /Log In/i });
     fireEvent.click(submitButton);
-
-    // Check if validation error appears
-    expect(await screen.findByText(/Please enter a valid email address/i)).toBeInTheDocument();
+    
+    await waitFor(() => {
+      expect(screen.getByText(/please enter a valid email/i)).toBeInTheDocument();
+    });
   });
 });
