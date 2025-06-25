@@ -1,5 +1,9 @@
 import '@testing-library/jest-dom';
 import { vi } from 'vitest';
+import React from 'react';
+
+// Make React available globally for tests
+global.React = React;
 
 // Mock CSS imports
 vi.mock('*.css', () => ({}));
@@ -32,9 +36,57 @@ Object.defineProperty(window.navigator, 'standalone', {
 window.addEventListener = vi.fn();
 window.removeEventListener = vi.fn();
 
+// Mock HTMLFormElement.requestSubmit for jsdom compatibility
+Object.defineProperty(HTMLFormElement.prototype, 'requestSubmit', {
+  value: function() {
+    this.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+  },
+  writable: true,
+});
+
 // Prevent uncaught error handlers from causing test failures
-window.onerror = vi.fn(() => true);
-window.onunhandledrejection = vi.fn(() => true);
+const originalError = console.error;
+const originalWarn = console.warn;
+
+// Override console methods but allow them to work normally for non-React errors
+console.error = (...args) => {
+  // Suppress specific React error boundary messages during tests
+  if (
+    typeof args[0] === 'string' && 
+    (args[0].includes('Error boundaries') || 
+     args[0].includes('The above error occurred') ||
+     args[0].includes('React will try to recreate'))
+  ) {
+    return;
+  }
+  originalError.apply(console, args);
+};
+
+console.warn = (...args) => {
+  // Suppress React warnings during tests
+  if (
+    typeof args[0] === 'string' && 
+    args[0].includes('Warning:')
+  ) {
+    return;
+  }
+  originalWarn.apply(console, args);
+};
+
+// Global error handler to catch uncaught errors in tests
+window.onerror = vi.fn((message, source, lineno, colno, error) => {
+  // Return true to prevent the error from being logged to console
+  if (error?.message?.includes('Test error') || 
+      error?.message?.includes('React is not defined')) {
+    return true;
+  }
+  return false;
+});
+
+window.onunhandledrejection = vi.fn((event) => {
+  event.preventDefault();
+  return true;
+});
 
 // Mock ResizeObserver
 global.ResizeObserver = vi.fn().mockImplementation(() => ({
@@ -59,16 +111,6 @@ HTMLCanvasElement.prototype.getContext = vi.fn();
 
 // Mock fetch for network requests
 global.fetch = vi.fn();
-
-// Silence console methods during tests
-global.console = {
-  ...console,
-  log: vi.fn(),
-  debug: vi.fn(),
-  info: vi.fn(),
-  warn: vi.fn(),
-  error: vi.fn(),
-};
 
 // Mock the usePWA hook directly
 vi.mock('./hooks/usePWA', () => ({

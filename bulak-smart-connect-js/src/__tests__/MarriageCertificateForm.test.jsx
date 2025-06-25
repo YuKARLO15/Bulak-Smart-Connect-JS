@@ -3,16 +3,28 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import { vi } from 'vitest';
 
-// Create a simple mock component since the actual component might not exist
+// Create a mock component that handles form submission
 const MockMarriageCertificateForm = () => {
+  const [submitted, setSubmitted] = React.useState(false);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Simulate localStorage interaction
+    window.localStorage.setItem('marriageApplication', JSON.stringify({
+      submittedAt: new Date().toISOString()
+    }));
+    setSubmitted(true);
+  };
+
   return (
     <div>
       <h1>Marriage Certificate Application</h1>
-      <form>
+      <form onSubmit={handleSubmit}>
         <button type="submit">Submit Application</button>
         <button type="button">Cancel</button>
       </form>
       <div>Please fill out all required fields</div>
+      {submitted && <div>Application submitted successfully!</div>}
     </div>
   );
 };
@@ -45,6 +57,14 @@ vi.mock('react-router-dom', async () => {
     useSearchParams: () => [new URLSearchParams(), vi.fn()],
     useNavigate: () => vi.fn(),
   };
+});
+
+// Mock form submission methods for jsdom
+Object.defineProperty(HTMLFormElement.prototype, 'requestSubmit', {
+  value: function() {
+    this.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+  },
+  writable: true,
 });
 
 const renderWithRouter = (component) => {

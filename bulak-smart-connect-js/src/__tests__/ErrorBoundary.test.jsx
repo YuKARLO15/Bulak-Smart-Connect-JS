@@ -14,10 +14,7 @@ class ErrorBoundary extends React.Component {
   }
 
   componentDidCatch(error, errorInfo) {
-    // Don't log to console in tests
-    if (process.env.NODE_ENV !== 'test') {
-      console.error('Error caught by boundary:', error, errorInfo);
-    }
+    // Silent in tests
   }
 
   render() {
@@ -38,19 +35,16 @@ const ThrowError = ({ shouldError }) => {
 };
 
 describe('ErrorBoundary', () => {
-  // Suppress console.error and window.onerror for this test
+  // Suppress error logging for clean test output
   const originalError = console.error;
-  const originalOnError = window.onerror;
   
   beforeAll(() => {
+    // Completely silence console.error for error boundary tests
     console.error = vi.fn();
-    // Prevent jsdom from treating the error as uncaught
-    window.onerror = vi.fn(() => true);
   });
 
   afterAll(() => {
     console.error = originalError;
-    window.onerror = originalOnError;
   });
 
   it('renders children when there is no error', () => {
@@ -64,9 +58,7 @@ describe('ErrorBoundary', () => {
   });
 
   it('renders error message when child component throws', () => {
-    // Suppress React error boundary warnings for this specific test
-    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
-    
+    // This test should pass without throwing uncaught errors
     render(
       <ErrorBoundary>
         <ThrowError shouldError={true} />
@@ -74,8 +66,5 @@ describe('ErrorBoundary', () => {
     );
 
     expect(screen.getByText('Something went wrong.')).toBeInTheDocument();
-    
-    // Restore console.error
-    consoleSpy.mockRestore();
   });
 });
