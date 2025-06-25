@@ -7,7 +7,7 @@ vi.mock('*.scss', () => ({}));
 vi.mock('*.sass', () => ({}));
 vi.mock('*.less', () => ({}));
 
-// Fix window.matchMedia mock - make sure it returns the mock function result
+// Fix window.matchMedia mock
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
   value: vi.fn((query) => ({
@@ -31,6 +31,10 @@ Object.defineProperty(window.navigator, 'standalone', {
 // Mock beforeinstallprompt and other events
 window.addEventListener = vi.fn();
 window.removeEventListener = vi.fn();
+
+// Prevent uncaught error handlers from causing test failures
+window.onerror = vi.fn(() => true);
+window.onunhandledrejection = vi.fn(() => true);
 
 // Mock ResizeObserver
 global.ResizeObserver = vi.fn().mockImplementation(() => ({

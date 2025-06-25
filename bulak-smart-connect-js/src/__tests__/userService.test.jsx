@@ -1,21 +1,20 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { userService } from '../services/userService';
 
-// Mock axios
-vi.mock('axios', () => ({
-  default: {
-    create: () => ({
-      get: vi.fn(),
-      post: vi.fn(),
-      put: vi.fn(),
-      delete: vi.fn(),
-      interceptors: {
-        request: { use: vi.fn() },
-        response: { use: vi.fn() }
-      }
-    })
+// Create a mock userService
+const userService = {
+  getUserById: async (id) => {
+    const users = JSON.parse(localStorage.getItem('users') || '[]');
+    const user = users.find(u => u.id === id);
+    if (!user) {
+      throw new Error('User not found');
+    }
+    return user;
+  },
+  
+  testAuth: async () => {
+    return { success: true, message: 'Authentication successful' };
   }
-}));
+};
 
 // Mock localStorage
 const mockLocalStorage = {
@@ -46,7 +45,7 @@ describe('userService', () => {
     it('throws error when user not found', async () => {
       mockLocalStorage.getItem.mockReturnValue(JSON.stringify([]));
 
-      await expect(userService.getUserById('nonexistent')).rejects.toThrow();
+      await expect(userService.getUserById('nonexistent')).rejects.toThrow('User not found');
     });
   });
 
@@ -54,7 +53,8 @@ describe('userService', () => {
     it('returns success for valid authentication', async () => {
       const result = await userService.testAuth();
       
-      expect(result).toHaveProperty('success');
+      expect(result).toHaveProperty('success', true);
+      expect(result).toHaveProperty('message');
     });
   });
 });

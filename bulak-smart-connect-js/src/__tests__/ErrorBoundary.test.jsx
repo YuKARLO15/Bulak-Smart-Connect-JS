@@ -14,7 +14,10 @@ class ErrorBoundary extends React.Component {
   }
 
   componentDidCatch(error, errorInfo) {
-    console.error('Error caught by boundary:', error, errorInfo);
+    // Don't log to console in tests
+    if (process.env.NODE_ENV !== 'test') {
+      console.error('Error caught by boundary:', error, errorInfo);
+    }
   }
 
   render() {
@@ -35,14 +38,19 @@ const ThrowError = ({ shouldError }) => {
 };
 
 describe('ErrorBoundary', () => {
-  // Suppress console.error for this test
+  // Suppress console.error and window.onerror for this test
   const originalError = console.error;
+  const originalOnError = window.onerror;
+  
   beforeAll(() => {
     console.error = vi.fn();
+    // Prevent jsdom from treating the error as uncaught
+    window.onerror = vi.fn(() => true);
   });
 
   afterAll(() => {
     console.error = originalError;
+    window.onerror = originalOnError;
   });
 
   it('renders children when there is no error', () => {
@@ -56,11 +64,21 @@ describe('ErrorBoundary', () => {
   });
 
   it('renders error message when child component throws', () => {
-    render(
-      <ErrorBoundary>
-        <ThrowError shouldError={true} />
-      </ErrorBoundary>
-    );
+    // Use a custom wrapper to catch the error
+    const ErrorWrapper = () => {
+      try {
+        return (
+          <ErrorBoundary>
+            <ThrowError shouldError={true} />
+          </ErrorBoundary>
+        );
+      } catch (error) {
+        // Error is caught by boundary, not here
+        return null;
+      }
+    };
+
+    render(<ErrorWrapper />);
 
     expect(screen.getByText('Something went wrong.')).toBeInTheDocument();
   });
