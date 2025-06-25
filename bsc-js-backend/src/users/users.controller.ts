@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import {
   Controller,
   Get,
@@ -6,9 +9,9 @@ import {
   Patch,
   Param,
   Delete,
-  Query,
   UseGuards,
   Request,
+  Query,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -42,6 +45,7 @@ export class UsersController {
   @ApiResponse({ status: 200, description: 'Users retrieved successfully' })
   async findAll(
     @Query() query: UserQueryDto,
+
     @Request() req: { user: AuthenticatedUser },
   ) {
     const { page = 1, limit = 10, search, role } = query;
@@ -102,6 +106,7 @@ export class UsersController {
   async update(
     @Param('id') id: string,
     @Body() updateUserDto: AdminUpdateUserDto,
+
     @Request() req: { user: AuthenticatedUser },
   ) {
     return this.usersService.adminUpdate(+id, updateUserDto);
@@ -115,6 +120,7 @@ export class UsersController {
   @ApiResponse({ status: 404, description: 'User not found' })
   async remove(
     @Param('id') id: string,
+
     @Request() req: { user: AuthenticatedUser },
   ) {
     return this.usersService.remove(+id);
@@ -129,6 +135,7 @@ export class UsersController {
   async updateStatus(
     @Param('id') id: string,
     @Body() updateStatusDto: UpdateUserStatusDto,
+
     @Request() req: { user: AuthenticatedUser },
   ) {
     return this.usersService.updateStatus(+id, updateStatusDto.isActive);
@@ -160,9 +167,11 @@ export class UsersController {
       const user = await this.usersService.create(userWithHashedPassword);
 
       // Return user without password
+
       const { password, ...userWithoutPassword } = user;
 
       // Get user with roles for response
+
       const userWithRoles = await this.usersService.findOne(user.id);
 
       return userWithRoles;

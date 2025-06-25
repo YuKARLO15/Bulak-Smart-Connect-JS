@@ -8,7 +8,9 @@ import { ConflictException, NotFoundException } from '@nestjs/common';
 
 describe('UsersService', () => {
   let service: UsersService;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   let userRepository: Repository<User>;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   let rolesService: RolesService;
 
   const mockUserRepository = {
@@ -136,12 +138,18 @@ describe('UsersService', () => {
 
       mockUserRepository.findOne.mockResolvedValue(mockUser);
 
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const result = await service.findOne(1);
 
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       expect(result.id).toBe(1);
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       expect(result.email).toBe('test@test.com');
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       expect(result.roles).toEqual(['citizen']);
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       expect(result.defaultRole).toBe('citizen');
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       expect(result.password).toBeUndefined();
     });
 

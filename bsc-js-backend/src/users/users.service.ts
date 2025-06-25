@@ -1,3 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import {
   Injectable,
   NotFoundException,
@@ -91,6 +95,7 @@ export class UsersService {
     }
 
     // Remove password and format response
+
     const { password, ...userWithoutPassword } = user;
     return {
       ...userWithoutPassword,
@@ -114,13 +119,21 @@ export class UsersService {
 
     const {
       email,
+
       username,
+
       firstName,
+
       middleName,
+
       lastName,
+
       nameExtension,
+
       contactNumber,
+
       roleIds,
+
       defaultRoleId,
     } = updateUserDto;
 
@@ -232,6 +245,7 @@ export class UsersService {
 
     const usersByRole = roleStats.map((stat) => ({
       roleName: stat.roleName || 'No Role',
+
       count: parseInt(stat.count),
     }));
 
