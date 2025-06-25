@@ -28,7 +28,7 @@ export enum ApplicationStatus {
   REJECTED = 'Rejected',
   DECLINE = 'Decline',
   READY_FOR_PICKUP = 'Ready for Pickup',
-  REQUIRES_ADDITIONAL_INFO = 'Requires Additional Info', 
+  REQUIRES_ADDITIONAL_INFO = 'Requires Additional Info',
 }
 
 @Entity('document_applications')
@@ -84,7 +84,7 @@ export class DocumentApplication {
   files: DocumentFile[];
 
   @OneToMany(() => ApplicationStatusHistory, (history) => history.application, {
-    cascade: false, 
+    cascade: false,
     eager: false,
   })
   statusHistory: ApplicationStatusHistory[];

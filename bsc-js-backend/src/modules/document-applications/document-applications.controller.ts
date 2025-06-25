@@ -20,8 +20,8 @@ import { UpdateDocumentApplicationDto } from './dto/update-document-application.
 import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../../auth/guards/roles.guard';
 import { Roles } from '../../auth/decorators/roles.decorator';
-import { User } from '../../auth/decorators/user.decorator'; 
-import { AuthenticatedUser } from '../../auth/jwt.strategy'; 
+import { User } from '../../auth/decorators/user.decorator';
+import { AuthenticatedUser } from '../../auth/jwt.strategy';
 import { ApplicationStatus } from './entities/document-application.entity';
 import {
   ApiTags,
@@ -45,7 +45,7 @@ export class DocumentApplicationsController {
   @ApiResponse({ status: 201, description: 'Application created successfully' })
   async create(
     @Body() createDto: CreateDocumentApplicationDto,
-    @User() user: AuthenticatedUser, 
+    @User() user: AuthenticatedUser,
   ) {
     return this.documentApplicationsService.create(createDto, user.id);
   }
@@ -78,11 +78,11 @@ export class DocumentApplicationsController {
     @User() user: AuthenticatedUser,
   ) {
     console.log('Received document category:', documentCategory); // Debug log
-    
+
     if (!documentCategory) {
       throw new BadRequestException('Document category is required');
     }
-    
+
     return this.documentApplicationsService.uploadFile(
       id,
       file,
@@ -95,11 +95,11 @@ export class DocumentApplicationsController {
   @ApiOperation({ summary: 'Get user applications' })
   async findAll(
     @Query('status') status?: string,
-    @User() user?: AuthenticatedUser, 
+    @User() user?: AuthenticatedUser,
   ) {
-    const userId = user?.roles.some(role => role.name === 'admin')
+    const userId = user?.roles.some((role) => role.name === 'admin')
       ? undefined
-      : user?.id; 
+      : user?.id;
     return this.documentApplicationsService.findAll(userId);
   }
 
@@ -111,21 +111,26 @@ export class DocumentApplicationsController {
     @Param('id') id: string,
     @User() user: AuthenticatedUser,
   ) {
-    const userId = user.roles.some(role => role.name === 'admin') 
-      ? undefined  // Admin can see any application
-      : user.id;   // Regular users can only see their own
-    
-    console.log(`Getting files for application ${id}, user: ${user.email}, isAdmin: ${!userId}`);
-    
-    return await this.documentApplicationsService.getApplicationFiles(id, userId);
+    const userId = user.roles.some((role) => role.name === 'admin')
+      ? undefined // Admin can see any application
+      : user.id; // Regular users can only see their own
+
+    console.log(
+      `Getting files for application ${id}, user: ${user.email}, isAdmin: ${!userId}`,
+    );
+
+    return await this.documentApplicationsService.getApplicationFiles(
+      id,
+      userId,
+    );
   }
 
   @Get(':id')
   @ApiOperation({ summary: 'Get specific application' })
-  async findOne(@Param('id') id: string, @User() user: AuthenticatedUser) { 
-    const userId = user.roles.some(role => role.name === 'admin') 
+  async findOne(@Param('id') id: string, @User() user: AuthenticatedUser) {
+    const userId = user.roles.some((role) => role.name === 'admin')
       ? undefined
-      : user.id; 
+      : user.id;
     return this.documentApplicationsService.findOne(id, userId);
   }
 
@@ -133,11 +138,11 @@ export class DocumentApplicationsController {
   @ApiOperation({ summary: 'Get file download URL' })
   async getFileDownloadUrl(
     @Param('fileId') fileId: string,
-    @User() user: AuthenticatedUser, 
+    @User() user: AuthenticatedUser,
   ) {
-    const userId = user.roles.some(role => role.name === 'admin') 
+    const userId = user.roles.some((role) => role.name === 'admin')
       ? undefined
-      : user.id; 
+      : user.id;
     const url = await this.documentApplicationsService.getFileDownloadUrl(
       +fileId,
       userId,
@@ -150,13 +155,13 @@ export class DocumentApplicationsController {
   async update(
     @Param('id') id: string,
     @Body() updateDto: UpdateDocumentApplicationDto,
-    @User() user: AuthenticatedUser, 
+    @User() user: AuthenticatedUser,
   ) {
-    const userId = user.roles.some(role => role.name === 'admin') 
+    const userId = user.roles.some((role) => role.name === 'admin')
       ? undefined
-      : user.id; 
-    const adminId = user.roles.some(role => role.name === 'admin') 
-      ? user.id 
+      : user.id;
+    const adminId = user.roles.some((role) => role.name === 'admin')
+      ? user.id
       : undefined;
 
     return this.documentApplicationsService.update(
@@ -186,10 +191,10 @@ export class DocumentApplicationsController {
 
   @Delete(':id')
   @ApiOperation({ summary: 'Delete application' })
-  async remove(@Param('id') id: string, @User() user: AuthenticatedUser) { 
-    const userId = user.roles.some(role => role.name === 'admin') 
+  async remove(@Param('id') id: string, @User() user: AuthenticatedUser) {
+    const userId = user.roles.some((role) => role.name === 'admin')
       ? undefined
-      : user.id; 
+      : user.id;
     await this.documentApplicationsService.remove(id, userId);
     return { message: 'Application deleted successfully' };
   }

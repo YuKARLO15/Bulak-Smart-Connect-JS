@@ -183,10 +183,15 @@ describe('UsersController', () => {
         roles: [{ name: 'admin' }],
       };
 
-      const result = await controller.update('1', updateUserDto, { user: mockAuthUser });
+      const result = await controller.update('1', updateUserDto, {
+        user: mockAuthUser,
+      });
 
       expect(result).toEqual(mockUser);
-      expect(mockUsersService.adminUpdate).toHaveBeenCalledWith(1, updateUserDto);
+      expect(mockUsersService.adminUpdate).toHaveBeenCalledWith(
+        1,
+        updateUserDto,
+      );
     });
   });
 
@@ -228,7 +233,9 @@ describe('UsersController', () => {
         roles: [{ name: 'admin' }],
       };
 
-      const result = await controller.updateStatus('1', updateStatusDto, { user: mockAuthUser });
+      const result = await controller.updateStatus('1', updateStatusDto, {
+        user: mockAuthUser,
+      });
 
       expect(result).toEqual(mockUser);
       expect(mockUsersService.updateStatus).toHaveBeenCalledWith(1, false);

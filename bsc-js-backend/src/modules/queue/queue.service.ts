@@ -96,7 +96,7 @@ export class QueueService {
     queueDetails.queue = savedQueue;
 
     const savedDetails = await this.queueDetailsRepository.save(queueDetails);
-    
+
     console.log('Queue details saved with isGuest:', savedDetails.isGuest);
 
     // Get queue position
@@ -210,7 +210,7 @@ export class QueueService {
 
   async getQueuePosition(queueId: number) {
     console.log(`Getting position for queue ID: ${queueId}`);
-    
+
     const queue = await this.findOne(queueId);
     console.log(`Found queue:`, queue);
 
@@ -225,12 +225,12 @@ export class QueueService {
       console.log('Queue is currently being served');
       return { position: 0, status: 'serving' };
     }
-    
+
     if (queue.status === QueueStatus.COMPLETED) {
       console.log('Queue is completed');
       return { position: 0, status: 'completed' };
     }
-    
+
     if (queue.status !== QueueStatus.PENDING) {
       console.log(`Queue status is ${queue.status}, not pending`);
       return { position: 0, status: queue.status };
@@ -256,7 +256,7 @@ export class QueueService {
     // Total position = serving queues + pending queues ahead + 1
     const position = servingCount + pendingAheadCount + 1;
     console.log(`Calculated position: ${position}`);
-    
+
     return { position, status: 'pending' };
   }
   async getDetailsForMultipleQueues(queueIds: number[]) {
@@ -488,7 +488,7 @@ export class QueueService {
   async findByUserIdWithDetails(userId: string) {
     // Convert string userId to number since the database expects a number
     const userIdNumber = parseInt(userId, 10);
-    
+
     if (isNaN(userIdNumber)) {
       console.error('Invalid userId provided:', userId);
       return [];
@@ -496,14 +496,14 @@ export class QueueService {
 
     // First, let's find the user's queue details that contain the userId
     const userDetails = await this.queueDetailsRepository.find({
-      where: { 
-        userId: userIdNumber
+      where: {
+        userId: userIdNumber,
       },
       relations: ['queue'],
     });
 
     // Extract queue IDs from the details
-    const queueIds = userDetails.map(detail => detail.queue.id);
+    const queueIds = userDetails.map((detail) => detail.queue.id);
 
     if (queueIds.length === 0) {
       return [];
@@ -512,12 +512,12 @@ export class QueueService {
     // Find ALL queues (including completed ones) but filter them in the frontend
     // Change this to include completed queues temporarily so we can clear them
     return await this.queueRepository.find({
-      where: { 
+      where: {
         id: In(queueIds),
         // Remove status filter to get all queues including completed ones
       },
       relations: ['details'],
-      order: { createdAt: 'ASC' }
+      order: { createdAt: 'ASC' },
     });
   }
 }

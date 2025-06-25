@@ -79,8 +79,8 @@ describe('UsersService', () => {
         roleIds: [4], // Changed to citizen role ID
       };
 
-      const mockUser = { 
-        id: 1, 
+      const mockUser = {
+        id: 1,
         email: createUserDto.email,
         username: createUserDto.username,
         firstName: createUserDto.firstName,
@@ -111,9 +111,14 @@ describe('UsersService', () => {
         lastName: 'User',
       };
 
-      mockUserRepository.findOne.mockResolvedValue({ id: 1, email: 'existing@test.com' });
+      mockUserRepository.findOne.mockResolvedValue({
+        id: 1,
+        email: 'existing@test.com',
+      });
 
-      await expect(service.create(createUserDto)).rejects.toThrow(ConflictException);
+      await expect(service.create(createUserDto)).rejects.toThrow(
+        ConflictException,
+      );
     });
   });
 
@@ -243,25 +248,25 @@ describe('UsersService', () => {
       });
 
       mockUserRepository.find.mockResolvedValueOnce([
-        { 
-          id: 1, 
-          email: 'user1@test.com', 
+        {
+          id: 1,
+          email: 'user1@test.com',
           firstName: 'User',
           lastName: 'One',
           password: 'hashedPassword1',
           createdAt: new Date(),
           defaultRole: { name: 'citizen' },
-          roles: [{ name: 'citizen' }]
+          roles: [{ name: 'citizen' }],
         },
-        { 
-          id: 2, 
-          email: 'user2@test.com', 
+        {
+          id: 2,
+          email: 'user2@test.com',
           firstName: 'User',
           lastName: 'Two',
           password: 'hashedPassword2',
           createdAt: new Date(),
           defaultRole: { name: 'admin' },
-          roles: [{ name: 'admin' }]
+          roles: [{ name: 'admin' }],
         },
       ]);
 

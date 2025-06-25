@@ -9,7 +9,7 @@ import { Repository, Like, In } from 'typeorm';
 import { User } from './entities/user.entity';
 import { AdminUpdateUserDto } from '../auth/dto/update-user.dto'; // Import from auth module
 import { RolesService } from '../roles/roles.service';
-import { CreateUserDto } from './dto/create-user.dto'; 
+import { CreateUserDto } from './dto/create-user.dto';
 import * as bcrypt from 'bcrypt';
 
 interface FindAllOptions {
@@ -57,19 +57,16 @@ export class UsersService {
       queryBuilder.andWhere('roles.name = :role', { role });
     }
 
-    queryBuilder
-      .orderBy('user.createdAt', 'DESC')
-      .skip(skip)
-      .take(limit);
+    queryBuilder.orderBy('user.createdAt', 'DESC').skip(skip).take(limit);
 
     const [users, total] = await queryBuilder.getManyAndCount();
 
     // Remove passwords from response
-    const sanitizedUsers = users.map(user => {
+    const sanitizedUsers = users.map((user) => {
       const { password, ...userWithoutPassword } = user;
       return {
         ...userWithoutPassword,
-        roles: user.roles.map(role => role.name),
+        roles: user.roles.map((role) => role.name),
         defaultRole: user.defaultRole?.name || 'citizen',
       };
     });
@@ -97,16 +94,19 @@ export class UsersService {
     const { password, ...userWithoutPassword } = user;
     return {
       ...userWithoutPassword,
-      roles: user.roles.map(role => role.name),
+      roles: user.roles.map((role) => role.name),
       defaultRole: user.defaultRole?.name || 'citizen',
     };
   }
 
   // Admin-only update method
-  async adminUpdate(id: number, updateUserDto: AdminUpdateUserDto): Promise<any> {
-    const user = await this.usersRepository.findOne({ 
+  async adminUpdate(
+    id: number,
+    updateUserDto: AdminUpdateUserDto,
+  ): Promise<any> {
+    const user = await this.usersRepository.findOne({
       where: { id },
-      relations: ['roles']
+      relations: ['roles'],
     });
     if (!user) {
       throw new NotFoundException(`User with ID ${id} not found`);
@@ -152,19 +152,26 @@ export class UsersService {
     if (firstName) updateData.firstName = firstName;
     if (lastName) updateData.lastName = lastName;
     if (contactNumber) updateData.contactNumber = contactNumber;
-    
+
     // Handle optional fields
     if (middleName !== undefined) updateData.middleName = middleName;
     if (nameExtension !== undefined) updateData.nameExtension = nameExtension;
     if (defaultRoleId !== undefined) updateData.defaultRoleId = defaultRoleId;
 
     // Update name if name components changed
-    if (firstName || middleName !== undefined || lastName || nameExtension !== undefined) {
+    if (
+      firstName ||
+      middleName !== undefined ||
+      lastName ||
+      nameExtension !== undefined
+    ) {
       const newFirstName = firstName || user.firstName;
-      const newMiddleName = middleName !== undefined ? middleName : user.middleName;
+      const newMiddleName =
+        middleName !== undefined ? middleName : user.middleName;
       const newLastName = lastName || user.lastName;
-      const newNameExtension = nameExtension !== undefined ? nameExtension : user.nameExtension;
-      
+      const newNameExtension =
+        nameExtension !== undefined ? nameExtension : user.nameExtension;
+
       updateData.name = `${newFirstName} ${newMiddleName ? newMiddleName + ' ' : ''}${newLastName}${newNameExtension ? ' ' + newNameExtension : ''}`;
     }
 
@@ -223,7 +230,7 @@ export class UsersService {
       .groupBy('role.name')
       .getRawMany();
 
-    const usersByRole = roleStats.map(stat => ({
+    const usersByRole = roleStats.map((stat) => ({
       roleName: stat.roleName || 'No Role',
       count: parseInt(stat.count),
     }));
@@ -235,7 +242,7 @@ export class UsersService {
       relations: ['defaultRole', 'roles'],
     });
 
-    const sanitizedRecentUsers = recentUsers.map(user => {
+    const sanitizedRecentUsers = recentUsers.map((user) => {
       const { password, ...userWithoutPassword } = user;
       return userWithoutPassword as Omit<User, 'password'>;
     });
@@ -275,11 +282,13 @@ export class UsersService {
       contactNumber,
       name,
       roleIds,
-      defaultRoleId
+      defaultRoleId,
     } = createUserDto;
 
     // Generate full name if not provided
-    const fullName = name || `${firstName} ${middleName ? middleName + ' ' : ''}${lastName}${nameExtension ? ' ' + nameExtension : ''}`;
+    const fullName =
+      name ||
+      `${firstName} ${middleName ? middleName + ' ' : ''}${lastName}${nameExtension ? ' ' + nameExtension : ''}`;
 
     // Check if user already exists
     const existingUserByEmail = await this.usersRepository.findOne({

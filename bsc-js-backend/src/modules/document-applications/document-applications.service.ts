@@ -106,20 +106,27 @@ export class DocumentApplicationsService {
     // Use query builder to update only the application table directly
     // This avoids TypeORM cascade relationship issues
     const updateData: any = {};
-    
+
+    // Build update data object with only provided fields
     if (updateDto.status !== undefined) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       updateData.status = updateDto.status;
     }
     if (updateDto.statusMessage !== undefined) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       updateData.statusMessage = updateDto.statusMessage;
     }
     if (updateDto.formData !== undefined) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       updateData.formData = updateDto.formData;
     }
     if (updateDto.applicationSubtype !== undefined) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       updateData.applicationSubtype = updateDto.applicationSubtype;
     }
+    // Track who made the modification for audit purposes
     if (adminId) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       updateData.lastModifiedBy = adminId;
     }
 
@@ -127,6 +134,7 @@ export class DocumentApplicationsService {
     await this.documentApplicationRepository
       .createQueryBuilder()
       .update(DocumentApplication)
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       .set(updateData)
       .where('id = :id', { id })
       .execute();
@@ -318,7 +326,10 @@ export class DocumentApplicationsService {
               downloadUrl: downloadUrl,
             };
           } catch (error) {
-            console.warn(`Service: Failed to generate URL for file ${file.id}:`, error);
+            console.warn(
+              `Service: Failed to generate URL for file ${file.id}:`,
+              error,
+            );
             return {
               id: file.id,
               fileName: file.fileName,
