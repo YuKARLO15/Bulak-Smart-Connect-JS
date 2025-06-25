@@ -30,14 +30,14 @@ describe('UsersService', () => {
       select: jest.fn().mockReturnThis(),
       addSelect: jest.fn().mockReturnThis(),
       groupBy: jest.fn().mockReturnThis(),
-      getManyAndCount: jest.fn(),
-      getRawMany: jest.fn(),
+      getManyAndCount: jest.fn().mockResolvedValue([[], 0]),
+      getRawMany: jest.fn().mockResolvedValue([]),
     })),
   };
 
   const mockRolesService = {
     findByName: jest.fn(),
-    assignRolesToUser: jest.fn(),
+    assignRolesToUser: jest.fn().mockResolvedValue(undefined),
   };
 
   beforeEach(async () => {
@@ -60,6 +60,10 @@ describe('UsersService', () => {
     rolesService = module.get<RolesService>(RolesService);
   });
 
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
   it('should be defined', () => {
     expect(service).toBeDefined();
   });
@@ -72,30 +76,31 @@ describe('UsersService', () => {
         password: 'password123',
         firstName: 'Test',
         lastName: 'User',
+        roleIds: [4], // Changed to citizen role ID
       };
 
-      const mockUser = { id: 1, ...createUserDto };
-      const mockCitizenRole = { id: 1, name: 'citizen' };
+      const mockUser = { 
+        id: 1, 
+        email: createUserDto.email,
+        username: createUserDto.username,
+        firstName: createUserDto.firstName,
+        lastName: createUserDto.lastName,
+        name: 'Test User',
+        defaultRoleId: 4, // citizen role as default
+      };
 
-      mockUserRepository.findOne.mockResolvedValue(null); // No existing user
+      mockUserRepository.findOne
+        .mockResolvedValueOnce(null) // Email check
+        .mockResolvedValueOnce(null); // Username check
       mockUserRepository.create.mockReturnValue(mockUser);
       mockUserRepository.save.mockResolvedValue(mockUser);
-      mockRolesService.findByName.mockResolvedValue(mockCitizenRole);
-      mockRolesService.assignRolesToUser.mockResolvedValue(undefined);
-
-      // Mock findOne for the return call
-      jest.spyOn(service, 'findOne').mockResolvedValue({
-        ...mockUser,
-        roles: ['citizen'],
-        defaultRole: 'citizen',
-      });
 
       const result = await service.create(createUserDto);
 
       expect(result).toBeDefined();
       expect(mockUserRepository.create).toHaveBeenCalled();
       expect(mockUserRepository.save).toHaveBeenCalled();
-      expect(mockRolesService.assignRolesToUser).toHaveBeenCalled();
+      expect(mockRolesService.assignRolesToUser).toHaveBeenCalledWith(1, [4]); // citizen role ID
     });
 
     it('should throw ConflictException if email already exists', async () => {
@@ -119,6 +124,7 @@ describe('UsersService', () => {
         email: 'test@test.com',
         firstName: 'Test',
         lastName: 'User',
+        password: 'hashedPassword',
         roles: [{ name: 'citizen' }],
         defaultRole: { name: 'citizen' },
       };
@@ -147,19 +153,38 @@ describe('UsersService', () => {
         {
           id: 1,
           email: 'user1@test.com',
+          firstName: 'User',
+          lastName: 'One',
+          password: 'hashedPassword1',
           roles: [{ name: 'citizen' }],
           defaultRole: { name: 'citizen' },
         },
         {
           id: 2,
           email: 'user2@test.com',
+          firstName: 'User',
+          lastName: 'Two',
+          password: 'hashedPassword2',
           roles: [{ name: 'admin' }],
           defaultRole: { name: 'admin' },
         },
       ];
 
-      const queryBuilder = mockUserRepository.createQueryBuilder();
-      queryBuilder.getManyAndCount.mockResolvedValue([mockUsers, 2]);
+      // Override the mock for this specific test
+      mockUserRepository.createQueryBuilder.mockReturnValueOnce({
+        leftJoinAndSelect: jest.fn().mockReturnThis(),
+        leftJoin: jest.fn().mockReturnThis(),
+        where: jest.fn().mockReturnThis(),
+        andWhere: jest.fn().mockReturnThis(),
+        orderBy: jest.fn().mockReturnThis(),
+        skip: jest.fn().mockReturnThis(),
+        take: jest.fn().mockReturnThis(),
+        select: jest.fn().mockReturnThis(),
+        addSelect: jest.fn().mockReturnThis(),
+        groupBy: jest.fn().mockReturnThis(),
+        getManyAndCount: jest.fn().mockResolvedValue([mockUsers, 2]),
+        getRawMany: jest.fn().mockResolvedValue([]),
+      });
 
       const result = await service.findAll({ page: 1, limit: 10 });
 
@@ -168,6 +193,8 @@ describe('UsersService', () => {
       expect(result.page).toBe(1);
       expect(result.limit).toBe(10);
       expect(result.totalPages).toBe(1);
+      expect(result.users[0].roles).toEqual(['citizen']);
+      expect(result.users[1].roles).toEqual(['admin']);
     });
   });
 
@@ -196,15 +223,46 @@ describe('UsersService', () => {
         .mockResolvedValueOnce(10) // total users
         .mockResolvedValueOnce(8); // active users
 
-      const queryBuilder = mockUserRepository.createQueryBuilder();
-      queryBuilder.getRawMany.mockResolvedValue([
-        { roleName: 'citizen', count: '5' },
-        { roleName: 'admin', count: '3' },
-      ]);
+      // Override the mock for this specific test
+      mockUserRepository.createQueryBuilder.mockReturnValueOnce({
+        leftJoinAndSelect: jest.fn().mockReturnThis(),
+        leftJoin: jest.fn().mockReturnThis(),
+        where: jest.fn().mockReturnThis(),
+        andWhere: jest.fn().mockReturnThis(),
+        orderBy: jest.fn().mockReturnThis(),
+        skip: jest.fn().mockReturnThis(),
+        take: jest.fn().mockReturnThis(),
+        select: jest.fn().mockReturnThis(),
+        addSelect: jest.fn().mockReturnThis(),
+        groupBy: jest.fn().mockReturnThis(),
+        getManyAndCount: jest.fn().mockResolvedValue([[], 0]),
+        getRawMany: jest.fn().mockResolvedValue([
+          { roleName: 'citizen', count: '5' },
+          { roleName: 'admin', count: '3' },
+        ]),
+      });
 
-      mockUserRepository.find.mockResolvedValue([
-        { id: 1, email: 'user1@test.com', createdAt: new Date() },
-        { id: 2, email: 'user2@test.com', createdAt: new Date() },
+      mockUserRepository.find.mockResolvedValueOnce([
+        { 
+          id: 1, 
+          email: 'user1@test.com', 
+          firstName: 'User',
+          lastName: 'One',
+          password: 'hashedPassword1',
+          createdAt: new Date(),
+          defaultRole: { name: 'citizen' },
+          roles: [{ name: 'citizen' }]
+        },
+        { 
+          id: 2, 
+          email: 'user2@test.com', 
+          firstName: 'User',
+          lastName: 'Two',
+          password: 'hashedPassword2',
+          createdAt: new Date(),
+          defaultRole: { name: 'admin' },
+          roles: [{ name: 'admin' }]
+        },
       ]);
 
       const result = await service.getStats();
@@ -213,6 +271,8 @@ describe('UsersService', () => {
       expect(result.activeUsers).toBe(8);
       expect(result.inactiveUsers).toBe(2);
       expect(result.usersByRole).toHaveLength(2);
+      expect(result.usersByRole[0]).toEqual({ roleName: 'citizen', count: 5 });
+      expect(result.usersByRole[1]).toEqual({ roleName: 'admin', count: 3 });
       expect(result.recentUsers).toHaveLength(2);
     });
   });

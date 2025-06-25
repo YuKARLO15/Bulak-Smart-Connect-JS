@@ -182,4 +182,37 @@ export const queueService = {
       throw error;
     }
   },
+
+  // Create manual queue for walk-in guests
+  createManualQueue: async (guestData = {}) => {
+    try {
+      console.log('Service: Creating manual queue with data:', guestData);
+      
+      const payload = {
+        firstName: guestData.firstName || 'Walk-in',
+        lastName: guestData.lastName || 'Guest',
+        middleInitial: guestData.middleInitial || '',
+        reasonOfVisit: guestData.reasonOfVisit || 'General Inquiry',
+        address: guestData.address || 'N/A',
+        phoneNumber: guestData.phoneNumber || 'N/A',
+        appointmentType: guestData.reasonOfVisit || 'General Inquiry',
+      };
+      
+      console.log('Service: Sending payload:', payload);
+      
+      const response = await axios.post(`${API_URL}/queue/manual`, payload, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json'
+        }
+      });
+      
+      console.log('Service: Manual queue created:', response.data);
+      return response.data;
+    } catch (error) {
+      console.error('Service: Error creating manual queue:', error);
+      console.error('Service: Error response:', error.response?.data);
+      throw error;
+    }
+  },
 };
