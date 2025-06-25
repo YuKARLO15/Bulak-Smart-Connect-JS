@@ -17,7 +17,9 @@
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "test:ui": "vitest --ui",
-    "test:a11y": "jest --config=jest.a11y.config.js --testMatch='**/*.a11y.test.{js,jsx}'"
+    "test:a11y": "jest --config=jest.a11y.config.js --testMatch='**/*.a11y.test.{js,jsx}'",
+    "test:integration": "vitest run --config=vitest.integration.config.js",
+    "test:e2e": "playwright test"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
