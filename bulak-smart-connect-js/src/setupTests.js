@@ -7,15 +7,15 @@ vi.mock('*.scss', () => ({}));
 vi.mock('*.sass', () => ({}));
 vi.mock('*.less', () => ({}));
 
-// Mock window.matchMedia
+// Fix window.matchMedia mock - make sure it returns the mock function result
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
-  value: vi.fn().mockImplementation(query => ({
+  value: vi.fn((query) => ({
     matches: false,
     media: query,
     onchange: null,
-    addListener: vi.fn(), // deprecated
-    removeListener: vi.fn(), // deprecated
+    addListener: vi.fn(),
+    removeListener: vi.fn(),
     addEventListener: vi.fn(),
     removeEventListener: vi.fn(),
     dispatchEvent: vi.fn(),
@@ -28,7 +28,7 @@ Object.defineProperty(window.navigator, 'standalone', {
   value: false,
 });
 
-// Mock beforeinstallprompt event
+// Mock beforeinstallprompt and other events
 window.addEventListener = vi.fn();
 window.removeEventListener = vi.fn();
 
@@ -46,14 +46,17 @@ global.IntersectionObserver = vi.fn().mockImplementation(() => ({
   disconnect: vi.fn(),
 }));
 
-// Mock URL.createObjectURL
+// Mock URL methods
 global.URL.createObjectURL = vi.fn(() => 'mocked-url');
 global.URL.revokeObjectURL = vi.fn();
 
 // Mock HTMLCanvasElement.getContext
 HTMLCanvasElement.prototype.getContext = vi.fn();
 
-// Mock console methods to reduce noise in tests
+// Mock fetch for network requests
+global.fetch = vi.fn();
+
+// Silence console methods during tests
 global.console = {
   ...console,
   log: vi.fn(),
@@ -63,7 +66,16 @@ global.console = {
   error: vi.fn(),
 };
 
-// Suppress React Scan in tests
+// Mock the usePWA hook directly
+vi.mock('./hooks/usePWA', () => ({
+  default: () => ({
+    isInstalled: false,
+    deferredPrompt: null,
+    showInstallPrompt: vi.fn(),
+  }),
+}));
+
+// Mock React Scan
 vi.mock('react-scan', () => ({
   scan: vi.fn(),
 }));
