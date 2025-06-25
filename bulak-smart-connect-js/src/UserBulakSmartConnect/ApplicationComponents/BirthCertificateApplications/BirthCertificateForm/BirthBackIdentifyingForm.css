@@ -86,7 +86,18 @@
   outline: none;
   background-color: #ddd;
 }
-
+.AffidavitShortInput1{
+    border: none;
+  border-bottom: 1px solid #333;
+  padding: 0 4px;
+  margin: 0 4px;
+  width: 40px;
+  color: #1d4e5f;
+  font-size: 14px;
+  text-align: center;
+  outline: none;
+  background-color: #fff;
+}
 .AffidavitMediumInput {
   border: none;
   border-bottom: 1px solid #333;
@@ -97,6 +108,17 @@
   font-size: 14px;
   outline: none;
   background-color: #ddd;
+}
+.AffidavitMediumInput1 {
+    border: none;
+  border-bottom: 1px solid #333;
+  padding: 0 4px;
+  margin: 0 4px;
+  width: 120px;
+  color: #1d4e5f;
+  font-size: 14px;
+  outline: none;
+  background-color: #fff;
 }
 
 .AffidavitLongInput {

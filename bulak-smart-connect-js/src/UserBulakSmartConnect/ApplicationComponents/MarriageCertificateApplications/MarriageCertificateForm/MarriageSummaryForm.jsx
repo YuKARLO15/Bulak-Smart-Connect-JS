@@ -3,10 +3,15 @@ import { useNavigate } from 'react-router-dom';
 import './MarriageSummaryForm.css';
 import { 
   Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, 
-  Button, TextField, Typography, Box
+  Button, TextField, Typography, Box, SpeedDial, SpeedDialAction, SpeedDialIcon
 } from '@mui/material';
 
+
 import EditIcon from '@mui/icons-material/Edit';
+import CheckIcon from '@mui/icons-material/Check';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import CancelIcon from '@mui/icons-material/Cancel';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 const MarriageSummaryForm = () => {
   const [formData, setFormData] = useState({});
@@ -401,42 +406,41 @@ const MarriageSummaryForm = () => {
           </tr>
         </tbody>
       </table>
-
-      <div className="ActionsContainerMSummary">
-        <button onClick={handleBackToForm} className="BackButtonMSummary">
-          Back to Form
-          </button>
-<Button 
-  variant="contained" 
-  onClick={handleModify}
-  className="ModifyButtonMSummary"
-  startIcon={<EditIcon />}
-  sx={{
-    backgroundColor: '#8aacb5',
-    color: 'white',
-    marginLeft: '10px',
-    marginRight: '10px',
-    padding: '6px 16px',
-    '&:hover': {
-      backgroundColor: '#6d8a91',
-    }
-  }}
->
-  Modify
-</Button>
-    
-        <button onClick={handleSubmit} className="BackButtonMSummary" >
-         Done
-          </button>
-          <Button
+ <div className="ActionButtonContainerMSummary">
+  
+  <Button
     variant="contained"
     color="error"
+    startIcon={<CancelIcon />}
     onClick={() => setConfirmCancelDialog(true)}
-    className="CancelApplicationButtonAdminAppForm"
+    className="ActionButtonMSummary cancelButton"
+    aria-label="Cancel Application"
   >
-    Cancel Application
-          </Button>
-          </div>
+    Cancel
+  </Button>
+  
+ 
+  
+  <Button
+    variant="contained" 
+    startIcon={<EditIcon />}
+    onClick={handleModify}
+    className="ActionButtonMSummary modifyButton"
+    aria-label="Modify Form"
+  >
+    Modify
+  </Button>
+  
+  <Button
+    variant="contained"
+    startIcon={<CheckIcon />}
+    onClick={handleSubmit}
+    className="ActionButtonMSummary doneButton"
+    aria-label="Done"
+  >
+    Done
+  </Button>
+</div>
           
           <Dialog open={confirmCancelDialog} onClose={() => setConfirmCancelDialog(false)}>
           <DialogTitle>Cancel Application</DialogTitle>

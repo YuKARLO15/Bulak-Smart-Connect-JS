@@ -20,6 +20,10 @@ import AffidavitBirthForm from './BirthCertificateForm/BirthBackIdentifyingForm'
 import EditIcon from '@mui/icons-material/Edit';
 import { getApplications } from '../ApplicationData';
 import { documentApplicationService } from '../../../services/documentApplicationService';
+import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import CancelIcon from '@mui/icons-material/Cancel';
 
 const BirthApplicationSummary = () => {
   const [formData, setFormData] = useState(null);
@@ -236,7 +240,9 @@ const uiTitleMap = {
       setDeleteDialogOpen(false);
     }
   };
-
+ const handleSubmit = () => {
+    navigate('/ApplicationForm');
+  };
   // Handle Edit Application
   const handleEditApplication = () => {
     console.log("Edit button clicked for application ID:", applicationId);
@@ -348,6 +354,7 @@ const uiTitleMap = {
   const renderCopyBirthSummary = () => {
     return (
       <Box className="MainContainerSummaryBirth">
+        
              <div className="ApplicationDetails">
   {(applicationStatus !== 'Pending' || statusMessage) && (
     <Box className="StatusSection" sx={{ marginTop: '15px', marginBottom: '15px' }}>
@@ -627,8 +634,17 @@ const uiTitleMap = {
             (Revised January 2007)
           </Typography>
           <Typography variant="body1" className="headerInfoText">
-            Republic of the Philippines
-          </Typography>
+              Republic of the Philippines
+            </Typography>
+            <Button
+      variant="text"
+      color="primary"
+      onClick={toggleAffidavitPage}
+      endIcon={<ArrowRightAltIcon />}
+      className="affidavitLinkBirth"
+    >
+      View Affidavit Forms
+    </Button>
           <Typography variant="body1" className="headerInfoText">
             OFFICE OF THE CIVIL REGISTRAR GENERAL
           </Typography>
@@ -826,13 +842,23 @@ const uiTitleMap = {
                 <Typography variant="body1">{formData?.motherDeceasedChildren || 'N/A'}</Typography>
               </Grid>
               <Grid item xs={3} className="fieldGroupNoBorder">
-                <Typography variant="body2" className="fieldLabel">
-                  11. OCCUPATION
-                </Typography>
-                <Typography variant="body1">{formData?.motherOccupation || 'N/A'}</Typography>
-              </Grid>
-            </Grid>
+  <Typography variant="body2" className="fieldLabel">
+    11. OCCUPATION
+  </Typography>
+  <Typography variant="body1">{formData?.motherOccupation || 'N/A'}</Typography>
+</Grid>
+</Grid>
 
+<Grid container>
+  <Grid item xs={12} className="fieldGroup">
+    <Typography variant="body2" className="fieldLabel">
+      12. AGE AT THE TIME OF THIS BIRTH
+    </Typography>
+    <Typography variant="body1">
+      {formData?.motherAge ? `${formData.motherAge} years` : 'N/A'}
+    </Typography>
+  </Grid>
+</Grid>
             <Grid container>
               <Grid item xs={12} className="fieldContainer">
                 <Typography variant="body2" className="fieldLabel">
@@ -877,7 +903,7 @@ const uiTitleMap = {
             </Grid>
 
             <Grid container>
-              <Grid item xs={4} className="fieldGroup">
+              <Grid item xs={3} className="fieldGroup">
                 <Typography variant="body2" className="fieldLabel">
                   15. CITIZENSHIP
                 </Typography>
@@ -889,13 +915,22 @@ const uiTitleMap = {
                 </Typography>
                 <Typography variant="body1">{formData?.fatherReligion || 'N/A'}</Typography>
               </Grid>
-              <Grid item xs={4} className="fieldGroupNoBorder">
-                <Typography variant="body2" className="fieldLabel">
-                  17. OCCUPATION
-                </Typography>
-                <Typography variant="body1">{formData?.fatherOccupation || 'N/A'}</Typography>
-              </Grid>
-            </Grid>
+              <Grid item xs={2} className="fieldGroup">
+  <Typography variant="body2" className="fieldLabel">
+    17. OCCUPATION
+  </Typography>
+  <Typography variant="body1">{formData?.fatherOccupation || 'N/A'}</Typography>
+</Grid>
+  <Grid item xs={3} className="fieldGroup">
+    <Typography variant="body2" className="fieldLabel">
+      18. AGE AT THE TIME OF THIS BIRTH
+    </Typography>
+    <Typography variant="body1">
+      {formData?.fatherAge ? `${formData.fatherAge} years` : 'N/A'}
+    </Typography>
+  </Grid>
+
+                </Grid>
 
             <Grid container>
               <Grid item xs={12} className="fieldContainer">
@@ -947,39 +982,41 @@ const uiTitleMap = {
           </Grid>
           </Grid>
           
-        <Box className="buttonsContainer">
 
-
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={toggleAffidavitPage}
-            className="ViewAffidavitButton"
-          >
-            View Affidavit Forms
-          </Button>
-
-          <Button
-            variant="contained"
-            color="secondary"
-            startIcon={<EditIcon />}
-            onClick={handleEditApplication}
-            className="EditButtonSummaryBirth"
-          >
-            Edit Application
-          </Button>
-
-          <Button
-            variant="contained"
-            color="error"
-            onClick={handleDeleteApplication}
-            className="DeleteButtonSummaryBirth"
-          >
-            Cancel Application
-          </Button>
-        </Box>
       </Paper>
+   <div className="ActionButtonContainerBirth">
+  <Button
+    variant="contained"
+    color="error"
+    startIcon={<CancelIcon />}
+    onClick={handleDeleteApplication}
+    className="ActionButtonBirth cancelButton"
+    aria-label="Cancel Application"
+  >
+    Cancel
+  </Button>
 
+  
+  <Button
+    variant="contained" 
+    startIcon={<EditIcon />}
+    onClick={handleEditApplication}
+    className="ActionButtonBirth modifyButton"
+    aria-label="Edit Application"
+  >
+    Edit
+  </Button>
+  
+  <Button
+    variant="contained"
+    startIcon={<CheckCircleIcon />}
+            className="ActionButtonBirth doneButton"
+            onClick={handleSubmit}
+    aria-label="Done"
+  >
+    Done
+  </Button>
+</div>
       <Dialog
         open={deleteDialogOpen}
         onClose={cancelDeleteApplication}
