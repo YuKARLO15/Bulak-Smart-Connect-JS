@@ -11,6 +11,7 @@ import {
   DialogContent,
   DialogContentText,
   DialogActions,
+  Container,
 } from '@mui/material';
 import './MarriageCertificateForm.css';
 import HusbandForm from './HusbandForm';
@@ -506,6 +507,7 @@ const MarriageCertificateForm = () => {
         {step === 2 && (
           <>
             <WifeForm formData={formData} handleChange={handleChange} errors={errors} />
+            <Container className="MarriageCertificateFormButtonContainer">
             <Button
               variant="contained"
               onClick={handlePrevious}
@@ -519,13 +521,15 @@ const MarriageCertificateForm = () => {
               className="MarriageCertificateFormButton"
             >
               {maxSteps === 2 ? 'Submit' : 'Next'}
-            </Button>
+              </Button>
+              </Container>
           </>
         )}
 
         {step === 3 && maxSteps > 2 && (
           <>
             <MarriageDetailsForm formData={formData} handleChange={handleChange} errors={errors} />
+             <Container className="MarriageCertificateFormButtonContainer">
             <Button
               variant="contained"
               onClick={handlePrevious}
@@ -540,6 +544,7 @@ const MarriageCertificateForm = () => {
             >
               Next
             </Button>
+            </Container>
           </>
         )}
 
@@ -551,6 +556,10 @@ const MarriageCertificateForm = () => {
               errors={errors}
               onValidationChange={setIsAffidavitFormValid}
             />
+            
+
+            <Container className="MarriageCertificateFormButtonContainer">
+          
             <Button
               variant="contained"
               onClick={handlePrevious}
@@ -566,6 +575,7 @@ const MarriageCertificateForm = () => {
             >
               Submit
             </Button>
+            </Container>
           </>
         )}
 
