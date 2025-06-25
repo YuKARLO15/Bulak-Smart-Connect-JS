@@ -444,6 +444,7 @@ export class UsersService {
     }
 
     // Remove password and format response
+
     const { password, ...userWithoutPassword } &#x3D; user;
     return {
       ...userWithoutPassword,
@@ -467,13 +468,21 @@ export class UsersService {
 
     const {
       email,
+
       username,
+
       firstName,
+
       middleName,
+
       lastName,
+
       nameExtension,
+
       contactNumber,
+
       roleIds,
+
       defaultRoleId,
     } &#x3D; updateUserDto;
 
@@ -585,6 +594,7 @@ export class UsersService {
 
     const usersByRole &#x3D; roleStats.map((stat) &#x3D;&gt; ({
       roleName: stat.roleName || &#x27;No Role&#x27;,
+
       count: parseInt(stat.count),
     }));
 

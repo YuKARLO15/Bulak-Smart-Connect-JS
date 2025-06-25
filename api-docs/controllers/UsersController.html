@@ -265,8 +265,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="146"
-                                    class="link-to-prism">src/users/users.controller.ts:146</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="153"
+                                    class="link-to-prism">src/users/users.controller.ts:153</a></div>
                         </td>
                     </tr>
 
@@ -346,8 +346,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="43"
-                                    class="link-to-prism">src/users/users.controller.ts:43</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="46"
+                                    class="link-to-prism">src/users/users.controller.ts:46</a></div>
                         </td>
                     </tr>
 
@@ -440,8 +440,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="76"
-                                    class="link-to-prism">src/users/users.controller.ts:76</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="80"
+                                    class="link-to-prism">src/users/users.controller.ts:80</a></div>
                         </td>
                     </tr>
 
@@ -531,8 +531,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="54"
-                                    class="link-to-prism">src/users/users.controller.ts:54</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="58"
+                                    class="link-to-prism">src/users/users.controller.ts:58</a></div>
                         </td>
                     </tr>
 
@@ -612,8 +612,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="66"
-                                    class="link-to-prism">src/users/users.controller.ts:66</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="70"
+                                    class="link-to-prism">src/users/users.controller.ts:70</a></div>
                         </td>
                     </tr>
 
@@ -664,8 +664,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="116"
-                                    class="link-to-prism">src/users/users.controller.ts:116</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="121"
+                                    class="link-to-prism">src/users/users.controller.ts:121</a></div>
                         </td>
                     </tr>
 
@@ -758,8 +758,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="102"
-                                    class="link-to-prism">src/users/users.controller.ts:102</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="106"
+                                    class="link-to-prism">src/users/users.controller.ts:106</a></div>
                         </td>
                     </tr>
 
@@ -864,8 +864,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="129"
-                                    class="link-to-prism">src/users/users.controller.ts:129</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="135"
+                                    class="link-to-prism">src/users/users.controller.ts:135</a></div>
                         </td>
                     </tr>
 
@@ -939,7 +939,10 @@
 
 
     <div class="tab-pane fade  tab-source-code" id="source">
-        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import {
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+import {
   Controller,
   Get,
   Post,
@@ -947,9 +950,9 @@
   Patch,
   Param,
   Delete,
-  Query,
   UseGuards,
   Request,
+  Query,
 } from &#x27;@nestjs/common&#x27;;
 import {
   ApiTags,
@@ -983,6 +986,7 @@ export class UsersController {
   @ApiResponse({ status: 200, description: &#x27;Users retrieved successfully&#x27; })
   async findAll(
     @Query() query: UserQueryDto,
+
     @Request() req: { user: AuthenticatedUser },
   ) {
     const { page &#x3D; 1, limit &#x3D; 10, search, role } &#x3D; query;
@@ -1043,6 +1047,7 @@ export class UsersController {
   async update(
     @Param(&#x27;id&#x27;) id: string,
     @Body() updateUserDto: AdminUpdateUserDto,
+
     @Request() req: { user: AuthenticatedUser },
   ) {
     return this.usersService.adminUpdate(+id, updateUserDto);
@@ -1056,6 +1061,7 @@ export class UsersController {
   @ApiResponse({ status: 404, description: &#x27;User not found&#x27; })
   async remove(
     @Param(&#x27;id&#x27;) id: string,
+
     @Request() req: { user: AuthenticatedUser },
   ) {
     return this.usersService.remove(+id);
@@ -1070,6 +1076,7 @@ export class UsersController {
   async updateStatus(
     @Param(&#x27;id&#x27;) id: string,
     @Body() updateStatusDto: UpdateUserStatusDto,
+
     @Request() req: { user: AuthenticatedUser },
   ) {
     return this.usersService.updateStatus(+id, updateStatusDto.isActive);
@@ -1101,9 +1108,11 @@ export class UsersController {
       const user &#x3D; await this.usersService.create(userWithHashedPassword);
 
       // Return user without password
+
       const { password, ...userWithoutPassword } &#x3D; user;
 
       // Get user with roles for response
+
       const userWithRoles &#x3D; await this.usersService.findOne(user.id);
 
       return userWithRoles;
