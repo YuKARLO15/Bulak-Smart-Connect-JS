@@ -997,7 +997,7 @@ import { Logger, Inject, forwardRef } from &#x27;@nestjs/common&#x27;;
     origin: &#x27;http://localhost:5173&#x27;, // Match your app&#x27;s CORS setting
     methods: [&#x27;GET&#x27;, &#x27;POST&#x27;],
     credentials: true,
-    allowedHeaders: [&#x27;Content-Type&#x27;, &#x27;Authorization&#x27;]
+    allowedHeaders: [&#x27;Content-Type&#x27;, &#x27;Authorization&#x27;],
   },
   namespace: &#x27;socket.io&#x27;, // Add this to match client expectation
 })

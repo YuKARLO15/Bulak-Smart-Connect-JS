@@ -706,7 +706,7 @@ export enum ApplicationStatus {
   REJECTED &#x3D; &#x27;Rejected&#x27;,
   DECLINE &#x3D; &#x27;Decline&#x27;,
   READY_FOR_PICKUP &#x3D; &#x27;Ready for Pickup&#x27;,
-  REQUIRES_ADDITIONAL_INFO &#x3D; &#x27;Requires Additional Info&#x27;, 
+  REQUIRES_ADDITIONAL_INFO &#x3D; &#x27;Requires Additional Info&#x27;,
 }
 
 @Entity(&#x27;document_applications&#x27;)
@@ -762,7 +762,7 @@ export class DocumentApplication {
   files: DocumentFile[];
 
   @OneToMany(() &#x3D;&gt; ApplicationStatusHistory, (history) &#x3D;&gt; history.application, {
-    cascade: false, 
+    cascade: false,
     eager: false,
   })
   statusHistory: ApplicationStatusHistory[];

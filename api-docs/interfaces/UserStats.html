@@ -362,7 +362,7 @@ import { Repository, Like, In } from &#x27;typeorm&#x27;;
 import { User } from &#x27;./entities/user.entity&#x27;;
 import { AdminUpdateUserDto } from &#x27;../auth/dto/update-user.dto&#x27;; // Import from auth module
 import { RolesService } from &#x27;../roles/roles.service&#x27;;
-import { CreateUserDto } from &#x27;./dto/create-user.dto&#x27;; 
+import { CreateUserDto } from &#x27;./dto/create-user.dto&#x27;;
 import * as bcrypt from &#x27;bcrypt&#x27;;
 
 interface FindAllOptions {
@@ -410,19 +410,16 @@ export class UsersService {
       queryBuilder.andWhere(&#x27;roles.name &#x3D; :role&#x27;, { role });
     }
 
-    queryBuilder
-      .orderBy(&#x27;user.createdAt&#x27;, &#x27;DESC&#x27;)
-      .skip(skip)
-      .take(limit);
+    queryBuilder.orderBy(&#x27;user.createdAt&#x27;, &#x27;DESC&#x27;).skip(skip).take(limit);
 
     const [users, total] &#x3D; await queryBuilder.getManyAndCount();
 
     // Remove passwords from response
-    const sanitizedUsers &#x3D; users.map(user &#x3D;&gt; {
+    const sanitizedUsers &#x3D; users.map((user) &#x3D;&gt; {
       const { password, ...userWithoutPassword } &#x3D; user;
       return {
         ...userWithoutPassword,
-        roles: user.roles.map(role &#x3D;&gt; role.name),
+        roles: user.roles.map((role) &#x3D;&gt; role.name),
         defaultRole: user.defaultRole?.name || &#x27;citizen&#x27;,
       };
     });
@@ -450,16 +447,19 @@ export class UsersService {
     const { password, ...userWithoutPassword } &#x3D; user;
     return {
       ...userWithoutPassword,
-      roles: user.roles.map(role &#x3D;&gt; role.name),
+      roles: user.roles.map((role) &#x3D;&gt; role.name),
       defaultRole: user.defaultRole?.name || &#x27;citizen&#x27;,
     };
   }
 
   // Admin-only update method
-  async adminUpdate(id: number, updateUserDto: AdminUpdateUserDto): Promise&lt;any&gt; {
-    const user &#x3D; await this.usersRepository.findOne({ 
+  async adminUpdate(
+    id: number,
+    updateUserDto: AdminUpdateUserDto,
+  ): Promise&lt;any&gt; {
+    const user &#x3D; await this.usersRepository.findOne({
       where: { id },
-      relations: [&#x27;roles&#x27;]
+      relations: [&#x27;roles&#x27;],
     });
     if (!user) {
       throw new NotFoundException(&#x60;User with ID ${id} not found&#x60;);
@@ -505,19 +505,26 @@ export class UsersService {
     if (firstName) updateData.firstName &#x3D; firstName;
     if (lastName) updateData.lastName &#x3D; lastName;
     if (contactNumber) updateData.contactNumber &#x3D; contactNumber;
-    
+
     // Handle optional fields
     if (middleName !&#x3D;&#x3D; undefined) updateData.middleName &#x3D; middleName;
     if (nameExtension !&#x3D;&#x3D; undefined) updateData.nameExtension &#x3D; nameExtension;
     if (defaultRoleId !&#x3D;&#x3D; undefined) updateData.defaultRoleId &#x3D; defaultRoleId;
 
     // Update name if name components changed
-    if (firstName || middleName !&#x3D;&#x3D; undefined || lastName || nameExtension !&#x3D;&#x3D; undefined) {
+    if (
+      firstName ||
+      middleName !&#x3D;&#x3D; undefined ||
+      lastName ||
+      nameExtension !&#x3D;&#x3D; undefined
+    ) {
       const newFirstName &#x3D; firstName || user.firstName;
-      const newMiddleName &#x3D; middleName !&#x3D;&#x3D; undefined ? middleName : user.middleName;
+      const newMiddleName &#x3D;
+        middleName !&#x3D;&#x3D; undefined ? middleName : user.middleName;
       const newLastName &#x3D; lastName || user.lastName;
-      const newNameExtension &#x3D; nameExtension !&#x3D;&#x3D; undefined ? nameExtension : user.nameExtension;
-      
+      const newNameExtension &#x3D;
+        nameExtension !&#x3D;&#x3D; undefined ? nameExtension : user.nameExtension;
+
       updateData.name &#x3D; &#x60;${newFirstName} ${newMiddleName ? newMiddleName + &#x27; &#x27; : &#x27;&#x27;}${newLastName}${newNameExtension ? &#x27; &#x27; + newNameExtension : &#x27;&#x27;}&#x60;;
     }
 
@@ -576,7 +583,7 @@ export class UsersService {
       .groupBy(&#x27;role.name&#x27;)
       .getRawMany();
 
-    const usersByRole &#x3D; roleStats.map(stat &#x3D;&gt; ({
+    const usersByRole &#x3D; roleStats.map((stat) &#x3D;&gt; ({
       roleName: stat.roleName || &#x27;No Role&#x27;,
       count: parseInt(stat.count),
     }));
@@ -588,7 +595,7 @@ export class UsersService {
       relations: [&#x27;defaultRole&#x27;, &#x27;roles&#x27;],
     });
 
-    const sanitizedRecentUsers &#x3D; recentUsers.map(user &#x3D;&gt; {
+    const sanitizedRecentUsers &#x3D; recentUsers.map((user) &#x3D;&gt; {
       const { password, ...userWithoutPassword } &#x3D; user;
       return userWithoutPassword as Omit&lt;User, &#x27;password&#x27;&gt;;
     });
@@ -628,11 +635,13 @@ export class UsersService {
       contactNumber,
       name,
       roleIds,
-      defaultRoleId
+      defaultRoleId,
     } &#x3D; createUserDto;
 
     // Generate full name if not provided
-    const fullName &#x3D; name || &#x60;${firstName} ${middleName ? middleName + &#x27; &#x27; : &#x27;&#x27;}${lastName}${nameExtension ? &#x27; &#x27; + nameExtension : &#x27;&#x27;}&#x60;;
+    const fullName &#x3D;
+      name ||
+      &#x60;${firstName} ${middleName ? middleName + &#x27; &#x27; : &#x27;&#x27;}${lastName}${nameExtension ? &#x27; &#x27; + nameExtension : &#x27;&#x27;}&#x60;;
 
     // Check if user already exists
     const existingUserByEmail &#x3D; await this.usersRepository.findOne({
@@ -679,7 +688,8 @@ export class UsersService {
       throw error;
     }
   }
-}</code></pre>
+}
+</code></pre>
     </div>
 </div>
 

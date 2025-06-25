@@ -457,8 +457,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="246"
-                                    class="link-to-prism">src/modules/document-applications/document-applications.service.ts:246</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="254"
+                                    class="link-to-prism">src/modules/document-applications/document-applications.service.ts:254</a></div>
                         </td>
                     </tr>
 
@@ -607,8 +607,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="271"
-                                    class="link-to-prism">src/modules/document-applications/document-applications.service.ts:271</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="279"
+                                    class="link-to-prism">src/modules/document-applications/document-applications.service.ts:279</a></div>
                         </td>
                     </tr>
 
@@ -688,8 +688,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="219"
-                                    class="link-to-prism">src/modules/document-applications/document-applications.service.ts:219</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="227"
+                                    class="link-to-prism">src/modules/document-applications/document-applications.service.ts:227</a></div>
                         </td>
                     </tr>
 
@@ -757,8 +757,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="256"
-                                    class="link-to-prism">src/modules/document-applications/document-applications.service.ts:256</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="264"
+                                    class="link-to-prism">src/modules/document-applications/document-applications.service.ts:264</a></div>
                         </td>
                     </tr>
 
@@ -796,8 +796,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="186"
-                                    class="link-to-prism">src/modules/document-applications/document-applications.service.ts:186</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="194"
+                                    class="link-to-prism">src/modules/document-applications/document-applications.service.ts:194</a></div>
                         </td>
                     </tr>
 
@@ -877,8 +877,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="204"
-                                    class="link-to-prism">src/modules/document-applications/document-applications.service.ts:204</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="212"
+                                    class="link-to-prism">src/modules/document-applications/document-applications.service.ts:212</a></div>
                         </td>
                     </tr>
 
@@ -1063,8 +1063,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="237"
-                                    class="link-to-prism">src/modules/document-applications/document-applications.service.ts:237</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="245"
+                                    class="link-to-prism">src/modules/document-applications/document-applications.service.ts:245</a></div>
                         </td>
                     </tr>
 
@@ -1168,8 +1168,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="138"
-                                    class="link-to-prism">src/modules/document-applications/document-applications.service.ts:138</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="146"
+                                    class="link-to-prism">src/modules/document-applications/document-applications.service.ts:146</a></div>
                         </td>
                     </tr>
 
@@ -1365,20 +1365,27 @@ export class DocumentApplicationsService {
     // Use query builder to update only the application table directly
     // This avoids TypeORM cascade relationship issues
     const updateData: any &#x3D; {};
-    
+
+    // Build update data object with only provided fields
     if (updateDto.status !&#x3D;&#x3D; undefined) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       updateData.status &#x3D; updateDto.status;
     }
     if (updateDto.statusMessage !&#x3D;&#x3D; undefined) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       updateData.statusMessage &#x3D; updateDto.statusMessage;
     }
     if (updateDto.formData !&#x3D;&#x3D; undefined) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       updateData.formData &#x3D; updateDto.formData;
     }
     if (updateDto.applicationSubtype !&#x3D;&#x3D; undefined) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       updateData.applicationSubtype &#x3D; updateDto.applicationSubtype;
     }
+    // Track who made the modification for audit purposes
     if (adminId) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       updateData.lastModifiedBy &#x3D; adminId;
     }
 
@@ -1386,6 +1393,7 @@ export class DocumentApplicationsService {
     await this.documentApplicationRepository
       .createQueryBuilder()
       .update(DocumentApplication)
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       .set(updateData)
       .where(&#x27;id &#x3D; :id&#x27;, { id })
       .execute();
@@ -1577,7 +1585,10 @@ export class DocumentApplicationsService {
               downloadUrl: downloadUrl,
             };
           } catch (error) {
-            console.warn(&#x60;Service: Failed to generate URL for file ${file.id}:&#x60;, error);
+            console.warn(
+              &#x60;Service: Failed to generate URL for file ${file.id}:&#x60;,
+              error,
+            );
             return {
               id: file.id,
               fileName: file.fileName,

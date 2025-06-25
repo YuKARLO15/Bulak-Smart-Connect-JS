@@ -446,8 +446,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="125"
-                                    class="link-to-prism">src/modules/document-applications/document-applications.controller.ts:125</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="130"
+                                    class="link-to-prism">src/modules/document-applications/document-applications.controller.ts:130</a></div>
                         </td>
                     </tr>
 
@@ -538,8 +538,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="202"
-                                    class="link-to-prism">src/modules/document-applications/document-applications.controller.ts:202</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="207"
+                                    class="link-to-prism">src/modules/document-applications/document-applications.controller.ts:207</a></div>
                         </td>
                     </tr>
 
@@ -678,8 +678,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="134"
-                                    class="link-to-prism">src/modules/document-applications/document-applications.controller.ts:134</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="139"
+                                    class="link-to-prism">src/modules/document-applications/document-applications.controller.ts:139</a></div>
                         </td>
                     </tr>
 
@@ -770,8 +770,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="210"
-                                    class="link-to-prism">src/modules/document-applications/document-applications.controller.ts:210</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="215"
+                                    class="link-to-prism">src/modules/document-applications/document-applications.controller.ts:215</a></div>
                         </td>
                     </tr>
 
@@ -818,8 +818,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="189"
-                                    class="link-to-prism">src/modules/document-applications/document-applications.controller.ts:189</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="194"
+                                    class="link-to-prism">src/modules/document-applications/document-applications.controller.ts:194</a></div>
                         </td>
                     </tr>
 
@@ -908,8 +908,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="150"
-                                    class="link-to-prism">src/modules/document-applications/document-applications.controller.ts:150</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="155"
+                                    class="link-to-prism">src/modules/document-applications/document-applications.controller.ts:155</a></div>
                         </td>
                     </tr>
 
@@ -1012,8 +1012,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="174"
-                                    class="link-to-prism">src/modules/document-applications/document-applications.controller.ts:174</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="179"
+                                    class="link-to-prism">src/modules/document-applications/document-applications.controller.ts:179</a></div>
                         </td>
                     </tr>
 
@@ -1225,8 +1225,8 @@ import { UpdateDocumentApplicationDto } from &#x27;./dto/update-document-applica
 import { JwtAuthGuard } from &#x27;../../auth/guards/jwt-auth.guard&#x27;;
 import { RolesGuard } from &#x27;../../auth/guards/roles.guard&#x27;;
 import { Roles } from &#x27;../../auth/decorators/roles.decorator&#x27;;
-import { User } from &#x27;../../auth/decorators/user.decorator&#x27;; 
-import { AuthenticatedUser } from &#x27;../../auth/jwt.strategy&#x27;; 
+import { User } from &#x27;../../auth/decorators/user.decorator&#x27;;
+import { AuthenticatedUser } from &#x27;../../auth/jwt.strategy&#x27;;
 import { ApplicationStatus } from &#x27;./entities/document-application.entity&#x27;;
 import {
   ApiTags,
@@ -1250,7 +1250,7 @@ export class DocumentApplicationsController {
   @ApiResponse({ status: 201, description: &#x27;Application created successfully&#x27; })
   async create(
     @Body() createDto: CreateDocumentApplicationDto,
-    @User() user: AuthenticatedUser, 
+    @User() user: AuthenticatedUser,
   ) {
     return this.documentApplicationsService.create(createDto, user.id);
   }
@@ -1283,11 +1283,11 @@ export class DocumentApplicationsController {
     @User() user: AuthenticatedUser,
   ) {
     console.log(&#x27;Received document category:&#x27;, documentCategory); // Debug log
-    
+
     if (!documentCategory) {
       throw new BadRequestException(&#x27;Document category is required&#x27;);
     }
-    
+
     return this.documentApplicationsService.uploadFile(
       id,
       file,
@@ -1300,11 +1300,11 @@ export class DocumentApplicationsController {
   @ApiOperation({ summary: &#x27;Get user applications&#x27; })
   async findAll(
     @Query(&#x27;status&#x27;) status?: string,
-    @User() user?: AuthenticatedUser, 
+    @User() user?: AuthenticatedUser,
   ) {
-    const userId &#x3D; user?.roles.some(role &#x3D;&gt; role.name &#x3D;&#x3D;&#x3D; &#x27;admin&#x27;)
+    const userId &#x3D; user?.roles.some((role) &#x3D;&gt; role.name &#x3D;&#x3D;&#x3D; &#x27;admin&#x27;)
       ? undefined
-      : user?.id; 
+      : user?.id;
     return this.documentApplicationsService.findAll(userId);
   }
 
@@ -1316,21 +1316,26 @@ export class DocumentApplicationsController {
     @Param(&#x27;id&#x27;) id: string,
     @User() user: AuthenticatedUser,
   ) {
-    const userId &#x3D; user.roles.some(role &#x3D;&gt; role.name &#x3D;&#x3D;&#x3D; &#x27;admin&#x27;) 
-      ? undefined  // Admin can see any application
-      : user.id;   // Regular users can only see their own
-    
-    console.log(&#x60;Getting files for application ${id}, user: ${user.email}, isAdmin: ${!userId}&#x60;);
-    
-    return await this.documentApplicationsService.getApplicationFiles(id, userId);
+    const userId &#x3D; user.roles.some((role) &#x3D;&gt; role.name &#x3D;&#x3D;&#x3D; &#x27;admin&#x27;)
+      ? undefined // Admin can see any application
+      : user.id; // Regular users can only see their own
+
+    console.log(
+      &#x60;Getting files for application ${id}, user: ${user.email}, isAdmin: ${!userId}&#x60;,
+    );
+
+    return await this.documentApplicationsService.getApplicationFiles(
+      id,
+      userId,
+    );
   }
 
   @Get(&#x27;:id&#x27;)
   @ApiOperation({ summary: &#x27;Get specific application&#x27; })
-  async findOne(@Param(&#x27;id&#x27;) id: string, @User() user: AuthenticatedUser) { 
-    const userId &#x3D; user.roles.some(role &#x3D;&gt; role.name &#x3D;&#x3D;&#x3D; &#x27;admin&#x27;) 
+  async findOne(@Param(&#x27;id&#x27;) id: string, @User() user: AuthenticatedUser) {
+    const userId &#x3D; user.roles.some((role) &#x3D;&gt; role.name &#x3D;&#x3D;&#x3D; &#x27;admin&#x27;)
       ? undefined
-      : user.id; 
+      : user.id;
     return this.documentApplicationsService.findOne(id, userId);
   }
 
@@ -1338,11 +1343,11 @@ export class DocumentApplicationsController {
   @ApiOperation({ summary: &#x27;Get file download URL&#x27; })
   async getFileDownloadUrl(
     @Param(&#x27;fileId&#x27;) fileId: string,
-    @User() user: AuthenticatedUser, 
+    @User() user: AuthenticatedUser,
   ) {
-    const userId &#x3D; user.roles.some(role &#x3D;&gt; role.name &#x3D;&#x3D;&#x3D; &#x27;admin&#x27;) 
+    const userId &#x3D; user.roles.some((role) &#x3D;&gt; role.name &#x3D;&#x3D;&#x3D; &#x27;admin&#x27;)
       ? undefined
-      : user.id; 
+      : user.id;
     const url &#x3D; await this.documentApplicationsService.getFileDownloadUrl(
       +fileId,
       userId,
@@ -1355,13 +1360,13 @@ export class DocumentApplicationsController {
   async update(
     @Param(&#x27;id&#x27;) id: string,
     @Body() updateDto: UpdateDocumentApplicationDto,
-    @User() user: AuthenticatedUser, 
+    @User() user: AuthenticatedUser,
   ) {
-    const userId &#x3D; user.roles.some(role &#x3D;&gt; role.name &#x3D;&#x3D;&#x3D; &#x27;admin&#x27;) 
+    const userId &#x3D; user.roles.some((role) &#x3D;&gt; role.name &#x3D;&#x3D;&#x3D; &#x27;admin&#x27;)
       ? undefined
-      : user.id; 
-    const adminId &#x3D; user.roles.some(role &#x3D;&gt; role.name &#x3D;&#x3D;&#x3D; &#x27;admin&#x27;) 
-      ? user.id 
+      : user.id;
+    const adminId &#x3D; user.roles.some((role) &#x3D;&gt; role.name &#x3D;&#x3D;&#x3D; &#x27;admin&#x27;)
+      ? user.id
       : undefined;
 
     return this.documentApplicationsService.update(
@@ -1391,10 +1396,10 @@ export class DocumentApplicationsController {
 
   @Delete(&#x27;:id&#x27;)
   @ApiOperation({ summary: &#x27;Delete application&#x27; })
-  async remove(@Param(&#x27;id&#x27;) id: string, @User() user: AuthenticatedUser) { 
-    const userId &#x3D; user.roles.some(role &#x3D;&gt; role.name &#x3D;&#x3D;&#x3D; &#x27;admin&#x27;) 
+  async remove(@Param(&#x27;id&#x27;) id: string, @User() user: AuthenticatedUser) {
+    const userId &#x3D; user.roles.some((role) &#x3D;&gt; role.name &#x3D;&#x3D;&#x3D; &#x27;admin&#x27;)
       ? undefined
-      : user.id; 
+      : user.id;
     await this.documentApplicationsService.remove(id, userId);
     return { message: &#x27;Application deleted successfully&#x27; };
   }

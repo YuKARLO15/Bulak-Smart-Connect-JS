@@ -202,8 +202,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="108"
-                                    class="link-to-prism">src/modules/queue/queues.controller.ts:108</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="109"
+                                    class="link-to-prism">src/modules/queue/queues.controller.ts:109</a></div>
                         </td>
                     </tr>
 
@@ -454,13 +454,14 @@ export class QueuesController {
     console.log(&#x27;GET /queues/user/&#x27; + userId + &#x27; endpoint called&#x27;);
     try {
       // Find queues for the specific user that are not completed
-      const userQueues &#x3D; await this.queueService.findByUserIdWithDetails(userId);
-      
+      const userQueues &#x3D;
+        await this.queueService.findByUserIdWithDetails(userId);
+
       console.log(&#x27;Found user queues:&#x27;, userQueues.length);
-      
+
       const result &#x3D; userQueues.map((queue) &#x3D;&gt; {
-        const details &#x3D; Array.isArray(queue.details) 
-          ? queue.details[0] 
+        const details &#x3D; Array.isArray(queue.details)
+          ? queue.details[0]
           : queue.details;
 
         return {
@@ -493,13 +494,13 @@ export class QueuesController {
       }
 
       const queue &#x3D; await this.queueService.findOne(queueId);
-      
+
       if (!queue) {
         throw new Error(&#x27;Queue not found&#x27;);
       }
 
-      const details &#x3D; Array.isArray(queue.details) 
-        ? queue.details[0] 
+      const details &#x3D; Array.isArray(queue.details)
+        ? queue.details[0]
         : queue.details;
 
       return {

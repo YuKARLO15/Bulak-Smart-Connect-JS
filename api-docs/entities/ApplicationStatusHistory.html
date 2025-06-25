@@ -515,7 +515,7 @@ export class ApplicationStatusHistory {
   // Relations
   @ManyToOne(() &#x3D;&gt; DocumentApplication, (app) &#x3D;&gt; app.statusHistory, {
     onDelete: &#x27;CASCADE&#x27;,
-    nullable: false, 
+    nullable: false,
   })
   @JoinColumn({ name: &#x27;application_id&#x27; })
   application: DocumentApplication;
