@@ -7,7 +7,10 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: './src/setupTests.js',
     globals: true,
-    css: true,
+    css: false, // Disable CSS processing to avoid JSDOM issues
+    // Mock CSS files
+    mockReset: true,
+    clearMocks: true,
   },
   resolve: {
     alias: {

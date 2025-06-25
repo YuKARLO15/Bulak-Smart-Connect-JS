@@ -1,6 +1,12 @@
 import '@testing-library/jest-dom';
 import { vi } from 'vitest';
 
+// Mock CSS imports
+vi.mock('*.css', () => ({}));
+vi.mock('*.scss', () => ({}));
+vi.mock('*.sass', () => ({}));
+vi.mock('*.less', () => ({}));
+
 // Mock window.matchMedia
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
@@ -38,6 +44,28 @@ global.IntersectionObserver = vi.fn().mockImplementation(() => ({
   observe: vi.fn(),
   unobserve: vi.fn(),
   disconnect: vi.fn(),
+}));
+
+// Mock URL.createObjectURL
+global.URL.createObjectURL = vi.fn(() => 'mocked-url');
+global.URL.revokeObjectURL = vi.fn();
+
+// Mock HTMLCanvasElement.getContext
+HTMLCanvasElement.prototype.getContext = vi.fn();
+
+// Mock console methods to reduce noise in tests
+global.console = {
+  ...console,
+  log: vi.fn(),
+  debug: vi.fn(),
+  info: vi.fn(),
+  warn: vi.fn(),
+  error: vi.fn(),
+};
+
+// Suppress React Scan in tests
+vi.mock('react-scan', () => ({
+  scan: vi.fn(),
 }));
 
 // Mock AuthContext for tests
