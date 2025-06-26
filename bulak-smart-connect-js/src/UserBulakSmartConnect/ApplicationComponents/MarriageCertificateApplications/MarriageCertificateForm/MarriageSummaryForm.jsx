@@ -21,26 +21,24 @@ const MarriageSummaryForm = () => {
   const [statusMessage, setStatusMessage] = useState('');
   const navigate = useNavigate();
 
-  // Load form data and application ID from localStorage when component mounts
-  useEffect(() => {
-    try {
-      // Get the current application ID
-      const currentApplicationId = localStorage.getItem('currentApplicationId');
-      if (currentApplicationId) {
-        setApplicationId(currentApplicationId);
-      }
-      
-      // Get the marriage form data
-      const savedCertificateData = localStorage.getItem('marriageFormData');
-      if (savedCertificateData) {
-        setFormData(JSON.parse(savedCertificateData));
-      }
-    } catch (err) {
-      console.error('Error loading form data:', err);
-    } finally {
-      setLoading(false);
+ useEffect(() => {
+  try {
+    const currentApplicationId = localStorage.getItem('currentApplicationId');
+    if (currentApplicationId) {
+      setApplicationId(currentApplicationId);
     }
-  }, []);`MC-924447`
+    
+    // Get the marriage form data
+    const savedCertificateData = localStorage.getItem('marriageFormData');
+    if (savedCertificateData) {
+      setFormData(JSON.parse(savedCertificateData));
+    }
+  } catch (err) {
+    console.error('Error loading form data:', err);
+  } finally {
+    setLoading(false);
+  }
+}, []);
   const handleCancelApplication = () => {
     try {
  
@@ -118,14 +116,13 @@ const MarriageSummaryForm = () => {
   try {
     console.log('Current formData:', formData);
 
-    const applicationId = formData.applicationId || formData.id;
-    console.log('Application ID for editing:', applicationId);
+    const appId = applicationId || formData.applicationId || formData.id;
+    console.log('Application ID for editing:', appId);
     
-    // Make sure we save formData with the application ID
-    if (applicationId) {
+    if (appId) {
       const updatedFormData = {
         ...formData,
-        applicationId: applicationId // Ensure ID is preserved
+        applicationId: appId 
       };
       
       localStorage.setItem('marriageFormData', JSON.stringify(updatedFormData));
@@ -134,13 +131,11 @@ const MarriageSummaryForm = () => {
       localStorage.setItem('marriageFormData', JSON.stringify(formData));
     }
     
-    // Set the editing flags
-   localStorage.setItem('isEditingMarriageForm', 'true');
+    localStorage.setItem('isEditingMarriageForm', 'true');
     localStorage.setItem('editingMarriageType', 'Marriage Certificate'); 
-    localStorage.setItem('currentEditingApplicationId', applicationId);
+    localStorage.setItem('currentEditingApplicationId', appId);
     localStorage.setItem('selectedMarriageOption', 'Marriage Certificate'); 
     
-    // Navigate to the form
     navigate('/MarriageForm');
   } catch (err) {
     console.error('Error setting up modification:', err);

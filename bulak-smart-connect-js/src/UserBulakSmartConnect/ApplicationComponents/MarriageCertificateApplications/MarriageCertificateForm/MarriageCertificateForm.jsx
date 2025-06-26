@@ -19,7 +19,7 @@ import WifeForm from './WifeForm';
 import MarriageDetailsForm from './MarriageDetailsForm';
 import MarriageAffidavitForm from './MarriageAffidavitForm';
 import { addApplication, getApplicationsByType, updateApplication } from '../../ApplicationData';
-
+import { documentApplicationService } from '../../../../services/documentApplicationService';
 const MarriageCertificateForm = () => {
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({});
@@ -30,14 +30,24 @@ const MarriageCertificateForm = () => {
   const [hasPreviousData, setHasPreviousData] = useState(false);
   const [previousLicenseData, setPreviousLicenseData] = useState(null);
   const [showDataDialog, setShowDataDialog] = useState(false);
-  // Add a state for affidavit form validation
   const [isAffidavitFormValid, setIsAffidavitFormValid] = useState(false);
 
   const navigate = useNavigate();
+  useEffect(() => {
+    const isDirectNavigation = !document.referrer.includes('MarriageDashboard');
+    const isNewApplication = !localStorage.getItem('isEditingMarriageForm');
 
+    if (isNewApplication) {
+      console.log('Starting new Marriage application - clearing previous application IDs');
+      localStorage.removeItem('currentApplicationId');
+      localStorage.removeItem('marriageApplicationId');
+    }
+  }, []);
   useEffect(() => {
     const isEditingForm = localStorage.getItem('isEditingMarriageForm') === 'true';
+    const currentEditingId = localStorage.getItem('currentEditingApplicationId');
     const option = localStorage.getItem('selectedMarriageOption');
+
     if (option) {
       setSelectedOption(option);
       setMaxSteps(option === 'Marriage License' ? 2 : 4);
@@ -49,28 +59,72 @@ const MarriageCertificateForm = () => {
       navigate('/MarriageDashboard');
     }
 
-    const editingType = localStorage.getItem('editingMarriageType');
-
-    if (isEditingForm && (!editingType || editingType === option)) {
-      const savedData = localStorage.getItem('marriageFormData');
-      if (savedData) {
+    const fetchData = async () => {
+      if (isEditingForm && currentEditingId) {
         try {
-          const parsedData = JSON.parse(savedData);
-          setFormData(parsedData);
+          const backendApp = await documentApplicationService.getApplication(currentEditingId);
 
-          if (parsedData.husbandCivilStatus === 'Widowed') {
-            setShowHusbandWidowedFields(true);
-          }
-          if (parsedData.wifeCivilStatus === 'Widowed') {
-            setShowWifeWidowedFields(true);
-          }
+          if (backendApp && backendApp.formData) {
+            setFormData(backendApp.formData);
+            console.log('Loaded form data from backend for editing:', currentEditingId);
 
-          console.log(`Loaded existing ${option} data for editing`);
-        } catch (err) {
-          console.error('Error loading marriage form data for editing:', err);
+            if (backendApp.formData.husbandCivilStatus === 'Widowed') {
+              setShowHusbandWidowedFields?.(true);
+            }
+            if (backendApp.formData.wifeCivilStatus === 'Widowed') {
+              setShowWifeWidowedFields?.(true);
+            }
+          } else {
+            const savedData = localStorage.getItem('marriageFormData');
+            if (savedData) {
+              try {
+                const parsedData = JSON.parse(savedData);
+                setFormData(parsedData);
+
+                if (parsedData.husbandCivilStatus === 'Widowed') {
+                  setShowHusbandWidowedFields?.(true);
+                }
+                if (parsedData.wifeCivilStatus === 'Widowed') {
+                  setShowWifeWidowedFields?.(true);
+                }
+
+                console.log(`Loaded existing ${option} data from localStorage for editing`);
+              } catch (err) {
+                console.error(
+                  'Error loading marriage form data from localStorage for editing:',
+                  err
+                );
+              }
+            }
+          }
+        } catch (error) {
+          console.error('Error fetching application from backend:', error);
+
+          const savedData = localStorage.getItem('marriageFormData');
+          if (savedData) {
+            try {
+              const parsedData = JSON.parse(savedData);
+              setFormData(parsedData);
+
+              if (parsedData.husbandCivilStatus === 'Widowed') {
+                setShowHusbandWidowedFields?.(true);
+              }
+              if (parsedData.wifeCivilStatus === 'Widowed') {
+                setShowWifeWidowedFields?.(true);
+              }
+
+              console.log(
+                `Loaded existing ${option} data from localStorage for editing (fallback)`
+              );
+            } catch (err) {
+              console.error('Error loading marriage form data from localStorage for editing:', err);
+            }
+          }
         }
       }
-    }
+    };
+
+    fetchData();
   }, [navigate]);
 
   const checkForPreviousLicenseData = () => {
@@ -239,53 +293,38 @@ const MarriageCertificateForm = () => {
     setStep(prevStep => prevStep - 1);
   };
 
-  const handleSubmit = e => {
+  const handleSubmit = async e => {
     if (e && e.preventDefault) {
       e.preventDefault();
     }
 
-    // When on the affidavit form step, validate it first
     if (step === 4 && !isAffidavitFormValid) {
-      // Trigger validation in the form
       const affidavitForm = document.querySelector('.affidavit-form1-container');
       if (affidavitForm) {
         const submitEvent = new Event('submit', { cancelable: true });
         affidavitForm.dispatchEvent(submitEvent);
 
-        // If the event was cancelled (validation failed), stop here
         if (submitEvent.defaultPrevented) {
           return;
         }
       }
-
-      // Alternative approach - just return if the form isn't valid
       return;
     }
 
     try {
       console.log('==== MARRIAGE FORM SUBMISSION ====');
 
-      // Check if we're in edit mode
       const isEditing = localStorage.getItem('isEditingMarriageForm') === 'true';
       const currentEditingId = localStorage.getItem('currentEditingApplicationId');
 
       console.log('Is editing mode?', isEditing);
       console.log('Editing ID:', currentEditingId);
 
-      // Determine the application ID
-      let applicationId;
-      if (isEditing && currentEditingId) {
-        applicationId = currentEditingId;
-        console.log('Using existing ID for edit:', applicationId);
-      } else {
-        applicationId =
-          selectedOption === 'Marriage License'
-            ? 'ML-' + Date.now().toString().slice(-6)
-            : 'MC-' + Date.now().toString().slice(-6);
-        console.log('Generated new ID:', applicationId);
-      }
+      const applicationType = 'Marriage Certificate';
+      const applicationSubtype = selectedOption || 'Marriage Certificate';
 
-      // Prepare form data
+      const applicantName = `${formData.husbandFirstName || ''} ${formData.husbandLastName || ''} and ${formData.wifeFirstName || ''} ${formData.wifeLastName || ''}`;
+
       const currentDate = new Date();
       const formattedDate = currentDate.toLocaleDateString('en-US', {
         year: 'numeric',
@@ -293,125 +332,128 @@ const MarriageCertificateForm = () => {
         day: 'numeric',
       });
 
-      // If we're editing, we need to get the existing application first
-      let finalApplicationData;
+      const completeFormData = {
+        ...formData,
+        certificateType: selectedOption,
+        lastUpdated: new Date().toISOString(),
+      };
+
+      let applicationId;
+      let backendResponse;
 
       if (isEditing && currentEditingId) {
-        // Get all applications to find the one we're editing
-        const applications = JSON.parse(localStorage.getItem('applications') || '[]');
-        const existingApp = applications.find(app => app.id === currentEditingId);
+        try {
+          backendResponse = await documentApplicationService.updateApplication(currentEditingId, {
+            formData: completeFormData,
+            applicantName: applicantName,
+            applicationType: applicationType,
+            applicationSubtype: applicationSubtype,
+            lastUpdated: new Date().toISOString(),
+          });
 
-        if (!existingApp) {
-          console.error('Could not find application with ID:', currentEditingId);
-          alert('Error: Could not find the application you are trying to edit.');
-          return;
+          applicationId = backendResponse.id || currentEditingId;
+          console.log('Successfully updated application in backend:', applicationId);
+        } catch (backendError) {
+          console.error('Backend update failed:', backendError);
+
+          const applications = JSON.parse(localStorage.getItem('applications') || '[]');
+          const index = applications.findIndex(app => app.id === currentEditingId);
+
+          if (index >= 0) {
+            applications[index] = {
+              ...applications[index],
+              type: applicationType,
+              applicationType: applicationType,
+              applicationSubtype: applicationSubtype,
+              message: `Application for ${selectedOption} between ${formData.husbandFirstName || ''} ${formData.husbandLastName || ''} and ${formData.wifeFirstName || ''} ${formData.wifeLastName || ''}`,
+              formData: completeFormData,
+              lastModified: new Date().toISOString(),
+            };
+
+            localStorage.setItem('applications', JSON.stringify(applications));
+            applicationId = currentEditingId;
+            console.log('Fallback to localStorage update for editing:', applicationId);
+          } else {
+            throw new Error('Application not found for editing.');
+          }
+        }
+      } else {
+        localStorage.removeItem('currentApplicationId');
+        localStorage.removeItem('marriageApplicationId');
+
+        applicationId =
+          selectedOption === 'Marriage License'
+            ? 'ML-' + Date.now().toString().slice(-6)
+            : 'MC-' + Date.now().toString().slice(-6);
+
+        const newApplicationData = {
+          applicationType: applicationType,
+          applicationSubtype: applicationSubtype,
+          applicantName: applicantName,
+          formData: completeFormData,
+          status: 'PENDING',
+        };
+
+        try {
+          backendResponse = await documentApplicationService.createApplication(newApplicationData);
+          if (backendResponse && backendResponse.id) {
+            applicationId = backendResponse.id;
+          }
+          console.log('Successfully created application in backend:', applicationId);
+        } catch (backendError) {
+          console.error('Backend creation failed:', backendError);
+
+          console.log('Falling back to localStorage creation only');
         }
 
-        console.log('Found existing application:', existingApp);
-
-        // Create a complete application object with all fields
-        finalApplicationData = {
+        const applications = JSON.parse(localStorage.getItem('applications') || '[]');
+        applications.push({
           id: applicationId,
-          type: selectedOption || existingApp.type,
-          applicationType: 'Modified Application',
-          date: existingApp.date || formattedDate,
-          status: existingApp.status || 'Pending',
-          message: `Application for ${selectedOption || 'marriage'} between ${formData.husbandFirstName || ''} ${formData.husbandLastName || ''} and ${formData.wifeFirstName || ''} ${formData.wifeLastName || ''}`,
-          // Replace formData entirely instead of merging
-          formData: {
-            ...formData,
-            applicationId: applicationId,
-            certificateType: selectedOption,
-            lastUpdated: new Date().toISOString(),
-          },
-          lastModified: new Date().toISOString(),
-        };
-      } else {
-        // Creating a new application
-        finalApplicationData = {
-          id: applicationId,
-          type: selectedOption || 'Marriage Certificate',
-          applicationType: 'New Application',
+          type: applicationType,
+          applicationType: applicationType,
+          applicationSubtype: applicationSubtype,
           date: formattedDate,
           status: 'Pending',
-          message: `Application for ${selectedOption || 'marriage'} between ${formData.husbandFirstName || ''} ${formData.husbandLastName || ''} and ${formData.wifeFirstName || ''} ${formData.wifeLastName || ''}`,
-          formData: {
-            ...formData,
-            applicationId: applicationId,
-            certificateType: selectedOption,
-            lastUpdated: new Date().toISOString(),
-          },
-        };
+          message: `Application for ${selectedOption} between ${formData.husbandFirstName || ''} ${formData.husbandLastName || ''} and ${formData.wifeFirstName || ''} ${formData.wifeLastName || ''}`,
+          formData: completeFormData,
+        });
+
+        localStorage.setItem('applications', JSON.stringify(applications));
       }
 
-      console.log('Final application data to submit:', finalApplicationData);
-
-      let result;
-      if (isEditing && currentEditingId) {
-        // For debugging purposes, get applications before update
-        const beforeApps = JSON.parse(localStorage.getItem('applications') || '[]');
-        console.log(
-          'Applications before update:',
-          beforeApps.map(a => a.id)
-        );
-
-        // Important: Pass the COMPLETE object to updateApplication
-        result = updateApplication(currentEditingId, finalApplicationData);
-
-        // For debugging, get applications after update
-        const afterApps = JSON.parse(localStorage.getItem('applications') || '[]');
-        console.log(
-          'Applications after update:',
-          afterApps.map(a => a.id)
-        );
-
-        console.log('Update result:', result);
-      } else {
-        result = addApplication(finalApplicationData);
-        console.log('Add result:', result);
-      }
-
-      if (!result) {
-        console.error('Failed to save application');
-        alert('There was an error saving your application. Please try again.');
-        return;
-      }
-
-      // Clear editing flags
       localStorage.removeItem('isEditingMarriageForm');
       localStorage.removeItem('editingMarriageType');
       localStorage.removeItem('currentEditingApplicationId');
-      localStorage.removeItem('marriageFormData');
 
-      // Notify any listeners about the storage change
+      localStorage.setItem('currentApplicationId', applicationId);
+      localStorage.setItem('marriageFormData', JSON.stringify(completeFormData));
+
       window.dispatchEvent(new Event('storage'));
+      window.dispatchEvent(
+        new CustomEvent('customStorageUpdate', {
+          detail: {
+            id: applicationId,
+            type: applicationType,
+            action: isEditing ? 'updated' : 'created',
+          },
+        })
+      );
 
-      // Navigate based on application type
       if (selectedOption === 'Marriage License') {
-        // Store the application data for Marriage License
-        localStorage.setItem('marriageFormData', JSON.stringify(finalApplicationData.formData));
-        localStorage.setItem('currentApplicationId', applicationId);
-        
-        // Navigate with proper state - ADD THIS
         navigate('/MarriageLicenseApplication', {
           state: {
             applicationId: applicationId,
-            formData: finalApplicationData.formData,
-            applicationType: 'Marriage License'
-          }
+            formData: completeFormData,
+            applicationType: 'Marriage License',
+          },
         });
       } else {
-        // Store the application data for Marriage Certificate
-        localStorage.setItem('marriageFormData', JSON.stringify(finalApplicationData.formData));
-        localStorage.setItem('currentApplicationId', applicationId);
-        
-        // Navigate with proper state
         navigate('/MarriageCertificateApplication', {
           state: {
             applicationId: applicationId,
-            formData: finalApplicationData.formData,
-            applicationType: 'Marriage Certificate'
-          }
+            formData: completeFormData,
+            applicationType: 'Marriage Certificate',
+          },
         });
       }
     } catch (error) {
@@ -508,42 +550,42 @@ const MarriageCertificateForm = () => {
           <>
             <WifeForm formData={formData} handleChange={handleChange} errors={errors} />
             <Container className="MarriageCertificateFormButtonContainer">
-            <Button
-              variant="contained"
-              onClick={handlePrevious}
-              className="MarriageCertificateFormButton"
-            >
-              Previous
-            </Button>
-            <Button
-              variant="contained"
-              onClick={maxSteps === 2 ? handleSubmit : handleNext}
-              className="MarriageCertificateFormButton"
-            >
-              {maxSteps === 2 ? 'Submit' : 'Next'}
+              <Button
+                variant="contained"
+                onClick={handlePrevious}
+                className="MarriageCertificateFormButton"
+              >
+                Previous
               </Button>
-              </Container>
+              <Button
+                variant="contained"
+                onClick={maxSteps === 2 ? handleSubmit : handleNext}
+                className="MarriageCertificateFormButton"
+              >
+                {maxSteps === 2 ? 'Submit' : 'Next'}
+              </Button>
+            </Container>
           </>
         )}
 
         {step === 3 && maxSteps > 2 && (
           <>
             <MarriageDetailsForm formData={formData} handleChange={handleChange} errors={errors} />
-             <Container className="MarriageCertificateFormButtonContainer">
-            <Button
-              variant="contained"
-              onClick={handlePrevious}
-              className="MarriageCertificateFormButton"
-            >
-              Previous
-            </Button>
-            <Button
-              variant="contained"
-              onClick={handleNext}
-              className="MarriageCertificateFormButton"
-            >
-              Next
-            </Button>
+            <Container className="MarriageCertificateFormButtonContainer">
+              <Button
+                variant="contained"
+                onClick={handlePrevious}
+                className="MarriageCertificateFormButton"
+              >
+                Previous
+              </Button>
+              <Button
+                variant="contained"
+                onClick={handleNext}
+                className="MarriageCertificateFormButton"
+              >
+                Next
+              </Button>
             </Container>
           </>
         )}
@@ -556,30 +598,27 @@ const MarriageCertificateForm = () => {
               errors={errors}
               onValidationChange={setIsAffidavitFormValid}
             />
-            
 
             <Container className="MarriageCertificateFormButtonContainer">
-          
-            <Button
-              variant="contained"
-              onClick={handlePrevious}
-              className="MarriageCertificateFormButton"
-            >
-              Previous
-            </Button>
-            <Button
-              variant="contained"
-              onClick={handleSubmit}
-              className="MarriageCertificateFormButton"
-              disabled={!isAffidavitFormValid}
-            >
-              Submit
-            </Button>
+              <Button
+                variant="contained"
+                onClick={handlePrevious}
+                className="MarriageCertificateFormButton"
+              >
+                Previous
+              </Button>
+              <Button
+                variant="contained"
+                onClick={handleSubmit}
+                className="MarriageCertificateFormButton"
+                disabled={!isAffidavitFormValid}
+              >
+                Submit
+              </Button>
             </Container>
           </>
         )}
 
-        {/* Progress indicator */}
         <Box className="FormProgressContainer">
           <Typography variant="body2">
             Step {step} of {maxSteps}

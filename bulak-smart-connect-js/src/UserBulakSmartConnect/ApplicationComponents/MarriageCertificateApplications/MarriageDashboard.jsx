@@ -34,13 +34,26 @@ const MarriageDashboard = () => {
   };
 
   const handleNext = () => {
-    if (!selectedOption) {
-      alert('Please select an application type before proceeding.');
-      return;
-    }
-    localStorage.setItem('selectedMarriageOption', selectedOption);
-    navigate('/MarriageForm');
-  };
+    
+  if (!selectedOption) {
+    alert('Please select an application type before proceeding.');
+    return;
+  }
+
+  localStorage.setItem('selectedMarriageOption', selectedOption);
+  
+  localStorage.removeItem('currentApplicationId');
+  localStorage.removeItem('marriageApplicationId');
+  localStorage.removeItem('marriageFormData');
+  localStorage.removeItem('isEditingMarriageForm');
+  localStorage.removeItem('currentEditingApplicationId');
+  localStorage.removeItem('editingMarriageType');
+  
+  localStorage.setItem('isCreatingNewMarriageApplication', 'true');
+
+  
+  navigate('/MarriageForm');
+};
 
   return (
     <Box className={`ContainerMDashboard ${isSidebarOpen ? 'sidebar-openMDashboard' : ''}`}>
