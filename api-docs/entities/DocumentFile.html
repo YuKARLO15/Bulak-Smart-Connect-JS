@@ -282,7 +282,7 @@
                         <b>Decorators : </b>
                         <br />
                         <code>
-                            @Column({name: &#x27;document_category&#x27;, length: 100, nullable: true})<br />
+                            @Column({name: &#x27;document_category&#x27;, length: 250, nullable: true})<br />
                         </code>
                     </td>
                 </tr>
@@ -549,7 +549,7 @@ export class DocumentFile {
   @Column({ name: &#x27;minio_object_name&#x27;, length: 500 })
   minioObjectName: string;
 
-  @Column({ name: &#x27;document_category&#x27;, length: 100, nullable: true })
+  @Column({ name: &#x27;document_category&#x27;, length: 250, nullable: true })
   documentCategory: string;
 
   @CreateDateColumn({ name: &#x27;uploaded_at&#x27; })
