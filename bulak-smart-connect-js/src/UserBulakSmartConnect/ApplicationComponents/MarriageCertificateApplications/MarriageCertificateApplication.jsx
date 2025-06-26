@@ -424,9 +424,6 @@ const MarriageCertificateApplication = () => {
       <Typography variant="h5" className="TitleMarriageCertificate">
         MARRIAGE CERTIFICATE APPLICATION
       </Typography>
-      <Typography className="SubtitleMarriageCertificate">
-        Request for Marriage Certificate
-      </Typography>
 
       {applicationId && (
         <Typography variant="body2" className="ApplicationIdMarriageCertificate">
