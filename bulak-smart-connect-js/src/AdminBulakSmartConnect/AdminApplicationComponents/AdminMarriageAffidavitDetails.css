@@ -1,0 +1,307 @@
+.AdminPreviewContainerMcAffidavit {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  line-height: 1.4;
+  color: #333;
+  background: white;
+}
+
+.AdminInfoHeaderMcAffidavit {
+  background: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  padding: 15px;
+}
+
+.AdminInfoContentMcAffidavit {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.AdminInfoRowMcAffidavit {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.AdminInfoLabelMcAffidavit {
+  font-weight: bold;
+  color: #495057;
+  min-width: 140px;
+}
+
+.AdminInfoValueMcAffidavit {
+  color: #212529;
+}
+
+.StatusMcAffidavit.Pending {
+  color: #fd7e14;
+  font-weight: bold;
+}
+
+.StatusMcAffidavit.Approved {
+  color: #28a745;
+  font-weight: bold;
+}
+
+.StatusMcAffidavit.Decline {
+  color: #dc3545;
+  font-weight: bold;
+}
+
+.AdminEditControlsMcAffidavit {
+  display: flex;
+  gap: 10px;
+}
+
+.AdminPreviewLoadingMcAffidavit {
+  text-align: center;
+  padding: 40px;
+  font-size: 18px;
+  color: #666;
+}
+
+.AdminPreviewErrorMcAffidavit {
+  text-align: center;
+  padding: 40px;
+  font-size: 18px;
+  color: #dc3545;
+  background: #f8d7da;
+  border: 1px solid #f5c6cb;
+  border-radius: 8px;
+  margin: 20px 0;
+}
+
+.AdminPreviewSuccessMcAffidavit {
+  text-align: center;
+  padding: 15px;
+  font-size: 16px;
+  color: #155724;
+  background: #d4edda;
+  border: 1px solid #c3e6cb;
+  border-radius: 8px;
+  margin: 20px 0;
+}
+
+.MarriageFormContainerMcAffidavit {
+  background: white;
+  border: 2px solid #000;
+  margin: 20px 0;
+  page-break-inside: avoid;
+}
+
+.FormHeaderMcAffidavit {
+  background: #184a5b ;
+  padding: 15px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 16px;
+  border-bottom: 1px solid #000;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.FormContentMcAffidavit {
+  padding: 20px;
+}
+
+.FormSectionMcAffidavit {
+  margin-bottom: 20px;
+}
+
+.FormRowMcAffidavit {
+  margin-bottom: 15px;
+  line-height: 1.6;
+}
+
+.AffidavitTextMcAffidavit {
+  margin-bottom: 10px;
+  text-align: justify;
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.WitnessesSectionMcAffidavit {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  padding: 15px;
+}
+
+.WitnessRowMcAffidavit {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 15px;
+  align-items: center;
+}
+
+.WitnessInputMcAffidavit {
+  padding: 8px;
+  border: none;
+  border-bottom: 1px solid #000;
+  background: transparent;
+  font-size: 14px;
+  font-family: inherit;
+  width: 100%;
+}
+
+.WitnessInputMcAffidavit:focus {
+  outline: none;
+  border-bottom: 2px solid #007bff;
+}
+
+.WitnessInputMcAffidavit.ReadOnlyMcAffidavit {
+  border-bottom: 1px solid #000;
+  background: transparent;
+  cursor: default;
+}
+
+.AffidavitUnderlineInputMcAffidavit {
+  display: inline-block;
+  border: none;
+  border-bottom: 1px solid #000;
+  background: transparent;
+  padding: 2px 5px;
+  margin: 0 5px;
+  font-size: 14px;
+  font-family: inherit;
+  min-width: 100px;
+  text-align: center;
+}
+
+.AffidavitUnderlineInputMcAffidavit:focus {
+  outline: none;
+  border-bottom: 2px solid #007bff;
+}
+
+.AffidavitUnderlineInputMcAffidavit.ReadOnlyMcAffidavit {
+  border-bottom: 1px solid #000;
+  background: transparent;
+  cursor: default;
+}
+
+.AffidavitShortInputMcAffidavit {
+  width: 60px;
+}
+
+.AffidavitMediumInputMcAffidavit {
+  width: 120px;
+}
+
+.AffidavitLongInputMcAffidavit {
+  width: 200px;
+}
+
+.CheckboxItemMcAffidavit {
+  display: flex;
+  align-items: flex-start;
+  margin: 10px 0;
+  padding-left: 20px;
+}
+
+.CheckboxInputMcAffidavit {
+  margin-right: 10px;
+  margin-top: 3px;
+  flex-shrink: 0;
+}
+
+.CheckboxLabelMcAffidavit {
+  flex: 1;
+  line-height: 1.6;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.CheckboxInputMcAffidavit:disabled + .CheckboxLabelMcAffidavit {
+  cursor: default;
+}
+
+.CeremonyTypesMcAffidavit {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 10px 0;
+  padding-left: 20px;
+}
+
+.CeremonyTypeMcAffidavit {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.CeremonyTypeMcAffidavit span {
+  font-weight: bold;
+  width: 20px;
+}
+
+.SignatureBlockMcAffidavit {
+  margin: 30px 10px 10px 10px;
+  display: inline-block;
+  width: 45%;
+  vertical-align: top;
+}
+
+.SignatureBlockMcAffidavit.FullWidthMcAffidavit {
+  width: 90%;
+  text-align: center;
+}
+
+.SignatureLineMcAffidavit {
+  border-bottom: 1px solid #000;
+  height: 30px;
+  margin-bottom: 5px;
+}
+
+.SignatureCaptionMcAffidavit {
+  text-align: center;
+  font-size: 12px;
+  margin-bottom: 10px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .AdminPreviewContainerMcAffidavit {
+    padding: 10px;
+  }
+  
+  .WitnessRowMcAffidavit {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  
+  .SignatureBlockMcAffidavit {
+    width: 90%;
+    margin: 20px 5px;
+  }
+  
+  .AdminInfoRowMcAffidavit {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .AdminInfoLabelMcAffidavit {
+    min-width: auto;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .AdminInfoHeaderMcAffidavit {
+    display: none;
+  }
+  
+  .AdminPreviewContainerMcAffidavit {
+    margin: 0;
+    padding: 0;
+  }
+  
+  .MarriageFormContainerMcAffidavit {
+    page-break-inside: avoid;
+    margin: 10px 0;
+  }
+}

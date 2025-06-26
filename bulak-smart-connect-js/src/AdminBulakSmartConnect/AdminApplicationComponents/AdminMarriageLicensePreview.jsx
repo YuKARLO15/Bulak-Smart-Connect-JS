@@ -38,7 +38,7 @@ const AdminMarriageLicensePreview = ({ applicationData }) => {
       <div className="AdminFormDocumentMLApplication">
         <div className="AdminDocumentHeaderMLApplication">
           <div className="AdminFormNumberMLApplication">Municipal Form No. 90 (Form No. 2)<br/>(Revised January 2001)</div>
-          <div className="AdminDocumentNoticeMLApplication">(To be accomplished in quadruplicate using black ink)</div>
+         
           <div className="AdminHeaderCenterMLApplication">
             <div className="AdminRepublicTextMLApplication">Republic of the Philippines</div>
             <div className="AdminRegistrarTextMLApplication">OFFICE OF THE CIVIL REGISTRAR GENERAL</div>
@@ -68,15 +68,15 @@ const AdminMarriageLicensePreview = ({ applicationData }) => {
           <div className="AdminTopRightMLApplication">
             <div className="AdminGridItemMLApplication">
               <div className="AdminItemLabelMLApplication">Registry No.</div>
-              <div className="AdminItemValueMLApplication"></div>
+              <div className="AdminItemValueMLApplication1"></div>
             </div>
             <div className="AdminGridItemMLApplication">
               <div className="AdminItemLabelMLApplication">Marriage License No.:</div>
-              <div className="AdminItemValueMLApplication"></div>
+              <div className="AdminItemValueMLApplication1"></div>
             </div>
             <div className="AdminGridItemMLApplication">
               <div className="AdminItemLabelMLApplication">Date of Issuance of Marriage License:</div>
-              <div className="AdminItemValueMLApplication"></div>
+              <div className="AdminItemValueMLApplication1"></div>
             </div>
           </div>
         </div>

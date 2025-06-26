@@ -132,9 +132,7 @@ const MarriageLicenseSummary = () => {
             <br />
             (Revised January 2001)
           </div>
-          <div className="DocumentNoticeMLSummary">
-            (To be accomplished in quadruplicate using black ink)
-          </div>
+        
           <div className="HeaderCenterMLSummary">
             <div className="RepublicTextMLSummary">Republic of the Philippines</div>
             <div className="RegistrarTextMLSummary">OFFICE OF THE CIVIL REGISTRAR GENERAL</div>
