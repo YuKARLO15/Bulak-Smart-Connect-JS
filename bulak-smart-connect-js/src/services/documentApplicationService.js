@@ -282,12 +282,12 @@ export const documentApplicationService = {
     }
   },
   
-  // Get application files
+  // Get application files (latest per category)
   getApplicationFiles: async (applicationId) => {
     try {
-      console.log(`Frontend Service: Fetching files for application ${applicationId}...`);
+      console.log(`Frontend Service: Fetching latest files for application ${applicationId}...`);
       const response = await apiClient.get(`/document-applications/${applicationId}/files`);
-      console.log('Frontend Service: Files response:', response.data);
+      console.log('Frontend Service: Latest files response:', response.data);
       return response.data;
     } catch (error) {
       console.error(`Frontend Service: Error getting files for application ${applicationId}:`, error);
@@ -301,6 +301,25 @@ export const documentApplicationService = {
     }
   },
   
+  // Get all application files (for admin)
+  getAllApplicationFiles: async (applicationId) => {
+    try {
+      console.log(`Frontend Service: Fetching ALL files for application ${applicationId}...`);
+      const response = await apiClient.get(`/document-applications/${applicationId}/files/all`);
+      console.log('Frontend Service: All files response:', response.data);
+      return response.data;
+    } catch (error) {
+      console.error(`Frontend Service: Error getting all files for application ${applicationId}:`, error);
+      
+      if (error.response?.status === 404) {
+        console.log('Frontend Service: Application or files not found, returning empty object');
+        return { latestByCategory: {}, allFiles: [] };
+      }
+      
+      throw error;
+    }
+  },
+
   // Get user's applications (non-admin) 
   getUserApplications: async () => {
     try {

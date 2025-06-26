@@ -91,3 +91,18 @@
   color: #f44336;
   font-style: italic;
 }
+
+.categorySectionTitle {
+  padding: 16px 0 8px 0;
+  border-bottom: 1px solid #e0e0e0;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.documentVersions {
+  margin-left: 16px;
+}
+
+.versionChip {
+  margin-left: 8px;
+}

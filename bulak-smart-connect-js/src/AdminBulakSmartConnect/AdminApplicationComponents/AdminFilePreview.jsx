@@ -1,21 +1,29 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Typography, Paper, List, ListItem, Button, Divider, Dialog, DialogTitle, DialogContent, DialogActions, CircularProgress } from '@mui/material';
+import { Box, Typography, Paper, List, ListItem, Button, Divider, Dialog, DialogTitle, DialogContent, DialogActions, CircularProgress, Chip } from '@mui/material';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import ImageIcon from '@mui/icons-material/Image';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import './AdminFIlePreview.css';
 import { documentApplicationService } from '../../services/documentApplicationService';
 
-const FileUploadPreview = ({ formData, applicationType, applicationSubtype }) => {
+const FileUploadPreview = ({ formData, applicationType, applicationSubtype, currentUser = "admin" }) => {
   const [uploadedFiles, setUploadedFiles] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [previewDialog, setPreviewDialog] = useState({ open: false, url: '', title: '' });
+  const [allFiles, setAllFiles] = useState([]);
+  const [showAllVersions, setShowAllVersions] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [previewDialog, setPreviewDialog] = useState({
+    open: false,
+    url: '',
+    title: '',
+    contentType: ''
+  });
   
   // Current date and time information
   const currentDateTime = "2025-06-08 16:24:15"; // UTC formatted
-  const currentUser = "dennissegailfrancisco"; // Current user's login
+  // const currentUser = "dennissegailfrancisco"; // Current user's login
   
   useEffect(() => {
     console.log('AdminFilePreview: useEffect triggered');
@@ -40,19 +48,19 @@ const FileUploadPreview = ({ formData, applicationType, applicationSubtype }) =>
     try {
       console.log(`AdminFilePreview: Fetching files for application ID: ${applicationId}`);
       
-      // Use the service to get files
-      const files = await documentApplicationService.getApplicationFiles(applicationId);
+      // Get latest files by default
+      const latestFiles = await documentApplicationService.getApplicationFiles(applicationId);
       
-      console.log('AdminFilePreview: Retrieved files from backend:', files);
-      console.log('AdminFilePreview: Number of files:', files?.length || 0);
-      console.log('AdminFilePreview: Files array check:', Array.isArray(files));
+      // Get all files for admin view
+      const allFilesData = await documentApplicationService.getAllApplicationFiles(applicationId);
       
-      if (Array.isArray(files) && files.length > 0) {
-        console.log('AdminFilePreview: Processing files...');
-        // Transform the files to match expected format
-        const transformedFiles = files.map((file, index) => {
+      console.log('AdminFilePreview: Retrieved latest files:', latestFiles);
+      console.log('AdminFilePreview: Retrieved all files data:', allFilesData);
+      
+      if (Array.isArray(latestFiles) && latestFiles.length > 0) {
+        const transformedFiles = latestFiles.map((file, index) => {
           console.log(`AdminFilePreview: Processing file ${index + 1}:`, file);
-          const transformed = {
+          return {
             id: file.id,
             name: file.fileName || file.name,
             documentType: file.documentCategory || file.documentType,
@@ -61,14 +69,11 @@ const FileUploadPreview = ({ formData, applicationType, applicationSubtype }) =>
             size: file.fileSize || file.size,
             uploadedAt: file.uploadedAt,
             uploaded: true,
-            isPlaceholder: false,
+            isLatest: true,
             placeholder: false
           };
-          console.log(`AdminFilePreview: Transformed file ${index + 1}:`, transformed);
-          return transformed;
         });
         
-        console.log('AdminFilePreview: Setting transformed files:', transformedFiles);
         setUploadedFiles(transformedFiles);
       } else {
         console.log('AdminFilePreview: No files returned from API, showing placeholders...');
@@ -80,16 +85,16 @@ const FileUploadPreview = ({ formData, applicationType, applicationSubtype }) =>
           uploaded: false,
           url: null
         }));
-        console.log('AdminFilePreview: Setting placeholders:', placeholders);
         setUploadedFiles(placeholders);
       }
+
+      // Set all files data for version history
+      if (allFilesData && allFilesData.allFiles) {
+        setAllFiles(allFilesData.allFiles);
+      }
+      
     } catch (error) {
       console.error('AdminFilePreview: Error fetching application files:', error);
-      console.error('AdminFilePreview: Error details:', {
-        message: error.message,
-        status: error.response?.status,
-        data: error.response?.data
-      });
       
       // Show placeholders on error
       const requiredDocs = getRequiredDocuments();
@@ -100,7 +105,6 @@ const FileUploadPreview = ({ formData, applicationType, applicationSubtype }) =>
         uploaded: false,
         url: null
       }));
-      console.log('AdminFilePreview: Setting error placeholders:', placeholders);
       setUploadedFiles(placeholders);
     } finally {
       setLoading(false);
@@ -538,15 +542,51 @@ const FileUploadPreview = ({ formData, applicationType, applicationSubtype }) =>
 
   const displayedDocs = documentsToDisplay();
 
+  const getFilesByCategory = () => {
+    const grouped = {};
+    allFiles.forEach(file => {
+      const category = file.documentCategory || file.documentType || 'uncategorized';
+      if (!grouped[category]) {
+        grouped[category] = [];
+      }
+      grouped[category].push({
+        id: file.id,
+        fileName: file.fileName || file.name,
+        fileType: file.fileType || file.contentType,
+        documentCategory: file.documentCategory || file.documentType,
+        uploadedAt: file.uploadedAt,
+        url: file.url || file.downloadUrl,
+        downloadUrl: file.url || file.downloadUrl
+      });
+    });
+    
+    // Sort each category by upload date (newest first)
+    Object.keys(grouped).forEach(category => {
+      grouped[category].sort((a, b) => new Date(b.uploadedAt) - new Date(a.uploadedAt));
+    });
+    
+    return grouped;
+  };
+
   return (
     <Box className="documentRequirementsContainer">
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
         <Typography variant="h5" className="documentRequirementsTitle">
           Document Requirements
         </Typography>
-        <Typography variant="body2" color="textSecondary">
-          Processed by: {currentUser} on {currentDateTime}
-        </Typography>
+        <Box display="flex" alignItems="center" gap={2}>
+          <Button
+            variant="outlined"
+            size="small"
+            onClick={() => setShowAllVersions(!showAllVersions)}
+            startIcon={showAllVersions ? <VisibilityOffIcon /> : <VisibilityIcon />}
+          >
+            {showAllVersions ? 'Show Latest Only' : 'Show All Versions'}
+          </Button>
+          <Typography variant="body2" color="textSecondary">
+            Processed by: {currentUser} on {currentDateTime}
+          </Typography>
+        </Box>
       </Box>
 
       {loading ? (
@@ -554,45 +594,105 @@ const FileUploadPreview = ({ formData, applicationType, applicationSubtype }) =>
           <CircularProgress />
         </Box>
       ) : (
-        <List className="documentList">
-          {displayedDocs.map((doc, index) => {
-            const docNumber = index + 1;
-            const docNote = getDocumentNote(doc.name || documentType);
-            const isUploaded = !doc.placeholder || doc.uploaded;
+        <>
+          {!showAllVersions ? (
+            // Show latest files only
+            <List className="documentList">
+              {displayedDocs.map((doc, index) => {
+                const docNumber = index + 1;
+                const docNote = getDocumentNote(doc.name || doc.documentType);
+                const isUploaded = !doc.placeholder || doc.uploaded;
 
-            return (
-              <React.Fragment key={index}>
-                <ListItem className="documentListItem">
-                  <Box className="documentItemContent">
-                    <Box className="documentHeader">
-                      <Typography className="documentNumberTitle">
-                        {docNumber}. { doc.documentType}
-                      </Typography>
-                    </Box>
+                return (
+                  <React.Fragment key={index}>
+                    <ListItem className="documentListItem">
+                      <Box className="documentItemContent">
+                        <Box className="documentHeader">
+                          <Typography className="documentNumberTitle">
+                            {docNumber}. {doc.documentType}
+                          </Typography>
+                        </Box>
 
-                    {docNote && <Typography className="documentNote">{docNote}</Typography>}
+                        {docNote && <Typography className="documentNote">{docNote}</Typography>}
 
-                    <Box className="uploadedPreviewBox">
-                      {isUploaded ? (
-                        <Button
-                          variant="text"
-                          className="uploadedPreviewButton"
-                          onClick={() => handleViewDocument(doc)}
-                          startIcon={getFileIcon(doc.name, doc.contentType)}
-                        >
-                          {doc.placeholder ? "View document" : "Preview document"}
-                        </Button>
-                      ) : (
-                        <Typography className="notUploadedText">No document uploaded</Typography>
-                      )}
-                    </Box>
+                        <Box className="uploadedPreviewBox">
+                          {isUploaded ? (
+                            <Button
+                              variant="text"
+                              className="uploadedPreviewButton"
+                              onClick={() => handleViewDocument(doc)}
+                              startIcon={getFileIcon(doc.name, doc.contentType)}
+                            >
+                              {doc.placeholder ? "View document" : "Preview document"}
+                            </Button>
+                          ) : (
+                            <Typography className="notUploadedText">No document uploaded</Typography>
+                          )}
+                        </Box>
+                      </Box>
+                    </ListItem>
+                    <Divider component="li" />
+                  </React.Fragment>
+                );
+              })}
+            </List>
+          ) : (
+            // Show all versions grouped by category
+            <Box>
+              {allFiles.length > 0 ? (
+                Object.entries(getFilesByCategory()).map(([category, files]) => (
+                  <Box key={category} mb={3}>
+                    <Typography variant="h6" className="categorySectionTitle">
+                      {formatDocumentName(category)} ({files.length} version{files.length !== 1 ? 's' : ''})
+                    </Typography>
+                    <List className="documentList">
+                      {files.map((file, index) => (
+                        <React.Fragment key={file.id || index}>
+                          <ListItem className="documentListItem">
+                            <Box className="documentItemContent">
+                              <Box className="documentHeader">
+                                <Typography className="documentNumberTitle">
+                                  v{files.length - index}. {file.fileName}
+                                  {index === 0 && (
+                                    <Chip 
+                                      label="Latest" 
+                                      size="small" 
+                                      color="primary" 
+                                      style={{ marginLeft: 8 }}
+                                    />
+                                  )}
+                                </Typography>
+                                <Typography variant="caption" color="textSecondary">
+                                  Uploaded: {new Date(file.uploadedAt).toLocaleString()}
+                                </Typography>
+                              </Box>
+
+                              <Box className="uploadedPreviewBox">
+                                <Button
+                                  variant="text"
+                                  className="uploadedPreviewButton"
+                                  onClick={() => handleViewDocument(file)}
+                                  startIcon={getFileIcon(file.fileName, file.fileType)}
+                                >
+                                  Preview document
+                                </Button>
+                              </Box>
+                            </Box>
+                          </ListItem>
+                          <Divider component="li" />
+                        </React.Fragment>
+                      ))}
+                    </List>
                   </Box>
-                </ListItem>
-                <Divider component="li" />
-              </React.Fragment>
-            );
-          })}
-        </List>
+                ))
+              ) : (
+                <Typography variant="body2" color="textSecondary" textAlign="center" p={3}>
+                  No file versions available to display.
+                </Typography>
+              )}
+            </Box>
+          )}
+        </>
       )}
       
       {/* Preview Dialog */}

@@ -97,26 +97,30 @@ export class DocumentApplicationsController {
     @Query('status') status?: string,
     @User() user?: AuthenticatedUser,
   ) {
-    const userId = user?.roles.some((role) => role.name === 'admin')
+    const userId = user?.roles.some((role) =>
+      ['admin', 'super_admin', 'staff'].includes(role.name),
+    )
       ? undefined
       : user?.id;
     return this.documentApplicationsService.findAll(userId);
   }
 
   @Get(':id/files')
-  @ApiOperation({ summary: 'Get application files' })
+  @ApiOperation({ summary: 'Get application files (latest per category)' })
   @ApiResponse({ status: 200, description: 'Files retrieved successfully' })
   @ApiResponse({ status: 404, description: 'Application not found' })
   async getApplicationFiles(
     @Param('id') id: string,
     @User() user: AuthenticatedUser,
   ) {
-    const userId = user.roles.some((role) => role.name === 'admin')
-      ? undefined // Admin can see any application
-      : user.id; // Regular users can only see their own
+    const userId = user.roles.some((role) =>
+      ['admin', 'super_admin', 'staff'].includes(role.name),
+    )
+      ? undefined
+      : user.id;
 
     console.log(
-      `Getting files for application ${id}, user: ${user.email}, isAdmin: ${!userId}`,
+      `Getting files for application ${id}, user: ${user.email}, isPrivileged: ${!userId}`,
     );
 
     return await this.documentApplicationsService.getApplicationFiles(
@@ -125,10 +129,32 @@ export class DocumentApplicationsController {
     );
   }
 
+  @Get(':id/files/all')
+  @ApiOperation({ summary: 'Get all application files (privileged users only)' })
+  @ApiResponse({ status: 200, description: 'All files retrieved successfully' })
+  @ApiResponse({ status: 404, description: 'Application not found' })
+  async getAllApplicationFiles(
+    @Param('id') id: string,
+    @User() user: AuthenticatedUser,
+  ) {
+    const userId = user.roles.some((role) =>
+      ['admin', 'super_admin', 'staff'].includes(role.name),
+    )
+      ? undefined
+      : user.id;
+
+    return await this.documentApplicationsService.getAllApplicationFiles(
+      id,
+      userId,
+    );
+  }
+
   @Get(':id')
   @ApiOperation({ summary: 'Get specific application' })
   async findOne(@Param('id') id: string, @User() user: AuthenticatedUser) {
-    const userId = user.roles.some((role) => role.name === 'admin')
+    const userId = user.roles.some((role) =>
+      ['admin', 'super_admin', 'staff'].includes(role.name),
+    )
       ? undefined
       : user.id;
     return this.documentApplicationsService.findOne(id, userId);
@@ -140,7 +166,9 @@ export class DocumentApplicationsController {
     @Param('fileId') fileId: string,
     @User() user: AuthenticatedUser,
   ) {
-    const userId = user.roles.some((role) => role.name === 'admin')
+    const userId = user.roles.some((role) =>
+      ['admin', 'super_admin', 'staff'].includes(role.name),
+    )
       ? undefined
       : user.id;
     const url = await this.documentApplicationsService.getFileDownloadUrl(
@@ -157,10 +185,14 @@ export class DocumentApplicationsController {
     @Body() updateDto: UpdateDocumentApplicationDto,
     @User() user: AuthenticatedUser,
   ) {
-    const userId = user.roles.some((role) => role.name === 'admin')
+    const userId = user.roles.some((role) =>
+      ['admin', 'super_admin', 'staff'].includes(role.name),
+    )
       ? undefined
       : user.id;
-    const adminId = user.roles.some((role) => role.name === 'admin')
+    const adminId = user.roles.some((role) =>
+      ['admin', 'super_admin', 'staff'].includes(role.name),
+    )
       ? user.id
       : undefined;
 
@@ -173,9 +205,9 @@ export class DocumentApplicationsController {
   }
 
   @Patch(':id/status')
-  @Roles('admin', 'staff')
+  @Roles('admin', 'staff', 'super_admin')
   @UseGuards(RolesGuard)
-  @ApiOperation({ summary: 'Update application status (Admin only)' })
+  @ApiOperation({ summary: 'Update application status (Privileged users only)' })
   async updateStatus(
     @Param('id') id: string,
     @Body() statusDto: { status: string; statusMessage?: string },
@@ -192,7 +224,9 @@ export class DocumentApplicationsController {
   @Delete(':id')
   @ApiOperation({ summary: 'Delete application' })
   async remove(@Param('id') id: string, @User() user: AuthenticatedUser) {
-    const userId = user.roles.some((role) => role.name === 'admin')
+    const userId = user.roles.some((role) =>
+      ['admin', 'super_admin', 'staff'].includes(role.name),
+    )
       ? undefined
       : user.id;
     await this.documentApplicationsService.remove(id, userId);
@@ -201,17 +235,17 @@ export class DocumentApplicationsController {
 
   // Admin endpoints
   @Get('admin/all')
-  @Roles('admin', 'staff')
+  @Roles('admin', 'staff', 'super_admin')
   @UseGuards(RolesGuard)
-  @ApiOperation({ summary: 'Get all applications (Admin only)' })
+  @ApiOperation({ summary: 'Get all applications (Privileged users only)' })
   async getAllApplications() {
     return this.documentApplicationsService.findAll();
   }
 
   @Get('admin/stats')
-  @Roles('admin')
+  @Roles('admin', 'super_admin')
   @UseGuards(RolesGuard)
-  @ApiOperation({ summary: 'Get application statistics (Admin only)' })
+  @ApiOperation({ summary: 'Get application statistics (Admin/Super Admin only)' })
   async getStats(): Promise<
     Array<{ type: string; status: string; count: string }>
   > {
