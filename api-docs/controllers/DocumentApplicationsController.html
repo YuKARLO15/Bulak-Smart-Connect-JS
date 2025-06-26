@@ -165,14 +165,6 @@
                                     <span class="modifier"></span>
                                     <span class="modifier"></span>
                                     <span class="modifier">Async</span>
-                                <a href="#getAllApplicationFiles" >getAllApplicationFiles</a>
-                            </li>
-                            <li>
-                                    <span class="modifier"></span>
-                                    <span class="modifier"></span>
-                                    <span class="modifier"></span>
-                                    <span class="modifier"></span>
-                                    <span class="modifier">Async</span>
                                 <a href="#getAllApplications" >getAllApplications</a>
                             </li>
                             <li>
@@ -454,100 +446,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="154"
-                                    class="link-to-prism">src/modules/document-applications/document-applications.controller.ts:154</a></div>
-                        </td>
-                    </tr>
-
-
-            <tr>
-                <td class="col-md-4">
-
-                            <div class="io-description">
-                                <b>Parameters :</b>
-                                
-                                <table class="params">
-                                    <thead>
-                                        <tr>
-                                            <td>Name</td>
-                                                <td>Type</td>
-                                            <td>Optional</td>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                                <td>id</td>
-                                            <td>
-                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
-                                            </td>
-
-                                            <td>
-                                                    No
-                                            </td>
-
-
-                                        </tr>
-                                        <tr>
-                                                <td>user</td>
-                                            <td>
-                                                            <code><a href="../interfaces/AuthenticatedUser.html" target="_self" >AuthenticatedUser</a></code>
-                                            </td>
-
-                                            <td>
-                                                    No
-                                            </td>
-
-
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        <div class="io-description">
-                            <b>Returns : </b>    <code>unknown</code>
-
-                        </div>
-                            <div class="io-description">
-                                
-                            </div>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    <table class="table table-sm table-bordered">
-        <tbody>
-            <tr>
-                <td class="col-md-4">
-                    <a name="getAllApplicationFiles"></a>
-                    <span class="name">
-                            <span class="modifier"></span>
-                            <span class="modifier"></span>
-                            <span class="modifier"></span>
-                            <span class="modifier"></span>
-                            <span class="modifier">Async</span>
-                        <span ><b>getAllApplicationFiles</b></span>
-                        <a href="#getAllApplicationFiles"><span class="icon ion-ios-link"></span></a>
-                    </span>
-                </td>
-            </tr>
-            <tr>
-                <td class="col-md-4">
-                        <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>getAllApplicationFiles(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, user: <a href="../interfaces/AuthenticatedUser.html" target="_self">AuthenticatedUser</a>)</code>
-                </td>
-            </tr>
-
-            <tr>
-                <td class="col-md-4">
-                    <b>Decorators : </b>
-                    <br />
-                    <code>@Get(&#x27;:id/files/all&#x27;)<br />@ApiOperation({summary: &#x27;Get all application files (privileged users only)&#x27;})<br />@ApiResponse({status: 200, description: &#x27;All files retrieved successfully&#x27;})<br />@ApiResponse({status: 404, description: &#x27;Application not found&#x27;})<br /></code>
-                </td>
-            </tr>
-
-                    <tr>
-                        <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="136"
-                                    class="link-to-prism">src/modules/document-applications/document-applications.controller.ts:136</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="130"
+                                    class="link-to-prism">src/modules/document-applications/document-applications.controller.ts:130</a></div>
                         </td>
                     </tr>
 
@@ -632,14 +532,14 @@
                 <td class="col-md-4">
                     <b>Decorators : </b>
                     <br />
-                    <code>@Get(&#x27;admin/all&#x27;)<br />@Roles(&#x27;admin&#x27;, &#x27;staff&#x27;, &#x27;super_admin&#x27;)<br />@UseGuards(RolesGuard)<br />@ApiOperation({summary: &#x27;Get all applications (Privileged users only)&#x27;})<br /></code>
+                    <code>@Get(&#x27;admin/all&#x27;)<br />@Roles(&#x27;admin&#x27;, &#x27;staff&#x27;)<br />@UseGuards(RolesGuard)<br />@ApiOperation({summary: &#x27;Get all applications (Admin only)&#x27;})<br /></code>
                 </td>
             </tr>
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="241"
-                                    class="link-to-prism">src/modules/document-applications/document-applications.controller.ts:241</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="207"
+                                    class="link-to-prism">src/modules/document-applications/document-applications.controller.ts:207</a></div>
                         </td>
                     </tr>
 
@@ -682,14 +582,14 @@
                 <td class="col-md-4">
                     <b>Decorators : </b>
                     <br />
-                    <code>@Get(&#x27;:id/files&#x27;)<br />@ApiOperation({summary: &#x27;Get application files (latest per category)&#x27;})<br />@ApiResponse({status: 200, description: &#x27;Files retrieved successfully&#x27;})<br />@ApiResponse({status: 404, description: &#x27;Application not found&#x27;})<br /></code>
+                    <code>@Get(&#x27;:id/files&#x27;)<br />@ApiOperation({summary: &#x27;Get application files&#x27;})<br />@ApiResponse({status: 200, description: &#x27;Files retrieved successfully&#x27;})<br />@ApiResponse({status: 404, description: &#x27;Application not found&#x27;})<br /></code>
                 </td>
             </tr>
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="112"
-                                    class="link-to-prism">src/modules/document-applications/document-applications.controller.ts:112</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="110"
+                                    class="link-to-prism">src/modules/document-applications/document-applications.controller.ts:110</a></div>
                         </td>
                     </tr>
 
@@ -778,8 +678,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="165"
-                                    class="link-to-prism">src/modules/document-applications/document-applications.controller.ts:165</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="139"
+                                    class="link-to-prism">src/modules/document-applications/document-applications.controller.ts:139</a></div>
                         </td>
                     </tr>
 
@@ -864,14 +764,14 @@
                 <td class="col-md-4">
                     <b>Decorators : </b>
                     <br />
-                    <code>@Get(&#x27;admin/stats&#x27;)<br />@Roles(&#x27;admin&#x27;, &#x27;super_admin&#x27;)<br />@UseGuards(RolesGuard)<br />@ApiOperation({summary: &#x27;Get application statistics (Admin/Super Admin only)&#x27;})<br /></code>
+                    <code>@Get(&#x27;admin/stats&#x27;)<br />@Roles(&#x27;admin&#x27;)<br />@UseGuards(RolesGuard)<br />@ApiOperation({summary: &#x27;Get application statistics (Admin only)&#x27;})<br /></code>
                 </td>
             </tr>
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="249"
-                                    class="link-to-prism">src/modules/document-applications/document-applications.controller.ts:249</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="215"
+                                    class="link-to-prism">src/modules/document-applications/document-applications.controller.ts:215</a></div>
                         </td>
                     </tr>
 
@@ -918,8 +818,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="226"
-                                    class="link-to-prism">src/modules/document-applications/document-applications.controller.ts:226</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="194"
+                                    class="link-to-prism">src/modules/document-applications/document-applications.controller.ts:194</a></div>
                         </td>
                     </tr>
 
@@ -1008,8 +908,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="183"
-                                    class="link-to-prism">src/modules/document-applications/document-applications.controller.ts:183</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="155"
+                                    class="link-to-prism">src/modules/document-applications/document-applications.controller.ts:155</a></div>
                         </td>
                     </tr>
 
@@ -1106,14 +1006,14 @@
                 <td class="col-md-4">
                     <b>Decorators : </b>
                     <br />
-                    <code>@Patch(&#x27;:id/status&#x27;)<br />@Roles(&#x27;admin&#x27;, &#x27;staff&#x27;, &#x27;super_admin&#x27;)<br />@UseGuards(RolesGuard)<br />@ApiOperation({summary: &#x27;Update application status (Privileged users only)&#x27;})<br /></code>
+                    <code>@Patch(&#x27;:id/status&#x27;)<br />@Roles(&#x27;admin&#x27;, &#x27;staff&#x27;)<br />@UseGuards(RolesGuard)<br />@ApiOperation({summary: &#x27;Update application status (Admin only)&#x27;})<br /></code>
                 </td>
             </tr>
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="211"
-                                    class="link-to-prism">src/modules/document-applications/document-applications.controller.ts:211</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="179"
+                                    class="link-to-prism">src/modules/document-applications/document-applications.controller.ts:179</a></div>
                         </td>
                     </tr>
 
@@ -1402,30 +1302,26 @@ export class DocumentApplicationsController {
     @Query(&#x27;status&#x27;) status?: string,
     @User() user?: AuthenticatedUser,
   ) {
-    const userId &#x3D; user?.roles.some((role) &#x3D;&gt;
-      [&#x27;admin&#x27;, &#x27;super_admin&#x27;, &#x27;staff&#x27;].includes(role.name),
-    )
+    const userId &#x3D; user?.roles.some((role) &#x3D;&gt; role.name &#x3D;&#x3D;&#x3D; &#x27;admin&#x27;)
       ? undefined
       : user?.id;
     return this.documentApplicationsService.findAll(userId);
   }
 
   @Get(&#x27;:id/files&#x27;)
-  @ApiOperation({ summary: &#x27;Get application files (latest per category)&#x27; })
+  @ApiOperation({ summary: &#x27;Get application files&#x27; })
   @ApiResponse({ status: 200, description: &#x27;Files retrieved successfully&#x27; })
   @ApiResponse({ status: 404, description: &#x27;Application not found&#x27; })
   async getApplicationFiles(
     @Param(&#x27;id&#x27;) id: string,
     @User() user: AuthenticatedUser,
   ) {
-    const userId &#x3D; user.roles.some((role) &#x3D;&gt;
-      [&#x27;admin&#x27;, &#x27;super_admin&#x27;, &#x27;staff&#x27;].includes(role.name),
-    )
-      ? undefined
-      : user.id;
+    const userId &#x3D; user.roles.some((role) &#x3D;&gt; role.name &#x3D;&#x3D;&#x3D; &#x27;admin&#x27;)
+      ? undefined // Admin can see any application
+      : user.id; // Regular users can only see their own
 
     console.log(
-      &#x60;Getting files for application ${id}, user: ${user.email}, isPrivileged: ${!userId}&#x60;,
+      &#x60;Getting files for application ${id}, user: ${user.email}, isAdmin: ${!userId}&#x60;,
     );
 
     return await this.documentApplicationsService.getApplicationFiles(
@@ -1434,32 +1330,10 @@ export class DocumentApplicationsController {
     );
   }
 
-  @Get(&#x27;:id/files/all&#x27;)
-  @ApiOperation({ summary: &#x27;Get all application files (privileged users only)&#x27; })
-  @ApiResponse({ status: 200, description: &#x27;All files retrieved successfully&#x27; })
-  @ApiResponse({ status: 404, description: &#x27;Application not found&#x27; })
-  async getAllApplicationFiles(
-    @Param(&#x27;id&#x27;) id: string,
-    @User() user: AuthenticatedUser,
-  ) {
-    const userId &#x3D; user.roles.some((role) &#x3D;&gt;
-      [&#x27;admin&#x27;, &#x27;super_admin&#x27;, &#x27;staff&#x27;].includes(role.name),
-    )
-      ? undefined
-      : user.id;
-
-    return await this.documentApplicationsService.getAllApplicationFiles(
-      id,
-      userId,
-    );
-  }
-
   @Get(&#x27;:id&#x27;)
   @ApiOperation({ summary: &#x27;Get specific application&#x27; })
   async findOne(@Param(&#x27;id&#x27;) id: string, @User() user: AuthenticatedUser) {
-    const userId &#x3D; user.roles.some((role) &#x3D;&gt;
-      [&#x27;admin&#x27;, &#x27;super_admin&#x27;, &#x27;staff&#x27;].includes(role.name),
-    )
+    const userId &#x3D; user.roles.some((role) &#x3D;&gt; role.name &#x3D;&#x3D;&#x3D; &#x27;admin&#x27;)
       ? undefined
       : user.id;
     return this.documentApplicationsService.findOne(id, userId);
@@ -1471,9 +1345,7 @@ export class DocumentApplicationsController {
     @Param(&#x27;fileId&#x27;) fileId: string,
     @User() user: AuthenticatedUser,
   ) {
-    const userId &#x3D; user.roles.some((role) &#x3D;&gt;
-      [&#x27;admin&#x27;, &#x27;super_admin&#x27;, &#x27;staff&#x27;].includes(role.name),
-    )
+    const userId &#x3D; user.roles.some((role) &#x3D;&gt; role.name &#x3D;&#x3D;&#x3D; &#x27;admin&#x27;)
       ? undefined
       : user.id;
     const url &#x3D; await this.documentApplicationsService.getFileDownloadUrl(
@@ -1490,14 +1362,10 @@ export class DocumentApplicationsController {
     @Body() updateDto: UpdateDocumentApplicationDto,
     @User() user: AuthenticatedUser,
   ) {
-    const userId &#x3D; user.roles.some((role) &#x3D;&gt;
-      [&#x27;admin&#x27;, &#x27;super_admin&#x27;, &#x27;staff&#x27;].includes(role.name),
-    )
+    const userId &#x3D; user.roles.some((role) &#x3D;&gt; role.name &#x3D;&#x3D;&#x3D; &#x27;admin&#x27;)
       ? undefined
       : user.id;
-    const adminId &#x3D; user.roles.some((role) &#x3D;&gt;
-      [&#x27;admin&#x27;, &#x27;super_admin&#x27;, &#x27;staff&#x27;].includes(role.name),
-    )
+    const adminId &#x3D; user.roles.some((role) &#x3D;&gt; role.name &#x3D;&#x3D;&#x3D; &#x27;admin&#x27;)
       ? user.id
       : undefined;
 
@@ -1510,9 +1378,9 @@ export class DocumentApplicationsController {
   }
 
   @Patch(&#x27;:id/status&#x27;)
-  @Roles(&#x27;admin&#x27;, &#x27;staff&#x27;, &#x27;super_admin&#x27;)
+  @Roles(&#x27;admin&#x27;, &#x27;staff&#x27;)
   @UseGuards(RolesGuard)
-  @ApiOperation({ summary: &#x27;Update application status (Privileged users only)&#x27; })
+  @ApiOperation({ summary: &#x27;Update application status (Admin only)&#x27; })
   async updateStatus(
     @Param(&#x27;id&#x27;) id: string,
     @Body() statusDto: { status: string; statusMessage?: string },
@@ -1529,9 +1397,7 @@ export class DocumentApplicationsController {
   @Delete(&#x27;:id&#x27;)
   @ApiOperation({ summary: &#x27;Delete application&#x27; })
   async remove(@Param(&#x27;id&#x27;) id: string, @User() user: AuthenticatedUser) {
-    const userId &#x3D; user.roles.some((role) &#x3D;&gt;
-      [&#x27;admin&#x27;, &#x27;super_admin&#x27;, &#x27;staff&#x27;].includes(role.name),
-    )
+    const userId &#x3D; user.roles.some((role) &#x3D;&gt; role.name &#x3D;&#x3D;&#x3D; &#x27;admin&#x27;)
       ? undefined
       : user.id;
     await this.documentApplicationsService.remove(id, userId);
@@ -1540,17 +1406,17 @@ export class DocumentApplicationsController {
 
   // Admin endpoints
   @Get(&#x27;admin/all&#x27;)
-  @Roles(&#x27;admin&#x27;, &#x27;staff&#x27;, &#x27;super_admin&#x27;)
+  @Roles(&#x27;admin&#x27;, &#x27;staff&#x27;)
   @UseGuards(RolesGuard)
-  @ApiOperation({ summary: &#x27;Get all applications (Privileged users only)&#x27; })
+  @ApiOperation({ summary: &#x27;Get all applications (Admin only)&#x27; })
   async getAllApplications() {
     return this.documentApplicationsService.findAll();
   }
 
   @Get(&#x27;admin/stats&#x27;)
-  @Roles(&#x27;admin&#x27;, &#x27;super_admin&#x27;)
+  @Roles(&#x27;admin&#x27;)
   @UseGuards(RolesGuard)
-  @ApiOperation({ summary: &#x27;Get application statistics (Admin/Super Admin only)&#x27; })
+  @ApiOperation({ summary: &#x27;Get application statistics (Admin only)&#x27; })
   async getStats(): Promise&lt;
     Array&lt;{ type: string; status: string; count: string }&gt;
   &gt; {

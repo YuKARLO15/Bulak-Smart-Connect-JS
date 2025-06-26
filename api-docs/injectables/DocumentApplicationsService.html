@@ -153,10 +153,6 @@
                             </li>
                             <li>
                                     <span class="modifier">Async</span>
-                                <a href="#getAllApplicationFiles" >getAllApplicationFiles</a>
-                            </li>
-                            <li>
-                                    <span class="modifier">Async</span>
                                 <a href="#getApplicationFiles" >getApplicationFiles</a>
                             </li>
                             <li>
@@ -580,87 +576,6 @@
                             </div>
                         <div class="io-description">
                             <b>Returns : </b>        <code><a href="../classes/DocumentApplication.html" target="_self" >Promise&lt;DocumentApplication&gt;</a></code>
-
-                        </div>
-                            <div class="io-description">
-                                
-                            </div>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    <table class="table table-sm table-bordered">
-        <tbody>
-            <tr>
-                <td class="col-md-4">
-                    <a name="getAllApplicationFiles"></a>
-                    <span class="name">
-                            <span class="modifier">Async</span>
-                        <span ><b>getAllApplicationFiles</b></span>
-                        <a href="#getAllApplicationFiles"><span class="icon ion-ios-link"></span></a>
-                    </span>
-                </td>
-            </tr>
-            <tr>
-                <td class="col-md-4">
-                        <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>getAllApplicationFiles(applicationId: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, userId?: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
-                </td>
-            </tr>
-
-
-                    <tr>
-                        <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="377"
-                                    class="link-to-prism">src/modules/document-applications/document-applications.service.ts:377</a></div>
-                        </td>
-                    </tr>
-
-
-            <tr>
-                <td class="col-md-4">
-
-                            <div class="io-description">
-                                <b>Parameters :</b>
-                                
-                                <table class="params">
-                                    <thead>
-                                        <tr>
-                                            <td>Name</td>
-                                                <td>Type</td>
-                                            <td>Optional</td>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                                <td>applicationId</td>
-                                            <td>
-                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
-                                            </td>
-
-                                            <td>
-                                                    No
-                                            </td>
-
-
-                                        </tr>
-                                        <tr>
-                                                <td>userId</td>
-                                            <td>
-                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
-                                            </td>
-
-                                            <td>
-                                                    Yes
-                                            </td>
-
-
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        <div class="io-description">
-                            <b>Returns : </b>    <code>unknown</code>
 
                         </div>
                             <div class="io-description">
@@ -1650,28 +1565,9 @@ export class DocumentApplicationsService {
         return [];
       }
 
-      // Group files by document category and get the latest one for each category
-      const latestFilesByCategory &#x3D; new Map();
-
-      application.files.forEach((file) &#x3D;&gt; {
-        const category &#x3D; file.documentCategory || &#x27;uncategorized&#x27;;
-        const existingFile &#x3D; latestFilesByCategory.get(category);
-
-        if (!existingFile || file.uploadedAt &gt; existingFile.uploadedAt) {
-          latestFilesByCategory.set(category, file);
-        }
-      });
-
-      // Convert map to array of latest files
-      const latestFiles &#x3D; Array.from(latestFilesByCategory.values());
-
-      console.log(
-        &#x60;Service: Filtered to ${latestFiles.length} latest files from ${application.files.length} total files&#x60;,
-      );
-
-      // Generate presigned URLs for each latest file
+      // Generate presigned URLs for each file
       const filesWithUrls &#x3D; await Promise.all(
-        latestFiles.map(async (file) &#x3D;&gt; {
+        application.files.map(async (file) &#x3D;&gt; {
           try {
             const downloadUrl &#x3D; await this.minioService.getPresignedUrl(
               file.minioObjectName,
@@ -1708,93 +1604,10 @@ export class DocumentApplicationsService {
         }),
       );
 
-      console.log(
-        &#x60;Service: Returning ${filesWithUrls.length} latest files with URLs&#x60;,
-      );
+      console.log(&#x60;Service: Returning ${filesWithUrls.length} files with URLs&#x60;);
       return filesWithUrls;
     } catch (error) {
       console.error(&#x27;Service: Error getting application files:&#x27;, error);
-      throw error;
-    }
-  }
-
-  async getAllApplicationFiles(applicationId: string, userId?: number) {
-    try {
-      console.log(
-        &#x60;Service: Getting ALL files for application ${applicationId}, userId: ${userId}&#x60;,
-      );
-
-      const application &#x3D; await this.documentApplicationRepository.findOne({
-        where: {
-          id: applicationId,
-          ...(userId &amp;&amp; { userId }),
-        },
-        relations: {
-          files: true,
-        },
-      });
-
-      if (!application) {
-        throw new NotFoundException(&#x60;Application ${applicationId} not found&#x60;);
-      }
-
-      if (!application.files || application.files.length &#x3D;&#x3D;&#x3D; 0) {
-        return [];
-      }
-
-      // Sort files by upload date (newest first) and group by category
-      const filesByCategory &#x3D; application.files
-        .sort((a, b) &#x3D;&gt; b.uploadedAt.getTime() - a.uploadedAt.getTime())
-        .reduce((acc, file) &#x3D;&gt; {
-          const category &#x3D; file.documentCategory || &#x27;uncategorized&#x27;;
-          if (!acc[category]) {
-            acc[category] &#x3D; [];
-          }
-          acc[category].push(file);
-          return acc;
-        }, {});
-
-      // Generate presigned URLs for all files
-      const filesWithUrls &#x3D; await Promise.all(
-        application.files.map(async (file) &#x3D;&gt; {
-          try {
-            const downloadUrl &#x3D; await this.minioService.getPresignedUrl(
-              file.minioObjectName,
-            );
-            return {
-              id: file.id,
-              fileName: file.fileName,
-              fileType: file.fileType,
-              fileSize: file.fileSize,
-              documentCategory: file.documentCategory,
-              minioObjectName: file.minioObjectName,
-              uploadedAt: file.uploadedAt,
-              url: downloadUrl,
-              downloadUrl: downloadUrl,
-            };
-          } catch (error) {
-            console.warn(&#x60;Failed to generate URL for file ${file.id}:&#x60;, error);
-            return {
-              id: file.id,
-              fileName: file.fileName,
-              fileType: file.fileType,
-              fileSize: file.fileSize,
-              documentCategory: file.documentCategory,
-              minioObjectName: file.minioObjectName,
-              uploadedAt: file.uploadedAt,
-              url: null,
-              downloadUrl: null,
-            };
-          }
-        }),
-      );
-
-      return {
-        latestByCategory: filesByCategory,
-        allFiles: filesWithUrls,
-      };
-    } catch (error) {
-      console.error(&#x27;Service: Error getting all application files:&#x27;, error);
       throw error;
     }
   }
