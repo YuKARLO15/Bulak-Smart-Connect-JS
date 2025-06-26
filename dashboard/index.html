@@ -265,7 +265,7 @@
                   </div>
               </div>
               <div class="last-updated">
-                  🔄 Last updated: 6/26/2025, 9:03:39 PM
+                  🔄 Last updated: 6/26/2025, 9:03:59 PM
               </div>
           </div>
       </header>
@@ -282,7 +282,7 @@
           <div class="workflow-name">CI</div>
           <div class="workflow-status">
             <div class="status-icon icon-error"></div>
-            <span>1m ago</span>
+            <span>2m ago</span>
           </div>
         </div>
         <div class="workflow-item error">
@@ -317,7 +317,7 @@
           <div class="workflow-name">End-to-End Tests</div>
           <div class="workflow-status">
             <div class="status-icon icon-success"></div>
-            <span>27s ago</span>
+            <span>48s ago</span>
           </div>
         </div>
         <div class="workflow-item success">
@@ -327,11 +327,11 @@
             <span>2m ago</span>
           </div>
         </div>
-        <div class="workflow-item running">
+        <div class="workflow-item success">
           <div class="workflow-name">API Security Scanning</div>
           <div class="workflow-status">
-            <div class="status-icon icon-running"></div>
-            <span>2m ago</span>
+            <div class="status-icon icon-success"></div>
+            <span>14s ago</span>
           </div>
         </div>
         <div class="workflow-item running">
@@ -366,7 +366,7 @@
           <div class="workflow-name">PR Checks</div>
           <div class="workflow-status">
             <div class="status-icon icon-error"></div>
-            <span>6m ago</span>
+            <span>7m ago</span>
           </div>
         </div>
         <div class="workflow-item warning">
@@ -384,11 +384,11 @@
                   </div>
                   <div class="metrics-grid">
                       <div class="metric-item">
-                          <span class="metric-value">36%</span>
+                          <span class="metric-value">43%</span>
                           <span class="metric-label">Success Rate</span>
                       </div>
                       <div class="metric-item">
-                          <span class="metric-value">0.8m</span>
+                          <span class="metric-value">1.0m</span>
                           <span class="metric-label">Avg Build Time</span>
                       </div>
                       <div class="metric-item">
@@ -479,7 +479,7 @@
     <div class="workflow-detail enhanced" style="border-left-color: #dc3545;">
       <div class="workflow-header">
         <h4>🔄 ❌ CI</h4>
-        <span class="workflow-meta">Run #1475 • 1m ago</span>
+        <span class="workflow-meta">Run #1475 • 2m ago</span>
       </div>
       <div class="workflow-description">
         <p style="color: #6c757d; font-style: italic; margin-bottom: 1rem;">Core build pipeline ensuring code quality and compilation</p>
@@ -639,7 +639,7 @@
     <div class="workflow-detail enhanced" style="border-left-color: #28a745;">
       <div class="workflow-header">
         <h4>🎯 ✅ End-to-End Tests</h4>
-        <span class="workflow-meta">Run #1478 • 28s ago</span>
+        <span class="workflow-meta">Run #1478 • 48s ago</span>
       </div>
       <div class="workflow-description">
         <p style="color: #6c757d; font-style: italic; margin-bottom: 1rem;">Complete user journey testing across the application</p>
@@ -700,20 +700,20 @@
         </ul>
       </div>
     </div>
-    <div class="workflow-detail enhanced" style="border-left-color: #007bff;">
+    <div class="workflow-detail enhanced" style="border-left-color: #28a745;">
       <div class="workflow-header">
-        <h4>⚔️ 🔄 API Security Scanning</h4>
-        <span class="workflow-meta">Run #1471 • 2m ago</span>
+        <h4>⚔️ ✅ API Security Scanning</h4>
+        <span class="workflow-meta">Run #1471 • 14s ago</span>
       </div>
       <div class="workflow-description">
         <p style="color: #6c757d; font-style: italic; margin-bottom: 1rem;">OWASP ZAP penetration testing for API endpoints</p>
       </div>
       <div class="workflow-info">
         <div class="info-item">
-          <strong>Status:</strong> <span style="color: #007bff; font-weight: bold;">IN_PROGRESS</span>
+          <strong>Status:</strong> <span style="color: #28a745; font-weight: bold;">SUCCESS</span>
         </div>
         <div class="info-item">
-          <strong>Duration:</strong> 0m
+          <strong>Duration:</strong> 3m
         </div>
         <div class="info-item">
           <strong>Commit:</strong> <code>fffc440</code>
@@ -863,7 +863,7 @@
     <div class="workflow-detail enhanced" style="border-left-color: #dc3545;">
       <div class="workflow-header">
         <h4>✅ ❌ PR Checks</h4>
-        <span class="workflow-meta">Run #439 • 6m ago</span>
+        <span class="workflow-meta">Run #439 • 7m ago</span>
       </div>
       <div class="workflow-description">
         <p style="color: #6c757d; font-style: italic; margin-bottom: 1rem;">Pull request validation and quality gates</p>
@@ -948,14 +948,14 @@
                       labels: ["Jun 20","Jun 21","Jun 22","Jun 23","Jun 24","Jun 25","Jun 26"],
                       datasets: [{
                           label: 'Successful Builds',
-                          data: [20,15,19,23,17,20,24],
+                          data: [15,19,24,15,17,15,17],
                           borderColor: '#28a745',
                           backgroundColor: 'rgba(40, 167, 69, 0.1)',
                           fill: true,
                           tension: 0.4
                       }, {
                           label: 'Failed Builds',
-                          data: [2,1,3,3,2,1,2],
+                          data: [2,3,2,3,2,1,3],
                           borderColor: '#dc3545',
                           backgroundColor: 'rgba(220, 53, 69, 0.1)',
                           fill: true,
