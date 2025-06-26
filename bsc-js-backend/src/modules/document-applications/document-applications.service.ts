@@ -306,9 +306,28 @@ export class DocumentApplicationsService {
         return [];
       }
 
-      // Generate presigned URLs for each file
+      // Group files by document category and get the latest one for each category
+      const latestFilesByCategory = new Map();
+
+      application.files.forEach((file) => {
+        const category = file.documentCategory || 'uncategorized';
+        const existingFile = latestFilesByCategory.get(category);
+
+        if (!existingFile || file.uploadedAt > existingFile.uploadedAt) {
+          latestFilesByCategory.set(category, file);
+        }
+      });
+
+      // Convert map to array of latest files
+      const latestFiles = Array.from(latestFilesByCategory.values());
+
+      console.log(
+        `Service: Filtered to ${latestFiles.length} latest files from ${application.files.length} total files`,
+      );
+
+      // Generate presigned URLs for each latest file
       const filesWithUrls = await Promise.all(
-        application.files.map(async (file) => {
+        latestFiles.map(async (file) => {
           try {
             const downloadUrl = await this.minioService.getPresignedUrl(
               file.minioObjectName,
@@ -345,10 +364,93 @@ export class DocumentApplicationsService {
         }),
       );
 
-      console.log(`Service: Returning ${filesWithUrls.length} files with URLs`);
+      console.log(
+        `Service: Returning ${filesWithUrls.length} latest files with URLs`,
+      );
       return filesWithUrls;
     } catch (error) {
       console.error('Service: Error getting application files:', error);
+      throw error;
+    }
+  }
+
+  async getAllApplicationFiles(applicationId: string, userId?: number) {
+    try {
+      console.log(
+        `Service: Getting ALL files for application ${applicationId}, userId: ${userId}`,
+      );
+
+      const application = await this.documentApplicationRepository.findOne({
+        where: {
+          id: applicationId,
+          ...(userId && { userId }),
+        },
+        relations: {
+          files: true,
+        },
+      });
+
+      if (!application) {
+        throw new NotFoundException(`Application ${applicationId} not found`);
+      }
+
+      if (!application.files || application.files.length === 0) {
+        return [];
+      }
+
+      // Sort files by upload date (newest first) and group by category
+      const filesByCategory = application.files
+        .sort((a, b) => b.uploadedAt.getTime() - a.uploadedAt.getTime())
+        .reduce((acc, file) => {
+          const category = file.documentCategory || 'uncategorized';
+          if (!acc[category]) {
+            acc[category] = [];
+          }
+          acc[category].push(file);
+          return acc;
+        }, {});
+
+      // Generate presigned URLs for all files
+      const filesWithUrls = await Promise.all(
+        application.files.map(async (file) => {
+          try {
+            const downloadUrl = await this.minioService.getPresignedUrl(
+              file.minioObjectName,
+            );
+            return {
+              id: file.id,
+              fileName: file.fileName,
+              fileType: file.fileType,
+              fileSize: file.fileSize,
+              documentCategory: file.documentCategory,
+              minioObjectName: file.minioObjectName,
+              uploadedAt: file.uploadedAt,
+              url: downloadUrl,
+              downloadUrl: downloadUrl,
+            };
+          } catch (error) {
+            console.warn(`Failed to generate URL for file ${file.id}:`, error);
+            return {
+              id: file.id,
+              fileName: file.fileName,
+              fileType: file.fileType,
+              fileSize: file.fileSize,
+              documentCategory: file.documentCategory,
+              minioObjectName: file.minioObjectName,
+              uploadedAt: file.uploadedAt,
+              url: null,
+              downloadUrl: null,
+            };
+          }
+        }),
+      );
+
+      return {
+        latestByCategory: filesByCategory,
+        allFiles: filesWithUrls,
+      };
+    } catch (error) {
+      console.error('Service: Error getting all application files:', error);
       throw error;
     }
   }
