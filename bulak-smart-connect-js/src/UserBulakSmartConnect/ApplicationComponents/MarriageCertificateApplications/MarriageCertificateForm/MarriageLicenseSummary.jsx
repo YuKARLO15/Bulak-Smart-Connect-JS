@@ -10,14 +10,28 @@ const MarriageLicenseSummary = () => {
   const [formData, setFormData] = useState({});
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-  const [isEditing, setIsEditing] = useState(false); 
-
+  const [isEditing, setIsEditing] = useState(false);
+  const [applicationId, setApplicationId] = useState('');
 
   useEffect(() => {
     try {
-      const savedLicenseData = localStorage.getItem('marriageFormData');
-      if (savedLicenseData) {
-        setFormData(JSON.parse(savedLicenseData));
+      const currentApplicationId = localStorage.getItem('currentApplicationId');
+      if (currentApplicationId) {
+        setApplicationId(currentApplicationId);
+        console.log('Found currentApplicationId:', currentApplicationId);
+      }
+
+      // Get the marriage form data
+      const savedCertificateData = localStorage.getItem('marriageFormData');
+      if (savedCertificateData) {
+        const parsedData = JSON.parse(savedCertificateData);
+
+        if (parsedData.applicationId && !currentApplicationId) {
+          setApplicationId(parsedData.applicationId);
+          console.log('Found applicationId in form data:', parsedData.applicationId);
+        }
+
+        setFormData(parsedData);
       }
     } catch (err) {
       console.error('Error loading form data:', err);
@@ -25,40 +39,35 @@ const MarriageLicenseSummary = () => {
       setLoading(false);
     }
   }, []);
- const handleModify = () => {
-  try {
-    console.log('Current formData:', formData);
-    
-    // Get the application ID
-    const applicationId = formData.applicationId || formData.id;
-    console.log('Application ID for editing:', applicationId);
-    
-    // Make sure we save formData with the application ID
-    if (applicationId) {
-      const updatedFormData = {
-        ...formData,
-        applicationId: applicationId // Ensure ID is preserved
-      };
-      
-      localStorage.setItem('marriageFormData', JSON.stringify(updatedFormData));
-    } else {
-      console.warn('No application ID found for editing');
+
+  const handleModify = () => {
+    try {
+      const appId = applicationId || formData.applicationId || formData.id;
+      console.log('Application ID for editing:', appId);
+
       localStorage.setItem('marriageFormData', JSON.stringify(formData));
+
+      localStorage.setItem('isEditingMarriageForm', 'true');
+      localStorage.setItem('editingMarriageType', 'Marriage License');
+      localStorage.setItem('selectedMarriageOption', 'Marriage License');
+
+      if (appId && appId !== 'undefined' && appId !== '') {
+        localStorage.setItem('currentEditingApplicationId', appId);
+        console.log('Set currentEditingApplicationId to:', appId);
+      } else {
+        localStorage.removeItem('currentEditingApplicationId');
+        console.log('No application ID - editing as draft');
+      }
+
+      setTimeout(() => {
+        navigate('/MarriageForm');
+      }, 100);
+    } catch (err) {
+      console.error('Error setting up modification:', err);
+      alert('There was a problem preparing the form for editing. Please try again.');
     }
-    
-    // Set the editing flags
-   localStorage.setItem('isEditingMarriageForm', 'true');
-    localStorage.setItem('editingMarriageType', 'Marriage License'); 
-    localStorage.setItem('currentEditingApplicationId', applicationId);
-    localStorage.setItem('selectedMarriageOption', 'Marriage License'); 
-    
-    // Navigate to the form
-    navigate('/MarriageForm');
-  } catch (err) {
-    console.error('Error setting up modification:', err);
-    alert('There was a problem preparing the form for editing. Please try again.');
-  }
-};
+  };
+
   const handleBackToForm = () => {
     navigate('/MarriageForm');
   };
@@ -67,86 +76,79 @@ const MarriageLicenseSummary = () => {
     navigate('/ApplicationForm');
   };
 
-
-useEffect(() => {
-  try {
-    const savedLicenseData = localStorage.getItem('marriageFormData');
-    if (savedLicenseData) {
-      const parsedData = JSON.parse(savedLicenseData);
-      
-      // Debug log to check wife's birth data
-      console.log("Wife birth data:", {
-        day: parsedData.wifeBirthDay,
-        month: parsedData.wifeBirthMonth,
-        year: parsedData.wifeBirthYear
-      });
-      
-      // Log all keys to check for naming inconsistencies
-      console.log("All form keys:", Object.keys(parsedData));
-      
-      setFormData(parsedData);
-    }
-  } catch (err) {
-    console.error('Error loading form data:', err);
-  } finally {
-    setLoading(false);
-  }
-}, []);
-
-
-
   if (loading) {
     return <div className="ContainerMLSummary">Loading...</div>;
-    }
-    const consentPersonHusband  = formData.waliFirstName + " "  + formData.waliMiddleName  + " "+ formData.waliLastName;
-    const consentPersonWife = formData.wifewaliFirstName + " " + formData.wifewaliMiddleName + " " + formData.wifewaliLastName;
-    const consentPersonAddHusband = formData.waliStreet + " " + formData.waliBarangay + " " + formData.waliCity + " " + formData.waliProvince;
-    const consentPersonAddWife = formData.wifewaliStreet + " " + formData.wifewaliBarangay + " " + formData.wifewaliCity + " " + formData.wifewaliProvince;
+  }
+  const consentPersonHusband =
+    formData.waliFirstName + ' ' + formData.waliMiddleName + ' ' + formData.waliLastName;
+  const consentPersonWife =
+    formData.wifewaliFirstName +
+    ' ' +
+    formData.wifewaliMiddleName +
+    ' ' +
+    formData.wifewaliLastName;
+  const consentPersonAddHusband =
+    formData.waliStreet +
+    ' ' +
+    formData.waliBarangay +
+    ' ' +
+    formData.waliCity +
+    ' ' +
+    formData.waliProvince;
+  const consentPersonAddWife =
+    formData.wifewaliStreet +
+    ' ' +
+    formData.wifewaliBarangay +
+    ' ' +
+    formData.wifewaliCity +
+    ' ' +
+    formData.wifewaliProvince;
   return (
     <div className="ContainerMLSummary">
-       {formData.lastUpdated && (
-      <Box 
-        sx={{ 
-          backgroundColor: '#e3f2fd', 
-          padding: '10px 15px', 
-          borderRadius: '8px',
-          margin: '0 auto 20px auto',
-          maxWidth: '80%',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
+      {formData.lastUpdated && (
+        <Box
+          sx={{
+            backgroundColor: '#e3f2fd',
+            padding: '10px 15px',
+            borderRadius: '8px',
+            margin: '0 auto 20px auto',
+            maxWidth: '80%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
             gap: '8px',
-       
-        }}
-      >
-        <EditIcon fontSize="small" sx={{ color: '#184a5b' }} />
-        <Typography variant="body2" sx={{ color: '#184a5b' }}>
-          This application was last modified on {new Date(formData.lastUpdated).toLocaleString()}
-        </Typography>
-      </Box>
-    )}
+          }}
+        >
+          <EditIcon fontSize="small" sx={{ color: '#184a5b' }} />
+          <Typography variant="body2" sx={{ color: '#184a5b' }}>
+            This application was last modified on {new Date(formData.lastUpdated).toLocaleString()}
+          </Typography>
+        </Box>
+      )}
       <div className="FormDocumentMLSummary">
-        
         <div className="DocumentHeaderMLSummary">
-          <div className="FormNumberMLSummary">Municipal Form No. 90 (Form No. 2)<br/>(Revised January 2001)</div>
-          <div className="DocumentNoticeMLSummary">(To be accomplished in quadruplicate using black ink)</div>
+          <div className="FormNumberMLSummary">
+            Municipal Form No. 90 (Form No. 2)
+            <br />
+            (Revised January 2001)
+          </div>
+        
           <div className="HeaderCenterMLSummary">
             <div className="RepublicTextMLSummary">Republic of the Philippines</div>
             <div className="RegistrarTextMLSummary">OFFICE OF THE CIVIL REGISTRAR GENERAL</div>
             <div className="LicenseTitleMLSummary">APPLICATION FOR MARRIAGE LICENSE</div>
           </div>
         </div>
-        
-        
+
         <div className="TopGridMLSummary">
           <div className="TopLeftMLSummary">
             <div className="GridItemMLSummary">
               <div className="ItemLabelMLSummary">Province</div>
-              <div className="ItemValueMLSummary">{ " Bulacan " || ''}</div>
+              <div className="ItemValueMLSummary">{' Bulacan ' || ''}</div>
             </div>
             <div className="GridItemMLSummary">
               <div className="ItemLabelMLSummary">City/Municipality</div>
-              <div className="ItemValueMLSummary">{ " San Ildefonso " || ''}</div>
+              <div className="ItemValueMLSummary">{' San Ildefonso ' || ''}</div>
             </div>
             <div className="GridItemMLSummary">
               <div className="ItemLabelMLSummary">Received by:</div>
@@ -172,7 +174,7 @@ useEffect(() => {
             </div>
           </div>
         </div>
-        
+
         {/* Main Applicant Sections */}
         <table className="ApplicantTableMLSummary">
           <thead>
@@ -188,14 +190,32 @@ useEffect(() => {
                 <div className="RegistrarTitleMLSummary">The Civil Registrar</div>
                 <div className="RegistrarStatementMLSummary">
                   <p>Sir/Madam:</p>
-                  <p>May I apply for a license to contract marriage with <span className="UnderlinedTextMLSummary">{formData.wifeFirstName || ''} {formData.wifeLastName || ''}</span> and to this effect, being duly sworn, I hereby depose and say that I have all the necessary qualifications and none of the legal disqualifications to contract the said marriage, and that the following data are true and correct to the best of my knowledge and information.</p>
+                  <p>
+                    May I apply for a license to contract marriage with{' '}
+                    <span className="UnderlinedTextMLSummary">
+                      {formData.wifeFirstName || ''} {formData.wifeLastName || ''}
+                    </span>{' '}
+                    and to this effect, being duly sworn, I hereby depose and say that I have all
+                    the necessary qualifications and none of the legal disqualifications to contract
+                    the said marriage, and that the following data are true and correct to the best
+                    of my knowledge and information.
+                  </p>
                 </div>
               </td>
               <td className="TableCellMLSummary">
                 <div className="RegistrarTitleMLSummary">The Civil Registrar</div>
                 <div className="RegistrarStatementMLSummary">
                   <p>Sir/Madam:</p>
-                  <p>May I apply for a license to contract marriage with <span className="UnderlinedTextMLSummary">{formData.husbandFirstName || ''} {formData.husbandLastName || ''}</span> and to this effect, being duly sworn, I hereby depose and say that I have all the necessary qualifications and none of the legal disqualifications to contract the said marriage, and that the following data are true and correct to the best of my knowledge and information.</p>
+                  <p>
+                    May I apply for a license to contract marriage with{' '}
+                    <span className="UnderlinedTextMLSummary">
+                      {formData.husbandFirstName || ''} {formData.husbandLastName || ''}
+                    </span>{' '}
+                    and to this effect, being duly sworn, I hereby depose and say that I have all
+                    the necessary qualifications and none of the legal disqualifications to contract
+                    the said marriage, and that the following data are true and correct to the best
+                    of my knowledge and information.
+                  </p>
                 </div>
               </td>
             </tr>
@@ -277,7 +297,7 @@ useEffect(() => {
                     <div className="DateParenMLSummary">(Month)</div>
                   </div>
                   <div className="DateFieldMLSummary">
-                    <div className="DateValueMLSummary">{formData.wifeBirthYear || '' }</div>
+                    <div className="DateValueMLSummary">{formData.wifeBirthYear || ''}</div>
                     <div className="DateParenMLSummary">(Year)</div>
                   </div>
                   <div className="DateFieldMLSummary">
@@ -354,14 +374,16 @@ useEffect(() => {
                 <div className="FieldNumberMLSummary">5.</div>
                 <div className="FieldLabelMLSummary">Residence</div>
                 <div className="ResidenceValueMLSummary">
-                  {formData.husbandStreet || ''} {formData.husbandBarangay || ''}, {formData.husbandCity || ''}, {formData.husbandProvince || ''}
+                  {formData.husbandStreet || ''} {formData.husbandBarangay || ''},{' '}
+                  {formData.husbandCity || ''}, {formData.husbandProvince || ''}
                 </div>
               </td>
               <td className="TableCellMLSummary">
                 <div className="FieldNumberMLSummary">5.</div>
                 <div className="FieldLabelMLSummary">Residence</div>
                 <div className="ResidenceValueMLSummary">
-                  {formData.wifeStreet || ''} {formData.wifeBarangay || ''}, {formData.wifeCity || ''}, {formData.wifeProvince || ''}
+                  {formData.wifeStreet || ''} {formData.wifeBarangay || ''},{' '}
+                  {formData.wifeCity || ''}, {formData.wifeProvince || ''}
                 </div>
               </td>
             </tr>
@@ -398,13 +420,21 @@ useEffect(() => {
             <tr>
               <td className="TableCellMLSummary">
                 <div className="FieldNumberMLSummary">8.</div>
-                <div className="FieldLabelMLSummary">If PREVIOUSLY MARRIED, how was it dissolved?</div>
-                <div className="PreviousMarriageMLSummary">{formData.husbandPreviousMarriageStatus || ''}</div>
+                <div className="FieldLabelMLSummary">
+                  If PREVIOUSLY MARRIED, how was it dissolved?
+                </div>
+                <div className="PreviousMarriageMLSummary">
+                  {formData.husbandPreviousMarriageStatus || ''}
+                </div>
               </td>
               <td className="TableCellMLSummary">
                 <div className="FieldNumberMLSummary">8.</div>
-                <div className="FieldLabelMLSummary">If PREVIOUSLY MARRIED, how was it dissolved?</div>
-                <div className="PreviousMarriageMLSummary">{formData.wifePreviousMarriageStatus || ''}</div>
+                <div className="FieldLabelMLSummary">
+                  If PREVIOUSLY MARRIED, how was it dissolved?
+                </div>
+                <div className="PreviousMarriageMLSummary">
+                  {formData.wifePreviousMarriageStatus || ''}
+                </div>
               </td>
             </tr>
 
@@ -414,18 +444,30 @@ useEffect(() => {
                 <div className="FieldNumberMLSummary">9.</div>
                 <div className="FieldLabelMLSummary">Place where dissolved</div>
                 <div className="PlaceDissolvedFieldsMLSummary">
-                  <div className="PlaceDissolvedValueMLSummary">{formData.husbandDissolutionCity || ''}</div>
-                  <div className="PlaceDissolvedValueMLSummary">{formData.husbandDissolutionProvince || ''}</div>
-                  <div className="PlaceDissolvedValueMLSummary">{formData.husbandDissolutionCountry || ''}</div>
+                  <div className="PlaceDissolvedValueMLSummary">
+                    {formData.husbandDissolutionCity || ''}
+                  </div>
+                  <div className="PlaceDissolvedValueMLSummary">
+                    {formData.husbandDissolutionProvince || ''}
+                  </div>
+                  <div className="PlaceDissolvedValueMLSummary">
+                    {formData.husbandDissolutionCountry || ''}
+                  </div>
                 </div>
               </td>
               <td className="TableCellMLSummary">
                 <div className="FieldNumberMLSummary">9.</div>
                 <div className="FieldLabelMLSummary">Place where dissolved</div>
                 <div className="PlaceDissolvedFieldsMLSummary">
-                  <div className="PlaceDissolvedValueMLSummary">{formData.wifeDissolutionCity || ''}</div>
-                  <div className="PlaceDissolvedValueMLSummary">{formData.wifeDissolutionProvince || ''}</div>
-                  <div className="PlaceDissolvedValueMLSummary">{formData.wifeDissolutionCountry || ''}</div>
+                  <div className="PlaceDissolvedValueMLSummary">
+                    {formData.wifeDissolutionCity || ''}
+                  </div>
+                  <div className="PlaceDissolvedValueMLSummary">
+                    {formData.wifeDissolutionProvince || ''}
+                  </div>
+                  <div className="PlaceDissolvedValueMLSummary">
+                    {formData.wifeDissolutionCountry || ''}
+                  </div>
                 </div>
               </td>
             </tr>
@@ -436,18 +478,30 @@ useEffect(() => {
                 <div className="FieldNumberMLSummary">10.</div>
                 <div className="FieldLabelMLSummary">Date when dissolved</div>
                 <div className="DissolvedDateFieldsMLSummary">
-                  <div className="DissolvedDateValueMLSummary">{formData.husbandDissolutionDay || ''}</div>
-                  <div className="DissolvedDateValueMLSummary">{formData.husbandDissolutionMonth || ''}</div>
-                  <div className="DissolvedDateValueMLSummary">{formData.husbandDissolutionYear || ''}</div>
+                  <div className="DissolvedDateValueMLSummary">
+                    {formData.husbandDissolutionDay || ''}
+                  </div>
+                  <div className="DissolvedDateValueMLSummary">
+                    {formData.husbandDissolutionMonth || ''}
+                  </div>
+                  <div className="DissolvedDateValueMLSummary">
+                    {formData.husbandDissolutionYear || ''}
+                  </div>
                 </div>
               </td>
               <td className="TableCellMLSummary">
                 <div className="FieldNumberMLSummary">10.</div>
                 <div className="FieldLabelMLSummary">Date when dissolved</div>
                 <div className="DissolvedDateFieldsMLSummary">
-                  <div className="DissolvedDateValueMLSummary">{formData.wifeDissolutionDay || ''}</div>
-                  <div className="DissolvedDateValueMLSummary">{formData.wifeDissolutionMonth || ''}</div>
-                  <div className="DissolvedDateValueMLSummary">{formData.wifeDissolutionYear || ''}</div>
+                  <div className="DissolvedDateValueMLSummary">
+                    {formData.wifeDissolutionDay || ''}
+                  </div>
+                  <div className="DissolvedDateValueMLSummary">
+                    {formData.wifeDissolutionMonth || ''}
+                  </div>
+                  <div className="DissolvedDateValueMLSummary">
+                    {formData.wifeDissolutionYear || ''}
+                  </div>
                 </div>
               </td>
             </tr>
@@ -456,8 +510,12 @@ useEffect(() => {
             <tr>
               <td className="TableCellMLSummary">
                 <div className="FieldNumberMLSummary">11.</div>
-                <div className="FieldLabelMLSummary">Degree of relationship of contracting parties</div>
-                <div className="RelationshipValueMLSummary">{formData.degreeRelationship || ''}</div>
+                <div className="FieldLabelMLSummary">
+                  Degree of relationship of contracting parties
+                </div>
+                <div className="RelationshipValueMLSummary">
+                  {formData.degreeRelationship || ''}
+                </div>
               </td>
               <td className="TableCellMLSummary"></td>
             </tr>
@@ -468,17 +526,27 @@ useEffect(() => {
                 <div className="FieldNumberMLSummary">12.</div>
                 <div className="FieldLabelMLSummary">Name of Father</div>
                 <div className="ParentNameFieldsMLSummary">
-                  <div className="ParentFirstNameMLSummary">{formData.husbandFatherFirstName || ''}</div>
-                  <div className="ParentMiddleNameMLSummary">{formData.husbandFatherMiddleName || ''}</div>
-                  <div className="ParentLastNameMLSummary">{formData.husbandFatherLastName || ''}</div>
+                  <div className="ParentFirstNameMLSummary">
+                    {formData.husbandFatherFirstName || ''}
+                  </div>
+                  <div className="ParentMiddleNameMLSummary">
+                    {formData.husbandFatherMiddleName || ''}
+                  </div>
+                  <div className="ParentLastNameMLSummary">
+                    {formData.husbandFatherLastName || ''}
+                  </div>
                 </div>
               </td>
               <td className="TableCellMLSummary">
                 <div className="FieldNumberMLSummary">12.</div>
                 <div className="FieldLabelMLSummary">Name of Father</div>
                 <div className="ParentNameFieldsMLSummary">
-                  <div className="ParentFirstNameMLSummary">{formData.wifeFatherFirstName || ''}</div>
-                  <div className="ParentMiddleNameMLSummary">{formData.wifeFatherMiddleName || ''}</div>
+                  <div className="ParentFirstNameMLSummary">
+                    {formData.wifeFatherFirstName || ''}
+                  </div>
+                  <div className="ParentMiddleNameMLSummary">
+                    {formData.wifeFatherMiddleName || ''}
+                  </div>
                   <div className="ParentLastNameMLSummary">{formData.wifeFatherLastName || ''}</div>
                 </div>
               </td>
@@ -489,12 +557,16 @@ useEffect(() => {
               <td className="TableCellMLSummary">
                 <div className="FieldNumberMLSummary">13.</div>
                 <div className="FieldLabelMLSummary">Citizenship</div>
-                <div className="FatherCitizenshipMLSummary">{formData.husbandFatherCitizenship || ''}</div>
+                <div className="FatherCitizenshipMLSummary">
+                  {formData.husbandFatherCitizenship || ''}
+                </div>
               </td>
               <td className="TableCellMLSummary">
                 <div className="FieldNumberMLSummary">13.</div>
                 <div className="FieldLabelMLSummary">Citizenship</div>
-                <div className="FatherCitizenshipMLSummary">{formData.wifeFatherCitizenship || ''}</div>
+                <div className="FatherCitizenshipMLSummary">
+                  {formData.wifeFatherCitizenship || ''}
+                </div>
               </td>
             </tr>
 
@@ -503,7 +575,9 @@ useEffect(() => {
               <td className="TableCellMLSummary">
                 <div className="FieldNumberMLSummary">14.</div>
                 <div className="FieldLabelMLSummary">Residence</div>
-                <div className="FatherResidenceMLSummary">{formData.husbandFatherAddress || ''}</div>
+                <div className="FatherResidenceMLSummary">
+                  {formData.husbandFatherAddress || ''}
+                </div>
               </td>
               <td className="TableCellMLSummary">
                 <div className="FieldNumberMLSummary">14.</div>
@@ -518,17 +592,27 @@ useEffect(() => {
                 <div className="FieldNumberMLSummary">15.</div>
                 <div className="FieldLabelMLSummary">Maiden Name of Mother</div>
                 <div className="ParentNameFieldsMLSummary">
-                  <div className="ParentFirstNameMLSummary">{formData.husbandMotherFirstName || ''}</div>
-                  <div className="ParentMiddleNameMLSummary">{formData.husbandMotherMiddleName || ''}</div>
-                  <div className="ParentLastNameMLSummary">{formData.husbandMotherLastName || ''}</div>
+                  <div className="ParentFirstNameMLSummary">
+                    {formData.husbandMotherFirstName || ''}
+                  </div>
+                  <div className="ParentMiddleNameMLSummary">
+                    {formData.husbandMotherMiddleName || ''}
+                  </div>
+                  <div className="ParentLastNameMLSummary">
+                    {formData.husbandMotherLastName || ''}
+                  </div>
                 </div>
               </td>
               <td className="TableCellMLSummary">
                 <div className="FieldNumberMLSummary">15.</div>
                 <div className="FieldLabelMLSummary">Maiden Name of Mother</div>
                 <div className="ParentNameFieldsMLSummary">
-                  <div className="ParentFirstNameMLSummary">{formData.wifeMotherFirstName || ''}</div>
-                  <div className="ParentMiddleNameMLSummary">{formData.wifeMotherMiddleName || ''}</div>
+                  <div className="ParentFirstNameMLSummary">
+                    {formData.wifeMotherFirstName || ''}
+                  </div>
+                  <div className="ParentMiddleNameMLSummary">
+                    {formData.wifeMotherMiddleName || ''}
+                  </div>
                   <div className="ParentLastNameMLSummary">{formData.wifeMotherLastName || ''}</div>
                 </div>
               </td>
@@ -539,12 +623,16 @@ useEffect(() => {
               <td className="TableCellMLSummary">
                 <div className="FieldNumberMLSummary">16.</div>
                 <div className="FieldLabelMLSummary">Citizenship</div>
-                <div className="MotherCitizenshipMLSummary">{formData.husbandMotherCitizenship || ''}</div>
+                <div className="MotherCitizenshipMLSummary">
+                  {formData.husbandMotherCitizenship || ''}
+                </div>
               </td>
               <td className="TableCellMLSummary">
                 <div className="FieldNumberMLSummary">16.</div>
                 <div className="FieldLabelMLSummary">Citizenship</div>
-                <div className="MotherCitizenshipMLSummary">{formData.wifeMotherCitizenship || ''}</div>
+                <div className="MotherCitizenshipMLSummary">
+                  {formData.wifeMotherCitizenship || ''}
+                </div>
               </td>
             </tr>
 
@@ -553,7 +641,9 @@ useEffect(() => {
               <td className="TableCellMLSummary">
                 <div className="FieldNumberMLSummary">17.</div>
                 <div className="FieldLabelMLSummary">Residence</div>
-                <div className="MotherResidenceMLSummary">{formData.husbandMotherAddress || ''}</div>
+                <div className="MotherResidenceMLSummary">
+                  {formData.husbandMotherAddress || ''}
+                </div>
               </td>
               <td className="TableCellMLSummary">
                 <div className="FieldNumberMLSummary">17.</div>
@@ -567,12 +657,12 @@ useEffect(() => {
               <td className="TableCellMLSummary">
                 <div className="FieldNumberMLSummary">18.</div>
                 <div className="FieldLabelMLSummary">Persons who gave consent or advice</div>
-                <div className="ConsentPersonMLSummary">{ consentPersonHusband|| ''}</div>
+                <div className="ConsentPersonMLSummary">{consentPersonHusband || ''}</div>
               </td>
               <td className="TableCellMLSummary">
                 <div className="FieldNumberMLSummary">18.</div>
                 <div className="FieldLabelMLSummary">Persons who gave consent or advice</div>
-                <div className="ConsentPersonMLSummary">{consentPersonWife|| ''}</div>
+                <div className="ConsentPersonMLSummary">{consentPersonWife || ''}</div>
               </td>
             </tr>
 
@@ -586,7 +676,9 @@ useEffect(() => {
               <td className="TableCellMLSummary">
                 <div className="FieldNumberMLSummary">19.</div>
                 <div className="FieldLabelMLSummary">Relationship</div>
-                <div className="RelationshipValueMLSummary">{formData.wifewaliRelationship|| ''}</div>
+                <div className="RelationshipValueMLSummary">
+                  {formData.wifewaliRelationship || ''}
+                </div>
               </td>
             </tr>
 
@@ -595,12 +687,14 @@ useEffect(() => {
               <td className="TableCellMLSummary">
                 <div className="FieldNumberMLSummary">20.</div>
                 <div className="FieldLabelMLSummary">Citizenship</div>
-                <div className="ConsentCitizenshipMLSummary">{formData.waliCitizenship  || ''}</div>
+                <div className="ConsentCitizenshipMLSummary">{formData.waliCitizenship || ''}</div>
               </td>
               <td className="TableCellMLSummary">
                 <div className="FieldNumberMLSummary">20.</div>
                 <div className="FieldLabelMLSummary">Citizenship</div>
-                <div className="ConsentCitizenshipMLSummary">{formData.wifewaliCitizenship || ''}</div>
+                <div className="ConsentCitizenshipMLSummary">
+                  {formData.wifewaliCitizenship || ''}
+                </div>
               </td>
             </tr>
 
@@ -609,12 +703,12 @@ useEffect(() => {
               <td className="TableCellMLSummary">
                 <div className="FieldNumberMLSummary">21.</div>
                 <div className="FieldLabelMLSummary">Residence</div>
-                <div className="ConsentResidenceMLSummary">{consentPersonAddHusband  || ''}</div>
+                <div className="ConsentResidenceMLSummary">{consentPersonAddHusband || ''}</div>
               </td>
               <td className="TableCellMLSummary">
                 <div className="FieldNumberMLSummary">21.</div>
                 <div className="FieldLabelMLSummary">Residence</div>
-                <div className="ConsentResidenceMLSummary">{consentPersonAddWife  || ''}</div>
+                <div className="ConsentResidenceMLSummary">{consentPersonAddWife || ''}</div>
               </td>
             </tr>
 
@@ -623,80 +717,86 @@ useEffect(() => {
               <td className="TableCellMLSummary SignatureBoxMLSummary">
                 <div className="SignatureLineMLSummary"></div>
                 <div className="SignatureLabelMLSummary">(Signature of Applicant)</div>
-                
+
                 <div className="SubscribedMLSummary">
                   <div className="SubscribedTextMLSummary">SUBSCRIBED AND SWORN</div>
                   <div className="SubscribedDetailsMLSummary">
-                    to before me this _____ day of ________, ________, Philippines, affiant who exhibited to me his Community Tax Cert. issued on __________ at _________.
+                    to before me this _____ day of ________, ________, Philippines, affiant who
+                    exhibited to me his Community Tax Cert. issued on __________ at _________.
                   </div>
                 </div>
-                
+
                 <div className="OfficialSignatureMLSummary">
                   <div className="OfficialLineMLSummary"></div>
-                  <div className="OfficialLabelMLSummary">(Signature Over Printed Name of the Civil Registrar)</div>
+                  <div className="OfficialLabelMLSummary">
+                    (Signature Over Printed Name of the Civil Registrar)
+                  </div>
                 </div>
               </td>
               <td className="TableCellMLSummary SignatureBoxMLSummary">
                 <div className="SignatureLineMLSummary"></div>
                 <div className="SignatureLabelMLSummary">(Signature of Applicant)</div>
-                
+
                 <div className="SubscribedMLSummary">
                   <div className="SubscribedTextMLSummary">SUBSCRIBED AND SWORN</div>
                   <div className="SubscribedDetailsMLSummary">
-                    to before me this _____ day of ________, ________, Philippines, affiant who exhibited to me his Community Tax Cert. issued on __________ at _________.
+                    to before me this _____ day of ________, ________, Philippines, affiant who
+                    exhibited to me his Community Tax Cert. issued on __________ at _________.
                   </div>
                   <div className="DocStampMLSummary">
                     <div className="StampTextMLSummary">
-                      Documentary<br/>
+                      Documentary
+                      <br />
                       stamp tax
                     </div>
                   </div>
                 </div>
-                
+
                 <div className="OfficialSignatureMLSummary">
                   <div className="OfficialLineMLSummary"></div>
-                  <div className="OfficialLabelMLSummary">(Signature Over Printed Name of the Civil Registrar)</div>
+                  <div className="OfficialLabelMLSummary">
+                    (Signature Over Printed Name of the Civil Registrar)
+                  </div>
                 </div>
               </td>
             </tr>
           </tbody>
         </table>
       </div>
-      {/* Replace the ButtonContainerMLSummary div with this code */}
-<div className="ActionButtonContainerMLSummary">
-  <Button
-    variant="contained"
-    color="error"
-    startIcon={<CancelIcon />}
-    onClick={() => setConfirmCancelDialog ? setConfirmCancelDialog(true) : navigate('/ApplicationForm')}
-    className="ActionButtonMLSummary cancelButton"
-    aria-label="Cancel Application"
-  >
-    Cancel
-  </Button>
-  
- 
-  <Button
-    variant="contained" 
-    startIcon={<EditIcon />}
-    onClick={handleModify}
-    className="ActionButtonMLSummary modifyButton"
-    aria-label="Modify Form"
-  >
-    Modify
-  </Button>
-  
-  <Button
-    variant="contained"
-    startIcon={<CheckIcon />}
-    onClick={handleSubmit}
-    className="ActionButtonMLSummary doneButton"
-    aria-label="Done"
-  >
-    Done
-  </Button>
-</div>
-      
+      <div className="ActionButtonContainerMLSummary">
+        <Button
+          variant="contained"
+          color="error"
+          startIcon={<CancelIcon />}
+          onClick={() =>
+            setConfirmCancelDialog ? setConfirmCancelDialog(true) : navigate('/ApplicationForm')
+          }
+          className="ActionButtonMLSummary cancelButton"
+          aria-label="Cancel Application"
+        >
+          Cancel
+        </Button>
+
+        <Button
+          variant="contained"
+          startIcon={<EditIcon />}
+          onClick={handleModify}
+          className="ActionButtonMLSummary modifyButton"
+          aria-label="Modify Form"
+        >
+          Modify
+        </Button>
+
+        <Button
+          variant="contained"
+          startIcon={<CheckIcon />}
+          onClick={handleSubmit}
+          className="ActionButtonMLSummary doneButton"
+          aria-label="Done"
+        >
+          Done
+        </Button>
+      </div>
     </div>
   );
 };

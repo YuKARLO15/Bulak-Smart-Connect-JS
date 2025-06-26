@@ -31,6 +31,8 @@ import AdminMarriageLicensePreview from './AdminMarriageLicensePreview';
 import NavBar from '../../NavigationComponents/NavSide';
 import { documentApplicationService } from '../../services/documentApplicationService';
 import AdminCopyBirthPreview from './AdminCopyBirthPreview';
+import AdminMarriageAffidavitDetails from './AdminMarriageAffidavitDetails';
+
 
 
 const AdminApplicationDetails = () => {
@@ -313,7 +315,9 @@ const handleApplicationClick = application => {
     'Copy of Birth Certificate',
     'Correction - Clerical Errors',
     'Correction - Sex/Date of Birth',
-    'Correction - First Name'
+    'Correction - First Name',
+    'Marriage License',
+    'Application for Marriage License',
   ].includes(subtype);
 };
 
@@ -440,22 +444,23 @@ const handleApplicationClick = application => {
                   >
                     Application Form
                   </Button>
-    { (!isCopyOrCorrectionOfBirthCertificate(selectedApplication) || 
-     (getApplicationType(selectedApplication) === 'Birth Certificate' && 
-      selectedApplication.applicationType === 'Request copy')) && (
-    <Button
-      variant="contained"
-      color={affidavit === 1 ? 'primary' : 'inherit'}
-      onClick={() => {
-        setAffidavitTab(1);
-        setShowDocumentsTab(false);
-      }}
-      startIcon={<AttachFileIcon />}
-      className={affidavit === 1 ? 'ActiveToggleButtonAdminAppForm' : ''}
-    >
-      Affidavit
-    </Button>
-  )}
+   { (!isCopyOrCorrectionOfBirthCertificate(selectedApplication) || 
+   (getApplicationType(selectedApplication) === 'Birth Certificate' && 
+    selectedApplication.applicationType === 'Request copy') ||
+   getApplicationType(selectedApplication) === 'Marriage Certificate') && (
+  <Button
+    variant="contained"
+    color={affidavit === 1 ? 'primary' : 'inherit'}
+    onClick={() => {
+      setAffidavitTab(1);
+      setShowDocumentsTab(false);
+    }}
+    startIcon={<AttachFileIcon />}
+    className={affidavit === 1 ? 'ActiveToggleButtonAdminAppForm' : ''}
+  >
+    Affidavit
+  </Button>
+)}
 
                   <Button
                     variant="contained"
@@ -474,9 +479,11 @@ const handleApplicationClick = application => {
 
         {!showDocumentsTab ? (
   <>
-    {affidavit === 1 ? (
-
-      <AdminBirthAffidavitPreviewPage 
+{affidavit === 1 ? (
+  <>
+    {getApplicationType(selectedApplication) === 'Marriage Certificate' || 
+     getApplicationType(selectedApplication) === 'Marriage License' ? (
+      <AdminMarriageAffidavitDetails 
         applicationId={selectedApplication.id}
         currentUser={{
           login: 'dennissegailfrancisco',
@@ -484,6 +491,16 @@ const handleApplicationClick = application => {
         }}
       />
     ) : (
+      <AdminBirthAffidavitPreviewPage 
+        applicationId={selectedApplication.id}
+        currentUser={{
+          login: 'dennissegailfrancisco',
+          role: 'super admin'
+        }}
+      />
+    )}
+  </>
+) : (
     
       <>
         {getApplicationType(selectedApplication) === 'Marriage Certificate' ? (
