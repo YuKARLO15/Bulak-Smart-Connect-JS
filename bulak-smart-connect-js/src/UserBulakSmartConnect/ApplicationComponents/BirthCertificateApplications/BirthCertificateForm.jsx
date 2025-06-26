@@ -93,7 +93,7 @@ const BirthCertificateForm = () => {
       }
     };
     fetchData();
-    // eslint-disable-next-line
+     
   }, [isEditing, editingApplicationId]);
 
   const handleChange = e => {

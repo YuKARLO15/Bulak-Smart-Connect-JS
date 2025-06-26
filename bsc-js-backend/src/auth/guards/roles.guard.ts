@@ -4,8 +4,8 @@ import { ROLES_KEY } from '../decorators/roles.decorator';
 
 // Define interface for request with user
 interface RequestWithUser extends Request {
-  user?: { 
-    roles?: Array<{ name: string }> | string[];  // ← Support both formats
+  user?: {
+    roles?: Array<{ name: string }> | string[];
   };
 }
 
@@ -25,12 +25,12 @@ export class RolesGuard implements CanActivate {
 
     const request = context.switchToHttp().getRequest<RequestWithUser>();
     const userRoles = request.user?.roles || [];
-    
+
     // Handle both string array and object array formats
-    const roleNames = userRoles.map(role => 
-      typeof role === 'string' ? role : role.name
+    const roleNames = userRoles.map((role: string | { name: string }) =>
+      typeof role === 'string' ? role : (role as { name: string }).name,
     );
-    
+
     return requiredRoles.some((role) => roleNames.includes(role));
   }
 }

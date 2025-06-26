@@ -8,7 +8,9 @@ import { ConflictException, NotFoundException } from '@nestjs/common';
 
 describe('UsersService', () => {
   let service: UsersService;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   let userRepository: Repository<User>;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   let rolesService: RolesService;
 
   const mockUserRepository = {
@@ -79,8 +81,8 @@ describe('UsersService', () => {
         roleIds: [4], // Changed to citizen role ID
       };
 
-      const mockUser = { 
-        id: 1, 
+      const mockUser = {
+        id: 1,
         email: createUserDto.email,
         username: createUserDto.username,
         firstName: createUserDto.firstName,
@@ -111,9 +113,14 @@ describe('UsersService', () => {
         lastName: 'User',
       };
 
-      mockUserRepository.findOne.mockResolvedValue({ id: 1, email: 'existing@test.com' });
+      mockUserRepository.findOne.mockResolvedValue({
+        id: 1,
+        email: 'existing@test.com',
+      });
 
-      await expect(service.create(createUserDto)).rejects.toThrow(ConflictException);
+      await expect(service.create(createUserDto)).rejects.toThrow(
+        ConflictException,
+      );
     });
   });
 
@@ -131,12 +138,18 @@ describe('UsersService', () => {
 
       mockUserRepository.findOne.mockResolvedValue(mockUser);
 
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const result = await service.findOne(1);
 
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       expect(result.id).toBe(1);
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       expect(result.email).toBe('test@test.com');
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       expect(result.roles).toEqual(['citizen']);
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       expect(result.defaultRole).toBe('citizen');
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       expect(result.password).toBeUndefined();
     });
 
@@ -243,25 +256,25 @@ describe('UsersService', () => {
       });
 
       mockUserRepository.find.mockResolvedValueOnce([
-        { 
-          id: 1, 
-          email: 'user1@test.com', 
+        {
+          id: 1,
+          email: 'user1@test.com',
           firstName: 'User',
           lastName: 'One',
           password: 'hashedPassword1',
           createdAt: new Date(),
           defaultRole: { name: 'citizen' },
-          roles: [{ name: 'citizen' }]
+          roles: [{ name: 'citizen' }],
         },
-        { 
-          id: 2, 
-          email: 'user2@test.com', 
+        {
+          id: 2,
+          email: 'user2@test.com',
           firstName: 'User',
           lastName: 'Two',
           password: 'hashedPassword2',
           createdAt: new Date(),
           defaultRole: { name: 'admin' },
-          roles: [{ name: 'admin' }]
+          roles: [{ name: 'admin' }],
         },
       ]);
 

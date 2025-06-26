@@ -115,7 +115,7 @@ describe('UsersController', () => {
 
   describe('findOne', () => {
     it('should return a user by id for admin', async () => {
-      const mockUser = {
+      const mockUser: any = {
         id: 1,
         email: 'test@test.com',
         firstName: 'John',
@@ -131,14 +131,15 @@ describe('UsersController', () => {
         roles: [{ name: 'admin' }],
       };
 
-      const result = await controller.findOne('1', { user: mockAuthUser });
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      const result: any = await controller.findOne('1', { user: mockAuthUser });
 
       expect(result).toEqual(mockUser);
       expect(mockUsersService.findOne).toHaveBeenCalledWith(1);
     });
 
     it('should allow users to view their own profile', async () => {
-      const mockUser = {
+      const mockUser: any = {
         id: 5,
         email: 'user@test.com',
         firstName: 'John',
@@ -154,7 +155,8 @@ describe('UsersController', () => {
         roles: [{ name: 'citizen' }],
       };
 
-      const result = await controller.findOne('5', { user: mockAuthUser });
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      const result: any = await controller.findOne('5', { user: mockAuthUser });
 
       expect(result).toEqual(mockUser);
       expect(mockUsersService.findOne).toHaveBeenCalledWith(5);
@@ -167,7 +169,8 @@ describe('UsersController', () => {
         firstName: 'Updated',
         lastName: 'Name',
       };
-      const mockUser = {
+
+      const mockUser: any = {
         id: 1,
         email: 'user@test.com',
         firstName: 'Updated',
@@ -183,10 +186,16 @@ describe('UsersController', () => {
         roles: [{ name: 'admin' }],
       };
 
-      const result = await controller.update('1', updateUserDto, { user: mockAuthUser });
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      const result: any = await controller.update('1', updateUserDto, {
+        user: mockAuthUser,
+      });
 
       expect(result).toEqual(mockUser);
-      expect(mockUsersService.adminUpdate).toHaveBeenCalledWith(1, updateUserDto);
+      expect(mockUsersService.adminUpdate).toHaveBeenCalledWith(
+        1,
+        updateUserDto,
+      );
     });
   });
 
@@ -210,7 +219,7 @@ describe('UsersController', () => {
 
   describe('updateStatus', () => {
     it('should update user status (admin only)', async () => {
-      const mockUser = {
+      const mockUser: any = {
         id: 1,
         email: 'user@test.com',
         firstName: 'John',
@@ -228,7 +237,10 @@ describe('UsersController', () => {
         roles: [{ name: 'admin' }],
       };
 
-      const result = await controller.updateStatus('1', updateStatusDto, { user: mockAuthUser });
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      const result: any = await controller.updateStatus('1', updateStatusDto, {
+        user: mockAuthUser,
+      });
 
       expect(result).toEqual(mockUser);
       expect(mockUsersService.updateStatus).toHaveBeenCalledWith(1, false);
@@ -237,7 +249,7 @@ describe('UsersController', () => {
 
   describe('getProfile', () => {
     it('should return current user profile', async () => {
-      const mockUser = {
+      const mockUser: any = {
         id: 1,
         email: 'user@test.com',
         firstName: 'John',
@@ -253,7 +265,8 @@ describe('UsersController', () => {
         roles: [{ name: 'citizen' }],
       };
 
-      const result = await controller.getProfile({ user: mockAuthUser });
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      const result: any = await controller.getProfile({ user: mockAuthUser });
 
       expect(result).toEqual(mockUser);
       expect(mockUsersService.findOne).toHaveBeenCalledWith(1);

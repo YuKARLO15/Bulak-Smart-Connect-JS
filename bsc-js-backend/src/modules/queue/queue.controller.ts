@@ -6,7 +6,7 @@ import {
   Patch,
   Param,
   //Delete, // Uncomment if you want to implement delete functionality
-  Request,
+  //Request, // Uncomment if you want to use Request object
   UseGuards,
 } from '@nestjs/common';
 import { QueueService } from './queue.service';
@@ -23,15 +23,12 @@ export class QueueController {
 
   @Post()
   @UseGuards(JwtAuthGuard)
-  create(
-    @Body() createQueueDto: CreateQueueDto,
-    @User() user?: UserEntity,
-  ) {
+  create(@Body() createQueueDto: CreateQueueDto, @User() user?: UserEntity) {
     // Extract user ID from authenticated user
-    const userId = user?.id || null; 
+    const userId = user?.id || null;
 
     console.log('=== QUEUE CREATION BACKEND DEBUG ===');
-    console.log('Queue creation - User from JWT:', user); 
+    console.log('Queue creation - User from JWT:', user);
     console.log('Original DTO received:', createQueueDto);
     console.log('DTO isGuest value:', createQueueDto.isGuest);
     console.log('DTO isGuest type:', typeof createQueueDto.isGuest);
@@ -64,7 +61,7 @@ export class QueueController {
     try {
       console.log('Manual queue creation by admin:', user?.id);
       console.log('Received DTO:', createQueueDto);
-      
+
       // Set default values for manual/guest queues
       const queueData: CreateQueueDto = {
         ...createQueueDto,
@@ -76,12 +73,12 @@ export class QueueController {
       console.log('Processed queue data:', queueData);
 
       const result = await this.queueService.create(queueData);
-      
+
       return {
         success: true,
         queue: result.queue || result,
         details: result.details,
-        message: 'Manual queue created successfully'
+        message: 'Manual queue created successfully',
       };
     } catch (error) {
       console.error('Error creating manual queue:', error);

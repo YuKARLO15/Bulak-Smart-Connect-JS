@@ -31,7 +31,7 @@ export class DocumentFile {
   @Column({ name: 'minio_object_name', length: 500 })
   minioObjectName: string;
 
-  @Column({ name: 'document_category', length: 100, nullable: true })
+  @Column({ name: 'document_category', length: 250, nullable: true })
   documentCategory: string;
 
   @CreateDateColumn({ name: 'uploaded_at' })

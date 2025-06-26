@@ -26,7 +26,7 @@ import {
 } from '@nestjs/swagger';
 
 interface RequestWithUser extends Request {
-  user: AuthenticatedUser; 
+  user: AuthenticatedUser;
 }
 
 @ApiTags('Authentication')

@@ -17,7 +17,9 @@
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "test:ui": "vitest --ui",
-    "test:a11y": "jest --config=jest.a11y.config.js --testMatch='**/*.a11y.test.{js,jsx}'"
+    "test:a11y": "jest --config=jest.a11y.config.js --testMatch='**/*.a11y.test.{js,jsx}'",
+    "test:integration": "vitest run --config=vitest.integration.config.js",
+    "test:e2e": "playwright test"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -56,6 +58,7 @@
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.20",
     "globals": "^15.14.0",
+    "jest-axe": "^10.0.0",
     "jsdom": "^26.1.0",
     "prettier": "^3.5.3",
     "rollup-plugin-visualizer": "^5.14.0",

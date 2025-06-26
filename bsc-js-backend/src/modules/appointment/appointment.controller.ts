@@ -22,11 +22,16 @@ import { Roles } from '../../auth/decorators/roles.decorator';
 import { AppointmentStatus } from './entities/appointment.entity';
 import { User } from '../../auth/decorators/user.decorator';
 import { AuthenticatedUser } from '../../auth/jwt.strategy';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBearerAuth,
+} from '@nestjs/swagger';
 
 @ApiTags('Appointments')
 @Controller('appointments')
-@UseGuards(JwtAuthGuard) 
+@UseGuards(JwtAuthGuard)
 @ApiBearerAuth('JWT-auth')
 export class AppointmentController {
   private readonly logger = new Logger(AppointmentController.name);
@@ -38,7 +43,7 @@ export class AppointmentController {
   @ApiResponse({ status: 201, description: 'Appointment created successfully' })
   async create(
     @Body() createAppointmentDto: CreateAppointmentDto,
-    @User() user: AuthenticatedUser, 
+    @User() user: AuthenticatedUser,
   ) {
     // Set the userId from the authenticated user
     createAppointmentDto.userId = user.id;
@@ -127,7 +132,7 @@ export class AppointmentController {
   async update(
     @Param('id') id: string,
     @Body() updateAppointmentDto: UpdateAppointmentDto,
-    @User() user: AuthenticatedUser, 
+    @User() user: AuthenticatedUser,
   ) {
     // Get the appointment to check if it belongs to the user
     const appointment = await this.appointmentService.findOne(+id);
@@ -168,10 +173,7 @@ export class AppointmentController {
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiOperation({ summary: 'Delete appointment' })
-  async remove(
-    @Param('id') id: string,
-    @User() user: AuthenticatedUser, 
-  ) {
+  async remove(@Param('id') id: string, @User() user: AuthenticatedUser) {
     // Get the appointment to check if it belongs to the user
     const appointment = await this.appointmentService.findOne(+id);
 

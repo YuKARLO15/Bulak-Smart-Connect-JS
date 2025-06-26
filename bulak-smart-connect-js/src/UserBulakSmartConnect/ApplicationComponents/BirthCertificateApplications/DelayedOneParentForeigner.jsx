@@ -111,7 +111,7 @@ const DelayedOneParentForeignerRegistration = () => {
       }
       setIsInitializing(false);
     })();
-    // eslint-disable-next-line
+     
   }, []);
 
   // Update uploaded documents count when uploadedFiles changes

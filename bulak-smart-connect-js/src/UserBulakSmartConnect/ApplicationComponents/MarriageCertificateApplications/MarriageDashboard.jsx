@@ -21,26 +21,22 @@ const MarriageDashboard = () => {
 
   const handlePrivacyPolicyClick = () => {
     const policyWindow = window.open('/PrivacyPolicy', '_blank');
-
     if (policyWindow) {
       const checkClosed = setInterval(() => {
         if (policyWindow.closed) {
           clearInterval(checkClosed);
           sessionStorage.setItem('visitedPrivacyPolicy', 'true');
           setHasVisitedPrivacyPolicy(true);
+          setAgreedPrivacy(true);
         }
       }, 1000);
     }
   };
 
   const handleNext = () => {
+    
   if (!selectedOption) {
     alert('Please select an application type before proceeding.');
-    return;
-  }
-
-  if (!agreedPrivacy || !agreedTerms) {
-    alert('You must agree to the Data Privacy Notice and Terms and Conditions to proceed.');
     return;
   }
 
@@ -154,34 +150,10 @@ const MarriageDashboard = () => {
         </Box>
 
         <Box className="SectionMDashboard">
-          <Typography variant="h6" className="SectionTitleMDashboard">
-            Terms and Condition
-          </Typography>
-          
-          <FormControlLabel
-            control={
-              <Radio
-                checked={agreedTerms}
-                onChange={() => setAgreedTerms(!agreedTerms)}
-              />
-            }
-            label={
-              <Box>
-                <Typography>I agree to the terms and conditions</Typography>
-                <Typography variant="caption" sx={{ fontStyle: 'italic' }}>
-                  sumasang-ayon ako sa mga termino at kondition
-                </Typography>
-              </Box>
-            }
-            className="RadioMDashboard"
-          />
-        </Box>
-
-        <Box className="SectionMDashboard">
           <Button
             variant="contained"
             onClick={handleNext}
-            disabled={!selectedOption || !agreedPrivacy || !agreedTerms || !hasVisitedPrivacyPolicy}
+            disabled={!selectedOption || !agreedPrivacy }
             className="NextButtonMDashboard"
           >
             Next
