@@ -20,10 +20,8 @@ const MarriageDashboard = () => {
   }, []);
 
   const handlePrivacyPolicyClick = () => {
-    // Open the privacy policy in a new window
     const policyWindow = window.open('/PrivacyPolicy', '_blank');
 
-    // Set up a listener to detect when the window is closed
     if (policyWindow) {
       const checkClosed = setInterval(() => {
         if (policyWindow.closed) {
@@ -36,18 +34,30 @@ const MarriageDashboard = () => {
   };
 
   const handleNext = () => {
-    if (!selectedOption) {
-      alert('Please select an application type before proceeding.');
-      return;
-    }
+  if (!selectedOption) {
+    alert('Please select an application type before proceeding.');
+    return;
+  }
 
-    if (!agreedPrivacy || !agreedTerms) {
-      alert('You must agree to the Data Privacy Notice and Terms and Conditions to proceed.');
-      return;
-    }
-    localStorage.setItem('selectedMarriageOption', selectedOption);
-    navigate('/MarriageForm');
-  };
+  if (!agreedPrivacy || !agreedTerms) {
+    alert('You must agree to the Data Privacy Notice and Terms and Conditions to proceed.');
+    return;
+  }
+
+  localStorage.setItem('selectedMarriageOption', selectedOption);
+  
+  localStorage.removeItem('currentApplicationId');
+  localStorage.removeItem('marriageApplicationId');
+  localStorage.removeItem('marriageFormData');
+  localStorage.removeItem('isEditingMarriageForm');
+  localStorage.removeItem('currentEditingApplicationId');
+  localStorage.removeItem('editingMarriageType');
+  
+  localStorage.setItem('isCreatingNewMarriageApplication', 'true');
+
+  
+  navigate('/MarriageForm');
+};
 
   return (
     <Box className={`ContainerMDashboard ${isSidebarOpen ? 'sidebar-openMDashboard' : ''}`}>
