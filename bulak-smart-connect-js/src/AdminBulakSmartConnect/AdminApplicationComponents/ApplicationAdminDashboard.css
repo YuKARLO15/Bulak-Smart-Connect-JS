@@ -207,7 +207,7 @@
 .ApplicationDashCount.Approved {
   color: #4caf50 !important;
 }
-.ApplicationDashCount.Denied {
+.ApplicationDashCount.Decline {
   color: #f44336 !important;
 }
 
