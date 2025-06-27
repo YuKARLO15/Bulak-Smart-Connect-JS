@@ -90,11 +90,11 @@ describe('LogInCard component', () => {
     const submitButton = screen.getByRole('button', { name: /log in/i });
     
     fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
-    fireEvent.change(passwordInput, { target: { value: 'password123' } });
+    fireEvent.change(passwordInput, { target: { value: 'TestPass123!' } }); 
     fireEvent.click(submitButton);
     
     await waitFor(() => {
-      expect(mockLogin).toHaveBeenCalledWith('test@example.com', 'password123', 'email');
+      expect(mockLogin).toHaveBeenCalledWith('test@example.com', 'TestPass123!', 'email');
     });
   });
 });

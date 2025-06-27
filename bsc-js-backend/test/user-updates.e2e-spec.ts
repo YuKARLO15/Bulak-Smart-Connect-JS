@@ -184,11 +184,11 @@ describe('User Update Functionality (e2e)', () => {
         .expect(409);
     });
 
-    it('should allow updating password with valid length', async () => {
+    it('should allow updating password with valid length and complexity', async () => {
       return request(app.getHttpServer() as unknown as import('http').Server)
         .post('/auth/update-profile')
         .set('Authorization', `Bearer ${citizenToken}`)
-        .send({ password: 'newSecurePassword123' })
+        .send({ password: 'NewSecure123!' }) 
         .expect(200);
     });
 
@@ -196,7 +196,31 @@ describe('User Update Functionality (e2e)', () => {
       return request(app.getHttpServer() as unknown as import('http').Server)
         .post('/auth/update-profile')
         .set('Authorization', `Bearer ${citizenToken}`)
-        .send({ password: 'short' })
+        .send({ password: 'Short1!' }) // Still too short (7 chars)
+        .expect(400);
+    });
+
+    it('should reject password without uppercase letter', async () => {
+      return request(app.getHttpServer() as unknown as import('http').Server)
+        .post('/auth/update-profile')
+        .set('Authorization', `Bearer ${citizenToken}`)
+        .send({ password: 'lowercase123!' })
+        .expect(400);
+    });
+
+    it('should reject password without numbers', async () => {
+      return request(app.getHttpServer() as unknown as import('http').Server)
+        .post('/auth/update-profile')
+        .set('Authorization', `Bearer ${citizenToken}`)
+        .send({ password: 'NoNumbers!' })
+        .expect(400);
+    });
+
+    it('should reject password without special characters', async () => {
+      return request(app.getHttpServer() as unknown as import('http').Server)
+        .post('/auth/update-profile')
+        .set('Authorization', `Bearer ${citizenToken}`)
+        .send({ password: 'NoSpecialChars123' })
         .expect(400);
     });
 
