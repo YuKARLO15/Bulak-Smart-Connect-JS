@@ -103,8 +103,26 @@ const AdminAddUser = () => {
         if (formData.password !== formData.confirmPassword) {
           validationErrors.confirmPassword = 'Passwords do not match';
         }
-        if (formData.password && formData.password.length < 6) {
-          validationErrors.password = 'Password must be at least 6 characters';
+        
+        if (formData.password) {
+          if (formData.password.length < 8) {
+            validationErrors.password = 'Password must be at least 8 characters long';
+          } else {
+            const hasUpperCase = /[A-Z]/.test(formData.password);
+            const hasLowerCase = /[a-z]/.test(formData.password);
+            const hasNumbers = /\d/.test(formData.password);
+            const hasSpecialChars = /[!@#$%^&*(),.?":{}|<>]/.test(formData.password);
+
+            if (!hasUpperCase) {
+              validationErrors.password = 'Password must contain at least one uppercase letter';
+            } else if (!hasLowerCase) {
+              validationErrors.password = 'Password must contain at least one lowercase letter';
+            } else if (!hasNumbers) {
+              validationErrors.password = 'Password must contain at least one number';
+            } else if (!hasSpecialChars) {
+              validationErrors.password = 'Password must contain at least one special character';
+            }
+          }
         }
       }
 
