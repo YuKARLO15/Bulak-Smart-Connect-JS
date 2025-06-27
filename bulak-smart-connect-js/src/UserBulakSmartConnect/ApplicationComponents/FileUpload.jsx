@@ -80,7 +80,7 @@ const FileUpload = ({ label, onUpload }) => {
   return (
     <Box className="file-upload-container">
       <Typography variant="subtitle2" className="file-label">
-        {label} <span className="sample-text">Sample</span>
+        {label} <span className="sample-text"></span>
       </Typography>
       <Box className="file-upload-box" onClick={openFileExplorer}>
         {error && (
