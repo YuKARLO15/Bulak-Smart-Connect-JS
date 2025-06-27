@@ -1611,41 +1611,80 @@ const handleApplicationClick = application => {
         </Grid>
       </Grid>
 
-      <Dialog open={statusUpdateDialog} onClose={() => setStatusUpdateDialog(false)}>
-        <DialogTitle>Update Application Status</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Update the status for application ID: {selectedApplication?.id}
-          </DialogContentText>
-          <FormControl fullWidth margin="normal">
-            <InputLabel>Status</InputLabel>
-            <Select value={newStatus} onChange={handleStatusChange} label="Status">
-              <MenuItem value="Pending">Pending</MenuItem>
-              <MenuItem value="Approved">Approved</MenuItem>
-              <MenuItem value="Decline">Decline</MenuItem>
-              <MenuItem value="Requires Additional Info">Requires Additional Info</MenuItem>
-            </Select>
-          </FormControl>
-          <TextField
-            margin="normal"
-            label="Status Message/Notes"
-            fullWidth
-            multiline
-            rows={4}
-            value={statusMessage}
-            onChange={handleMessageChange}
-            placeholder="Enter any notes or messages for the applicant..."
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setStatusUpdateDialog(false)} color="primary">
-            Cancel
-          </Button>
-          <Button onClick={handleUpdateStatus} color="primary" variant="contained">
-            Update Status
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <Dialog 
+  open={statusUpdateDialog} 
+  onClose={() => setStatusUpdateDialog(false)}
+  classes={{ paper: 'StatusDialogPaperAdminAppForm' }}
+  className="StatusDialogAdminAppForm"
+>
+  <DialogTitle className="StatusDialogTitleAdminAppForm">
+     Update Application Status
+  </DialogTitle>
+  <DialogContent className="StatusDialogContentAdminAppForm">
+    <DialogContentText className="StatusDialogDescriptionAdminAppForm">
+      Update the status for the following application:
+    </DialogContentText>
+    
+    <Box className="StatusApplicationIdChipAdminAppForm">
+      Application ID: {selectedApplication?.id}
+    </Box>
+    
+    <FormControl 
+      fullWidth 
+      margin="normal" 
+      className="StatusFormControlAdminAppForm"
+    >
+      <InputLabel className="StatusInputLabelAdminAppForm">Status</InputLabel>
+      <Select 
+        value={newStatus} 
+        onChange={handleStatusChange} 
+        label="Status"
+        className="StatusSelectAdminAppForm"
+      >
+        <MenuItem value="Pending" className="StatusMenuItemPendingAdminAppForm">
+           Pending
+        </MenuItem>
+        <MenuItem value="Approved" className="StatusMenuItemApprovedAdminAppForm">
+           Approved
+        </MenuItem>
+        <MenuItem value="Decline" className="StatusMenuItemDeclineAdminAppForm">
+           Decline
+        </MenuItem>
+        <MenuItem value="Requires Additional Info" className="StatusMenuItemAdditionalInfoAdminAppForm">
+          Requires Additional Info
+        </MenuItem>
+      </Select>
+    </FormControl>
+    
+    <TextField
+      margin="normal"
+      label="Status Message/Notes"
+      fullWidth
+      multiline
+      rows={4}
+      value={statusMessage}
+      onChange={handleMessageChange}
+      placeholder="Enter any notes or messages for the applicant..."
+      className="StatusTextFieldAdminAppForm"
+      InputLabelProps={{ className: 'StatusInputLabelAdminAppForm' }}
+    />
+  </DialogContent>
+  <DialogActions className="StatusDialogActionsAdminAppForm">
+    <Button 
+      onClick={() => setStatusUpdateDialog(false)} 
+      className="StatusCancelButtonAdminAppForm"
+    >
+      Cancel
+    </Button>
+    <Button 
+      onClick={handleUpdateStatus} 
+      variant="contained"
+      className="StatusUpdateButtonAdminAppForm"
+    >
+      Update Status
+    </Button>
+  </DialogActions>
+</Dialog>
     </Box>
   );
 };
