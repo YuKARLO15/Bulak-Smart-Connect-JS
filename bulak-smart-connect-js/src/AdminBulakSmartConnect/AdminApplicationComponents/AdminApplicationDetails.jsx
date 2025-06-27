@@ -32,6 +32,7 @@ import NavBar from '../../NavigationComponents/NavSide';
 import { documentApplicationService } from '../../services/documentApplicationService';
 import AdminCopyBirthPreview from './AdminCopyBirthPreview';
 import AdminMarriageAffidavitDetails from './AdminMarriageAffidavitDetails';
+import SearchIcon from '@mui/icons-material/Search'; 
 
 
 
@@ -49,7 +50,8 @@ const AdminApplicationDetails = () => {
   const [filterCategory, setFilterCategory] = useState('All'); 
   const [showDocumentsTab, setShowDocumentsTab] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-const [affidavit, setAffidavitTab] = useState(0);
+  const [affidavit, setAffidavitTab] = useState(0);
+    const [searchTerm, setSearchTerm] = useState('');
   const currentUser = 'dennissegailfrancisco'; 
   useEffect(() => {
     let isMounted = true;
@@ -287,10 +289,12 @@ const handleApplicationClick = application => {
   };
 
   const filteredApplications = applications.filter(app => {
+    // Status filter
     if (filterStatus !== 'All' && app.status !== filterStatus) {
       return false;
     }
 
+    // Category filter
     if (filterCategory !== 'All') {
       const appType = getApplicationType(app);
       
@@ -306,8 +310,29 @@ const handleApplicationClick = application => {
       }
     }
 
+    // Search filter - search by name and ID
+    if (searchTerm.trim() !== '') {
+      const searchLower = searchTerm.toLowerCase();
+      const firstName = (app.formData?.firstName || '').toLowerCase();
+      const lastName = (app.formData?.lastName || '').toLowerCase();
+      const middleName = (app.formData?.middleName || '').toLowerCase();
+      const fullName = `${firstName} ${middleName} ${lastName}`.trim();
+      const applicationId = (app.id || '').toLowerCase();
+      
+      const matchesName = firstName.includes(searchLower) || 
+                         lastName.includes(searchLower) || 
+                         middleName.includes(searchLower) ||
+                         fullName.includes(searchLower);
+      const matchesId = applicationId.includes(searchLower);
+      
+      if (!matchesName && !matchesId) {
+        return false;
+      }
+    }
+
     return true;
   });
+
 
   const isCopyOrCorrectionOfBirthCertificate = (app) => {
   const subtype = getApplicationSubtype(app);
@@ -320,7 +345,9 @@ const handleApplicationClick = application => {
     'Application for Marriage License',
   ].includes(subtype);
 };
-
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value);
+  };
   if (loading) {
     return (
       <Box className="LoadingContainerAdminAppForm">
@@ -352,6 +379,22 @@ const handleApplicationClick = application => {
           <Paper elevation={3} className="ApplicationsListPaperAdminAppForm">
             <Box className="FilterContainerAdminAppForm">
               <h3 className="FilterTitleApplication"> Filter Applications </h3>
+                    <TextField
+                fullWidth
+                margin="normal"
+                label="Search by Name or ID"
+                value={searchTerm}
+                onChange={handleSearchChange}
+                placeholder="Enter name, ID, or partial match..."
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <SearchIcon />
+                    </InputAdornment>
+                  ),
+                }}
+                variant="outlined"
+              />
               
               {/* Category Filter */}
               <FormControl fullWidth margin="normal">
