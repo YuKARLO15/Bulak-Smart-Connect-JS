@@ -345,13 +345,16 @@ const handleApplicationClick = application => {
 
   const isCopyOrCorrectionOfBirthCertificate = (app) => {
   const subtype = getApplicationSubtype(app);
-  return [
+    if (
+      subtype === 'Marriage License' || 
+      subtype === 'Application for Marriage License') {
+    return false;
+  }
+    return [
     'Copy of Birth Certificate',
     'Correction - Clerical Errors',
     'Correction - Sex/Date of Birth',
-    'Correction - First Name',
-    'Marriage License',
-    'Application for Marriage License',
+    'Correction - First Name'
   ].includes(subtype);
 };
   const handleSearchChange = (event) => {
@@ -504,10 +507,16 @@ const handleApplicationClick = application => {
                   >
                     Application Form
                   </Button>
-   { (!isCopyOrCorrectionOfBirthCertificate(selectedApplication) || 
+{ (!isCopyOrCorrectionOfBirthCertificate(selectedApplication) || 
    (getApplicationType(selectedApplication) === 'Birth Certificate' && 
     selectedApplication.applicationType === 'Request copy') ||
-   getApplicationType(selectedApplication) === 'Marriage Certificate') && (
+   (getApplicationType(selectedApplication) === 'Marriage Certificate' &&
+    getApplicationSubtype(selectedApplication) !== 'Marriage License' &&
+    getApplicationSubtype(selectedApplication) !== 'Application for Marriage License')) && 
+   // Additional check to explicitly exclude Marriage License applications
+   getApplicationType(selectedApplication) !== 'Marriage License' &&
+   getApplicationSubtype(selectedApplication) !== 'Marriage License' &&
+   getApplicationSubtype(selectedApplication) !== 'Application for Marriage License' && (
   <Button
     variant="contained"
     color={affidavit === 1 ? 'primary' : 'inherit'}
@@ -541,7 +550,10 @@ const handleApplicationClick = application => {
   <>
 {affidavit === 1 ? (
   <>
-    {getApplicationType(selectedApplication) === 'Marriage Certificate' ? (
+      {(
+      getApplicationType(selectedApplication) === 'Marriage Certificate') &&
+     getApplicationSubtype(selectedApplication) !== 'Marriage License' &&
+     getApplicationSubtype(selectedApplication) !== 'Application for Marriage License' ? (
       <AdminMarriageAffidavitDetails 
         applicationId={selectedApplication.id}
         currentUser={{
