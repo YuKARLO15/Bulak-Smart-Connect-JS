@@ -160,6 +160,10 @@
                                 <a href="#updateUserInfo" >updateUserInfo</a>
                             </li>
                             <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#validatePasswordStrength" >validatePasswordStrength</a>
+                            </li>
+                            <li>
                                     <span class="modifier">Async</span>
                                 <a href="#validateUser" >validateUser</a>
                             </li>
@@ -368,8 +372,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="210"
-                                    class="link-to-prism">src/auth/auth.service.ts:210</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="211"
+                                    class="link-to-prism">src/auth/auth.service.ts:211</a></div>
                         </td>
                     </tr>
 
@@ -437,8 +441,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="205"
-                                    class="link-to-prism">src/auth/auth.service.ts:205</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="206"
+                                    class="link-to-prism">src/auth/auth.service.ts:206</a></div>
                         </td>
                     </tr>
 
@@ -644,8 +648,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="238"
-                                    class="link-to-prism">src/auth/auth.service.ts:238</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="239"
+                                    class="link-to-prism">src/auth/auth.service.ts:239</a></div>
                         </td>
                     </tr>
 
@@ -694,6 +698,75 @@
                             </div>
                         <div class="io-description">
                             <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="validatePasswordStrength"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>validatePasswordStrength</b></span>
+                        <a href="#validatePasswordStrength"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>validatePasswordStrength(password: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="538"
+                                    class="link-to-prism">src/auth/auth.service.ts:538</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>password</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>literal type</code>
 
                         </div>
                             <div class="io-description">
@@ -920,8 +993,9 @@ export class AuthService {
     }
 
     // Validate password strength
-    if (password.length &lt; 6) {
-      throw new BadRequestException(&#x27;Password must be at least 6 characters&#x27;);
+    const passwordValidation &#x3D; this.validatePasswordStrength(password);
+    if (!passwordValidation.isValid) {
+      throw new BadRequestException(passwordValidation.message);
     }
 
     // Hash password
@@ -1056,10 +1130,9 @@ export class AuthService {
       // Handle password change if provided
       if (updateUserDto.password) {
         // Validate password strength
-        if (updateUserDto.password.length &lt; 8) {
-          throw new BadRequestException(
-            &#x27;Password must be at least 8 characters&#x27;,
-          );
+        const passwordValidation &#x3D; this.validatePasswordStrength(updateUserDto.password);
+        if (!passwordValidation.isValid) {
+          throw new BadRequestException(passwordValidation.message);
         }
 
         // Hash new password
@@ -1313,6 +1386,39 @@ export class AuthService {
         &#x27;Failed to update user: Unexpected error occurred&#x27;,
       );
     }
+  }
+
+  private validatePasswordStrength(password: string): { isValid: boolean; message?: string } {
+    if (!password) {
+      return { isValid: false, message: &#x27;Password is required&#x27; };
+    }
+
+    if (password.length &lt; 8) {
+      return { isValid: false, message: &#x27;Password must be at least 8 characters long&#x27; };
+    }
+
+    const hasUpperCase &#x3D; /[A-Z]/.test(password);
+    const hasLowerCase &#x3D; /[a-z]/.test(password);
+    const hasNumbers &#x3D; /\d/.test(password);
+    const hasSpecialChars &#x3D; /[!@#$%^&amp;*(),.?&quot;:{}|&lt;&gt;]/.test(password);
+
+    if (!hasUpperCase) {
+      return { isValid: false, message: &#x27;Password must contain at least one uppercase letter&#x27; };
+    }
+
+    if (!hasLowerCase) {
+      return { isValid: false, message: &#x27;Password must contain at least one lowercase letter&#x27; };
+    }
+
+    if (!hasNumbers) {
+      return { isValid: false, message: &#x27;Password must contain at least one number&#x27; };
+    }
+
+    if (!hasSpecialChars) {
+      return { isValid: false, message: &#x27;Password must contain at least one special character (!@#$%^&amp;*(),.?&quot;:{}|&lt;&gt;)&#x27; };
+    }
+
+    return { isValid: true };
   }
 }
 </code></pre>
