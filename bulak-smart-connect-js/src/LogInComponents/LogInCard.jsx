@@ -126,9 +126,9 @@ export default function LogInCard({ onLogin }) {
     }
 
     // Password validation remains the same
-    if (!password || password.length < 8) {
+    if (!password || password.length < 6) {
       setPasswordError(true);
-      setPasswordErrorMessage('Password must be at least 8 characters long.');
+      setPasswordErrorMessage('Password must be at least 6 characters long.');
       isValid = false;
     } else {
       setPasswordError(false);
