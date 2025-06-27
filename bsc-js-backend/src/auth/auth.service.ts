@@ -140,8 +140,9 @@ export class AuthService {
     }
 
     // Validate password strength
-    if (password.length < 6) {
-      throw new BadRequestException('Password must be at least 6 characters');
+    const passwordValidation = this.validatePasswordStrength(password);
+    if (!passwordValidation.isValid) {
+      throw new BadRequestException(passwordValidation.message);
     }
 
     // Hash password
@@ -276,10 +277,9 @@ export class AuthService {
       // Handle password change if provided
       if (updateUserDto.password) {
         // Validate password strength
-        if (updateUserDto.password.length < 8) {
-          throw new BadRequestException(
-            'Password must be at least 8 characters',
-          );
+        const passwordValidation = this.validatePasswordStrength(updateUserDto.password);
+        if (!passwordValidation.isValid) {
+          throw new BadRequestException(passwordValidation.message);
         }
 
         // Hash new password
@@ -533,5 +533,38 @@ export class AuthService {
         'Failed to update user: Unexpected error occurred',
       );
     }
+  }
+
+  private validatePasswordStrength(password: string): { isValid: boolean; message?: string } {
+    if (!password) {
+      return { isValid: false, message: 'Password is required' };
+    }
+
+    if (password.length < 8) {
+      return { isValid: false, message: 'Password must be at least 8 characters long' };
+    }
+
+    const hasUpperCase = /[A-Z]/.test(password);
+    const hasLowerCase = /[a-z]/.test(password);
+    const hasNumbers = /\d/.test(password);
+    const hasSpecialChars = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+
+    if (!hasUpperCase) {
+      return { isValid: false, message: 'Password must contain at least one uppercase letter' };
+    }
+
+    if (!hasLowerCase) {
+      return { isValid: false, message: 'Password must contain at least one lowercase letter' };
+    }
+
+    if (!hasNumbers) {
+      return { isValid: false, message: 'Password must contain at least one number' };
+    }
+
+    if (!hasSpecialChars) {
+      return { isValid: false, message: 'Password must contain at least one special character (!@#$%^&*(),.?":{}|<>)' };
+    }
+
+    return { isValid: true };
   }
 }
