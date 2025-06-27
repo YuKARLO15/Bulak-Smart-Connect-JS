@@ -54,7 +54,7 @@ export class AppointmentController {
 
   @Get()
   @UseGuards(RolesGuard)
-  @Roles('admin', 'staff')
+  @Roles('admin', 'staff', 'super_admin')
   @ApiOperation({ summary: 'Get all appointments (Admin/Staff only)' })
   async findAll() {
     this.logger.log('Fetching all appointments');
@@ -70,7 +70,7 @@ export class AppointmentController {
 
   @Get('stats')
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('admin', 'staff')
+  @Roles('admin', 'staff', 'super_admin')
   async getStats() {
     this.logger.log('Fetching appointment statistics');
     return this.appointmentService.getAppointmentsStats();
@@ -78,7 +78,7 @@ export class AppointmentController {
 
   @Get('by-date')
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('admin', 'staff')
+  @Roles('admin', 'staff', 'super_admin')
   async getByDate(@Query('date') date: string) {
     if (!date) {
       throw new BadRequestException('Date parameter is required');
@@ -89,7 +89,7 @@ export class AppointmentController {
 
   @Get('date-range')
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('admin', 'staff')
+  @Roles('admin', 'staff', 'super_admin')
   async getByDateRange(
     @Query('start') startDate: string,
     @Query('end') endDate: string,
@@ -139,7 +139,7 @@ export class AppointmentController {
 
     // If not admin and not the appointment owner, don't allow update
     if (
-      !user.roles.some((role) => ['admin', 'staff'].includes(role.name)) &&
+      !user.roles.some((role) => ['admin', 'staff', 'super_admin'].includes(role.name)) &&
       appointment.userId !== user.id
     ) {
       throw new BadRequestException(
@@ -153,7 +153,7 @@ export class AppointmentController {
 
   @Patch(':id/status')
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('admin', 'staff')
+  @Roles('admin', 'staff', 'super_admin')
   async updateStatus(
     @Param('id') id: string,
     @Body('status') status: AppointmentStatus,
@@ -179,7 +179,7 @@ export class AppointmentController {
 
     // If not admin and not the appointment owner, don't allow deletion
     if (
-      !user.roles.some((role) => ['admin', 'staff'].includes(role.name)) &&
+      !user.roles.some((role) => ['admin', 'staff', 'super_admin'].includes(role.name)) &&
       appointment.userId !== user.id
     ) {
       throw new BadRequestException(
