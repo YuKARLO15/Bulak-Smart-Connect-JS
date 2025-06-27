@@ -6,7 +6,7 @@ import {
   forwardRef,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, LessThanOrEqual, LessThan, In } from 'typeorm';
+import { Repository, LessThanOrEqual, LessThan, In, Between } from 'typeorm';
 import { Queue, QueueStatus } from './entities/queue.entity';
 import { QueueDetails } from './entities/queue-details.entity';
 import {
@@ -35,18 +35,25 @@ export class QueueService {
     const today = new Date();
     const dateStr = `${today.getFullYear()}${String(today.getMonth() + 1).padStart(2, '0')}${String(today.getDate()).padStart(2, '0')}`;
 
-    // Get the count of queues created today to determine the sequence number
+    // Get the start and end of today for accurate daily counting
     const todayStart = new Date(today);
     todayStart.setHours(0, 0, 0, 0);
+    
+    const todayEnd = new Date(today);
+    todayEnd.setHours(23, 59, 59, 999);
 
+    // Count ONLY queues created TODAY (this will reset to 0 each day)
     const todayCount = await this.queueRepository.count({
       where: {
-        createdAt: LessThanOrEqual(today),
+        createdAt: Between(todayStart, todayEnd),
       },
     });
 
-    // Format the queue number: YYYYMMDD-XXXX where XXXX is the sequence number
-    const queueNumber = `${dateStr}-${String(todayCount + 1).padStart(4, '0')}`;
+    // Format the queue number: YYYYMMDD-XXX (using 3 digits for daily sequence)
+    // This keeps your existing backend format but ensures daily reset
+    const queueNumber = `${dateStr}-${String(todayCount + 1).padStart(3, '0')}`;
+
+    console.log(`Creating queue number: ${queueNumber} for today. Daily count: ${todayCount + 1}`);
 
     // Create and save the queue
     const queue = this.queueRepository.create({
