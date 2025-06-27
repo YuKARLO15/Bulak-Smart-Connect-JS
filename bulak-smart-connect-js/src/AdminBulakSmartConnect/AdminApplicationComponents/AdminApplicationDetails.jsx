@@ -64,42 +64,41 @@ const AdminApplicationDetails = () => {
         if (!isMounted) return;
 
 
-        const processedApplications = storedApplications.map(app => {
-         
-          let baseType = '';
-          let subtype = '';
-          
-      
-          if (app.type) {
-            baseType = app.type;
-          } else if (app.applicationType) {
-            baseType = app.applicationType;
-          } else if (app.formData && app.formData.applicationType) {
-            baseType = app.formData.applicationType;
-          } else {
-            baseType = 'Document Application';
-          }
-          
-      
-          if (app.applicationSubtype) {
-            subtype = app.applicationSubtype;
-          } else if (app.formData && app.formData.applicationSubtype) {
-            subtype = app.formData.applicationSubtype;
-          } else if (app.subtype) {
-            subtype = app.subtype;
-          }
-          
-          if (subtype === 'Request a Copy of Birth Certificate' || 
-              (app.type === 'Birth Certificate' && app.applicationType === 'Request copy')) {
-            subtype = 'Copy of Birth Certificate';
-          }
-          
-          return {
-            ...app,
-            type: baseType,
-            applicationSubtype: subtype || ''
-          };
-        });
+       const processedApplications = storedApplications.map(app => {
+  let baseType = '';
+  let subtype = '';
+  
+  // Debug logging
+  console.log('Processing app:', app.id, app);
+  
+  // More explicit type determination
+  if (app.formData?.applicationType) {
+    baseType = app.formData.applicationType;
+  } else if (app.type) {
+    baseType = app.type;
+  } else if (app.applicationType) {
+    baseType = app.applicationType;
+  } else {
+    baseType = 'Document Application';
+  }
+  
+  // Subtype determination
+  if (app.formData?.applicationSubtype) {
+    subtype = app.formData.applicationSubtype;
+  } else if (app.applicationSubtype) {
+    subtype = app.applicationSubtype;
+  } else if (app.subtype) {
+    subtype = app.subtype;
+  }
+  
+  console.log('Processed type:', baseType, 'subtype:', subtype);
+  
+  return {
+    ...app,
+    type: baseType,
+    applicationSubtype: subtype || ''
+  };
+});
 
         setApplications(processedApplications);
 
@@ -297,20 +296,31 @@ const handleApplicationClick = application => {
     // Category filter
     if (filterCategory !== 'All') {
       const appType = getApplicationType(app);
+      const appSubtype = getApplicationSubtype(app);
       
       if (filterCategory === 'Birth Certificate') {
         if (
           appType !== 'Birth Certificate' &&
-          appType !== 'Copy of Birth Certificate'
+          appType !== 'Copy of Birth Certificate' &&
+          appSubtype !== 'Copy of Birth Certificate'
         ) {
           return false;
         }
-      } else if (appType !== filterCategory) {
+      } else if (filterCategory === 'Marriage License') {
+        // For Marriage License, check both type and subtype
+        if (appType !== 'Marriage License' && appSubtype !== 'Marriage License' && appSubtype !== 'Application for Marriage License') {
+          return false;
+        }
+      } else if (filterCategory === 'Marriage Certificate') {
+        if (appType !== 'Marriage Certificate' && appSubtype !== 'Marriage Certificate') {
+          return false;
+        }
+      } else if (appType !== filterCategory && appSubtype !== filterCategory) {
         return false;
       }
     }
 
-    // Search filter - search by name and ID
+
     if (searchTerm.trim() !== '') {
       const searchLower = searchTerm.toLowerCase();
       const firstName = (app.formData?.firstName || '').toLowerCase();
@@ -332,7 +342,6 @@ const handleApplicationClick = application => {
 
     return true;
   });
-
 
   const isCopyOrCorrectionOfBirthCertificate = (app) => {
   const subtype = getApplicationSubtype(app);
@@ -446,9 +455,17 @@ const handleApplicationClick = application => {
                       </Typography>
                       
                       <Typography variant="body2" className="ApplicationDateAdminAppForm">
-                        {/* Display subtype if available, otherwise show the base type */}
-                        Type: {getApplicationSubtype(app) || getApplicationType(app)}
-                      </Typography> 
+  {/* For Marriage License applications, prioritize subtype, otherwise show subtype or type */}
+  Type: {(() => {
+    const appType = getApplicationType(app);
+    const appSubtype = getApplicationSubtype(app);
+    
+    if (appType === 'Marriage License' && appSubtype) {
+      return appSubtype;
+    }
+    return appSubtype || appType;
+  })()}
+</Typography>
                     </Box>
                     <Box className="ApplicationDetailsAdminAppForm">
                       <Typography variant="body2" style={{ marginTop: '4px' }}>
@@ -524,8 +541,7 @@ const handleApplicationClick = application => {
   <>
 {affidavit === 1 ? (
   <>
-    {getApplicationType(selectedApplication) === 'Marriage Certificate' || 
-     getApplicationType(selectedApplication) === 'Marriage License' ? (
+    {getApplicationType(selectedApplication) === 'Marriage Certificate' ? (
       <AdminMarriageAffidavitDetails 
         applicationId={selectedApplication.id}
         currentUser={{
@@ -546,13 +562,15 @@ const handleApplicationClick = application => {
 ) : (
     
       <>
-        {getApplicationType(selectedApplication) === 'Marriage Certificate' ? (
-          <AdminMarriageApplicationView applicationData={selectedApplication} />
-        ) : getApplicationType(selectedApplication) === 'Marriage License' ? (
-          <AdminMarriageLicensePreview applicationData={selectedApplication} />
-         ) : isCopyOrCorrectionOfBirthCertificate(selectedApplication) ? (
-          <AdminCopyBirthPreview applicationData={selectedApplication} />
-        ) : getApplicationType(selectedApplication) === 'Birth Certificate' ? (
+      {getApplicationSubtype(selectedApplication) === 'Marriage Certificate' ? (
+  <AdminMarriageApplicationView applicationData={selectedApplication} />
+) : (getApplicationType(selectedApplication) === 'Marriage License' || 
+     getApplicationSubtype(selectedApplication) === 'Marriage License' || 
+     getApplicationSubtype(selectedApplication) === 'Application for Marriage License') ? (
+  <AdminMarriageLicensePreview applicationData={selectedApplication} />
+) : isCopyOrCorrectionOfBirthCertificate(selectedApplication) ? (
+  <AdminCopyBirthPreview applicationData={selectedApplication} />
+) : getApplicationType(selectedApplication) === 'Birth Certificate' ? (
                       <>
                         <Box className="certificateHeaderContainer">
                    
