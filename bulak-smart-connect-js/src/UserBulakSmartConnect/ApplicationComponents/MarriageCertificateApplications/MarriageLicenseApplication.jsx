@@ -18,11 +18,19 @@ import FileUpload from '../FileUpload';
 import './MarriageLicenseApplication.css';
 import { documentApplicationService } from '../../../services/documentApplicationService';
 
-const mandatoryDocuments = [
-  'Birth / Baptismal Certificate',
-  'Seminar Certificate (CSDW)',
-  'Cenomar (PSA)',
-  'Official Receipt',
+const mandatoryDocumentsHusband = [
+  'Birth / Baptismal Certificate (Husband)',
+  'Cenomar (PSA) (Husband)',
+];
+
+const mandatoryDocumentsWife = [
+  'Birth / Baptismal Certificate (Wife)',
+  'Cenomar (PSA) (Wife)',
+];
+
+const sharedMandatoryDocuments = [
+  'Seminar Certificate (CSDW)'
+
 ];
 
 const MarriageLicenseApplication = () => {
@@ -311,8 +319,12 @@ const MarriageLicenseApplication = () => {
     }
   };
 
-  const isMandatoryComplete = mandatoryDocuments.every(doc => uploadedFiles[doc]);
-
+const isMandatoryComplete = [
+  ...mandatoryDocumentsHusband,
+  ...mandatoryDocumentsWife,
+  ...sharedMandatoryDocuments,
+  ].every(doc => uploadedFiles[doc]);
+  
   const isFormComplete =
     isMandatoryComplete &&
     (!foreignNational || foreignNationalType) &&
@@ -450,78 +462,61 @@ const MarriageLicenseApplication = () => {
         />
       </Box>
 
-      <Box className="MandatoryDocumentsMarriageLicense">
-        <Typography variant="body1" className="SectionTitleMarriageLicense">
-          Mandatory Documents:
-        </Typography>
-        {isLoading && !backendApplicationCreated && (
-          <Box sx={{ display: 'flex', alignItems: 'center', my: 2 }}>
-            <CircularProgress size={20} sx={{ mr: 1 }} />
-            <Typography variant="body2" color="text.secondary">
-              Creating application record... Please wait.
-            </Typography>
-          </Box>
-        )}
-        {mandatoryDocuments.map((doc, index) => (
-          <FileUpload
-            key={index}
-            label={doc}
-            onUpload={(isUploaded, fileDataObj) => handleFileUpload(doc, isUploaded, fileDataObj)}
-            required={true}
-            disabled={isLoading}
-          />
-        ))}
-      </Box>
+     <Box className="MandatoryDocumentsMarriageLicense">
+  <Typography variant="body1" className="SectionTitleMarriageLicense">
+    Mandatory Documents:
+  </Typography>
+  {isLoading && !backendApplicationCreated && (
+    <Box sx={{ display: 'flex', alignItems: 'center', my: 2 }}>
+      <CircularProgress size={20} sx={{ mr: 1 }} />
+      <Typography variant="body2" color="text.secondary">
+        Creating application record... Please wait.
+      </Typography>
+    </Box>
+  )}
+  
+  {/* Husband's Documents */}
+        <Typography variant="h6" sx={{ mt: 2, mb: 1, color: '#184a5b' }}>
+          Husband's Documents:
+  </Typography>
+  {mandatoryDocumentsHusband.map((doc, index) => (
+    <FileUpload
+      key={`husband-${index}`}
+      label={doc}
+      onUpload={(isUploaded, fileDataObj) => handleFileUpload(doc, isUploaded, fileDataObj)}
+      required={true}
+      disabled={isLoading}
+    />
+  ))}
 
-      {foreignNational && (
-        <Box className="AdditionalDocumentsMarriageLicense">
-          <Typography variant="body1" className="SectionTitleMarriageLicense">
-            For Foreign Nationals:
-          </Typography>
-          <FormControl className="RadioGroupMarriageLicense">
-            <Typography>Who is a foreign national?</Typography>
-            <RadioGroup
-              row
-              value={foreignNationalType}
-              onChange={e => setForeignNationalType(e.target.value)}
-            >
-              <FormControlLabel
-                value="Groom"
-                control={<Radio />}
-                label="Groom"
-                disabled={isLoading}
-              />
-              <FormControlLabel
-                value="Bride"
-                control={<Radio />}
-                label="Bride"
-                disabled={isLoading}
-              />
-            </RadioGroup>
-          </FormControl>
+  {/* Wife's Documents */}
+        <Typography variant="h6" sx={{ mt: 2, mb: 1, color: '#184a5b' }}>
+          Wife's Documents:
+  </Typography>
+  {mandatoryDocumentsWife.map((doc, index) => (
+    <FileUpload
+      key={`wife-${index}`}
+      label={doc}
+      onUpload={(isUploaded, fileDataObj) => handleFileUpload(doc, isUploaded, fileDataObj)}
+      required={true}
+      disabled={isLoading}
+    />
+  ))}
 
-          <FileUpload
-            label="Legal Capacity from their embassy (Manila)"
-            onUpload={(isUploaded, fileDataObj) =>
-              handleFileUpload(
-                'Legal Capacity from their embassy (Manila)',
-                isUploaded,
-                fileDataObj
-              )
-            }
-            required={true}
-            disabled={isLoading}
-          />
-          <FileUpload
-            label="Decree of Divorce from Court"
-            onUpload={(isUploaded, fileDataObj) =>
-              handleFileUpload('Decree of Divorce from Court', isUploaded, fileDataObj)
-            }
-            required={true}
-            disabled={isLoading}
-          />
-        </Box>
-      )}
+  {/* Shared Documents */}
+        <Typography variant="h6" sx={{ mt: 2, mb: 1, color: '#184a5b' }}>
+          Shared Documents:
+  </Typography>
+  {sharedMandatoryDocuments.map((doc, index) => (
+    <FileUpload
+      key={`shared-${index}`}
+      label={doc}
+      onUpload={(isUploaded, fileDataObj) => handleFileUpload(doc, isUploaded, fileDataObj)}
+      required={true}
+      disabled={isLoading}
+    />
+  ))}
+</Box>
 
       {widowWidower && (
         <Box className="AdditionalDocumentsMarriageLicense">
