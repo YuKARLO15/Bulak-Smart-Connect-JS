@@ -352,7 +352,7 @@
                 <td class="col-md-4">
                     <b>Decorators : </b>
                     <br />
-                    <code>@Get()<br />@UseGuards(RolesGuard)<br />@Roles(&#x27;admin&#x27;, &#x27;staff&#x27;)<br />@ApiOperation({summary: &#x27;Get all appointments (Admin/Staff only)&#x27;})<br /></code>
+                    <code>@Get()<br />@UseGuards(RolesGuard)<br />@Roles(&#x27;admin&#x27;, &#x27;staff&#x27;, &#x27;super_admin&#x27;)<br />@ApiOperation({summary: &#x27;Get all appointments (Admin/Staff only)&#x27;})<br /></code>
                 </td>
             </tr>
 
@@ -710,7 +710,7 @@
                 <td class="col-md-4">
                     <b>Decorators : </b>
                     <br />
-                    <code>@Get(&#x27;by-date&#x27;)<br />@UseGuards(JwtAuthGuard, RolesGuard)<br />@Roles(&#x27;admin&#x27;, &#x27;staff&#x27;)<br /></code>
+                    <code>@Get(&#x27;by-date&#x27;)<br />@UseGuards(JwtAuthGuard, RolesGuard)<br />@Roles(&#x27;admin&#x27;, &#x27;staff&#x27;, &#x27;super_admin&#x27;)<br /></code>
                 </td>
             </tr>
 
@@ -789,7 +789,7 @@
                 <td class="col-md-4">
                     <b>Decorators : </b>
                     <br />
-                    <code>@Get(&#x27;date-range&#x27;)<br />@UseGuards(JwtAuthGuard, RolesGuard)<br />@Roles(&#x27;admin&#x27;, &#x27;staff&#x27;)<br /></code>
+                    <code>@Get(&#x27;date-range&#x27;)<br />@UseGuards(JwtAuthGuard, RolesGuard)<br />@Roles(&#x27;admin&#x27;, &#x27;staff&#x27;, &#x27;super_admin&#x27;)<br /></code>
                 </td>
             </tr>
 
@@ -880,7 +880,7 @@
                 <td class="col-md-4">
                     <b>Decorators : </b>
                     <br />
-                    <code>@Get(&#x27;stats&#x27;)<br />@UseGuards(JwtAuthGuard, RolesGuard)<br />@Roles(&#x27;admin&#x27;, &#x27;staff&#x27;)<br /></code>
+                    <code>@Get(&#x27;stats&#x27;)<br />@UseGuards(JwtAuthGuard, RolesGuard)<br />@Roles(&#x27;admin&#x27;, &#x27;staff&#x27;, &#x27;super_admin&#x27;)<br /></code>
                 </td>
             </tr>
 
@@ -1122,7 +1122,7 @@
                 <td class="col-md-4">
                     <b>Decorators : </b>
                     <br />
-                    <code>@Patch(&#x27;:id/status&#x27;)<br />@UseGuards(JwtAuthGuard, RolesGuard)<br />@Roles(&#x27;admin&#x27;, &#x27;staff&#x27;)<br /></code>
+                    <code>@Patch(&#x27;:id/status&#x27;)<br />@UseGuards(JwtAuthGuard, RolesGuard)<br />@Roles(&#x27;admin&#x27;, &#x27;staff&#x27;, &#x27;super_admin&#x27;)<br /></code>
                 </td>
             </tr>
 
@@ -1247,7 +1247,7 @@ export class AppointmentController {
 
   @Get()
   @UseGuards(RolesGuard)
-  @Roles(&#x27;admin&#x27;, &#x27;staff&#x27;)
+  @Roles(&#x27;admin&#x27;, &#x27;staff&#x27;, &#x27;super_admin&#x27;)
   @ApiOperation({ summary: &#x27;Get all appointments (Admin/Staff only)&#x27; })
   async findAll() {
     this.logger.log(&#x27;Fetching all appointments&#x27;);
@@ -1263,7 +1263,7 @@ export class AppointmentController {
 
   @Get(&#x27;stats&#x27;)
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(&#x27;admin&#x27;, &#x27;staff&#x27;)
+  @Roles(&#x27;admin&#x27;, &#x27;staff&#x27;, &#x27;super_admin&#x27;)
   async getStats() {
     this.logger.log(&#x27;Fetching appointment statistics&#x27;);
     return this.appointmentService.getAppointmentsStats();
@@ -1271,7 +1271,7 @@ export class AppointmentController {
 
   @Get(&#x27;by-date&#x27;)
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(&#x27;admin&#x27;, &#x27;staff&#x27;)
+  @Roles(&#x27;admin&#x27;, &#x27;staff&#x27;, &#x27;super_admin&#x27;)
   async getByDate(@Query(&#x27;date&#x27;) date: string) {
     if (!date) {
       throw new BadRequestException(&#x27;Date parameter is required&#x27;);
@@ -1282,7 +1282,7 @@ export class AppointmentController {
 
   @Get(&#x27;date-range&#x27;)
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(&#x27;admin&#x27;, &#x27;staff&#x27;)
+  @Roles(&#x27;admin&#x27;, &#x27;staff&#x27;, &#x27;super_admin&#x27;)
   async getByDateRange(
     @Query(&#x27;start&#x27;) startDate: string,
     @Query(&#x27;end&#x27;) endDate: string,
@@ -1332,7 +1332,7 @@ export class AppointmentController {
 
     // If not admin and not the appointment owner, don&#x27;t allow update
     if (
-      !user.roles.some((role) &#x3D;&gt; [&#x27;admin&#x27;, &#x27;staff&#x27;].includes(role.name)) &amp;&amp;
+      !user.roles.some((role) &#x3D;&gt; [&#x27;admin&#x27;, &#x27;staff&#x27;, &#x27;super_admin&#x27;].includes(role.name)) &amp;&amp;
       appointment.userId !&#x3D;&#x3D; user.id
     ) {
       throw new BadRequestException(
@@ -1346,7 +1346,7 @@ export class AppointmentController {
 
   @Patch(&#x27;:id/status&#x27;)
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(&#x27;admin&#x27;, &#x27;staff&#x27;)
+  @Roles(&#x27;admin&#x27;, &#x27;staff&#x27;, &#x27;super_admin&#x27;)
   async updateStatus(
     @Param(&#x27;id&#x27;) id: string,
     @Body(&#x27;status&#x27;) status: AppointmentStatus,
@@ -1372,7 +1372,7 @@ export class AppointmentController {
 
     // If not admin and not the appointment owner, don&#x27;t allow deletion
     if (
-      !user.roles.some((role) &#x3D;&gt; [&#x27;admin&#x27;, &#x27;staff&#x27;].includes(role.name)) &amp;&amp;
+      !user.roles.some((role) &#x3D;&gt; [&#x27;admin&#x27;, &#x27;staff&#x27;, &#x27;super_admin&#x27;].includes(role.name)) &amp;&amp;
       appointment.userId !&#x3D;&#x3D; user.id
     ) {
       throw new BadRequestException(
