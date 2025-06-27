@@ -487,7 +487,7 @@ if (isEditing.phoneNumber) updates.contactNumber = phoneNumber;
                     required
                   />
                   <p className="PasswordRequirementsUAcc">
-                    Password must be at least 8 characters long and include uppercase, lowercase and numbers.
+                    Password must be at least 8 characters long and include uppercase, lowercase, numbers, and special characters.
                   </p>
                 </div>
 
