@@ -233,7 +233,47 @@ const handleApplicationClick = application => {
   const handleFilterChange = event => {
     setFilterStatus(event.target.value);
   };
+const getApplicantDisplayName = (app) => {
+  const appType = getApplicationType(app);
+  const appSubtype = getApplicationSubtype(app);
+  
 
+  if (appType === 'Marriage Certificate' || 
+      appType === 'Marriage License' || 
+      appSubtype === 'Marriage Certificate' || 
+      appSubtype === 'Marriage License' || 
+      appSubtype === 'Application for Marriage License') {
+    
+    const husbandFirstName = app.formData?.husbandFirstName || '';
+    const husbandLastName = app.formData?.husbandLastName || '';
+   
+    
+    const wifeFirstName = app.formData?.wifeFirstName || '';
+    const wifeLastName = app.formData?.wifeMaidenLastName || app.formData?.wifeLastName || '';
+
+    
+    // Build full names
+    const husbandFullName = [husbandFirstName, husbandLastName]
+      .filter(Boolean).join(' ').trim();
+    const wifeFullName = [wifeFirstName, wifeLastName]
+      .filter(Boolean).join(' ').trim();
+    
+    if (husbandFullName && wifeFullName) {
+      return `${husbandFullName} and ${wifeFullName}`;
+    } else if (husbandFullName) {
+      return husbandFullName;
+    } else if (wifeFullName) {
+      return wifeFullName;
+    } else {
+      return 'Unknown';
+    }
+  }
+  
+  // For other document types (birth certificates, etc.)
+  const firstName = app.formData?.firstName || '';
+  const lastName = app.formData?.lastName || '';
+  return firstName && lastName ? `${firstName} ${lastName}` : 'Unknown';
+};
   const handleUpdateStatus = async () => {
     try {
 
@@ -450,7 +490,7 @@ const handleApplicationClick = application => {
                     onClick={() => handleApplicationClick(app)}
                   >
                     <Typography variant="subtitle1" className="ApplicationNameAdminAppForm">
-                      {app.formData?.firstName || 'Unknown'} {app.formData?.lastName || ''}
+                       {getApplicantDisplayName(app)}
                     </Typography>
                     <Box className="ApplicationMetAdminAppForm">
                       <Typography variant="body2" className="ApplicationIdAdminAppForm">
