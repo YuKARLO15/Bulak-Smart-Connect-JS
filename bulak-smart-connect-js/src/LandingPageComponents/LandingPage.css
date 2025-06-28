@@ -37,7 +37,7 @@
 .PhTimeComponent {
   position: absolute;
  bottom: 170px;
-  left: 50px;
+  left: 20px;
 z-index: 1100 !important;
   opacity: 0.8;
   pointer-events: none;
