@@ -608,7 +608,7 @@ const isMandatoryComplete = [
 
       <Button
         variant="contained"
-        color="primary"
+     
         disabled={!isFormComplete || isLoading || isSubmitted}
         sx={{ marginTop: '20px', minWidth: '120px' }}
         onClick={handleSubmit}
