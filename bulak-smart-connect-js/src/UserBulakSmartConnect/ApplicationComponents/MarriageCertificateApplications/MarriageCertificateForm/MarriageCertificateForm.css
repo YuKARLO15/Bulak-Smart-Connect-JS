@@ -324,3 +324,131 @@ label:not([data-required])::after {
   content: '';
 }
 
+.husband-checkbox-group {
+  margin: 1rem 0;
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border-radius: 4px;
+  border: 1px solid #e9ecef;
+}
+
+.husband-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-weight: 500;
+  color: #333;
+  cursor: pointer;
+  margin: 0;
+}
+
+.husband-checkbox-label::after {
+  content: '';
+}
+
+.husband-checkbox-label input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #1c4d5a;
+  cursor: pointer;
+}
+
+.husband-checkbox-label input[type="checkbox"]:checked {
+  background-color: #1c4d5a;
+}
+
+.husband-checkbox-label input[type="checkbox"]:focus {
+  border: 2px solid #1c4d5a;
+
+}
+
+/* Optional: Custom checkbox styling for better cross-browser compatibility */
+.husband-checkbox-label input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 2px solid #ccc;
+  border-radius: 3px;
+  background-color: #fff;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.husband-checkbox-label input[type="checkbox"]:checked {
+  background-color: #1c4d5a;
+
+}
+
+.husband-checkbox-label input[type="checkbox"]:checked::after {
+  content: '✓';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.husband-checkbox-label input[type="checkbox"]:hover {
+  border-color: #1c4d5a;
+}
+
+.wife-checkbox-group {
+  margin: 1rem 0;
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border-radius: 4px;
+  border: 1px solid #e9ecef;
+}
+
+.wife-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-weight: 500;
+  color: #333;
+  cursor: pointer;
+  margin: 0;
+}
+
+.wife-checkbox-label::after {
+  content: '';
+}
+
+.wife-checkbox-label input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 2px solid #ccc;
+  border-radius: 3px;
+  background-color: #fff;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.wife-checkbox-label input[type="checkbox"]:checked {
+  background-color: #1c4d5a;
+  border-color: #1c4d5a;
+}
+
+.wife-checkbox-label input[type="checkbox"]:checked::after {
+  content: '✓';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.wife-checkbox-label input[type="checkbox"]:hover {
+  border-color: #1c4d5a;
+}

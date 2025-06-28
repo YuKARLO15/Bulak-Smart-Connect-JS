@@ -320,7 +320,7 @@ const MarriageCertificateForm = () => {
       console.log('Is editing mode?', isEditing);
       console.log('Editing ID:', currentEditingId);
 
-      const applicationType = 'Marriage Certificate';
+      const applicationType = selectedOption || 'Marriage Certificate';
       const applicationSubtype = selectedOption || 'Marriage Certificate';
 
       const applicantName = `${formData.husbandFirstName || ''} ${formData.husbandLastName || ''} and ${formData.wifeFirstName || ''} ${formData.wifeLastName || ''}`;
