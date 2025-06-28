@@ -62,7 +62,7 @@ const WalkInQueueDetail = () => {
             {' '}
             Hi, <span className="highlight">{firstName}</span>
           </h2>
-          <p>You Are Currently in {queuePosition}th Queue.</p>
+          <p>You Are Currently on Queue.</p>
           <p className="notification">we'll notify you when it is almost your turn</p>
         </div>
 
