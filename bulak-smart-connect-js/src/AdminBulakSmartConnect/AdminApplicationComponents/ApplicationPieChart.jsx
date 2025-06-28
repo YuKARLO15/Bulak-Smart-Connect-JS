@@ -16,10 +16,10 @@ const ApplicationPieChart = ({ applications }) => {
     return [
       { name: 'Birth - Pending', value: birthPending, color: '#FFA726' }, 
       { name: 'Birth - Approved', value: birthApproved, color: '#66BB6A' }, 
-      { name: 'Birth - Denied', value: birthDenied, color: '#EF5350' }, 
+      { name: 'Birth - Declined', value: birthDenied, color: '#EF5350' }, 
       { name: 'Marriage - Pending', value: marriagePending, color: '#F7CB73' },
       { name: 'Marriage - Approved', value: marriageApproved, color: '#8DC3A7' },
-      { name: 'Marriage - Denied', value: marriageDenied, color: '#D9512C' },
+      { name: 'Marriage - Declined', value: marriageDenied, color: '#D9512C' },
     ].filter(item => item.value > 0); // Only show segments that have data
   };
 

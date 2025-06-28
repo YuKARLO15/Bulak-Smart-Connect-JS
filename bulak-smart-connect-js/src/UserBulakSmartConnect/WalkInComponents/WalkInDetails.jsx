@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import './WalkInDetails.css';
 import NavBar from '../../NavigationComponents/NavSide';
+
 const WalkInQueueDetail = () => {
   const [queueData, setQueueData] = useState(null);
   const [queuePosition, setQueuePosition] = useState(5);
@@ -13,6 +14,36 @@ const WalkInQueueDetail = () => {
       setQueueData(userData);
     }
   }, []);
+
+  // Function to determine requirements link based on reason of visit
+  const getRequirementsLink = (reasonOfVisit) => {
+    const reason = reasonOfVisit?.toLowerCase();
+    
+    if (reason?.includes('birth')) {
+      return '/RequirementBirthList';
+    } else if (reason?.includes('marriage')) {
+      return '/RequirementMarriageList';
+    } else {
+      // For general inquiry, return null to show different content
+      return null;
+    }
+  };
+
+  // Function to render requirements section
+    const renderRequirementsSection = (reasonOfVisit) => {
+    const requirementsLink = getRequirementsLink(reasonOfVisit);
+    
+    if (requirementsLink) {
+      return (
+        <div className="requirements-link">
+          <Link to={requirementsLink}>Link for Requirements</Link>
+        </div>
+      );
+    } else {
+      // Return null to hide the section for general inquiries
+      return null;
+    }
+  };
 
   if (!queueData) {
     return <div className="loading">Loading queue information...</div>;
@@ -40,9 +71,7 @@ const WalkInQueueDetail = () => {
           <div className="queue-number">{id}</div>
         </div>
 
-        <div className="requirements-link">
-          <Link to="/requirements">Link for Requirements</Link>
-        </div>
+        {renderRequirementsSection(userData.reasonOfVisit)}
 
         <div className="appointment-info">
           <p>

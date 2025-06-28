@@ -159,7 +159,7 @@ const RecentApplicationsAdmin = () => {
           stats[docCategory].pending++;
         } else if (status.includes('approved') || status.includes('accept')) {
           stats[docCategory].approved++;
-        } else if (status.includes('declined') || status.includes('denied') || status.includes('reject')) {
+        } else if (status.includes('declined') || status.includes('decline') || status.includes('denied') || status.includes('reject')) {
           stats[docCategory].declined++;
         } else {
           // Default to pending for any other status

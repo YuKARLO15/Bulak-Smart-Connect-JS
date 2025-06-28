@@ -127,7 +127,7 @@ const AdminApplicationDashboard = () => {
       } else if (filter === 'Denied') {
         setFilteredApplications(
           applications.filter(app =>
-            ['rejected', 'declined', 'denied'].includes(app.status?.toLowerCase())
+            ['rejected', 'declined', 'denied', 'decline'].includes(app.status?.toLowerCase())
           )
         );
       }
@@ -142,7 +142,7 @@ const AdminApplicationDashboard = () => {
     status = status.toLowerCase();
     if (status.includes('approved')) return 'Approved';
     if (status.includes('pending') || status.includes('submitted')) return 'Pending';
-    if (status.includes('declined') || status.includes('denied') || status.includes('rejected')) return 'Denied';
+    if (status.includes('declined') || status.includes('decline') ||  status.includes('denied') || status.includes('rejected')) return 'Denied';
     return '';
   };
 

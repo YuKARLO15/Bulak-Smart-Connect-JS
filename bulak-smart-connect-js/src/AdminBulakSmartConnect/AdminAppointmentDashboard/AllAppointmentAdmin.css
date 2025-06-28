@@ -51,6 +51,7 @@
   font-size: 14px;
   transition: all 0.3s ease;
   background: linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%);
+    color: #154249;
 }
 
 .search-input:focus {
@@ -58,6 +59,7 @@
   border-color: #1C4D5A;
   box-shadow: 0 0 0 3px rgba(28, 77, 90, 0.15);
   transform: translateY(-1px);
+  color: #154249;
 }
 
 .search-icon {
