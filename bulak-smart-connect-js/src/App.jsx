@@ -85,7 +85,6 @@ import AdminWalkInDetails from './AdminBulakSmartConnect/AdminWalkInDetails/Admi
 import AdminAccount from './AdminBulakSmartConnect/AdminAccount/AdminAccount';
 
 //Admin ScreenSmartQueue//
-
 import ScreenSmartQueue from './AdminBulakSmartConnect/AdminSmartQueueComponents/ScreenSmartQueue';
 
 function App() {
@@ -128,9 +127,6 @@ function App() {
 
           {/* Admin Announcement */}
           <Route path="/AdminAnnouncement" element={<AdminAnnouncement />} />
-
-          {/* Admin Account */}
-          <Route path="/AdminAccount" element={<AdminAccount />} />
         </Route>
 
 
@@ -144,6 +140,9 @@ function App() {
           <Route path="/AdminWalkInDetails" element={<AdminWalkInDetails />} />
           <Route path="/AdminWalkInDetails/:id" element={<AdminWalkInDetails />} />
           <Route path="/AdminAppointmentDashboard" element={<AdminAppointmentDashboard />} />
+
+          {/* Admin Account */}
+          <Route path="/AdminAccount" element={<AdminAccount />} />
         </Route>
 
         {/* User routes - Any authenticated user */}
