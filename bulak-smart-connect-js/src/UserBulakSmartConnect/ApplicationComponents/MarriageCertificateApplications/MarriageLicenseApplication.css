@@ -90,3 +90,13 @@
   margin-left: 250px;
   width: 100vw;
 }
+
+.SubmitButtonMarriageLicense{
+    background-color: #184a5b !important;
+    color: white !important;
+    padding: 10px 20px !important;
+    margin-top: 24px !important;
+    display: block !important;
+    width: 20vw !important;
+
+}

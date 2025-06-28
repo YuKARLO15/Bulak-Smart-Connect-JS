@@ -4,9 +4,13 @@ import './MarriageCertificateForm.css';
 const HusbandForm = ({ formData, handleChange, errors, isMarriageLicense = false }) => {
   const selectedOption = localStorage.getItem('selectedMarriageOption');
   const isLicenseApplication = isMarriageLicense || selectedOption === 'Marriage License';
+  
   return (
     <section className="husband-section section">
       <h3 className="husband-heading">I. HUSBAND</h3>
+
+      {/* HUSBAND DETAILS HEADER */}
+      <h4 className="husband-subheading">Personal Information</h4>
 
       {/* Full Name */}
       <label className="husband-label">1. FULL NAME *</label>
@@ -353,164 +357,186 @@ const HusbandForm = ({ formData, handleChange, errors, isMarriageLicense = false
           )}
         </div>
       </div>
+
+      {/* PREVIOUS MARRIAGE SECTION - Only for Marriage License */}
       {isLicenseApplication && (
         <>
-          <h4 className="husband-subheading">Previous Marriage Information (if applicable)</h4>
+          <h4 className="husband-subheading">Previous Marriage Information</h4>
           
-          <label className="husband-label">15. IF PREVIOUSLY MARRIED, HOW WAS IT DISSOLVED?</label>
-          <div className="husband-input-group input-group">
-            <div className="husband-input-container input-container">
-              <select
-                name="husbandPreviousMarriageStatus"
-                className="husband-select"
-                value={formData.husbandPreviousMarriageStatus || ''}
+          {/* Checkbox for previous marriage */}
+          <div className="husband-checkbox-group">
+            <label className="husband-checkbox-label">
+              <input
+                type="checkbox"
+                name="hasPreviousMarriage"
+                checked={formData.hasPreviousMarriage || false}
                 onChange={handleChange}
-              >
-                <option value="" disabled>Select</option>
-                <option value="Not Applicable">Not Applicable</option>
-                <option value="Death">Death</option>
-                <option value="Annulment">Annulment</option>
-                <option value="Divorce">Divorce</option>
-                <option value="Legal Separation">Legal Separation</option>
-              </select>
-              {errors.husbandPreviousMarriageStatus && (
-                <span className="husband-error error-message">
-                  {errors.husbandPreviousMarriageStatus}
-                </span>
-              )}
-            </div>
+              />
+              I was previously married
+            </label>
           </div>
 
-          <label className="husband-label">16. PLACE WHERE DISSOLVED</label>
-          <div className="husband-input-group input-group">
-            <div className="husband-input-container input-container">
-              <input
-                type="text"
-                name="husbandDissolutionCity"
-                className="husband-input"
-                placeholder="City/Municipality"
-                value={formData.husbandDissolutionCity || ''}
-                onChange={handleChange}
-              />
-              {errors.husbandDissolutionCity && (
-                <span className="husband-error error-message">
-                  {errors.husbandDissolutionCity}
-                </span>
-              )}
-            </div>
-            <div className="husband-input-container input-container">
-              <input
-                type="text"
-                name="husbandDissolutionProvince"
-                className="husband-input"
-                placeholder="Province"
-                value={formData.husbandDissolutionProvince || ''}
-                onChange={handleChange}
-              />
-              {errors.husbandDissolutionProvince && (
-                <span className="husband-error error-message">
-                  {errors.husbandDissolutionProvince}
-                </span>
-              )}
-            </div>
-            <div className="husband-input-container input-container">
-              <input
-                type="text"
-                name="husbandDissolutionCountry"
-                className="husband-input"
-                placeholder="Country"
-                value={formData.husbandDissolutionCountry || ''}
-                onChange={handleChange}
-              />
-              {errors.husbandDissolutionCountry && (
-                <span className="husband-error error-message">
-                  {errors.husbandDissolutionCountry}
-                </span>
-              )}
-            </div>
-          </div>
+          {/* Show dissolution fields only if checkbox is checked */}
+          {formData.hasPreviousMarriage && (
+            <>
+              <label className="husband-label">15. HOW WAS PREVIOUS MARRIAGE DISSOLVED? *</label>
+              <div className="husband-input-group input-group">
+                <div className="husband-input-container input-container">
+                  <select
+                    name="husbandPreviousMarriageStatus"
+                    className="husband-select"
+                    value={formData.husbandPreviousMarriageStatus || ''}
+                    onChange={handleChange}
+                  >
+                    <option value="" disabled>Select</option>
+                    <option value="Death">Death</option>
+                    <option value="Annulment">Annulment</option>
+                    <option value="Divorce">Divorce</option>
+                    <option value="Legal Separation">Legal Separation</option>
+                  </select>
+                  {errors.husbandPreviousMarriageStatus && (
+                    <span className="husband-error error-message">
+                      {errors.husbandPreviousMarriageStatus}
+                    </span>
+                  )}
+                </div>
+              </div>
 
-          <label className="husband-label">17. DATE WHEN DISSOLVED</label>
-          <div className="husband-input-group input-group">
-            <div className="husband-input-container input-container">
-              <select
-                name="husbandDissolutionDay"
-                className="husband-select"
-                value={formData.husbandDissolutionDay || ''}
-                onChange={handleChange}
-              >
-                <option value="" disabled>
-                  Day
-                </option>
-                {Array.from({ length: 31 }, (_, i) => (
-                  <option key={i + 1} value={i + 1}>
-                    {i + 1}
-                  </option>
-                ))}
-              </select>
-              {errors.husbandDissolutionDay && (
-                <span className="husband-error error-message">
-                  {errors.husbandDissolutionDay}
-                </span>
-              )}
-            </div>
-            <div className="husband-input-container input-container">
-              <select
-                name="husbandDissolutionMonth"
-                className="husband-select"
-                value={formData.husbandDissolutionMonth || ''}
-                onChange={handleChange}
-              >
-                <option value="" disabled>
-                  Month
-                </option>
-                <option value="January">January</option>
-                <option value="February">February</option>
-                <option value="March">March</option>
-                <option value="April">April</option>
-                <option value="May">May</option>
-                <option value="June">June</option>
-                <option value="July">July</option>
-                <option value="August">August</option>
-                <option value="September">September</option>
-                <option value="October">October</option>
-                <option value="November">November</option>
-                <option value="December">December</option>
-              </select>
-              {errors.husbandDissolutionMonth && (
-                <span className="husband-error error-message">
-                  {errors.husbandDissolutionMonth}
-                </span>
-              )}
-            </div>
-            <div className="husband-input-container input-container">
-              <select
-                name="husbandDissolutionYear"
-                className="husband-select"
-                value={formData.husbandDissolutionYear || ''}
-                onChange={handleChange}
-              >
-                <option value="" disabled>
-                  Year
-                </option>
-                {Array.from({ length: 100 }, (_, i) => {
-                  const year = new Date().getFullYear() - i;
-                  return (
-                    <option key={year} value={year}>
-                      {year}
+              <label className="husband-label">16. PLACE WHERE DISSOLVED *</label>
+              <div className="husband-input-group input-group">
+                <div className="husband-input-container input-container">
+                  <input
+                    type="text"
+                    name="husbandDissolutionCity"
+                    className="husband-input"
+                    placeholder="City/Municipality"
+                    value={formData.husbandDissolutionCity || ''}
+                    onChange={handleChange}
+                  />
+                  {errors.husbandDissolutionCity && (
+                    <span className="husband-error error-message">
+                      {errors.husbandDissolutionCity}
+                    </span>
+                  )}
+                </div>
+                <div className="husband-input-container input-container">
+                  <input
+                    type="text"
+                    name="husbandDissolutionProvince"
+                    className="husband-input"
+                    placeholder="Province"
+                    value={formData.husbandDissolutionProvince || ''}
+                    onChange={handleChange}
+                  />
+                  {errors.husbandDissolutionProvince && (
+                    <span className="husband-error error-message">
+                      {errors.husbandDissolutionProvince}
+                    </span>
+                  )}
+                </div>
+                <div className="husband-input-container input-container">
+                  <input
+                    type="text"
+                    name="husbandDissolutionCountry"
+                    className="husband-input"
+                    placeholder="Country"
+                    value={formData.husbandDissolutionCountry || ''}
+                    onChange={handleChange}
+                  />
+                  {errors.husbandDissolutionCountry && (
+                    <span className="husband-error error-message">
+                      {errors.husbandDissolutionCountry}
+                    </span>
+                  )}
+                </div>
+              </div>
+
+              <label className="husband-label">17. DATE WHEN DISSOLVED *</label>
+              <div className="husband-input-group input-group">
+                <div className="husband-input-container input-container">
+                  <select
+                    name="husbandDissolutionDay"
+                    className="husband-select"
+                    value={formData.husbandDissolutionDay || ''}
+                    onChange={handleChange}
+                  >
+                    <option value="" disabled>
+                      Day
                     </option>
-                  );
-                })}
-              </select>
-              {errors.husbandDissolutionYear && (
-                <span className="husband-error error-message">
-                  {errors.husbandDissolutionYear}
-                </span>
-              )}
-            </div>
-          </div>
+                    {Array.from({ length: 31 }, (_, i) => (
+                      <option key={i + 1} value={i + 1}>
+                        {i + 1}
+                      </option>
+                    ))}
+                  </select>
+                  {errors.husbandDissolutionDay && (
+                    <span className="husband-error error-message">
+                      {errors.husbandDissolutionDay}
+                    </span>
+                  )}
+                </div>
+                <div className="husband-input-container input-container">
+                  <select
+                    name="husbandDissolutionMonth"
+                    className="husband-select"
+                    value={formData.husbandDissolutionMonth || ''}
+                    onChange={handleChange}
+                  >
+                    <option value="" disabled>
+                      Month
+                    </option>
+                    <option value="January">January</option>
+                    <option value="February">February</option>
+                    <option value="March">March</option>
+                    <option value="April">April</option>
+                    <option value="May">May</option>
+                    <option value="June">June</option>
+                    <option value="July">July</option>
+                    <option value="August">August</option>
+                    <option value="September">September</option>
+                    <option value="October">October</option>
+                    <option value="November">November</option>
+                    <option value="December">December</option>
+                  </select>
+                  {errors.husbandDissolutionMonth && (
+                    <span className="husband-error error-message">
+                      {errors.husbandDissolutionMonth}
+                    </span>
+                  )}
+                </div>
+                <div className="husband-input-container input-container">
+                  <select
+                    name="husbandDissolutionYear"
+                    className="husband-select"
+                    value={formData.husbandDissolutionYear || ''}
+                    onChange={handleChange}
+                  >
+                    <option value="" disabled>
+                      Year
+                    </option>
+                    {Array.from({ length: 100 }, (_, i) => {
+                      const year = new Date().getFullYear() - i;
+                      return (
+                        <option key={year} value={year}>
+                          {year}
+                        </option>
+                      );
+                    })}
+                  </select>
+                  {errors.husbandDissolutionYear && (
+                    <span className="husband-error error-message">
+                      {errors.husbandDissolutionYear}
+                    </span>
+                  )}
+                </div>
+              </div>
+            </>
+          )}
         </>
       )}
+
+      {/* FATHER'S INFORMATION HEADER */}
+      <h4 className="husband-subheading">Father's Information</h4>
 
       {/* Father's Name */}
       <label className="husband-label">8. NAME OF FATHER (Buong Pangalan ng Ama) *</label>
@@ -593,6 +619,9 @@ const HusbandForm = ({ formData, handleChange, errors, isMarriageLicense = false
           </div>
         </>
       )}
+
+      {/* MOTHER'S INFORMATION HEADER */}
+      <h4 className="husband-subheading">Mother's Information</h4>
 
       {/* Mother's Maiden Name */}
       <label className="husband-label">
@@ -678,9 +707,12 @@ const HusbandForm = ({ formData, handleChange, errors, isMarriageLicense = false
         </>
       )}
 
+      {/* PERSON WHO GAVE CONSENT/ADVICE HEADER */}
+      <h4 className="husband-subheading">Person Who Gave Consent or Advice</h4>
+
       {/* Name of Person/Wali Who Gave Consent or Advice */}
       <label className="husband-label">
-        12. NAME OF PERSON / WALI WHO GAVE CONSENT OR ADVICE *
+        12. NAME OF PERSON WHO GAVE CONSENT OR ADVICE *
       </label>
       <div className="husband-input-group input-group">
         <div className="husband-input-container input-container">
@@ -742,25 +774,25 @@ const HusbandForm = ({ formData, handleChange, errors, isMarriageLicense = false
         </div>
       </div>
       {isLicenseApplication && (
-  <>
-    <label className="husband-label">13a. CITIZENSHIP</label>
-    <div className="husband-input-group input-group">
-      <div className="husband-input-container input-container">
-        <input
-          type="text"
-          name="waliCitizenship"
-          className="husband-input wali-input"
-          placeholder="Citizenship"
-          value={formData.waliCitizenship || ''}
-          onChange={handleChange}
-        />
-        {errors.waliCitizenship && (
-          <span className="husband-error error-message">{errors.waliCitizenship}</span>
-        )}
-      </div>
-    </div>
-  </>
-)}
+        <>
+          <label className="husband-label">13a. CITIZENSHIP</label>
+          <div className="husband-input-group input-group">
+            <div className="husband-input-container input-container">
+              <input
+                type="text"
+                name="waliCitizenship"
+                className="husband-input wali-input"
+                placeholder="Citizenship"
+                value={formData.waliCitizenship || ''}
+                onChange={handleChange}
+              />
+              {errors.waliCitizenship && (
+                <span className="husband-error error-message">{errors.waliCitizenship}</span>
+              )}
+            </div>
+          </div>
+        </>
+      )}
 
       {/* Residence */}
       <label className="husband-label">14. RESIDENCE *</label>

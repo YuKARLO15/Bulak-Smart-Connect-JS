@@ -490,6 +490,104 @@
 .appointment-card[data-status="completed"]::before {
   background: linear-gradient(180deg, #27ae60 0%, #229954 100%);
 }
+/* Add these styles to your AllAppointmentAdmin.css file */
+.date-range-group {
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.date-range-inputs {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 5px;
+}
+
+.date-input-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.date-input-wrapper label {
+  font-size: 12px;
+  color: #666;
+  margin: 0;
+}
+
+.date-input {
+  padding: 6px 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  min-width: 140px;
+}
+
+.date-input:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+.clear-date-range {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  height: fit-content;
+  align-self: flex-end;
+}
+
+.clear-date-range:hover {
+  background-color: #c82333;
+}
+
+.date-range-indicator {
+  color: #007bff;
+  font-weight: normal;
+  font-size: 0.9em;
+}
+/* Add to your AllAppointmentAdmin.css */
+.date-input {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  min-width: 140px;
+  cursor: pointer;
+  background-color: white;
+}
+
+.date-input:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+.date-input::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 3px;
+}
+
+.date-input::-webkit-calendar-picker-indicator:hover {
+  background-color: #f0f0f0;
+}
+@media (max-width: 768px) {
+  .date-range-inputs {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .date-input {
+    min-width: unset;
+    width: 100%;
+  }
+}
 
 /* Enhanced responsive design */
 @media (max-width: 1200px) {

@@ -1,17 +1,16 @@
 .PhClockContainer {
   align-self: flex-end;
   position: relative;
-  top: 100px;
-
+  top: 140px;
   z-index: 1000;
   width: fit-content;
 }
 
 .PhClockWrapper {
-  background-color: white;
+
   padding: 10px 15px;
   border-radius: 4px;
-  text-align: center;
+  text-align: left;
 }
 
 .PhClockTitle {
