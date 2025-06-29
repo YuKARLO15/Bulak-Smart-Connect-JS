@@ -37,6 +37,10 @@ MINIO_PORT=9000
 MINIO_ACCESS_KEY=minioadmin
 MINIO_SECRET_KEY=minioadmin123
 MINIO_BUCKET_NAME=document-applications
+
+#Queue Reset Configuration
+QUEUE_RESET_TIMEZONE=Asia/Manila
+QUEUE_RESET_TIME=23:59
 ```
 
 ### 3. Generate Secure JWT Secret

@@ -214,4 +214,51 @@ export const queueService = {
       throw error;
     }
   },
+
+  // Listen for daily reset notifications
+  onDailyReset: (callback) => {
+    if (window.socket) {
+      window.socket.on('dailyQueueReset', (data) => {
+        console.log('📅 Daily queue reset notification:', data);
+        callback(data);
+      });
+    }
+  },
+
+  // Manual admin reset
+  triggerManualReset: async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.post(`${config.API_BASE_URL}/queue/admin/daily-reset`, {}, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error triggering manual reset:', error);
+      
+      if (error.response?.status === 401) {
+        throw new Error('Authentication failed. Please log in again.');
+      } else if (error.response?.status === 403) {
+        throw new Error('Admin privileges required.');
+      } else if (error.response?.status === 500) {
+        throw new Error('Server error during reset. The reset may have completed successfully.');
+      } else {
+        throw new Error(error.response?.data?.message || 'Failed to perform daily reset');
+      }
+    }
+  },
+
+  // Get today's pending count
+  getTodayPendingCount: async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.get(`${config.API_BASE_URL}/queue/admin/pending-count`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error getting pending count:', error);
+      throw error;
+    }
+  },
 };
