@@ -16,10 +16,14 @@ import { QueueStatus } from './entities/queue.entity';
 import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
 import { User } from '../../auth/decorators/user.decorator';
 import { User as UserEntity } from '../../users/entities/user.entity';
+import { QueueSchedulerService } from './queue-scheduler.service';
 
 @Controller('queue')
 export class QueueController {
-  constructor(private readonly queueService: QueueService) {}
+  constructor(
+    private readonly queueService: QueueService,
+    private readonly queueSchedulerService: QueueSchedulerService,
+  ) {}
 
   @Post()
   @UseGuards(JwtAuthGuard)
@@ -212,5 +216,33 @@ export class QueueController {
       console.error(`Error checking if queue ${id} exists:`, error);
       return { exists: false };
     }
+  }
+
+  @Post('admin/daily-reset')
+  @UseGuards(JwtAuthGuard)
+  async manualDailyReset(@User() user?: UserEntity) {
+    // Only allow admins to trigger manual reset
+    if (!user || !user.roles?.includes['admin'] && !user.roles?.includes['super_admin']) {
+      throw new Error('Unauthorized: Admin access required');
+    }
+
+    console.log(`Manual daily reset triggered by admin: ${user.username}`);
+    await this.queueSchedulerService.manualDailyReset();
+    
+    return {
+      success: true,
+      message: 'Daily queue reset completed successfully',
+      timestamp: new Date(),
+    };
+  }
+
+  @Get('admin/pending-count')
+  @UseGuards(JwtAuthGuard)
+  async getTodayPendingCount() {
+    const count = await this.queueSchedulerService.getTodayPendingCount();
+    return {
+      pendingCount: count,
+      date: new Date().toDateString(),
+    };
   }
 }

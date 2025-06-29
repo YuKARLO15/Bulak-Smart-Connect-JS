@@ -39,6 +39,10 @@ const AdminWalkInQueue = () => {
     phoneNumber: ''
   });
   
+  // States for pending count and reset
+  const [pendingCount, setPendingCount] = useState(0);
+  const [isResetting, setIsResetting] = useState(false);
+  
   const navigate = useNavigate();
 
   // Current queue is the first in the serving queues
@@ -569,6 +573,35 @@ const AdminWalkInQueue = () => {
     }
   }, []);
 
+  // Fetch pending count
+  const fetchPendingCount = async () => {
+    try {
+      const data = await queueService.getTodayPendingCount();
+      setPendingCount(data.pendingCount);
+    } catch (error) {
+      console.error('Error fetching pending count:', error);
+    }
+  };
+
+  // Manual reset handler
+  const handleManualReset = async () => {
+    if (!window.confirm('⚠️ This will cancel ALL pending queues for today. Are you sure?')) {
+      return;
+    }
+
+    setIsResetting(true);
+    try {
+      const result = await queueService.triggerManualReset();
+      alert(`✅ Daily reset completed! ${result.message}`);
+      await fetchQueueData(); // Refresh the queue data
+    } catch (error) {
+      console.error('Error during manual reset:', error);
+      alert('❌ Failed to perform daily reset. Please try again.');
+    } finally {
+      setIsResetting(false);
+    }
+  };
+
   // View details of a specific queue
   const viewQueueDetails = (queueId) => {
     navigate(`/AdminWalkInDetails/${queueId}`);
@@ -582,9 +615,13 @@ const AdminWalkInQueue = () => {
   // Fetch data on component mount and refresh periodically
   useEffect(() => {
     fetchQueueData();
+    fetchPendingCount(); // Fetch pending count on mount
     
     // Auto-refresh every 30 seconds
-    const intervalId = setInterval(fetchQueueData, 30000);
+    const intervalId = setInterval(() => {
+      fetchQueueData();
+      fetchPendingCount();
+    }, 30000);
     
     return () => clearInterval(intervalId);
   }, [fetchQueueData]);
@@ -613,6 +650,30 @@ const AdminWalkInQueue = () => {
           title="Create Manual Queue (Ctrl+Q)"
         >
           + Manual Queue
+        </button>
+        
+        {/* Manual Reset Button - New Feature */}
+        <button
+          className="manual-reset-btn"
+          onClick={handleManualReset}
+          disabled={isResetting || pendingCount === 0}
+          title="Cancel all pending queues for today"
+          style={{
+            position: 'absolute',
+            right: '200px', // Adjust position
+            top: '50%',
+            transform: 'translateY(-50%)',
+            background: pendingCount > 0 ? 'linear-gradient(135deg, #dc3545, #c82333)' : '#ccc',
+            color: 'white',
+            border: 'none',
+            borderRadius: '8px',
+            padding: '12px 18px',
+            fontSize: '0.9rem',
+            fontWeight: '600',
+            cursor: pendingCount > 0 ? 'pointer' : 'not-allowed',
+          }}
+        >
+          {isResetting ? 'Resetting...' : `🔄 Daily Reset (${pendingCount} pending)`}
         </button>
       </div>
 

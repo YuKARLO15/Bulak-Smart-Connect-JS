@@ -214,4 +214,42 @@ export const queueService = {
       throw error;
     }
   },
+
+  // Listen for daily reset notifications
+  onDailyReset: (callback) => {
+    if (window.socket) {
+      window.socket.on('dailyQueueReset', (data) => {
+        console.log('📅 Daily queue reset notification:', data);
+        callback(data);
+      });
+    }
+  },
+
+  // Manual admin reset
+  triggerManualReset: async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.post(`${config.API_BASE_URL}/queue/admin/daily-reset`, {}, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error triggering manual reset:', error);
+      throw error;
+    }
+  },
+
+  // Get today's pending count
+  getTodayPendingCount: async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.get(`${config.API_BASE_URL}/queue/admin/pending-count`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error getting pending count:', error);
+      throw error;
+    }
+  },
 };
