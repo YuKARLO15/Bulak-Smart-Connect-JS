@@ -173,7 +173,7 @@ const getAllUserQueues = () => {
       const [currentQueuesResponse, pendingQueuesResponse, userQueuesResponse] = await Promise.all(promises);
       
       // Process user queues from backend FIRST, fallback to localStorage
-      if (userQueuesResponse && userQueuesResponse.length > 0) {
+      if (userQueuesResponse && Array.isArray(userQueuesResponse) && userQueuesResponse.length > 0) {
         console.log('Using user queues from backend:', userQueuesResponse);
         
         // Filter out completed queues and clear them from localStorage
