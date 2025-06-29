@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import axios from 'axios';
+import config from '../../config/env.js';
 import './UserAccount.css';
 import NavBar from '../../NavigationComponents/NavSide';
 import EditIcon from '@mui/icons-material/Edit';
@@ -51,7 +52,7 @@ const UserAccount = () => {
 
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get(`http://localhost:3000/auth/profile`, {
+        const response = await axios.get(`${config.API_BASE_URL}/auth/profile`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -121,7 +122,7 @@ if (isEditing.phoneNumber) updates.contactNumber = phoneNumber;
         setCanChangeUsername(false);
       }
 
-      await axios.post(`http://localhost:3000/auth/update-profile`, updates, {
+      await axios.post(`${config.API_BASE_URL}/auth/update-profile`, updates, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -151,7 +152,7 @@ if (isEditing.phoneNumber) updates.contactNumber = phoneNumber;
   try {
     console.log('Attempting to verify password');
 
-    const response = await axios.post(`http://localhost:3000/auth/login`, {
+    const response = await axios.post(`${config.API_BASE_URL}/auth/login`, {
       email: email,
       emailOrUsername: email,
       username: username,
@@ -216,7 +217,7 @@ if (isEditing.phoneNumber) updates.contactNumber = phoneNumber;
     try {
       const token = localStorage.getItem('token');
       await axios.post(
-        `http://localhost:3000/auth/update-profile`,
+        `${config.API_BASE_URL}/auth/update-profile`,
         {
           password: newPassword,
           oldPassword: currentPassword, 

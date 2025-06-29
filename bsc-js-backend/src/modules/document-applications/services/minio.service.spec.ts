@@ -19,7 +19,7 @@ describe('MinioService (Document Applications)', () => {
         MINIO_USE_SSL: 'false',
         MINIO_ACCESS_KEY: 'minioadmin',
         MINIO_SECRET_KEY: 'minioadmin123',
-        MINIO_BUCKET_NAME: 'document-applications',
+        MINIO_BUCKET_NAME: 'bulak-smart-connect',
       };
       return config[key] || defaultValue;
     }),
@@ -69,7 +69,7 @@ describe('MinioService (Document Applications)', () => {
       await service.onModuleInit();
 
       expect(mockMinioClient.bucketExists).toHaveBeenCalledWith(
-        'document-applications',
+        'bulak-smart-connect',
       );
     });
 
@@ -80,10 +80,10 @@ describe('MinioService (Document Applications)', () => {
       await service.onModuleInit();
 
       expect(mockMinioClient.bucketExists).toHaveBeenCalledWith(
-        'document-applications',
+        'bulak-smart-connect',
       );
       expect(mockMinioClient.makeBucket).toHaveBeenCalledWith(
-        'document-applications',
+        'bulak-smart-connect',
         'us-east-1',
       );
     });
@@ -104,7 +104,7 @@ describe('MinioService (Document Applications)', () => {
 
       expect(result).toBe('documents/test.pdf');
       expect(mockMinioClient.putObject).toHaveBeenCalledWith(
-        'document-applications',
+        'bulak-smart-connect',
         'documents/test.pdf',
         mockFile.buffer,
         mockFile.size,
@@ -127,7 +127,7 @@ describe('MinioService (Document Applications)', () => {
 
       expect(result).toBe(expectedUrl);
       expect(mockMinioClient.presignedGetObject).toHaveBeenCalledWith(
-        'document-applications',
+        'bulak-smart-connect',
         'documents/test.pdf',
         3600,
       );
@@ -141,7 +141,7 @@ describe('MinioService (Document Applications)', () => {
 
       expect(result).toBe(expectedUrl);
       expect(mockMinioClient.presignedGetObject).toHaveBeenCalledWith(
-        'document-applications',
+        'bulak-smart-connect',
         'documents/test.pdf',
         7200,
       );
@@ -155,7 +155,7 @@ describe('MinioService (Document Applications)', () => {
       await service.deleteFile('documents/test.pdf');
 
       expect(mockMinioClient.removeObject).toHaveBeenCalledWith(
-        'document-applications',
+        'bulak-smart-connect',
         'documents/test.pdf',
       );
     });
@@ -174,7 +174,7 @@ describe('MinioService (Document Applications)', () => {
 
       expect(result).toBe(expectedInfo);
       expect(mockMinioClient.statObject).toHaveBeenCalledWith(
-        'document-applications',
+        'bulak-smart-connect',
         'documents/test.pdf',
       );
     });
@@ -200,7 +200,7 @@ describe('MinioService (Document Applications)', () => {
 
       expect(result).toEqual([{ name: 'file1.pdf' }, { name: 'file2.pdf' }]);
       expect(mockMinioClient.listObjects).toHaveBeenCalledWith(
-        'document-applications',
+        'bulak-smart-connect',
         undefined,
         true,
       );
@@ -224,7 +224,7 @@ describe('MinioService (Document Applications)', () => {
 
       expect(result).toEqual([{ name: 'documents/file1.pdf' }]);
       expect(mockMinioClient.listObjects).toHaveBeenCalledWith(
-        'document-applications',
+        'bulak-smart-connect',
         'documents/',
         true,
       );

@@ -321,6 +321,72 @@ npm run start
 
 Test at [http://localhost:3000/](http://localhost:3000/)
 
+## 🌍 Environment Variable Management
+
+### Unified Configuration System
+
+We've implemented a comprehensive environment variable system that centralizes all configuration:
+
+#### **Key Features:**
+- ✅ **Centralized Configuration**: Single source of truth for all settings
+- ✅ **Environment-Specific**: Separate configs for development/staging/production
+- ✅ **Type Safety**: Automatic validation and type conversion
+- ✅ **Debug Controls**: Configurable logging and debugging features
+- ✅ **Feature Flags**: Enable/disable features per environment
+- ✅ **Security**: No hardcoded URLs or sensitive data in code
+
+#### **Configuration Files:**
+```
+📁 Project Structure
+├── bsc-js-backend/
+│   ├── .env                    # Backend development config
+│   ├── .env.production        # Backend production config
+│   └── .env.example          # Backend template
+├── bulak-smart-connect-js/
+│   ├── .env                    # Frontend development config
+│   ├── .env.production        # Frontend production config
+│   ├── .env.example          # Frontend template
+│   └── src/config/env.js     # Configuration service
+```
+
+#### **Environment Variables Categories:**
+
+| Category | Backend | Frontend | Description |
+|----------|---------|----------|-------------|
+| **API Configuration** | `PORT`, `CORS` | `VITE_API_BASE_URL` | Server and API settings |
+| **Database** | `DB_HOST`, `DB_PORT` | - | Database connection |
+| **WebSocket** | `WS_CORS_ORIGIN` | `VITE_WS_URL` | Real-time communication |
+| **MinIO Storage** | `MINIO_BUCKET_NAME` | - | File storage settings |
+| **Feature Flags** | `NODE_ENV` | `VITE_ENABLE_*` | Enable/disable features |
+| **Security** | `JWT_SECRET` | - | Authentication settings |
+| **UI/UX** | - | `VITE_THEME_*` | User interface settings |
+
+### 🚨 Common Issues & Solutions
+
+#### **Frontend Config Not Working (404 Errors)**
+```javascript
+// ❌ WRONG - Don't use import.meta.env directly
+const response = await axios.get('http://localhost:3000/auth/profile');
+
+// ✅ CORRECT - Use the config system
+import config from '../config/env.js';
+const response = await axios.get(`${config.API_BASE_URL}/auth/profile`);
+```
+
+#### **Environment Variables Not Loading**
+```bash
+# Restart dev servers after changing .env files
+npm run dev
+
+# Check if variables are loaded
+console.log('Config:', config);
+```
+
+#### **CORS Errors**
+- Verify `VITE_API_BASE_URL` matches backend `PORT`
+- Check `WS_CORS_ORIGIN` matches frontend URL
+- Ensure `ALLOWED_ORIGINS` includes frontend URL
+
 ## TypeORM Migrations for Production
 
 ```bash
@@ -487,6 +553,55 @@ CREATE TABLE queues (
 > Also ensure there is no personal information on the database before you export it, for our safety. Optionally, you can just export it without the data, only the schema.
 
 ### MinIO Setup
+
+1. **Download MinIO**:
+   ```bash
+   # Windows
+   wget https://dl.min.io/server/minio/release/windows-amd64/minio.exe
+   # Or download from https://min.io/download
+   ```
+
+2. **Create MinIO directory**:
+   ```bash
+   mkdir C:\minio\data
+   ```
+
+3. **Start MinIO Server**:
+   ```batch
+   # Create start-minio.bat
+   @echo off
+   set MINIO_ROOT_USER=minioadmin
+   set MINIO_ROOT_PASSWORD=minioadmin123
+   minio.exe server C:\minio\data --console-address ":9001"
+   ```
+
+4. **Verify Installation**:
+   - MinIO API: [http://localhost:9000](http://localhost:9000)
+   - MinIO Console: [http://localhost:9001](http://localhost:9001)
+
+5. **Create Bucket** (if not auto-created):
+   - **Option A: Using Web Console**
+     - Login to MinIO Console
+     - Click "Create Bucket"
+     - Name: `bulak-smart-connect`
+     - Set to public read if needed
+   
+   - **Option B: Using MinIO Client (if installed)**
+   ```cmd
+   mc.exe mb local/bulak-smart-connect
+   ```
+
+6. **Update Environment Variables**:
+   ```bash
+   # In your .env file
+   MINIO_ENDPOINT=localhost
+   MINIO_PORT=9000
+   MINIO_USE_SSL=false
+   MINIO_ACCESS_KEY=minioadmin
+   MINIO_SECRET_KEY=minioadmin123
+   MINIO_BUCKET_NAME=bulak-smart-connect
+   FILE_STORAGE_TYPE=minio
+   ```
 
 MinIO is an object storage solution used for storing and managing document files in the application.
 
@@ -773,36 +888,144 @@ For production environments, consider:
 
 ## Environment Setup
 
-Create a `.env` file in the bsc-js-backend directory with:
+### 🔧 Backend Environment Configuration
+
+Create a `.env` file in the `bsc-js-backend` directory with:
 
 ```bash
+# ===========================================
+# BSC BACKEND ENVIRONMENT CONFIGURATION
+# ===========================================
+
+# Server Configuration
+NODE_ENV=development
+PORT=3000
+HOST=localhost
+
+# CORS & WebSocket Configuration
+ALLOWED_ORIGINS=http://localhost:5173,http://localhost:3000
+WS_CORS_ORIGIN=http://localhost:5173
+FRONTEND_URL=http://localhost:5173
+
 # Database Configuration
 DB_HOST=localhost
 DB_PORT=3306
 DB_USERNAME=root
 DB_PASSWORD=your_password
 DB_NAME=bulak_smart_connect
+DB_SYNCHRONIZE=false
+DB_LOGGING=false
+DB_TIMEZONE=+08:00
 
 # JWT Configuration
-JWT_SECRET=your_jwt_secret_key
+JWT_SECRET=your_jwt_secret_key_min_32_chars
+JWT_EXPIRES_IN=7d
 
 # MinIO Configuration
 MINIO_ENDPOINT=localhost
 MINIO_PORT=9000
 MINIO_USE_SSL=false
 MINIO_ACCESS_KEY=minioadmin
-MINIO_SECRET_KEY=your_password
+MINIO_SECRET_KEY=minioadmin123
 MINIO_BUCKET_NAME=bulak-smart-connect
 FILE_STORAGE_TYPE=minio
+
+# Swagger Documentation
+SWAGGER_TITLE=Bulak Smart Connect API
+SWAGGER_DESCRIPTION=REST API for Bulak Smart Connect Municipal Services System
+SWAGGER_VERSION=1.0.0
+
+# Application URLs for logging
+SERVER_BASE_URL=http://localhost:3000
+SWAGGER_URL=http://localhost:3000/api/docs
 ```
 
-Generate a secure JWT secret using:
+### 🎨 Frontend Environment Configuration
+
+Create a `.env` file in the `bulak-smart-connect-js` directory:
 
 ```bash
-node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"
+# ===========================================
+# BSC FRONTEND ENVIRONMENT CONFIGURATION
+# ===========================================
+
+# API Configuration
+VITE_API_BASE_URL=http://localhost:3000
+VITE_WS_URL=http://localhost:3000
+VITE_API_TIMEOUT=15000
+
+# Application Configuration
+VITE_APP_TITLE=Bulak Smart Connect
+VITE_APP_DESCRIPTION=Municipal Services Digital Platform
+VITE_APP_VERSION=1.0.0
+VITE_NODE_ENV=development
+
+# Feature Flags
+VITE_ENABLE_PWA=true
+VITE_ENABLE_ANALYTICS=false
+VITE_ENABLE_DEBUG=true
+
+# Storage Configuration
+VITE_STORAGE_PREFIX=bulak_smart_connect_
+
+# Print Settings
+VITE_PRINT_ENABLED=true
+VITE_PRINT_COPIES=1
+VITE_PRINTER_NAME=default
+
+# Queue System Configuration
+VITE_QUEUE_REFRESH_INTERVAL=5000
+VITE_QUEUE_AUTO_REFRESH=true
+
+# File Upload Configuration
+VITE_MAX_FILE_SIZE=10485760
+VITE_ALLOWED_FILE_TYPES=pdf,doc,docx,jpg,jpeg,png
+
+# External Services
+VITE_GOOGLE_MAPS_API_KEY=
+VITE_RECAPTCHA_SITE_KEY=
+
+# UI Configuration
+VITE_THEME_PRIMARY=#184a5b
+VITE_THEME_SECONDARY=#ffffff
+VITE_SIDEBAR_DEFAULT_OPEN=true
+
+# Development URLs
+VITE_ADMIN_PANEL_URL=http://localhost:5173/AdminHome
+VITE_USER_DASHBOARD_URL=http://localhost:5173/UserDashboard
+
+# Endpoints Configuration
+VITE_AUTH_ENDPOINT=/auth
+VITE_QUEUE_ENDPOINT=/queue
+VITE_APPOINTMENTS_ENDPOINT=/appointments
+VITE_ANNOUNCEMENTS_ENDPOINT=/announcements
+VITE_DOCUMENT_APPLICATIONS_ENDPOINT=/document-applications
+VITE_USERS_ENDPOINT=/users
 ```
 
-Optionally, you can retrieve the env file from our secure channel and put it in the bsc-js-backend directory 
+### 🔐 Environment Variable Generation
+
+Generate secure environment variables:
+
+```bash
+# Generate a secure JWT secret
+node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"
+
+# Generate secure MinIO credentials for production
+node -e "console.log('MINIO_ACCESS_KEY=' + require('crypto').randomBytes(16).toString('hex'))"
+node -e "console.log('MINIO_SECRET_KEY=' + require('crypto').randomBytes(32).toString('hex'))"
+```
+
+### 📋 Quick Setup Commands
+
+```bash
+# Copy environment templates
+cp bsc-js-backend/.env.example bsc-js-backend/.env
+cp bulak-smart-connect-js/.env.example bulak-smart-connect-js/.env
+
+# Edit configuration files with your actual values
+# Update database credentials, API keys, and other settings
+``` 
 
 ## XAMPP Setup (Alternative to MySQL Installer/Optional)
 

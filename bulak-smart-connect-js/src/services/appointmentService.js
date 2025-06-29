@@ -1,7 +1,6 @@
 import axios from 'axios';
 import api from './api';
-
-const API_URL = 'http://localhost:3000';
+import config from '../config/env.js';
 
 export const appointmentService = {
   // Create a new appointment 

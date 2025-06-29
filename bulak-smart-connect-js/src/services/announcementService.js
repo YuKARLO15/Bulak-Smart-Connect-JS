@@ -1,12 +1,11 @@
 import axios from 'axios';
-
-const API_BASE_URL = /*import.meta.env.VITE_REACT_APP_API_URL || Temporary Comment will setup later*/ 'http://localhost:3000';
+import config from '../config/env.js';
 
 export const announcementService = {
   // Get all announcements
   async getAllAnnouncements() {
     try {
-      const response = await axios.get(`${API_BASE_URL}/announcements`);
+      const response = await axios.get(`\$\{config.API_BASE_URL\}/announcements`);
       return response.data;
     } catch (error) {
       console.error('Error fetching announcements:', error);
@@ -17,7 +16,7 @@ export const announcementService = {
   // Get recent announcements
   async getRecentAnnouncements(limit = 5) {
     try {
-      const response = await axios.get(`${API_BASE_URL}/announcements/recent?limit=${limit}`);
+      const response = await axios.get(`\$\{config.API_BASE_URL\}/announcements/recent?limit=${limit}`);
       return response.data;
     } catch (error) {
       console.error('Error fetching recent announcements:', error);
@@ -28,7 +27,7 @@ export const announcementService = {
   // Get single announcement
   async getAnnouncementById(id) {
     try {
-      const response = await axios.get(`${API_BASE_URL}/announcements/${id}`);
+      const response = await axios.get(`\$\{config.API_BASE_URL\}/announcements/${id}`);
       return response.data;
     } catch (error) {
       console.error('Error fetching announcement:', error);
@@ -39,7 +38,7 @@ export const announcementService = {
   // Create new announcement
   async createAnnouncement(announcementData) {
     try {
-      const response = await axios.post(`${API_BASE_URL}/announcements`, announcementData);
+      const response = await axios.post(`\$\{config.API_BASE_URL\}/announcements`, announcementData);
       return response.data;
     } catch (error) {
       console.error('Error creating announcement:', error);
@@ -50,7 +49,7 @@ export const announcementService = {
   // Update announcement
   async updateAnnouncement(id, announcementData) {
     try {
-      const response = await axios.patch(`${API_BASE_URL}/announcements/${id}`, announcementData);
+      const response = await axios.patch(`\$\{config.API_BASE_URL\}/announcements/${id}`, announcementData);
       return response.data;
     } catch (error) {
       console.error('Error updating announcement:', error);
@@ -61,7 +60,7 @@ export const announcementService = {
   // Delete announcement
   async deleteAnnouncement(id) {
     try {
-      await axios.delete(`${API_BASE_URL}/announcements/${id}`);
+      await axios.delete(`\$\{config.API_BASE_URL\}/announcements/${id}`);
       return true;
     } catch (error) {
       console.error('Error deleting announcement:', error);

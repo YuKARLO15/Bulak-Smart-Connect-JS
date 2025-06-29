@@ -1,10 +1,11 @@
 import axios from 'axios';
+import config from '../config/env.js';
 
 // Create an axios instance with common configurations
 const apiClient = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000',
+  baseURL: config.API_BASE_URL,
   withCredentials: true, // Include cookies in requests if needed
-  timeout: 15000, // 15 second timeout
+  timeout: config.API_TIMEOUT, // Use config timeout
   headers: {
     'Accept': 'application/json'
   }

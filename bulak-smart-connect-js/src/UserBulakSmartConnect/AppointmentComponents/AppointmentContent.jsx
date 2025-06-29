@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
+import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import DatePickerInputAppointForm from './DataPickerAppointmentForm';
-import './AppointmentContent.css';
-import { saveRecentAppointments } from './RecentAppointmentData';
 import { appointmentService } from '../../services/appointmentService'; 
 import axios from 'axios';
+import config from '../../config/env.js';
 import { FormControl, InputLabel, Select, MenuItem, FormHelperText } from '@mui/material';
+
+import './AppointmentContent.css';
+import { saveRecentAppointments } from './RecentAppointmentData';
 
 const steps = [
   { label: 'Book Appointment' },
@@ -74,7 +77,7 @@ const AppointmentContainer = ({ onBack, preselectedDate }) => {
         setFetchingUserData(true);
         const token = localStorage.getItem('token');
         if (!token) return;
-        const response = await axios.get('http://localhost:3000/auth/profile', {
+        const response = await axios.get(`${config.API_BASE_URL}/auth/profile`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         if (response.data) {

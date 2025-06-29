@@ -4,11 +4,10 @@
 // But logging in and getting user data is done in src/context/AuthContext.jsx
 
 import axios from 'axios';
-
-const API_URL = 'http://localhost:3000';
+import config from '../config/env.js';
 
 const api = axios.create({
-  baseURL: API_URL,
+  baseURL: config.API_BASE_URL,
   headers: {
     'Content-Type': 'application/json',
   },

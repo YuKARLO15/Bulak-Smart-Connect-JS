@@ -6,6 +6,7 @@ import { io } from 'socket.io-client';
 import { queueService } from '../../services/queueService';
 import FloatingAnnouncementFab from '../../LandingPageComponents/FloatingAnnouncement';
 import { Box, Button, Container, Grid, Typography, Card, CardContent } from '@mui/material';
+import config from '../../config/env.js';
 
 // Format queue number to WK format
 const formatWKNumber = (queueNumber) => {
@@ -426,7 +427,7 @@ const getAllUserQueues = () => {
     let socket = null;
     
     try {
-      socket = io('http://localhost:3000', {
+      socket = io(config.WS_URL, {
         transports: ['websocket'],
         reconnectionAttempts: 3,
         timeout: 5000,
