@@ -27,7 +27,7 @@ VITE_ENABLE_DEBUG=true
 VITE_ENABLE_ANALYTICS=false
 
 # Storage
-VITE_STORAGE_PREFIX=bulak_smart_connect_
+VITE_STORAGE_PREFIX=
 ```
 
 ### 3. Advanced Configuration (Optional)
