@@ -357,8 +357,8 @@ import { DocumentApplicationsModule } from &#x27;./modules/document-applications
         password: configService.get(&#x27;DB_PASSWORD&#x27;),
         database: configService.get(&#x27;DB_NAME&#x27;),
         entities: [__dirname + &#x27;/**/*.entity{.ts,.js}&#x27;],
-        synchronize: configService.get(&#x27;NODE_ENV&#x27;) !&#x3D;&#x3D; &#x27;production&#x27;, //set this sheesh to true in development only
-        logging: configService.get(&#x27;NODE_ENV&#x27;) !&#x3D;&#x3D; &#x27;production&#x27;,
+        synchronize: configService.get(&#x27;DB_SYNCHRONIZE&#x27;) &#x3D;&#x3D;&#x3D; &#x27;true&#x27;, // Use environment variable
+        logging: configService.get(&#x27;DB_LOGGING&#x27;) &#x3D;&#x3D;&#x3D; &#x27;true&#x27;, // Use environment variable
         logger: &#x27;advanced-console&#x27;,
         // Prevent data loss in development (below code is for development only)
         // synchronize: true,
@@ -367,18 +367,18 @@ import { DocumentApplicationsModule } from &#x27;./modules/document-applications
 
         // Only for development environments!
         beforeConnect: async (connection): Promise&lt;void&gt; &#x3D;&gt; {
-          if (process.env.NODE_ENV !&#x3D;&#x3D; &#x27;production&#x27;) {
+          if (configService.get(&#x27;NODE_ENV&#x27;) !&#x3D;&#x3D; &#x27;production&#x27;) {
             const conn &#x3D; connection as {
               query: (sql: string) &#x3D;&gt; Promise&lt;unknown&gt;;
             };
             // Disable foreign key checks for development
             await conn.query(&#x27;SET FOREIGN_KEY_CHECKS&#x3D;0;&#x27;);
-            // Set time zone to UTC for consistent datetime handling
-            await conn.query(&quot;SET time_zone &#x3D; &#x27;+08:00&#x27;;&quot;); // Philippines time zone (UTC+8)
+            // Set time zone using environment variable
+            await conn.query(&#x60;SET time_zone &#x3D; &#x27;${configService.get(&#x27;DB_TIMEZONE&#x27;) || &#x27;+08:00&#x27;}&#x27;;&#x60;);
           }
         },
         afterConnect: async (connection): Promise&lt;void&gt; &#x3D;&gt; {
-          if (process.env.NODE_ENV !&#x3D;&#x3D; &#x27;production&#x27;) {
+          if (configService.get(&#x27;NODE_ENV&#x27;) !&#x3D;&#x3D; &#x27;production&#x27;) {
             await (
               connection as { query: (sql: string) &#x3D;&gt; Promise&lt;unknown&gt; }
             ).query(&#x27;SET FOREIGN_KEY_CHECKS&#x3D;1;&#x27;);
