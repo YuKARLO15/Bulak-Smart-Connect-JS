@@ -511,16 +511,6 @@ const MarriageSummaryForm = () => {
             <DialogContentText>
               Are you sure you want to cancel this application? This action cannot be undone.
             </DialogContentText>
-            <TextField
-              margin="normal"
-              label="Reason for Cancellation"
-              fullWidth
-              multiline
-              rows={4}
-              value={statusMessage}
-              onChange={handleMessageChange}
-              placeholder="Please provide a reason for cancellation..."
-            />
           </DialogContent>
           <DialogActions>
             <Button onClick={() => setConfirmCancelDialog(false)} color="primary">
