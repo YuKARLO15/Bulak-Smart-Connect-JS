@@ -37,7 +37,7 @@ const config = {
   },
   
   // Local Storage
-  STORAGE_PREFIX: import.meta.env.VITE_STORAGE_PREFIX || 'bulak_smart_connect_',
+  STORAGE_PREFIX: import.meta.env.VITE_STORAGE_PREFIX || '',
   
   // Print Settings
   PRINT: {

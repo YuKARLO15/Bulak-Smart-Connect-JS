@@ -966,7 +966,7 @@ VITE_ENABLE_ANALYTICS=false
 VITE_ENABLE_DEBUG=true
 
 # Storage Configuration
-VITE_STORAGE_PREFIX=bulak_smart_connect_
+VITE_STORAGE_PREFIX=
 
 # Print Settings
 VITE_PRINT_ENABLED=true

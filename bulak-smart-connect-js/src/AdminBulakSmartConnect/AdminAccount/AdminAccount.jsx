@@ -53,7 +53,7 @@ const AccountManagement = () => {
           return;
         }
 
-        const response = await axios.get('\$\{config.API_BASE_URL\}/auth/profile', {
+        const response = await axios.get(`${config.API_BASE_URL}/auth/profile`, {
           headers: { Authorization: `Bearer ${token}` }
         });
 
@@ -176,7 +176,7 @@ const AccountManagement = () => {
         setCanChangeUsername(false);
       }
 
-      await axios.post('\$\{config.API_BASE_URL\}/auth/update-profile', updates, {
+      await axios.post(`${config.API_BASE_URL}/auth/update-profile`, updates, {
         headers: { Authorization: `Bearer ${token}` }
       });
 
@@ -231,7 +231,7 @@ const AccountManagement = () => {
       }
 
       const token = localStorage.getItem('token');
-      await axios.post('\$\{config.API_BASE_URL\}/auth/update-profile', {
+      await axios.post(`${config.API_BASE_URL}/auth/update-profile`, {
         password: passwordData.newPassword,
         oldPassword: passwordData.currentPassword
       }, {
