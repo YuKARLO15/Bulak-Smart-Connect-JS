@@ -136,6 +136,10 @@
                         <ul class="index-list">
                             <li>
                                     <span class="modifier">Private</span>
+                                <a href="#isResetInProgress" >isResetInProgress</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
                                     <span class="modifier">Readonly</span>
                                 <a href="#logger" >logger</a>
                             </li>
@@ -192,7 +196,7 @@
                 </tr>
                         <tr>
                             <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="10" class="link-to-prism">src/modules/queue/queue-scheduler.service.ts:10</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="11" class="link-to-prism">src/modules/queue/queue-scheduler.service.ts:11</a></div>
                             </td>
                         </tr>
 
@@ -269,8 +273,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="144"
-                                    class="link-to-prism">src/modules/queue/queue-scheduler.service.ts:144</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="152"
+                                    class="link-to-prism">src/modules/queue/queue-scheduler.service.ts:152</a></div>
                         </td>
                     </tr>
 
@@ -316,8 +320,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="23"
-                                    class="link-to-prism">src/modules/queue/queue-scheduler.service.ts:23</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="24"
+                                    class="link-to-prism">src/modules/queue/queue-scheduler.service.ts:24</a></div>
                         </td>
                     </tr>
 
@@ -356,8 +360,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="105"
-                                    class="link-to-prism">src/modules/queue/queue-scheduler.service.ts:105</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="113"
+                                    class="link-to-prism">src/modules/queue/queue-scheduler.service.ts:113</a></div>
                         </td>
                     </tr>
 
@@ -437,8 +441,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="138"
-                                    class="link-to-prism">src/modules/queue/queue-scheduler.service.ts:138</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="146"
+                                    class="link-to-prism">src/modules/queue/queue-scheduler.service.ts:146</a></div>
                         </td>
                     </tr>
 
@@ -447,7 +451,7 @@
                 <td class="col-md-4">
 
                         <div class="io-description">
-                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                            <b>Returns : </b>    <code>unknown</code>
 
                         </div>
                 </td>
@@ -460,6 +464,32 @@
     <h3 id="inputs">
         Properties
     </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="isResetInProgress"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>isResetInProgress</b></span>
+                        <a href="#isResetInProgress"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>false</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="11" class="link-to-prism">src/modules/queue/queue-scheduler.service.ts:11</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
     <table class="table table-sm table-bordered">
         <tbody>
             <tr>
@@ -503,6 +533,7 @@ import { QueueGateway } from &#x27;./queue.gateway&#x27;;
 @Injectable()
 export class QueueSchedulerService {
   private readonly logger &#x3D; new Logger(QueueSchedulerService.name);
+  private isResetInProgress &#x3D; false; 
 
   constructor(
     @InjectRepository(Queue)
@@ -513,19 +544,25 @@ export class QueueSchedulerService {
   // Run every day at 11:59 PM (23:59)
   @Cron(&#x27;59 23 * * *&#x27;, {
     name: &#x27;daily-queue-reset&#x27;,
-    timeZone: &#x27;Asia/Manila&#x27;, // Adjust to your timezone
+    timeZone: &#x27;Asia/Manila&#x27;,
   })
   async handleDailyQueueReset() {
+    // ✅ FIXED: Prevent concurrent execution
+    if (this.isResetInProgress) {
+      this.logger.warn(&#x27;🚫 Daily reset already in progress, skipping...&#x27;);
+      return;
+    }
+
+    this.isResetInProgress &#x3D; true;
     this.logger.log(&#x27;🔄 Starting daily queue reset process...&#x27;);
 
     try {
-      // Find all pending queues from today
+      // ✅ FIXED: Better timezone handling
       const today &#x3D; new Date();
-      const startOfDay &#x3D; new Date(today);
-      startOfDay.setHours(0, 0, 0, 0);
-      
-      const endOfDay &#x3D; new Date(today);
-      endOfDay.setHours(23, 59, 59, 999);
+      const startOfDay &#x3D; new Date(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0, 0);
+      const endOfDay &#x3D; new Date(today.getFullYear(), today.getMonth(), today.getDate(), 23, 59, 59, 999);
+
+      this.logger.log(&#x60;🗓️ Searching for queues between: ${startOfDay.toISOString()} and ${endOfDay.toISOString()}&#x60;);
 
       // Get all pending queues created today
       const pendingQueues &#x3D; await this.queueRepository.find({
@@ -543,13 +580,13 @@ export class QueueSchedulerService {
           pendingQueues.map(queue &#x3D;&gt; ({
             ...queue,
             status: QueueStatus.CANCELLED,
-            completedAt: new Date(), // Mark when they were cancelled
+            completedAt: new Date(),
           }))
         );
 
         this.logger.log(&#x60;❌ Cancelled ${cancelledQueues.length} pending queues&#x60;);
 
-        // Notify all connected clients about the queue cancellations
+        // Notify clients about cancellations
         for (const queue of cancelledQueues) {
           this.queueGateway.notifyQueueUpdate(queue.id, {
             action: &#x27;cancelled&#x27;,
@@ -558,7 +595,7 @@ export class QueueSchedulerService {
           });
         }
 
-        // Send a general notification about the daily reset
+        // Send general notification
         this.queueGateway.server.emit(&#x27;dailyQueueReset&#x27;, {
           cancelledCount: cancelledQueues.length,
           timestamp: new Date(),
@@ -566,7 +603,7 @@ export class QueueSchedulerService {
         });
       }
 
-      // Also cancel any serving queues that weren&#x27;t completed
+      // Also cancel any serving queues
       const servingQueues &#x3D; await this.queueRepository.find({
         where: {
           status: QueueStatus.SERVING,
@@ -587,12 +624,13 @@ export class QueueSchedulerService {
       }
 
       this.logger.log(&#x27;✅ Daily queue reset completed successfully&#x27;);
-
-      // Log statistics for the day
       await this.logDailyStatistics(startOfDay, endOfDay);
 
     } catch (error) {
       this.logger.error(&#x27;❌ Error during daily queue reset:&#x27;, error);
+      throw error; // ✅ FIXED: Propagate error for proper handling
+    } finally {
+      this.isResetInProgress &#x3D; false; // ✅ FIXED: Always reset flag
     }
   }
 
@@ -632,17 +670,14 @@ export class QueueSchedulerService {
   // Manual trigger for testing or admin use
   async manualDailyReset() {
     this.logger.log(&#x27;🔄 Manual daily queue reset triggered&#x27;);
-    await this.handleDailyQueueReset();
+    return await this.handleDailyQueueReset(); // ✅ FIXED: Return result
   }
 
   // Get pending queues count for today
   async getTodayPendingCount(): Promise&lt;number&gt; {
     const today &#x3D; new Date();
-    const startOfDay &#x3D; new Date(today);
-    startOfDay.setHours(0, 0, 0, 0);
-    
-    const endOfDay &#x3D; new Date(today);
-    endOfDay.setHours(23, 59, 59, 999);
+    const startOfDay &#x3D; new Date(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0, 0);
+    const endOfDay &#x3D; new Date(today.getFullYear(), today.getMonth(), today.getDate(), 23, 59, 59, 999);
 
     return await this.queueRepository.count({
       where: {
