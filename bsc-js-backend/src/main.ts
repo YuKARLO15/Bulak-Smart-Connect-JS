@@ -5,16 +5,18 @@ import { DataSource } from 'typeorm';
 import { Role } from './roles/entities/role.entity';
 import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { ConfigService } from '@nestjs/config';
 import * as Minio from 'minio';
 
 dotenv.config();
 
 async function bootstrap() {
-  // Debug env variables
-  console.log('JWT_SECRET exists:', !!process.env.JWT_SECRET);
-  console.log('JWT_SECRET length:', process.env.JWT_SECRET?.length);
-
   const app = await NestFactory.create(AppModule);
+  const configService = app.get(ConfigService);
+
+  // Debug env variables
+  console.log('JWT_SECRET exists:', !!configService.get('JWT_SECRET'));
+  console.log('JWT_SECRET length:', configService.get('JWT_SECRET')?.length);
 
   // Set up global validation pipe with transformation enabled
   app.useGlobalPipes(
@@ -27,9 +29,9 @@ async function bootstrap() {
 
   // Set up Swagger documentation
   const config = new DocumentBuilder()
-    .setTitle('Bulak Smart Connect API')
+    .setTitle(configService.get('SWAGGER_TITLE') || 'Bulak Smart Connect API')
     .setDescription(
-      `
+      configService.get('SWAGGER_DESCRIPTION') || `
     REST API for Bulak Smart Connect Municipal Services System
     
     ## Features
@@ -44,14 +46,14 @@ async function bootstrap() {
     Most endpoints require JWT authentication. Use the login endpoint to obtain a token.
   `,
     )
-    .setVersion('1.0.0')
+    .setVersion(configService.get('SWAGGER_VERSION') || '1.0.0')
     .setContact(
       'Bulak Smart Connect Team',
       'https://github.com/YuKARLO15/Bulak-Smart-Connect-JS',
       'contact@bulaksmartconnect.com',
     )
     .setLicense('MIT', 'https://opensource.org/licenses/MIT')
-    .addServer('http://localhost:3000', 'Development Server')
+    .addServer(`http://localhost:${configService.get('PORT') || 3000}`, 'Development Server')
     .addBearerAuth(
       {
         type: 'http',
@@ -80,8 +82,9 @@ async function bootstrap() {
   SwaggerModule.setup('api/docs', app, document);
 
   // Enable CORS
+  const allowedOrigins = configService.get('ALLOWED_ORIGINS')?.split(',') || [configService.get('FRONTEND_URL') || 'http://localhost:5173'];
   app.enableCors({
-    origin: 'http://localhost:5173', // Frontend IP
+    origin: allowedOrigins,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
     allowedHeaders: ['Content-Type', 'Authorization'],
@@ -94,7 +97,14 @@ async function bootstrap() {
   // Test MinIO connection
   await testMinIOConnection();
 
-  await app.listen(process.env.PORT ?? 3000);
+  const port = configService.get('PORT') || 3000;
+  const host = configService.get('HOST') || 'localhost';
+  await app.listen(port);
+  
+  console.log(`🚀 Application is running on: ${configService.get('SERVER_BASE_URL') || `http://${host}:${port}`}`);
+  console.log(`📚 Swagger docs available at: ${configService.get('SWAGGER_URL') || `http://${host}:${port}/api/docs`}`);
+  console.log(`🌐 CORS enabled for: ${allowedOrigins.join(', ')}`);
+  console.log(`🔗 WebSocket CORS: ${configService.get('WS_CORS_ORIGIN')}`);
 }
 
 async function testMinIOConnection() {
@@ -115,8 +125,8 @@ async function testMinIOConnection() {
       `✅ MinIO connection successful! Found ${buckets.length} buckets`,
     );
 
-    // Ensure document-applications bucket exists
-    const bucketName = process.env.MINIO_BUCKET_NAME || 'document-applications';
+    // Ensure bulak-smart-connect bucket exists
+    const bucketName = process.env.MINIO_BUCKET_NAME || 'bulak-smart-connect';
     const bucketExists = await minioClient.bucketExists(bucketName);
 
     if (!bucketExists) {

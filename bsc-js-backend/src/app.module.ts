@@ -28,8 +28,8 @@ import { DocumentApplicationsModule } from './modules/document-applications/docu
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_NAME'),
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
-        synchronize: configService.get('NODE_ENV') !== 'production', //set this sheesh to true in development only
-        logging: configService.get('NODE_ENV') !== 'production',
+        synchronize: configService.get('DB_SYNCHRONIZE') === 'true', // Use environment variable
+        logging: configService.get('DB_LOGGING') === 'true', // Use environment variable
         logger: 'advanced-console',
         // Prevent data loss in development (below code is for development only)
         // synchronize: true,
@@ -38,18 +38,18 @@ import { DocumentApplicationsModule } from './modules/document-applications/docu
 
         // Only for development environments!
         beforeConnect: async (connection): Promise<void> => {
-          if (process.env.NODE_ENV !== 'production') {
+          if (configService.get('NODE_ENV') !== 'production') {
             const conn = connection as {
               query: (sql: string) => Promise<unknown>;
             };
             // Disable foreign key checks for development
             await conn.query('SET FOREIGN_KEY_CHECKS=0;');
-            // Set time zone to UTC for consistent datetime handling
-            await conn.query("SET time_zone = '+08:00';"); // Philippines time zone (UTC+8)
+            // Set time zone using environment variable
+            await conn.query(`SET time_zone = '${configService.get('DB_TIMEZONE') || '+08:00'}';`);
           }
         },
         afterConnect: async (connection): Promise<void> => {
-          if (process.env.NODE_ENV !== 'production') {
+          if (configService.get('NODE_ENV') !== 'production') {
             await (
               connection as { query: (sql: string) => Promise<unknown> }
             ).query('SET FOREIGN_KEY_CHECKS=1;');

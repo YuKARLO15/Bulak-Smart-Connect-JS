@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import './AdminWalkInQueue.css';
 import NavBar from '../../NavigationComponents/NavSide';
 import { queueService } from '../../services/queueService';
+import config from '../../config/env.js';
 import axios from 'axios';
 
 // Format queue number to WK format - reusing from WalkInQueueAdmin
@@ -158,7 +159,7 @@ const AdminWalkInQueue = () => {
         const commands = createPOSCommands();
         
         // Try sending to a local print server (you'd need to set up a simple Node.js server)
-        const response = await fetch('http://localhost:3001/print', {
+        const response = await fetch(`${config.PRINT.SERVER_URL}/print`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

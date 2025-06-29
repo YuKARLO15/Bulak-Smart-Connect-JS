@@ -1,5 +1,6 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import axios from 'axios';
+import config from '../config/env.js';
 
 const AuthContext = createContext(null);
 
@@ -22,7 +23,7 @@ export const AuthProvider = ({ children }) => {
 
       try {
         // Get user profile with roles
-        const response = await axios.get('http://localhost:3000/auth/profile', {
+        const response = await axios.get(`${config.API_BASE_URL}/auth/profile`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         
@@ -61,7 +62,7 @@ export const AuthProvider = ({ children }) => {
 
       console.log(`Attempting login with ${loginType}:`, emailOrUsername);
       
-      const response = await axios.post('http://localhost:3000/auth/login', payload);
+      const response = await axios.post(`${config.API_BASE_URL}/auth/login`, payload);
 
       // New logging for backend response
       console.log("Backend auth response:", response.data); //Debugging line
@@ -158,7 +159,7 @@ export const AuthProvider = ({ children }) => {
     
     try {
       const response = await axios.post(
-        'http://localhost:3000/auth/update-profile',
+        `${config.API_BASE_URL}/auth/update-profile`,
         profileData,
         {
           headers: { Authorization: `Bearer ${token}` }
@@ -200,7 +201,7 @@ export const AuthProvider = ({ children }) => {
     
     try {
       const response = await axios.post(
-        `http://localhost:3000/auth/admin/update-user/${targetUserId}`,
+        `${config.API_BASE_URL}/auth/admin/update-user/${targetUserId}`,
         userData,
         {
           headers: { Authorization: `Bearer ${token}` }

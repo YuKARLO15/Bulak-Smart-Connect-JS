@@ -1,10 +1,11 @@
 import axios from 'axios';
+import config from '../config/env.js';
 
 // Create an axios instance with common configurations
 const apiClient = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000',
+  baseURL: config.API_BASE_URL,
   withCredentials: true,
-  timeout: 15000,
+  timeout: config.API_TIMEOUT,
   headers: {
     'Accept': 'application/json',
     'Content-Type': 'application/json'
@@ -13,17 +14,17 @@ const apiClient = axios.create({
 
 // Add request interceptor to include auth token in all requests
 apiClient.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem('token');
+  (requestConfig) => {
+    const token = localStorage.getItem(`${config.STORAGE_PREFIX}token`);
     if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+      requestConfig.headers.Authorization = `Bearer ${token}`;
       // Debug: Log token being sent
       console.log('🎫 Sending request with token:', token.substring(0, 20) + '...');
-      console.log('🎯 Request URL:', config.url);
+      console.log('🎯 Request URL:', requestConfig.url);
     } else {
-      console.warn('⚠️ No token found for request to:', config.url);
+      console.warn('⚠️ No token found for request to:', requestConfig.url);
     }
-    return config;
+    return requestConfig;
   },
   (error) => {
     return Promise.reject(error);

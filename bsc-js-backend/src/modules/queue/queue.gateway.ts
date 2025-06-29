@@ -8,10 +8,11 @@ import {
 import { Server, Socket } from 'socket.io';
 import { QueueService } from './queue.service';
 import { Logger, Inject, forwardRef } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 
 @WebSocketGateway({
   cors: {
-    origin: 'http://localhost:5173', // Match your app's CORS setting
+    origin: process.env.WS_CORS_ORIGIN || 'http://localhost:5173',
     methods: ['GET', 'POST'],
     credentials: true,
     allowedHeaders: ['Content-Type', 'Authorization'],
@@ -27,10 +28,12 @@ export class QueueGateway implements OnGatewayConnection, OnGatewayDisconnect {
   constructor(
     @Inject(forwardRef(() => QueueService))
     private readonly queueService: QueueService,
+    private readonly configService: ConfigService,
   ) {}
 
   handleConnection(client: Socket) {
     this.logger.log(`Client connected: ${client.id}`);
+    this.logger.log(`CORS origin configured: ${this.configService.get('WS_CORS_ORIGIN')}`);
   }
 
   handleDisconnect(client: Socket) {
