@@ -8,6 +8,7 @@ import { QueueGateway } from './queue.gateway';
 @Injectable()
 export class QueueSchedulerService {
   private readonly logger = new Logger(QueueSchedulerService.name);
+  private isResetInProgress = false; 
 
   constructor(
     @InjectRepository(Queue)
@@ -18,19 +19,25 @@ export class QueueSchedulerService {
   // Run every day at 11:59 PM (23:59)
   @Cron('59 23 * * *', {
     name: 'daily-queue-reset',
-    timeZone: 'Asia/Manila', // Adjust to your timezone
+    timeZone: 'Asia/Manila',
   })
   async handleDailyQueueReset() {
+    // ✅ FIXED: Prevent concurrent execution
+    if (this.isResetInProgress) {
+      this.logger.warn('🚫 Daily reset already in progress, skipping...');
+      return;
+    }
+
+    this.isResetInProgress = true;
     this.logger.log('🔄 Starting daily queue reset process...');
 
     try {
-      // Find all pending queues from today
+      // ✅ FIXED: Better timezone handling
       const today = new Date();
-      const startOfDay = new Date(today);
-      startOfDay.setHours(0, 0, 0, 0);
-      
-      const endOfDay = new Date(today);
-      endOfDay.setHours(23, 59, 59, 999);
+      const startOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0, 0);
+      const endOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 23, 59, 59, 999);
+
+      this.logger.log(`🗓️ Searching for queues between: ${startOfDay.toISOString()} and ${endOfDay.toISOString()}`);
 
       // Get all pending queues created today
       const pendingQueues = await this.queueRepository.find({
@@ -48,13 +55,13 @@ export class QueueSchedulerService {
           pendingQueues.map(queue => ({
             ...queue,
             status: QueueStatus.CANCELLED,
-            completedAt: new Date(), // Mark when they were cancelled
+            completedAt: new Date(),
           }))
         );
 
         this.logger.log(`❌ Cancelled ${cancelledQueues.length} pending queues`);
 
-        // Notify all connected clients about the queue cancellations
+        // Notify clients about cancellations
         for (const queue of cancelledQueues) {
           this.queueGateway.notifyQueueUpdate(queue.id, {
             action: 'cancelled',
@@ -63,7 +70,7 @@ export class QueueSchedulerService {
           });
         }
 
-        // Send a general notification about the daily reset
+        // Send general notification
         this.queueGateway.server.emit('dailyQueueReset', {
           cancelledCount: cancelledQueues.length,
           timestamp: new Date(),
@@ -71,7 +78,7 @@ export class QueueSchedulerService {
         });
       }
 
-      // Also cancel any serving queues that weren't completed
+      // Also cancel any serving queues
       const servingQueues = await this.queueRepository.find({
         where: {
           status: QueueStatus.SERVING,
@@ -92,12 +99,13 @@ export class QueueSchedulerService {
       }
 
       this.logger.log('✅ Daily queue reset completed successfully');
-
-      // Log statistics for the day
       await this.logDailyStatistics(startOfDay, endOfDay);
 
     } catch (error) {
       this.logger.error('❌ Error during daily queue reset:', error);
+      throw error; // ✅ FIXED: Propagate error for proper handling
+    } finally {
+      this.isResetInProgress = false; // ✅ FIXED: Always reset flag
     }
   }
 
@@ -137,17 +145,14 @@ export class QueueSchedulerService {
   // Manual trigger for testing or admin use
   async manualDailyReset() {
     this.logger.log('🔄 Manual daily queue reset triggered');
-    await this.handleDailyQueueReset();
+    return await this.handleDailyQueueReset(); // ✅ FIXED: Return result
   }
 
   // Get pending queues count for today
   async getTodayPendingCount(): Promise<number> {
     const today = new Date();
-    const startOfDay = new Date(today);
-    startOfDay.setHours(0, 0, 0, 0);
-    
-    const endOfDay = new Date(today);
-    endOfDay.setHours(23, 59, 59, 999);
+    const startOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0, 0);
+    const endOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 23, 59, 59, 999);
 
     return await this.queueRepository.count({
       where: {

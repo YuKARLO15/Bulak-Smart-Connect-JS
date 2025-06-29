@@ -8,6 +8,8 @@ import {
   //Delete, // Uncomment if you want to implement delete functionality
   //Request, // Uncomment if you want to use Request object
   UseGuards,
+  UnauthorizedException,
+  InternalServerErrorException,
 } from '@nestjs/common';
 import { QueueService } from './queue.service';
 import { CreateQueueDto } from './dto/create-queue.dto';
@@ -221,19 +223,25 @@ export class QueueController {
   @Post('admin/daily-reset')
   @UseGuards(JwtAuthGuard)
   async manualDailyReset(@User() user?: UserEntity) {
-    // Only allow admins to trigger manual reset
-    if (!user || !user.roles?.includes['admin'] && !user.roles?.includes['super_admin']) {
-      throw new Error('Unauthorized: Admin access required');
+    // Only allow admins to trigger manual daily reset
+    if (!user || (!user.roles?.includes['admin'] && !user.roles?.includes['super_admin'])) {
+      throw new UnauthorizedException('Admin access required');
     }
 
     console.log(`Manual daily reset triggered by admin: ${user.username}`);
-    await this.queueSchedulerService.manualDailyReset();
     
-    return {
-      success: true,
-      message: 'Daily queue reset completed successfully',
-      timestamp: new Date(),
-    };
+    try {
+      await this.queueSchedulerService.manualDailyReset();
+      
+      return {
+        success: true,
+        message: 'Daily queue reset completed successfully',
+        timestamp: new Date(),
+      };
+    } catch (error) {
+      console.error('Error during manual daily reset:', error);
+      throw new InternalServerErrorException('Failed to perform daily reset');
+    }
   }
 
   @Get('admin/pending-count')

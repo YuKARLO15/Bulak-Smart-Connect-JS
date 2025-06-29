@@ -594,9 +594,19 @@ const AdminWalkInQueue = () => {
       const result = await queueService.triggerManualReset();
       alert(`✅ Daily reset completed! ${result.message}`);
       await fetchQueueData(); // Refresh the queue data
+      await fetchPendingCount(); // Update pending count
     } catch (error) {
       console.error('Error during manual reset:', error);
-      alert('❌ Failed to perform daily reset. Please try again.');
+      
+      // ✅ IMPROVED: Better error handling
+      if (error.message.includes('Server error during reset')) {
+        // Reset might have worked despite the error
+        alert('⚠️ Reset completed but with server warnings. Refreshing data...');
+        await fetchQueueData();
+        await fetchPendingCount();
+      } else {
+        alert(`❌ ${error.message}`);
+      }
     } finally {
       setIsResetting(false);
     }

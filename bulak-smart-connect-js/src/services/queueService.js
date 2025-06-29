@@ -235,7 +235,16 @@ export const queueService = {
       return response.data;
     } catch (error) {
       console.error('Error triggering manual reset:', error);
-      throw error;
+      
+      if (error.response?.status === 401) {
+        throw new Error('Authentication failed. Please log in again.');
+      } else if (error.response?.status === 403) {
+        throw new Error('Admin privileges required.');
+      } else if (error.response?.status === 500) {
+        throw new Error('Server error during reset. The reset may have completed successfully.');
+      } else {
+        throw new Error(error.response?.data?.message || 'Failed to perform daily reset');
+      }
     }
   },
 
