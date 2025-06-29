@@ -186,60 +186,70 @@ const uiTitleMap = {
   };
 
   // Confirm delete application
-  const confirmDeleteApplication = () => {
+ const confirmDeleteApplication = async () => {
+  try {
+    console.log("Deleting application ID:", applicationId);
+    
+    // Verify we have an ID
+    if (!applicationId) {
+      console.error("No application ID to delete");
+      setDeleteDialogOpen(false);
+      return;
+    }
+    
+    // Delete from database first
     try {
-      console.log("Deleting application ID:", applicationId);
-      
-      // Verify we have an ID
-      if (!applicationId) {
-        console.error("No application ID to delete");
-        setDeleteDialogOpen(false);
-        return;
-      }
-      
-      // Get existing applications
-      const existingApplications = JSON.parse(localStorage.getItem('applications') || '[]');
-      console.log("Current applications count:", existingApplications.length);
-      
-      // Filter out this application
-      const updatedApplications = existingApplications.filter(app => app.id !== applicationId);
-      console.log("Updated applications count:", updatedApplications.length);
-      
-      // Save updated list
-      localStorage.setItem('applications', JSON.stringify(updatedApplications));
+      await documentApplicationService.deleteApplication(applicationId);
+      console.log("Application deleted from database:", applicationId);
+    } catch (dbError) {
+      console.error("Error deleting from database:", dbError);
+      // Continue with local deletion even if database deletion fails
+      // You might want to show a warning here
+    }
+    
+    // Get existing applications from localStorage
+    const existingApplications = JSON.parse(localStorage.getItem('applications') || '[]');
+    console.log("Current applications count:", existingApplications.length);
+    
+    // Filter out this application
+    const updatedApplications = existingApplications.filter(app => app.id !== applicationId);
+    console.log("Updated applications count:", updatedApplications.length);
+    
+    // Save updated list to localStorage
+    localStorage.setItem('applications', JSON.stringify(updatedApplications));
 
-      // Update current application if needed
-      if (updatedApplications.length > 0) {
-        const nextApp = updatedApplications[0];
-        localStorage.setItem('currentApplicationId', nextApp.id);
-        
-        // Only update birthCertificateApplication if the next app is a birth certificate
-        if (nextApp.type === 'Birth Certificate' || nextApp.type === 'Copy of Birth Certificate') {
-          localStorage.setItem('birthCertificateApplication', JSON.stringify(nextApp.formData));
-        } else {
-          localStorage.removeItem('birthCertificateApplication');
-        }
+    // Update current application if needed
+    if (updatedApplications.length > 0) {
+      const nextApp = updatedApplications[0];
+      localStorage.setItem('currentApplicationId', nextApp.id);
+      
+      // Only update birthCertificateApplication if the next app is a birth certificate
+      if (nextApp.type === 'Birth Certificate' || nextApp.type === 'Copy of Birth Certificate') {
+        localStorage.setItem('birthCertificateApplication', JSON.stringify(nextApp.formData));
       } else {
-        // No applications left
-        localStorage.removeItem('currentApplicationId');
         localStorage.removeItem('birthCertificateApplication');
       }
-
-      console.log('Application deleted:', applicationId);
-      setDeleteDialogOpen(false);
-      
-      // Dispatch a storage event to notify other components
-      const customEvent = new Event('customStorageUpdate');
-      window.dispatchEvent(customEvent);
-      
-      // Navigate back to applications
-      navigate('/ApplicationForm');
-    } catch (err) {
-      console.error('Error deleting application:', err);
-      setError('Error deleting application: ' + err.message);
-      setDeleteDialogOpen(false);
+    } else {
+      // No applications left
+      localStorage.removeItem('currentApplicationId');
+      localStorage.removeItem('birthCertificateApplication');
     }
-  };
+
+    console.log('Application deleted:', applicationId);
+    setDeleteDialogOpen(false);
+    
+    // Dispatch a storage event to notify other components
+    const customEvent = new Event('customStorageUpdate');
+    window.dispatchEvent(customEvent);
+    
+    // Navigate back to applications
+    navigate('/ApplicationForm');
+  } catch (err) {
+    console.error('Error deleting application:', err);
+    setError('Error deleting application: ' + err.message);
+    setDeleteDialogOpen(false);
+  }
+};
  const handleSubmit = () => {
     navigate('/ApplicationForm');
   };
