@@ -141,6 +141,10 @@
                             </li>
                             <li>
                                     <span class="modifier">Async</span>
+                                <a href="#findUserByEmail" >findUserByEmail</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
                                 <a href="#getProfile" >getProfile</a>
                             </li>
                             <li>
@@ -154,6 +158,10 @@
                             <li>
                                     <span class="modifier">Async</span>
                                 <a href="#register" >register</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#updatePassword" >updatePassword</a>
                             </li>
                             <li>
                                     <span class="modifier">Async</span>
@@ -341,6 +349,75 @@
                             </div>
                         <div class="io-description">
                             <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="findUserByEmail"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>findUserByEmail</b></span>
+                        <a href="#findUserByEmail"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>findUserByEmail(email: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="539"
+                                    class="link-to-prism">src/auth/auth.service.ts:539</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>email</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="../entitys/User.html" target="_self" >Promise&lt;User | null&gt;</a></code>
 
                         </div>
                             <div class="io-description">
@@ -630,6 +707,87 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
+                    <a name="updatePassword"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>updatePassword</b></span>
+                        <a href="#updatePassword"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>updatePassword(email: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, newPassword: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="553"
+                                    class="link-to-prism">src/auth/auth.service.ts:553</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>email</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>newPassword</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;void&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
                     <a name="updateUserInfo"></a>
                     <span class="name">
                             <span class="modifier">Async</span>
@@ -729,8 +887,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="538"
-                                    class="link-to-prism">src/auth/auth.service.ts:538</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="584"
+                                    class="link-to-prism">src/auth/auth.service.ts:584</a></div>
                         </td>
                     </tr>
 
@@ -1385,6 +1543,52 @@ export class AuthService {
       throw new BadRequestException(
         &#x27;Failed to update user: Unexpected error occurred&#x27;,
       );
+    }
+  }
+
+  // Add this method to find user by email
+  async findUserByEmail(email: string): Promise&lt;User | null&gt; {
+    try {
+      const user &#x3D; await this.usersRepository.findOne({
+        where: { email },
+        relations: [&#x27;defaultRole&#x27;],
+      });
+      return user;
+    } catch (error) {
+      console.error(&#x27;Error finding user by email:&#x27;, error);
+      return null;
+    }
+  }
+
+  // Add this method to update password
+  async updatePassword(email: string, newPassword: string): Promise&lt;void&gt; {
+    try {
+      // Validate password strength
+      const passwordValidation &#x3D; this.validatePasswordStrength(newPassword);
+      if (!passwordValidation.isValid) {
+        throw new BadRequestException(passwordValidation.message);
+      }
+
+      // Find user by email
+      const user &#x3D; await this.findUserByEmail(email);
+      if (!user) {
+        throw new BadRequestException(&#x27;User not found&#x27;);
+      }
+
+      // Hash new password
+      const salt &#x3D; await bcrypt.genSalt();
+      const hashedPassword &#x3D; await bcrypt.hash(newPassword, salt);
+
+      // Update password in database
+      await this.usersRepository.update(
+        { id: user.id },
+        { password: hashedPassword }
+      );
+
+      console.log(&#x60;Password updated successfully for user: ${email}&#x60;);
+    } catch (error) {
+      console.error(&#x27;Error updating password:&#x27;, error);
+      throw error;
     }
   }
 

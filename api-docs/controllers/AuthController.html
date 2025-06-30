@@ -159,6 +159,11 @@
                             </li>
                             <li>
                                     <span class="modifier"></span>
+                                    <span class="modifier">Async</span>
+                                <a href="#forgotPassword" >forgotPassword</a>
+                            </li>
+                            <li>
+                                    <span class="modifier"></span>
                                     <span class="modifier"></span>
                                     <span class="modifier"></span>
                                     <span class="modifier"></span>
@@ -187,6 +192,16 @@
                             </li>
                             <li>
                                     <span class="modifier"></span>
+                                    <span class="modifier">Async</span>
+                                <a href="#resetPassword" >resetPassword</a>
+                            </li>
+                            <li>
+                                    <span class="modifier"></span>
+                                    <span class="modifier">Async</span>
+                                <a href="#sendOTP" >sendOTP</a>
+                            </li>
+                            <li>
+                                    <span class="modifier"></span>
                                     <span class="modifier"></span>
                                     <span class="modifier"></span>
                                     <span class="modifier"></span>
@@ -197,6 +212,11 @@
                                     <span class="modifier"></span>
                                     <span class="modifier">Async</span>
                                 <a href="#updateProfile" >updateProfile</a>
+                            </li>
+                            <li>
+                                    <span class="modifier"></span>
+                                    <span class="modifier">Async</span>
+                                <a href="#verifyOTP" >verifyOTP</a>
                             </li>
                         </ul>
                     </td>
@@ -257,8 +277,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="183"
-                                    class="link-to-prism">src/auth/auth.controller.ts:183</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="219"
+                                    class="link-to-prism">src/auth/auth.controller.ts:219</a></div>
                         </td>
                     </tr>
 
@@ -332,6 +352,82 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
+                    <a name="forgotPassword"></a>
+                    <span class="name">
+                            <span class="modifier"></span>
+                            <span class="modifier">Async</span>
+                        <span ><b>forgotPassword</b></span>
+                        <a href="#forgotPassword"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>forgotPassword(undefined: literal type)</code>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <b>Decorators : </b>
+                    <br />
+                    <code>@Post(&#x27;forgot-password&#x27;)<br /></code>
+                </td>
+            </tr>
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="288"
+                                    class="link-to-prism">src/auth/auth.controller.ts:288</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                        <code>literal type</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
                     <a name="getProfile"></a>
                     <span class="name">
                             <span class="modifier"></span>
@@ -362,8 +458,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="112"
-                                    class="link-to-prism">src/auth/auth.controller.ts:112</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="148"
+                                    class="link-to-prism">src/auth/auth.controller.ts:148</a></div>
                         </td>
                     </tr>
 
@@ -443,8 +539,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="63"
-                                    class="link-to-prism">src/auth/auth.controller.ts:63</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="70"
+                                    class="link-to-prism">src/auth/auth.controller.ts:70</a></div>
                         </td>
                     </tr>
 
@@ -511,7 +607,7 @@
             <tr>
                 <td class="col-md-4">
                         <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>register(registerDto: <a href="../classes/RegisterDto.html" target="_self">RegisterDto</a>)</code>
+                    <code>register(createUserDto: <a href="../classes/RegisterDto.html" target="_self">RegisterDto</a>)</code>
                 </td>
             </tr>
 
@@ -525,8 +621,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="102"
-                                    class="link-to-prism">src/auth/auth.controller.ts:102</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="109"
+                                    class="link-to-prism">src/auth/auth.controller.ts:109</a></div>
                         </td>
                     </tr>
 
@@ -547,9 +643,163 @@
                                     </thead>
                                     <tbody>
                                         <tr>
-                                                <td>registerDto</td>
+                                                <td>createUserDto</td>
                                             <td>
                                                             <code><a href="../classes/RegisterDto.html" target="_self" >RegisterDto</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="resetPassword"></a>
+                    <span class="name">
+                            <span class="modifier"></span>
+                            <span class="modifier">Async</span>
+                        <span ><b>resetPassword</b></span>
+                        <a href="#resetPassword"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>resetPassword(resetDto: literal type)</code>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <b>Decorators : </b>
+                    <br />
+                    <code>@Post(&#x27;reset-password&#x27;)<br /></code>
+                </td>
+            </tr>
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="313"
+                                    class="link-to-prism">src/auth/auth.controller.ts:313</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>resetDto</td>
+                                            <td>
+                                                        <code>literal type</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="sendOTP"></a>
+                    <span class="name">
+                            <span class="modifier"></span>
+                            <span class="modifier">Async</span>
+                        <span ><b>sendOTP</b></span>
+                        <a href="#sendOTP"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>sendOTP(sendOtpDto: literal type)</code>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <b>Decorators : </b>
+                    <br />
+                    <code>@Post(&#x27;send-otp&#x27;)<br /></code>
+                </td>
+            </tr>
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="243"
+                                    class="link-to-prism">src/auth/auth.controller.ts:243</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>sendOtpDto</td>
+                                            <td>
+                                                        <code>literal type</code>
                                             </td>
 
                                             <td>
@@ -610,8 +860,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="134"
-                                    class="link-to-prism">src/auth/auth.controller.ts:134</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="170"
+                                    class="link-to-prism">src/auth/auth.controller.ts:170</a></div>
                         </td>
                     </tr>
 
@@ -669,6 +919,83 @@
             </tr>
         </tbody>
     </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="verifyOTP"></a>
+                    <span class="name">
+                            <span class="modifier"></span>
+                            <span class="modifier">Async</span>
+                        <span ><b>verifyOTP</b></span>
+                        <a href="#verifyOTP"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>verifyOTP(verifyOtpDto: literal type)</code>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <b>Decorators : </b>
+                    <br />
+                    <code>@Post(&#x27;verify-otp&#x27;)<br /></code>
+                </td>
+            </tr>
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="266"
+                                    class="link-to-prism">src/auth/auth.controller.ts:266</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>verifyOtpDto</td>
+                                            <td>
+                                                        <code>literal type</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 </section>    </div>
 
 
@@ -682,6 +1009,7 @@
   Request,
   UnauthorizedException,
   Param,
+  BadRequestException,
 } from &#x27;@nestjs/common&#x27;;
 import { AuthService } from &#x27;./auth.service&#x27;;
 import { LoginDto } from &#x27;./dto/login.dto&#x27;;
@@ -699,6 +1027,8 @@ import {
   ApiParam,
   ApiBody,
 } from &#x27;@nestjs/swagger&#x27;;
+import { OTPService } from &#x27;../services/otp.service&#x27;;
+import { EmailService } from &#x27;../services/email.service&#x27;;
 
 interface RequestWithUser extends Request {
   user: AuthenticatedUser;
@@ -707,7 +1037,11 @@ interface RequestWithUser extends Request {
 @ApiTags(&#x27;Authentication&#x27;)
 @Controller(&#x27;auth&#x27;)
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private otpService: OTPService, 
+    private emailService: EmailService, 
+  ) {}
 
   @ApiOperation({ summary: &#x27;User login&#x27; })
   @ApiResponse({
@@ -774,9 +1108,38 @@ export class AuthController {
   })
   @ApiBody({ type: RegisterDto })
   @Post(&#x27;register&#x27;)
-  async register(@Body() registerDto: RegisterDto) {
-    console.log(&#x27;Register endpoint hit with data:&#x27;, registerDto); //Debugging Statement
-    return this.authService.register(registerDto);
+  async register(@Body() createUserDto: RegisterDto) {
+    try {
+      // First verify OTP if email verification is enabled
+      if (createUserDto.email &amp;&amp; createUserDto.otp) {
+        const isOtpValid &#x3D; await this.otpService.verifyOTP(
+          createUserDto.email,
+          createUserDto.otp,
+          &#x27;verification&#x27;,
+        );
+
+        if (!isOtpValid) {
+          throw new BadRequestException(&#x27;Invalid or expired OTP&#x27;);
+        }
+      }
+
+      const result &#x3D; await this.authService.register(createUserDto);
+
+      // Send welcome email
+      if (createUserDto.email) {
+        await this.emailService.sendApplicationNotification(
+          createUserDto.email,
+          &#x27;Welcome!&#x27;,
+          &#x27;Account Created&#x27;,
+          &#x27;Welcome to Bulak LGU Smart Connect&#x27;,
+        );
+      }
+
+      return result;
+    } catch (error) {
+      console.error(&#x27;Registration error:&#x27;, error);
+      throw error;
+    }
   }
   @ApiOperation({ summary: &#x27;Get user profile&#x27; })
   @ApiResponse({ status: 200, description: &#x27;Profile retrieved successfully&#x27; })
@@ -875,6 +1238,100 @@ export class AuthController {
       throw new UnauthorizedException(
         error instanceof Error ? error.message : &#x27;Failed to update user&#x27;,
       );
+    }
+  }
+
+  @Post(&#x27;send-otp&#x27;)
+  async sendOTP(@Body() sendOtpDto: { email: string; purpose?: string }) {
+    try {
+      const { email, purpose &#x3D; &#x27;verification&#x27; } &#x3D; sendOtpDto;
+
+      // Validate email format
+      if (!email || !/\S+@\S+\.\S+/.test(email)) {
+        throw new BadRequestException(&#x27;Invalid email format&#x27;);
+      }
+
+      await this.otpService.generateOTP(email, purpose);
+
+      return {
+        success: true,
+        message: &#x27;OTP sent successfully&#x27;,
+        email: email,
+      };
+    } catch (error) {
+      console.error(&#x27;Error sending OTP:&#x27;, error);
+      throw new BadRequestException(&#x27;Failed to send OTP&#x27;);
+    }
+  }
+
+  @Post(&#x27;verify-otp&#x27;)
+  async verifyOTP(@Body() verifyOtpDto: { email: string; otp: string; purpose?: string }) {
+    try {
+      const { email, otp, purpose &#x3D; &#x27;verification&#x27; } &#x3D; verifyOtpDto;
+
+      const isValid &#x3D; await this.otpService.verifyOTP(email, otp, purpose);
+
+      if (!isValid) {
+        throw new UnauthorizedException(&#x27;Invalid or expired OTP&#x27;);
+      }
+
+      return {
+        success: true,
+        message: &#x27;OTP verified successfully&#x27;,
+      };
+    } catch (error) {
+      console.error(&#x27;Error verifying OTP:&#x27;, error);
+      throw new UnauthorizedException(&#x27;Invalid or expired OTP&#x27;);
+    }
+  }
+
+  // Add password reset endpoints
+  @Post(&#x27;forgot-password&#x27;)
+  async forgotPassword(@Body() { email }: { email: string }) {
+    try {
+      // Check if user exists
+      const user &#x3D; await this.authService.findUserByEmail(email);
+      if (!user) {
+        // Don&#x27;t reveal if email exists for security
+        return {
+          success: true,
+          message: &#x27;If this email is registered, you will receive a password reset code&#x27;,
+        };
+      }
+
+      await this.otpService.generateOTP(email, &#x27;password_reset&#x27;);
+
+      return {
+        success: true,
+        message: &#x27;Password reset code sent to your email&#x27;,
+      };
+    } catch (error) {
+      console.error(&#x27;Forgot password error:&#x27;, error);
+      throw new BadRequestException(&#x27;Failed to send password reset code&#x27;);
+    }
+  }
+
+  @Post(&#x27;reset-password&#x27;)
+  async resetPassword(@Body() resetDto: { email: string; otp: string; newPassword: string }) {
+    try {
+      const { email, otp, newPassword } &#x3D; resetDto;
+
+      // Verify OTP
+      const isOtpValid &#x3D; await this.otpService.verifyOTP(email, otp, &#x27;password_reset&#x27;);
+      if (!isOtpValid) {
+        throw new UnauthorizedException(&#x27;Invalid or expired reset code&#x27;);
+      }
+
+      // Update password
+      await this.authService.updatePassword(email, newPassword);
+
+      return {
+        success: true,
+        message: &#x27;Password reset successfully&#x27;,
+      };
+    } catch (error) {
+      console.error(&#x27;Reset password error:&#x27;, error);
+      throw error;
     }
   }
 }
