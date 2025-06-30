@@ -116,7 +116,8 @@ function App() {
         <Route path="/LogIn" element={<LogIn />} />
         <Route path="/SignUpForm" element={<SignUpForm />} />
         <Route path="/unauthorized" element={<Unauthorized />} />
-        <Route path="/ScreenSmartQueue" element={<ScreenSmartQueue/> } />
+        <Route path="/ScreenSmartQueue" element={<ScreenSmartQueue />} />
+          <Route path="/PrivacyPolicy" element={<PrivacyPolicy />} />
 
         {/* Admin routes - Protected for admin and super_admin */}
         <Route element={<PrivateRoute allowedRoles={['admin', 'super_admin']} />}>
@@ -186,7 +187,7 @@ function App() {
             <Route path="/UserAccount" element={<UserAccount />} />
 
           {/* User Privacy Policy */}
-          <Route path="/PrivacyPolicy" element={<PrivacyPolicy />} />
+        
         </Route>
       </Routes>
     

@@ -36,8 +36,25 @@ const SignUpForm = () => {
   const [success, setSuccess] = useState(false);
   const navigate = useNavigate();
 
+  // Load saved form data from sessionStorage on component mount
+  useEffect(() => {
+    const savedFormData = sessionStorage.getItem('signupFormData');
+    if (savedFormData) {
+      try {
+        const parsedData = JSON.parse(savedFormData);
+        setFormData(parsedData);
+      } catch (error) {
+        console.error('Error parsing saved form data:', error);
+        // Clear corrupted data
+        sessionStorage.removeItem('signupFormData');
+      }
+    }
+  }, []);
+
   const handleInputChange = e => {
     const { name, value, type, checked } = e.target;
+
+    let updatedFormData;
 
     // contacts numeric onleeeee
     if (name === 'contact') {
@@ -45,16 +62,26 @@ const SignUpForm = () => {
 
       //11 digits
       if (formattedValue.length <= 11) {
-        setFormData(prevFormData => ({
-          ...prevFormData,
+        updatedFormData = {
+          ...formData,
           contact: formattedValue,
-        }));
+        };
+      } else {
+        return; // Don't update if exceeds 11 digits
       }
     } else {
-      setFormData(prevFormData => ({
-        ...prevFormData,
+      updatedFormData = {
+        ...formData,
         [name]: type === 'checkbox' ? checked : value,
-      }));
+      };
+    }
+
+    setFormData(updatedFormData);
+    
+    // Save to sessionStorage (exclude sensitive data like passwords for security)
+    const dataToSave = { ...updatedFormData };
+    if (name !== 'password' && name !== 'confirmpassword') {
+      sessionStorage.setItem('signupFormData', JSON.stringify(dataToSave));
     }
   };
 
@@ -134,6 +161,9 @@ const SignUpForm = () => {
 
         setIsLoading(false);
         setSuccess(true);
+
+        // Clear sessionStorage on successful registration
+        sessionStorage.removeItem('signupFormData');
 
         // Redirect to login page after short delay
         setTimeout(() => {
