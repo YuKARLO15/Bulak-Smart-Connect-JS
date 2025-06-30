@@ -12,6 +12,9 @@ import { QueueModule } from './modules/queue/queue.module';
 import { AppointmentModule } from './modules/appointment/appointment.module';
 import { AnnouncementModule } from './modules/announcement/announcement.module';
 import { DocumentApplicationsModule } from './modules/document-applications/document-applications.module';
+import { OTP } from './entities/otp.entity';
+import { OTPService } from './services/otp.service';
+import { EmailService } from './services/email.service';
 
 @Module({
   imports: [
@@ -66,8 +69,9 @@ import { DocumentApplicationsModule } from './modules/document-applications/docu
     AnnouncementModule,
     DocumentApplicationsModule,
     ScheduleModule.forRoot(),
+    TypeOrmModule.forFeature([OTP]),
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, OTPService, EmailService],
 })
 export class AppModule {}

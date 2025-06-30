@@ -7,6 +7,7 @@ import {
   Request,
   UnauthorizedException,
   Param,
+  BadRequestException,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
@@ -24,6 +25,8 @@ import {
   ApiParam,
   ApiBody,
 } from '@nestjs/swagger';
+import { OTPService } from '../services/otp.service';
+import { EmailService } from '../services/email.service';
 
 interface RequestWithUser extends Request {
   user: AuthenticatedUser;
@@ -32,7 +35,11 @@ interface RequestWithUser extends Request {
 @ApiTags('Authentication')
 @Controller('auth')
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private otpService: OTPService, 
+    private emailService: EmailService, 
+  ) {}
 
   @ApiOperation({ summary: 'User login' })
   @ApiResponse({
@@ -99,9 +106,38 @@ export class AuthController {
   })
   @ApiBody({ type: RegisterDto })
   @Post('register')
-  async register(@Body() registerDto: RegisterDto) {
-    console.log('Register endpoint hit with data:', registerDto); //Debugging Statement
-    return this.authService.register(registerDto);
+  async register(@Body() createUserDto: RegisterDto) {
+    try {
+      // First verify OTP if email verification is enabled
+      if (createUserDto.email && createUserDto.otp) {
+        const isOtpValid = await this.otpService.verifyOTP(
+          createUserDto.email,
+          createUserDto.otp,
+          'verification',
+        );
+
+        if (!isOtpValid) {
+          throw new BadRequestException('Invalid or expired OTP');
+        }
+      }
+
+      const result = await this.authService.register(createUserDto);
+
+      // Send welcome email
+      if (createUserDto.email) {
+        await this.emailService.sendApplicationNotification(
+          createUserDto.email,
+          'Welcome!',
+          'Account Created',
+          'Welcome to Bulak LGU Smart Connect',
+        );
+      }
+
+      return result;
+    } catch (error) {
+      console.error('Registration error:', error);
+      throw error;
+    }
   }
   @ApiOperation({ summary: 'Get user profile' })
   @ApiResponse({ status: 200, description: 'Profile retrieved successfully' })
@@ -200,6 +236,100 @@ export class AuthController {
       throw new UnauthorizedException(
         error instanceof Error ? error.message : 'Failed to update user',
       );
+    }
+  }
+
+  @Post('send-otp')
+  async sendOTP(@Body() sendOtpDto: { email: string; purpose?: string }) {
+    try {
+      const { email, purpose = 'verification' } = sendOtpDto;
+
+      // Validate email format
+      if (!email || !/\S+@\S+\.\S+/.test(email)) {
+        throw new BadRequestException('Invalid email format');
+      }
+
+      await this.otpService.generateOTP(email, purpose);
+
+      return {
+        success: true,
+        message: 'OTP sent successfully',
+        email: email,
+      };
+    } catch (error) {
+      console.error('Error sending OTP:', error);
+      throw new BadRequestException('Failed to send OTP');
+    }
+  }
+
+  @Post('verify-otp')
+  async verifyOTP(@Body() verifyOtpDto: { email: string; otp: string; purpose?: string }) {
+    try {
+      const { email, otp, purpose = 'verification' } = verifyOtpDto;
+
+      const isValid = await this.otpService.verifyOTP(email, otp, purpose);
+
+      if (!isValid) {
+        throw new UnauthorizedException('Invalid or expired OTP');
+      }
+
+      return {
+        success: true,
+        message: 'OTP verified successfully',
+      };
+    } catch (error) {
+      console.error('Error verifying OTP:', error);
+      throw new UnauthorizedException('Invalid or expired OTP');
+    }
+  }
+
+  // Add password reset endpoints
+  @Post('forgot-password')
+  async forgotPassword(@Body() { email }: { email: string }) {
+    try {
+      // Check if user exists
+      const user = await this.authService.findUserByEmail(email);
+      if (!user) {
+        // Don't reveal if email exists for security
+        return {
+          success: true,
+          message: 'If this email is registered, you will receive a password reset code',
+        };
+      }
+
+      await this.otpService.generateOTP(email, 'password_reset');
+
+      return {
+        success: true,
+        message: 'Password reset code sent to your email',
+      };
+    } catch (error) {
+      console.error('Forgot password error:', error);
+      throw new BadRequestException('Failed to send password reset code');
+    }
+  }
+
+  @Post('reset-password')
+  async resetPassword(@Body() resetDto: { email: string; otp: string; newPassword: string }) {
+    try {
+      const { email, otp, newPassword } = resetDto;
+
+      // Verify OTP
+      const isOtpValid = await this.otpService.verifyOTP(email, otp, 'password_reset');
+      if (!isOtpValid) {
+        throw new UnauthorizedException('Invalid or expired reset code');
+      }
+
+      // Update password
+      await this.authService.updatePassword(email, newPassword);
+
+      return {
+        success: true,
+        message: 'Password reset successfully',
+      };
+    } catch (error) {
+      console.error('Reset password error:', error);
+      throw error;
     }
   }
 }
