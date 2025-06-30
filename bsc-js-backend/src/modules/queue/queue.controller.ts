@@ -223,12 +223,13 @@ export class QueueController {
   @Post('admin/daily-reset')
   @UseGuards(JwtAuthGuard)
   async manualDailyReset(@User() user?: UserEntity) {
-    // Only allow admins to trigger manual daily reset
-    if (!user || (!user.roles?.includes['admin'] && !user.roles?.includes['super_admin'])) {
-      throw new UnauthorizedException('Admin access required');
+    // Only allows privileged users
+    if (!user || !user.roles?.some(role => ['admin', 'super_admin', 'staff'].includes(role.name))) {
+      console.log(`Unauthorized reset attempt by user: ${user?.username || 'unknown'} with roles: ${user?.roles?.map(r => r.name).join(', ') || 'none'}`);
+      throw new UnauthorizedException('Admin, Super Admin, or Staff privileges required');
     }
 
-    console.log(`Manual daily reset triggered by admin: ${user.username}`);
+    console.log(`Manual daily reset triggered by ${user.roles.map(r => r.name).join(', ')}: ${user.username}`);
     
     try {
       await this.queueSchedulerService.manualDailyReset();
@@ -237,6 +238,7 @@ export class QueueController {
         success: true,
         message: 'Daily queue reset completed successfully',
         timestamp: new Date(),
+        triggeredBy: user.username
       };
     } catch (error) {
       console.error('Error during manual daily reset:', error);
@@ -246,7 +248,12 @@ export class QueueController {
 
   @Get('admin/pending-count')
   @UseGuards(JwtAuthGuard)
-  async getTodayPendingCount() {
+  async getTodayPendingCount(@User() user?: UserEntity) {
+    // Only allows privileged users
+    if (!user || !user.roles?.some(role => ['admin', 'super_admin', 'staff'].includes(role.name))) {
+      throw new UnauthorizedException('Admin access required');
+    }
+
     const count = await this.queueSchedulerService.getTodayPendingCount();
     return {
       pendingCount: count,
