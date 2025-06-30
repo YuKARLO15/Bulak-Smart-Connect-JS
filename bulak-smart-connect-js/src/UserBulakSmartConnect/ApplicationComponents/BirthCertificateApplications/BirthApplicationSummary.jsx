@@ -551,7 +551,7 @@ const uiTitleMap = {
         {/* Delete dialog */}
         <Dialog
           open={deleteDialogOpen}
-          onClose={cancelDeleteApplication}
+          onClose={handleDeleteApplication}
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
         >
