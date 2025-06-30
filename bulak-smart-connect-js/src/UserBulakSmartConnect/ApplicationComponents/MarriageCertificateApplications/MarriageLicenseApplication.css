@@ -100,3 +100,19 @@
     width: 20vw !important;
 
 }
+.BackButtonMarriageLicense{
+  color: #184a5b !important;
+  border: #184a5b solid 1px !important;
+    padding: 10px 20px !important;
+    margin-top: 24px !important;
+    display: block !important;
+    width: 10vw !important;
+}
+.ButtonContainerMarriageLicense {
+  display: flex;
+  justify-content: space-between ;
+  gap: 20px;
+  margin-top: 20px;
+  width: 60vw !important;
+  margin-bottom: 50px !important;
+}

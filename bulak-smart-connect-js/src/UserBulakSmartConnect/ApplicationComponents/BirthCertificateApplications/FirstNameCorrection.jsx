@@ -58,7 +58,7 @@ const FirstNameCorrection = () => {
   const isEditing = location.state?.isEditing || 
                     localStorage.getItem('isEditingBirthApplication') === 'true';
 
-  // Show snackbar notification
+
   const showNotification = (message, severity = 'info') => {
     setSnackbar({
       open: true,
@@ -67,17 +67,16 @@ const FirstNameCorrection = () => {
     });
   };
 
-  // Close snackbar
+
   const handleCloseSnackbar = () => {
     setSnackbar(prev => ({ ...prev, open: false }));
   };
 
-  // Create application in backend
   const createBackendApplication = async () => {
     try {
       console.log("Creating application in backend...");
       
-      // Get current application ID from localStorage or create a new one
+
       const currentId = localStorage.getItem('currentApplicationId');
       let appId = currentId;
       
@@ -89,7 +88,7 @@ const FirstNameCorrection = () => {
       
       setApplicationId(appId);
 
-      // Prepare data for backend
+
       const backendApplicationData = {
         applicationType: 'Birth Certificate',
         applicationSubtype: 'Correction - First Name',
@@ -101,11 +100,11 @@ const FirstNameCorrection = () => {
 
       console.log("Creating application with data:", backendApplicationData);
       
-      // Call API to create application
+
       const response = await documentApplicationService.createApplication(backendApplicationData);
       console.log("Backend created application:", response);
       
-      // Store the backend ID
+
       if (response && response.id) {
         localStorage.setItem('currentApplicationId', response.id);
         setApplicationId(response.id);
@@ -120,7 +119,6 @@ const FirstNameCorrection = () => {
     }
   };
 
-  // Update uploaded documents count when uploadedFiles changes
   useEffect(() => {
     const count = Object.values(uploadedFiles).filter(Boolean).length;
     setUploadedDocumentsCount(count);
@@ -128,12 +126,12 @@ const FirstNameCorrection = () => {
   }, [uploadedFiles]);
 
   useEffect(() => {
-    // Load data when component mounts
+
     const loadData = async () => {
       try {
         setIsInitializing(true);
         
-        // Load application data
+
         if (isEditing) {
           console.log("Loading data for editing...");
           const editingId = localStorage.getItem('editingApplicationId');
@@ -142,7 +140,6 @@ const FirstNameCorrection = () => {
           if (editingId) {
             setApplicationId(editingId);
             
-            // Check if this application exists in backend
             try {
               const backendApp = await documentApplicationService.getApplication(editingId);
               if (backendApp) {
@@ -154,7 +151,6 @@ const FirstNameCorrection = () => {
             }
           }
           
-          // Get applications from localStorage
           const applications = JSON.parse(localStorage.getItem('applications') || '[]');
           const applicationToEdit = applications.find(app => app.id === editingId);
           
@@ -170,7 +166,6 @@ const FirstNameCorrection = () => {
               setFormData(applicationToEdit.formData);
             }
           } else {
-            // Fallback to direct form data if available
             const savedFormData = localStorage.getItem('birthCertificateApplication');
             if (savedFormData) {
               const parsedData = JSON.parse(savedFormData);
@@ -185,12 +180,10 @@ const FirstNameCorrection = () => {
             }
           }
         } else {
-          // If not editing, check for current application data
           const currentId = localStorage.getItem('currentApplicationId');
           if (currentId) {
             setApplicationId(currentId);
             
-            // Check if this application exists in backend
             try {
               const backendApp = await documentApplicationService.getApplication(currentId);
               if (backendApp) {
@@ -200,13 +193,11 @@ const FirstNameCorrection = () => {
             } catch (error) {
               console.warn("Application may not exist in backend:", error);
               
-              // If we have form data but no backend application, automatically create it
               const currentApplicationData = localStorage.getItem('birthCertificateApplication');
               if (currentApplicationData) {
                 const parsedData = JSON.parse(currentApplicationData);
                 setFormData(parsedData);
                 
-                // Auto-create backend application if needed
                 await createBackendApplication();
               }
             }
@@ -225,7 +216,6 @@ const FirstNameCorrection = () => {
           }
         }
         
-        // Check storage usage
         const usage = localStorageManager.getCurrentUsage();
         console.log(`📊 Current storage usage: ${usage.percentage.toFixed(1)}%`);
         
@@ -244,7 +234,6 @@ const FirstNameCorrection = () => {
     loadData();
   }, [isEditing]);
 
-  // Function to convert data URL to File object
   function dataURLtoFile(dataurl, filename, type) {
     try {
       const arr = dataurl.split(',');
@@ -262,7 +251,6 @@ const FirstNameCorrection = () => {
   }
 
   const handleFileUpload = async (label, isUploaded, fileDataObj) => {
-    // Create application if needed before uploading files
     if (!backendApplicationCreated && isUploaded) {
       setIsLoading(true);
       const createdApp = await createBackendApplication();
@@ -274,7 +262,6 @@ const FirstNameCorrection = () => {
       }
     }
     
-    // Update the uploadedFiles state
     setUploadedFiles(prevState => {
       const newState = { ...prevState, [label]: isUploaded };
       console.log("Updated uploadedFiles:", newState);
@@ -287,7 +274,6 @@ const FirstNameCorrection = () => {
         [label]: fileDataObj,
       }));
 
-      // === Upload to backend ===
       try {
         const currentAppId = applicationId || localStorage.getItem('currentApplicationId');
         if (!currentAppId) {
@@ -300,7 +286,6 @@ const FirstNameCorrection = () => {
         
         const file = dataURLtoFile(fileDataObj.data, fileDataObj.name, fileDataObj.type);
         
-        // Log the URL that will be called
         const uploadUrl = `/document-applications/${currentAppId}/files`;
         console.log("Uploading to URL:", uploadUrl);
         
@@ -312,16 +297,14 @@ const FirstNameCorrection = () => {
       } catch (error) {
         console.error(`Failed to upload "${label}":`, error);
         
-        // Show detailed error information
         if (error.response) {
           console.error("Server response:", error.response.status, error.response.data);
           
-          // If error is 404 (application not found), try to create it and retry upload
           if (error.response.status === 404) {
             showNotification("Application not found. Creating new application...", "info");
             const createdApp = await createBackendApplication();
             if (createdApp) {
-              // Retry upload
+           
               try {
                 const retryResponse = await documentApplicationService.uploadFile(
                   createdApp.id, 
@@ -342,7 +325,7 @@ const FirstNameCorrection = () => {
           showNotification(`Failed to upload "${label}": ${error.message}`, "error");
         }
         
-        // Revert the upload state on error
+   
         setUploadedFiles(prevState => ({
           ...prevState,
           [label]: false,
@@ -358,7 +341,7 @@ const FirstNameCorrection = () => {
   };
 
   const isMandatoryComplete = () => {
-    // Check all mandatory documents
+  
     const allMandatoryDocsUploaded = mandatoryDocuments.every(doc => {
       const isUploaded = uploadedFiles[doc] === true;
       if (!isUploaded) {
@@ -367,14 +350,14 @@ const FirstNameCorrection = () => {
       return isUploaded;
     });
 
-    // Check if Marriage Certificate is uploaded if isMarried is true
+  
     const isMarriageCertComplete = !isMarried || uploadedFiles['Marriage Certificate'] === true;
     
     if (isMarried && !isMarriageCertComplete) {
       console.log("Missing Marriage Certificate");
     }
 
-    // For debugging:
+
     if (allMandatoryDocsUploaded && isMarriageCertComplete) {
       console.log("All documents uploaded. Button should be enabled.");
       return true;
@@ -384,7 +367,7 @@ const FirstNameCorrection = () => {
     }
   };
 
-  // Force enable submit button if at least one document is uploaded
+
   const forceEnableSubmit = uploadedDocumentsCount > 0;
 
   const mapStatusForBackend = (frontendStatus) => {
@@ -412,7 +395,7 @@ const FirstNameCorrection = () => {
       setIsLoading(true);
       setIsSubmitted(true);
       
-      // Get the application ID
+    
       const currentAppId = applicationId || localStorage.getItem('currentApplicationId');
       if (!currentAppId) {
         console.error("No application ID found");
@@ -422,14 +405,14 @@ const FirstNameCorrection = () => {
         return;
       }
 
-      // Check storage usage before saving
+    
       const usage = localStorageManager.getCurrentUsage();
       if (usage.isCritical) {
         console.warn('Storage critical, performing cleanup before save...');
         await localStorageManager.performCleanup(0.4);
       }
 
-      // Backend data preparation
+    
       const backendData = {
         status: mapStatusForBackend('SUBMITTED'),
         statusMessage: 'Application submitted with all required documents',
@@ -439,17 +422,17 @@ const FirstNameCorrection = () => {
         isMarried: isMarried
       };
       
-      // Update the backend application
+   
       try {
         const response = await documentApplicationService.updateApplication(currentAppId, backendData);
         console.log('Application status updated in backend:', response);
       } catch (error) {
         console.error('Failed to update backend status:', error);
         showNotification("Warning: Failed to update backend status. Continuing with local update.", "warning");
-        // Continue with local update even if backend fails
+  
       }
 
-      // Update localStorage with auto-cleanup support
+   
       const updatedFormData = {
         ...formData,
         uploadedFiles: fileData,
@@ -458,12 +441,12 @@ const FirstNameCorrection = () => {
         submittedAt: new Date().toISOString()
       };
 
-      // Get current applications
+
       const applications = JSON.parse(localStorage.getItem('applications') || '[]');
       const appIndex = applications.findIndex(app => app.id === currentAppId);
 
       if (appIndex >= 0) {
-        // Update existing application
+
         applications[appIndex] = {
           ...applications[appIndex],
           formData: {
@@ -476,7 +459,7 @@ const FirstNameCorrection = () => {
           lastUpdated: new Date().toISOString()
         };
       } else {
-        // If not found, add as new application
+       
         applications.push({
           id: currentAppId,
           type: 'Birth Certificate',
@@ -492,7 +475,7 @@ const FirstNameCorrection = () => {
         });
       }
 
-      // Use safe storage methods
+  
       const applicationsStored = await localStorageManager.safeSetItem(
         'applications', 
         JSON.stringify(applications)
@@ -509,7 +492,7 @@ const FirstNameCorrection = () => {
         showNotification('Application submitted successfully!', 'success');
       }
 
-      // Dispatch storage events
+  
       window.dispatchEvent(new Event('storage'));
       window.dispatchEvent(new CustomEvent('customStorageUpdate', {
         detail: {
@@ -522,7 +505,7 @@ const FirstNameCorrection = () => {
 
       console.log('Application submitted successfully');
       
-      // Navigate to summary page after a short delay
+     
       setTimeout(() => {
         navigate('/BirthApplicationSummary');
       }, 2000);
@@ -637,15 +620,106 @@ const FirstNameCorrection = () => {
           )}
 
           <Box className="ButtonContainerFirstName">
-            <Button
-              variant="outlined"
-              color="primary"
-              onClick={() => navigate(-1)}
-              className="BackButtonFirstName"
-              disabled={isLoading}
-            >
-              Back
-            </Button>
+        <Button
+    variant="outlined"
+    color="primary"
+    onClick={() => {
+      
+      const modifyApplicationState = {
+       
+        applicationId: applicationId,
+        isEditing: true, 
+        editingApplicationId: applicationId,
+        
+  
+        formData: {
+          ...formData,
+          isMarried: isMarried,
+          uploadedFiles: uploadedFiles,
+          fileData: fileData,
+          lastModified: new Date().toISOString()
+        },
+        
+       
+        uploadedFiles: uploadedFiles,
+        fileData: fileData,
+        
+  
+        isMarried: isMarried,
+        
+        
+        modifyMode: true,
+        preserveData: true,
+        backFromCorrection: true,
+        correctionType: 'First Name'
+      };
+
+     
+      try {
+
+        localStorage.setItem('birthCertificateApplication', JSON.stringify(modifyApplicationState.formData));
+        
+       
+        localStorage.setItem('isEditingBirthApplication', 'true');
+        localStorage.setItem('editingApplicationId', applicationId);
+        localStorage.setItem('currentApplicationId', applicationId);
+        
+      
+        localStorage.setItem('modifyingApplication', JSON.stringify({
+          id: applicationId,
+          type: 'Birth Certificate - Correction',
+          correctionType: 'First Name',
+          isMarried: isMarried,
+          uploadedFiles: uploadedFiles,
+          timestamp: new Date().toISOString()
+        }));
+
+
+        const applications = JSON.parse(localStorage.getItem('applications') || '[]');
+        const appIndex = applications.findIndex(app => app.id === applicationId);
+        
+        if (appIndex >= 0) {
+    
+          applications[appIndex] = {
+            ...applications[appIndex],
+            formData: modifyApplicationState.formData,
+            uploadedFiles: uploadedFiles,
+            isMarried: isMarried,
+            status: applications[appIndex].status || 'In Progress',
+            lastModified: new Date().toISOString(),
+            isBeingModified: true
+          };
+          
+          localStorage.setItem('applications', JSON.stringify(applications));
+        }
+
+        console.log('Navigating back with modify state:', modifyApplicationState);
+        
+ 
+        navigate('/RequestACopyBirthCertificate', { 
+          state: modifyApplicationState,
+          replace: false 
+        });
+        
+      } catch (error) {
+        console.error('Error saving modify state:', error);
+        showNotification('Error saving current state. Some data may be lost.', 'warning');
+     e
+        navigate('/RequestACopyBirthCertificate', { 
+          state: { 
+            applicationId: applicationId,
+            isEditing: true,
+            editingApplicationId: applicationId,
+            formData: formData
+          } 
+        });
+      }
+    }}
+    className="BackButtonFirstName"
+    disabled={isLoading}
+  >
+    Back
+  </Button>
             <Button
               variant="contained"
               color="primary"

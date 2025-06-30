@@ -12,6 +12,7 @@ import {
   FormControl,
   CircularProgress,
   Snackbar,
+  Container,
 } from '@mui/material';
 import NavBar from '../../../NavigationComponents/NavSide';
 import FileUpload from '../FileUpload';
@@ -606,6 +607,141 @@ const isMandatoryComplete = [
         </Alert>
       )}
 
+     <Container className="ButtonContainerMarriageLicense">
+  <Button
+    variant="outlined"
+    color="primary"
+    onClick={() => {
+    
+      const modifyApplicationState = {
+     
+        applicationId: applicationId,
+        isEditing: true,
+        editingApplicationId: applicationId,
+        
+  
+        formData: {
+          ...formData,
+          foreignNational: foreignNational,
+          foreignNationalType: foreignNationalType,
+          widowWidower: widowWidower,
+          widowWidowerType: widowWidowerType,
+          annulled: annulled,
+          annulledType: annulledType,
+          uploadedFiles: uploadedFiles,
+          fileData: fileData,
+          lastModified: new Date().toISOString()
+        },
+        
+    
+        uploadedFiles: uploadedFiles,
+        fileData: fileData,
+        
+
+        foreignNational: foreignNational,
+        foreignNationalType: foreignNationalType,
+        widowWidower: widowWidower,
+        widowWidowerType: widowWidowerType,
+        annulled: annulled,
+        annulledType: annulledType,
+        
+       
+        modifyMode: true,
+        preserveData: true,
+        backFromMarriageLicense: true,
+        applicationType: 'Marriage License Application'
+      };
+
+      try {
+        const originalFormData = JSON.parse(localStorage.getItem('marriageFormData') || '{}');
+        
+        const updatedFormData = {
+          ...originalFormData, 
+          marriageLicense: {
+            foreignNational: foreignNational,
+            foreignNationalType: foreignNationalType,
+            widowWidower: widowWidower,
+            widowWidowerType: widowWidowerType,
+            annulled: annulled,
+            annulledType: annulledType,
+            uploadedFiles: uploadedFiles,
+            fileData: fileData,
+            lastModified: new Date().toISOString()
+          }
+        };
+        
+        localStorage.setItem('marriageFormData', JSON.stringify(updatedFormData));
+        
+        localStorage.setItem('isEditingMarriageForm', 'true');
+        localStorage.setItem('currentEditingApplicationId', applicationId);
+        localStorage.setItem('currentApplicationId', applicationId);
+        localStorage.setItem('marriageApplicationId', applicationId);
+        
+        localStorage.setItem('modifyingApplication', JSON.stringify({
+          id: applicationId,
+          type: 'Marriage License',
+          subtype: 'Marriage License Application',
+          foreignNational: foreignNational,
+          widowWidower: widowWidower,
+          annulled: annulled,
+          uploadedFiles: uploadedFiles,
+          timestamp: new Date().toISOString()
+        }));
+
+        const applications = JSON.parse(localStorage.getItem('applications') || '[]');
+        const appIndex = applications.findIndex(app => app.id === applicationId);
+        
+        if (appIndex >= 0) {
+          applications[appIndex] = {
+            ...applications[appIndex],
+            formData: updatedFormData,
+            marriageLicense: {
+              foreignNational: foreignNational,
+              foreignNationalType: foreignNationalType,
+              widowWidower: widowWidower,
+              widowWidowerType: widowWidowerType,
+              annulled: annulled,
+              annulledType: annulledType,
+              uploadedFiles: uploadedFiles
+            },
+            status: applications[appIndex].status || 'In Progress',
+            lastModified: new Date().toISOString(),
+            isBeingModified: true
+          };
+          
+          localStorage.setItem('applications', JSON.stringify(applications));
+        }
+
+        console.log('Navigating back with modify state:', modifyApplicationState);
+        
+        navigate('/MarriageForm', { 
+          state: {
+            ...modifyApplicationState,
+            preserveOriginalData: true 
+          },
+          replace: false
+        });
+        
+      } catch (error) {
+        console.error('Error saving modify state:', error);
+        showNotification('Error saving current state. Some data may be lost.', 'warning');
+        
+        navigate('/MarriageForm', { 
+          state: { 
+            applicationId: applicationId,
+            isEditing: true,
+            editingApplicationId: applicationId,
+            formData: formData
+          } 
+        });
+      }
+    }}
+    className="BackButtonMarriageLicense"
+    disabled={isLoading}
+  >
+    Back
+  </Button>
+
       <Button
         variant="contained"
      
@@ -616,7 +752,7 @@ const isMandatoryComplete = [
       >
         {isLoading ? <CircularProgress size={24} color="inherit" /> : 'Submit'}
       </Button>
-
+</Container>
       <Snackbar
         open={snackbar.open}
         autoHideDuration={6000}

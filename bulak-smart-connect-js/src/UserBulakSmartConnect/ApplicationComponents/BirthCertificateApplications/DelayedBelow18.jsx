@@ -22,7 +22,7 @@ const mandatoryDocuments = [
 const Below18Registration = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [motherNotPresent, setMotherNotPresent] = useState(false);
-  const [maritalStatus, setMaritalStatus] = useState(''); // "marital" or "non-marital"
+  const [maritalStatus, setMaritalStatus] = useState(''); 
   const [uploadedFiles, setUploadedFiles] = useState({});
   const [fileData, setFileData] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -637,15 +637,110 @@ const Below18Registration = () => {
          
 
               <Box className="ButtonContainerBelow18">
-                <Button
-                  variant="outlined"
-                  color="primary"
-                  onClick={() => navigate(-1)}
-                  className="BackButtonBelow18"
-                  disabled={isLoading}
-                >
-                  Back
-                </Button>
+        <Button
+    variant="outlined"
+    color="primary"
+    onClick={() => {
+
+      const modifyApplicationState = {
+    
+        applicationId: applicationId,
+        isEditing: true, 
+        editingApplicationId: applicationId,
+ 
+        formData: {
+          ...formData,
+          documentStatus: status,
+          uploadedFiles: uploadedFiles,
+          fileData: fileData,
+          lastModified: new Date().toISOString()
+        },
+        
+      
+        uploadedFiles: uploadedFiles,
+        fileData: fileData,
+        
+    
+        documentStatus: status,
+        maritalStatus: status, 
+        
+      
+        modifyMode: true,
+        preserveData: true,
+        backFromDelayedRegistration: true,
+        applicationType: 'Delayed Registration - Above 18'
+      };
+
+  
+      try {
+
+        localStorage.setItem('birthCertificateApplication', JSON.stringify(modifyApplicationState.formData));
+        
+  
+        localStorage.setItem('isEditingBirthApplication', 'true');
+        localStorage.setItem('editingApplicationId', applicationId);
+        localStorage.setItem('currentApplicationId', applicationId);
+        
+ 
+        localStorage.setItem('maritalStatus', status);
+        
+    
+        localStorage.setItem('modifyingApplication', JSON.stringify({
+          id: applicationId,
+          type: 'Birth Certificate - Delayed Registration',
+          subtype: 'Below 18',
+          documentStatus: status,
+          uploadedFiles: uploadedFiles,
+          timestamp: new Date().toISOString()
+        }));
+
+
+        const applications = JSON.parse(localStorage.getItem('applications') || '[]');
+        const appIndex = applications.findIndex(app => app.id === applicationId);
+        
+        if (appIndex >= 0) {
+
+          applications[appIndex] = {
+            ...applications[appIndex],
+            formData: modifyApplicationState.formData,
+            uploadedFiles: uploadedFiles,
+            documentStatus: status,
+            status: applications[appIndex].status || 'In Progress',
+            lastModified: new Date().toISOString(),
+            isBeingModified: true
+          };
+          
+          localStorage.setItem('applications', JSON.stringify(applications));
+        }
+
+        console.log('Navigating back with modify state:', modifyApplicationState);
+        
+       
+        navigate('/BirthCertificateForm', { 
+          state: modifyApplicationState,
+          replace: false 
+        });
+        
+      } catch (error) {
+        console.error('Error saving modify state:', error);
+        showNotification('Error saving current state. Some data may be lost.', 'warning');
+
+        navigate('/BirthCertificateForm', { 
+          state: { 
+            applicationId: applicationId,
+            isEditing: true,
+            editingApplicationId: applicationId,
+            formData: formData,
+            documentStatus: status
+          } 
+        });
+      }
+    }}
+    className="BackButtonDelayedAbove18"
+    disabled={isLoading}
+  >
+    Back
+  </Button>
                 <Button
                   variant="contained"
                   color="primary"

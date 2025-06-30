@@ -269,11 +269,12 @@ const uiTitle = uiTitleMap[selectedKind] || uiTitleMap['Copy'];
             navigate('/SexDobCorrection');
           } else if (selectedKind === 'First Name') {
             navigate('/FirstNameCorrection');
-          } else {
+          } 
+          else {
             navigate('/BirthApplicationSummary');
           }
         } else {
-          navigate('/BirthApplicationSummary');
+          navigate('/CTCBirthCertificate');
         }
       }, 1000);
 
