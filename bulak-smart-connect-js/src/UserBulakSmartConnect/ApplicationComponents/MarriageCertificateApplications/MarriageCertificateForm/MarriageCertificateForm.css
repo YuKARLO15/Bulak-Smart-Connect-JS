@@ -129,6 +129,13 @@
   margin-right: 6px;
   cursor: pointer;
   accent-color: #1c4d5a;
+  
+}
+
+.husband-radio-container, .wife-radio-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .husband-error {
