@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { documentApplicationService } from '../../services/documentApplicationService';
 import './AdminAffidavitDetails.css';
+import { useAuth } from '../../context/AuthContext';
 
 const AdminBirthAffidavitPreviewPage = ({ applicationId, currentUser }) => {
   const [formData, setFormData] = useState({});
@@ -15,9 +16,11 @@ const AdminBirthAffidavitPreviewPage = ({ applicationId, currentUser }) => {
   const [registrationType, setRegistrationType] = useState('self');
   const [parentStatus, setParentStatus] = useState('married');
   const [maritalStatus, setMaritalStatus] = useState('single');
+ const { user, hasRole } = useAuth();
 
-  const canEdit = currentUser?.role === 'super admin' || currentUser?.role === 'admin';
-  const canView = canEdit;
+  // Updated permission checks using AuthContext
+  const canEdit = hasRole('super_admin') || hasRole('admin') ;
+  const canView =  hasRole('super_admin') || hasRole('admin') || hasRole('staff');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -190,7 +193,7 @@ const AdminBirthAffidavitPreviewPage = ({ applicationId, currentUser }) => {
                     onClick={() => { setIsEditMode(true); setSuccess(''); setError(''); }}
                     style={{
                       padding: '8px 16px',
-                      backgroundColor: '#0066cc',
+                      backgroundColor: '#184a5b',
                       color: 'white',
                       border: 'none',
                       borderRadius: '4px',
@@ -205,7 +208,7 @@ const AdminBirthAffidavitPreviewPage = ({ applicationId, currentUser }) => {
                       onClick={handleSave}
                       style={{
                         padding: '8px 16px',
-                        backgroundColor: '#28a745',
+                        backgroundColor: '#184a5b',
                         color: 'white',
                         border: 'none',
                         borderRadius: '4px',
