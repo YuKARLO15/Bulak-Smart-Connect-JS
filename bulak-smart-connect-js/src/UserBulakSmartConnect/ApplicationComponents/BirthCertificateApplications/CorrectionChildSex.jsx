@@ -1,6 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Box, Button, Checkbox, FormControlLabel, Grid, Typography, Alert, Paper, Snackbar, CircularProgress } from '@mui/material';
+import {
+  Box,
+  Button,
+  Checkbox,
+  FormControlLabel,
+  Grid,
+  Typography,
+  Alert,
+  Paper,
+  Snackbar,
+  CircularProgress,
+} from '@mui/material';
 import FileUpload from '../FileUpload';
 import './CorrectionChildSex.css';
 import NavBar from '../../../NavigationComponents/NavSide';
@@ -49,81 +60,76 @@ const SexDobCorrection = () => {
   const [applicationId, setApplicationId] = useState(null);
   const [backendApplicationCreated, setBackendApplicationCreated] = useState(false);
   const [uploadedDocumentsCount, setUploadedDocumentsCount] = useState(0);
-  
-  const isEditing = location.state?.isEditing || 
-                    localStorage.getItem('isEditingBirthApplication') === 'true';
 
-  // Show snackbar notification
+  const isEditing =
+    location.state?.isEditing || localStorage.getItem('isEditingBirthApplication') === 'true';
+
   const showNotification = (message, severity = 'info') => {
     setSnackbar({
       open: true,
       message,
-      severity
+      severity,
     });
   };
 
-  // Close snackbar
   const handleCloseSnackbar = () => {
     setSnackbar(prev => ({ ...prev, open: false }));
   };
 
-  // Create application in backend
   const createBackendApplication = async () => {
     try {
-      console.log("Creating application in backend...");
-      
-      // Get current application ID from localStorage or create a new one
+      console.log('Creating application in backend...');
+
       const currentId = localStorage.getItem('currentApplicationId');
       let appId = currentId;
-      
+
       if (!appId) {
         appId = 'BC-' + Date.now().toString().slice(-6);
-        console.log("Generated new application ID:", appId);
+        console.log('Generated new application ID:', appId);
         localStorage.setItem('currentApplicationId', appId);
       }
-      
+
       setApplicationId(appId);
 
-      // Prepare data for backend
       const backendApplicationData = {
         applicationType: 'Birth Certificate',
         applicationSubtype: 'Correction - Sex/Date of Birth',
         applicantName: `${formData.firstName || ''} ${formData.lastName || ''}`,
         applicantDetails: JSON.stringify({
-          ...formData, 
+          ...formData,
           correctionOptions: selectedOptions,
-          isMarried: isMarried
+          isMarried: isMarried,
         }),
         formData: {
-          ...formData, 
+          ...formData,
           correctionOptions: selectedOptions,
-          isMarried: isMarried
+          isMarried: isMarried,
         },
-        status: 'PENDING'
+        status: 'PENDING',
       };
 
-      console.log("Creating application with data:", backendApplicationData);
-      
-      // Call API to create application
+      console.log('Creating application with data:', backendApplicationData);
+
       const response = await documentApplicationService.createApplication(backendApplicationData);
-      console.log("Backend created application:", response);
-      
-      // Store the backend ID
+      console.log('Backend created application:', response);
+
       if (response && response.id) {
         localStorage.setItem('currentApplicationId', response.id);
         setApplicationId(response.id);
         setBackendApplicationCreated(true);
       }
-      
+
       return response;
     } catch (error) {
-      console.error("Failed to create application in backend:", error);
-      showNotification(`Failed to register application: ${error.message}. Please try again.`, "error");
+      console.error('Failed to create application in backend:', error);
+      showNotification(
+        `Failed to register application: ${error.message}. Please try again.`,
+        'error'
+      );
       return null;
     }
   };
 
-  // Update uploaded documents count when uploadedFiles changes
   useEffect(() => {
     const count = Object.values(uploadedFiles).filter(Boolean).length;
     setUploadedDocumentsCount(count);
@@ -131,38 +137,34 @@ const SexDobCorrection = () => {
   }, [uploadedFiles]);
 
   useEffect(() => {
-    // Load data when component mounts
     const loadData = async () => {
       try {
         setIsInitializing(true);
-        
-        // Load application data
+
         if (isEditing) {
-          console.log("Loading data for editing...");
+          console.log('Loading data for editing...');
           const editingId = localStorage.getItem('editingApplicationId');
-          console.log("Editing application ID:", editingId);
-          
+          console.log('Editing application ID:', editingId);
+
           if (editingId) {
             setApplicationId(editingId);
-            
-            // Check if this application exists in backend
+
             try {
               const backendApp = await documentApplicationService.getApplication(editingId);
               if (backendApp) {
                 setBackendApplicationCreated(true);
-                console.log("Application exists in backend:", backendApp);
+                console.log('Application exists in backend:', backendApp);
               }
             } catch (error) {
-              console.warn("Application may not exist in backend:", error);
+              console.warn('Application may not exist in backend:', error);
             }
           }
-          
-          // Get applications from localStorage
+
           const applications = JSON.parse(localStorage.getItem('applications') || '[]');
           const applicationToEdit = applications.find(app => app.id === editingId);
-          
+
           if (applicationToEdit) {
-            console.log("Found application to edit:", applicationToEdit);
+            console.log('Found application to edit:', applicationToEdit);
             if (applicationToEdit.formData) {
               if (applicationToEdit.formData.correctionOptions) {
                 setSelectedOptions(applicationToEdit.formData.correctionOptions);
@@ -176,7 +178,6 @@ const SexDobCorrection = () => {
               setUploadedFiles(applicationToEdit.uploadedFiles || {});
             }
           } else {
-            // Fallback to direct form data if available
             const savedFormData = localStorage.getItem('birthCertificateApplication');
             if (savedFormData) {
               const parsedData = JSON.parse(savedFormData);
@@ -190,37 +191,33 @@ const SexDobCorrection = () => {
               if (parsedData.uploadedFiles) {
                 setUploadedFiles(parsedData.uploadedFiles || {});
               }
-              console.log("Loaded form data from birthCertificateApplication");
+              console.log('Loaded form data from birthCertificateApplication');
             }
           }
         } else {
-          // If not editing, check for current application data
           const currentId = localStorage.getItem('currentApplicationId');
           if (currentId) {
             setApplicationId(currentId);
-            
-            // Check if this application exists in backend
+
             try {
               const backendApp = await documentApplicationService.getApplication(currentId);
               if (backendApp) {
                 setBackendApplicationCreated(true);
-                console.log("Application exists in backend:", backendApp);
+                console.log('Application exists in backend:', backendApp);
               }
             } catch (error) {
-              console.warn("Application may not exist in backend:", error);
-              
-              // If we have form data but no backend application, automatically create it
+              console.warn('Application may not exist in backend:', error);
+
               const currentApplicationData = localStorage.getItem('birthCertificateApplication');
               if (currentApplicationData) {
                 const parsedData = JSON.parse(currentApplicationData);
                 setFormData(parsedData);
-                
-                // Auto-create backend application if needed
+
                 await createBackendApplication();
               }
             }
           }
-          
+
           const currentApplicationData = localStorage.getItem('birthCertificateApplication');
           if (currentApplicationData) {
             const parsedData = JSON.parse(currentApplicationData);
@@ -236,27 +233,25 @@ const SexDobCorrection = () => {
             }
           }
         }
-        
-        // Check storage usage
+
         const usage = localStorageManager.getCurrentUsage();
         console.log(`📊 Current storage usage: ${usage.percentage.toFixed(1)}%`);
-        
+
         if (usage.isNearFull) {
           console.warn('⚠️ localStorage is getting full, performing cleanup...');
           await localStorageManager.performCleanup(0.2);
         }
       } catch (error) {
-        console.error("Error during initialization:", error);
-        showNotification("Error loading application data", "error");
+        console.error('Error during initialization:', error);
+        showNotification('Error loading application data', 'error');
       } finally {
         setIsInitializing(false);
       }
     };
-    
+
     loadData();
   }, [isEditing]);
 
-  // Function to convert data URL to File object
   function dataURLtoFile(dataurl, filename, type) {
     try {
       const arr = dataurl.split(',');
@@ -279,34 +274,31 @@ const SexDobCorrection = () => {
       ...prev,
       [name]: checked,
     }));
-    
-    // Update formData with selected options
+
     setFormData(prev => ({
       ...prev,
       correctionOptions: {
-        ...prev.correctionOptions || {},
-        [name]: checked
-      }
+        ...(prev.correctionOptions || {}),
+        [name]: checked,
+      },
     }));
   };
 
   const handleFileUpload = async (label, isUploaded, fileDataObj) => {
-    // Create application if needed before uploading files
     if (!backendApplicationCreated && isUploaded) {
       setIsLoading(true);
       const createdApp = await createBackendApplication();
       setIsLoading(false);
-      
+
       if (!createdApp) {
-        showNotification("Failed to register application. Cannot upload files.", "error");
+        showNotification('Failed to register application. Cannot upload files.', 'error');
         return;
       }
     }
-    
-    // Update the uploadedFiles state
+
     setUploadedFiles(prevState => {
       const newState = { ...prevState, [label]: isUploaded };
-      console.log("Updated uploadedFiles:", newState);
+      console.log('Updated uploadedFiles:', newState);
       return newState;
     });
 
@@ -316,62 +308,58 @@ const SexDobCorrection = () => {
         [label]: fileDataObj,
       }));
 
-      // === Upload to backend ===
       try {
         const currentAppId = applicationId || localStorage.getItem('currentApplicationId');
         if (!currentAppId) {
-          showNotification("Application ID is missing. Cannot upload file.", "error");
+          showNotification('Application ID is missing. Cannot upload file.', 'error');
           return;
         }
-        
-        console.log("Application ID:", currentAppId);
-        console.log("Uploading file:", fileDataObj.name);
-        
+
+        console.log('Application ID:', currentAppId);
+        console.log('Uploading file:', fileDataObj.name);
+
         const file = dataURLtoFile(fileDataObj.data, fileDataObj.name, fileDataObj.type);
-        
-        // Log the URL that will be called
+
         const uploadUrl = `/document-applications/${currentAppId}/files`;
-        console.log("Uploading to URL:", uploadUrl);
-        
+        console.log('Uploading to URL:', uploadUrl);
+
         const response = await documentApplicationService.uploadFile(currentAppId, file, label);
-        console.log("Upload response:", response);
-        
-        showNotification(`"${label}" uploaded successfully!`, "success");
-        
+        console.log('Upload response:', response);
+
+        showNotification(`"${label}" uploaded successfully!`, 'success');
       } catch (error) {
         console.error(`Failed to upload "${label}":`, error);
-        
-        // Show detailed error information
+
         if (error.response) {
-          console.error("Server response:", error.response.status, error.response.data);
-          
-          // If error is 404 (application not found), try to create it and retry upload
+          console.error('Server response:', error.response.status, error.response.data);
+
           if (error.response.status === 404) {
-            showNotification("Application not found. Creating new application...", "info");
+            showNotification('Application not found. Creating new application...', 'info');
             const createdApp = await createBackendApplication();
             if (createdApp) {
-              // Retry upload
               try {
                 const retryResponse = await documentApplicationService.uploadFile(
-                  createdApp.id, 
-                  dataURLtoFile(fileDataObj.data, fileDataObj.name, fileDataObj.type), 
+                  createdApp.id,
+                  dataURLtoFile(fileDataObj.data, fileDataObj.name, fileDataObj.type),
                   label
                 );
-                console.log("Retry upload response:", retryResponse);
-                showNotification(`"${label}" uploaded successfully!`, "success");
+                console.log('Retry upload response:', retryResponse);
+                showNotification(`"${label}" uploaded successfully!`, 'success');
                 return;
               } catch (retryError) {
-                console.error("Retry upload failed:", retryError);
+                console.error('Retry upload failed:', retryError);
               }
             }
           }
-          
-          showNotification(`Failed to upload "${label}": ${error.response.data?.message || error.message}`, "error");
+
+          showNotification(
+            `Failed to upload "${label}": ${error.response.data?.message || error.message}`,
+            'error'
+          );
         } else {
-          showNotification(`Failed to upload "${label}": ${error.message}`, "error");
+          showNotification(`Failed to upload "${label}": ${error.message}`, 'error');
         }
-        
-        // Revert the upload state on error
+
         setUploadedFiles(prevState => ({
           ...prevState,
           [label]: false,
@@ -387,7 +375,6 @@ const SexDobCorrection = () => {
   };
 
   const isMandatoryComplete = () => {
-    // Check all mandatory documents
     const allMandatoryDocsUploaded = mandatoryDocuments.every(doc => {
       const isUploaded = uploadedFiles[doc] === true;
       if (!isUploaded) {
@@ -396,44 +383,42 @@ const SexDobCorrection = () => {
       return isUploaded;
     });
 
-    // Check if Marriage Certificate is uploaded if isMarried is true
     const isMarriageCertComplete = !isMarried || uploadedFiles['Marriage Certificate'] === true;
-    
+
     if (isMarried && !isMarriageCertComplete) {
-      console.log("Missing Marriage Certificate");
+      console.log('Missing Marriage Certificate');
     }
 
-    // Check if any options are selected
     const isAnyOptionSelected = Object.values(selectedOptions).some(val => val);
     if (!isAnyOptionSelected) {
-      console.log("No correction options selected");
+      console.log('No correction options selected');
     }
 
-    // For debugging:
     if (allMandatoryDocsUploaded && isMarriageCertComplete && isAnyOptionSelected) {
-      console.log("All documents uploaded and at least one option selected. Button should be enabled.");
+      console.log(
+        'All documents uploaded and at least one option selected. Button should be enabled.'
+      );
       return true;
     } else {
-      console.log("Missing documents or no options selected. Button should be disabled.");
+      console.log('Missing documents or no options selected. Button should be disabled.');
       return false;
     }
   };
-  
-  // Force enable submit button if at least one document is uploaded and one option is selected
+
   const isAnyOptionSelected = Object.values(selectedOptions).some(val => val);
   const forceEnableSubmit = uploadedDocumentsCount > 0 && isAnyOptionSelected;
 
-  const mapStatusForBackend = (frontendStatus) => {
+  const mapStatusForBackend = frontendStatus => {
     const statusMap = {
-      'Submitted': 'Pending',
-      'SUBMITTED': 'Pending',
-      'Pending': 'Pending',
-      'Approved': 'Approved',
-      'Rejected': 'Rejected',
-      'Declined': 'Rejected',
-      'Ready for Pickup': 'Ready for Pickup'
+      Submitted: 'Pending',
+      SUBMITTED: 'Pending',
+      Pending: 'Pending',
+      Approved: 'Approved',
+      Rejected: 'Rejected',
+      Declined: 'Rejected',
+      'Ready for Pickup': 'Ready for Pickup',
     };
-    
+
     return statusMap[frontendStatus] || 'Pending';
   };
 
@@ -441,25 +426,22 @@ const SexDobCorrection = () => {
     try {
       setIsLoading(true);
       setIsSubmitted(true);
-      
-      // Get the application ID
+
       const currentAppId = applicationId || localStorage.getItem('currentApplicationId');
       if (!currentAppId) {
-        console.error("No application ID found");
-        showNotification("Application ID is missing. Cannot proceed.", "error");
+        console.error('No application ID found');
+        showNotification('Application ID is missing. Cannot proceed.', 'error');
         setIsLoading(false);
         setIsSubmitted(false);
         return;
       }
 
-      // Check storage usage before saving
       const usage = localStorageManager.getCurrentUsage();
       if (usage.isCritical) {
         console.warn('Storage critical, performing cleanup before save...');
         await localStorageManager.performCleanup(0.4);
       }
 
-      // Backend data preparation
       const backendData = {
         status: mapStatusForBackend('SUBMITTED'),
         statusMessage: 'Application submitted with all required documents',
@@ -467,53 +449,53 @@ const SexDobCorrection = () => {
         applicationType: 'Birth Certificate',
         applicationSubtype: 'Correction - Sex/Date of Birth',
         correctionOptions: selectedOptions,
-        isMarried: isMarried
+        isMarried: isMarried,
       };
-      
-      // Update the backend application
+
       try {
-        const response = await documentApplicationService.updateApplication(currentAppId, backendData);
+        const response = await documentApplicationService.updateApplication(
+          currentAppId,
+          backendData
+        );
         console.log('Application status updated in backend:', response);
       } catch (error) {
         console.error('Failed to update backend status:', error);
-        showNotification("Warning: Failed to update backend status. Continuing with local update.", "warning");
-        // Continue with local update even if backend fails
+        showNotification(
+          'Warning: Failed to update backend status. Continuing with local update.',
+          'warning'
+        );
       }
 
-      // Update localStorage with auto-cleanup support
       const updatedFormData = {
         ...formData,
         uploadedFiles: fileData,
         correctionOptions: selectedOptions,
         isMarried: isMarried,
         status: 'Pending',
-        submittedAt: new Date().toISOString()
+        submittedAt: new Date().toISOString(),
       };
 
-      // Get current applications
       const applications = JSON.parse(localStorage.getItem('applications') || '[]');
       const appIndex = applications.findIndex(app => app.id === currentAppId);
 
       if (appIndex >= 0) {
-        // Update existing application
         applications[appIndex] = {
           ...applications[appIndex],
           formData: {
             ...applications[appIndex].formData,
-            ...updatedFormData
+            ...updatedFormData,
           },
           uploadedFiles: fileData,
           correctionOptions: selectedOptions,
           isMarried: isMarried,
           status: 'Pending',
-          lastUpdated: new Date().toISOString()
+          lastUpdated: new Date().toISOString(),
         };
       } else {
-        // If not found, add as new application
         applications.push({
           id: currentAppId,
           type: 'Birth Certificate',
-          applicationType: 'Correction',  
+          applicationType: 'Correction',
           applicationSubtype: 'Correction - Sex/Date of Birth',
           date: new Date().toLocaleDateString(),
           status: 'Pending',
@@ -522,48 +504,49 @@ const SexDobCorrection = () => {
           uploadedFiles: fileData,
           correctionOptions: selectedOptions,
           isMarried: isMarried,
-          lastUpdated: new Date().toISOString()
+          lastUpdated: new Date().toISOString(),
         });
       }
 
-      // Use safe storage methods
       const applicationsStored = await localStorageManager.safeSetItem(
-        'applications', 
+        'applications',
         JSON.stringify(applications)
       );
-      
+
       const formDataStored = await localStorageManager.safeSetItem(
-        'birthCertificateApplication', 
+        'birthCertificateApplication',
         JSON.stringify(updatedFormData)
       );
 
       if (!applicationsStored || !formDataStored) {
-        showNotification('Application submitted successfully! Note: Some data may not be saved locally due to storage limitations.', 'warning');
+        showNotification(
+          'Application submitted successfully! Note: Some data may not be saved locally due to storage limitations.',
+          'warning'
+        );
       } else {
         showNotification('Application submitted successfully!', 'success');
       }
 
-      // Dispatch storage events
       window.dispatchEvent(new Event('storage'));
-      window.dispatchEvent(new CustomEvent('customStorageUpdate', {
-        detail: {
-          id: currentAppId,
-          action: 'updated',
-          type: 'Birth Certificate',
-          subtype: 'Correction - Sex/Date of Birth'
-        }
-      }));
+      window.dispatchEvent(
+        new CustomEvent('customStorageUpdate', {
+          detail: {
+            id: currentAppId,
+            action: 'updated',
+            type: 'Birth Certificate',
+            subtype: 'Correction - Sex/Date of Birth',
+          },
+        })
+      );
 
       console.log('Application submitted successfully');
-      
-      // Navigate to summary page after a short delay
+
       setTimeout(() => {
         navigate('/BirthApplicationSummary');
       }, 2000);
-
     } catch (error) {
       console.error('Error submitting application:', error);
-      showNotification(`Error submitting application: ${error.message}`, "error");
+      showNotification(`Error submitting application: ${error.message}`, 'error');
       setIsLoading(false);
       setIsSubmitted(false);
     } finally {
@@ -622,10 +605,10 @@ const SexDobCorrection = () => {
               Mandatory Documents:
             </Typography>
             {mandatoryDocuments.map((doc, index) => (
-              <FileUpload 
-                key={index} 
-                label={doc} 
-                onUpload={(isUploaded, fileDataObj) => 
+              <FileUpload
+                key={index}
+                label={doc}
+                onUpload={(isUploaded, fileDataObj) =>
                   handleFileUpload(doc, isUploaded, fileDataObj)
                 }
                 required={true}
@@ -640,13 +623,13 @@ const SexDobCorrection = () => {
             </Typography>
             <FormControlLabel
               control={
-                <Checkbox 
-                  checked={isMarried} 
+                <Checkbox
+                  checked={isMarried}
                   onChange={e => {
                     setIsMarried(e.target.checked);
                     setFormData(prev => ({
                       ...prev,
-                      isMarried: e.target.checked
+                      isMarried: e.target.checked,
                     }));
                   }}
                   disabled={isLoading}
@@ -656,20 +639,20 @@ const SexDobCorrection = () => {
               className="MarriedCheckbox"
             />
             {isMarried && (
-              <FileUpload 
-                label="Marriage Certificate" 
-                onUpload={(isUploaded, fileDataObj) => 
-                  handleFileUpload("Marriage Certificate", isUploaded, fileDataObj)
+              <FileUpload
+                label="Marriage Certificate"
+                onUpload={(isUploaded, fileDataObj) =>
+                  handleFileUpload('Marriage Certificate', isUploaded, fileDataObj)
                 }
                 required={true}
                 disabled={isLoading}
               />
             )}
             {supportingDocuments.map((doc, index) => (
-              <FileUpload 
-                key={index} 
-                label={doc} 
-                onUpload={(isUploaded, fileDataObj) => 
+              <FileUpload
+                key={index}
+                label={doc}
+                onUpload={(isUploaded, fileDataObj) =>
                   handleFileUpload(doc, isUploaded, fileDataObj)
                 }
                 disabled={isLoading}
@@ -682,12 +665,12 @@ const SexDobCorrection = () => {
               Additional Requirements For Document Correction Of Sex:
             </Typography>
             {addiotionalDocuments.map((doc, index) => (
-              <FileUpload 
-                key={index} 
-                label={doc} 
-                onUpload={(isUploaded, fileDataObj) => 
+              <FileUpload
+                key={index}
+                label={doc}
+                onUpload={(isUploaded, fileDataObj) =>
                   handleFileUpload(doc, isUploaded, fileDataObj)
-                } 
+                }
                 required={selectedOptions.Sex}
                 disabled={isLoading}
               />
@@ -717,109 +700,100 @@ const SexDobCorrection = () => {
           )}
 
           <Box className="ButtonContainerCorrection">
-<Button
-  variant="outlined"
-  color="primary"
-  onClick={() => {
-    // Prepare comprehensive application state for modification
-    const modifyApplicationState = {
-      // Application identification
-      applicationId: applicationId,
-      isEditing: true, // Always set to true when modifying
-      editingApplicationId: applicationId,
-      
-      // Current form data with all modifications
-      formData: {
-        ...formData,
-        correctionOptions: selectedOptions,
-        isMarried: isMarried,
-        uploadedFiles: uploadedFiles,
-        fileData: fileData,
-        lastModified: new Date().toISOString()
-      },
-      
-      // File states
-      uploadedFiles: uploadedFiles,
-      fileData: fileData,
-      
-      // Correction specific data
-      correctionOptions: selectedOptions,
-      isMarried: isMarried,
-      
-      // Metadata
-      modifyMode: true,
-      preserveData: true,
-      backFromCorrection: true
-    };
+            <Button
+              variant="outlined"
+              color="primary"
+              onClick={() => {
+                const modifyApplicationState = {
+                  applicationId: applicationId,
+                  isEditing: true,
+                  editingApplicationId: applicationId,
 
-    // Update localStorage to maintain state
-    try {
-      // Save the current correction state
-      localStorage.setItem('birthCertificateApplication', JSON.stringify(modifyApplicationState.formData));
-      
-      // Mark as editing mode
-      localStorage.setItem('isEditingBirthApplication', 'true');
-      localStorage.setItem('editingApplicationId', applicationId);
-      localStorage.setItem('currentApplicationId', applicationId);
-      
-      // Save modification state
-      localStorage.setItem('modifyingApplication', JSON.stringify({
-        id: applicationId,
-        type: 'Birth Certificate - Correction',
-        correctionOptions: selectedOptions,
-        isMarried: isMarried,
-        uploadedFiles: uploadedFiles,
-        timestamp: new Date().toISOString()
-      }));
+                  formData: {
+                    ...formData,
+                    correctionOptions: selectedOptions,
+                    isMarried: isMarried,
+                    uploadedFiles: uploadedFiles,
+                    fileData: fileData,
+                    lastModified: new Date().toISOString(),
+                  },
 
-      // Update the applications array with current state
-      const applications = JSON.parse(localStorage.getItem('applications') || '[]');
-      const appIndex = applications.findIndex(app => app.id === applicationId);
-      
-      if (appIndex >= 0) {
-        // Update existing application with current modifications
-        applications[appIndex] = {
-          ...applications[appIndex],
-          formData: modifyApplicationState.formData,
-          uploadedFiles: uploadedFiles,
-          correctionOptions: selectedOptions,
-          isMarried: isMarried,
-          status: applications[appIndex].status || 'In Progress',
-          lastModified: new Date().toISOString(),
-          isBeingModified: true
-        };
-        
-        localStorage.setItem('applications', JSON.stringify(applications));
-      }
+                  uploadedFiles: uploadedFiles,
+                  fileData: fileData,
 
-      console.log('Navigating back with modify state:', modifyApplicationState);
-      
-      // Navigate back to the form with modify state
-      navigate('/RequestACopyBirthCertificate', { 
-        state: modifyApplicationState,
-        replace: false // Don't replace history, allow back navigation
-      });
-      
-    } catch (error) {
-      console.error('Error saving modify state:', error);
-      showNotification('Error saving current state. Some data may be lost.', 'warning');
-      
-      // Fallback navigation with basic state
-      navigate('/RequestACopyBirthCertificate', { 
-        state: { 
-          applicationId: applicationId,
-          isEditing: true,
-          editingApplicationId: applicationId,
-          formData: formData
-        } 
-      });
-    }
-  }}
-  className="BackButtonCorrection"
-  disabled={isLoading}
->
-  Back
-</Button>
+                  correctionOptions: selectedOptions,
+                  isMarried: isMarried,
+
+                  modifyMode: true,
+                  preserveData: true,
+                  backFromCorrection: true,
+                };
+
+                try {
+                  localStorage.setItem(
+                    'birthCertificateApplication',
+                    JSON.stringify(modifyApplicationState.formData)
+                  );
+
+                  localStorage.setItem('isEditingBirthApplication', 'true');
+                  localStorage.setItem('editingApplicationId', applicationId);
+                  localStorage.setItem('currentApplicationId', applicationId);
+
+                  localStorage.setItem(
+                    'modifyingApplication',
+                    JSON.stringify({
+                      id: applicationId,
+                      type: 'Birth Certificate - Correction',
+                      correctionOptions: selectedOptions,
+                      isMarried: isMarried,
+                      uploadedFiles: uploadedFiles,
+                      timestamp: new Date().toISOString(),
+                    })
+                  );
+
+                  const applications = JSON.parse(localStorage.getItem('applications') || '[]');
+                  const appIndex = applications.findIndex(app => app.id === applicationId);
+
+                  if (appIndex >= 0) {
+                    applications[appIndex] = {
+                      ...applications[appIndex],
+                      formData: modifyApplicationState.formData,
+                      uploadedFiles: uploadedFiles,
+                      correctionOptions: selectedOptions,
+                      isMarried: isMarried,
+                      status: applications[appIndex].status || 'In Progress',
+                      lastModified: new Date().toISOString(),
+                      isBeingModified: true,
+                    };
+
+                    localStorage.setItem('applications', JSON.stringify(applications));
+                  }
+
+                  console.log('Navigating back with modify state:', modifyApplicationState);
+
+                  navigate('/RequestACopyBirthCertificate', {
+                    state: modifyApplicationState,
+                    replace: false,
+                  });
+                } catch (error) {
+                  console.error('Error saving modify state:', error);
+                  showNotification('Error saving current state. Some data may be lost.', 'warning');
+
+                  navigate('/RequestACopyBirthCertificate', {
+                    state: {
+                      applicationId: applicationId,
+                      isEditing: true,
+                      editingApplicationId: applicationId,
+                      formData: formData,
+                    },
+                  });
+                }
+              }}
+              className="BackButtonCorrection"
+              disabled={isLoading}
+            >
+              Back
+            </Button>
             <Button
               variant="contained"
               color="primary"
@@ -827,24 +801,19 @@ const SexDobCorrection = () => {
               onClick={handleSubmit}
               className="SubmitButtonCorrection"
             >
-              {isLoading ? "Submitting..." : "Submit Application"}
+              {isLoading ? 'Submitting...' : 'Submit Application'}
             </Button>
           </Box>
         </Paper>
       )}
 
-      {/* Snackbar for notifications */}
       <Snackbar
         open={snackbar.open}
         autoHideDuration={6000}
         onClose={handleCloseSnackbar}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
       >
-        <Alert 
-          onClose={handleCloseSnackbar} 
-          severity={snackbar.severity}
-          variant="filled"
-        >
+        <Alert onClose={handleCloseSnackbar} severity={snackbar.severity} variant="filled">
           {snackbar.message}
         </Alert>
       </Snackbar>

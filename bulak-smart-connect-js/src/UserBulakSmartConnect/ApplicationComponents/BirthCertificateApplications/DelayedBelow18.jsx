@@ -22,7 +22,7 @@ const mandatoryDocuments = [
 const Below18Registration = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [motherNotPresent, setMotherNotPresent] = useState(false);
-  const [maritalStatus, setMaritalStatus] = useState(''); // "marital" or "non-marital"
+  const [maritalStatus, setMaritalStatus] = useState(''); 
   const [uploadedFiles, setUploadedFiles] = useState({});
   const [fileData, setFileData] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -641,14 +641,13 @@ const Below18Registration = () => {
     variant="outlined"
     color="primary"
     onClick={() => {
-      // Prepare comprehensive application state for modification
+
       const modifyApplicationState = {
-        // Application identification
+    
         applicationId: applicationId,
-        isEditing: true, // Always set to true when modifying
+        isEditing: true, 
         editingApplicationId: applicationId,
-        
-        // Current form data with all modifications
+ 
         formData: {
           ...formData,
           documentStatus: status,
@@ -657,35 +656,35 @@ const Below18Registration = () => {
           lastModified: new Date().toISOString()
         },
         
-        // File states
+      
         uploadedFiles: uploadedFiles,
         fileData: fileData,
         
-        // Delayed registration specific data
+    
         documentStatus: status,
-        maritalStatus: status, // Keep both for compatibility
+        maritalStatus: status, 
         
-        // Metadata
+      
         modifyMode: true,
         preserveData: true,
         backFromDelayedRegistration: true,
         applicationType: 'Delayed Registration - Above 18'
       };
 
-      // Update localStorage to maintain state
+  
       try {
-        // Save the current application state
+
         localStorage.setItem('birthCertificateApplication', JSON.stringify(modifyApplicationState.formData));
         
-        // Mark as editing mode
+  
         localStorage.setItem('isEditingBirthApplication', 'true');
         localStorage.setItem('editingApplicationId', applicationId);
         localStorage.setItem('currentApplicationId', applicationId);
         
-        // Preserve marital status for the form
+ 
         localStorage.setItem('maritalStatus', status);
         
-        // Save modification state
+    
         localStorage.setItem('modifyingApplication', JSON.stringify({
           id: applicationId,
           type: 'Birth Certificate - Delayed Registration',
@@ -695,12 +694,12 @@ const Below18Registration = () => {
           timestamp: new Date().toISOString()
         }));
 
-        // Update the applications array with current state
+
         const applications = JSON.parse(localStorage.getItem('applications') || '[]');
         const appIndex = applications.findIndex(app => app.id === applicationId);
         
         if (appIndex >= 0) {
-          // Update existing application with current modifications
+
           applications[appIndex] = {
             ...applications[appIndex],
             formData: modifyApplicationState.formData,
@@ -716,17 +715,16 @@ const Below18Registration = () => {
 
         console.log('Navigating back with modify state:', modifyApplicationState);
         
-        // Navigate back to BirthCertificateForm with modify state
+       
         navigate('/BirthCertificateForm', { 
           state: modifyApplicationState,
-          replace: false // Don't replace history, allow back navigation
+          replace: false 
         });
         
       } catch (error) {
         console.error('Error saving modify state:', error);
         showNotification('Error saving current state. Some data may be lost.', 'warning');
-        
-        // Fallback navigation with basic state
+
         navigate('/BirthCertificateForm', { 
           state: { 
             applicationId: applicationId,
