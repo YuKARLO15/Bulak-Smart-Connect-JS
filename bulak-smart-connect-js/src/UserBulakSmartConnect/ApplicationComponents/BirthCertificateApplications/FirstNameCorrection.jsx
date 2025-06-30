@@ -637,15 +637,107 @@ const FirstNameCorrection = () => {
           )}
 
           <Box className="ButtonContainerFirstName">
-            <Button
-              variant="outlined"
-              color="primary"
-              onClick={() => navigate(-1)}
-              className="BackButtonFirstName"
-              disabled={isLoading}
-            >
-              Back
-            </Button>
+        <Button
+    variant="outlined"
+    color="primary"
+    onClick={() => {
+      // Prepare comprehensive application state for modification
+      const modifyApplicationState = {
+        // Application identification
+        applicationId: applicationId,
+        isEditing: true, // Always set to true when modifying
+        editingApplicationId: applicationId,
+        
+        // Current form data with all modifications
+        formData: {
+          ...formData,
+          isMarried: isMarried,
+          uploadedFiles: uploadedFiles,
+          fileData: fileData,
+          lastModified: new Date().toISOString()
+        },
+        
+        // File states
+        uploadedFiles: uploadedFiles,
+        fileData: fileData,
+        
+        // Correction specific data
+        isMarried: isMarried,
+        
+        // Metadata
+        modifyMode: true,
+        preserveData: true,
+        backFromCorrection: true,
+        correctionType: 'First Name'
+      };
+
+      // Update localStorage to maintain state
+      try {
+        // Save the current correction state
+        localStorage.setItem('birthCertificateApplication', JSON.stringify(modifyApplicationState.formData));
+        
+        // Mark as editing mode
+        localStorage.setItem('isEditingBirthApplication', 'true');
+        localStorage.setItem('editingApplicationId', applicationId);
+        localStorage.setItem('currentApplicationId', applicationId);
+        
+        // Save modification state
+        localStorage.setItem('modifyingApplication', JSON.stringify({
+          id: applicationId,
+          type: 'Birth Certificate - Correction',
+          correctionType: 'First Name',
+          isMarried: isMarried,
+          uploadedFiles: uploadedFiles,
+          timestamp: new Date().toISOString()
+        }));
+
+        // Update the applications array with current state
+        const applications = JSON.parse(localStorage.getItem('applications') || '[]');
+        const appIndex = applications.findIndex(app => app.id === applicationId);
+        
+        if (appIndex >= 0) {
+          // Update existing application with current modifications
+          applications[appIndex] = {
+            ...applications[appIndex],
+            formData: modifyApplicationState.formData,
+            uploadedFiles: uploadedFiles,
+            isMarried: isMarried,
+            status: applications[appIndex].status || 'In Progress',
+            lastModified: new Date().toISOString(),
+            isBeingModified: true
+          };
+          
+          localStorage.setItem('applications', JSON.stringify(applications));
+        }
+
+        console.log('Navigating back with modify state:', modifyApplicationState);
+        
+        // Navigate back to the form with modify state
+        navigate('/RequestACopyBirthCertificate', { 
+          state: modifyApplicationState,
+          replace: false // Don't replace history, allow back navigation
+        });
+        
+      } catch (error) {
+        console.error('Error saving modify state:', error);
+        showNotification('Error saving current state. Some data may be lost.', 'warning');
+        
+        // Fallback navigation with basic state
+        navigate('/RequestACopyBirthCertificate', { 
+          state: { 
+            applicationId: applicationId,
+            isEditing: true,
+            editingApplicationId: applicationId,
+            formData: formData
+          } 
+        });
+      }
+    }}
+    className="BackButtonFirstName"
+    disabled={isLoading}
+  >
+    Back
+  </Button>
             <Button
               variant="contained"
               color="primary"

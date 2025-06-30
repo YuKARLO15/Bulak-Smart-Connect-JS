@@ -594,15 +594,107 @@ const CorrectionClericalError = () => {
           )}
 
           <Box className="ButtonContainerClerical">
-            <Button
-              variant="outlined"
-              color="primary"
-              onClick={() => navigate(-1)}
-              className="BackButtonClerical"
-              disabled={isLoading}
-            >
-              Back
-            </Button>
+ <Button
+    variant="outlined"
+    color="primary"
+    onClick={() => {
+ 
+      const modifyApplicationState = {
+       
+        applicationId: applicationId,
+        isEditing: true, 
+        editingApplicationId: applicationId,
+        
+    
+        formData: {
+          ...formData,
+          correctionOptions: selectedOptions,
+          uploadedFiles: uploadedFiles,
+          fileData: fileData,
+          lastModified: new Date().toISOString()
+        },
+        
+       
+        uploadedFiles: uploadedFiles,
+        fileData: fileData,
+        
+
+        correctionOptions: selectedOptions,
+        
+  
+        modifyMode: true,
+        preserveData: true,
+        backFromCorrection: true,
+        correctionType: 'Clerical Errors'
+      };
+
+ 
+      try {
+       
+        localStorage.setItem('birthCertificateApplication', JSON.stringify(modifyApplicationState.formData));
+        
+   
+        localStorage.setItem('isEditingBirthApplication', 'true');
+        localStorage.setItem('editingApplicationId', applicationId);
+        localStorage.setItem('currentApplicationId', applicationId);
+        
+   
+        localStorage.setItem('modifyingApplication', JSON.stringify({
+          id: applicationId,
+          type: 'Birth Certificate - Correction',
+          correctionType: 'Clerical Errors',
+          correctionOptions: selectedOptions,
+          uploadedFiles: uploadedFiles,
+          timestamp: new Date().toISOString()
+        }));
+
+  
+        const applications = JSON.parse(localStorage.getItem('applications') || '[]');
+        const appIndex = applications.findIndex(app => app.id === applicationId);
+        
+        if (appIndex >= 0) {
+ 
+          applications[appIndex] = {
+            ...applications[appIndex],
+            formData: modifyApplicationState.formData,
+            uploadedFiles: uploadedFiles,
+            correctionOptions: selectedOptions,
+            status: applications[appIndex].status || 'In Progress',
+            lastModified: new Date().toISOString(),
+            isBeingModified: true
+          };
+          
+          localStorage.setItem('applications', JSON.stringify(applications));
+        }
+
+        console.log('Navigating back with modify state:', modifyApplicationState);
+        
+   
+        navigate('/RequestACopyBirthCertificate', { 
+          state: modifyApplicationState,
+          replace: false 
+        });
+        
+      } catch (error) {
+        console.error('Error saving modify state:', error);
+        showNotification('Error saving current state. Some data may be lost.', 'warning');
+        
+        
+        navigate('/RequestACopyBirthCertificate', { 
+          state: { 
+            applicationId: applicationId,
+            isEditing: true,
+            editingApplicationId: applicationId,
+            formData: formData
+          } 
+        });
+      }
+    }}
+    className="BackButtonClerical"
+    disabled={isLoading}
+  >
+    Back
+  </Button>
             <Button
               variant="contained"
               color="primary"
