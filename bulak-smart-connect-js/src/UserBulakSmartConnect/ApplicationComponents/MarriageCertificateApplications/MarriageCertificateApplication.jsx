@@ -380,10 +380,96 @@ const MarriageCertificateApplication = () => {
     }
   };
 
-  const handleBack = () => {
-    navigate('/MarriageCertificateForm');
+ const handleBack = () => {
+  const modifyApplicationState = {
+    applicationId: applicationId,
+    isEditing: true,
+    editingApplicationId: applicationId,
+    
+    formData: {
+      ...formData,
+      uploadedFiles: uploadedFiles,
+      fileData: fileData,
+      lastModified: new Date().toISOString()
+    },
+    
+    uploadedFiles: uploadedFiles,
+    fileData: fileData,
+    
+    modifyMode: true,
+    preserveData: true,
+    backFromMarriageCertificate: true,
+    applicationType: 'Marriage Certificate Application'
   };
 
+  try {
+    const originalFormData = JSON.parse(localStorage.getItem('marriageFormData') || '{}');
+    
+    const updatedFormData = {
+      ...originalFormData,
+      marriageCertificate: {
+        uploadedFiles: uploadedFiles,
+        fileData: fileData,
+        lastModified: new Date().toISOString()
+      }
+    };
+    
+    localStorage.setItem('marriageFormData', JSON.stringify(updatedFormData));
+    
+    localStorage.setItem('isEditingMarriageForm', 'true');
+    localStorage.setItem('currentEditingApplicationId', applicationId);
+    localStorage.setItem('currentApplicationId', applicationId);
+    localStorage.setItem('marriageApplicationId', applicationId);
+    
+    localStorage.setItem('modifyingApplication', JSON.stringify({
+      id: applicationId,
+      type: 'Marriage Certificate',
+      subtype: 'Marriage Certificate Application',
+      uploadedFiles: uploadedFiles,
+      timestamp: new Date().toISOString()
+    }));
+
+    const applications = JSON.parse(localStorage.getItem('applications') || '[]');
+    const appIndex = applications.findIndex(app => app.id === applicationId);
+    
+    if (appIndex >= 0) {
+      applications[appIndex] = {
+        ...applications[appIndex],
+        formData: updatedFormData,
+        marriageCertificate: {
+          uploadedFiles: uploadedFiles,
+          fileData: fileData
+        },
+        status: applications[appIndex].status || 'In Progress',
+        lastModified: new Date().toISOString(),
+        isBeingModified: true
+      };
+      
+      localStorage.setItem('applications', JSON.stringify(applications));
+    }
+    
+    navigate('/MarriageForm', { 
+      state: {
+        ...modifyApplicationState,
+        preserveOriginalData: true
+      },
+      replace: false
+    });
+    
+  } catch (error) {
+    console.error('Error saving modify state:', error);
+    showNotification('Error saving current state. Some data may be lost.', 'warning');
+    
+    navigate('/MarriageForm', { 
+      state: { 
+        applicationId: applicationId,
+        isEditing: true,
+        editingApplicationId: applicationId,
+        formData: formData
+      } 
+    });
+  }
+};
   const navigateToNextStep = (nextStep, currentFormData) => {
     const existingData = JSON.parse(localStorage.getItem('marriageFormData') || '{}');
     const mergedData = {
