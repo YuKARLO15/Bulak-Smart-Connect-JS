@@ -1507,7 +1507,7 @@
             <tr>
                 <td class="col-md-4">
                         <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>getTodayPendingCount()</code>
+                    <code>getTodayPendingCount(user?: <a href="../entitys/User.html" target="_self">UserEntity</a>)</code>
                 </td>
             </tr>
 
@@ -1521,8 +1521,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="249"
-                                    class="link-to-prism">src/modules/queue/queue.controller.ts:249</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="251"
+                                    class="link-to-prism">src/modules/queue/queue.controller.ts:251</a></div>
                         </td>
                     </tr>
 
@@ -1530,10 +1530,40 @@
             <tr>
                 <td class="col-md-4">
 
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>user</td>
+                                            <td>
+                                                            <code><a href="../entitys/User.html" target="_self" >UserEntity</a></code>
+                                            </td>
+
+                                            <td>
+                                                    Yes
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         <div class="io-description">
                             <b>Returns : </b>    <code>unknown</code>
 
                         </div>
+                            <div class="io-description">
+                                
+                            </div>
                 </td>
             </tr>
         </tbody>
@@ -2022,12 +2052,13 @@ export class QueueController {
   @Post(&#x27;admin/daily-reset&#x27;)
   @UseGuards(JwtAuthGuard)
   async manualDailyReset(@User() user?: UserEntity) {
-    // Only allow admins to trigger manual daily reset
-    if (!user || (!user.roles?.includes[&#x27;admin&#x27;] &amp;&amp; !user.roles?.includes[&#x27;super_admin&#x27;])) {
-      throw new UnauthorizedException(&#x27;Admin access required&#x27;);
+    // Only allows privileged users
+    if (!user || !user.roles?.some(role &#x3D;&gt; [&#x27;admin&#x27;, &#x27;super_admin&#x27;, &#x27;staff&#x27;].includes(role.name))) {
+      console.log(&#x60;Unauthorized reset attempt by user: ${user?.username || &#x27;unknown&#x27;} with roles: ${user?.roles?.map(r &#x3D;&gt; r.name).join(&#x27;, &#x27;) || &#x27;none&#x27;}&#x60;);
+      throw new UnauthorizedException(&#x27;Admin, Super Admin, or Staff privileges required&#x27;);
     }
 
-    console.log(&#x60;Manual daily reset triggered by admin: ${user.username}&#x60;);
+    console.log(&#x60;Manual daily reset triggered by ${user.roles.map(r &#x3D;&gt; r.name).join(&#x27;, &#x27;)}: ${user.username}&#x60;);
     
     try {
       await this.queueSchedulerService.manualDailyReset();
@@ -2036,6 +2067,7 @@ export class QueueController {
         success: true,
         message: &#x27;Daily queue reset completed successfully&#x27;,
         timestamp: new Date(),
+        triggeredBy: user.username
       };
     } catch (error) {
       console.error(&#x27;Error during manual daily reset:&#x27;, error);
@@ -2045,7 +2077,12 @@ export class QueueController {
 
   @Get(&#x27;admin/pending-count&#x27;)
   @UseGuards(JwtAuthGuard)
-  async getTodayPendingCount() {
+  async getTodayPendingCount(@User() user?: UserEntity) {
+    // Only allows privileged users
+    if (!user || !user.roles?.some(role &#x3D;&gt; [&#x27;admin&#x27;, &#x27;super_admin&#x27;, &#x27;staff&#x27;].includes(role.name))) {
+      throw new UnauthorizedException(&#x27;Admin access required&#x27;);
+    }
+
     const count &#x3D; await this.queueSchedulerService.getTodayPendingCount();
     return {
       pendingCount: count,
