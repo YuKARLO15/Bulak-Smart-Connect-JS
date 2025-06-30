@@ -1,44 +1,162 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, Typography, Box } from '@mui/material';
+import { Button, Typography, Box, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import './MarriageLicenseSummary.css';
 import EditIcon from '@mui/icons-material/Edit';
 import CheckIcon from '@mui/icons-material/Check';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import CancelIcon from '@mui/icons-material/Cancel';
+import { documentApplicationService } from '../../../../services/documentApplicationService';
+
 const MarriageLicenseSummary = () => {
   const [formData, setFormData] = useState({});
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
   const [applicationId, setApplicationId] = useState('');
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
   useEffect(() => {
     try {
+      console.log("=== Marriage License Summary - Loading Data ===");
+      
       const currentApplicationId = localStorage.getItem('currentApplicationId');
+      console.log('currentApplicationId from localStorage:', currentApplicationId);
+      
       if (currentApplicationId) {
         setApplicationId(currentApplicationId);
-        console.log('Found currentApplicationId:', currentApplicationId);
+        console.log('Set applicationId from currentApplicationId:', currentApplicationId);
       }
 
-      // Get the marriage form data
       const savedCertificateData = localStorage.getItem('marriageFormData');
+      console.log('marriageFormData from localStorage:', savedCertificateData);
+      
       if (savedCertificateData) {
         const parsedData = JSON.parse(savedCertificateData);
-
-        if (parsedData.applicationId && !currentApplicationId) {
-          setApplicationId(parsedData.applicationId);
-          console.log('Found applicationId in form data:', parsedData.applicationId);
+        console.log('Parsed marriage form data:', parsedData);
+        
+        const possibleId = parsedData.applicationId || parsedData.id || parsedData.appId;
+        console.log('Possible ID from form data:', possibleId);
+        
+        if (possibleId && !currentApplicationId) {
+          setApplicationId(possibleId);
+          console.log('Set applicationId from form data:', possibleId);
         }
 
         setFormData(parsedData);
       }
+
+      const applications = JSON.parse(localStorage.getItem('applications') || '[]');
+      console.log('All applications:', applications);
+      
+      const marriageApps = applications.filter(app => 
+        app.type === 'Marriage License' || 
+        app.type === 'Marriage Certificate' ||
+        app.applicationType === 'MARRIAGE_LICENSE'
+      );
+      console.log('Marriage applications found:', marriageApps);
+      
+      if (marriageApps.length > 0 && !currentApplicationId) {
+        const latestMarriageApp = marriageApps[0];
+        console.log('Using latest marriage app ID:', latestMarriageApp.id);
+        setApplicationId(latestMarriageApp.id);
+      }
+      
     } catch (err) {
       console.error('Error loading form data:', err);
     } finally {
       setLoading(false);
     }
   }, []);
+
+  const handleDeleteApplication = () => {
+    setDeleteDialogOpen(true);
+  };
+
+  const cancelDeleteApplication = () => {
+    setDeleteDialogOpen(false);
+  };
+
+  const confirmDeleteApplication = async () => {
+  try {
+    console.log("=== Attempting to delete marriage application ===");
+    console.log("applicationId state:", applicationId);
+    console.log("formData:", formData);
+    
+    let idToDelete = applicationId || formData.applicationId || formData.id || formData.appId;
+    
+    if (!idToDelete) {
+      const applications = JSON.parse(localStorage.getItem('applications') || '[]');
+      const marriageApps = applications.filter(app => 
+        app.type === 'Marriage License' || 
+        app.type === 'Marriage Certificate' ||
+        app.applicationType === 'MARRIAGE_LICENSE'
+      );
+      
+      if (marriageApps.length > 0) {
+        idToDelete = marriageApps[0].id;
+        console.log("Found ID from applications array:", idToDelete);
+      }
+    }
+    
+    console.log("Final ID to delete:", idToDelete);
+    
+    if (!idToDelete) {
+      console.error("No application ID found to delete");
+      alert("Cannot find application ID to delete. Please try refreshing the page.");
+      setDeleteDialogOpen(false);
+      return;
+    }
+    
+    // Try to delete from database first - don't catch the error here
+    try {
+      await documentApplicationService.deleteApplication(idToDelete);
+      console.log("Marriage application deleted from database:", idToDelete);
+    } catch (dbError) {
+      console.error("Error deleting from database:", dbError);
+      alert("Failed to delete application from database. Please try again or contact support.");
+      setDeleteDialogOpen(false);
+      return; // Stop execution if database deletion fails
+    }
+    
+    // Only proceed with localStorage deletion if database deletion was successful
+    const existingApplications = JSON.parse(localStorage.getItem('applications') || '[]');
+    console.log("Current applications count:", existingApplications.length);
+    
+    const updatedApplications = existingApplications.filter(app => app.id !== idToDelete);
+    console.log("Updated applications count:", updatedApplications.length);
+    
+    localStorage.setItem('applications', JSON.stringify(updatedApplications));
+
+    if (updatedApplications.length > 0) {
+      const nextApp = updatedApplications[0];
+      localStorage.setItem('currentApplicationId', nextApp.id);
+      
+      if (nextApp.type === 'Marriage License' || nextApp.type === 'Marriage Certificate') {
+        localStorage.setItem('marriageFormData', JSON.stringify(nextApp.formData));
+      } else {
+        localStorage.removeItem('marriageFormData');
+      }
+    } else {
+      localStorage.removeItem('currentApplicationId');
+      localStorage.removeItem('marriageFormData');
+    }
+
+    console.log('Marriage application deleted successfully from both database and localStorage:', idToDelete);
+    setDeleteDialogOpen(false);
+    
+    const customEvent = new Event('customStorageUpdate');
+    window.dispatchEvent(customEvent);
+    
+    alert('Application deleted successfully!');
+    navigate('/ApplicationForm');
+    
+  } catch (err) {
+    console.error('Error deleting marriage application:', err);
+    alert('Error deleting application: ' + err.message);
+    setDeleteDialogOpen(false);
+  }
+};
 
   const handleModify = () => {
     try {
@@ -79,6 +197,7 @@ const MarriageLicenseSummary = () => {
   if (loading) {
     return <div className="ContainerMLSummary">Loading...</div>;
   }
+
   const consentPersonHusband =
     formData.waliFirstName + ' ' + formData.waliMiddleName + ' ' + formData.waliLastName;
   const consentPersonWife =
@@ -103,6 +222,7 @@ const MarriageLicenseSummary = () => {
     formData.wifewaliCity +
     ' ' +
     formData.wifewaliProvince;
+
   return (
     <div className="ContainerMLSummary">
       {formData.lastUpdated && (
@@ -175,7 +295,6 @@ const MarriageLicenseSummary = () => {
           </div>
         </div>
 
-        {/* Main Applicant Sections */}
         <table className="ApplicantTableMLSummary">
           <thead>
             <tr>
@@ -184,7 +303,6 @@ const MarriageLicenseSummary = () => {
             </tr>
           </thead>
           <tbody>
-            {/* Civil Registrar Section */}
             <tr>
               <td className="TableCellMLSummary">
                 <div className="RegistrarTitleMLSummary">The Civil Registrar</div>
@@ -220,7 +338,6 @@ const MarriageLicenseSummary = () => {
               </td>
             </tr>
 
-            {/* Name of Applicant */}
             <tr>
               <td className="TableCellMLSummary">
                 <div className="FieldNumberMLSummary">1.</div>
@@ -260,7 +377,6 @@ const MarriageLicenseSummary = () => {
               </td>
             </tr>
 
-            {/* Date of Birth / Age */}
             <tr>
               <td className="TableCellMLSummary">
                 <div className="FieldNumberMLSummary">2.</div>
@@ -308,7 +424,6 @@ const MarriageLicenseSummary = () => {
               </td>
             </tr>
 
-            {/* Place of Birth */}
             <tr>
               <td className="TableCellMLSummary">
                 <div className="FieldNumberMLSummary">3.</div>
@@ -348,7 +463,6 @@ const MarriageLicenseSummary = () => {
               </td>
             </tr>
 
-            {/* Sex/Citizenship */}
             <tr>
               <td className="TableCellMLSummary">
                 <div className="FieldNumberMLSummary">4.</div>
@@ -368,7 +482,6 @@ const MarriageLicenseSummary = () => {
               </td>
             </tr>
 
-            {/* Residence */}
             <tr>
               <td className="TableCellMLSummary">
                 <div className="FieldNumberMLSummary">5.</div>
@@ -388,7 +501,6 @@ const MarriageLicenseSummary = () => {
               </td>
             </tr>
 
-            {/* Religion/Religious Sect */}
             <tr>
               <td className="TableCellMLSummary">
                 <div className="FieldNumberMLSummary">6.</div>
@@ -402,7 +514,6 @@ const MarriageLicenseSummary = () => {
               </td>
             </tr>
 
-            {/* Civil Status */}
             <tr>
               <td className="TableCellMLSummary">
                 <div className="FieldNumberMLSummary">7.</div>
@@ -416,7 +527,6 @@ const MarriageLicenseSummary = () => {
               </td>
             </tr>
 
-            {/* If previously married */}
             <tr>
               <td className="TableCellMLSummary">
                 <div className="FieldNumberMLSummary">8.</div>
@@ -438,7 +548,6 @@ const MarriageLicenseSummary = () => {
               </td>
             </tr>
 
-            {/* Place where dissolved */}
             <tr>
               <td className="TableCellMLSummary">
                 <div className="FieldNumberMLSummary">9.</div>
@@ -472,7 +581,6 @@ const MarriageLicenseSummary = () => {
               </td>
             </tr>
 
-            {/* Date when dissolved */}
             <tr>
               <td className="TableCellMLSummary">
                 <div className="FieldNumberMLSummary">10.</div>
@@ -506,7 +614,6 @@ const MarriageLicenseSummary = () => {
               </td>
             </tr>
 
-            {/* Degree of relationship */}
             <tr>
               <td className="TableCellMLSummary">
                 <div className="FieldNumberMLSummary">11.</div>
@@ -520,7 +627,6 @@ const MarriageLicenseSummary = () => {
               <td className="TableCellMLSummary"></td>
             </tr>
 
-            {/* Name of Father */}
             <tr>
               <td className="TableCellMLSummary">
                 <div className="FieldNumberMLSummary">12.</div>
@@ -552,7 +658,6 @@ const MarriageLicenseSummary = () => {
               </td>
             </tr>
 
-            {/* Citizenship (Father) */}
             <tr>
               <td className="TableCellMLSummary">
                 <div className="FieldNumberMLSummary">13.</div>
@@ -570,7 +675,6 @@ const MarriageLicenseSummary = () => {
               </td>
             </tr>
 
-            {/* Residence (Father) */}
             <tr>
               <td className="TableCellMLSummary">
                 <div className="FieldNumberMLSummary">14.</div>
@@ -586,7 +690,6 @@ const MarriageLicenseSummary = () => {
               </td>
             </tr>
 
-            {/* Maiden Name of Mother */}
             <tr>
               <td className="TableCellMLSummary">
                 <div className="FieldNumberMLSummary">15.</div>
@@ -618,7 +721,6 @@ const MarriageLicenseSummary = () => {
               </td>
             </tr>
 
-            {/* Citizenship (Mother) */}
             <tr>
               <td className="TableCellMLSummary">
                 <div className="FieldNumberMLSummary">16.</div>
@@ -636,7 +738,6 @@ const MarriageLicenseSummary = () => {
               </td>
             </tr>
 
-            {/* Residence (Mother) */}
             <tr>
               <td className="TableCellMLSummary">
                 <div className="FieldNumberMLSummary">17.</div>
@@ -652,7 +753,6 @@ const MarriageLicenseSummary = () => {
               </td>
             </tr>
 
-            {/* Person who gave consent */}
             <tr>
               <td className="TableCellMLSummary">
                 <div className="FieldNumberMLSummary">18.</div>
@@ -666,7 +766,6 @@ const MarriageLicenseSummary = () => {
               </td>
             </tr>
 
-            {/* Relationship */}
             <tr>
               <td className="TableCellMLSummary">
                 <div className="FieldNumberMLSummary">19.</div>
@@ -682,7 +781,6 @@ const MarriageLicenseSummary = () => {
               </td>
             </tr>
 
-            {/* Citizenship (Consent Person) */}
             <tr>
               <td className="TableCellMLSummary">
                 <div className="FieldNumberMLSummary">20.</div>
@@ -698,7 +796,6 @@ const MarriageLicenseSummary = () => {
               </td>
             </tr>
 
-            {/* Residence (Consent Person) */}
             <tr>
               <td className="TableCellMLSummary">
                 <div className="FieldNumberMLSummary">21.</div>
@@ -712,7 +809,6 @@ const MarriageLicenseSummary = () => {
               </td>
             </tr>
 
-            {/* Signature Section */}
             <tr>
               <td className="TableCellMLSummary SignatureBoxMLSummary">
                 <div className="SignatureLineMLSummary"></div>
@@ -764,13 +860,12 @@ const MarriageLicenseSummary = () => {
         </table>
       </div>
       <div className="ActionButtonContainerMLSummary">
+        
         <Button
           variant="contained"
           color="error"
           startIcon={<CancelIcon />}
-          onClick={() =>
-            setConfirmCancelDialog ? setConfirmCancelDialog(true) : navigate('/ApplicationForm')
-          }
+          onClick={handleDeleteApplication}
           className="ActionButtonMLSummary cancelButton"
           aria-label="Cancel Application"
         >
@@ -797,8 +892,30 @@ const MarriageLicenseSummary = () => {
           Done
         </Button>
       </div>
+      
+      <Dialog
+        open={deleteDialogOpen}
+        onClose={cancelDeleteApplication}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">{'Cancel Marriage License Application?'}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Are you sure you want to cancel this marriage license application? This action cannot be undone.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={cancelDeleteApplication} color="primary">
+            No, Keep Application
+          </Button>
+          <Button onClick={confirmDeleteApplication} color="error" autoFocus>
+            Yes, Cancel Application
+          </Button>
+        </DialogActions>
+      </Dialog>
+      
     </div>
   );
 };
-
 export default MarriageLicenseSummary;

@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { documentApplicationService } from '../../services/documentApplicationService';
 import './AdminMarriageAffidavitDetails.css';
 
+import { useAuth } from '../../context/AuthContext';
+
 const AdminMarriageAffidavitDetails = ({ applicationId, currentUser }) => {
   const [formData, setFormData] = useState({});
   const [loading, setLoading] = useState(true);
@@ -11,8 +13,11 @@ const AdminMarriageAffidavitDetails = ({ applicationId, currentUser }) => {
   const [originalData, setOriginalData] = useState({});
   const [success, setSuccess] = useState('');
 
-  const canEdit = currentUser?.role === 'super admin' || currentUser?.role === 'admin';
-  const canView = canEdit;
+  const { user, hasRole } = useAuth();
+
+
+  const canEdit = hasRole('super_admin') || hasRole('admin');
+  const canView = hasRole('super_admin') || hasRole('admin') || hasRole('staff');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -65,7 +70,7 @@ const AdminMarriageAffidavitDetails = ({ applicationId, currentUser }) => {
       const updatedAffidavitData = {
         ...formData,
         lastUpdated: new Date().toISOString(),
-        lastUpdatedBy: currentUser.login
+        lastUpdatedBy: user?.login || currentUser?.login
       };
    
       await documentApplicationService.updateApplication(applicationId, {
@@ -88,6 +93,7 @@ const AdminMarriageAffidavitDetails = ({ applicationId, currentUser }) => {
     setError('');
     setSuccess('');
   };
+
 
   const getHusbandFullName = () => {
     const firstName = formData.husbandFirstName || '';
