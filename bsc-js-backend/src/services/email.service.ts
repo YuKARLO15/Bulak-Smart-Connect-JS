@@ -24,7 +24,7 @@ export class EmailService {
         subject: '🔐 Bulak LGU Smart Connect - Email Verification',
         html: `
           <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 20px; text-align: center;">
+            <div style="background: linear-gradient(135deg, #1c4d5a 0%, #8aacd5 100%); padding: 20px; text-align: center;">
               <h1 style="color: white; margin: 0;">Bulak LGU Smart Connect</h1>
             </div>
             <div style="padding: 30px; background-color: #f9f9f9;">
@@ -32,7 +32,7 @@ export class EmailService {
               <p style="font-size: 16px; color: #555;">
                 Please use the following OTP to verify your email address:
               </p>
-              <div style="background: #667eea; color: white; font-size: 32px; font-weight: bold; 
+              <div style="background: #1c4d5a; color: white; font-size: 32px; font-weight: bold; 
                           text-align: center; padding: 20px; margin: 20px 0; border-radius: 8px; 
                           letter-spacing: 8px;">${otp}</div>
               <p style="color: #777; font-size: 14px;">
@@ -49,7 +49,7 @@ export class EmailService {
         subject: '🔒 Bulak LGU Smart Connect - Password Reset',
         html: `
           <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 20px; text-align: center;">
+            <div style="background: linear-gradient(135deg, #1c4d5a 0%, #8aacd5 100%); padding: 20px; text-align: center;">
               <h1 style="color: white; margin: 0;">Bulak LGU Smart Connect</h1>
             </div>
             <div style="padding: 30px; background-color: #f9f9f9;">
@@ -57,7 +57,7 @@ export class EmailService {
               <p style="font-size: 16px; color: #555;">
                 Use this OTP to reset your password:
               </p>
-              <div style="background: #e74c3c; color: white; font-size: 32px; font-weight: bold; 
+              <div style="background: #1c4d5a; color: white; font-size: 32px; font-weight: bold; 
                           text-align: center; padding: 20px; margin: 20px 0; border-radius: 8px; 
                           letter-spacing: 8px;">${otp}</div>
               <p style="color: #777; font-size: 14px;">
@@ -74,7 +74,7 @@ export class EmailService {
         subject: '📋 Bulak LGU Smart Connect - Application Status Update',
         html: `
           <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 20px; text-align: center;">
+            <div style="background: linear-gradient(135deg, #1c4d5a 0%, #8aacd5 100%); padding: 20px; text-align: center;">
               <h1 style="color: white; margin: 0;">Bulak LGU Smart Connect</h1>
             </div>
             <div style="padding: 30px; background-color: #f9f9f9;">
@@ -82,7 +82,7 @@ export class EmailService {
               <p style="font-size: 16px; color: #555;">
                 Your application status has been updated. Please check your dashboard for details.
               </p>
-              <div style="background: #27ae60; color: white; font-size: 16px; font-weight: bold; 
+              <div style="background: #1c4d5a; color: white; font-size: 16px; font-weight: bold; 
                           text-align: center; padding: 15px; margin: 20px 0; border-radius: 8px;">
                 Status: ${otp}
               </div>
@@ -121,7 +121,7 @@ export class EmailService {
       subject: `📋 Application ${applicationId} - Status: ${status}`,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-          <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 20px; text-align: center;">
+          <div style="background: linear-gradient(135deg, #1c4d5a 0%, #8aacd5 100%); padding: 20px; text-align: center;">
             <h1 style="color: white; margin: 0;">Bulak LGU Smart Connect</h1>
           </div>
           <div style="padding: 30px; background-color: #f9f9f9;">
