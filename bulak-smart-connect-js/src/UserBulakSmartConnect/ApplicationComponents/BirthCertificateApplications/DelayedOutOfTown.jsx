@@ -633,14 +633,111 @@ const DelayedOutOfTownRegistration = () => {
 
           <Box className="ButtonContainerOutOfTown">
             <Button
-              variant="outlined"
-              color="primary"
-              onClick={() => navigate(-1)}
-              className="BackButtonOutOfTown"
-              disabled={isLoading}
-            >
-              Back
-            </Button>
+               variant="outlined"
+               color="primary"
+               onClick={() => {
+                 // Prepare comprehensive application state for modification
+                 const modifyApplicationState = {
+                   // Application identification
+                   applicationId: applicationId,
+                   isEditing: true, // Always set to true when modifying
+                   editingApplicationId: applicationId,
+                   
+                   // Current form data with all modifications
+                   formData: {
+                     ...formData,
+                     documentStatus: status,
+                     uploadedFiles: uploadedFiles,
+                     fileData: fileData,
+                     lastModified: new Date().toISOString()
+                   },
+                   
+                   // File states
+                   uploadedFiles: uploadedFiles,
+                   fileData: fileData,
+                   
+                   // Delayed registration specific data
+                   documentStatus: status,
+                   maritalStatus: status, // Keep both for compatibility
+                   
+                   // Metadata
+                   modifyMode: true,
+                   preserveData: true,
+                   backFromDelayedRegistration: true,
+                   applicationType: 'Delayed Registration - Out of Town',
+                 };
+           
+                 // Update localStorage to maintain state
+                 try {
+                   // Save the current application state
+                   localStorage.setItem('birthCertificateApplication', JSON.stringify(modifyApplicationState.formData));
+                   
+                   // Mark as editing mode
+                   localStorage.setItem('isEditingBirthApplication', 'true');
+                   localStorage.setItem('editingApplicationId', applicationId);
+                   localStorage.setItem('currentApplicationId', applicationId);
+                   
+                   // Preserve marital status for the form
+                   localStorage.setItem('maritalStatus', status);
+                   
+                   // Save modification state
+                   localStorage.setItem('modifyingApplication', JSON.stringify({
+                     id: applicationId,
+                     type: 'Birth Certificate - Delayed Registration',
+                     subtype: 'Below 18',
+                     documentStatus: status,
+                     uploadedFiles: uploadedFiles,
+                     timestamp: new Date().toISOString()
+                   }));
+           
+                   // Update the applications array with current state
+                   const applications = JSON.parse(localStorage.getItem('applications') || '[]');
+                   const appIndex = applications.findIndex(app => app.id === applicationId);
+                   
+                   if (appIndex >= 0) {
+                     // Update existing application with current modifications
+                     applications[appIndex] = {
+                       ...applications[appIndex],
+                       formData: modifyApplicationState.formData,
+                       uploadedFiles: uploadedFiles,
+                       documentStatus: status,
+                       status: applications[appIndex].status || 'In Progress',
+                       lastModified: new Date().toISOString(),
+                       isBeingModified: true
+                     };
+                     
+                     localStorage.setItem('applications', JSON.stringify(applications));
+                   }
+           
+                   console.log('Navigating back with modify state:', modifyApplicationState);
+                   
+                   // Navigate back to BirthCertificateForm with modify state
+                   navigate('/BirthCertificateForm', { 
+                     state: modifyApplicationState,
+                     replace: false // Don't replace history, allow back navigation
+                   });
+                   
+                 } catch (error) {
+                   console.error('Error saving modify state:', error);
+                   showNotification('Error saving current state. Some data may be lost.', 'warning');
+                   
+                   // Fallback navigation with basic state
+                   navigate('/BirthCertificateForm', { 
+                     state: { 
+                       applicationId: applicationId,
+                       isEditing: true,
+                       editingApplicationId: applicationId,
+                       formData: formData,
+                       documentStatus: status
+                     } 
+                   });
+                 }
+               }}
+               className="BackButtonDelayedAbove18"
+               disabled={isLoading}
+             >
+               Back
+             </Button>
             <Button
               variant="contained"
               color="primary"
