@@ -535,6 +535,22 @@ export class AuthController {
       throw error;
     }
   }
+
+  @Post(&#x27;test-otp&#x27;)
+  async testOTP(@Body() { email }: { email: string }) {
+    try {
+      const otp &#x3D; await this.otpService.generateOTP(email, &#x27;verification&#x27;);
+      return {
+        success: true,
+        message: &#x27;OTP generated and sent&#x27;,
+        // Remove this in production - only for testing
+        otp: process.env.NODE_ENV &#x3D;&#x3D;&#x3D; &#x27;development&#x27; ? otp : undefined
+      };
+    } catch (error) {
+      console.error(&#x27;Test OTP error:&#x27;, error);
+      throw new BadRequestException(&#x27;Failed to generate OTP&#x27;);
+    }
+  }
 }
 </code></pre>
     </div>

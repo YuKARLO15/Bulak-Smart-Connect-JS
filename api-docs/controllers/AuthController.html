@@ -202,6 +202,11 @@
                             </li>
                             <li>
                                     <span class="modifier"></span>
+                                    <span class="modifier">Async</span>
+                                <a href="#testOTP" >testOTP</a>
+                            </li>
+                            <li>
+                                    <span class="modifier"></span>
                                     <span class="modifier"></span>
                                     <span class="modifier"></span>
                                     <span class="modifier"></span>
@@ -826,6 +831,82 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
+                    <a name="testOTP"></a>
+                    <span class="name">
+                            <span class="modifier"></span>
+                            <span class="modifier">Async</span>
+                        <span ><b>testOTP</b></span>
+                        <a href="#testOTP"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>testOTP(undefined: literal type)</code>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <b>Decorators : </b>
+                    <br />
+                    <code>@Post(&#x27;test-otp&#x27;)<br /></code>
+                </td>
+            </tr>
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="337"
+                                    class="link-to-prism">src/auth/auth.controller.ts:337</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                        <code>literal type</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
                     <a name="updateProfile"></a>
                     <span class="name">
                             <span class="modifier"></span>
@@ -1332,6 +1413,22 @@ export class AuthController {
     } catch (error) {
       console.error(&#x27;Reset password error:&#x27;, error);
       throw error;
+    }
+  }
+
+  @Post(&#x27;test-otp&#x27;)
+  async testOTP(@Body() { email }: { email: string }) {
+    try {
+      const otp &#x3D; await this.otpService.generateOTP(email, &#x27;verification&#x27;);
+      return {
+        success: true,
+        message: &#x27;OTP generated and sent&#x27;,
+        // Remove this in production - only for testing
+        otp: process.env.NODE_ENV &#x3D;&#x3D;&#x3D; &#x27;development&#x27; ? otp : undefined
+      };
+    } catch (error) {
+      console.error(&#x27;Test OTP error:&#x27;, error);
+      throw new BadRequestException(&#x27;Failed to generate OTP&#x27;);
     }
   }
 }
