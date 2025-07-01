@@ -38,11 +38,19 @@ const AdminAccountManagement = () => {
       setError('');
       
       console.log('Loading users from API...');
-      const response = await userService.getAllUsers({
+      
+      // Build query params, only include search if it's not empty
+      const queryParams = {
         page: 1,
-        limit: 100,
-        search: search.trim()
-      });
+        limit: 100
+      };
+      
+      // Only add search parameter if search term is not empty
+      if (search && search.trim() !== '') {
+        queryParams.search = search.trim();
+      }
+      
+      const response = await userService.getAllUsers(queryParams);
 
       // Filter out citizens - only show admin, staff, and super_admin users
       const transformedUsers = response.users
@@ -80,10 +88,24 @@ const AdminAccountManagement = () => {
       setError('Failed to load users from server, using local data');
       
       // Fallback to localStorage with filtering
-      const localUsers = getUsers().filter(user => {
+      let localUsers = getUsers();
+      
+      // Apply search filter if search term exists
+      if (search && search.trim() !== '') {
+        const searchTerm = search.trim().toLowerCase();
+        localUsers = localUsers.filter(user => 
+          (user.name || '').toLowerCase().includes(searchTerm) ||
+          (user.email || '').toLowerCase().includes(searchTerm) ||
+          (user.username || '').toLowerCase().includes(searchTerm)
+        );
+      }
+      
+      // Filter out citizens
+      localUsers = localUsers.filter(user => {
         const userRoles = Array.isArray(user.roles) ? user.roles : [user.roles || 'citizen'];
         return userRoles.some(role => ['admin', 'staff', 'super_admin'].includes(role));
       });
+      
       setUsers(localUsers);
       console.log(`Fallback: Loaded ${localUsers.length} non-citizen users from localStorage`);
     } finally {

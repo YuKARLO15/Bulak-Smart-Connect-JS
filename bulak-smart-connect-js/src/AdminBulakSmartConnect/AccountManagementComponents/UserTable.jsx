@@ -208,7 +208,17 @@ const UserTable = ({ users, handleUpload, removeUser, loading, onRefresh }) => {
             </div>
             <div className="user-detail-row">
               <span>Roles:</span>
-              <span>{(selectedUser.roles || []).join(', ')}</span>
+              <span>
+                {(selectedUser.roles || []).map(role => {
+                  const roleLabels = {
+                    'super_admin': 'Admin',
+                    'admin': 'Manager',
+                    'staff': 'Staff',
+                    'citizen': 'Citizen'
+                  };
+                  return roleLabels[role] || role;
+                }).join(', ')}
+              </span>
             </div>
 
             <button className="close-modal-btn" onClick={() => setSelectedUser(null)}>

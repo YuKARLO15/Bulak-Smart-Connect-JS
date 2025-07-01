@@ -15,10 +15,11 @@ const apiClient = axios.create({
 // Add request interceptor to include auth token in all requests
 apiClient.interceptors.request.use(
   (requestConfig) => {
-    const token = localStorage.getItem(`${config.STORAGE_PREFIX}token`);
+    // Try both with and without prefix to handle inconsistencies
+    let token = localStorage.getItem('token') || localStorage.getItem(`${config.STORAGE_PREFIX}token`);
+    
     if (token) {
       requestConfig.headers.Authorization = `Bearer ${token}`;
-      // Debug: Log token being sent
       console.log('🎫 Sending request with token:', token.substring(0, 20) + '...');
       console.log('🎯 Request URL:', requestConfig.url);
     } else {
@@ -341,14 +342,22 @@ const userService = {
   // Admin update any user
   adminUpdateUser: async (userId, userData) => {
     try {
+      console.log('🔧 Admin updating user:', userId, userData);
+      
+      // Verify current user has super_admin role
+      const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+      if (!currentUser.roles || !currentUser.roles.includes('super_admin')) {
+        throw new Error('Only super administrators can update users');
+      }
+      
       const response = await apiClient.post(`/auth/admin/update-user/${userId}`, userData);
       
-      // Also update localStorage
+      // Update localStorage on success
       try {
         const localUsers = JSON.parse(localStorage.getItem('users') || '[]');
         const index = localUsers.findIndex(u => u.id === userId);
         if (index >= 0) {
-          localUsers[index] = { ...localUsers[index], ...userData };
+          localUsers[index] = { ...localUsers[index], ...response.data };
           localStorage.setItem('users', JSON.stringify(localUsers));
         }
       } catch (localErr) {
@@ -357,15 +366,37 @@ const userService = {
       
       return response.data;
     } catch (error) {
-      console.error(`Error admin updating user ${userId}:`, error);
+      console.error(`❌ Error admin updating user ${userId}:`, error);
       
-      // Update localStorage even if API fails
+      // Enhanced error logging
+      if (error.response?.status === 401) {
+        console.error('🚫 Authentication failed - checking token...');
+        const token = localStorage.getItem('token') || localStorage.getItem(`${config.STORAGE_PREFIX}token`);
+        console.error('Token exists:', !!token);
+        console.error('Token length:', token?.length);
+        
+        // Check if token is expired
+        if (token) {
+          try {
+            const payload = JSON.parse(atob(token.split('.')[1]));
+            const isExpired = payload.exp * 1000 < Date.now();
+            console.error('Token expired:', isExpired);
+          } catch (parseErr) {
+            console.error('Token parse error:', parseErr);
+          }
+        }
+      } else if (error.response?.status === 403) {
+        console.error('🚫 Insufficient permissions');
+      }
+      
+      // Fallback to localStorage update
       try {
         const localUsers = JSON.parse(localStorage.getItem('users') || '[]');
         const index = localUsers.findIndex(u => u.id === userId);
         if (index >= 0) {
           localUsers[index] = { ...localUsers[index], ...userData };
           localStorage.setItem('users', JSON.stringify(localUsers));
+          console.log('✅ Updated user in localStorage as fallback');
           return localUsers[index];
         }
       } catch (localErr) {
