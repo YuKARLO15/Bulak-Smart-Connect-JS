@@ -295,6 +295,377 @@ Our live dashboard provides:
     </table>
 </div>
 
+## 📧 OTP Email Verification System
+
+### 🌟 Features
+- **🔐 Secure 6-digit OTP codes** with TOTP algorithm and time-based expiration (5 minutes)
+- **📧 Professional HTML email templates** for verification and password reset
+- **🎯 Multi-purpose OTPs** (registration verification, password reset, document notifications)
+- **🔄 Single-use enforcement** and automatic cleanup of expired codes
+- **🛡️ Anti-spam protection** with rate limiting and input validation
+- **⚡ React components** ready for frontend integration with Material-UI
+
+### 🚀 Quick OTP Setup
+
+#### 1. Backend OTP Configuration
+```bash
+cd bsc-js-backend
+
+# Generate secure OTP secret
+npm run generate-otp-secret
+
+# Setup OTP system (creates .env, configures secrets)
+npm run setup-otp
+
+# Add to your .env file:
+OTP_SECRET=your-generated-secret-from-above
+OTP_LENGTH=6
+OTP_EXPIRY_MINUTES=5
+
+# Email configuration
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_SECURE=false
+SMTP_USER=your-email@gmail.com
+SMTP_PASS=your-app-password  # Use Gmail App Password
+EMAIL_FROM=noreply@bulaksmartconnect.com
+```
+
+#### 2. Gmail App Password Setup
+1. **Enable 2-Factor Authentication** on your Gmail account
+2. **Generate App Password**: Go to [Google App Passwords](https://myaccount.google.com/apppasswords)
+3. **Select "Mail"** and generate a 16-character password
+4. **Use this password** as your `SMTP_PASS` value (not your regular Gmail password)
+
+#### 3. Test OTP System
+```bash
+# Start backend with test endpoints enabled
+NODE_ENV=development npm run start:dev
+
+# Visit Swagger docs
+# http://localhost:3000/api/docs
+
+# Test OTP generation endpoint
+POST /auth/test-otp
+{
+  "email": "test@example.com"
+}
+```
+
+### 📱 OTP API Endpoints
+
+#### Send OTP for Verification
+```http
+POST /auth/send-otp
+Content-Type: application/json
+
+{
+  "email": "user@example.com",
+  "purpose": "verification"  // or "password_reset"
+}
+
+Response: {
+  "success": true,
+  "message": "OTP sent successfully",
+  "email": "user@example.com"
+}
+```
+
+#### Verify OTP Code
+```http
+POST /auth/verify-otp
+Content-Type: application/json
+
+{
+  "email": "user@example.com",
+  "otp": "123456",
+  "purpose": "verification"
+}
+
+Response: {
+  "success": true,
+  "message": "OTP verified successfully"
+}
+```
+
+#### Complete Forgot Password Flow
+```http
+# Step 1: Request password reset
+POST /auth/forgot-password
+{
+  "email": "user@example.com"
+}
+
+# Step 2: Reset password with OTP
+POST /auth/reset-password
+{
+  "email": "user@example.com",
+  "otp": "123456",
+  "newPassword": "NewSecure123!"
+}
+```
+
+### 🎨 Frontend OTP Integration
+
+#### Enhanced Forgot Password Dialog
+The existing Material-UI `ForgotPassword` component now includes:
+- **Multi-step wizard**: Email → OTP → New Password → Success
+- **Auto-focus navigation** between OTP input fields
+- **Real-time validation** and error handling
+- **Resend OTP functionality** with cooldown timer
+- **Password strength validation** with visual feedback
+
+```jsx
+import ForgotPassword from './LogInComponents/ForgotPassword';
+
+// In your login component
+const [showForgotPassword, setShowForgotPassword] = useState(false);
+
+<ForgotPassword
+  open={showForgotPassword}
+  handleClose={() => setShowForgotPassword(false)}
+/>
+```
+
+#### OTP Verification Component
+```jsx
+import OTPVerification from './components/OTPVerification';
+
+// For registration or other verification needs
+const [showOtpModal, setShowOtpModal] = useState(false);
+
+{showOtpModal && (
+  <OTPVerification
+    email={userEmail}
+    purpose="verification"
+    onVerified={handleVerificationSuccess}
+    onCancel={() => setShowOtpModal(false)}
+    title="Verify Your Email"
+  />
+)}
+```
+
+### 🔒 Security Features
+
+#### Password Requirements
+- **Minimum 8 characters**
+- **At least 1 uppercase letter** (A-Z)
+- **At least 1 lowercase letter** (a-z)
+- **At least 1 number** (0-9)
+- **At least 1 special character** (@$!%*?&)
+
+#### OTP Security
+- **Time-limited**: 5-minute expiration for security
+- **Single-use**: OTPs are marked as verified after use
+- **Purpose isolation**: Verification vs password reset codes are separate
+- **Rate limiting**: Prevents spam and abuse
+- **Secure generation**: Uses cryptographically secure random number generation
+
+#### Email Security
+- **Professional templates** with company branding
+- **Anti-phishing measures** with clear sender identification
+- **Secure links** with proper validation
+- **No sensitive data** exposed in email content
+
+### 📧 Email Templates
+
+The system includes responsive HTML email templates:
+
+#### 📧 **Email Verification Template**
+- **Blue gradient theme** for account verification
+- **Clear call-to-action** with OTP code prominently displayed
+- **Security warnings** about code expiration and usage
+- **Professional branding** with Bulak LGU Smart Connect styling
+
+#### 🔒 **Password Reset Template**
+- **Red security theme** for password reset alerts
+- **Urgent styling** to indicate security-related action
+- **Clear instructions** for password reset process
+- **Warning messages** about account security
+
+#### 📋 **Application Status Template**
+- **Color-coded themes**:
+  - 🟠 **Pending**: Orange theme
+  - 🟢 **Approved**: Green theme
+  - 🔴 **Rejected**: Red theme
+  - 🔵 **Ready for Pickup**: Blue theme
+- **Application details** including ID and type
+- **Next steps** clearly outlined
+
+### 🧪 Testing OTP System
+
+#### Development Testing
+```bash
+# 1. Start backend in development mode
+cd bsc-js-backend
+NODE_ENV=development npm run start:dev
+
+# 2. Use test endpoint (returns OTP in response for testing)
+curl -X POST http://localhost:3000/auth/test-otp \
+  -H "Content-Type: application/json" \
+  -d '{"email":"test@example.com"}'
+
+# 3. Test verification
+curl -X POST http://localhost:3000/auth/verify-otp \
+  -H "Content-Type: application/json" \
+  -d '{"email":"test@example.com","otp":"123456","purpose":"verification"}'
+```
+
+#### Unit Tests
+```bash
+# Run OTP-specific tests
+npm run test:otp
+
+# Run authentication tests
+npm run test:auth
+
+# Run all tests with coverage
+npm run test:cov
+```
+
+#### Frontend Testing Component
+Use the built-in test component for development:
+```jsx
+import OTPTest from './components/OTPTest';
+
+// Add to your development routes
+<OTPTest />
+```
+
+### 🔧 Advanced Configuration
+
+#### Environment Variables
+```bash
+# Backend (.env)
+OTP_SECRET=your-super-secret-otp-key-minimum-32-characters
+OTP_LENGTH=6                    # 6-digit codes (standard)
+OTP_EXPIRY_MINUTES=5           # 5 minutes expiration
+ENABLE_OTP_TEST_ENDPOINTS=true # Development only
+
+# Email settings
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_SECURE=false
+SMTP_USER=your-email@gmail.com
+SMTP_PASS=your-app-password
+EMAIL_FROM=noreply@bulaksmartconnect.com
+```
+
+#### Production Settings
+```bash
+# Production environment
+NODE_ENV=production
+ENABLE_OTP_TEST_ENDPOINTS=false  # Disable test endpoints
+OTP_SECRET=use-different-secret-for-production
+
+# Use secure SMTP
+SMTP_SECURE=true
+SMTP_PORT=465
+```
+
+### 📊 Monitoring and Analytics
+
+#### OTP Metrics to Track
+- **Generation Rate**: OTPs created per hour/day
+- **Verification Success Rate**: Percentage of successful verifications
+- **Expiration Rate**: Percentage of OTPs that expire unused
+- **Resend Frequency**: How often users request new codes
+- **Email Delivery Success**: SMTP delivery confirmation
+
+#### Error Monitoring
+- **Failed Verifications**: Track invalid OTP attempts
+- **Email Delivery Failures**: Monitor SMTP errors
+- **Rate Limit Triggers**: Detect potential abuse
+- **Database Errors**: OTP storage/retrieval issues
+
+### 🚨 Troubleshooting
+
+#### Common Issues
+
+**📧 Emails not sending:**
+```bash
+# Check SMTP configuration
+# Verify Gmail app password (not regular password)
+# Ensure 2FA enabled on Gmail account
+# Check firewall/network restrictions on port 587
+```
+
+**🔢 OTP verification failing:**
+```bash
+# Check OTP hasn't expired (5 minutes)
+# Verify OTP_SECRET is consistent between restarts
+# Ensure system clock is synchronized
+# Check for typos in OTP input
+```
+
+**⚡ Rate limiting issues:**
+```bash
+# Implement exponential backoff for retries
+# Monitor email sending quotas (Gmail: 500/day for free accounts)
+# Use dedicated SMTP service for production (SendGrid, AWS SES)
+```
+
+**🌐 CORS errors in frontend:**
+```bash
+# Verify VITE_API_BASE_URL matches backend URL
+# Check backend ALLOWED_ORIGINS includes frontend URL
+# Ensure no trailing slashes in URLs
+```
+
+#### Debug Commands
+```javascript
+// Backend - Check OTP service
+console.log('OTP Config:', {
+  secret: !!process.env.OTP_SECRET,
+  length: process.env.OTP_LENGTH,
+  expiry: process.env.OTP_EXPIRY_MINUTES
+});
+
+// Frontend - Check configuration
+import config from './config/env.js';
+console.log('API Base URL:', config.API_BASE_URL);
+```
+
+### 🏗️ Integration Checklist
+
+#### ✅ **Completed Integrations**
+- [x] **Enhanced ForgotPassword Dialog** - Multi-step Material-UI wizard
+- [x] **OTP Verification Component** - Reusable verification modal
+- [x] **Email Service Integration** - Professional HTML templates
+- [x] **Backend API Endpoints** - Complete OTP management
+- [x] **Database Schema** - OTP storage and cleanup
+- [x] **Security Implementation** - Rate limiting and validation
+- [x] **Test Suite** - Comprehensive unit and integration tests
+- [x] **Swagger Documentation** - Complete API documentation
+
+#### 📋 **Future Integrations** (Available for implementation)
+- [ ] **Admin User Creation** - Email verification for new admin users
+- [ ] **Document Status Notifications** - Email alerts for application updates
+- [ ] **Two-Factor Authentication** - Optional 2FA for admin accounts
+- [ ] **SMS OTP** - Alternative delivery method via SMS gateway
+- [ ] **Email Templates Customization** - Admin panel for template management
+
+### 📈 Performance Considerations
+
+#### Database Optimization
+- **Automated cleanup** of expired OTPs (runs every hour)
+- **Indexed queries** for fast OTP lookup
+- **Connection pooling** for database efficiency
+
+#### Email Performance
+- **Async email sending** - Non-blocking operation
+- **Queue management** for high-volume scenarios
+- **Template caching** for faster rendering
+
+#### Frontend Performance
+- **Lazy loading** of OTP components
+- **Optimized bundle size** - Components loaded on demand
+- **Cached configurations** - Environment variables processed once
+
+---
+
+*The OTP system is production-ready and seamlessly integrates with your existing authentication flow. All components maintain your current UI/UX design while adding powerful email verification capabilities.*
+
 ## Site Accessibility
 
 - **Live Dashboard**: https://yukarlo15.github.io/Bulak-Smart-Connect-JS/dashboard/

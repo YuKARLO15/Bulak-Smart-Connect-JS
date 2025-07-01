@@ -18,7 +18,20 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "test:a11y": "jest --testMatch='**/*.a11y.{js,ts,jsx,tsx}'"
+    "test:a11y": "jest --testMatch='**/*.a11y.{js,ts,jsx,tsx}'",
+    "generate-jwt-secret": "node scripts/generate-jwt-secret.js",
+    "generate-otp-secret": "node scripts/generate-otp-secret.js", 
+    "setup-complete": "node scripts/setup-otp.js",
+    "test:otp": "npm run test -- --testPathPattern=otp",
+    "test:auth": "npm run test -- --testPathPattern=auth",
+    "test:security": "npm run test -- --testPathPattern=\"(auth|otp)\"",
+    "test:unit": "npm run test -- --testPathPattern=\"\\.spec\\.ts$\"",
+    "test:all": "npm run test && npm run test:e2e",
+    "docs:security": "echo 'Security documentation available in SECURITY_SETUP_GUIDE.md'",
+    "docs:otp": "echo 'OTP integration guide available in README.md#otp-email-verification-system'",
+    "health:check": "curl -f http://localhost:3000/health || exit 1",
+    "health:db": "npm run test -- --testPathPattern=\"database.*health\"",
+    "health:otp": "npm run test -- --testPathPattern=\"otp.*health\""
   },
   "dependencies": {
     "@nestjs/common": "^11.1.0",

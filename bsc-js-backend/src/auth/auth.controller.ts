@@ -24,21 +24,32 @@ import {
   ApiBearerAuth,
   ApiParam,
   ApiBody,
+  ApiQuery,
+  ApiProperty,
+  ApiPropertyOptional,
 } from '@nestjs/swagger';
 import { OTPService } from '../services/otp.service';
 import { EmailService } from '../services/email.service';
+import {
+  SendOtpDto,
+  VerifyOtpDto,
+  ForgotPasswordDto,
+  ResetPasswordDto,
+  TestOtpDto,
+  ApplicationNotificationDto,
+} from './dto/otp.dto';
 
 interface RequestWithUser extends Request {
   user: AuthenticatedUser;
 }
 
-@ApiTags('Authentication')
+@ApiTags('Authentication & OTP')
 @Controller('auth')
 export class AuthController {
   constructor(
     private authService: AuthService,
-    private otpService: OTPService, 
-    private emailService: EmailService, 
+    private otpService: OTPService,
+    private emailService: EmailService,
   ) {}
 
   @ApiOperation({ summary: 'User login' })
@@ -239,6 +250,72 @@ export class AuthController {
     }
   }
 
+  @ApiOperation({
+    summary: 'Send OTP for email verification or password reset',
+    description: `
+    Generates and sends a 6-digit OTP code to the specified email address.
+    
+    **Use Cases:**
+    - Email verification during registration
+    - Password reset verification
+    - Two-factor authentication
+    
+    **Security Features:**
+    - OTP expires after 5 minutes
+    - Previous OTPs are invalidated when new one is generated
+    - Rate limiting to prevent spam
+    
+    **Email Templates:**
+    - Verification: Blue gradient professional template
+    - Password Reset: Red themed security alert template
+    `,
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'OTP sent successfully',
+    schema: {
+      type: 'object',
+      properties: {
+        success: { type: 'boolean', example: true },
+        message: { type: 'string', example: 'OTP sent successfully' },
+        email: { type: 'string', example: 'user@example.com' },
+      },
+    },
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Bad Request - Invalid email format or missing fields',
+    schema: {
+      type: 'object',
+      properties: {
+        statusCode: { type: 'number', example: 400 },
+        message: { type: 'string', example: 'Invalid email format' },
+        error: { type: 'string', example: 'Bad Request' },
+      },
+    },
+  })
+  @ApiBody({
+    description: 'Email and purpose for OTP generation',
+    schema: {
+      type: 'object',
+      properties: {
+        email: {
+          type: 'string',
+          format: 'email',
+          example: 'user@example.com',
+          description: 'Email address to send OTP to',
+        },
+        purpose: {
+          type: 'string',
+          enum: ['verification', 'password_reset'],
+          example: 'verification',
+          description: 'Purpose of the OTP',
+          default: 'verification',
+        },
+      },
+      required: ['email'],
+    },
+  })
   @Post('send-otp')
   async sendOTP(@Body() sendOtpDto: { email: string; purpose?: string }) {
     try {
@@ -262,8 +339,78 @@ export class AuthController {
     }
   }
 
+  @ApiOperation({
+    summary: 'Verify OTP code',
+    description: `
+    Verifies a 6-digit OTP code against the email and purpose.
+    
+    **Verification Process:**
+    1. Checks if OTP exists and is not expired
+    2. Validates the code matches
+    3. Marks OTP as verified (single-use)
+    4. Returns verification status
+    
+    **Security Features:**
+    - Single-use OTPs (marked as verified after use)
+    - Time-based expiration (5 minutes)
+    - Purpose isolation (verification vs password_reset)
+    `,
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'OTP verified successfully',
+    schema: {
+      type: 'object',
+      properties: {
+        success: { type: 'boolean', example: true },
+        message: { type: 'string', example: 'OTP verified successfully' },
+      },
+    },
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized - Invalid or expired OTP',
+    schema: {
+      type: 'object',
+      properties: {
+        statusCode: { type: 'number', example: 401 },
+        message: { type: 'string', example: 'Invalid or expired OTP' },
+        error: { type: 'string', example: 'Unauthorized' },
+      },
+    },
+  })
+  @ApiBody({
+    description: 'Email, OTP code, and purpose for verification',
+    schema: {
+      type: 'object',
+      properties: {
+        email: {
+          type: 'string',
+          format: 'email',
+          example: 'user@example.com',
+          description: 'Email address',
+        },
+        otp: {
+          type: 'string',
+          example: '123456',
+          pattern: '^[0-9]{6}$',
+          description: '6-digit OTP code',
+        },
+        purpose: {
+          type: 'string',
+          enum: ['verification', 'password_reset'],
+          example: 'verification',
+          description: 'Purpose of the OTP verification',
+          default: 'verification',
+        },
+      },
+      required: ['email', 'otp'],
+    },
+  })
   @Post('verify-otp')
-  async verifyOTP(@Body() verifyOtpDto: { email: string; otp: string; purpose?: string }) {
+  async verifyOTP(
+    @Body() verifyOtpDto: { email: string; otp: string; purpose?: string },
+  ) {
     try {
       const { email, otp, purpose = 'verification' } = verifyOtpDto;
 
@@ -284,6 +431,55 @@ export class AuthController {
   }
 
   // Add password reset endpoints
+  @ApiOperation({
+    summary: 'Request password reset OTP',
+    description: `
+    Initiates password reset process by sending OTP to registered email.
+    
+    **Security Features:**
+    - Does not reveal if email exists (security best practice)
+    - Generates secure 6-digit OTP
+    - Uses dedicated password reset email template
+    - OTP expires after 5 minutes
+    
+    **Process:**
+    1. Validates email format
+    2. Checks if user exists (internally)
+    3. Generates OTP for password_reset purpose
+    4. Sends formatted email with reset instructions
+    5. Returns success message regardless of email existence
+    `,
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Password reset process initiated',
+    schema: {
+      type: 'object',
+      properties: {
+        success: { type: 'boolean', example: true },
+        message: {
+          type: 'string',
+          example:
+            'If this email is registered, you will receive a password reset code',
+        },
+      },
+    },
+  })
+  @ApiBody({
+    description: 'Email address for password reset',
+    schema: {
+      type: 'object',
+      properties: {
+        email: {
+          type: 'string',
+          format: 'email',
+          example: 'user@example.com',
+          description: 'Registered email address',
+        },
+      },
+      required: ['email'],
+    },
+  })
   @Post('forgot-password')
   async forgotPassword(@Body() { email }: { email: string }) {
     try {
@@ -293,7 +489,8 @@ export class AuthController {
         // Don't reveal if email exists for security
         return {
           success: true,
-          message: 'If this email is registered, you will receive a password reset code',
+          message:
+            'If this email is registered, you will receive a password reset code',
         };
       }
 
@@ -309,13 +506,95 @@ export class AuthController {
     }
   }
 
+  @ApiOperation({
+    summary: 'Reset password with OTP verification',
+    description: `
+    Completes password reset process using OTP verification.
+    
+    **Process:**
+    1. Verifies OTP code is valid and not expired
+    2. Validates new password meets complexity requirements
+    3. Updates user password with secure hashing
+    4. Marks OTP as used
+    
+    **Password Requirements:**
+    - Minimum 8 characters
+    - At least 1 uppercase letter
+    - At least 1 lowercase letter  
+    - At least 1 number
+    - At least 1 special character (@$!%*?&)
+    
+    **Security Features:**
+    - bcrypt password hashing
+    - OTP single-use enforcement
+    - Password strength validation
+    `,
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Password reset successfully',
+    schema: {
+      type: 'object',
+      properties: {
+        success: { type: 'boolean', example: true },
+        message: { type: 'string', example: 'Password reset successfully' },
+      },
+    },
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized - Invalid or expired reset code',
+    schema: {
+      type: 'object',
+      properties: {
+        statusCode: { type: 'number', example: 401 },
+        message: { type: 'string', example: 'Invalid or expired reset code' },
+        error: { type: 'string', example: 'Unauthorized' },
+      },
+    },
+  })
+  @ApiBody({
+    description: 'Email, OTP, and new password for reset',
+    schema: {
+      type: 'object',
+      properties: {
+        email: {
+          type: 'string',
+          format: 'email',
+          example: 'user@example.com',
+          description: 'Email address',
+        },
+        otp: {
+          type: 'string',
+          example: '123456',
+          pattern: '^[0-9]{6}$',
+          description: '6-digit OTP code received via email',
+        },
+        newPassword: {
+          type: 'string',
+          example: 'NewSecure123!',
+          minLength: 8,
+          pattern:
+            '^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$',
+          description: 'New password (must meet complexity requirements)',
+        },
+      },
+      required: ['email', 'otp', 'newPassword'],
+    },
+  })
   @Post('reset-password')
-  async resetPassword(@Body() resetDto: { email: string; otp: string; newPassword: string }) {
+  async resetPassword(
+    @Body() resetDto: { email: string; otp: string; newPassword: string },
+  ) {
     try {
       const { email, otp, newPassword } = resetDto;
 
       // Verify OTP
-      const isOtpValid = await this.otpService.verifyOTP(email, otp, 'password_reset');
+      const isOtpValid = await this.otpService.verifyOTP(
+        email,
+        otp,
+        'password_reset',
+      );
       if (!isOtpValid) {
         throw new UnauthorizedException('Invalid or expired reset code');
       }
@@ -333,19 +612,183 @@ export class AuthController {
     }
   }
 
+  @ApiOperation({
+    summary: 'Test OTP generation (Development Only)',
+    description: `
+    **⚠️ DEVELOPMENT ONLY - Disabled in Production**
+    
+    Generates test OTP and optionally returns the code for testing purposes.
+    
+    **Usage:**
+    - Frontend testing and debugging
+    - Integration testing
+    - Email service verification
+    
+    **Security:**
+    - Only available when NODE_ENV=development
+    - Returns OTP code in response for testing
+    - Disabled automatically in production
+    `,
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Test OTP generated successfully',
+    schema: {
+      type: 'object',
+      properties: {
+        success: { type: 'boolean', example: true },
+        message: { type: 'string', example: 'OTP generated and sent' },
+        otp: {
+          type: 'string',
+          example: '123456',
+          description: 'OTP code (only in development mode)',
+        },
+      },
+    },
+  })
+  @ApiResponse({
+    status: 403,
+    description: 'Forbidden - Not available in production',
+    schema: {
+      type: 'object',
+      properties: {
+        statusCode: { type: 'number', example: 403 },
+        message: {
+          type: 'string',
+          example: 'Test endpoints not available in production',
+        },
+        error: { type: 'string', example: 'Forbidden' },
+      },
+    },
+  })
+  @ApiBody({
+    description: 'Email address for testing OTP generation',
+    schema: {
+      type: 'object',
+      properties: {
+        email: {
+          type: 'string',
+          format: 'email',
+          example: 'test@example.com',
+          description: 'Email address for testing OTP generation',
+        },
+      },
+      required: ['email'],
+    },
+  })
   @Post('test-otp')
   async testOTP(@Body() { email }: { email: string }) {
+    // Add environment check to your existing implementation
+    if (process.env.NODE_ENV === 'production') {
+      throw new BadRequestException(
+        'Test endpoints not available in production',
+      );
+    }
+
     try {
       const otp = await this.otpService.generateOTP(email, 'verification');
       return {
         success: true,
         message: 'OTP generated and sent',
         // Remove this in production - only for testing
-        otp: process.env.NODE_ENV === 'development' ? otp : undefined
+        otp: process.env.NODE_ENV === 'development' ? otp : undefined,
       };
     } catch (error) {
       console.error('Test OTP error:', error);
       throw new BadRequestException('Failed to generate OTP');
+    }
+  }
+
+  @ApiOperation({
+    summary: 'Send application status notification',
+    description: `
+    Sends formatted email notification for application status updates.
+    
+    **Supported Statuses:**
+    - Pending (Orange theme)
+    - Approved (Green theme)
+    - Rejected (Red theme)
+    - Ready for Pickup (Blue theme)
+    
+    **Email Features:**
+    - Professional branded templates
+    - Status-specific color coding
+    - Application details included
+    - Responsive design
+    `,
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Application notification sent successfully',
+    schema: {
+      type: 'object',
+      properties: {
+        success: { type: 'boolean', example: true },
+        message: {
+          type: 'string',
+          example: 'Application notification sent successfully',
+        },
+      },
+    },
+  })
+  @ApiBody({
+    description: 'Application notification details',
+    schema: {
+      type: 'object',
+      properties: {
+        email: {
+          type: 'string',
+          format: 'email',
+          example: 'user@example.com',
+          description: 'Recipient email address',
+        },
+        applicationId: {
+          type: 'string',
+          example: 'APP-001',
+          description: 'Application ID',
+        },
+        status: {
+          type: 'string',
+          enum: ['Pending', 'Approved', 'Rejected', 'Ready for Pickup'],
+          example: 'Approved',
+          description: 'Application status',
+        },
+        applicationType: {
+          type: 'string',
+          example: 'Birth Certificate',
+          description: 'Type of application',
+        },
+      },
+      required: ['email', 'applicationId', 'status', 'applicationType'],
+    },
+  })
+  @Post('send-application-notification')
+  async sendApplicationNotification(
+    @Body()
+    notificationDto: {
+      email: string;
+      applicationId: string;
+      status: string;
+      applicationType: string;
+    },
+  ) {
+    try {
+      const { email, applicationId, status, applicationType } = notificationDto;
+
+      await this.emailService.sendApplicationNotification(
+        email,
+        applicationId,
+        status,
+        applicationType,
+      );
+
+      return {
+        success: true,
+        message: 'Application notification sent successfully',
+      };
+    } catch (error) {
+      console.error('Error sending application notification:', error);
+      throw new BadRequestException('Failed to send application notification');
     }
   }
 }

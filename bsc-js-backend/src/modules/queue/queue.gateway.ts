@@ -33,7 +33,9 @@ export class QueueGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   handleConnection(client: Socket) {
     this.logger.log(`Client connected: ${client.id}`);
-    this.logger.log(`CORS origin configured: ${this.configService.get('WS_CORS_ORIGIN')}`);
+    this.logger.log(
+      `CORS origin configured: ${this.configService.get('WS_CORS_ORIGIN')}`,
+    );
   }
 
   handleDisconnect(client: Socket) {

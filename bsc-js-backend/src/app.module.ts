@@ -49,7 +49,9 @@ import { EmailService } from './services/email.service';
             // Disable foreign key checks for development
             await conn.query('SET FOREIGN_KEY_CHECKS=0;');
             // Set time zone using environment variable
-            await conn.query(`SET time_zone = '${configService.get('DB_TIMEZONE') || '+08:00'}';`);
+            await conn.query(
+              `SET time_zone = '${configService.get('DB_TIMEZONE') || '+08:00'}';`,
+            );
           }
         },
         afterConnect: async (connection): Promise<void> => {

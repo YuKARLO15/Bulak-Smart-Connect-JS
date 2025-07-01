@@ -31,29 +31,62 @@ async function bootstrap() {
   const config = new DocumentBuilder()
     .setTitle(configService.get('SWAGGER_TITLE') || 'Bulak Smart Connect API')
     .setDescription(
-      configService.get('SWAGGER_DESCRIPTION') || `
-    REST API for Bulak Smart Connect Municipal Services System
+      configService.get('SWAGGER_DESCRIPTION') ||
+        `
+    🏛️ **REST API for Bulak Smart Connect Municipal Services System**
     
-    ## Features
-    - User Authentication & Authorization
-    - Queue Management System
-    - Appointment Scheduling
-    - Municipal Announcements
-    - Role-based Access Control
-    - MinIO Document Storage 
+    ## 🌟 Features
+    - **🔐 User Authentication & Authorization** with JWT tokens
+    - **📧 OTP Email Verification System** for secure operations
+    - **🔄 Queue Management System** for municipal services
+    - **📅 Appointment Scheduling** with calendar integration
+    - **📢 Municipal Announcements** and notifications
+    - **👥 Role-based Access Control** (Citizen, Admin, Super Admin)
+    - **📁 MinIO Document Storage** for file management
+    - **🔐 Password Reset** with email verification
     
-    ## Authentication
-    Most endpoints require JWT authentication. Use the login endpoint to obtain a token.
+    ## 🔐 Authentication
+    Most endpoints require JWT authentication. Use the \`/auth/login\` endpoint to get a JWT token,
+    then include it in the Authorization header: \`Bearer <your-token>\`
+    
+    ## 📧 OTP System Features
+    - ✅ Secure 6-digit OTP codes with time-based expiration
+    - ⏰ 5-minute expiration time for security
+    - 📧 Professional HTML email templates
+    - 🎯 Multiple purposes (verification, password_reset)
+    - 🛡️ Anti-spam protection and rate limiting
+    - 🔄 Single-use OTP enforcement
+    
+    **OTP Flow:**
+    1. \`POST /auth/send-otp\` - Generate and send OTP
+    2. \`POST /auth/verify-otp\` - Verify OTP code
+    3. Complete your operation (registration, password reset, etc.)
+    
+    ## 🛡️ Security Features
+    - Password Requirements: 8+ chars, uppercase, lowercase, numbers, special chars
+    - JWT Tokens: Secure session management with expiration
+    - OTP Security: Time-limited, single-use verification codes
+    - Rate Limiting: Prevents abuse and spam attacks
+    - Input Validation: Comprehensive request validation
+    
+    ## 📱 Integration Ready
+    - React components available for OTP verification
+    - Material-UI forgot password dialogs
+    - Real-time validation and feedback
+    - Mobile-responsive design
   `,
     )
-    .setVersion(configService.get('SWAGGER_VERSION') || '1.0.0')
+    .setVersion(configService.get('SWAGGER_VERSION') || '1.2.0')
     .setContact(
       'Bulak Smart Connect Team',
       'https://github.com/YuKARLO15/Bulak-Smart-Connect-JS',
       'contact@bulaksmartconnect.com',
     )
     .setLicense('MIT', 'https://opensource.org/licenses/MIT')
-    .addServer(`http://localhost:${configService.get('PORT') || 3000}`, 'Development Server')
+    .addServer(
+      `http://localhost:${configService.get('PORT') || 3000}`,
+      'Development Server',
+    )
     .addBearerAuth(
       {
         type: 'http',
@@ -65,7 +98,10 @@ async function bootstrap() {
       },
       'JWT-auth',
     )
-    .addTag('Authentication', 'User authentication and profile management')
+    .addTag(
+      'Authentication & OTP',
+      '🔐 User authentication, registration, and OTP verification system',
+    )
     .addTag(
       'Queue Management',
       'Real-time queue management for municipal services',
@@ -82,7 +118,9 @@ async function bootstrap() {
   SwaggerModule.setup('api/docs', app, document);
 
   // Enable CORS
-  const allowedOrigins = configService.get('ALLOWED_ORIGINS')?.split(',') || [configService.get('FRONTEND_URL') || 'http://localhost:5173'];
+  const allowedOrigins = configService.get('ALLOWED_ORIGINS')?.split(',') || [
+    configService.get('FRONTEND_URL') || 'http://localhost:5173',
+  ];
   app.enableCors({
     origin: allowedOrigins,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
@@ -100,9 +138,13 @@ async function bootstrap() {
   const port = configService.get('PORT') || 3000;
   const host = configService.get('HOST') || 'localhost';
   await app.listen(port);
-  
-  console.log(`🚀 Application is running on: ${configService.get('SERVER_BASE_URL') || `http://${host}:${port}`}`);
-  console.log(`📚 Swagger docs available at: ${configService.get('SWAGGER_URL') || `http://${host}:${port}/api/docs`}`);
+
+  console.log(
+    `🚀 Application is running on: ${configService.get('SERVER_BASE_URL') || `http://${host}:${port}`}`,
+  );
+  console.log(
+    `📚 Swagger docs available at: ${configService.get('SWAGGER_URL') || `http://${host}:${port}/api/docs`}`,
+  );
   console.log(`🌐 CORS enabled for: ${allowedOrigins.join(', ')}`);
   console.log(`🔗 WebSocket CORS: ${configService.get('WS_CORS_ORIGIN')}`);
 }
