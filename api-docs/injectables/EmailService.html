@@ -514,7 +514,7 @@ export class EmailService {
               © 2025 Bulak LGU Smart Connect. All rights reserved.
             &lt;/div&gt;
           &lt;/div&gt;
-        &#x60;
+        &#x60;,
       },
       password_reset: {
         subject: &#x27;🔒 Bulak LGU Smart Connect - Password Reset&#x27;,
@@ -539,7 +539,7 @@ export class EmailService {
               © 2025 Bulak LGU Smart Connect. All rights reserved.
             &lt;/div&gt;
           &lt;/div&gt;
-        &#x60;
+        &#x60;,
       },
       application_update: {
         subject: &#x27;📋 Bulak LGU Smart Connect - Application Status Update&#x27;,
@@ -562,8 +562,8 @@ export class EmailService {
               © 2025 Bulak LGU Smart Connect. All rights reserved.
             &lt;/div&gt;
           &lt;/div&gt;
-        &#x60;
-      }
+        &#x60;,
+      },
     };
 
     const template &#x3D; templates[purpose] || templates.verification;
@@ -578,12 +578,17 @@ export class EmailService {
     return await this.transporter.sendMail(mailOptions);
   }
 
-  async sendApplicationNotification(email: string, applicationId: string, status: string, applicationType: string) {
+  async sendApplicationNotification(
+    email: string,
+    applicationId: string,
+    status: string,
+    applicationType: string,
+  ) {
     const statusColors &#x3D; {
-      &#x27;Pending&#x27;: &#x27;#f39c12&#x27;,
-      &#x27;Approved&#x27;: &#x27;#27ae60&#x27;,
-      &#x27;Rejected&#x27;: &#x27;#e74c3c&#x27;,
-      &#x27;Ready for Pickup&#x27;: &#x27;#3498db&#x27;
+      Pending: &#x27;#f39c12&#x27;,
+      Approved: &#x27;#27ae60&#x27;,
+      Rejected: &#x27;#e74c3c&#x27;,
+      &#x27;Ready for Pickup&#x27;: &#x27;#3498db&#x27;,
     };
 
     const mailOptions &#x3D; {
@@ -618,7 +623,8 @@ export class EmailService {
 
     return await this.transporter.sendMail(mailOptions);
   }
-}</code></pre>
+}
+</code></pre>
     </div>
 
 </div>

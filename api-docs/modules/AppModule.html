@@ -408,7 +408,9 @@ import { EmailService } from &#x27;./services/email.service&#x27;;
             // Disable foreign key checks for development
             await conn.query(&#x27;SET FOREIGN_KEY_CHECKS&#x3D;0;&#x27;);
             // Set time zone using environment variable
-            await conn.query(&#x60;SET time_zone &#x3D; &#x27;${configService.get(&#x27;DB_TIMEZONE&#x27;) || &#x27;+08:00&#x27;}&#x27;;&#x60;);
+            await conn.query(
+              &#x60;SET time_zone &#x3D; &#x27;${configService.get(&#x27;DB_TIMEZONE&#x27;) || &#x27;+08:00&#x27;}&#x27;;&#x60;,
+            );
           }
         },
         afterConnect: async (connection): Promise&lt;void&gt; &#x3D;&gt; {

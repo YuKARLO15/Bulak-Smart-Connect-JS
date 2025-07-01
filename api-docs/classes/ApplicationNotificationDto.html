@@ -208,7 +208,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="128" class="link-to-prism">src/auth/dto/otp.dto.ts:128</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="133" class="link-to-prism">src/auth/dto/otp.dto.ts:133</a></div>
                         </td>
                     </tr>
 
@@ -245,7 +245,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="143" class="link-to-prism">src/auth/dto/otp.dto.ts:143</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="148" class="link-to-prism">src/auth/dto/otp.dto.ts:148</a></div>
                         </td>
                     </tr>
 
@@ -282,7 +282,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="121" class="link-to-prism">src/auth/dto/otp.dto.ts:121</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="126" class="link-to-prism">src/auth/dto/otp.dto.ts:126</a></div>
                         </td>
                     </tr>
 
@@ -319,7 +319,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="136" class="link-to-prism">src/auth/dto/otp.dto.ts:136</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="141" class="link-to-prism">src/auth/dto/otp.dto.ts:141</a></div>
                         </td>
                     </tr>
 
@@ -339,7 +339,13 @@
 
     <div class="tab-pane fade  tab-source-code" id="source">
         <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { ApiProperty, ApiPropertyOptional } from &#x27;@nestjs/swagger&#x27;;
-import { IsEmail, IsString, IsOptional, Length, Matches } from &#x27;class-validator&#x27;;
+import {
+  IsEmail,
+  IsString,
+  IsOptional,
+  Length,
+  Matches,
+} from &#x27;class-validator&#x27;;
 
 export class SendOtpDto {
   @ApiProperty({
@@ -428,16 +434,15 @@ export class ResetPasswordDto {
     description: &#x27;New password (must meet complexity requirements)&#x27;,
     example: &#x27;NewSecure123!&#x27;,
     minLength: 8,
-    pattern: &#x27;^(?&#x3D;.*[a-z])(?&#x3D;.*[A-Z])(?&#x3D;.*\\d)(?&#x3D;.*[@$!%*?&amp;])[A-Za-z\\d@$!%*?&amp;]{8,}$&#x27;,
+    pattern:
+      &#x27;^(?&#x3D;.*[a-z])(?&#x3D;.*[A-Z])(?&#x3D;.*\\d)(?&#x3D;.*[@$!%*?&amp;])[A-Za-z\\d@$!%*?&amp;]{8,}$&#x27;,
   })
   @IsString()
   @Length(8, 100, { message: &#x27;Password must be at least 8 characters long&#x27; })
-  @Matches(
-    /^(?&#x3D;.*[a-z])(?&#x3D;.*[A-Z])(?&#x3D;.*\d)(?&#x3D;.*[@$!%*?&amp;])[A-Za-z\d@$!%*?&amp;]/,
-    {
-      message: &#x27;Password must contain uppercase, lowercase, numbers, and special characters&#x27;,
-    },
-  )
+  @Matches(/^(?&#x3D;.*[a-z])(?&#x3D;.*[A-Z])(?&#x3D;.*\d)(?&#x3D;.*[@$!%*?&amp;])[A-Za-z\d@$!%*?&amp;]/, {
+    message:
+      &#x27;Password must contain uppercase, lowercase, numbers, and special characters&#x27;,
+  })
   newPassword: string;
 }
 
@@ -481,7 +486,8 @@ export class ApplicationNotificationDto {
   })
   @IsString()
   applicationType: string;
-}</code></pre>
+}
+</code></pre>
     </div>
 </div>
 

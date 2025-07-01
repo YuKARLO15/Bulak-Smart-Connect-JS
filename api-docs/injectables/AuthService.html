@@ -287,8 +287,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="383"
-                                    class="link-to-prism">src/auth/auth.service.ts:383</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="385"
+                                    class="link-to-prism">src/auth/auth.service.ts:385</a></div>
                         </td>
                     </tr>
 
@@ -380,8 +380,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="539"
-                                    class="link-to-prism">src/auth/auth.service.ts:539</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="541"
+                                    class="link-to-prism">src/auth/auth.service.ts:541</a></div>
                         </td>
                     </tr>
 
@@ -725,8 +725,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="553"
-                                    class="link-to-prism">src/auth/auth.service.ts:553</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="555"
+                                    class="link-to-prism">src/auth/auth.service.ts:555</a></div>
                         </td>
                     </tr>
 
@@ -887,8 +887,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="584"
-                                    class="link-to-prism">src/auth/auth.service.ts:584</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="586"
+                                    class="link-to-prism">src/auth/auth.service.ts:586</a></div>
                         </td>
                     </tr>
 
@@ -1288,7 +1288,9 @@ export class AuthService {
       // Handle password change if provided
       if (updateUserDto.password) {
         // Validate password strength
-        const passwordValidation &#x3D; this.validatePasswordStrength(updateUserDto.password);
+        const passwordValidation &#x3D; this.validatePasswordStrength(
+          updateUserDto.password,
+        );
         if (!passwordValidation.isValid) {
           throw new BadRequestException(passwordValidation.message);
         }
@@ -1582,7 +1584,7 @@ export class AuthService {
       // Update password in database
       await this.usersRepository.update(
         { id: user.id },
-        { password: hashedPassword }
+        { password: hashedPassword },
       );
 
       console.log(&#x60;Password updated successfully for user: ${email}&#x60;);
@@ -1592,13 +1594,19 @@ export class AuthService {
     }
   }
 
-  private validatePasswordStrength(password: string): { isValid: boolean; message?: string } {
+  private validatePasswordStrength(password: string): {
+    isValid: boolean;
+    message?: string;
+  } {
     if (!password) {
       return { isValid: false, message: &#x27;Password is required&#x27; };
     }
 
     if (password.length &lt; 8) {
-      return { isValid: false, message: &#x27;Password must be at least 8 characters long&#x27; };
+      return {
+        isValid: false,
+        message: &#x27;Password must be at least 8 characters long&#x27;,
+      };
     }
 
     const hasUpperCase &#x3D; /[A-Z]/.test(password);
@@ -1607,19 +1615,32 @@ export class AuthService {
     const hasSpecialChars &#x3D; /[!@#$%^&amp;*(),.?&quot;:{}|&lt;&gt;]/.test(password);
 
     if (!hasUpperCase) {
-      return { isValid: false, message: &#x27;Password must contain at least one uppercase letter&#x27; };
+      return {
+        isValid: false,
+        message: &#x27;Password must contain at least one uppercase letter&#x27;,
+      };
     }
 
     if (!hasLowerCase) {
-      return { isValid: false, message: &#x27;Password must contain at least one lowercase letter&#x27; };
+      return {
+        isValid: false,
+        message: &#x27;Password must contain at least one lowercase letter&#x27;,
+      };
     }
 
     if (!hasNumbers) {
-      return { isValid: false, message: &#x27;Password must contain at least one number&#x27; };
+      return {
+        isValid: false,
+        message: &#x27;Password must contain at least one number&#x27;,
+      };
     }
 
     if (!hasSpecialChars) {
-      return { isValid: false, message: &#x27;Password must contain at least one special character (!@#$%^&amp;*(),.?&quot;:{}|&lt;&gt;)&#x27; };
+      return {
+        isValid: false,
+        message:
+          &#x27;Password must contain at least one special character (!@#$%^&amp;*(),.?&quot;:{}|&lt;&gt;)&#x27;,
+      };
     }
 
     return { isValid: true };

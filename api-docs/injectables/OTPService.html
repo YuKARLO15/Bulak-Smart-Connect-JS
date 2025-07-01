@@ -259,8 +259,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="83"
-                                    class="link-to-prism">src/services/otp.service.ts:83</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="92"
+                                    class="link-to-prism">src/services/otp.service.ts:92</a></div>
                         </td>
                     </tr>
 
@@ -385,8 +385,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="57"
-                                    class="link-to-prism">src/services/otp.service.ts:57</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="62"
+                                    class="link-to-prism">src/services/otp.service.ts:62</a></div>
                         </td>
                     </tr>
 
@@ -488,11 +488,14 @@ export class OTPService {
     private configService: ConfigService,
   ) {}
 
-  async generateOTP(email: string, purpose: string &#x3D; &#x27;verification&#x27;): Promise&lt;string&gt; {
+  async generateOTP(
+    email: string,
+    purpose: string &#x3D; &#x27;verification&#x27;,
+  ): Promise&lt;string&gt; {
     // Invalidate any existing OTPs for this email and purpose
     await this.otpRepository.update(
       { email, purpose, verified: false },
-      { verified: true } // Mark as used
+      { verified: true }, // Mark as used
     );
 
     // Generate new OTP
@@ -501,11 +504,13 @@ export class OTPService {
       secret: this.configService.get(&#x27;OTP_SECRET&#x27;) || &#x27;default-secret-key&#x27;,
       digits: otpLength,
       step: 300, // 5 minutes
-      encoding: &#x27;base32&#x27;
+      encoding: &#x27;base32&#x27;,
     });
 
     // Calculate expiry time
-    const expiryMinutes &#x3D; parseInt(this.configService.get(&#x27;OTP_EXPIRY_MINUTES&#x27;, &#x27;5&#x27;));
+    const expiryMinutes &#x3D; parseInt(
+      this.configService.get(&#x27;OTP_EXPIRY_MINUTES&#x27;, &#x27;5&#x27;),
+    );
     const expiresAt &#x3D; new Date();
     expiresAt.setMinutes(expiresAt.getMinutes() + expiryMinutes);
 
@@ -515,7 +520,7 @@ export class OTPService {
       otp,
       purpose,
       expiresAt,
-      verified: false
+      verified: false,
     });
 
     await this.otpRepository.save(otpEntity);
@@ -526,14 +531,18 @@ export class OTPService {
     return otp; // Only return for testing purposes
   }
 
-  async verifyOTP(email: string, otp: string, purpose: string &#x3D; &#x27;verification&#x27;): Promise&lt;boolean&gt; {
+  async verifyOTP(
+    email: string,
+    otp: string,
+    purpose: string &#x3D; &#x27;verification&#x27;,
+  ): Promise&lt;boolean&gt; {
     const otpEntity &#x3D; await this.otpRepository.findOne({
       where: {
         email,
         otp,
         purpose,
-        verified: false
-      }
+        verified: false,
+      },
     });
 
     if (!otpEntity) {
@@ -554,10 +563,11 @@ export class OTPService {
 
   async cleanupExpiredOTPs(): Promise&lt;void&gt; {
     await this.otpRepository.delete({
-      expiresAt: LessThan(new Date())
+      expiresAt: LessThan(new Date()),
     });
   }
-}</code></pre>
+}
+</code></pre>
     </div>
 
 </div>

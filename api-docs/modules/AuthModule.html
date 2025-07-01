@@ -363,13 +363,13 @@ import { AuthController } from &#x27;./auth.controller&#x27;;
 import { User } from &#x27;../users/entities/user.entity&#x27;;
 import { JwtStrategy } from &#x27;./jwt.strategy&#x27;;
 import { RolesModule } from &#x27;../roles/roles.module&#x27;;
-import { OTP } from &#x27;../entities/otp.entity&#x27;; 
-import { OTPService } from &#x27;../services/otp.service&#x27;; 
-import { EmailService } from &#x27;../services/email.service&#x27;; 
+import { OTP } from &#x27;../entities/otp.entity&#x27;;
+import { OTPService } from &#x27;../services/otp.service&#x27;;
+import { EmailService } from &#x27;../services/email.service&#x27;;
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User, OTP]), 
+    TypeOrmModule.forFeature([User, OTP]),
     PassportModule.register({ defaultStrategy: &#x27;jwt&#x27; }),
     JwtModule.registerAsync({
       imports: [ConfigModule],
@@ -381,14 +381,9 @@ import { EmailService } from &#x27;../services/email.service&#x27;;
     }),
     RolesModule,
   ],
-  providers: [
-    AuthService, 
-    JwtStrategy, 
-    OTPService,    
-    EmailService    
-  ],
+  providers: [AuthService, JwtStrategy, OTPService, EmailService],
   controllers: [AuthController],
-  exports: [AuthService, JwtStrategy, PassportModule, OTPService, EmailService], 
+  exports: [AuthService, JwtStrategy, PassportModule, OTPService, EmailService],
 })
 export class AuthModule {}
 </code></pre>

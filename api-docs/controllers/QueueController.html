@@ -1521,8 +1521,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="251"
-                                    class="link-to-prism">src/modules/queue/queue.controller.ts:251</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="262"
+                                    class="link-to-prism">src/modules/queue/queue.controller.ts:262</a></div>
                         </td>
                     </tr>
 
@@ -2053,21 +2053,32 @@ export class QueueController {
   @UseGuards(JwtAuthGuard)
   async manualDailyReset(@User() user?: UserEntity) {
     // Only allows privileged users
-    if (!user || !user.roles?.some(role &#x3D;&gt; [&#x27;admin&#x27;, &#x27;super_admin&#x27;, &#x27;staff&#x27;].includes(role.name))) {
-      console.log(&#x60;Unauthorized reset attempt by user: ${user?.username || &#x27;unknown&#x27;} with roles: ${user?.roles?.map(r &#x3D;&gt; r.name).join(&#x27;, &#x27;) || &#x27;none&#x27;}&#x60;);
-      throw new UnauthorizedException(&#x27;Admin, Super Admin, or Staff privileges required&#x27;);
+    if (
+      !user ||
+      !user.roles?.some((role) &#x3D;&gt;
+        [&#x27;admin&#x27;, &#x27;super_admin&#x27;, &#x27;staff&#x27;].includes(role.name),
+      )
+    ) {
+      console.log(
+        &#x60;Unauthorized reset attempt by user: ${user?.username || &#x27;unknown&#x27;} with roles: ${user?.roles?.map((r) &#x3D;&gt; r.name).join(&#x27;, &#x27;) || &#x27;none&#x27;}&#x60;,
+      );
+      throw new UnauthorizedException(
+        &#x27;Admin, Super Admin, or Staff privileges required&#x27;,
+      );
     }
 
-    console.log(&#x60;Manual daily reset triggered by ${user.roles.map(r &#x3D;&gt; r.name).join(&#x27;, &#x27;)}: ${user.username}&#x60;);
-    
+    console.log(
+      &#x60;Manual daily reset triggered by ${user.roles.map((r) &#x3D;&gt; r.name).join(&#x27;, &#x27;)}: ${user.username}&#x60;,
+    );
+
     try {
       await this.queueSchedulerService.manualDailyReset();
-      
+
       return {
         success: true,
         message: &#x27;Daily queue reset completed successfully&#x27;,
         timestamp: new Date(),
-        triggeredBy: user.username
+        triggeredBy: user.username,
       };
     } catch (error) {
       console.error(&#x27;Error during manual daily reset:&#x27;, error);
@@ -2079,7 +2090,12 @@ export class QueueController {
   @UseGuards(JwtAuthGuard)
   async getTodayPendingCount(@User() user?: UserEntity) {
     // Only allows privileged users
-    if (!user || !user.roles?.some(role &#x3D;&gt; [&#x27;admin&#x27;, &#x27;super_admin&#x27;, &#x27;staff&#x27;].includes(role.name))) {
+    if (
+      !user ||
+      !user.roles?.some((role) &#x3D;&gt;
+        [&#x27;admin&#x27;, &#x27;super_admin&#x27;, &#x27;staff&#x27;].includes(role.name),
+      )
+    ) {
       throw new UnauthorizedException(&#x27;Admin access required&#x27;);
     }
 

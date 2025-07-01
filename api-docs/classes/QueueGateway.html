@@ -434,8 +434,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="39"
-                                    class="link-to-prism">src/modules/queue/queue.gateway.ts:39</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="41"
+                                    class="link-to-prism">src/modules/queue/queue.gateway.ts:41</a></div>
                         </td>
                     </tr>
 
@@ -511,8 +511,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="51"
-                                    class="link-to-prism">src/modules/queue/queue.gateway.ts:51</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="53"
+                                    class="link-to-prism">src/modules/queue/queue.gateway.ts:53</a></div>
                         </td>
                     </tr>
 
@@ -600,8 +600,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="57"
-                                    class="link-to-prism">src/modules/queue/queue.gateway.ts:57</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="59"
+                                    class="link-to-prism">src/modules/queue/queue.gateway.ts:59</a></div>
                         </td>
                     </tr>
 
@@ -689,8 +689,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="44"
-                                    class="link-to-prism">src/modules/queue/queue.gateway.ts:44</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="46"
+                                    class="link-to-prism">src/modules/queue/queue.gateway.ts:46</a></div>
                         </td>
                     </tr>
 
@@ -778,8 +778,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="63"
-                                    class="link-to-prism">src/modules/queue/queue.gateway.ts:63</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="65"
+                                    class="link-to-prism">src/modules/queue/queue.gateway.ts:65</a></div>
                         </td>
                     </tr>
 
@@ -845,8 +845,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="75"
-                                    class="link-to-prism">src/modules/queue/queue.gateway.ts:75</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="77"
+                                    class="link-to-prism">src/modules/queue/queue.gateway.ts:77</a></div>
                         </td>
                     </tr>
 
@@ -924,8 +924,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="70"
-                                    class="link-to-prism">src/modules/queue/queue.gateway.ts:70</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="72"
+                                    class="link-to-prism">src/modules/queue/queue.gateway.ts:72</a></div>
                         </td>
                     </tr>
 
@@ -1028,7 +1028,9 @@ export class QueueGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   handleConnection(client: Socket) {
     this.logger.log(&#x60;Client connected: ${client.id}&#x60;);
-    this.logger.log(&#x60;CORS origin configured: ${this.configService.get(&#x27;WS_CORS_ORIGIN&#x27;)}&#x60;);
+    this.logger.log(
+      &#x60;CORS origin configured: ${this.configService.get(&#x27;WS_CORS_ORIGIN&#x27;)}&#x60;,
+    );
   }
 
   handleDisconnect(client: Socket) {

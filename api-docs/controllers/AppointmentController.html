@@ -935,8 +935,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="176"
-                                    class="link-to-prism">src/modules/appointment/appointment.controller.ts:176</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="178"
+                                    class="link-to-prism">src/modules/appointment/appointment.controller.ts:178</a></div>
                         </td>
                     </tr>
 
@@ -1128,8 +1128,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="157"
-                                    class="link-to-prism">src/modules/appointment/appointment.controller.ts:157</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="159"
+                                    class="link-to-prism">src/modules/appointment/appointment.controller.ts:159</a></div>
                         </td>
                     </tr>
 
@@ -1332,7 +1332,9 @@ export class AppointmentController {
 
     // If not admin and not the appointment owner, don&#x27;t allow update
     if (
-      !user.roles.some((role) &#x3D;&gt; [&#x27;admin&#x27;, &#x27;staff&#x27;, &#x27;super_admin&#x27;].includes(role.name)) &amp;&amp;
+      !user.roles.some((role) &#x3D;&gt;
+        [&#x27;admin&#x27;, &#x27;staff&#x27;, &#x27;super_admin&#x27;].includes(role.name),
+      ) &amp;&amp;
       appointment.userId !&#x3D;&#x3D; user.id
     ) {
       throw new BadRequestException(
@@ -1372,7 +1374,9 @@ export class AppointmentController {
 
     // If not admin and not the appointment owner, don&#x27;t allow deletion
     if (
-      !user.roles.some((role) &#x3D;&gt; [&#x27;admin&#x27;, &#x27;staff&#x27;, &#x27;super_admin&#x27;].includes(role.name)) &amp;&amp;
+      !user.roles.some((role) &#x3D;&gt;
+        [&#x27;admin&#x27;, &#x27;staff&#x27;, &#x27;super_admin&#x27;].includes(role.name),
+      ) &amp;&amp;
       appointment.userId !&#x3D;&#x3D; user.id
     ) {
       throw new BadRequestException(

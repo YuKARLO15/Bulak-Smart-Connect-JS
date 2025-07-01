@@ -454,8 +454,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="154"
-                                    class="link-to-prism">src/modules/document-applications/document-applications.controller.ts:154</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="156"
+                                    class="link-to-prism">src/modules/document-applications/document-applications.controller.ts:156</a></div>
                         </td>
                     </tr>
 
@@ -546,8 +546,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="136"
-                                    class="link-to-prism">src/modules/document-applications/document-applications.controller.ts:136</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="138"
+                                    class="link-to-prism">src/modules/document-applications/document-applications.controller.ts:138</a></div>
                         </td>
                     </tr>
 
@@ -638,8 +638,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="241"
-                                    class="link-to-prism">src/modules/document-applications/document-applications.controller.ts:241</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="245"
+                                    class="link-to-prism">src/modules/document-applications/document-applications.controller.ts:245</a></div>
                         </td>
                     </tr>
 
@@ -778,8 +778,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="165"
-                                    class="link-to-prism">src/modules/document-applications/document-applications.controller.ts:165</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="167"
+                                    class="link-to-prism">src/modules/document-applications/document-applications.controller.ts:167</a></div>
                         </td>
                     </tr>
 
@@ -870,8 +870,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="249"
-                                    class="link-to-prism">src/modules/document-applications/document-applications.controller.ts:249</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="255"
+                                    class="link-to-prism">src/modules/document-applications/document-applications.controller.ts:255</a></div>
                         </td>
                     </tr>
 
@@ -918,8 +918,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="226"
-                                    class="link-to-prism">src/modules/document-applications/document-applications.controller.ts:226</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="230"
+                                    class="link-to-prism">src/modules/document-applications/document-applications.controller.ts:230</a></div>
                         </td>
                     </tr>
 
@@ -1008,8 +1008,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="183"
-                                    class="link-to-prism">src/modules/document-applications/document-applications.controller.ts:183</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="185"
+                                    class="link-to-prism">src/modules/document-applications/document-applications.controller.ts:185</a></div>
                         </td>
                     </tr>
 
@@ -1112,8 +1112,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="211"
-                                    class="link-to-prism">src/modules/document-applications/document-applications.controller.ts:211</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="215"
+                                    class="link-to-prism">src/modules/document-applications/document-applications.controller.ts:215</a></div>
                         </td>
                     </tr>
 
@@ -1435,7 +1435,9 @@ export class DocumentApplicationsController {
   }
 
   @Get(&#x27;:id/files/all&#x27;)
-  @ApiOperation({ summary: &#x27;Get all application files (privileged users only)&#x27; })
+  @ApiOperation({
+    summary: &#x27;Get all application files (privileged users only)&#x27;,
+  })
   @ApiResponse({ status: 200, description: &#x27;All files retrieved successfully&#x27; })
   @ApiResponse({ status: 404, description: &#x27;Application not found&#x27; })
   async getAllApplicationFiles(
@@ -1512,7 +1514,9 @@ export class DocumentApplicationsController {
   @Patch(&#x27;:id/status&#x27;)
   @Roles(&#x27;admin&#x27;, &#x27;staff&#x27;, &#x27;super_admin&#x27;)
   @UseGuards(RolesGuard)
-  @ApiOperation({ summary: &#x27;Update application status (Privileged users only)&#x27; })
+  @ApiOperation({
+    summary: &#x27;Update application status (Privileged users only)&#x27;,
+  })
   async updateStatus(
     @Param(&#x27;id&#x27;) id: string,
     @Body() statusDto: { status: string; statusMessage?: string },
@@ -1550,7 +1554,9 @@ export class DocumentApplicationsController {
   @Get(&#x27;admin/stats&#x27;)
   @Roles(&#x27;admin&#x27;, &#x27;super_admin&#x27;)
   @UseGuards(RolesGuard)
-  @ApiOperation({ summary: &#x27;Get application statistics (Admin/Super Admin only)&#x27; })
+  @ApiOperation({
+    summary: &#x27;Get application statistics (Admin/Super Admin only)&#x27;,
+  })
   async getStats(): Promise&lt;
     Array&lt;{ type: string; status: string; count: string }&gt;
   &gt; {

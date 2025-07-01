@@ -251,8 +251,8 @@ interface RequestWithUser extends Request {
 export class AuthController {
   constructor(
     private authService: AuthService,
-    private otpService: OTPService, 
-    private emailService: EmailService, 
+    private otpService: OTPService,
+    private emailService: EmailService,
   ) {}
 
   @ApiOperation({ summary: &#x27;User login&#x27; })
@@ -506,18 +506,18 @@ export class AuthController {
           type: &#x27;string&#x27;,
           format: &#x27;email&#x27;,
           example: &#x27;user@example.com&#x27;,
-          description: &#x27;Email address to send OTP to&#x27;
+          description: &#x27;Email address to send OTP to&#x27;,
         },
         purpose: {
           type: &#x27;string&#x27;,
           enum: [&#x27;verification&#x27;, &#x27;password_reset&#x27;],
           example: &#x27;verification&#x27;,
           description: &#x27;Purpose of the OTP&#x27;,
-          default: &#x27;verification&#x27;
-        }
+          default: &#x27;verification&#x27;,
+        },
       },
-      required: [&#x27;email&#x27;]
-    }
+      required: [&#x27;email&#x27;],
+    },
   })
   @Post(&#x27;send-otp&#x27;)
   async sendOTP(@Body() sendOtpDto: { email: string; purpose?: string }) {
@@ -591,27 +591,29 @@ export class AuthController {
           type: &#x27;string&#x27;,
           format: &#x27;email&#x27;,
           example: &#x27;user@example.com&#x27;,
-          description: &#x27;Email address&#x27;
+          description: &#x27;Email address&#x27;,
         },
         otp: {
           type: &#x27;string&#x27;,
           example: &#x27;123456&#x27;,
           pattern: &#x27;^[0-9]{6}$&#x27;,
-          description: &#x27;6-digit OTP code&#x27;
+          description: &#x27;6-digit OTP code&#x27;,
         },
         purpose: {
           type: &#x27;string&#x27;,
           enum: [&#x27;verification&#x27;, &#x27;password_reset&#x27;],
           example: &#x27;verification&#x27;,
           description: &#x27;Purpose of the OTP verification&#x27;,
-          default: &#x27;verification&#x27;
-        }
+          default: &#x27;verification&#x27;,
+        },
       },
-      required: [&#x27;email&#x27;, &#x27;otp&#x27;]
-    }
+      required: [&#x27;email&#x27;, &#x27;otp&#x27;],
+    },
   })
   @Post(&#x27;verify-otp&#x27;)
-  async verifyOTP(@Body() verifyOtpDto: { email: string; otp: string; purpose?: string }) {
+  async verifyOTP(
+    @Body() verifyOtpDto: { email: string; otp: string; purpose?: string },
+  ) {
     try {
       const { email, otp, purpose &#x3D; &#x27;verification&#x27; } &#x3D; verifyOtpDto;
 
@@ -658,9 +660,10 @@ export class AuthController {
       type: &#x27;object&#x27;,
       properties: {
         success: { type: &#x27;boolean&#x27;, example: true },
-        message: { 
-          type: &#x27;string&#x27;, 
-          example: &#x27;If this email is registered, you will receive a password reset code&#x27; 
+        message: {
+          type: &#x27;string&#x27;,
+          example:
+            &#x27;If this email is registered, you will receive a password reset code&#x27;,
         },
       },
     },
@@ -674,11 +677,11 @@ export class AuthController {
           type: &#x27;string&#x27;,
           format: &#x27;email&#x27;,
           example: &#x27;user@example.com&#x27;,
-          description: &#x27;Registered email address&#x27;
-        }
+          description: &#x27;Registered email address&#x27;,
+        },
       },
-      required: [&#x27;email&#x27;]
-    }
+      required: [&#x27;email&#x27;],
+    },
   })
   @Post(&#x27;forgot-password&#x27;)
   async forgotPassword(@Body() { email }: { email: string }) {
@@ -689,7 +692,8 @@ export class AuthController {
         // Don&#x27;t reveal if email exists for security
         return {
           success: true,
-          message: &#x27;If this email is registered, you will receive a password reset code&#x27;,
+          message:
+            &#x27;If this email is registered, you will receive a password reset code&#x27;,
         };
       }
 
@@ -761,32 +765,39 @@ export class AuthController {
           type: &#x27;string&#x27;,
           format: &#x27;email&#x27;,
           example: &#x27;user@example.com&#x27;,
-          description: &#x27;Email address&#x27;
+          description: &#x27;Email address&#x27;,
         },
         otp: {
           type: &#x27;string&#x27;,
           example: &#x27;123456&#x27;,
           pattern: &#x27;^[0-9]{6}$&#x27;,
-          description: &#x27;6-digit OTP code received via email&#x27;
+          description: &#x27;6-digit OTP code received via email&#x27;,
         },
         newPassword: {
           type: &#x27;string&#x27;,
           example: &#x27;NewSecure123!&#x27;,
           minLength: 8,
-          pattern: &#x27;^(?&#x3D;.*[a-z])(?&#x3D;.*[A-Z])(?&#x3D;.*\\d)(?&#x3D;.*[@$!%*?&amp;])[A-Za-z\\d@$!%*?&amp;]{8,}$&#x27;,
-          description: &#x27;New password (must meet complexity requirements)&#x27;
-        }
+          pattern:
+            &#x27;^(?&#x3D;.*[a-z])(?&#x3D;.*[A-Z])(?&#x3D;.*\\d)(?&#x3D;.*[@$!%*?&amp;])[A-Za-z\\d@$!%*?&amp;]{8,}$&#x27;,
+          description: &#x27;New password (must meet complexity requirements)&#x27;,
+        },
       },
-      required: [&#x27;email&#x27;, &#x27;otp&#x27;, &#x27;newPassword&#x27;]
-    }
+      required: [&#x27;email&#x27;, &#x27;otp&#x27;, &#x27;newPassword&#x27;],
+    },
   })
   @Post(&#x27;reset-password&#x27;)
-  async resetPassword(@Body() resetDto: { email: string; otp: string; newPassword: string }) {
+  async resetPassword(
+    @Body() resetDto: { email: string; otp: string; newPassword: string },
+  ) {
     try {
       const { email, otp, newPassword } &#x3D; resetDto;
 
       // Verify OTP
-      const isOtpValid &#x3D; await this.otpService.verifyOTP(email, otp, &#x27;password_reset&#x27;);
+      const isOtpValid &#x3D; await this.otpService.verifyOTP(
+        email,
+        otp,
+        &#x27;password_reset&#x27;,
+      );
       if (!isOtpValid) {
         throw new UnauthorizedException(&#x27;Invalid or expired reset code&#x27;);
       }
@@ -830,10 +841,10 @@ export class AuthController {
       properties: {
         success: { type: &#x27;boolean&#x27;, example: true },
         message: { type: &#x27;string&#x27;, example: &#x27;OTP generated and sent&#x27; },
-        otp: { 
-          type: &#x27;string&#x27;, 
+        otp: {
+          type: &#x27;string&#x27;,
           example: &#x27;123456&#x27;,
-          description: &#x27;OTP code (only in development mode)&#x27;
+          description: &#x27;OTP code (only in development mode)&#x27;,
         },
       },
     },
@@ -845,7 +856,10 @@ export class AuthController {
       type: &#x27;object&#x27;,
       properties: {
         statusCode: { type: &#x27;number&#x27;, example: 403 },
-        message: { type: &#x27;string&#x27;, example: &#x27;Test endpoints not available in production&#x27; },
+        message: {
+          type: &#x27;string&#x27;,
+          example: &#x27;Test endpoints not available in production&#x27;,
+        },
         error: { type: &#x27;string&#x27;, example: &#x27;Forbidden&#x27; },
       },
     },
@@ -859,26 +873,28 @@ export class AuthController {
           type: &#x27;string&#x27;,
           format: &#x27;email&#x27;,
           example: &#x27;test@example.com&#x27;,
-          description: &#x27;Email address for testing OTP generation&#x27;
-        }
+          description: &#x27;Email address for testing OTP generation&#x27;,
+        },
       },
-      required: [&#x27;email&#x27;]
-    }
+      required: [&#x27;email&#x27;],
+    },
   })
   @Post(&#x27;test-otp&#x27;)
   async testOTP(@Body() { email }: { email: string }) {
     // Add environment check to your existing implementation
     if (process.env.NODE_ENV &#x3D;&#x3D;&#x3D; &#x27;production&#x27;) {
-      throw new BadRequestException(&#x27;Test endpoints not available in production&#x27;);
+      throw new BadRequestException(
+        &#x27;Test endpoints not available in production&#x27;,
+      );
     }
-    
+
     try {
       const otp &#x3D; await this.otpService.generateOTP(email, &#x27;verification&#x27;);
       return {
         success: true,
         message: &#x27;OTP generated and sent&#x27;,
         // Remove this in production - only for testing
-        otp: process.env.NODE_ENV &#x3D;&#x3D;&#x3D; &#x27;development&#x27; ? otp : undefined
+        otp: process.env.NODE_ENV &#x3D;&#x3D;&#x3D; &#x27;development&#x27; ? otp : undefined,
       };
     } catch (error) {
       console.error(&#x27;Test OTP error:&#x27;, error);
@@ -911,7 +927,10 @@ export class AuthController {
       type: &#x27;object&#x27;,
       properties: {
         success: { type: &#x27;boolean&#x27;, example: true },
-        message: { type: &#x27;string&#x27;, example: &#x27;Application notification sent successfully&#x27; },
+        message: {
+          type: &#x27;string&#x27;,
+          example: &#x27;Application notification sent successfully&#x27;,
+        },
       },
     },
   })
@@ -924,48 +943,51 @@ export class AuthController {
           type: &#x27;string&#x27;,
           format: &#x27;email&#x27;,
           example: &#x27;user@example.com&#x27;,
-          description: &#x27;Recipient email address&#x27;
+          description: &#x27;Recipient email address&#x27;,
         },
         applicationId: {
           type: &#x27;string&#x27;,
           example: &#x27;APP-001&#x27;,
-          description: &#x27;Application ID&#x27;
+          description: &#x27;Application ID&#x27;,
         },
         status: {
           type: &#x27;string&#x27;,
           enum: [&#x27;Pending&#x27;, &#x27;Approved&#x27;, &#x27;Rejected&#x27;, &#x27;Ready for Pickup&#x27;],
           example: &#x27;Approved&#x27;,
-          description: &#x27;Application status&#x27;
+          description: &#x27;Application status&#x27;,
         },
         applicationType: {
           type: &#x27;string&#x27;,
           example: &#x27;Birth Certificate&#x27;,
-          description: &#x27;Type of application&#x27;
-        }
+          description: &#x27;Type of application&#x27;,
+        },
       },
-      required: [&#x27;email&#x27;, &#x27;applicationId&#x27;, &#x27;status&#x27;, &#x27;applicationType&#x27;]
-    }
+      required: [&#x27;email&#x27;, &#x27;applicationId&#x27;, &#x27;status&#x27;, &#x27;applicationType&#x27;],
+    },
   })
   @Post(&#x27;send-application-notification&#x27;)
-  async sendApplicationNotification(@Body() notificationDto: {
-    email: string;
-    applicationId: string;
-    status: string;
-    applicationType: string;
-  }) {
+  async sendApplicationNotification(
+    @Body()
+    notificationDto: {
+      email: string;
+      applicationId: string;
+      status: string;
+      applicationType: string;
+    },
+  ) {
     try {
       const { email, applicationId, status, applicationType } &#x3D; notificationDto;
-      
+
       await this.emailService.sendApplicationNotification(
         email,
         applicationId,
         status,
-        applicationType
+        applicationType,
       );
-      
+
       return {
         success: true,
-        message: &#x27;Application notification sent successfully&#x27;
+        message: &#x27;Application notification sent successfully&#x27;,
       };
     } catch (error) {
       console.error(&#x27;Error sending application notification:&#x27;, error);
