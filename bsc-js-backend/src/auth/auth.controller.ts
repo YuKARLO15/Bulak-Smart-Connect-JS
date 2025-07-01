@@ -38,6 +38,7 @@ import {
   TestOtpDto,
   ApplicationNotificationDto,
 } from './dto/otp.dto';
+import { QueueNotificationDto } from './dto/queue-notification.dto';
 
 interface RequestWithUser extends Request {
   user: AuthenticatedUser;
@@ -798,6 +799,50 @@ export class AuthController {
     } catch (error) {
       console.error('Error sending application notification:', error);
       throw new BadRequestException('Failed to send application notification');
+    }
+  }
+
+  @ApiOperation({
+    summary: 'Send queue notification',
+    description: 'Send email notification for queue position or status updates',
+  })
+  @Post('send-queue-notification')
+  async sendQueueNotification(@Body() notificationDto: QueueNotificationDto) {
+    try {
+      const { email, queueNumber, type, position, estimatedTime, status, message } = notificationDto;
+
+      if (type === 'position_alert') {
+        // Fix: Ensure position is defined for position alerts
+        if (position === undefined) {
+          throw new BadRequestException('Position is required for position alerts');
+        }
+        
+        await this.emailService.sendQueuePositionAlert(
+          email,
+          queueNumber,
+          position, // Now guaranteed to be a number
+          estimatedTime || '10 minutes', // Provide default if undefined
+        );
+      } else if (type === 'status_update') {
+        await this.emailService.sendQueueStatusUpdate(
+          email,
+          queueNumber,
+          status || 'now_serving', // Provide default if undefined
+          message || 'Please proceed to the counter',
+        );
+      }
+
+      return {
+        success: true,
+        message: 'Queue notification sent successfully',
+      };
+    } catch (error) {
+      // Don't throw error to avoid breaking queue functionality
+      console.error('Queue notification error:', error);
+      return {
+        success: false,
+        message: 'Failed to send notification, but queue operation continues',
+      };
     }
   }
 }

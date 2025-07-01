@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import './AdminWalkInQueue.css';
 import NavBar from '../../NavigationComponents/NavSide';
 import { queueService } from '../../services/queueService';
+import { queueNotificationService } from '../../services/queueNotificationService.js';
 import config from '../../config/env.js';
 import axios from 'axios';
 
@@ -388,6 +389,28 @@ const AdminWalkInQueue = () => {
     }
   };
 
+  // Notify user function - Send email notification when admin changes status
+  const notifyUserOnStatusChange = async (queueId, newStatus, queueData) => {
+    try {
+      // Get queue details to find user email
+      const queueDetails = await queueService.fetchQueueDetails(queueId);
+      const userEmail = queueDetails?.details?.user?.email;
+      
+      if (userEmail && queueData) {
+        const queueNumber = formatWKNumber(queueData.queueNumber || queueData.id);
+        
+        if (newStatus === 'serving') {
+          // Send "now serving" notification
+          await queueNotificationService.sendNowServingAlert(userEmail, queueNumber);
+          console.log('📧 Admin triggered "now serving" notification for:', queueNumber);
+        }
+      }
+    } catch (error) {
+      console.error('Error sending admin notification:', error);
+      // Don't break the flow if notification fails
+    }
+  };
+
   // Manual queue creation function
   const createManualQueue = async (guestData = null) => {
     setIsCreatingQueue(true);
@@ -483,10 +506,19 @@ const AdminWalkInQueue = () => {
       // Parse the queueId if it's not already a number
       const parsedQueueId = parseInt(queueId, 10) || queueId;
       
+      // Get queue data before updating for notification purposes
+      const queueToUpdate = pendingQueues.find(q => q.id === queueId || q.id === parsedQueueId) ||
+                            currentQueues.find(q => q.id === queueId || q.id === parsedQueueId);
+      
       // Make API call to update status using queueService
       await queueService.updateQueueStatus(parsedQueueId, newStatus);
       
       console.log(`Queue status updated successfully: ${queueId} → ${newStatus}`);
+      
+      // Send notification if status changed to serving
+      if (newStatus === 'serving' && queueToUpdate) {
+        await notifyUserOnStatusChange(parsedQueueId, newStatus, queueToUpdate);
+      }
       
       // Update local state based on new status
       if (newStatus === 'serving' || newStatus === 'in-progress') {
