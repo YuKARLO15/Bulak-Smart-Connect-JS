@@ -1,4 +1,4 @@
-import React, { useState } from 'react'; //useState Here
+import React, { useState, useEffect } from 'react'; //useState Here
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
@@ -10,6 +10,10 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Link from '@mui/material/Link';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
+import IconButton from '@mui/material/IconButton';
+import InputAdornment from '@mui/material/InputAdornment';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import ForgotPassword from './ForgotPassword';
 import './LogInCard.css';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
@@ -26,8 +30,25 @@ export default function LogInCard({ onLogin }) {
   const [error, setError] = useState('');
   const [open, setOpen] = useState(false);
   const [loginType, setLoginType] = useState('email');  // Add login type state
+  const [showPassword, setShowPassword] = useState(false); // Show password state
+  const [rememberMe, setRememberMe] = useState(false); // Remember me state
   const navigate = useNavigate();
   const { login, hasRole, isStaff } = useAuth(); // New AuthContext to handle login and roles
+
+  // Load saved credentials on component mount
+  useEffect(() => {
+    const savedEmail = localStorage.getItem('rememberedEmail');
+    const savedPassword = localStorage.getItem('rememberedPassword');
+    const savedLoginType = localStorage.getItem('rememberedLoginType');
+    const wasRemembered = localStorage.getItem('rememberMe') === 'true';
+    
+    if (wasRemembered && savedEmail && savedPassword) {
+      setEmail(savedEmail);
+      setPassword(savedPassword);
+      setLoginType(savedLoginType || 'email');
+      setRememberMe(true);
+    }
+  }, []);
 
   const toggleLoginType = () => {
     const newType = loginType === 'email' ? 'username' : 'email';
@@ -47,6 +68,14 @@ export default function LogInCard({ onLogin }) {
 
   const handleClickOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+  const handleTogglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const handleRememberMeChange = (event) => {
+    setRememberMe(event.target.checked);
+  };
 
   const handleSubmit = async event => {
     event.preventDefault();
@@ -75,6 +104,20 @@ export default function LogInCard({ onLogin }) {
         console.log('Login successful:', success);
         //Auth Success Step
         if (success) {
+          // Handle "Remember Me" functionality
+          if (rememberMe) {
+            localStorage.setItem('rememberedEmail', email);
+            localStorage.setItem('rememberedPassword', password);
+            localStorage.setItem('rememberedLoginType', loginType);
+            localStorage.setItem('rememberMe', 'true');
+          } else {
+            // Clear saved credentials if "Remember Me" is unchecked
+            localStorage.removeItem('rememberedEmail');
+            localStorage.removeItem('rememberedPassword');
+            localStorage.removeItem('rememberedLoginType');
+            localStorage.removeItem('rememberMe');
+          }
+
           if (user && (user.roles?.includes('staff') || 
               user.roles?.includes('admin') || 
               user.roles?.includes('super_admin'))) {
@@ -149,7 +192,6 @@ export default function LogInCard({ onLogin }) {
             <FormLabel htmlFor="email" className="LogInLabel">
               {getInputLabel()}
             </FormLabel>
-      
           </Box>
           <TextField
             error={emailError}
@@ -173,14 +215,13 @@ export default function LogInCard({ onLogin }) {
             <FormLabel htmlFor="password" className="LogInLabel">
               Password
             </FormLabel>
-           
           </Box>
           <TextField
             error={passwordError}
             helperText={passwordErrorMessage}
             name="password"
             placeholder="••••••"
-            type="password"
+            type={showPassword ? 'text' : 'password'}
             id="password"
             autoComplete="current-password"
             required
@@ -188,6 +229,20 @@ export default function LogInCard({ onLogin }) {
             className={`TextField ${passwordError ? 'error' : ''}`}
             value={password}
             onChange={e => setPassword(e.target.value)}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={handleTogglePasswordVisibility}
+                    edge="end"
+                    sx={{ color: '#ffffff' }}
+                  >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
           />
            <Link
               component="button"
@@ -200,7 +255,14 @@ export default function LogInCard({ onLogin }) {
             </Link>
         </FormControl>
         <FormControlLabel
-          control={<Checkbox value="remember" color="#184a5b" />}
+          control={
+            <Checkbox 
+              checked={rememberMe}
+              onChange={handleRememberMeChange}
+              value="remember" 
+              sx={{ color: '#184a5b' }}
+            />
+          }
           label="Remember me"
           className="RememberMe"
         />

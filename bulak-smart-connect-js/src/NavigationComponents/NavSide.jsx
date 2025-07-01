@@ -36,6 +36,19 @@ const NavBar = ({ isSidebarOpen, setIsSidebarOpen }) => {
     return location.pathname === path;
   };
 
+  // Function to get display role name
+  const getDisplayRole = () => {
+    const roleLabels = {
+      'super_admin': 'Admin',
+      'admin': 'Manager',
+      'staff': 'Staff',
+      'citizen': 'Citizen'
+    };
+    
+    const userRole = user?.roles?.[0] || user?.defaultRole || 'citizen';
+    return roleLabels[userRole] || userRole;
+  };
+
   return (
     <>
       <button
@@ -50,7 +63,7 @@ const NavBar = ({ isSidebarOpen, setIsSidebarOpen }) => {
           <div className="Profile">
             <div className="NavUserName">{user?.name || 'Welcome'}</div>
             <div className="NavUserEmail">{user?.email || 'user@email.com'}</div>
-            <div className="NavUserRole">{user?.roles?.[0] || 'User'}</div>
+            <div className="NavUserRole">{getDisplayRole()}</div>
           </div>
     
           <div className="NavigationButtons">
@@ -114,25 +127,27 @@ const NavBar = ({ isSidebarOpen, setIsSidebarOpen }) => {
                 >
                   <CampaignIcon /> Announcements
                 </Link>
-
-              {/* User Management */}
-              <Link 
-                to="/AdminAccountManagement" 
-                className={isActive('/AdminAccountManagement') ? 'active' : ''}
-              >
-                <ManageAccountsIcon /> User Management
-              </Link>
               </>
             )}
 
             {/* Super admin only links */}
             {hasRole('super_admin') && (
-              <Link 
-                to="/system-settings" 
-                className={isActive('/system-settings') ? 'active' : ''}
-              >
-                <TuneIcon /> System Settings
-              </Link>
+              <>
+                {/* User Management - Super Admin Only */}
+                <Link 
+                  to="/AdminAccountManagement" 
+                  className={isActive('/AdminAccountManagement') ? 'active' : ''}
+                >
+                  <ManageAccountsIcon /> User Management
+                </Link>
+                
+                <Link 
+                  to="/system-settings" 
+                  className={isActive('/system-settings') ? 'active' : ''}
+                >
+                  <TuneIcon /> System Settings
+                </Link>
+              </>
             )}
 
             {/* Account */}

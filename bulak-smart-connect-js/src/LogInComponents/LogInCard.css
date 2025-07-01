@@ -7,9 +7,9 @@
   gap: 16px;
   box-shadow: none !important;
   color: #184a5b;
-max-height:542px;
-
+  max-height: 542px;
 }
+
 .LogIn {
   margin: 0vw;
 }
@@ -51,7 +51,8 @@ max-height:542px;
   align-self: start;
   color: #184a5b;
 }
-.ForgotPassword{
+
+.ForgotPassword {
   color: #184a5b !important;
   text-align: start;
   margin-top: 10px !important;
@@ -60,6 +61,7 @@ max-height:542px;
 #email {
   color: #ffffff;
 }
+
 #password {
   color: #ffffff;
 }
@@ -81,8 +83,16 @@ max-height:542px;
   color: white !important;
 }
 
-.RemembeMe {
+.RememberMe {
   color: #184a5b;
+}
+
+.RememberMe .MuiCheckbox-root {
+  color: #184a5b !important;
+}
+
+.RememberMe .MuiCheckbox-root.Mui-checked {
+  color: #184a5b !important;
 }
 
 .LoginButton {
@@ -95,4 +105,24 @@ max-height:542px;
   border-color: #184a5b !important;
   background-color: #ffffff !important;
   color: #184a5b !important;
+}
+
+/* Password visibility toggle button styling */
+.TextField .MuiInputAdornment-root .MuiIconButton-root {
+  color: #ffffff !important;
+}
+
+.TextField .MuiInputAdornment-root .MuiIconButton-root:hover {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Input field text color */
+.TextField .MuiOutlinedInput-input {
+  color: #ffffff !important;
+}
+
+/* Placeholder text color */
+.TextField .MuiOutlinedInput-input::placeholder {
+  color: rgba(255, 255, 255, 0.7) !important;
+  opacity: 1;
 }
