@@ -49,7 +49,6 @@ const SearchAddUser = ({ onSearch }) => {
 
   return (
     <div className="search-user">
-      <div style={{ position: 'relative' }}>
         <input 
           type="text" 
           placeholder="Search User..." 
@@ -76,7 +75,6 @@ const SearchAddUser = ({ onSearch }) => {
             ✕
           </button>
         )}
-      </div>
       {isSuperAdmin && (
         <button className="add-user" onClick={handleAddUserClick}>
           Add User
