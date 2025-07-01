@@ -4,6 +4,7 @@ import './WalkInQueue.css';
 import NavBar from '../../NavigationComponents/NavSide';
 import { io } from 'socket.io-client';
 import { queueService } from '../../services/queueService';
+import { queueNotificationService } from '../../services/queueNotificationService'; // Add this import
 import FloatingAnnouncementFab from '../../LandingPageComponents/FloatingAnnouncement';
 import { Box, Button, Container, Grid, Typography, Card, CardContent } from '@mui/material';
 import config from '../../config/env.js';
@@ -37,11 +38,68 @@ const getCurrentUserId = () => {
 
 const WalkInQueueContainer = () => {
   const [queuePosition, setQueuePosition] = useState(null); 
-  const [currentQueue, setCurrentQueue] = useState([]); // Make sure this is currentQueue, not currentQueues
+  const [currentQueue, setCurrentQueue] = useState([]);
   const [pendingQueues, setPendingQueues] = useState([]);
   const [userQueue, setUserQueue] = useState(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [loading, setLoading] = useState(true); 
+  const [loading, setLoading] = useState(true);
+  
+  // Add notification tracking states
+  const [notificationsSent, setNotificationsSent] = useState(new Set());
+  const [lastNotifiedPosition, setLastNotifiedPosition] = useState(null);
+
+  // Function to get user email from localStorage
+  const getUserEmail = () => {
+    try {
+      const user = JSON.parse(localStorage.getItem('user') || '{}');
+      return user.email || null;
+    } catch (e) {
+      console.error('Error getting user email:', e);
+      return null;
+    }
+  };
+
+  // Enhanced function to check position and send notifications
+  const checkPositionAndNotify = useCallback(async (position, queueData) => {
+    const userEmail = getUserEmail();
+    if (!userEmail || !queueData) return;
+
+    const queueNumber = queueData.queueNumber || queueData.id;
+
+    try {
+      // Send notification when user reaches position 3 (and hasn't been notified yet)
+      if (position === 3 && !notificationsSent.has(`${queueNumber}_3`)) {
+        const estimatedMinutes = (position - 1) * 5; // Assuming 5 minutes per person
+        
+        await queueNotificationService.sendQueuePositionAlert(
+          userEmail,
+          queueNumber,
+          position,
+          `${estimatedMinutes} minutes`
+        );
+
+        // Mark as notified
+        setNotificationsSent(prev => new Set([...prev, `${queueNumber}_3`]));
+        console.log('📧 Position 3 notification sent for queue:', queueNumber);
+      }
+
+      // Send notification when it's their turn (position 1 or "NOW SERVING")
+      if ((position === 1 || position === 'NOW SERVING') && !notificationsSent.has(`${queueNumber}_serving`)) {
+        await queueNotificationService.sendNowServingAlert(userEmail, queueNumber);
+        
+        // Mark as notified for serving
+        setNotificationsSent(prev => new Set([...prev, `${queueNumber}_serving`]));
+        console.log('📧 "Now serving" notification sent for queue:', queueNumber);
+      }
+
+      // Update last notified position
+      setLastNotifiedPosition(position);
+
+    } catch (error) {
+      console.error('Error sending queue notification:', error);
+      // Don't break the app if notification fails
+    }
+  }, [notificationsSent]);
 
   // Add near the top of your component
   useEffect(() => {
@@ -234,6 +292,10 @@ const getAllUserQueues = () => {
           if (servingQueue) {
             console.log('User queue is being served');
             setQueuePosition('NOW SERVING');
+            
+            // ✅ NOTIFICATION: Check and notify for "now serving"
+            await checkPositionAndNotify('NOW SERVING', servingQueue);
+            
           } else if (pendingQueue) {
             console.log('Found pending queue, getting position for:', pendingQueue.dbId);
             try {
@@ -242,8 +304,12 @@ const getAllUserQueues = () => {
               
               if (positionData.status === 'serving') {
                 setQueuePosition('NOW SERVING');
+                // ✅ NOTIFICATION: Check and notify for "now serving"
+                await checkPositionAndNotify('NOW SERVING', pendingQueue);
               } else if (positionData.position > 0) {
                 setQueuePosition(positionData.position);
+                // ✅ NOTIFICATION: Check and notify for position 3
+                await checkPositionAndNotify(positionData.position, pendingQueue);
               } else {
                 setQueuePosition(null);
               }
@@ -288,8 +354,12 @@ const getAllUserQueues = () => {
                 const positionData = await queueService.getQueuePosition(firstQueue.dbId);
                 if (queueDetails.status === 'serving') {
                   setQueuePosition('NOW SERVING');
+                  // ✅ NOTIFICATION: Check and notify for "now serving"
+                  await checkPositionAndNotify('NOW SERVING', firstQueue);
                 } else if (positionData.position > 0) {
                   setQueuePosition(positionData.position);
+                  // ✅ NOTIFICATION: Check and notify for position 3
+                  await checkPositionAndNotify(positionData.position, firstQueue);
                 } else {
                   setQueuePosition(null);
                 }
@@ -389,7 +459,7 @@ const getAllUserQueues = () => {
       console.error('Failed to fetch queue data:', error);
       setLoading(false);
     }
-  }, []);
+  }, [checkPositionAndNotify]); // Add checkPositionAndNotify to dependencies
 
   // Add this function and call it periodically
   const syncWithOtherTabs = useCallback(() => {
