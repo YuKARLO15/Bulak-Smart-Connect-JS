@@ -8,6 +8,8 @@ import {
   //Delete, // Uncomment if you want to implement delete functionality
   //Request, // Uncomment if you want to use Request object
   UseGuards,
+  UnauthorizedException,
+  InternalServerErrorException,
 } from '@nestjs/common';
 import { QueueService } from './queue.service';
 import { CreateQueueDto } from './dto/create-queue.dto';
@@ -16,10 +18,14 @@ import { QueueStatus } from './entities/queue.entity';
 import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
 import { User } from '../../auth/decorators/user.decorator';
 import { User as UserEntity } from '../../users/entities/user.entity';
+import { QueueSchedulerService } from './queue-scheduler.service';
 
 @Controller('queue')
 export class QueueController {
-  constructor(private readonly queueService: QueueService) {}
+  constructor(
+    private readonly queueService: QueueService,
+    private readonly queueSchedulerService: QueueSchedulerService,
+  ) {}
 
   @Post()
   @UseGuards(JwtAuthGuard)
@@ -212,5 +218,46 @@ export class QueueController {
       console.error(`Error checking if queue ${id} exists:`, error);
       return { exists: false };
     }
+  }
+
+  @Post('admin/daily-reset')
+  @UseGuards(JwtAuthGuard)
+  async manualDailyReset(@User() user?: UserEntity) {
+    // Only allows privileged users
+    if (!user || !user.roles?.some(role => ['admin', 'super_admin', 'staff'].includes(role.name))) {
+      console.log(`Unauthorized reset attempt by user: ${user?.username || 'unknown'} with roles: ${user?.roles?.map(r => r.name).join(', ') || 'none'}`);
+      throw new UnauthorizedException('Admin, Super Admin, or Staff privileges required');
+    }
+
+    console.log(`Manual daily reset triggered by ${user.roles.map(r => r.name).join(', ')}: ${user.username}`);
+    
+    try {
+      await this.queueSchedulerService.manualDailyReset();
+      
+      return {
+        success: true,
+        message: 'Daily queue reset completed successfully',
+        timestamp: new Date(),
+        triggeredBy: user.username
+      };
+    } catch (error) {
+      console.error('Error during manual daily reset:', error);
+      throw new InternalServerErrorException('Failed to perform daily reset');
+    }
+  }
+
+  @Get('admin/pending-count')
+  @UseGuards(JwtAuthGuard)
+  async getTodayPendingCount(@User() user?: UserEntity) {
+    // Only allows privileged users
+    if (!user || !user.roles?.some(role => ['admin', 'super_admin', 'staff'].includes(role.name))) {
+      throw new UnauthorizedException('Admin access required');
+    }
+
+    const count = await this.queueSchedulerService.getTodayPendingCount();
+    return {
+      pendingCount: count,
+      date: new Date().toDateString(),
+    };
   }
 }

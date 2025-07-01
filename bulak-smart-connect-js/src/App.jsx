@@ -8,6 +8,7 @@ import PrivateRoute from './components/PrivateRoute';
 import Unauthorized from './components/Unauthorized';
 import InstallPrompt from './components/InstallPrompt';
 import OfflineIndicator from './components/OfflineIndicator';
+import OTPTest from './components/OTPTest';
 
 //-----------SERVICES --------------//
 //import { localStorageManager } from './services/localStorageManager';
@@ -118,6 +119,7 @@ function App() {
         <Route path="/unauthorized" element={<Unauthorized />} />
         <Route path="/ScreenSmartQueue" element={<ScreenSmartQueue />} />
           <Route path="/PrivacyPolicy" element={<PrivacyPolicy />} />
+        <Route path="/test-otp" element={<OTPTest />} />
 
         {/* Admin routes - Protected for admin and super_admin */}
         <Route element={<PrivateRoute allowedRoles={['admin', 'super_admin']} />}>
