@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import '../AccountManagementComponents/UserTable.css';
 import { useNavigate } from 'react-router-dom';
 import userService from '../../services/userService';
+import { FaEllipsisV } from 'react-icons/fa';
 
 const UserTable = ({ users, handleUpload, removeUser, loading, onRefresh }) => {
   const navigate = useNavigate();
-  const [showDetails, setShowDetails] = useState(false);
   const [statusUpdating, setStatusUpdating] = useState({});
+  const [dropdownOpenIndex, setDropdownOpenIndex] = useState(null);
+  const [selectedUser, setSelectedUser] = useState(null);
 
   const handleModifyClick = (user, index) => {
     navigate('/add-user', {
@@ -14,16 +16,15 @@ const UserTable = ({ users, handleUpload, removeUser, loading, onRefresh }) => {
         isModifying: true,
         userData: user,
         userIndex: index,
-        userId: user.id // Add backend user ID
-      }
+        userId: user.id,
+      },
     });
   };
 
-  const handleRemoveClick = (index) => {
+  const handleRemoveClick = index => {
     removeUser(index);
   };
 
-  // Handle file upload
   const handleFileUpload = (event, index) => {
     const file = event.target.files[0];
     if (file) {
@@ -31,7 +32,6 @@ const UserTable = ({ users, handleUpload, removeUser, loading, onRefresh }) => {
     }
   };
 
-  // Handle status toggle with backend integration
   const handleStatusToggle = async (user, index) => {
     if (!user.id) {
       alert('Cannot update status for local-only users');
@@ -40,23 +40,18 @@ const UserTable = ({ users, handleUpload, removeUser, loading, onRefresh }) => {
 
     try {
       setStatusUpdating(prev => ({ ...prev, [index]: true }));
-      
       const newStatus = !user.isActive;
       await userService.updateUserStatus(user.id, newStatus);
-      
-      // Update local state immediately
+
       const updatedUsers = JSON.parse(localStorage.getItem('users') || '[]');
       if (updatedUsers[index]) {
         updatedUsers[index].isActive = newStatus;
         updatedUsers[index].status = newStatus ? 'Logged In' : 'Not Logged In';
         localStorage.setItem('users', JSON.stringify(updatedUsers));
       }
-      
-      // Refresh the data to get updated status
-      if (onRefresh) {
-        onRefresh();
-      }
-      
+
+      if (onRefresh) onRefresh();
+
       alert(`User ${newStatus ? 'activated' : 'deactivated'} successfully!`);
     } catch (err) {
       console.error('Error updating user status:', err);
@@ -66,46 +61,23 @@ const UserTable = ({ users, handleUpload, removeUser, loading, onRefresh }) => {
     }
   };
 
-  const toggleViewDetails = () => {
-    setShowDetails(prev => !prev);
+  const toggleDropdown = index => {
+    setDropdownOpenIndex(prev => (prev === index ? null : index));
   };
 
   if (loading) {
     return (
       <div className="user-table-container compact">
-        <div style={{ 
-          textAlign: 'center', 
-          padding: '40px', 
-          color: '#666',
-          fontSize: '16px'
-        }}>
-          Loading users...
-        </div>
+        <div className="loading-message">Loading users...</div>
       </div>
     );
   }
 
   return (
     <div className="user-table-container compact">
-      {/* Add refresh button */}
       {onRefresh && (
-        <div style={{ 
-          marginBottom: '15px', 
-          textAlign: 'right',
-          paddingRight: '20px'
-        }}>
-          <button 
-            onClick={onRefresh}
-            style={{
-              background: '#28a745',
-              color: 'white',
-              border: 'none',
-              padding: '8px 16px',
-              borderRadius: '4px',
-              cursor: 'pointer',
-              fontSize: '14px'
-            }}
-          >
+        <div className="refresh-button-container">
+          <button onClick={onRefresh} className="refresh-button">
             🔄 Refresh
           </button>
         </div>
@@ -115,13 +87,6 @@ const UserTable = ({ users, handleUpload, removeUser, loading, onRefresh }) => {
         <thead>
           <tr>
             <th>Name</th>
-            {showDetails && (
-              <>
-                <th>Username</th>
-                <th>Email</th>
-                <th>Phone Number</th>
-              </>
-            )}
             <th>Status</th>
             <th>User Role</th>
             <th>Actions</th>
@@ -130,12 +95,7 @@ const UserTable = ({ users, handleUpload, removeUser, loading, onRefresh }) => {
         <tbody>
           {users.length === 0 ? (
             <tr>
-              <td colSpan={showDetails ? 7 : 4} style={{ 
-                textAlign: 'center', 
-                color: '#666',
-                fontStyle: 'italic',
-                padding: '40px'
-              }}>
+              <td colSpan={4} className="no-users">
                 No users found
               </td>
             </tr>
@@ -148,42 +108,20 @@ const UserTable = ({ users, handleUpload, removeUser, loading, onRefresh }) => {
                     <span className="user-name">{user.name}</span>
                   </div>
                 </td>
-
-                {showDetails && (
-                  <>
-                    <td>{user.username}</td>
-                    <td>{user.email}</td>
-                    <td>{user.contact}</td>
-                  </>
-                )}
-
                 <td className={user.status === 'Logged In' ? 'status-logged' : 'status-not-logged'}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <div className="status-toggle-container">
                     {user.status}
                     {user.id && (
                       <button
                         onClick={() => handleStatusToggle(user, index)}
                         disabled={statusUpdating[index]}
-                        style={{
-                          background: user.isActive ? '#dc3545' : '#28a745',
-                          color: 'white',
-                          border: 'none',
-                          padding: '4px 8px',
-                          borderRadius: '4px',
-                          cursor: statusUpdating[index] ? 'not-allowed' : 'pointer',
-                          fontSize: '12px',
-                          opacity: statusUpdating[index] ? 0.6 : 1
-                        }}
+                        className={`status-btn ${user.isActive ? 'deactivate' : 'activate'}`}
                       >
-                        {statusUpdating[index] 
-                          ? '...' 
-                          : (user.isActive ? 'Deactivate' : 'Activate')
-                        }
+                        {statusUpdating[index] ? '...' : user.isActive ? 'Deactivate' : 'Activate'}
                       </button>
                     )}
                   </div>
                 </td>
-                
                 <td>
                   <div className="roles">
                     {(user.roles || []).map((role, idx) => (
@@ -193,44 +131,62 @@ const UserTable = ({ users, handleUpload, removeUser, loading, onRefresh }) => {
                     ))}
                   </div>
                 </td>
-                
                 <td className="actions">
-                  <button className="view" onClick={toggleViewDetails}>
-                    {showDetails ? 'Hide' : 'View'}
-                  </button>
-                  <button className="modify" onClick={() => handleModifyClick(user, index)}>
-                    Modify
-                  </button>
-                  <button className="remove" onClick={() => handleRemoveClick(index)}>
-                    Remove
-                  </button>
-                  <input 
-                    type="file" 
-                    accept="image/*" 
-                    onChange={(e) => handleFileUpload(e, index)}
-                    style={{ display: 'none' }}
-                    id={`file-upload-${index}`}
-                  />
-                  <label 
-                    htmlFor={`file-upload-${index}`} 
-                    style={{
-                      cursor: 'pointer',
-                      background: '#007bff',
-                      color: 'white',
-                      padding: '4px 8px',
-                      borderRadius: '4px',
-                      fontSize: '12px',
-                      border: 'none'
-                    }}
-                  >
-                    Upload
-                  </label>
+                  <div className="dropdown-container">
+                    <button className="dropdown-toggle" onClick={() => toggleDropdown(index)}>
+                      <FaEllipsisV />
+                    </button>
+                    {dropdownOpenIndex === index && (
+                      <div className="dropdown-menu">
+                        <button onClick={() => setSelectedUser(user)}>View</button>
+                        <button onClick={() => handleModifyClick(user, index)}>Modify</button>
+                        <button onClick={() => handleRemoveClick(index)}>Delete</button>
+                      </div>
+                    )}
+                  </div>
                 </td>
               </tr>
             ))
           )}
         </tbody>
       </table>
+
+      {selectedUser && (
+        <div className="modal-overlay" onClick={() => setSelectedUser(null)}>
+          <div className="modal-content" onClick={e => e.stopPropagation()}>
+            <h2 className="modal-title">User Details</h2>
+
+            <div className="user-detail-row">
+              <span>Name:</span>
+              <span>{selectedUser.name}</span>
+            </div>
+            <div className="user-detail-row">
+              <span>Username:</span>
+              <span>{selectedUser.username}</span>
+            </div>
+            <div className="user-detail-row">
+              <span>Email:</span>
+              <span>{selectedUser.email}</span>
+            </div>
+            <div className="user-detail-row">
+              <span>Phone Number:</span>
+              <span>{selectedUser.contact}</span>
+            </div>
+            <div className="user-detail-row">
+              <span>Status:</span>
+              <span>{selectedUser.status}</span>
+            </div>
+            <div className="user-detail-row">
+              <span>Roles:</span>
+              <span>{(selectedUser.roles || []).join(', ')}</span>
+            </div>
+
+            <button className="close-modal-btn" onClick={() => setSelectedUser(null)}>
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
