@@ -241,6 +241,7 @@ import {
   TestOtpDto,
   ApplicationNotificationDto,
 } from &#x27;./dto/otp.dto&#x27;;
+import { QueueNotificationDto } from &#x27;./dto/queue-notification.dto&#x27;;
 
 interface RequestWithUser extends Request {
   user: AuthenticatedUser;
@@ -1001,6 +1002,50 @@ export class AuthController {
     } catch (error) {
       console.error(&#x27;Error sending application notification:&#x27;, error);
       throw new BadRequestException(&#x27;Failed to send application notification&#x27;);
+    }
+  }
+
+  @ApiOperation({
+    summary: &#x27;Send queue notification&#x27;,
+    description: &#x27;Send email notification for queue position or status updates&#x27;,
+  })
+  @Post(&#x27;send-queue-notification&#x27;)
+  async sendQueueNotification(@Body() notificationDto: QueueNotificationDto) {
+    try {
+      const { email, queueNumber, type, position, estimatedTime, status, message } &#x3D; notificationDto;
+
+      if (type &#x3D;&#x3D;&#x3D; &#x27;position_alert&#x27;) {
+        // Fix: Ensure position is defined for position alerts
+        if (position &#x3D;&#x3D;&#x3D; undefined) {
+          throw new BadRequestException(&#x27;Position is required for position alerts&#x27;);
+        }
+        
+        await this.emailService.sendQueuePositionAlert(
+          email,
+          queueNumber,
+          position, // Now guaranteed to be a number
+          estimatedTime || &#x27;10 minutes&#x27;, // Provide default if undefined
+        );
+      } else if (type &#x3D;&#x3D;&#x3D; &#x27;status_update&#x27;) {
+        await this.emailService.sendQueueStatusUpdate(
+          email,
+          queueNumber,
+          status || &#x27;now_serving&#x27;, // Provide default if undefined
+          message || &#x27;Please proceed to the counter&#x27;,
+        );
+      }
+
+      return {
+        success: true,
+        message: &#x27;Queue notification sent successfully&#x27;,
+      };
+    } catch (error) {
+      // Don&#x27;t throw error to avoid breaking queue functionality
+      console.error(&#x27;Queue notification error:&#x27;, error);
+      return {
+        success: false,
+        message: &#x27;Failed to send notification, but queue operation continues&#x27;,
+      };
     }
   }
 }

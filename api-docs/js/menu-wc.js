@@ -423,6 +423,9 @@ customElements.define('compodoc-menu', class extends HTMLElement {
                                 <a href="classes/QueueGateway.html" data-type="entity-link" >QueueGateway</a>
                             </li>
                             <li class="link">
+                                <a href="classes/QueueNotificationDto.html" data-type="entity-link" >QueueNotificationDto</a>
+                            </li>
+                            <li class="link">
                                 <a href="classes/RegisterDto.html" data-type="entity-link" >RegisterDto</a>
                             </li>
                             <li class="link">

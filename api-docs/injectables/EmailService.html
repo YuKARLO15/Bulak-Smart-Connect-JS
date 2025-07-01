@@ -158,6 +158,14 @@
                                     <span class="modifier">Async</span>
                                 <a href="#sendOTP" >sendOTP</a>
                             </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#sendQueuePositionAlert" >sendQueuePositionAlert</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#sendQueueStatusUpdate" >sendQueueStatusUpdate</a>
+                            </li>
                         </ul>
                     </td>
                 </tr>
@@ -430,6 +438,216 @@
             </tr>
         </tbody>
     </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="sendQueuePositionAlert"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>sendQueuePositionAlert</b></span>
+                        <a href="#sendQueuePositionAlert"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>sendQueuePositionAlert(email: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, queueNumber: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, position: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, estimatedTime: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="156"
+                                    class="link-to-prism">src/services/email.service.ts:156</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>email</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>queueNumber</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>position</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>estimatedTime</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;any&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="sendQueueStatusUpdate"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>sendQueueStatusUpdate</b></span>
+                        <a href="#sendQueueStatusUpdate"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>sendQueueStatusUpdate(email: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, queueNumber: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, status: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, message: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="222"
+                                    class="link-to-prism">src/services/email.service.ts:222</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>email</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>queueNumber</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>status</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>message</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;any&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 </section>
             <section data-compodoc="block-properties">
     
@@ -622,6 +840,135 @@ export class EmailService {
     };
 
     return await this.transporter.sendMail(mailOptions);
+  }
+
+  async sendQueuePositionAlert(
+    email: string,
+    queueNumber: string,
+    position: number,
+    estimatedTime: string,
+  ): Promise&lt;any&gt; {
+    const subject &#x3D; &#x60;🔔 Bulak LGU Smart Connect - You&#x27;re Almost Up! (Position #${position})&#x60;;
+    
+    const html &#x3D; &#x60;
+      &lt;!DOCTYPE html&gt;
+      &lt;html&gt;
+      &lt;head&gt;
+          &lt;meta charset&#x3D;&quot;utf-8&quot;&gt;
+          &lt;title&gt;Queue Position Alert&lt;/title&gt;
+      &lt;/head&gt;
+      &lt;body style&#x3D;&quot;font-family: Arial, sans-serif; line-height: 1.6; color: #333;&quot;&gt;
+          &lt;div style&#x3D;&quot;max-width: 600px; margin: 0 auto; padding: 20px;&quot;&gt;
+              &lt;div style&#x3D;&quot;text-align: center; margin-bottom: 30px;&quot;&gt;
+                  &lt;h1 style&#x3D;&quot;color: #2c3e50;&quot;&gt;🎫 Bulak LGU Smart Connect&lt;/h1&gt;
+                  &lt;p style&#x3D;&quot;color: #7f8c8d;&quot;&gt;Queue Position Alert&lt;/p&gt;
+              &lt;/div&gt;
+              
+              &lt;div style&#x3D;&quot;background: #fff3cd; border: 1px solid #ffeaa7; padding: 20px; border-radius: 8px; margin-bottom: 20px;&quot;&gt;
+                  &lt;h2 style&#x3D;&quot;color: #e17055; margin-top: 0; text-align: center;&quot;&gt;⚡ You&#x27;re Almost Up!&lt;/h2&gt;
+                  &lt;div style&#x3D;&quot;text-align: center;&quot;&gt;
+                      &lt;p style&#x3D;&quot;font-size: 18px; margin: 10px 0;&quot;&gt;
+                          &lt;strong&gt;Queue Number:&lt;/strong&gt; &lt;span style&#x3D;&quot;font-size: 24px; color: #2d3436;&quot;&gt;${queueNumber}&lt;/span&gt;
+                      &lt;/p&gt;
+                      &lt;p style&#x3D;&quot;font-size: 18px; margin: 10px 0;&quot;&gt;
+                          &lt;strong&gt;Current Position:&lt;/strong&gt; &lt;span style&#x3D;&quot;font-size: 24px; color: #e17055;&quot;&gt;#${position}&lt;/span&gt;
+                      &lt;/p&gt;
+                      &lt;p style&#x3D;&quot;font-size: 16px; margin: 10px 0;&quot;&gt;
+                          &lt;strong&gt;Estimated Wait Time:&lt;/strong&gt; ${estimatedTime}
+                      &lt;/p&gt;
+                  &lt;/div&gt;
+              &lt;/div&gt;
+              
+              &lt;div style&#x3D;&quot;background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 20px;&quot;&gt;
+                  &lt;h3 style&#x3D;&quot;color: #2980b9; margin-top: 0;&quot;&gt;📋 Please Prepare:&lt;/h3&gt;
+                  &lt;ul style&#x3D;&quot;color: #555;&quot;&gt;
+                      &lt;li&gt;Have your documents ready&lt;/li&gt;
+                      &lt;li&gt;Stay nearby - you&#x27;ll be called soon!&lt;/li&gt;
+                      &lt;li&gt;Check the queue display at the office&lt;/li&gt;
+                      &lt;li&gt;Keep this email for reference&lt;/li&gt;
+                  &lt;/ul&gt;
+              &lt;/div&gt;
+              
+              &lt;div style&#x3D;&quot;text-align: center; margin-top: 30px;&quot;&gt;
+                  &lt;p style&#x3D;&quot;color: #7f8c8d; font-size: 14px;&quot;&gt;
+                      Thank you for your patience! 🙏&lt;br/&gt;
+                      Civil Registrar Office - Bulak LGU Smart Connect
+                  &lt;/p&gt;
+              &lt;/div&gt;
+          &lt;/div&gt;
+      &lt;/body&gt;
+      &lt;/html&gt;
+    &#x60;;
+
+    return this.transporter.sendMail({
+      from: this.configService.get&lt;string&gt;(&#x27;SMTP_FROM&#x27;),
+      to: email,
+      subject,
+      html,
+    });
+  }
+
+  async sendQueueStatusUpdate(
+    email: string,
+    queueNumber: string,
+    status: string,
+    message: string,
+  ): Promise&lt;any&gt; {
+    const subject &#x3D; &#x60;🎯 Bulak LGU Smart Connect - Please Proceed to Counter!&#x60;;
+    
+    const html &#x3D; &#x60;
+      &lt;!DOCTYPE html&gt;
+      &lt;html&gt;
+      &lt;head&gt;
+          &lt;meta charset&#x3D;&quot;utf-8&quot;&gt;
+          &lt;title&gt;Now Serving&lt;/title&gt;
+      &lt;/head&gt;
+      &lt;body style&#x3D;&quot;font-family: Arial, sans-serif; line-height: 1.6; color: #333;&quot;&gt;
+          &lt;div style&#x3D;&quot;max-width: 600px; margin: 0 auto; padding: 20px;&quot;&gt;
+              &lt;div style&#x3D;&quot;text-align: center; margin-bottom: 30px;&quot;&gt;
+                  &lt;h1 style&#x3D;&quot;color: #2c3e50;&quot;&gt;🎫 Bulak LGU Smart Connect&lt;/h1&gt;
+                  &lt;p style&#x3D;&quot;color: #7f8c8d;&quot;&gt;Now Serving&lt;/p&gt;
+              &lt;/div&gt;
+              
+              &lt;div style&#x3D;&quot;background: #d4edda; border: 1px solid #c3e6cb; padding: 20px; border-radius: 8px; margin-bottom: 20px;&quot;&gt;
+                  &lt;h2 style&#x3D;&quot;color: #27ae60; margin-top: 0; text-align: center;&quot;&gt;🎯 NOW SERVING&lt;/h2&gt;
+                  &lt;div style&#x3D;&quot;text-align: center;&quot;&gt;
+                      &lt;p style&#x3D;&quot;font-size: 18px; margin: 10px 0;&quot;&gt;
+                          &lt;strong&gt;Queue Number:&lt;/strong&gt; &lt;span style&#x3D;&quot;font-size: 32px; color: #2d3436; font-weight: bold;&quot;&gt;${queueNumber}&lt;/span&gt;
+                      &lt;/p&gt;
+                      &lt;p style&#x3D;&quot;font-size: 18px; margin: 15px 0; color: #27ae60; font-weight: bold;&quot;&gt;
+                          ${message}
+                      &lt;/p&gt;
+                  &lt;/div&gt;
+              &lt;/div&gt;
+              
+              &lt;div style&#x3D;&quot;background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 20px;&quot;&gt;
+                  &lt;h3 style&#x3D;&quot;color: #2980b9; margin-top: 0;&quot;&gt;📍 Next Steps:&lt;/h3&gt;
+                  &lt;ul style&#x3D;&quot;color: #555;&quot;&gt;
+                      &lt;li&gt;&lt;strong&gt;Proceed to the counter immediately&lt;/strong&gt;&lt;/li&gt;
+                      &lt;li&gt;Bring all your documents&lt;/li&gt;
+                      &lt;li&gt;Present this notification if requested&lt;/li&gt;
+                      &lt;li&gt;Thank you for using our digital queue system!&lt;/li&gt;
+                  &lt;/ul&gt;
+              &lt;/div&gt;
+              
+              &lt;div style&#x3D;&quot;text-align: center; margin-top: 30px;&quot;&gt;
+                  &lt;p style&#x3D;&quot;color: #7f8c8d; font-size: 14px;&quot;&gt;
+                      Civil Registrar Office - Bulak LGU Smart Connect&lt;br/&gt;
+                      Serving you better with technology! 🙏
+                  &lt;/p&gt;
+              &lt;/div&gt;
+          &lt;/div&gt;
+      &lt;/body&gt;
+      &lt;/html&gt;
+    &#x60;;
+
+    return this.transporter.sendMail({
+      from: this.configService.get&lt;string&gt;(&#x27;SMTP_FROM&#x27;),
+      to: email,
+      subject,
+      html,
+    });
   }
 }
 </code></pre>
