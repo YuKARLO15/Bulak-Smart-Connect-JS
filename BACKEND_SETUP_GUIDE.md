@@ -41,6 +41,19 @@ MINIO_BUCKET_NAME=document-applications
 #Queue Reset Configuration
 QUEUE_RESET_TIMEZONE=Asia/Manila
 QUEUE_RESET_TIME=23:59
+
+# Email Configuration (if applicable)
+SMTP_HOST=
+SMTP_PORT=587
+SMTP_SECURE=
+SMTP_USER=
+SMTP_PASS=
+EMAIL_FROM=
+
+# OTP Configuration
+OTP_SECRET=your-super-secret-key-here
+OTP_EXPIRY_MINUTES=5
+OTP_LENGTH=6
 ```
 
 ### 3. Generate Secure JWT Secret

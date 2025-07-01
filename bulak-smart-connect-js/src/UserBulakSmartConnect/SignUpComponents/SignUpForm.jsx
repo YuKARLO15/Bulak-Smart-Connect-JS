@@ -14,6 +14,8 @@ import '../SignUpComponents/SignUpForm.css';
 
 import '../SignUpComponents/DataPrivacy.css';
 import { authService } from '../../services/api'; //API Service to NestJS
+import OTPVerification from '../../components/OTPVerification';
+import { otpService } from '../../services/otpService';
 
 const SignUpForm = () => {
   const [formData, setFormData] = useState({
@@ -34,6 +36,9 @@ const SignUpForm = () => {
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [showOtpVerification, setShowOtpVerification] = useState(false);
+  const [isEmailVerified, setIsEmailVerified] = useState(false);
+  const [pendingEmail, setPendingEmail] = useState('');
   const navigate = useNavigate();
 
   const handleInputChange = e => {
@@ -106,14 +111,26 @@ const SignUpForm = () => {
 
   const handleSubmit = async event => {
     event.preventDefault();
-    console.log('Form submitted');
-    console.log('Form data at submission:', formData); //Debugging Statement
+    
     const formErrors = validate(formData);
-    console.log('Validation errors:', formErrors); //Debugging Statement
     setErrors(formErrors);
 
     if (Object.keys(formErrors).length === 0) {
-      console.log('Form valid, attempting registration with:', formData); //Debugging Statement
+      // Check if email verification is required
+      if (!isEmailVerified) {
+        setPendingEmail(formData.email);
+        try {
+          await otpService.sendOTP(formData.email, 'verification');
+          setShowOtpVerification(true);
+          return; // Stop here, continue after OTP verification
+        } catch (error) {
+          console.error('Error sending OTP:', error);
+          setErrors({ email: 'Failed to send verification code' });
+          return;
+        }
+      }
+
+      // Proceed with registration if email is verified
       try {
         setIsLoading(true);
 
@@ -160,6 +177,65 @@ const SignUpForm = () => {
         console.error('Registration error:', error);
       }
     }
+  };
+
+  const performRegistration = async () => {
+    try {
+      setIsLoading(true);
+
+      // Register user with MySQL
+      await authService.register({
+        username: formData.username,
+        email: formData.email,
+        password: formData.password,
+        firstName: formData.firstname,
+        lastName: formData.lastname,
+        ...(formData.middlename && { middleName: formData.middlename }),
+        ...(formData.hasExtension && formData.extension && { nameExtension: formData.extension }),
+        contactNumber: formData.contact,
+        name: `${formData.firstname} ${formData.middlename ? formData.middlename + ' ' : ''}${formData.lastname}${formData.hasExtension && formData.extension ? ' ' + formData.extension : ''}`,
+        // updates: formData.updates,
+        // age: formData.age,
+      });
+
+      setIsLoading(false);
+      setSuccess(true);
+
+      // Redirect to login page after short delay
+      setTimeout(() => {
+        navigate('/LogIn');
+      }, 2000);
+    } catch (error) {
+      setIsLoading(false);
+
+      console.log('Error response:', error.response); // Add this to debug
+
+      if (error.response) {
+        // Check for 409 Conflict status code
+        if (error.response.status === 409) {
+          setErrors({ ...formErrors, email: 'This email is already registered' });
+        } else {
+          const errorMessage =
+            error.response.data?.message || 'Registration failed. Please try again.';
+          setErrors({ ...formErrors, submit: errorMessage });
+        }
+      } else {
+        setErrors({ ...formErrors, submit: 'Registration failed. Please try again.' });
+      }
+
+      console.error('Registration error:', error);
+    }
+  };
+
+  const handleOtpVerified = () => {
+    setIsEmailVerified(true);
+    setShowOtpVerification(false);
+    performRegistration();
+  };
+
+  const handleOtpCancel = () => {
+    setShowOtpVerification(false);
+    setPendingEmail('');
   };
 
   return (
@@ -225,6 +301,16 @@ const SignUpForm = () => {
           Already have an account? <Link to="/LogIn">Sign in</Link>
         </div>
       </form>
+
+      {showOtpVerification && (
+        <OTPVerification
+          email={pendingEmail}
+          purpose="verification"
+          onVerified={handleOtpVerified}
+          onCancel={handleOtpCancel}
+          title="Verify Your Email"
+        />
+      )}
     </div>
   );
 };

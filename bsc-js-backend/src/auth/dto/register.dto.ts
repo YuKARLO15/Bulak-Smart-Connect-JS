@@ -11,7 +11,6 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
  * DTO for user registration
  * @class RegisterDto
  */
-
 export class RegisterDto {
   @ApiProperty({
     description: 'User email address',
@@ -85,4 +84,13 @@ export class RegisterDto {
   })
   @IsString()
   contactNumber?: string;
+
+  // OTP field for email verification
+  @ApiPropertyOptional({
+    description: 'OTP code for email verification (optional)',
+    example: '123456',
+  })
+  @IsString()
+  @IsOptional()
+  otp?: string;
 }

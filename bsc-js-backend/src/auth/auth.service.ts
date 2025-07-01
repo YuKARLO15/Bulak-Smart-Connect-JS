@@ -535,6 +535,52 @@ export class AuthService {
     }
   }
 
+  // Add this method to find user by email
+  async findUserByEmail(email: string): Promise<User | null> {
+    try {
+      const user = await this.usersRepository.findOne({
+        where: { email },
+        relations: ['defaultRole'],
+      });
+      return user;
+    } catch (error) {
+      console.error('Error finding user by email:', error);
+      return null;
+    }
+  }
+
+  // Add this method to update password
+  async updatePassword(email: string, newPassword: string): Promise<void> {
+    try {
+      // Validate password strength
+      const passwordValidation = this.validatePasswordStrength(newPassword);
+      if (!passwordValidation.isValid) {
+        throw new BadRequestException(passwordValidation.message);
+      }
+
+      // Find user by email
+      const user = await this.findUserByEmail(email);
+      if (!user) {
+        throw new BadRequestException('User not found');
+      }
+
+      // Hash new password
+      const salt = await bcrypt.genSalt();
+      const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+      // Update password in database
+      await this.usersRepository.update(
+        { id: user.id },
+        { password: hashedPassword }
+      );
+
+      console.log(`Password updated successfully for user: ${email}`);
+    } catch (error) {
+      console.error('Error updating password:', error);
+      throw error;
+    }
+  }
+
   private validatePasswordStrength(password: string): { isValid: boolean; message?: string } {
     if (!password) {
       return { isValid: false, message: 'Password is required' };
