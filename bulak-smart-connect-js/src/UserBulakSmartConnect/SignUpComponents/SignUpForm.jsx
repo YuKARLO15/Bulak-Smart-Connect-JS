@@ -231,6 +231,9 @@ const SignUpForm = () => {
       setIsLoading(false);
       setSuccess(true);
 
+      // Clear sessionStorage on successful registration
+      sessionStorage.removeItem('signupFormData');
+
       // Redirect to login page after short delay
       setTimeout(() => {
         navigate('/LogIn');
