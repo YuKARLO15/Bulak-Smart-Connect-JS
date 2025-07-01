@@ -287,8 +287,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="385"
-                                    class="link-to-prism">src/auth/auth.service.ts:385</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="388"
+                                    class="link-to-prism">src/auth/auth.service.ts:388</a></div>
                         </td>
                     </tr>
 
@@ -380,8 +380,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="541"
-                                    class="link-to-prism">src/auth/auth.service.ts:541</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="544"
+                                    class="link-to-prism">src/auth/auth.service.ts:544</a></div>
                         </td>
                     </tr>
 
@@ -725,8 +725,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="555"
-                                    class="link-to-prism">src/auth/auth.service.ts:555</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="558"
+                                    class="link-to-prism">src/auth/auth.service.ts:558</a></div>
                         </td>
                     </tr>
 
@@ -887,8 +887,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="586"
-                                    class="link-to-prism">src/auth/auth.service.ts:586</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="589"
+                                    class="link-to-prism">src/auth/auth.service.ts:589</a></div>
                         </td>
                     </tr>
 
@@ -1339,8 +1339,11 @@ export class AuthService {
       }
 
       try {
-        // Update user with all provided fields
-        await this.usersRepository.update(userId, updateUserDto);
+        // 🔥 CRITICAL FIX: Remove role-related fields before updating User entity
+        const { roleIds, defaultRoleId, ...userUpdateFields } &#x3D; updateUserDto as any;
+        
+        // Update user with only valid User entity fields
+        await this.usersRepository.update(userId, userUpdateFields);
 
         // Get updated user with relations
         const updatedUser &#x3D; await this.usersRepository.findOne({

@@ -430,13 +430,21 @@ export class AuthController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(&#x27;admin&#x27;, &#x27;super_admin&#x27;)
   @Post(&#x27;admin/update-user/:userId&#x27;)
+  @UseGuards(JwtAuthGuard) // Make sure this guard is working
   async adminUpdateUser(
     @Request() req: RequestWithUser,
     @Param(&#x27;userId&#x27;) targetUserId: string,
     @Body() updateUserDto: AdminUpdateUserDto,
   ) {
-    // Add null check before converting to number
+    // Add logging to see what&#x27;s happening
+    console.log(&#x27;🔍 Admin update request received:&#x27;);
+    console.log(&#x27;Admin ID:&#x27;, req.user?.id);
+    console.log(&#x27;Admin roles:&#x27;, req.user?.roles);
+    console.log(&#x27;Target User ID:&#x27;, targetUserId);
+    console.log(&#x27;Update data:&#x27;, updateUserDto);
+
     if (!req.user || req.user.id &#x3D;&#x3D;&#x3D; undefined || req.user.id &#x3D;&#x3D;&#x3D; null) {
+      console.error(&#x27;❌ No user in request object&#x27;);
       throw new UnauthorizedException(&#x27;Invalid admin ID&#x27;);
     }
 
@@ -447,6 +455,7 @@ export class AuthController {
         updateUserDto,
       );
     } catch (error) {
+      console.error(&#x27;❌ Admin update error:&#x27;, error);
       throw new UnauthorizedException(
         error instanceof Error ? error.message : &#x27;Failed to update user&#x27;,
       );

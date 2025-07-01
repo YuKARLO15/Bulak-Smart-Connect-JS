@@ -154,6 +154,7 @@
                                     <span class="modifier"></span>
                                     <span class="modifier"></span>
                                     <span class="modifier"></span>
+                                    <span class="modifier"></span>
                                     <span class="modifier">Async</span>
                                 <a href="#adminUpdateUser" >adminUpdateUser</a>
                             </li>
@@ -286,6 +287,7 @@
                             <span class="modifier"></span>
                             <span class="modifier"></span>
                             <span class="modifier"></span>
+                            <span class="modifier"></span>
                             <span class="modifier">Async</span>
                         <span ><b>adminUpdateUser</b></span>
                         <a href="#adminUpdateUser"><span class="icon ion-ios-link"></span></a>
@@ -303,14 +305,14 @@
                 <td class="col-md-4">
                     <b>Decorators : </b>
                     <br />
-                    <code>@ApiOperation({summary: &#x27;Admin update user&#x27;, description: &#x27;Allows administrators to update any user&#x27;s information including role assignments&#x27;})<br />@ApiParam({name: &#x27;userId&#x27;, description: &#x27;ID of the user to update&#x27;})<br />@ApiBody({type: AdminUpdateUserDto})<br />@ApiResponse({status: 200, description: &#x27;User successfully updated&#x27;})<br />@ApiResponse({status: 400, description: &#x27;Bad request - invalid input data&#x27;})<br />@ApiResponse({status: 401, description: &#x27;Unauthorized - invalid credentials&#x27;})<br />@ApiResponse({status: 403, description: &#x27;Forbidden - insufficient permissions&#x27;})<br />@ApiResponse({status: 404, description: &#x27;Not found - user or role not found&#x27;})<br />@ApiResponse({status: 409, description: &#x27;Conflict - email or username already exists&#x27;})<br />@ApiBearerAuth(&#x27;JWT-auth&#x27;)<br />@UseGuards(JwtAuthGuard, RolesGuard)<br />@Roles(&#x27;admin&#x27;, &#x27;super_admin&#x27;)<br />@Post(&#x27;admin/update-user/:userId&#x27;)<br /></code>
+                    <code>@ApiOperation({summary: &#x27;Admin update user&#x27;, description: &#x27;Allows administrators to update any user&#x27;s information including role assignments&#x27;})<br />@ApiParam({name: &#x27;userId&#x27;, description: &#x27;ID of the user to update&#x27;})<br />@ApiBody({type: AdminUpdateUserDto})<br />@ApiResponse({status: 200, description: &#x27;User successfully updated&#x27;})<br />@ApiResponse({status: 400, description: &#x27;Bad request - invalid input data&#x27;})<br />@ApiResponse({status: 401, description: &#x27;Unauthorized - invalid credentials&#x27;})<br />@ApiResponse({status: 403, description: &#x27;Forbidden - insufficient permissions&#x27;})<br />@ApiResponse({status: 404, description: &#x27;Not found - user or role not found&#x27;})<br />@ApiResponse({status: 409, description: &#x27;Conflict - email or username already exists&#x27;})<br />@ApiBearerAuth(&#x27;JWT-auth&#x27;)<br />@UseGuards(JwtAuthGuard, RolesGuard)<br />@Roles(&#x27;admin&#x27;, &#x27;super_admin&#x27;)<br />@Post(&#x27;admin/update-user/:userId&#x27;)<br />@UseGuards(JwtAuthGuard)<br /></code>
                 </td>
             </tr>
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="230"
-                                    class="link-to-prism">src/auth/auth.controller.ts:230</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="231"
+                                    class="link-to-prism">src/auth/auth.controller.ts:231</a></div>
                         </td>
                     </tr>
 
@@ -428,8 +430,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="484"
-                                    class="link-to-prism">src/auth/auth.controller.ts:484</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="493"
+                                    class="link-to-prism">src/auth/auth.controller.ts:493</a></div>
                         </td>
                     </tr>
 
@@ -772,8 +774,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="586"
-                                    class="link-to-prism">src/auth/auth.controller.ts:586</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="595"
+                                    class="link-to-prism">src/auth/auth.controller.ts:595</a></div>
                         </td>
                     </tr>
 
@@ -866,8 +868,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="766"
-                                    class="link-to-prism">src/auth/auth.controller.ts:766</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="775"
+                                    class="link-to-prism">src/auth/auth.controller.ts:775</a></div>
                         </td>
                     </tr>
 
@@ -963,8 +965,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="320"
-                                    class="link-to-prism">src/auth/auth.controller.ts:320</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="329"
+                                    class="link-to-prism">src/auth/auth.controller.ts:329</a></div>
                         </td>
                     </tr>
 
@@ -1058,8 +1060,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="680"
-                                    class="link-to-prism">src/auth/auth.controller.ts:680</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="689"
+                                    class="link-to-prism">src/auth/auth.controller.ts:689</a></div>
                         </td>
                     </tr>
 
@@ -1248,8 +1250,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="411"
-                                    class="link-to-prism">src/auth/auth.controller.ts:411</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="420"
+                                    class="link-to-prism">src/auth/auth.controller.ts:420</a></div>
                         </td>
                     </tr>
 
@@ -1528,13 +1530,21 @@ export class AuthController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(&#x27;admin&#x27;, &#x27;super_admin&#x27;)
   @Post(&#x27;admin/update-user/:userId&#x27;)
+  @UseGuards(JwtAuthGuard) // Make sure this guard is working
   async adminUpdateUser(
     @Request() req: RequestWithUser,
     @Param(&#x27;userId&#x27;) targetUserId: string,
     @Body() updateUserDto: AdminUpdateUserDto,
   ) {
-    // Add null check before converting to number
+    // Add logging to see what&#x27;s happening
+    console.log(&#x27;🔍 Admin update request received:&#x27;);
+    console.log(&#x27;Admin ID:&#x27;, req.user?.id);
+    console.log(&#x27;Admin roles:&#x27;, req.user?.roles);
+    console.log(&#x27;Target User ID:&#x27;, targetUserId);
+    console.log(&#x27;Update data:&#x27;, updateUserDto);
+
     if (!req.user || req.user.id &#x3D;&#x3D;&#x3D; undefined || req.user.id &#x3D;&#x3D;&#x3D; null) {
+      console.error(&#x27;❌ No user in request object&#x27;);
       throw new UnauthorizedException(&#x27;Invalid admin ID&#x27;);
     }
 
@@ -1545,6 +1555,7 @@ export class AuthController {
         updateUserDto,
       );
     } catch (error) {
+      console.error(&#x27;❌ Admin update error:&#x27;, error);
       throw new UnauthorizedException(
         error instanceof Error ? error.message : &#x27;Failed to update user&#x27;,
       );
