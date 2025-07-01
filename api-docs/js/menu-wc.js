@@ -384,6 +384,9 @@ customElements.define('compodoc-menu', class extends HTMLElement {
                                 <a href="classes/AdminUpdateUserDto.html" data-type="entity-link" >AdminUpdateUserDto</a>
                             </li>
                             <li class="link">
+                                <a href="classes/ApplicationNotificationDto.html" data-type="entity-link" >ApplicationNotificationDto</a>
+                            </li>
+                            <li class="link">
                                 <a href="classes/ApplicationStatusHistory.html" data-type="entity-link" >ApplicationStatusHistory</a>
                             </li>
                             <li class="link">
@@ -408,6 +411,9 @@ customElements.define('compodoc-menu', class extends HTMLElement {
                                 <a href="classes/DocumentFile.html" data-type="entity-link" >DocumentFile</a>
                             </li>
                             <li class="link">
+                                <a href="classes/ForgotPasswordDto.html" data-type="entity-link" >ForgotPasswordDto</a>
+                            </li>
+                            <li class="link">
                                 <a href="classes/LoginDto.html" data-type="entity-link" >LoginDto</a>
                             </li>
                             <li class="link">
@@ -418,6 +424,15 @@ customElements.define('compodoc-menu', class extends HTMLElement {
                             </li>
                             <li class="link">
                                 <a href="classes/RegisterDto.html" data-type="entity-link" >RegisterDto</a>
+                            </li>
+                            <li class="link">
+                                <a href="classes/ResetPasswordDto.html" data-type="entity-link" >ResetPasswordDto</a>
+                            </li>
+                            <li class="link">
+                                <a href="classes/SendOtpDto.html" data-type="entity-link" >SendOtpDto</a>
+                            </li>
+                            <li class="link">
+                                <a href="classes/TestOtpDto.html" data-type="entity-link" >TestOtpDto</a>
                             </li>
                             <li class="link">
                                 <a href="classes/UpdateAnnouncementDto.html" data-type="entity-link" >UpdateAnnouncementDto</a>
@@ -448,6 +463,9 @@ customElements.define('compodoc-menu', class extends HTMLElement {
                             </li>
                             <li class="link">
                                 <a href="classes/UserStatsResponseDto.html" data-type="entity-link" >UserStatsResponseDto</a>
+                            </li>
+                            <li class="link">
+                                <a href="classes/VerifyOtpDto.html" data-type="entity-link" >VerifyOtpDto</a>
                             </li>
                         </ul>
                     </li>
