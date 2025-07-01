@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import '../AccountManagementComponents/UserTable.css';
 import { useNavigate } from 'react-router-dom';
 import userService from '../../services/userService';
+import { FaEllipsisV } from 'react-icons/fa';
 
 const UserTable = ({ users, handleUpload, removeUser, loading, onRefresh }) => {
   const navigate = useNavigate();
   const [showDetails, setShowDetails] = useState(false);
   const [statusUpdating, setStatusUpdating] = useState({});
+  const [dropdownOpenIndex, setDropdownOpenIndex] = useState(null);
 
   const handleModifyClick = (user, index) => {
     navigate('/add-user', {
@@ -14,7 +16,7 @@ const UserTable = ({ users, handleUpload, removeUser, loading, onRefresh }) => {
         isModifying: true,
         userData: user,
         userIndex: index,
-        userId: user.id // Add backend user ID
+        userId: user.id
       }
     });
   };
@@ -23,7 +25,6 @@ const UserTable = ({ users, handleUpload, removeUser, loading, onRefresh }) => {
     removeUser(index);
   };
 
-  // Handle file upload
   const handleFileUpload = (event, index) => {
     const file = event.target.files[0];
     if (file) {
@@ -31,7 +32,6 @@ const UserTable = ({ users, handleUpload, removeUser, loading, onRefresh }) => {
     }
   };
 
-  // Handle status toggle with backend integration
   const handleStatusToggle = async (user, index) => {
     if (!user.id) {
       alert('Cannot update status for local-only users');
@@ -40,23 +40,20 @@ const UserTable = ({ users, handleUpload, removeUser, loading, onRefresh }) => {
 
     try {
       setStatusUpdating(prev => ({ ...prev, [index]: true }));
-      
       const newStatus = !user.isActive;
       await userService.updateUserStatus(user.id, newStatus);
-      
-      // Update local state immediately
+
       const updatedUsers = JSON.parse(localStorage.getItem('users') || '[]');
       if (updatedUsers[index]) {
         updatedUsers[index].isActive = newStatus;
         updatedUsers[index].status = newStatus ? 'Logged In' : 'Not Logged In';
         localStorage.setItem('users', JSON.stringify(updatedUsers));
       }
-      
-      // Refresh the data to get updated status
+
       if (onRefresh) {
         onRefresh();
       }
-      
+
       alert(`User ${newStatus ? 'activated' : 'deactivated'} successfully!`);
     } catch (err) {
       console.error('Error updating user status:', err);
@@ -70,15 +67,14 @@ const UserTable = ({ users, handleUpload, removeUser, loading, onRefresh }) => {
     setShowDetails(prev => !prev);
   };
 
+  const toggleDropdown = (index) => {
+    setDropdownOpenIndex(prev => (prev === index ? null : index));
+  };
+
   if (loading) {
     return (
       <div className="user-table-container compact">
-        <div style={{ 
-          textAlign: 'center', 
-          padding: '40px', 
-          color: '#666',
-          fontSize: '16px'
-        }}>
+        <div style={{ textAlign: 'center', padding: '40px', color: '#666', fontSize: '16px' }}>
           Loading users...
         </div>
       </div>
@@ -87,13 +83,8 @@ const UserTable = ({ users, handleUpload, removeUser, loading, onRefresh }) => {
 
   return (
     <div className="user-table-container compact">
-      {/* Add refresh button */}
       {onRefresh && (
-        <div style={{ 
-          marginBottom: '15px', 
-          textAlign: 'right',
-          paddingRight: '20px'
-        }}>
+        <div style={{ marginBottom: '15px', textAlign: 'right', paddingRight: '20px' }}>
           <button 
             onClick={onRefresh}
             style={{
@@ -130,12 +121,7 @@ const UserTable = ({ users, handleUpload, removeUser, loading, onRefresh }) => {
         <tbody>
           {users.length === 0 ? (
             <tr>
-              <td colSpan={showDetails ? 7 : 4} style={{ 
-                textAlign: 'center', 
-                color: '#666',
-                fontStyle: 'italic',
-                padding: '40px'
-              }}>
+              <td colSpan={showDetails ? 7 : 4} style={{ textAlign: 'center', color: '#666', fontStyle: 'italic', padding: '40px' }}>
                 No users found
               </td>
             </tr>
@@ -183,7 +169,7 @@ const UserTable = ({ users, handleUpload, removeUser, loading, onRefresh }) => {
                     )}
                   </div>
                 </td>
-                
+
                 <td>
                   <div className="roles">
                     {(user.roles || []).map((role, idx) => (
@@ -193,38 +179,21 @@ const UserTable = ({ users, handleUpload, removeUser, loading, onRefresh }) => {
                     ))}
                   </div>
                 </td>
-                
+
                 <td className="actions">
-                  <button className="view" onClick={toggleViewDetails}>
-                    {showDetails ? 'Hide' : 'View'}
-                  </button>
-                  <button className="modify" onClick={() => handleModifyClick(user, index)}>
-                    Modify
-                  </button>
-                  <button className="remove" onClick={() => handleRemoveClick(index)}>
-                    Remove
-                  </button>
-                  <input 
-                    type="file" 
-                    accept="image/*" 
-                    onChange={(e) => handleFileUpload(e, index)}
-                    style={{ display: 'none' }}
-                    id={`file-upload-${index}`}
-                  />
-                  <label 
-                    htmlFor={`file-upload-${index}`} 
-                    style={{
-                      cursor: 'pointer',
-                      background: '#007bff',
-                      color: 'white',
-                      padding: '4px 8px',
-                      borderRadius: '4px',
-                      fontSize: '12px',
-                      border: 'none'
-                    }}
-                  >
-                    Upload
-                  </label>
+                  <div className="dropdown-container">
+                    <button className="dropdown-toggle" onClick={() => toggleDropdown(index)}>
+                      <FaEllipsisV />
+                    </button>
+
+                    {dropdownOpenIndex === index && (
+                      <div className="dropdown-menu">
+                        <button onClick={toggleViewDetails}>View</button>
+                        <button onClick={() => handleModifyClick(user, index)}>Modify</button>
+                        <button onClick={() => handleRemoveClick(index)}>Delete</button>
+                      </div>
+                    )}
+                  </div>
                 </td>
               </tr>
             ))
