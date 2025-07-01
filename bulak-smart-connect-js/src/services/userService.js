@@ -74,77 +74,36 @@ const userService = {
         throw new Error('No authentication token found');
       }
       
-      // Check if user has required role
-      const hasRequiredRole = currentUser.roles && (
-        currentUser.roles.includes('admin') ||
-        currentUser.roles.includes('staff') ||
-        currentUser.roles.includes('super_admin')
-      );
+      // Check if user has super_admin role
+      const isSuperAdmin = currentUser.roles && currentUser.roles.includes('super_admin');
       
-      if (!hasRequiredRole) {
-        console.warn('⚠️ User does not have required role for user management');
-        console.warn('User roles:', currentUser.roles);
+      if (!isSuperAdmin) {
+        throw new Error('Access denied. Only super administrators can view user management.');
       }
       
       const queryParams = new URLSearchParams({
         page: params.page || 1,
         limit: params.limit || 50,
         ...(params.search && { search: params.search }),
-        ...(params.role && { role: params.role }),
+        // Add filter to exclude citizens
+        excludeRoles: 'citizen'
       });
       
-      // Make the API request
       const response = await apiClient.get(`/users?${queryParams}`);
       
-      // Verify the response has users array
-      if (response.data && Array.isArray(response.data.users)) {
-        console.log(`✅ Fetched ${response.data.users.length} users from API`);
-        return response.data;
-      } else {
-        console.warn('⚠️ API response format unexpected:', response.data);
-        throw new Error('Invalid API response format');
+      console.log('✅ Users fetched successfully:', response.data);
+      return response.data;
+      
+    } catch (error) {
+      console.error('❌ Error fetching users:', error);
+      
+      // Enhanced error handling for 403/401
+      if (error.response?.status === 403 || error.response?.status === 401) {
+        console.error('🚫 Access denied - insufficient permissions');
+        throw new Error('Access denied. Only super administrators can manage users.');
       }
       
-    } catch (apiError) {
-      console.warn('❌ Users API call failed:', apiError.message);
-      
-      // If it's a 403 error, provide specific guidance
-      if (apiError.response?.status === 403) {
-        console.error('🚫 Permission denied. Possible causes:');
-        console.error('1. User role not properly set in backend');
-        console.error('2. JWT token expired or invalid');
-        console.error('3. Role guard not recognizing user permissions');
-        
-        // Try to refresh token or provide fallback
-        const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
-        if (currentUser.roles && currentUser.roles.includes('admin')) {
-          console.log('💡 User appears to be admin, but backend rejected request');
-        }
-      }
-      
-      // Fallback to localStorage
-      console.log('🔄 Falling back to localStorage for users...');
-      const localUsers = JSON.parse(localStorage.getItem('users') || '[]');
-      
-      if (Array.isArray(localUsers) && localUsers.length > 0) {
-        console.log(`📦 Found ${localUsers.length} users in localStorage`);
-        return {
-          users: localUsers,
-          total: localUsers.length,
-          page: 1,
-          limit: localUsers.length,
-          totalPages: 1
-        };
-      } else {
-        console.warn('📭 No users found in localStorage');
-        return {
-          users: [],
-          total: 0,
-          page: 1,
-          limit: 50,
-          totalPages: 0
-        };
-      }
+      throw error;
     }
   },
 

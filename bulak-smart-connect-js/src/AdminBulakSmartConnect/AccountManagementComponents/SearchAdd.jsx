@@ -1,10 +1,14 @@
 import React, { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 import '../AccountManagementComponents/SearchAdd.css';
 
 const SearchAddUser = ({ onSearch }) => {
   const navigate = useNavigate();
+  const { hasRole } = useAuth();
   const [searchTerm, setSearchTerm] = useState('');
+
+  const isSuperAdmin = hasRole('super_admin');
 
   // Debounced search to avoid too many API calls
   const debouncedSearch = useCallback(
@@ -29,6 +33,10 @@ const SearchAddUser = ({ onSearch }) => {
   };
 
   const handleAddUserClick = () => {
+    if (!isSuperAdmin) {
+      alert('Only super administrators can add users');
+      return;
+    }
     navigate('/add-user');
   };
 
@@ -41,6 +49,7 @@ const SearchAddUser = ({ onSearch }) => {
 
   return (
     <div className="search-user">
+      <div style={{ position: 'relative' }}>
         <input 
           type="text" 
           placeholder="Search User..." 
@@ -67,9 +76,12 @@ const SearchAddUser = ({ onSearch }) => {
             ✕
           </button>
         )}
-      <button className="add-user" onClick={handleAddUserClick}>
-        Add User
-      </button>
+      </div>
+      {isSuperAdmin && (
+        <button className="add-user" onClick={handleAddUserClick}>
+          Add User
+        </button>
+      )}
     </div>
   );
 };

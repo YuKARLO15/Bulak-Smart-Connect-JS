@@ -15,8 +15,24 @@ const AdminAccountManagement = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
+  // Check if user has super_admin role
+  const isSuperAdmin = hasRole('super_admin');
+
+  // Redirect if not super_admin
+  useEffect(() => {
+    if (!loading && !isSuperAdmin) {
+      setError('Access denied. Only super administrators can manage users.');
+      return;
+    }
+  }, [loading, isSuperAdmin]);
+
   // Load users from backend with localStorage fallback
   const loadUsers = async (search = '') => {
+    if (!isSuperAdmin) {
+      setLoading(false);
+      return;
+    }
+
     try {
       setLoading(true);
       setError('');
@@ -28,40 +44,48 @@ const AdminAccountManagement = () => {
         search: search.trim()
       });
 
-      // Transform backend data to match your existing component structure
-      const transformedUsers = response.users.map(user => ({
-        id: user.id,
-        name: user.name || `${user.firstName || ''} ${user.lastName || ''}`.trim(),
-        username: user.username || 'N/A',
-        email: user.email,
-        contact: user.contactNumber || 'N/A',
-        status: user.isActive ? 'Logged In' : 'Not Logged In',
-        roles: Array.isArray(user.roles) ? user.roles : [user.roles || user.defaultRole || 'citizen'],
-        image: null, // Keep for your existing image functionality
-        firstName: user.firstName,
-        lastName: user.lastName,
-        middleName: user.middleName,
-        nameExtension: user.nameExtension,
-        isActive: user.isActive,
-        defaultRole: user.defaultRole,
-        createdAt: user.createdAt,
-        updatedAt: user.updatedAt
-      }));
+      // Filter out citizens - only show admin, staff, and super_admin users
+      const transformedUsers = response.users
+        .filter(user => {
+          const userRoles = Array.isArray(user.roles) ? user.roles : [user.roles || user.defaultRole || 'citizen'];
+          return userRoles.some(role => ['admin', 'staff', 'super_admin'].includes(role));
+        })
+        .map(user => ({
+          id: user.id,
+          name: user.name || `${user.firstName || ''} ${user.lastName || ''}`.trim(),
+          username: user.username || 'N/A',
+          email: user.email,
+          contact: user.contactNumber || 'N/A',
+          status: user.isActive ? 'Logged In' : 'Not Logged In',
+          roles: Array.isArray(user.roles) ? user.roles : [user.roles || user.defaultRole || 'citizen'],
+          image: null,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          middleName: user.middleName,
+          nameExtension: user.nameExtension,
+          isActive: user.isActive,
+          defaultRole: user.defaultRole,
+          createdAt: user.createdAt,
+          updatedAt: user.updatedAt
+        }));
 
       setUsers(transformedUsers);
       
       // Update localStorage for consistency
       localStorage.setItem('users', JSON.stringify(transformedUsers));
-      console.log(`Loaded ${transformedUsers.length} users from API`);
+      console.log(`Loaded ${transformedUsers.length} non-citizen users from API`);
       
     } catch (err) {
       console.error('Error loading users from API:', err);
       setError('Failed to load users from server, using local data');
       
-      // Fallback to localStorage
-      const localUsers = getUsers();
+      // Fallback to localStorage with filtering
+      const localUsers = getUsers().filter(user => {
+        const userRoles = Array.isArray(user.roles) ? user.roles : [user.roles || 'citizen'];
+        return userRoles.some(role => ['admin', 'staff', 'super_admin'].includes(role));
+      });
       setUsers(localUsers);
-      console.log(`Fallback: Loaded ${localUsers.length} users from localStorage`);
+      console.log(`Fallback: Loaded ${localUsers.length} non-citizen users from localStorage`);
     } finally {
       setLoading(false);
     }
@@ -146,6 +170,20 @@ const AdminAccountManagement = () => {
       <h2 className='label-usermanagement'>User Management</h2>
       <NavBar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
       
+      {!isSuperAdmin && (
+        <div style={{
+          background: '#f8d7da', 
+          color: '#721c24', 
+          padding: '15px', 
+          margin: '10px 20px',
+          borderRadius: '4px',
+          textAlign: 'center',
+          border: '1px solid #f5c6cb'
+        }}>
+          <strong>Access Denied:</strong> Only super administrators can manage users.
+        </div>
+      )}
+      
       {error && (
         <div style={{
           background: '#fff3cd', 
@@ -160,15 +198,19 @@ const AdminAccountManagement = () => {
         </div>
       )}
 
-      <SearchAddUser onSearch={handleSearch} />
-      
-      <UserTable 
-        users={users} 
-        handleUpload={handleUpload}
-        removeUser={handleRemoveUser}
-        loading={loading}
-        onRefresh={() => loadUsers(searchQuery)}
-      />
+      {isSuperAdmin && (
+        <>
+          <SearchAddUser onSearch={handleSearch} />
+          
+          <UserTable 
+            users={users} 
+            handleUpload={handleUpload}
+            removeUser={handleRemoveUser}
+            loading={loading}
+            onRefresh={() => loadUsers(searchQuery)}
+          />
+        </>
+      )}
     </div>
   );
 };

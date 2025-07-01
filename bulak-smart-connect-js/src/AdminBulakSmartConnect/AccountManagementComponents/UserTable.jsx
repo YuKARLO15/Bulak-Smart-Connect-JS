@@ -3,14 +3,23 @@ import '../AccountManagementComponents/UserTable.css';
 import { useNavigate } from 'react-router-dom';
 import userService from '../../services/userService';
 import { FaEllipsisV } from 'react-icons/fa';
+import { useAuth } from '../../context/AuthContext';
 
 const UserTable = ({ users, handleUpload, removeUser, loading, onRefresh }) => {
   const navigate = useNavigate();
+  const { hasRole } = useAuth();
   const [statusUpdating, setStatusUpdating] = useState({});
   const [dropdownOpenIndex, setDropdownOpenIndex] = useState(null);
   const [selectedUser, setSelectedUser] = useState(null);
 
+  const isSuperAdmin = hasRole('super_admin');
+
   const handleModifyClick = (user, index) => {
+    if (!isSuperAdmin) {
+      alert('Only super administrators can modify users');
+      return;
+    }
+    
     navigate('/add-user', {
       state: {
         isModifying: true,
@@ -22,6 +31,10 @@ const UserTable = ({ users, handleUpload, removeUser, loading, onRefresh }) => {
   };
 
   const handleRemoveClick = index => {
+    if (!isSuperAdmin) {
+      alert('Only super administrators can remove users');
+      return;
+    }
     removeUser(index);
   };
 
@@ -33,6 +46,11 @@ const UserTable = ({ users, handleUpload, removeUser, loading, onRefresh }) => {
   };
 
   const handleStatusToggle = async (user, index) => {
+    if (!isSuperAdmin) {
+      alert('Only super administrators can change user status');
+      return;
+    }
+
     if (!user.id) {
       alert('Cannot update status for local-only users');
       return;
@@ -124,11 +142,23 @@ const UserTable = ({ users, handleUpload, removeUser, loading, onRefresh }) => {
                 </td>
                 <td>
                   <div className="roles">
-                    {(user.roles || []).map((role, idx) => (
-                      <span key={idx} className={`role ${role.toLowerCase()}`}>
-                        {role}
-                      </span>
-                    ))}
+                    {(user.roles || []).map((role, idx) => {
+                      // Map role names to display labels
+                      const roleLabels = {
+                        'super_admin': 'Admin',
+                        'admin': 'Manager', 
+                        'staff': 'Staff',
+                        'citizen': 'Citizen'
+                      };
+                      
+                      const displayRole = roleLabels[role] || role;
+                      
+                      return (
+                        <span key={idx} className={`role ${role.toLowerCase()}`}>
+                          {displayRole}
+                        </span>
+                      );
+                    })}
                   </div>
                 </td>
                 <td className="actions">
