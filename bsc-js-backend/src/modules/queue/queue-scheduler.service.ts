@@ -8,7 +8,7 @@ import { QueueGateway } from './queue.gateway';
 @Injectable()
 export class QueueSchedulerService {
   private readonly logger = new Logger(QueueSchedulerService.name);
-  private isResetInProgress = false; 
+  private isResetInProgress = false;
 
   constructor(
     @InjectRepository(Queue)
@@ -34,10 +34,28 @@ export class QueueSchedulerService {
     try {
       // ✅ FIXED: Better timezone handling
       const today = new Date();
-      const startOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0, 0);
-      const endOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 23, 59, 59, 999);
+      const startOfDay = new Date(
+        today.getFullYear(),
+        today.getMonth(),
+        today.getDate(),
+        0,
+        0,
+        0,
+        0,
+      );
+      const endOfDay = new Date(
+        today.getFullYear(),
+        today.getMonth(),
+        today.getDate(),
+        23,
+        59,
+        59,
+        999,
+      );
 
-      this.logger.log(`🗓️ Searching for queues between: ${startOfDay.toISOString()} and ${endOfDay.toISOString()}`);
+      this.logger.log(
+        `🗓️ Searching for queues between: ${startOfDay.toISOString()} and ${endOfDay.toISOString()}`,
+      );
 
       // Get all pending queues created today
       const pendingQueues = await this.queueRepository.find({
@@ -47,19 +65,23 @@ export class QueueSchedulerService {
         },
       });
 
-      this.logger.log(`📋 Found ${pendingQueues.length} pending queues to cancel`);
+      this.logger.log(
+        `📋 Found ${pendingQueues.length} pending queues to cancel`,
+      );
 
       if (pendingQueues.length > 0) {
         // Mark all pending queues as cancelled
         const cancelledQueues = await this.queueRepository.save(
-          pendingQueues.map(queue => ({
+          pendingQueues.map((queue) => ({
             ...queue,
             status: QueueStatus.CANCELLED,
             completedAt: new Date(),
-          }))
+          })),
         );
 
-        this.logger.log(`❌ Cancelled ${cancelledQueues.length} pending queues`);
+        this.logger.log(
+          `❌ Cancelled ${cancelledQueues.length} pending queues`,
+        );
 
         // Notify clients about cancellations
         for (const queue of cancelledQueues) {
@@ -74,7 +96,8 @@ export class QueueSchedulerService {
         this.queueGateway.server.emit('dailyQueueReset', {
           cancelledCount: cancelledQueues.length,
           timestamp: new Date(),
-          message: 'Daily queue reset completed. All pending queues have been cancelled.',
+          message:
+            'Daily queue reset completed. All pending queues have been cancelled.',
         });
       }
 
@@ -88,19 +111,20 @@ export class QueueSchedulerService {
 
       if (servingQueues.length > 0) {
         const cancelledServingQueues = await this.queueRepository.save(
-          servingQueues.map(queue => ({
+          servingQueues.map((queue) => ({
             ...queue,
             status: QueueStatus.CANCELLED,
             completedAt: new Date(),
-          }))
+          })),
         );
 
-        this.logger.log(`❌ Cancelled ${cancelledServingQueues.length} serving queues`);
+        this.logger.log(
+          `❌ Cancelled ${cancelledServingQueues.length} serving queues`,
+        );
       }
 
       this.logger.log('✅ Daily queue reset completed successfully');
       await this.logDailyStatistics(startOfDay, endOfDay);
-
     } catch (error) {
       this.logger.error('❌ Error during daily queue reset:', error);
       throw error; // ✅ FIXED: Propagate error for proper handling
@@ -136,7 +160,9 @@ export class QueueSchedulerService {
       this.logger.log(`   Total Queues: ${total}`);
       this.logger.log(`   Completed: ${completed}`);
       this.logger.log(`   Cancelled: ${cancelled}`);
-      this.logger.log(`   Completion Rate: ${total > 0 ? ((completed / total) * 100).toFixed(1) : 0}%`);
+      this.logger.log(
+        `   Completion Rate: ${total > 0 ? ((completed / total) * 100).toFixed(1) : 0}%`,
+      );
     } catch (error) {
       this.logger.error('Error logging daily statistics:', error);
     }
@@ -151,8 +177,24 @@ export class QueueSchedulerService {
   // Get pending queues count for today
   async getTodayPendingCount(): Promise<number> {
     const today = new Date();
-    const startOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0, 0);
-    const endOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 23, 59, 59, 999);
+    const startOfDay = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      today.getDate(),
+      0,
+      0,
+      0,
+      0,
+    );
+    const endOfDay = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      today.getDate(),
+      23,
+      59,
+      59,
+      999,
+    );
 
     return await this.queueRepository.count({
       where: {

@@ -48,8 +48,8 @@ interface RequestWithUser extends Request {
 export class AuthController {
   constructor(
     private authService: AuthService,
-    private otpService: OTPService, 
-    private emailService: EmailService, 
+    private otpService: OTPService,
+    private emailService: EmailService,
   ) {}
 
   @ApiOperation({ summary: 'User login' })
@@ -303,18 +303,18 @@ export class AuthController {
           type: 'string',
           format: 'email',
           example: 'user@example.com',
-          description: 'Email address to send OTP to'
+          description: 'Email address to send OTP to',
         },
         purpose: {
           type: 'string',
           enum: ['verification', 'password_reset'],
           example: 'verification',
           description: 'Purpose of the OTP',
-          default: 'verification'
-        }
+          default: 'verification',
+        },
       },
-      required: ['email']
-    }
+      required: ['email'],
+    },
   })
   @Post('send-otp')
   async sendOTP(@Body() sendOtpDto: { email: string; purpose?: string }) {
@@ -388,27 +388,29 @@ export class AuthController {
           type: 'string',
           format: 'email',
           example: 'user@example.com',
-          description: 'Email address'
+          description: 'Email address',
         },
         otp: {
           type: 'string',
           example: '123456',
           pattern: '^[0-9]{6}$',
-          description: '6-digit OTP code'
+          description: '6-digit OTP code',
         },
         purpose: {
           type: 'string',
           enum: ['verification', 'password_reset'],
           example: 'verification',
           description: 'Purpose of the OTP verification',
-          default: 'verification'
-        }
+          default: 'verification',
+        },
       },
-      required: ['email', 'otp']
-    }
+      required: ['email', 'otp'],
+    },
   })
   @Post('verify-otp')
-  async verifyOTP(@Body() verifyOtpDto: { email: string; otp: string; purpose?: string }) {
+  async verifyOTP(
+    @Body() verifyOtpDto: { email: string; otp: string; purpose?: string },
+  ) {
     try {
       const { email, otp, purpose = 'verification' } = verifyOtpDto;
 
@@ -455,9 +457,10 @@ export class AuthController {
       type: 'object',
       properties: {
         success: { type: 'boolean', example: true },
-        message: { 
-          type: 'string', 
-          example: 'If this email is registered, you will receive a password reset code' 
+        message: {
+          type: 'string',
+          example:
+            'If this email is registered, you will receive a password reset code',
         },
       },
     },
@@ -471,11 +474,11 @@ export class AuthController {
           type: 'string',
           format: 'email',
           example: 'user@example.com',
-          description: 'Registered email address'
-        }
+          description: 'Registered email address',
+        },
       },
-      required: ['email']
-    }
+      required: ['email'],
+    },
   })
   @Post('forgot-password')
   async forgotPassword(@Body() { email }: { email: string }) {
@@ -486,7 +489,8 @@ export class AuthController {
         // Don't reveal if email exists for security
         return {
           success: true,
-          message: 'If this email is registered, you will receive a password reset code',
+          message:
+            'If this email is registered, you will receive a password reset code',
         };
       }
 
@@ -558,32 +562,39 @@ export class AuthController {
           type: 'string',
           format: 'email',
           example: 'user@example.com',
-          description: 'Email address'
+          description: 'Email address',
         },
         otp: {
           type: 'string',
           example: '123456',
           pattern: '^[0-9]{6}$',
-          description: '6-digit OTP code received via email'
+          description: '6-digit OTP code received via email',
         },
         newPassword: {
           type: 'string',
           example: 'NewSecure123!',
           minLength: 8,
-          pattern: '^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$',
-          description: 'New password (must meet complexity requirements)'
-        }
+          pattern:
+            '^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$',
+          description: 'New password (must meet complexity requirements)',
+        },
       },
-      required: ['email', 'otp', 'newPassword']
-    }
+      required: ['email', 'otp', 'newPassword'],
+    },
   })
   @Post('reset-password')
-  async resetPassword(@Body() resetDto: { email: string; otp: string; newPassword: string }) {
+  async resetPassword(
+    @Body() resetDto: { email: string; otp: string; newPassword: string },
+  ) {
     try {
       const { email, otp, newPassword } = resetDto;
 
       // Verify OTP
-      const isOtpValid = await this.otpService.verifyOTP(email, otp, 'password_reset');
+      const isOtpValid = await this.otpService.verifyOTP(
+        email,
+        otp,
+        'password_reset',
+      );
       if (!isOtpValid) {
         throw new UnauthorizedException('Invalid or expired reset code');
       }
@@ -627,10 +638,10 @@ export class AuthController {
       properties: {
         success: { type: 'boolean', example: true },
         message: { type: 'string', example: 'OTP generated and sent' },
-        otp: { 
-          type: 'string', 
+        otp: {
+          type: 'string',
           example: '123456',
-          description: 'OTP code (only in development mode)'
+          description: 'OTP code (only in development mode)',
         },
       },
     },
@@ -642,7 +653,10 @@ export class AuthController {
       type: 'object',
       properties: {
         statusCode: { type: 'number', example: 403 },
-        message: { type: 'string', example: 'Test endpoints not available in production' },
+        message: {
+          type: 'string',
+          example: 'Test endpoints not available in production',
+        },
         error: { type: 'string', example: 'Forbidden' },
       },
     },
@@ -656,26 +670,28 @@ export class AuthController {
           type: 'string',
           format: 'email',
           example: 'test@example.com',
-          description: 'Email address for testing OTP generation'
-        }
+          description: 'Email address for testing OTP generation',
+        },
       },
-      required: ['email']
-    }
+      required: ['email'],
+    },
   })
   @Post('test-otp')
   async testOTP(@Body() { email }: { email: string }) {
     // Add environment check to your existing implementation
     if (process.env.NODE_ENV === 'production') {
-      throw new BadRequestException('Test endpoints not available in production');
+      throw new BadRequestException(
+        'Test endpoints not available in production',
+      );
     }
-    
+
     try {
       const otp = await this.otpService.generateOTP(email, 'verification');
       return {
         success: true,
         message: 'OTP generated and sent',
         // Remove this in production - only for testing
-        otp: process.env.NODE_ENV === 'development' ? otp : undefined
+        otp: process.env.NODE_ENV === 'development' ? otp : undefined,
       };
     } catch (error) {
       console.error('Test OTP error:', error);
@@ -708,7 +724,10 @@ export class AuthController {
       type: 'object',
       properties: {
         success: { type: 'boolean', example: true },
-        message: { type: 'string', example: 'Application notification sent successfully' },
+        message: {
+          type: 'string',
+          example: 'Application notification sent successfully',
+        },
       },
     },
   })
@@ -721,48 +740,51 @@ export class AuthController {
           type: 'string',
           format: 'email',
           example: 'user@example.com',
-          description: 'Recipient email address'
+          description: 'Recipient email address',
         },
         applicationId: {
           type: 'string',
           example: 'APP-001',
-          description: 'Application ID'
+          description: 'Application ID',
         },
         status: {
           type: 'string',
           enum: ['Pending', 'Approved', 'Rejected', 'Ready for Pickup'],
           example: 'Approved',
-          description: 'Application status'
+          description: 'Application status',
         },
         applicationType: {
           type: 'string',
           example: 'Birth Certificate',
-          description: 'Type of application'
-        }
+          description: 'Type of application',
+        },
       },
-      required: ['email', 'applicationId', 'status', 'applicationType']
-    }
+      required: ['email', 'applicationId', 'status', 'applicationType'],
+    },
   })
   @Post('send-application-notification')
-  async sendApplicationNotification(@Body() notificationDto: {
-    email: string;
-    applicationId: string;
-    status: string;
-    applicationType: string;
-  }) {
+  async sendApplicationNotification(
+    @Body()
+    notificationDto: {
+      email: string;
+      applicationId: string;
+      status: string;
+      applicationType: string;
+    },
+  ) {
     try {
       const { email, applicationId, status, applicationType } = notificationDto;
-      
+
       await this.emailService.sendApplicationNotification(
         email,
         applicationId,
         status,
-        applicationType
+        applicationType,
       );
-      
+
       return {
         success: true,
-        message: 'Application notification sent successfully'
+        message: 'Application notification sent successfully',
       };
     } catch (error) {
       console.error('Error sending application notification:', error);

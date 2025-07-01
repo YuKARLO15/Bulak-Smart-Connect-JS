@@ -38,7 +38,7 @@ export class QueueService {
     // Get the start and end of today for accurate daily counting
     const todayStart = new Date(today);
     todayStart.setHours(0, 0, 0, 0);
-    
+
     const todayEnd = new Date(today);
     todayEnd.setHours(23, 59, 59, 999);
 
@@ -53,7 +53,9 @@ export class QueueService {
     // This keeps your existing backend format but ensures daily reset
     const queueNumber = `${dateStr}-${String(todayCount + 1).padStart(3, '0')}`;
 
-    console.log(`Creating queue number: ${queueNumber} for today. Daily count: ${todayCount + 1}`);
+    console.log(
+      `Creating queue number: ${queueNumber} for today. Daily count: ${todayCount + 1}`,
+    );
 
     // Create and save the queue
     const queue = this.queueRepository.create({

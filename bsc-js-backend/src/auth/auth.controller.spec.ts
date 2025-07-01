@@ -66,10 +66,13 @@ describe('AuthController', () => {
 
   describe('login', () => {
     it('should login user successfully', async () => {
-      const loginDto = { emailOrUsername: 'test@example.com', password: 'password123' };
+      const loginDto = {
+        emailOrUsername: 'test@example.com',
+        password: 'password123',
+      };
       const expectedResult = {
         access_token: 'jwt-token',
-        user: { id: 1, email: 'test@example.com', roles: ['citizen'] }
+        user: { id: 1, email: 'test@example.com', roles: ['citizen'] },
       };
 
       mockAuthService.login.mockResolvedValue(expectedResult);
@@ -81,11 +84,16 @@ describe('AuthController', () => {
     });
 
     it('should throw UnauthorizedException for invalid credentials', async () => {
-      const loginDto = { emailOrUsername: 'test@example.com', password: 'wrongpassword' };
+      const loginDto = {
+        emailOrUsername: 'test@example.com',
+        password: 'wrongpassword',
+      };
 
       mockAuthService.login.mockRejectedValue(new Error('Invalid credentials'));
 
-      await expect(controller.login(loginDto)).rejects.toThrow(UnauthorizedException);
+      await expect(controller.login(loginDto)).rejects.toThrow(
+        UnauthorizedException,
+      );
     });
   });
 
@@ -97,12 +105,12 @@ describe('AuthController', () => {
         password: 'Password123!',
         firstName: 'Test',
         lastName: 'User',
-        otp: '123456'
+        otp: '123456',
       };
 
       const expectedResult = {
         access_token: 'jwt-token',
-        user: { id: 1, email: 'test@example.com', roles: ['citizen'] }
+        user: { id: 1, email: 'test@example.com', roles: ['citizen'] },
       };
 
       mockOTPService.verifyOTP.mockResolvedValue(true);
@@ -111,13 +119,17 @@ describe('AuthController', () => {
 
       const result = await controller.register(registerDto);
 
-      expect(mockOTPService.verifyOTP).toHaveBeenCalledWith('test@example.com', '123456', 'verification');
+      expect(mockOTPService.verifyOTP).toHaveBeenCalledWith(
+        'test@example.com',
+        '123456',
+        'verification',
+      );
       expect(mockAuthService.register).toHaveBeenCalledWith(registerDto);
       expect(mockEmailService.sendApplicationNotification).toHaveBeenCalledWith(
         'test@example.com',
         'Welcome!',
         'Account Created',
-        'Welcome to Bulak LGU Smart Connect'
+        'Welcome to Bulak LGU Smart Connect',
       );
       expect(result).toEqual(expectedResult);
     });
@@ -128,12 +140,12 @@ describe('AuthController', () => {
         username: 'testuser',
         password: 'Password123!',
         firstName: 'Test',
-        lastName: 'User'
+        lastName: 'User',
       };
 
       const expectedResult = {
         access_token: 'jwt-token',
-        user: { id: 1, email: 'test@example.com', roles: ['citizen'] }
+        user: { id: 1, email: 'test@example.com', roles: ['citizen'] },
       };
 
       mockAuthService.register.mockResolvedValue(expectedResult);
@@ -153,12 +165,14 @@ describe('AuthController', () => {
         password: 'Password123!',
         firstName: 'Test',
         lastName: 'User',
-        otp: '000000'
+        otp: '000000',
       };
 
       mockOTPService.verifyOTP.mockResolvedValue(false);
 
-      await expect(controller.register(registerDto)).rejects.toThrow(BadRequestException);
+      await expect(controller.register(registerDto)).rejects.toThrow(
+        BadRequestException,
+      );
       expect(mockAuthService.register).not.toHaveBeenCalled();
     });
   });
@@ -171,11 +185,14 @@ describe('AuthController', () => {
 
       const result = await controller.sendOTP(sendOtpDto);
 
-      expect(mockOTPService.generateOTP).toHaveBeenCalledWith('test@example.com', 'verification');
+      expect(mockOTPService.generateOTP).toHaveBeenCalledWith(
+        'test@example.com',
+        'verification',
+      );
       expect(result).toEqual({
         success: true,
         message: 'OTP sent successfully',
-        email: 'test@example.com'
+        email: 'test@example.com',
       });
     });
 
@@ -186,38 +203,55 @@ describe('AuthController', () => {
 
       const result = await controller.sendOTP(sendOtpDto);
 
-      expect(mockOTPService.generateOTP).toHaveBeenCalledWith('test@example.com', 'verification');
+      expect(mockOTPService.generateOTP).toHaveBeenCalledWith(
+        'test@example.com',
+        'verification',
+      );
       expect(result.success).toBe(true);
     });
 
     it('should throw BadRequestException for invalid email', async () => {
       const sendOtpDto = { email: 'invalid-email', purpose: 'verification' };
 
-      await expect(controller.sendOTP(sendOtpDto)).rejects.toThrow(BadRequestException);
+      await expect(controller.sendOTP(sendOtpDto)).rejects.toThrow(
+        BadRequestException,
+      );
       expect(mockOTPService.generateOTP).not.toHaveBeenCalled();
     });
 
     it('should handle OTP service errors', async () => {
       const sendOtpDto = { email: 'test@example.com', purpose: 'verification' };
 
-      mockOTPService.generateOTP.mockRejectedValue(new Error('Email service failed'));
+      mockOTPService.generateOTP.mockRejectedValue(
+        new Error('Email service failed'),
+      );
 
-      await expect(controller.sendOTP(sendOtpDto)).rejects.toThrow(BadRequestException);
+      await expect(controller.sendOTP(sendOtpDto)).rejects.toThrow(
+        BadRequestException,
+      );
     });
   });
 
   describe('verifyOTP', () => {
     it('should verify OTP successfully', async () => {
-      const verifyOtpDto = { email: 'test@example.com', otp: '123456', purpose: 'verification' };
+      const verifyOtpDto = {
+        email: 'test@example.com',
+        otp: '123456',
+        purpose: 'verification',
+      };
 
       mockOTPService.verifyOTP.mockResolvedValue(true);
 
       const result = await controller.verifyOTP(verifyOtpDto);
 
-      expect(mockOTPService.verifyOTP).toHaveBeenCalledWith('test@example.com', '123456', 'verification');
+      expect(mockOTPService.verifyOTP).toHaveBeenCalledWith(
+        'test@example.com',
+        '123456',
+        'verification',
+      );
       expect(result).toEqual({
         success: true,
-        message: 'OTP verified successfully'
+        message: 'OTP verified successfully',
       });
     });
 
@@ -228,23 +262,39 @@ describe('AuthController', () => {
 
       await controller.verifyOTP(verifyOtpDto);
 
-      expect(mockOTPService.verifyOTP).toHaveBeenCalledWith('test@example.com', '123456', 'verification');
+      expect(mockOTPService.verifyOTP).toHaveBeenCalledWith(
+        'test@example.com',
+        '123456',
+        'verification',
+      );
     });
 
     it('should throw UnauthorizedException for invalid OTP', async () => {
-      const verifyOtpDto = { email: 'test@example.com', otp: '000000', purpose: 'verification' };
+      const verifyOtpDto = {
+        email: 'test@example.com',
+        otp: '000000',
+        purpose: 'verification',
+      };
 
       mockOTPService.verifyOTP.mockResolvedValue(false);
 
-      await expect(controller.verifyOTP(verifyOtpDto)).rejects.toThrow(UnauthorizedException);
+      await expect(controller.verifyOTP(verifyOtpDto)).rejects.toThrow(
+        UnauthorizedException,
+      );
     });
 
     it('should handle OTP service errors', async () => {
-      const verifyOtpDto = { email: 'test@example.com', otp: '123456', purpose: 'verification' };
+      const verifyOtpDto = {
+        email: 'test@example.com',
+        otp: '123456',
+        purpose: 'verification',
+      };
 
       mockOTPService.verifyOTP.mockRejectedValue(new Error('Database error'));
 
-      await expect(controller.verifyOTP(verifyOtpDto)).rejects.toThrow(UnauthorizedException);
+      await expect(controller.verifyOTP(verifyOtpDto)).rejects.toThrow(
+        UnauthorizedException,
+      );
     });
   });
 
@@ -259,10 +309,13 @@ describe('AuthController', () => {
       const result = await controller.forgotPassword({ email });
 
       expect(mockAuthService.findUserByEmail).toHaveBeenCalledWith(email);
-      expect(mockOTPService.generateOTP).toHaveBeenCalledWith(email, 'password_reset');
+      expect(mockOTPService.generateOTP).toHaveBeenCalledWith(
+        email,
+        'password_reset',
+      );
       expect(result).toEqual({
         success: true,
-        message: 'Password reset code sent to your email'
+        message: 'Password reset code sent to your email',
       });
     });
 
@@ -277,7 +330,8 @@ describe('AuthController', () => {
       expect(mockOTPService.generateOTP).not.toHaveBeenCalled();
       expect(result).toEqual({
         success: true,
-        message: 'If this email is registered, you will receive a password reset code'
+        message:
+          'If this email is registered, you will receive a password reset code',
       });
     });
 
@@ -286,9 +340,13 @@ describe('AuthController', () => {
       const mockUser = { id: 1, email: 'test@example.com' };
 
       mockAuthService.findUserByEmail.mockResolvedValue(mockUser);
-      mockOTPService.generateOTP.mockRejectedValue(new Error('Email service failed'));
+      mockOTPService.generateOTP.mockRejectedValue(
+        new Error('Email service failed'),
+      );
 
-      await expect(controller.forgotPassword({ email })).rejects.toThrow(BadRequestException);
+      await expect(controller.forgotPassword({ email })).rejects.toThrow(
+        BadRequestException,
+      );
     });
   });
 
@@ -297,7 +355,7 @@ describe('AuthController', () => {
       const resetDto = {
         email: 'test@example.com',
         otp: '123456',
-        newPassword: 'NewPassword123!'
+        newPassword: 'NewPassword123!',
       };
 
       mockOTPService.verifyOTP.mockResolvedValue(true);
@@ -305,11 +363,18 @@ describe('AuthController', () => {
 
       const result = await controller.resetPassword(resetDto);
 
-      expect(mockOTPService.verifyOTP).toHaveBeenCalledWith('test@example.com', '123456', 'password_reset');
-      expect(mockAuthService.updatePassword).toHaveBeenCalledWith('test@example.com', 'NewPassword123!');
+      expect(mockOTPService.verifyOTP).toHaveBeenCalledWith(
+        'test@example.com',
+        '123456',
+        'password_reset',
+      );
+      expect(mockAuthService.updatePassword).toHaveBeenCalledWith(
+        'test@example.com',
+        'NewPassword123!',
+      );
       expect(result).toEqual({
         success: true,
-        message: 'Password reset successfully'
+        message: 'Password reset successfully',
       });
     });
 
@@ -317,12 +382,14 @@ describe('AuthController', () => {
       const resetDto = {
         email: 'test@example.com',
         otp: '000000',
-        newPassword: 'NewPassword123!'
+        newPassword: 'NewPassword123!',
       };
 
       mockOTPService.verifyOTP.mockResolvedValue(false);
 
-      await expect(controller.resetPassword(resetDto)).rejects.toThrow(UnauthorizedException);
+      await expect(controller.resetPassword(resetDto)).rejects.toThrow(
+        UnauthorizedException,
+      );
       expect(mockAuthService.updatePassword).not.toHaveBeenCalled();
     });
 
@@ -330,13 +397,17 @@ describe('AuthController', () => {
       const resetDto = {
         email: 'test@example.com',
         otp: '123456',
-        newPassword: 'weak'
+        newPassword: 'weak',
       };
 
       mockOTPService.verifyOTP.mockResolvedValue(true);
-      mockAuthService.updatePassword.mockRejectedValue(new BadRequestException('Password too weak'));
+      mockAuthService.updatePassword.mockRejectedValue(
+        new BadRequestException('Password too weak'),
+      );
 
-      await expect(controller.resetPassword(resetDto)).rejects.toThrow(BadRequestException);
+      await expect(controller.resetPassword(resetDto)).rejects.toThrow(
+        BadRequestException,
+      );
     });
   });
 
@@ -357,11 +428,14 @@ describe('AuthController', () => {
 
       const result = await controller.testOTP({ email });
 
-      expect(mockOTPService.generateOTP).toHaveBeenCalledWith(email, 'verification');
+      expect(mockOTPService.generateOTP).toHaveBeenCalledWith(
+        email,
+        'verification',
+      );
       expect(result).toEqual({
         success: true,
         message: 'OTP generated and sent',
-        otp: '123456'
+        otp: '123456',
       });
     });
 
@@ -376,30 +450,34 @@ describe('AuthController', () => {
       expect(result).toEqual({
         success: true,
         message: 'OTP generated and sent',
-        otp: undefined
+        otp: undefined,
       });
     });
 
     it('should handle OTP generation errors', async () => {
       const email = 'test@example.com';
 
-      mockOTPService.generateOTP.mockRejectedValue(new Error('Service unavailable'));
+      mockOTPService.generateOTP.mockRejectedValue(
+        new Error('Service unavailable'),
+      );
 
-      await expect(controller.testOTP({ email })).rejects.toThrow(BadRequestException);
+      await expect(controller.testOTP({ email })).rejects.toThrow(
+        BadRequestException,
+      );
     });
   });
 
   describe('getProfile', () => {
     it('should get user profile successfully', async () => {
       const mockRequest = {
-        user: { id: 1, email: 'test@example.com' }
+        user: { id: 1, email: 'test@example.com' },
       } as any;
 
       const expectedProfile = {
         id: 1,
         email: 'test@example.com',
         firstName: 'Test',
-        lastName: 'User'
+        lastName: 'User',
       };
 
       mockAuthService.getProfile.mockResolvedValue(expectedProfile);
@@ -412,10 +490,12 @@ describe('AuthController', () => {
 
     it('should throw UnauthorizedException for invalid user ID', async () => {
       const mockRequest = {
-        user: { id: null }
+        user: { id: null },
       } as any;
 
-      await expect(controller.getProfile(mockRequest)).rejects.toThrow(UnauthorizedException);
+      await expect(controller.getProfile(mockRequest)).rejects.toThrow(
+        UnauthorizedException,
+      );
       expect(mockAuthService.getProfile).not.toHaveBeenCalled();
     });
   });
@@ -423,12 +503,12 @@ describe('AuthController', () => {
   describe('updateProfile', () => {
     it('should update user profile successfully', async () => {
       const mockRequest = {
-        user: { id: 1, email: 'test@example.com' }
+        user: { id: 1, email: 'test@example.com' },
       } as any;
 
       const updateDto = {
         firstName: 'Updated',
-        lastName: 'Name'
+        lastName: 'Name',
       };
 
       const expectedResult = { success: true, message: 'Profile updated' };
@@ -443,12 +523,14 @@ describe('AuthController', () => {
 
     it('should throw UnauthorizedException for invalid user ID', async () => {
       const mockRequest = {
-        user: { id: undefined }
+        user: { id: undefined },
       } as any;
 
       const updateDto = { firstName: 'Updated' };
 
-      await expect(controller.updateProfile(mockRequest, updateDto)).rejects.toThrow(UnauthorizedException);
+      await expect(
+        controller.updateProfile(mockRequest, updateDto),
+      ).rejects.toThrow(UnauthorizedException);
       expect(mockAuthService.updateUserInfo).not.toHaveBeenCalled();
     });
   });

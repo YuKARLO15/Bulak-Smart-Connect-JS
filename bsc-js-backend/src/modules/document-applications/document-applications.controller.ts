@@ -130,7 +130,9 @@ export class DocumentApplicationsController {
   }
 
   @Get(':id/files/all')
-  @ApiOperation({ summary: 'Get all application files (privileged users only)' })
+  @ApiOperation({
+    summary: 'Get all application files (privileged users only)',
+  })
   @ApiResponse({ status: 200, description: 'All files retrieved successfully' })
   @ApiResponse({ status: 404, description: 'Application not found' })
   async getAllApplicationFiles(
@@ -207,7 +209,9 @@ export class DocumentApplicationsController {
   @Patch(':id/status')
   @Roles('admin', 'staff', 'super_admin')
   @UseGuards(RolesGuard)
-  @ApiOperation({ summary: 'Update application status (Privileged users only)' })
+  @ApiOperation({
+    summary: 'Update application status (Privileged users only)',
+  })
   async updateStatus(
     @Param('id') id: string,
     @Body() statusDto: { status: string; statusMessage?: string },
@@ -245,7 +249,9 @@ export class DocumentApplicationsController {
   @Get('admin/stats')
   @Roles('admin', 'super_admin')
   @UseGuards(RolesGuard)
-  @ApiOperation({ summary: 'Get application statistics (Admin/Super Admin only)' })
+  @ApiOperation({
+    summary: 'Get application statistics (Admin/Super Admin only)',
+  })
   async getStats(): Promise<
     Array<{ type: string; status: string; count: string }>
   > {

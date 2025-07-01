@@ -31,7 +31,8 @@ async function bootstrap() {
   const config = new DocumentBuilder()
     .setTitle(configService.get('SWAGGER_TITLE') || 'Bulak Smart Connect API')
     .setDescription(
-      configService.get('SWAGGER_DESCRIPTION') || `
+      configService.get('SWAGGER_DESCRIPTION') ||
+        `
     🏛️ **REST API for Bulak Smart Connect Municipal Services System**
     
     ## 🌟 Features
@@ -82,7 +83,10 @@ async function bootstrap() {
       'contact@bulaksmartconnect.com',
     )
     .setLicense('MIT', 'https://opensource.org/licenses/MIT')
-    .addServer(`http://localhost:${configService.get('PORT') || 3000}`, 'Development Server')
+    .addServer(
+      `http://localhost:${configService.get('PORT') || 3000}`,
+      'Development Server',
+    )
     .addBearerAuth(
       {
         type: 'http',
@@ -94,7 +98,10 @@ async function bootstrap() {
       },
       'JWT-auth',
     )
-    .addTag('Authentication & OTP', '🔐 User authentication, registration, and OTP verification system')
+    .addTag(
+      'Authentication & OTP',
+      '🔐 User authentication, registration, and OTP verification system',
+    )
     .addTag(
       'Queue Management',
       'Real-time queue management for municipal services',
@@ -111,7 +118,9 @@ async function bootstrap() {
   SwaggerModule.setup('api/docs', app, document);
 
   // Enable CORS
-  const allowedOrigins = configService.get('ALLOWED_ORIGINS')?.split(',') || [configService.get('FRONTEND_URL') || 'http://localhost:5173'];
+  const allowedOrigins = configService.get('ALLOWED_ORIGINS')?.split(',') || [
+    configService.get('FRONTEND_URL') || 'http://localhost:5173',
+  ];
   app.enableCors({
     origin: allowedOrigins,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
@@ -129,9 +138,13 @@ async function bootstrap() {
   const port = configService.get('PORT') || 3000;
   const host = configService.get('HOST') || 'localhost';
   await app.listen(port);
-  
-  console.log(`🚀 Application is running on: ${configService.get('SERVER_BASE_URL') || `http://${host}:${port}`}`);
-  console.log(`📚 Swagger docs available at: ${configService.get('SWAGGER_URL') || `http://${host}:${port}/api/docs`}`);
+
+  console.log(
+    `🚀 Application is running on: ${configService.get('SERVER_BASE_URL') || `http://${host}:${port}`}`,
+  );
+  console.log(
+    `📚 Swagger docs available at: ${configService.get('SWAGGER_URL') || `http://${host}:${port}/api/docs`}`,
+  );
   console.log(`🌐 CORS enabled for: ${allowedOrigins.join(', ')}`);
   console.log(`🔗 WebSocket CORS: ${configService.get('WS_CORS_ORIGIN')}`);
 }

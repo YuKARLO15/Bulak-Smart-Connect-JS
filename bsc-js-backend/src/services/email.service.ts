@@ -43,7 +43,7 @@ export class EmailService {
               © 2025 Bulak LGU Smart Connect. All rights reserved.
             </div>
           </div>
-        `
+        `,
       },
       password_reset: {
         subject: '🔒 Bulak LGU Smart Connect - Password Reset',
@@ -68,7 +68,7 @@ export class EmailService {
               © 2025 Bulak LGU Smart Connect. All rights reserved.
             </div>
           </div>
-        `
+        `,
       },
       application_update: {
         subject: '📋 Bulak LGU Smart Connect - Application Status Update',
@@ -91,8 +91,8 @@ export class EmailService {
               © 2025 Bulak LGU Smart Connect. All rights reserved.
             </div>
           </div>
-        `
-      }
+        `,
+      },
     };
 
     const template = templates[purpose] || templates.verification;
@@ -107,12 +107,17 @@ export class EmailService {
     return await this.transporter.sendMail(mailOptions);
   }
 
-  async sendApplicationNotification(email: string, applicationId: string, status: string, applicationType: string) {
+  async sendApplicationNotification(
+    email: string,
+    applicationId: string,
+    status: string,
+    applicationType: string,
+  ) {
     const statusColors = {
-      'Pending': '#f39c12',
-      'Approved': '#27ae60',
-      'Rejected': '#e74c3c',
-      'Ready for Pickup': '#3498db'
+      Pending: '#f39c12',
+      Approved: '#27ae60',
+      Rejected: '#e74c3c',
+      'Ready for Pickup': '#3498db',
     };
 
     const mailOptions = {

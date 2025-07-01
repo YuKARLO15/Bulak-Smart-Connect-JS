@@ -188,7 +188,7 @@ describe('User Update Functionality (e2e)', () => {
       return request(app.getHttpServer() as unknown as import('http').Server)
         .post('/auth/update-profile')
         .set('Authorization', `Bearer ${citizenToken}`)
-        .send({ password: 'NewSecure123!' }) 
+        .send({ password: 'NewSecure123!' })
         .expect(200);
     });
 

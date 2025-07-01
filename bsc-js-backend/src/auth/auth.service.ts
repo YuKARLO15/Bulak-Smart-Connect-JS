@@ -277,7 +277,9 @@ export class AuthService {
       // Handle password change if provided
       if (updateUserDto.password) {
         // Validate password strength
-        const passwordValidation = this.validatePasswordStrength(updateUserDto.password);
+        const passwordValidation = this.validatePasswordStrength(
+          updateUserDto.password,
+        );
         if (!passwordValidation.isValid) {
           throw new BadRequestException(passwordValidation.message);
         }
@@ -571,7 +573,7 @@ export class AuthService {
       // Update password in database
       await this.usersRepository.update(
         { id: user.id },
-        { password: hashedPassword }
+        { password: hashedPassword },
       );
 
       console.log(`Password updated successfully for user: ${email}`);
@@ -581,13 +583,19 @@ export class AuthService {
     }
   }
 
-  private validatePasswordStrength(password: string): { isValid: boolean; message?: string } {
+  private validatePasswordStrength(password: string): {
+    isValid: boolean;
+    message?: string;
+  } {
     if (!password) {
       return { isValid: false, message: 'Password is required' };
     }
 
     if (password.length < 8) {
-      return { isValid: false, message: 'Password must be at least 8 characters long' };
+      return {
+        isValid: false,
+        message: 'Password must be at least 8 characters long',
+      };
     }
 
     const hasUpperCase = /[A-Z]/.test(password);
@@ -596,19 +604,32 @@ export class AuthService {
     const hasSpecialChars = /[!@#$%^&*(),.?":{}|<>]/.test(password);
 
     if (!hasUpperCase) {
-      return { isValid: false, message: 'Password must contain at least one uppercase letter' };
+      return {
+        isValid: false,
+        message: 'Password must contain at least one uppercase letter',
+      };
     }
 
     if (!hasLowerCase) {
-      return { isValid: false, message: 'Password must contain at least one lowercase letter' };
+      return {
+        isValid: false,
+        message: 'Password must contain at least one lowercase letter',
+      };
     }
 
     if (!hasNumbers) {
-      return { isValid: false, message: 'Password must contain at least one number' };
+      return {
+        isValid: false,
+        message: 'Password must contain at least one number',
+      };
     }
 
     if (!hasSpecialChars) {
-      return { isValid: false, message: 'Password must contain at least one special character (!@#$%^&*(),.?":{}|<>)' };
+      return {
+        isValid: false,
+        message:
+          'Password must contain at least one special character (!@#$%^&*(),.?":{}|<>)',
+      };
     }
 
     return { isValid: true };

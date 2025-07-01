@@ -67,7 +67,9 @@ describe('EmailService', () => {
       const otp = '123456';
       const purpose = 'verification';
 
-      mockTransporter.sendMail.mockResolvedValue({ messageId: 'test-message-id' });
+      mockTransporter.sendMail.mockResolvedValue({
+        messageId: 'test-message-id',
+      });
 
       const result = await service.sendOTP(email, otp, purpose);
 
@@ -85,7 +87,9 @@ describe('EmailService', () => {
       const otp = '123456';
       const purpose = 'password_reset';
 
-      mockTransporter.sendMail.mockResolvedValue({ messageId: 'test-message-id' });
+      mockTransporter.sendMail.mockResolvedValue({
+        messageId: 'test-message-id',
+      });
 
       const result = await service.sendOTP(email, otp, purpose);
 
@@ -103,7 +107,9 @@ describe('EmailService', () => {
       const otp = '123456';
       const purpose = 'unknown_purpose';
 
-      mockTransporter.sendMail.mockResolvedValue({ messageId: 'test-message-id' });
+      mockTransporter.sendMail.mockResolvedValue({
+        messageId: 'test-message-id',
+      });
 
       const result = await service.sendOTP(email, otp, purpose);
 
@@ -121,9 +127,13 @@ describe('EmailService', () => {
       const otp = '123456';
       const purpose = 'verification';
 
-      mockTransporter.sendMail.mockRejectedValue(new Error('SMTP connection failed'));
+      mockTransporter.sendMail.mockRejectedValue(
+        new Error('SMTP connection failed'),
+      );
 
-      await expect(service.sendOTP(email, otp, purpose)).rejects.toThrow('SMTP connection failed');
+      await expect(service.sendOTP(email, otp, purpose)).rejects.toThrow(
+        'SMTP connection failed',
+      );
     });
 
     it('should include OTP in email content', async () => {
@@ -131,7 +141,9 @@ describe('EmailService', () => {
       const otp = '987654';
       const purpose = 'verification';
 
-      mockTransporter.sendMail.mockResolvedValue({ messageId: 'test-message-id' });
+      mockTransporter.sendMail.mockResolvedValue({
+        messageId: 'test-message-id',
+      });
 
       await service.sendOTP(email, otp, purpose);
 
@@ -148,9 +160,16 @@ describe('EmailService', () => {
       const status = 'Approved';
       const applicationType = 'Business Permit';
 
-      mockTransporter.sendMail.mockResolvedValue({ messageId: 'test-message-id' });
+      mockTransporter.sendMail.mockResolvedValue({
+        messageId: 'test-message-id',
+      });
 
-      const result = await service.sendApplicationNotification(email, applicationId, status, applicationType);
+      const result = await service.sendApplicationNotification(
+        email,
+        applicationId,
+        status,
+        applicationType,
+      );
 
       expect(mockTransporter.sendMail).toHaveBeenCalledWith({
         from: 'noreply@bulaksmartconnect.com',
@@ -171,13 +190,15 @@ describe('EmailService', () => {
 
       for (const testCase of testCases) {
         mockTransporter.sendMail.mockClear();
-        mockTransporter.sendMail.mockResolvedValue({ messageId: 'test-message-id' });
+        mockTransporter.sendMail.mockResolvedValue({
+          messageId: 'test-message-id',
+        });
 
         await service.sendApplicationNotification(
           'test@example.com',
           'APP-001',
           testCase.status,
-          'Document Application'
+          'Document Application',
         );
 
         const sendMailCall = mockTransporter.sendMail.mock.calls[0][0];
@@ -192,9 +213,16 @@ describe('EmailService', () => {
       const status = 'Unknown Status';
       const applicationType = 'Business Permit';
 
-      mockTransporter.sendMail.mockResolvedValue({ messageId: 'test-message-id' });
+      mockTransporter.sendMail.mockResolvedValue({
+        messageId: 'test-message-id',
+      });
 
-      await service.sendApplicationNotification(email, applicationId, status, applicationType);
+      await service.sendApplicationNotification(
+        email,
+        applicationId,
+        status,
+        applicationType,
+      );
 
       const sendMailCall = mockTransporter.sendMail.mock.calls[0][0];
       expect(sendMailCall.html).toContain('#333'); // Default color
@@ -207,9 +235,16 @@ describe('EmailService', () => {
       const status = 'Approved';
       const applicationType = 'Birth Certificate';
 
-      mockTransporter.sendMail.mockResolvedValue({ messageId: 'test-message-id' });
+      mockTransporter.sendMail.mockResolvedValue({
+        messageId: 'test-message-id',
+      });
 
-      await service.sendApplicationNotification(email, applicationId, status, applicationType);
+      await service.sendApplicationNotification(
+        email,
+        applicationId,
+        status,
+        applicationType,
+      );
 
       const sendMailCall = mockTransporter.sendMail.mock.calls[0][0];
       expect(sendMailCall.html).toContain(applicationId);
@@ -228,7 +263,12 @@ describe('EmailService', () => {
       mockTransporter.sendMail.mockRejectedValue(new Error('Network timeout'));
 
       await expect(
-        service.sendApplicationNotification(email, applicationId, status, applicationType)
+        service.sendApplicationNotification(
+          email,
+          applicationId,
+          status,
+          applicationType,
+        ),
       ).rejects.toThrow('Network timeout');
     });
   });

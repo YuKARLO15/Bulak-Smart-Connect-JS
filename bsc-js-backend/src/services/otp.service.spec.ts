@@ -81,7 +81,7 @@ describe('OTPService', () => {
     it('should generate and save OTP successfully', async () => {
       const email = 'test@example.com';
       const purpose = 'verification';
-      
+
       const mockOtpEntity = {
         id: 1,
         email,
@@ -101,11 +101,15 @@ describe('OTPService', () => {
 
       expect(mockOtpRepository.update).toHaveBeenCalledWith(
         { email, purpose, verified: false },
-        { verified: true }
+        { verified: true },
       );
       expect(mockOtpRepository.create).toHaveBeenCalled();
       expect(mockOtpRepository.save).toHaveBeenCalledWith(mockOtpEntity);
-      expect(mockEmailService.sendOTP).toHaveBeenCalledWith(email, expect.any(String), purpose);
+      expect(mockEmailService.sendOTP).toHaveBeenCalledWith(
+        email,
+        expect.any(String),
+        purpose,
+      );
       expect(result).toBeDefined();
       expect(typeof result).toBe('string');
       expect(result).toHaveLength(6);
@@ -118,9 +122,13 @@ describe('OTPService', () => {
       mockOtpRepository.update.mockResolvedValue({ affected: 0 });
       mockOtpRepository.create.mockReturnValue({});
       mockOtpRepository.save.mockResolvedValue({});
-      mockEmailService.sendOTP.mockRejectedValue(new Error('Email service failed'));
+      mockEmailService.sendOTP.mockRejectedValue(
+        new Error('Email service failed'),
+      );
 
-      await expect(service.generateOTP(email, purpose)).rejects.toThrow('Email service failed');
+      await expect(service.generateOTP(email, purpose)).rejects.toThrow(
+        'Email service failed',
+      );
     });
 
     it('should generate OTP with default purpose', async () => {
@@ -133,7 +141,11 @@ describe('OTPService', () => {
 
       await service.generateOTP(email);
 
-      expect(mockEmailService.sendOTP).toHaveBeenCalledWith(email, expect.any(String), 'verification');
+      expect(mockEmailService.sendOTP).toHaveBeenCalledWith(
+        email,
+        expect.any(String),
+        'verification',
+      );
     });
   });
 
@@ -154,14 +166,20 @@ describe('OTPService', () => {
       };
 
       mockOtpRepository.findOne.mockResolvedValue(mockOtpEntity);
-      mockOtpRepository.save.mockResolvedValue({ ...mockOtpEntity, verified: true });
+      mockOtpRepository.save.mockResolvedValue({
+        ...mockOtpEntity,
+        verified: true,
+      });
 
       const result = await service.verifyOTP(email, otp, purpose);
 
       expect(mockOtpRepository.findOne).toHaveBeenCalledWith({
-        where: { email, otp, purpose, verified: false }
+        where: { email, otp, purpose, verified: false },
       });
-      expect(mockOtpRepository.save).toHaveBeenCalledWith({ ...mockOtpEntity, verified: true });
+      expect(mockOtpRepository.save).toHaveBeenCalledWith({
+        ...mockOtpEntity,
+        verified: true,
+      });
       expect(result).toBe(true);
     });
 
@@ -175,7 +193,7 @@ describe('OTPService', () => {
       const result = await service.verifyOTP(email, otp, purpose);
 
       expect(mockOtpRepository.findOne).toHaveBeenCalledWith({
-        where: { email, otp, purpose, verified: false }
+        where: { email, otp, purpose, verified: false },
       });
       expect(result).toBe(false);
     });
@@ -218,12 +236,15 @@ describe('OTPService', () => {
       };
 
       mockOtpRepository.findOne.mockResolvedValue(mockOtpEntity);
-      mockOtpRepository.save.mockResolvedValue({ ...mockOtpEntity, verified: true });
+      mockOtpRepository.save.mockResolvedValue({
+        ...mockOtpEntity,
+        verified: true,
+      });
 
       const result = await service.verifyOTP(email, otp);
 
       expect(mockOtpRepository.findOne).toHaveBeenCalledWith({
-        where: { email, otp, purpose: 'verification', verified: false }
+        where: { email, otp, purpose: 'verification', verified: false },
       });
       expect(result).toBe(true);
     });
@@ -236,14 +257,16 @@ describe('OTPService', () => {
       await service.cleanupExpiredOTPs();
 
       expect(mockOtpRepository.delete).toHaveBeenCalledWith({
-        expiresAt: expect.any(Object) // LessThan(new Date())
+        expiresAt: expect.any(Object), // LessThan(new Date())
       });
     });
 
     it('should handle cleanup errors gracefully', async () => {
       mockOtpRepository.delete.mockRejectedValue(new Error('Database error'));
 
-      await expect(service.cleanupExpiredOTPs()).rejects.toThrow('Database error');
+      await expect(service.cleanupExpiredOTPs()).rejects.toThrow(
+        'Database error',
+      );
     });
   });
 
@@ -265,9 +288,13 @@ describe('OTPService', () => {
         }
       });
 
-      mockOtpRepository.update.mockRejectedValue(new Error('Database connection failed'));
+      mockOtpRepository.update.mockRejectedValue(
+        new Error('Database connection failed'),
+      );
 
-      await expect(service.generateOTP(email, purpose)).rejects.toThrow('Database connection failed');
+      await expect(service.generateOTP(email, purpose)).rejects.toThrow(
+        'Database connection failed',
+      );
     });
 
     it('should handle missing configuration values', async () => {

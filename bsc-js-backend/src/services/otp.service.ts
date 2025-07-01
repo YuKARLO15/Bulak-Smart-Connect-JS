@@ -16,11 +16,14 @@ export class OTPService {
     private configService: ConfigService,
   ) {}
 
-  async generateOTP(email: string, purpose: string = 'verification'): Promise<string> {
+  async generateOTP(
+    email: string,
+    purpose: string = 'verification',
+  ): Promise<string> {
     // Invalidate any existing OTPs for this email and purpose
     await this.otpRepository.update(
       { email, purpose, verified: false },
-      { verified: true } // Mark as used
+      { verified: true }, // Mark as used
     );
 
     // Generate new OTP
@@ -29,11 +32,13 @@ export class OTPService {
       secret: this.configService.get('OTP_SECRET') || 'default-secret-key',
       digits: otpLength,
       step: 300, // 5 minutes
-      encoding: 'base32'
+      encoding: 'base32',
     });
 
     // Calculate expiry time
-    const expiryMinutes = parseInt(this.configService.get('OTP_EXPIRY_MINUTES', '5'));
+    const expiryMinutes = parseInt(
+      this.configService.get('OTP_EXPIRY_MINUTES', '5'),
+    );
     const expiresAt = new Date();
     expiresAt.setMinutes(expiresAt.getMinutes() + expiryMinutes);
 
@@ -43,7 +48,7 @@ export class OTPService {
       otp,
       purpose,
       expiresAt,
-      verified: false
+      verified: false,
     });
 
     await this.otpRepository.save(otpEntity);
@@ -54,14 +59,18 @@ export class OTPService {
     return otp; // Only return for testing purposes
   }
 
-  async verifyOTP(email: string, otp: string, purpose: string = 'verification'): Promise<boolean> {
+  async verifyOTP(
+    email: string,
+    otp: string,
+    purpose: string = 'verification',
+  ): Promise<boolean> {
     const otpEntity = await this.otpRepository.findOne({
       where: {
         email,
         otp,
         purpose,
-        verified: false
-      }
+        verified: false,
+      },
     });
 
     if (!otpEntity) {
@@ -82,7 +91,7 @@ export class OTPService {
 
   async cleanupExpiredOTPs(): Promise<void> {
     await this.otpRepository.delete({
-      expiresAt: LessThan(new Date())
+      expiresAt: LessThan(new Date()),
     });
   }
 }

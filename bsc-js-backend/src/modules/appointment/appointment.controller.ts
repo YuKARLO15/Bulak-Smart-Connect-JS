@@ -139,7 +139,9 @@ export class AppointmentController {
 
     // If not admin and not the appointment owner, don't allow update
     if (
-      !user.roles.some((role) => ['admin', 'staff', 'super_admin'].includes(role.name)) &&
+      !user.roles.some((role) =>
+        ['admin', 'staff', 'super_admin'].includes(role.name),
+      ) &&
       appointment.userId !== user.id
     ) {
       throw new BadRequestException(
@@ -179,7 +181,9 @@ export class AppointmentController {
 
     // If not admin and not the appointment owner, don't allow deletion
     if (
-      !user.roles.some((role) => ['admin', 'staff', 'super_admin'].includes(role.name)) &&
+      !user.roles.some((role) =>
+        ['admin', 'staff', 'super_admin'].includes(role.name),
+      ) &&
       appointment.userId !== user.id
     ) {
       throw new BadRequestException(
