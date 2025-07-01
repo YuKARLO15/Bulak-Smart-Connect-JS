@@ -21,7 +21,8 @@
     "test:a11y": "jest --testMatch='**/*.a11y.{js,ts,jsx,tsx}'",
     "generate-otp-secret": "node scripts/generate-otp-secret.js",
     "test:otp": "npm run test -- --testPathPattern=otp",
-    "test:auth": "npm run test -- --testPathPattern=auth"
+    "test:auth": "npm run test -- --testPathPattern=auth",
+    "setup-otp": "node scripts/setup-otp.js"
   },
   "dependencies": {
     "@nestjs/common": "^11.1.0",
