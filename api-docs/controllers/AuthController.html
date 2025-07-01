@@ -159,6 +159,9 @@
                             </li>
                             <li>
                                     <span class="modifier"></span>
+                                    <span class="modifier"></span>
+                                    <span class="modifier"></span>
+                                    <span class="modifier"></span>
                                     <span class="modifier">Async</span>
                                 <a href="#forgotPassword" >forgotPassword</a>
                             </li>
@@ -192,15 +195,35 @@
                             </li>
                             <li>
                                     <span class="modifier"></span>
+                                    <span class="modifier"></span>
+                                    <span class="modifier"></span>
+                                    <span class="modifier"></span>
+                                    <span class="modifier"></span>
                                     <span class="modifier">Async</span>
                                 <a href="#resetPassword" >resetPassword</a>
                             </li>
                             <li>
                                     <span class="modifier"></span>
+                                    <span class="modifier"></span>
+                                    <span class="modifier"></span>
+                                    <span class="modifier"></span>
+                                    <span class="modifier">Async</span>
+                                <a href="#sendApplicationNotification" >sendApplicationNotification</a>
+                            </li>
+                            <li>
+                                    <span class="modifier"></span>
+                                    <span class="modifier"></span>
+                                    <span class="modifier"></span>
+                                    <span class="modifier"></span>
+                                    <span class="modifier"></span>
                                     <span class="modifier">Async</span>
                                 <a href="#sendOTP" >sendOTP</a>
                             </li>
                             <li>
+                                    <span class="modifier"></span>
+                                    <span class="modifier"></span>
+                                    <span class="modifier"></span>
+                                    <span class="modifier"></span>
                                     <span class="modifier"></span>
                                     <span class="modifier">Async</span>
                                 <a href="#testOTP" >testOTP</a>
@@ -219,6 +242,10 @@
                                 <a href="#updateProfile" >updateProfile</a>
                             </li>
                             <li>
+                                    <span class="modifier"></span>
+                                    <span class="modifier"></span>
+                                    <span class="modifier"></span>
+                                    <span class="modifier"></span>
                                     <span class="modifier"></span>
                                     <span class="modifier">Async</span>
                                 <a href="#verifyOTP" >verifyOTP</a>
@@ -282,8 +309,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="219"
-                                    class="link-to-prism">src/auth/auth.controller.ts:219</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="230"
+                                    class="link-to-prism">src/auth/auth.controller.ts:230</a></div>
                         </td>
                     </tr>
 
@@ -360,6 +387,9 @@
                     <a name="forgotPassword"></a>
                     <span class="name">
                             <span class="modifier"></span>
+                            <span class="modifier"></span>
+                            <span class="modifier"></span>
+                            <span class="modifier"></span>
                             <span class="modifier">Async</span>
                         <span ><b>forgotPassword</b></span>
                         <a href="#forgotPassword"><span class="icon ion-ios-link"></span></a>
@@ -377,14 +407,29 @@
                 <td class="col-md-4">
                     <b>Decorators : </b>
                     <br />
-                    <code>@Post(&#x27;forgot-password&#x27;)<br /></code>
+                    <code>@ApiOperation({summary: &#x27;Request password reset OTP&#x27;, description: 
+    Initiates password reset process by sending OTP to registered email.
+    
+    **Security Features:**
+    - Does not reveal if email exists (security best practice)
+    - Generates secure 6-digit OTP
+    - Uses dedicated password reset email template
+    - OTP expires after 5 minutes
+    
+    **Process:**
+    1. Validates email format
+    2. Checks if user exists (internally)
+    3. Generates OTP for password_reset purpose
+    4. Sends formatted email with reset instructions
+    5. Returns success message regardless of email existence
+    })<br />@ApiResponse({status: 200, description: &#x27;Password reset process initiated&#x27;, schema: undefined})<br />@ApiBody({description: &#x27;Email address for password reset&#x27;, schema: undefined})<br />@Post(&#x27;forgot-password&#x27;)<br /></code>
                 </td>
             </tr>
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="288"
-                                    class="link-to-prism">src/auth/auth.controller.ts:288</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="481"
+                                    class="link-to-prism">src/auth/auth.controller.ts:481</a></div>
                         </td>
                     </tr>
 
@@ -463,8 +508,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="148"
-                                    class="link-to-prism">src/auth/auth.controller.ts:148</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="159"
+                                    class="link-to-prism">src/auth/auth.controller.ts:159</a></div>
                         </td>
                     </tr>
 
@@ -544,8 +589,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="70"
-                                    class="link-to-prism">src/auth/auth.controller.ts:70</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="81"
+                                    class="link-to-prism">src/auth/auth.controller.ts:81</a></div>
                         </td>
                     </tr>
 
@@ -626,8 +671,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="109"
-                                    class="link-to-prism">src/auth/auth.controller.ts:109</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="120"
+                                    class="link-to-prism">src/auth/auth.controller.ts:120</a></div>
                         </td>
                     </tr>
 
@@ -680,6 +725,10 @@
                     <a name="resetPassword"></a>
                     <span class="name">
                             <span class="modifier"></span>
+                            <span class="modifier"></span>
+                            <span class="modifier"></span>
+                            <span class="modifier"></span>
+                            <span class="modifier"></span>
                             <span class="modifier">Async</span>
                         <span ><b>resetPassword</b></span>
                         <a href="#resetPassword"><span class="icon ion-ios-link"></span></a>
@@ -697,14 +746,34 @@
                 <td class="col-md-4">
                     <b>Decorators : </b>
                     <br />
-                    <code>@Post(&#x27;reset-password&#x27;)<br /></code>
+                    <code>@ApiOperation({summary: &#x27;Reset password with OTP verification&#x27;, description: 
+    Completes password reset process using OTP verification.
+    
+    **Process:**
+    1. Verifies OTP code is valid and not expired
+    2. Validates new password meets complexity requirements
+    3. Updates user password with secure hashing
+    4. Marks OTP as used
+    
+    **Password Requirements:**
+    - Minimum 8 characters
+    - At least 1 uppercase letter
+    - At least 1 lowercase letter  
+    - At least 1 number
+    - At least 1 special character (@$!%*?&amp;)
+    
+    **Security Features:**
+    - bcrypt password hashing
+    - OTP single-use enforcement
+    - Password strength validation
+    })<br />@ApiResponse({status: 200, description: &#x27;Password reset successfully&#x27;, schema: undefined})<br />@ApiResponse({status: 401, description: &#x27;Unauthorized - Invalid or expired reset code&#x27;, schema: undefined})<br />@ApiBody({description: &#x27;Email, OTP, and new password for reset&#x27;, schema: undefined})<br />@Post(&#x27;reset-password&#x27;)<br /></code>
                 </td>
             </tr>
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="313"
-                                    class="link-to-prism">src/auth/auth.controller.ts:313</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="581"
+                                    class="link-to-prism">src/auth/auth.controller.ts:581</a></div>
                         </td>
                     </tr>
 
@@ -754,8 +823,106 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
+                    <a name="sendApplicationNotification"></a>
+                    <span class="name">
+                            <span class="modifier"></span>
+                            <span class="modifier"></span>
+                            <span class="modifier"></span>
+                            <span class="modifier"></span>
+                            <span class="modifier">Async</span>
+                        <span ><b>sendApplicationNotification</b></span>
+                        <a href="#sendApplicationNotification"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>sendApplicationNotification(notificationDto: literal type)</code>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <b>Decorators : </b>
+                    <br />
+                    <code>@ApiOperation({summary: &#x27;Send application status notification&#x27;, description: 
+    Sends formatted email notification for application status updates.
+    
+    **Supported Statuses:**
+    - Pending (Orange theme)
+    - Approved (Green theme)
+    - Rejected (Red theme)
+    - Ready for Pickup (Blue theme)
+    
+    **Email Features:**
+    - Professional branded templates
+    - Status-specific color coding
+    - Application details included
+    - Responsive design
+    })<br />@ApiResponse({status: 200, description: &#x27;Application notification sent successfully&#x27;, schema: undefined})<br />@ApiBody({description: &#x27;Application notification details&#x27;, schema: undefined})<br />@Post(&#x27;send-application-notification&#x27;)<br /></code>
+                </td>
+            </tr>
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="747"
+                                    class="link-to-prism">src/auth/auth.controller.ts:747</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>notificationDto</td>
+                                            <td>
+                                                        <code>literal type</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
                     <a name="sendOTP"></a>
                     <span class="name">
+                            <span class="modifier"></span>
+                            <span class="modifier"></span>
+                            <span class="modifier"></span>
+                            <span class="modifier"></span>
                             <span class="modifier"></span>
                             <span class="modifier">Async</span>
                         <span ><b>sendOTP</b></span>
@@ -774,14 +941,30 @@
                 <td class="col-md-4">
                     <b>Decorators : </b>
                     <br />
-                    <code>@Post(&#x27;send-otp&#x27;)<br /></code>
+                    <code>@ApiOperation({summary: &#x27;Send OTP for email verification or password reset&#x27;, description: 
+    Generates and sends a 6-digit OTP code to the specified email address.
+    
+    **Use Cases:**
+    - Email verification during registration
+    - Password reset verification
+    - Two-factor authentication
+    
+    **Security Features:**
+    - OTP expires after 5 minutes
+    - Previous OTPs are invalidated when new one is generated
+    - Rate limiting to prevent spam
+    
+    **Email Templates:**
+    - Verification: Blue gradient professional template
+    - Password Reset: Red themed security alert template
+    })<br />@ApiResponse({status: 200, description: &#x27;OTP sent successfully&#x27;, schema: undefined})<br />@ApiResponse({status: 400, description: &#x27;Bad Request - Invalid email format or missing fields&#x27;, schema: undefined})<br />@ApiBody({description: &#x27;Email and purpose for OTP generation&#x27;, schema: undefined})<br />@Post(&#x27;send-otp&#x27;)<br /></code>
                 </td>
             </tr>
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="243"
-                                    class="link-to-prism">src/auth/auth.controller.ts:243</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="320"
+                                    class="link-to-prism">src/auth/auth.controller.ts:320</a></div>
                         </td>
                     </tr>
 
@@ -834,6 +1017,10 @@
                     <a name="testOTP"></a>
                     <span class="name">
                             <span class="modifier"></span>
+                            <span class="modifier"></span>
+                            <span class="modifier"></span>
+                            <span class="modifier"></span>
+                            <span class="modifier"></span>
                             <span class="modifier">Async</span>
                         <span ><b>testOTP</b></span>
                         <a href="#testOTP"><span class="icon ion-ios-link"></span></a>
@@ -851,14 +1038,28 @@
                 <td class="col-md-4">
                     <b>Decorators : </b>
                     <br />
-                    <code>@Post(&#x27;test-otp&#x27;)<br /></code>
+                    <code>@ApiOperation({summary: &#x27;Test OTP generation (Development Only)&#x27;, description: 
+    **⚠️ DEVELOPMENT ONLY - Disabled in Production**
+    
+    Generates test OTP and optionally returns the code for testing purposes.
+    
+    **Usage:**
+    - Frontend testing and debugging
+    - Integration testing
+    - Email service verification
+    
+    **Security:**
+    - Only available when NODE_ENV&#x3D;development
+    - Returns OTP code in response for testing
+    - Disabled automatically in production
+    })<br />@ApiResponse({status: 200, description: &#x27;Test OTP generated successfully&#x27;, schema: undefined})<br />@ApiResponse({status: 403, description: &#x27;Forbidden - Not available in production&#x27;, schema: undefined})<br />@ApiBody({description: &#x27;Email address for testing OTP generation&#x27;, schema: undefined})<br />@Post(&#x27;test-otp&#x27;)<br /></code>
                 </td>
             </tr>
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="337"
-                                    class="link-to-prism">src/auth/auth.controller.ts:337</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="666"
+                                    class="link-to-prism">src/auth/auth.controller.ts:666</a></div>
                         </td>
                     </tr>
 
@@ -941,8 +1142,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="170"
-                                    class="link-to-prism">src/auth/auth.controller.ts:170</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="181"
+                                    class="link-to-prism">src/auth/auth.controller.ts:181</a></div>
                         </td>
                     </tr>
 
@@ -1007,6 +1208,10 @@
                     <a name="verifyOTP"></a>
                     <span class="name">
                             <span class="modifier"></span>
+                            <span class="modifier"></span>
+                            <span class="modifier"></span>
+                            <span class="modifier"></span>
+                            <span class="modifier"></span>
                             <span class="modifier">Async</span>
                         <span ><b>verifyOTP</b></span>
                         <a href="#verifyOTP"><span class="icon ion-ios-link"></span></a>
@@ -1024,14 +1229,27 @@
                 <td class="col-md-4">
                     <b>Decorators : </b>
                     <br />
-                    <code>@Post(&#x27;verify-otp&#x27;)<br /></code>
+                    <code>@ApiOperation({summary: &#x27;Verify OTP code&#x27;, description: 
+    Verifies a 6-digit OTP code against the email and purpose.
+    
+    **Verification Process:**
+    1. Checks if OTP exists and is not expired
+    2. Validates the code matches
+    3. Marks OTP as verified (single-use)
+    4. Returns verification status
+    
+    **Security Features:**
+    - Single-use OTPs (marked as verified after use)
+    - Time-based expiration (5 minutes)
+    - Purpose isolation (verification vs password_reset)
+    })<br />@ApiResponse({status: 200, description: &#x27;OTP verified successfully&#x27;, schema: undefined})<br />@ApiResponse({status: 401, description: &#x27;Unauthorized - Invalid or expired OTP&#x27;, schema: undefined})<br />@ApiBody({description: &#x27;Email, OTP code, and purpose for verification&#x27;, schema: undefined})<br />@Post(&#x27;verify-otp&#x27;)<br /></code>
                 </td>
             </tr>
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="266"
-                                    class="link-to-prism">src/auth/auth.controller.ts:266</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="411"
+                                    class="link-to-prism">src/auth/auth.controller.ts:411</a></div>
                         </td>
                     </tr>
 
@@ -1107,15 +1325,26 @@ import {
   ApiBearerAuth,
   ApiParam,
   ApiBody,
+  ApiQuery,
+  ApiProperty,
+  ApiPropertyOptional,
 } from &#x27;@nestjs/swagger&#x27;;
 import { OTPService } from &#x27;../services/otp.service&#x27;;
 import { EmailService } from &#x27;../services/email.service&#x27;;
+import {
+  SendOtpDto,
+  VerifyOtpDto,
+  ForgotPasswordDto,
+  ResetPasswordDto,
+  TestOtpDto,
+  ApplicationNotificationDto,
+} from &#x27;./dto/otp.dto&#x27;;
 
 interface RequestWithUser extends Request {
   user: AuthenticatedUser;
 }
 
-@ApiTags(&#x27;Authentication&#x27;)
+@ApiTags(&#x27;Authentication &amp; OTP&#x27;)
 @Controller(&#x27;auth&#x27;)
 export class AuthController {
   constructor(
@@ -1322,6 +1551,72 @@ export class AuthController {
     }
   }
 
+  @ApiOperation({
+    summary: &#x27;Send OTP for email verification or password reset&#x27;,
+    description: &#x60;
+    Generates and sends a 6-digit OTP code to the specified email address.
+    
+    **Use Cases:**
+    - Email verification during registration
+    - Password reset verification
+    - Two-factor authentication
+    
+    **Security Features:**
+    - OTP expires after 5 minutes
+    - Previous OTPs are invalidated when new one is generated
+    - Rate limiting to prevent spam
+    
+    **Email Templates:**
+    - Verification: Blue gradient professional template
+    - Password Reset: Red themed security alert template
+    &#x60;,
+  })
+  @ApiResponse({
+    status: 200,
+    description: &#x27;OTP sent successfully&#x27;,
+    schema: {
+      type: &#x27;object&#x27;,
+      properties: {
+        success: { type: &#x27;boolean&#x27;, example: true },
+        message: { type: &#x27;string&#x27;, example: &#x27;OTP sent successfully&#x27; },
+        email: { type: &#x27;string&#x27;, example: &#x27;user@example.com&#x27; },
+      },
+    },
+  })
+  @ApiResponse({
+    status: 400,
+    description: &#x27;Bad Request - Invalid email format or missing fields&#x27;,
+    schema: {
+      type: &#x27;object&#x27;,
+      properties: {
+        statusCode: { type: &#x27;number&#x27;, example: 400 },
+        message: { type: &#x27;string&#x27;, example: &#x27;Invalid email format&#x27; },
+        error: { type: &#x27;string&#x27;, example: &#x27;Bad Request&#x27; },
+      },
+    },
+  })
+  @ApiBody({
+    description: &#x27;Email and purpose for OTP generation&#x27;,
+    schema: {
+      type: &#x27;object&#x27;,
+      properties: {
+        email: {
+          type: &#x27;string&#x27;,
+          format: &#x27;email&#x27;,
+          example: &#x27;user@example.com&#x27;,
+          description: &#x27;Email address to send OTP to&#x27;
+        },
+        purpose: {
+          type: &#x27;string&#x27;,
+          enum: [&#x27;verification&#x27;, &#x27;password_reset&#x27;],
+          example: &#x27;verification&#x27;,
+          description: &#x27;Purpose of the OTP&#x27;,
+          default: &#x27;verification&#x27;
+        }
+      },
+      required: [&#x27;email&#x27;]
+    }
+  })
   @Post(&#x27;send-otp&#x27;)
   async sendOTP(@Body() sendOtpDto: { email: string; purpose?: string }) {
     try {
@@ -1345,6 +1640,74 @@ export class AuthController {
     }
   }
 
+  @ApiOperation({
+    summary: &#x27;Verify OTP code&#x27;,
+    description: &#x60;
+    Verifies a 6-digit OTP code against the email and purpose.
+    
+    **Verification Process:**
+    1. Checks if OTP exists and is not expired
+    2. Validates the code matches
+    3. Marks OTP as verified (single-use)
+    4. Returns verification status
+    
+    **Security Features:**
+    - Single-use OTPs (marked as verified after use)
+    - Time-based expiration (5 minutes)
+    - Purpose isolation (verification vs password_reset)
+    &#x60;,
+  })
+  @ApiResponse({
+    status: 200,
+    description: &#x27;OTP verified successfully&#x27;,
+    schema: {
+      type: &#x27;object&#x27;,
+      properties: {
+        success: { type: &#x27;boolean&#x27;, example: true },
+        message: { type: &#x27;string&#x27;, example: &#x27;OTP verified successfully&#x27; },
+      },
+    },
+  })
+  @ApiResponse({
+    status: 401,
+    description: &#x27;Unauthorized - Invalid or expired OTP&#x27;,
+    schema: {
+      type: &#x27;object&#x27;,
+      properties: {
+        statusCode: { type: &#x27;number&#x27;, example: 401 },
+        message: { type: &#x27;string&#x27;, example: &#x27;Invalid or expired OTP&#x27; },
+        error: { type: &#x27;string&#x27;, example: &#x27;Unauthorized&#x27; },
+      },
+    },
+  })
+  @ApiBody({
+    description: &#x27;Email, OTP code, and purpose for verification&#x27;,
+    schema: {
+      type: &#x27;object&#x27;,
+      properties: {
+        email: {
+          type: &#x27;string&#x27;,
+          format: &#x27;email&#x27;,
+          example: &#x27;user@example.com&#x27;,
+          description: &#x27;Email address&#x27;
+        },
+        otp: {
+          type: &#x27;string&#x27;,
+          example: &#x27;123456&#x27;,
+          pattern: &#x27;^[0-9]{6}$&#x27;,
+          description: &#x27;6-digit OTP code&#x27;
+        },
+        purpose: {
+          type: &#x27;string&#x27;,
+          enum: [&#x27;verification&#x27;, &#x27;password_reset&#x27;],
+          example: &#x27;verification&#x27;,
+          description: &#x27;Purpose of the OTP verification&#x27;,
+          default: &#x27;verification&#x27;
+        }
+      },
+      required: [&#x27;email&#x27;, &#x27;otp&#x27;]
+    }
+  })
   @Post(&#x27;verify-otp&#x27;)
   async verifyOTP(@Body() verifyOtpDto: { email: string; otp: string; purpose?: string }) {
     try {
@@ -1367,6 +1730,54 @@ export class AuthController {
   }
 
   // Add password reset endpoints
+  @ApiOperation({
+    summary: &#x27;Request password reset OTP&#x27;,
+    description: &#x60;
+    Initiates password reset process by sending OTP to registered email.
+    
+    **Security Features:**
+    - Does not reveal if email exists (security best practice)
+    - Generates secure 6-digit OTP
+    - Uses dedicated password reset email template
+    - OTP expires after 5 minutes
+    
+    **Process:**
+    1. Validates email format
+    2. Checks if user exists (internally)
+    3. Generates OTP for password_reset purpose
+    4. Sends formatted email with reset instructions
+    5. Returns success message regardless of email existence
+    &#x60;,
+  })
+  @ApiResponse({
+    status: 200,
+    description: &#x27;Password reset process initiated&#x27;,
+    schema: {
+      type: &#x27;object&#x27;,
+      properties: {
+        success: { type: &#x27;boolean&#x27;, example: true },
+        message: { 
+          type: &#x27;string&#x27;, 
+          example: &#x27;If this email is registered, you will receive a password reset code&#x27; 
+        },
+      },
+    },
+  })
+  @ApiBody({
+    description: &#x27;Email address for password reset&#x27;,
+    schema: {
+      type: &#x27;object&#x27;,
+      properties: {
+        email: {
+          type: &#x27;string&#x27;,
+          format: &#x27;email&#x27;,
+          example: &#x27;user@example.com&#x27;,
+          description: &#x27;Registered email address&#x27;
+        }
+      },
+      required: [&#x27;email&#x27;]
+    }
+  })
   @Post(&#x27;forgot-password&#x27;)
   async forgotPassword(@Body() { email }: { email: string }) {
     try {
@@ -1392,6 +1803,81 @@ export class AuthController {
     }
   }
 
+  @ApiOperation({
+    summary: &#x27;Reset password with OTP verification&#x27;,
+    description: &#x60;
+    Completes password reset process using OTP verification.
+    
+    **Process:**
+    1. Verifies OTP code is valid and not expired
+    2. Validates new password meets complexity requirements
+    3. Updates user password with secure hashing
+    4. Marks OTP as used
+    
+    **Password Requirements:**
+    - Minimum 8 characters
+    - At least 1 uppercase letter
+    - At least 1 lowercase letter  
+    - At least 1 number
+    - At least 1 special character (@$!%*?&amp;)
+    
+    **Security Features:**
+    - bcrypt password hashing
+    - OTP single-use enforcement
+    - Password strength validation
+    &#x60;,
+  })
+  @ApiResponse({
+    status: 200,
+    description: &#x27;Password reset successfully&#x27;,
+    schema: {
+      type: &#x27;object&#x27;,
+      properties: {
+        success: { type: &#x27;boolean&#x27;, example: true },
+        message: { type: &#x27;string&#x27;, example: &#x27;Password reset successfully&#x27; },
+      },
+    },
+  })
+  @ApiResponse({
+    status: 401,
+    description: &#x27;Unauthorized - Invalid or expired reset code&#x27;,
+    schema: {
+      type: &#x27;object&#x27;,
+      properties: {
+        statusCode: { type: &#x27;number&#x27;, example: 401 },
+        message: { type: &#x27;string&#x27;, example: &#x27;Invalid or expired reset code&#x27; },
+        error: { type: &#x27;string&#x27;, example: &#x27;Unauthorized&#x27; },
+      },
+    },
+  })
+  @ApiBody({
+    description: &#x27;Email, OTP, and new password for reset&#x27;,
+    schema: {
+      type: &#x27;object&#x27;,
+      properties: {
+        email: {
+          type: &#x27;string&#x27;,
+          format: &#x27;email&#x27;,
+          example: &#x27;user@example.com&#x27;,
+          description: &#x27;Email address&#x27;
+        },
+        otp: {
+          type: &#x27;string&#x27;,
+          example: &#x27;123456&#x27;,
+          pattern: &#x27;^[0-9]{6}$&#x27;,
+          description: &#x27;6-digit OTP code received via email&#x27;
+        },
+        newPassword: {
+          type: &#x27;string&#x27;,
+          example: &#x27;NewSecure123!&#x27;,
+          minLength: 8,
+          pattern: &#x27;^(?&#x3D;.*[a-z])(?&#x3D;.*[A-Z])(?&#x3D;.*\\d)(?&#x3D;.*[@$!%*?&amp;])[A-Za-z\\d@$!%*?&amp;]{8,}$&#x27;,
+          description: &#x27;New password (must meet complexity requirements)&#x27;
+        }
+      },
+      required: [&#x27;email&#x27;, &#x27;otp&#x27;, &#x27;newPassword&#x27;]
+    }
+  })
   @Post(&#x27;reset-password&#x27;)
   async resetPassword(@Body() resetDto: { email: string; otp: string; newPassword: string }) {
     try {
@@ -1416,8 +1902,74 @@ export class AuthController {
     }
   }
 
+  @ApiOperation({
+    summary: &#x27;Test OTP generation (Development Only)&#x27;,
+    description: &#x60;
+    **⚠️ DEVELOPMENT ONLY - Disabled in Production**
+    
+    Generates test OTP and optionally returns the code for testing purposes.
+    
+    **Usage:**
+    - Frontend testing and debugging
+    - Integration testing
+    - Email service verification
+    
+    **Security:**
+    - Only available when NODE_ENV&#x3D;development
+    - Returns OTP code in response for testing
+    - Disabled automatically in production
+    &#x60;,
+  })
+  @ApiResponse({
+    status: 200,
+    description: &#x27;Test OTP generated successfully&#x27;,
+    schema: {
+      type: &#x27;object&#x27;,
+      properties: {
+        success: { type: &#x27;boolean&#x27;, example: true },
+        message: { type: &#x27;string&#x27;, example: &#x27;OTP generated and sent&#x27; },
+        otp: { 
+          type: &#x27;string&#x27;, 
+          example: &#x27;123456&#x27;,
+          description: &#x27;OTP code (only in development mode)&#x27;
+        },
+      },
+    },
+  })
+  @ApiResponse({
+    status: 403,
+    description: &#x27;Forbidden - Not available in production&#x27;,
+    schema: {
+      type: &#x27;object&#x27;,
+      properties: {
+        statusCode: { type: &#x27;number&#x27;, example: 403 },
+        message: { type: &#x27;string&#x27;, example: &#x27;Test endpoints not available in production&#x27; },
+        error: { type: &#x27;string&#x27;, example: &#x27;Forbidden&#x27; },
+      },
+    },
+  })
+  @ApiBody({
+    description: &#x27;Email address for testing OTP generation&#x27;,
+    schema: {
+      type: &#x27;object&#x27;,
+      properties: {
+        email: {
+          type: &#x27;string&#x27;,
+          format: &#x27;email&#x27;,
+          example: &#x27;test@example.com&#x27;,
+          description: &#x27;Email address for testing OTP generation&#x27;
+        }
+      },
+      required: [&#x27;email&#x27;]
+    }
+  })
   @Post(&#x27;test-otp&#x27;)
   async testOTP(@Body() { email }: { email: string }) {
+    // Add environment check to your existing implementation
+    if (process.env.NODE_ENV &#x3D;&#x3D;&#x3D; &#x27;production&#x27;) {
+      throw new BadRequestException(&#x27;Test endpoints not available in production&#x27;);
+    }
+    
     try {
       const otp &#x3D; await this.otpService.generateOTP(email, &#x27;verification&#x27;);
       return {
@@ -1429,6 +1981,93 @@ export class AuthController {
     } catch (error) {
       console.error(&#x27;Test OTP error:&#x27;, error);
       throw new BadRequestException(&#x27;Failed to generate OTP&#x27;);
+    }
+  }
+
+  @ApiOperation({
+    summary: &#x27;Send application status notification&#x27;,
+    description: &#x60;
+    Sends formatted email notification for application status updates.
+    
+    **Supported Statuses:**
+    - Pending (Orange theme)
+    - Approved (Green theme)
+    - Rejected (Red theme)
+    - Ready for Pickup (Blue theme)
+    
+    **Email Features:**
+    - Professional branded templates
+    - Status-specific color coding
+    - Application details included
+    - Responsive design
+    &#x60;,
+  })
+  @ApiResponse({
+    status: 200,
+    description: &#x27;Application notification sent successfully&#x27;,
+    schema: {
+      type: &#x27;object&#x27;,
+      properties: {
+        success: { type: &#x27;boolean&#x27;, example: true },
+        message: { type: &#x27;string&#x27;, example: &#x27;Application notification sent successfully&#x27; },
+      },
+    },
+  })
+  @ApiBody({
+    description: &#x27;Application notification details&#x27;,
+    schema: {
+      type: &#x27;object&#x27;,
+      properties: {
+        email: {
+          type: &#x27;string&#x27;,
+          format: &#x27;email&#x27;,
+          example: &#x27;user@example.com&#x27;,
+          description: &#x27;Recipient email address&#x27;
+        },
+        applicationId: {
+          type: &#x27;string&#x27;,
+          example: &#x27;APP-001&#x27;,
+          description: &#x27;Application ID&#x27;
+        },
+        status: {
+          type: &#x27;string&#x27;,
+          enum: [&#x27;Pending&#x27;, &#x27;Approved&#x27;, &#x27;Rejected&#x27;, &#x27;Ready for Pickup&#x27;],
+          example: &#x27;Approved&#x27;,
+          description: &#x27;Application status&#x27;
+        },
+        applicationType: {
+          type: &#x27;string&#x27;,
+          example: &#x27;Birth Certificate&#x27;,
+          description: &#x27;Type of application&#x27;
+        }
+      },
+      required: [&#x27;email&#x27;, &#x27;applicationId&#x27;, &#x27;status&#x27;, &#x27;applicationType&#x27;]
+    }
+  })
+  @Post(&#x27;send-application-notification&#x27;)
+  async sendApplicationNotification(@Body() notificationDto: {
+    email: string;
+    applicationId: string;
+    status: string;
+    applicationType: string;
+  }) {
+    try {
+      const { email, applicationId, status, applicationType } &#x3D; notificationDto;
+      
+      await this.emailService.sendApplicationNotification(
+        email,
+        applicationId,
+        status,
+        applicationType
+      );
+      
+      return {
+        success: true,
+        message: &#x27;Application notification sent successfully&#x27;
+      };
+    } catch (error) {
+      console.error(&#x27;Error sending application notification:&#x27;, error);
+      throw new BadRequestException(&#x27;Failed to send application notification&#x27;);
     }
   }
 }
