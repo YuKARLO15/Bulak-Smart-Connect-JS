@@ -715,3 +715,89 @@
 .appointment-cards-container::-webkit-scrollbar-thumb:hover {
   background: linear-gradient(145deg, #154249 0%, #1f4a57 100%);
 }
+/* Cancel Dialog Styles with ApptAdmin suffix */
+.cancel-dialog-overlay-ApptAdmin {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.cancel-dialog-ApptAdmin {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 90%;
+  max-width: 400px;
+  overflow: hidden;
+}
+
+.cancel-dialog-header-ApptAdmin {
+  background-color: #154249;
+  color: white;
+  padding: 16px 20px;
+}
+
+.cancel-dialog-header-ApptAdmin h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.cancel-dialog-body-ApptAdmin {
+  padding: 20px;
+  line-height: 1.6;
+}
+
+.cancel-dialog-body-ApptAdmin p {
+  margin: 8px 0;
+  color: #333;
+}
+
+.cancel-dialog-body-ApptAdmin strong {
+  color: #154249;
+}
+
+.cancel-dialog-footer-ApptAdmin {
+  padding: 16px 20px;
+  border-top: 1px solid #eee;
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+.proceed-btn-ApptAdmin {
+  background-color: #154249;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+.proceed-btn-ApptAdmin:hover {
+  background-color: #d32f2f;
+}
+
+.discard-btn-ApptAdmin {
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+.discard-btn-ApptAdmin:hover {
+  background-color: #5a6268;
+}

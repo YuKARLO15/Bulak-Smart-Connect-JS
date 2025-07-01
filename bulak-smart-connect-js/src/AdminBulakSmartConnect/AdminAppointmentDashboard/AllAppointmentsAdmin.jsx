@@ -13,6 +13,8 @@ const AllAppointmentsAdmin = () => {
   const [error, setError] = useState(null);
   const [statusFilter, setStatusFilter] = useState('all');
   const [typeFilter, setTypeFilter] = useState('all');
+   const [cancelDialog, setCancelDialog] = useState({ show: false, appointmentId: null, appointmentName: '' });
+
 
   const [dateRangeFilter, setDateRangeFilter] = useState({
     startDate: '',
@@ -168,19 +170,29 @@ const AllAppointmentsAdmin = () => {
       setError('Failed to update appointment status. Please try again.');
     }
   };
+  const handleCancelAppointment = (appointmentId, appointmentName) => {
+    setCancelDialog({
+      show: true,
+      appointmentId: appointmentId,
+      appointmentName: appointmentName
+    });
+  };
 
-  const handleDeleteAppointment = async appointmentId => {
-    if (window.confirm('Are you sure you want to delete this appointment?')) {
-      try {
-        await appointmentService.deleteAppointment(appointmentId);
-      
-        await fetchAppointments();
-      } catch (error) {
-        console.error('Error deleting appointment:', error);
-        setError('Failed to delete appointment. Please try again.');
-      }
+  const confirmCancelAppointment = async () => {
+    try {
+      await appointmentService.updateAppointmentStatus(cancelDialog.appointmentId, 'cancelled');
+      await fetchAppointments();
+      setCancelDialog({ show: false, appointmentId: null, appointmentName: '' });
+    } catch (error) {
+      console.error('Error cancelling appointment:', error);
+      setError('Failed to cancel appointment. Please try again.');
     }
   };
+
+  const discardCancelAppointment = () => {
+    setCancelDialog({ show: false, appointmentId: null, appointmentName: '' });
+  };
+
 
   const appointmentTypes =
     appointments.length > 0
@@ -221,7 +233,7 @@ const AllAppointmentsAdmin = () => {
   };
 
   const getAppointmentId = appointment => {
-    return appointment.id || appointment._id || appointment.appointmentNumber || 'N/A';
+    return appointment.appointmentNumber || 'N/A';
   };
 
   const handleSearchChange = event => {
@@ -270,7 +282,10 @@ const AllAppointmentsAdmin = () => {
   };
 
   const formatAppointmentDate = appointment => {
+
     const date = appointment.appointmentDate || appointment.date;
+
+   
     if (date) {
       return new Date(date).toLocaleDateString();
     }
@@ -309,6 +324,35 @@ const AllAppointmentsAdmin = () => {
 
   return (
     <div className="all-appointments-admin">
+       {cancelDialog.show && (
+        <div className="cancel-dialog-overlay-ApptAdmin">
+          <div className="cancel-dialog-ApptAdmin">
+            <div className="cancel-dialog-header-ApptAdmin">
+              <h3>Cancel Appointment</h3>
+            </div>
+            <div className="cancel-dialog-body-ApptAdmin">
+              <p>You are about to cancel appointment ID: </p>
+              <p><strong>{cancelDialog.appointmentId}</strong></p>
+              <p>Client: <strong>{cancelDialog.appointmentName}</strong></p>
+              <p>Are you sure you want to proceed?</p>
+            </div>
+            <div className="cancel-dialog-footer-ApptAdmin">
+              <button 
+                className="proceed-btn-ApptAdmin" 
+                onClick={confirmCancelAppointment}
+              >
+                Proceed
+              </button>
+              <button 
+                className="discard-btn-ApptAdmin" 
+                onClick={discardCancelAppointment}
+              >
+                Discard
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       <div className="all-appointments-filters">
         <div className="filter-group search-group">
           <label htmlFor="search-filter">Search:</label>
@@ -523,7 +567,7 @@ const AllAppointmentsAdmin = () => {
                       <button
                         className="cancel-btn"
                         onClick={() =>
-                          handleStatusUpdate(getAppointmentId(appointment), 'cancelled')
+                          handleCancelAppointment(getAppointmentId(appointment), getClientName(appointment))
                         }
                       >
                         Cancel
