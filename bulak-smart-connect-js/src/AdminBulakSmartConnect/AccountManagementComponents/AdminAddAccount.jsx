@@ -174,18 +174,26 @@ const AdminAddUser = () => {
               // Try backend first
               const roleId = availableRoles.find(r => r.name === formData.role)?.id || 4;
               const backendData = {
-                ...userData,
+                email: userData.email,
+                username: userData.username,
+                firstName: userData.firstName,
+                middleName: userData.middleName,
+                lastName: userData.lastName,
+                nameExtension: userData.nameExtension,
+                contactNumber: userData.contactNumber,
                 roleIds: [roleId],
                 defaultRoleId: roleId,
               };
               
-              const result = await adminUpdateUser(userId, backendData);
-              if (result.success) {
-                console.log('User updated via backend');
-                success = true;
-              } else {
-                throw new Error(result.error || 'Backend update failed');
+              // Only include password if provided
+              if (formData.password && formData.password.trim()) {
+                backendData.password = formData.password;
               }
+              
+              // Use userService instead of adminUpdateUser from context
+              const response = await userService.adminUpdateUser(userId, backendData);
+              console.log('User updated via backend:', response);
+              success = true;
             } else {
               throw new Error('No user ID for backend update');
             }
