@@ -184,6 +184,18 @@ const UserTable = ({ users, handleUpload, removeUser, loading, onRefresh }) => {
             <button className="close-modal-btn" onClick={() => setSelectedUser(null)}>
               Close
             </button>
+            <button
+              className="modify-modal-btn"
+              onClick={() => {
+                handleModifyClick(
+                  selectedUser,
+                  users.findIndex(u => u.id === selectedUser.id)
+                );
+                setSelectedUser(null);
+              }}
+            >
+              Modify
+            </button>
           </div>
         </div>
       )}
