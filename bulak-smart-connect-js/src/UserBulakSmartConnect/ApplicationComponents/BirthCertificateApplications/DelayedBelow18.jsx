@@ -87,7 +87,7 @@ const documentDescriptions = {
       - Sworn statement from second non-relative witness and  witness <GovernmentIdTooltip>government issued ID</GovernmentIdTooltip>
     </>
   ),
-  'Unedited Front-Facing Photo (2x2, White Background)': '- Recent passport-style photo with white background',
+  'Unedited Front-Facing Photo (2x2, White Background)': '- Recent passport-style photo taken within the last 3 months with white background',
   'Documentary Evidence/s of Parents': '- Birth certificate of parents, marriage certificate, etc.',
   'Barangay Certification of Residency': '- Certificate of residency from local barangay',
   'National ID , ePhil ID or PhilSys transaction slip': '- A valid National ID, ePhilID, or PhilSys transaction slip is required for this application. If you do not have any of these, please stay updated on the San Ildefonso National ID booth schedules, check other PhilSys registration centers, and secure your ID or transaction slip before proceeding.',
