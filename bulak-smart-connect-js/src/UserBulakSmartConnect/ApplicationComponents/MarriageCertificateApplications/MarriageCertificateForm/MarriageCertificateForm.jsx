@@ -20,6 +20,7 @@ import MarriageDetailsForm from './MarriageDetailsForm';
 import MarriageAffidavitForm from './MarriageAffidavitForm';
 import { addApplication, getApplicationsByType, updateApplication } from '../../ApplicationData';
 import { documentApplicationService } from '../../../../services/documentApplicationService';
+import NavBar from '../../../../NavigationComponents/NavSide';
 const MarriageCertificateForm = () => {
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({});
@@ -31,6 +32,7 @@ const MarriageCertificateForm = () => {
   const [previousLicenseData, setPreviousLicenseData] = useState(null);
   const [showDataDialog, setShowDataDialog] = useState(false);
   const [isAffidavitFormValid, setIsAffidavitFormValid] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const navigate = useNavigate();
   useEffect(() => {
@@ -462,7 +464,7 @@ const MarriageCertificateForm = () => {
     }
   };
   return (
-    <Box className="MarriageCertificateFormContainer" sx={{ 
+    <Box className={`MarriageCertificateFormContainer ${isSidebarOpen ? 'sidebar-open' : ''}`} sx={{ 
       width: '100vw', 
       minHeight: '100vh', 
       margin: 0, 
@@ -472,6 +474,7 @@ const MarriageCertificateForm = () => {
       flexDirection: 'column',
       alignItems: 'center'
     }}>
+      <NavBar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
       <Dialog
         open={showDataDialog}
         aria-labelledby="previous-data-dialog-title"

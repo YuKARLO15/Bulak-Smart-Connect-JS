@@ -6,6 +6,13 @@
   padding: 0 !important;
   box-sizing: border-box !important;
   overflow-x: hidden !important;
+  transition: margin-left 0.3s ease;
+}
+
+/* Sidebar responsive styles */
+.MarriageCertificateFormContainer.sidebar-open {
+  margin-left: 250px;
+  width: calc(100vw - 250px);
 }
 
 .CertificateFormTitle, .MarriageCertificateFormTitle {
