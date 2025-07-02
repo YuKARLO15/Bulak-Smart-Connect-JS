@@ -35,18 +35,21 @@ form.announcementform textarea {
   font-family: inherit;
   background-color: #f9fafb;
   transition: border-color 0.2s ease;
+
 }
 
 form.announcementform input:focus,
 form.announcementform textarea:focus {
   border-color: #3b82f6;
   outline: none;
-  background-color: #fff;
+  background-color: #f5f5f5;
+  color: black;
 }
 
 form.announcementform textarea {
   min-height: 100px;
   resize: vertical;
+  background-color: #f5f5f5;
 }
 
 form.announcementform button {
