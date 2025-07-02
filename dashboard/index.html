@@ -265,7 +265,7 @@
                   </div>
               </div>
               <div class="last-updated">
-                  🔄 Last updated: 7/2/2025, 6:45:31 PM
+                  🔄 Last updated: 7/2/2025, 6:45:54 PM
               </div>
           </div>
       </header>
@@ -278,46 +278,46 @@
                       <span class="status-badge status-warning">Minor Issues</span>
                   </div>
                   <div class="workflow-list">
-        <div class="workflow-item running">
+        <div class="workflow-item error">
           <div class="workflow-name">CI</div>
           <div class="workflow-status">
-            <div class="status-icon icon-running"></div>
-            <span>28s ago</span>
+            <div class="status-icon icon-error"></div>
+            <span>15s ago</span>
           </div>
         </div>
         <div class="workflow-item running">
           <div class="workflow-name">Backend Tests</div>
           <div class="workflow-status">
             <div class="status-icon icon-running"></div>
-            <span>28s ago</span>
+            <span>50s ago</span>
           </div>
         </div>
         <div class="workflow-item running">
           <div class="workflow-name">MySQL Authentication CI</div>
           <div class="workflow-status">
             <div class="status-icon icon-running"></div>
-            <span>29s ago</span>
+            <span>51s ago</span>
           </div>
         </div>
         <div class="workflow-item running">
           <div class="workflow-name">Code Quality and Security</div>
           <div class="workflow-status">
             <div class="status-icon icon-running"></div>
-            <span>28s ago</span>
+            <span>50s ago</span>
           </div>
         </div>
         <div class="workflow-item running">
           <div class="workflow-name">CodeQL</div>
           <div class="workflow-status">
             <div class="status-icon icon-running"></div>
-            <span>28s ago</span>
+            <span>50s ago</span>
           </div>
         </div>
         <div class="workflow-item running">
           <div class="workflow-name">End-to-End Tests</div>
           <div class="workflow-status">
             <div class="status-icon icon-running"></div>
-            <span>28s ago</span>
+            <span>50s ago</span>
           </div>
         </div>
         <div class="workflow-item success">
@@ -331,35 +331,35 @@
           <div class="workflow-name">API Security Scanning</div>
           <div class="workflow-status">
             <div class="status-icon icon-running"></div>
-            <span>28s ago</span>
+            <span>50s ago</span>
           </div>
         </div>
         <div class="workflow-item running">
           <div class="workflow-name">Browser Compatibility Testing</div>
           <div class="workflow-status">
             <div class="status-icon icon-running"></div>
-            <span>28s ago</span>
+            <span>50s ago</span>
           </div>
         </div>
         <div class="workflow-item running">
           <div class="workflow-name">Accessibility Testing</div>
           <div class="workflow-status">
             <div class="status-icon icon-running"></div>
-            <span>28s ago</span>
+            <span>50s ago</span>
           </div>
         </div>
         <div class="workflow-item success">
           <div class="workflow-name">API Documentation</div>
           <div class="workflow-status">
             <div class="status-icon icon-success"></div>
-            <span>26m ago</span>
+            <span>27m ago</span>
           </div>
         </div>
         <div class="workflow-item running">
           <div class="workflow-name">Frontend Documentation</div>
           <div class="workflow-status">
             <div class="status-icon icon-running"></div>
-            <span>29s ago</span>
+            <span>51s ago</span>
           </div>
         </div>
         <div class="workflow-item error">
@@ -423,10 +423,10 @@
       <div class="alert alert-warning">
         <span class="alert-icon">🔧</span>
         <div>
-          <strong>1 Non-Security Workflow(s) Failed</strong><br>
-          Review and fix: PR Checks
+          <strong>2 Non-Security Workflow(s) Failed</strong><br>
+          Review and fix: CI, PR Checks
           <div style="margin-top: 0.5rem; font-size: 0.9rem;">
-            ⚠️ PR Checks: Build/test failure
+            ⚠️ CI: Build/test failure<br>⚠️ PR Checks: Build/test failure
           </div>
         </div>
       </div></div>
@@ -479,20 +479,20 @@
                   <h2 class="card-title">🔍 Detailed Workflow Status</h2>
               </div>
               <div id="detailedWorkflows">
-    <div class="workflow-detail enhanced" style="border-left-color: #007bff;">
+    <div class="workflow-detail enhanced" style="border-left-color: #dc3545;">
       <div class="workflow-header">
-        <h4>🔄 🔄 CI</h4>
-        <span class="workflow-meta">Run #1711 • 28s ago</span>
+        <h4>🔄 ❌ CI</h4>
+        <span class="workflow-meta">Run #1711 • 16s ago</span>
       </div>
       <div class="workflow-description">
         <p style="color: #6c757d; font-style: italic; margin-bottom: 1rem;">Core build pipeline ensuring code quality and compilation</p>
       </div>
       <div class="workflow-info">
         <div class="info-item">
-          <strong>Status:</strong> <span style="color: #007bff; font-weight: bold;">IN_PROGRESS</span>
+          <strong>Status:</strong> <span style="color: #dc3545; font-weight: bold;">FAILURE</span>
         </div>
         <div class="info-item">
-          <strong>Duration:</strong> 0m
+          <strong>Duration:</strong> 1m
         </div>
         <div class="info-item">
           <strong>Commit:</strong> <code>a67f98d</code>
@@ -514,7 +514,7 @@
     <div class="workflow-detail enhanced" style="border-left-color: #007bff;">
       <div class="workflow-header">
         <h4>🧪 🔄 Backend Tests</h4>
-        <span class="workflow-meta">Run #766 • 28s ago</span>
+        <span class="workflow-meta">Run #766 • 51s ago</span>
       </div>
       <div class="workflow-description">
         <p style="color: #6c757d; font-style: italic; margin-bottom: 1rem;">Comprehensive backend testing with database integration</p>
@@ -546,7 +546,7 @@
     <div class="workflow-detail enhanced" style="border-left-color: #007bff;">
       <div class="workflow-header">
         <h4>🔐 🔄 MySQL Authentication CI</h4>
-        <span class="workflow-meta">Run #1554 • 29s ago</span>
+        <span class="workflow-meta">Run #1554 • 52s ago</span>
       </div>
       <div class="workflow-description">
         <p style="color: #6c757d; font-style: italic; margin-bottom: 1rem;">Database authentication and role validation system</p>
@@ -578,7 +578,7 @@
     <div class="workflow-detail enhanced" style="border-left-color: #007bff;">
       <div class="workflow-header">
         <h4>🛡️ 🔄 Code Quality and Security</h4>
-        <span class="workflow-meta">Run #1725 • 28s ago</span>
+        <span class="workflow-meta">Run #1725 • 51s ago</span>
       </div>
       <div class="workflow-description">
         <p style="color: #6c757d; font-style: italic; margin-bottom: 1rem;">Multi-layer security analysis and code quality assessment</p>
@@ -610,7 +610,7 @@
     <div class="workflow-detail enhanced" style="border-left-color: #007bff;">
       <div class="workflow-header">
         <h4>🕵️ 🔄 CodeQL</h4>
-        <span class="workflow-meta">Run #1726 • 28s ago</span>
+        <span class="workflow-meta">Run #1726 • 51s ago</span>
       </div>
       <div class="workflow-description">
         <p style="color: #6c757d; font-style: italic; margin-bottom: 1rem;">Advanced static code analysis for security vulnerabilities</p>
@@ -642,7 +642,7 @@
     <div class="workflow-detail enhanced" style="border-left-color: #007bff;">
       <div class="workflow-header">
         <h4>🎯 🔄 End-to-End Tests</h4>
-        <span class="workflow-meta">Run #1715 • 28s ago</span>
+        <span class="workflow-meta">Run #1715 • 51s ago</span>
       </div>
       <div class="workflow-description">
         <p style="color: #6c757d; font-style: italic; margin-bottom: 1rem;">Complete user journey testing across the application</p>
@@ -706,7 +706,7 @@
     <div class="workflow-detail enhanced" style="border-left-color: #007bff;">
       <div class="workflow-header">
         <h4>⚔️ 🔄 API Security Scanning</h4>
-        <span class="workflow-meta">Run #1708 • 28s ago</span>
+        <span class="workflow-meta">Run #1708 • 51s ago</span>
       </div>
       <div class="workflow-description">
         <p style="color: #6c757d; font-style: italic; margin-bottom: 1rem;">OWASP ZAP penetration testing for API endpoints</p>
@@ -738,7 +738,7 @@
     <div class="workflow-detail enhanced" style="border-left-color: #007bff;">
       <div class="workflow-header">
         <h4>🌐 🔄 Browser Compatibility Testing</h4>
-        <span class="workflow-meta">Run #1725 • 28s ago</span>
+        <span class="workflow-meta">Run #1725 • 51s ago</span>
       </div>
       <div class="workflow-description">
         <p style="color: #6c757d; font-style: italic; margin-bottom: 1rem;">Cross-browser compatibility validation</p>
@@ -770,7 +770,7 @@
     <div class="workflow-detail enhanced" style="border-left-color: #007bff;">
       <div class="workflow-header">
         <h4>♿ 🔄 Accessibility Testing</h4>
-        <span class="workflow-meta">Run #1721 • 28s ago</span>
+        <span class="workflow-meta">Run #1721 • 51s ago</span>
       </div>
       <div class="workflow-description">
         <p style="color: #6c757d; font-style: italic; margin-bottom: 1rem;">WCAG AA compliance and accessibility validation</p>
@@ -802,7 +802,7 @@
     <div class="workflow-detail enhanced" style="border-left-color: #28a745;">
       <div class="workflow-header">
         <h4>📋 ✅ API Documentation</h4>
-        <span class="workflow-meta">Run #236 • 26m ago</span>
+        <span class="workflow-meta">Run #236 • 27m ago</span>
       </div>
       <div class="workflow-description">
         <p style="color: #6c757d; font-style: italic; margin-bottom: 1rem;">Automated API documentation generation</p>
@@ -834,7 +834,7 @@
     <div class="workflow-detail enhanced" style="border-left-color: #007bff;">
       <div class="workflow-header">
         <h4>🎨 🔄 Frontend Documentation</h4>
-        <span class="workflow-meta">Run #663 • 29s ago</span>
+        <span class="workflow-meta">Run #663 • 52s ago</span>
       </div>
       <div class="workflow-description">
         <p style="color: #6c757d; font-style: italic; margin-bottom: 1rem;">Component library documentation with Storybook</p>
@@ -951,14 +951,14 @@
                       labels: ["Jun 26","Jun 27","Jun 28","Jun 29","Jun 30","Jul 1","Jul 2"],
                       datasets: [{
                           label: 'Successful Builds',
-                          data: [16,18,19,18,22,21,20],
+                          data: [24,23,15,22,16,21,21],
                           borderColor: '#28a745',
                           backgroundColor: 'rgba(40, 167, 69, 0.1)',
                           fill: true,
                           tension: 0.4
                       }, {
                           label: 'Failed Builds',
-                          data: [2,3,2,1,1,2,1],
+                          data: [2,1,3,3,1,2,3],
                           borderColor: '#dc3545',
                           backgroundColor: 'rgba(220, 53, 69, 0.1)',
                           fill: true,
