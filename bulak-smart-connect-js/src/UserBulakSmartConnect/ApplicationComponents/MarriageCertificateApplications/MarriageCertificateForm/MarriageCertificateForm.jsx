@@ -462,7 +462,16 @@ const MarriageCertificateForm = () => {
     }
   };
   return (
-    <Box className="MarriageCertificateFormContainer">
+    <Box className="MarriageCertificateFormContainer" sx={{ 
+      width: '100vw', 
+      minHeight: '100vh', 
+      margin: 0, 
+      padding: 0, 
+      boxSizing: 'border-box',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center'
+    }}>
       <Dialog
         open={showDataDialog}
         aria-labelledby="previous-data-dialog-title"
@@ -521,18 +530,45 @@ const MarriageCertificateForm = () => {
           </Button>
         </DialogActions>
       </Dialog>
-      <Typography variant="h4" className="MarriageCertificateFormTitle">
+      <Typography 
+        variant="h4" 
+        className="MarriageCertificateFormTitle"
+        sx={{
+          fontWeight: '600 !important',
+          backgroundColor: '#184a5b !important',
+          textAlign: 'center !important',
+          color: 'white !important',
+          padding: '20px !important',
+          width: '100vw',
+          margin: 0,
+          marginBottom: '20px !important',
+          fontSize: { xs: '1.8rem', md: '2.5rem' }
+        }}
+      >
         {selectedOption || 'Marriage'} Application Form
       </Typography>
 
       {dataPreFilled && (
-        <Alert severity="info" sx={{ mb: 2 }}>
+        <Alert severity="info" sx={{ mb: 2, mx: 2, width: '100%', maxWidth: '1200px' }}>
           Using data from your previous Marriage License application. Please verify all information
           is still correct.
         </Alert>
       )}
 
-      <Paper className="MarriageCertificateForm" elevation={3}>
+      <Paper className="MarriageCertificateForm" elevation={3} sx={{
+        width: '100%',
+        maxWidth: '1200px',
+        margin: '0 auto',
+        padding: '2.5rem',
+        '@media (max-width: 768px)': {
+          padding: '1.5rem',
+          margin: '0 10px'
+        },
+        '@media (max-width: 480px)': {
+          padding: '1rem',
+          margin: '0 5px'
+        }
+      }}>
         {step === 1 && (
           <>
             <HusbandForm formData={formData} handleChange={handleChange} errors={errors} />
