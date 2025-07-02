@@ -683,7 +683,7 @@ const Below18Registration = () => {
       }
       required={true}
       disabled={isLoading}
-      multiple={doc === 'Two (2) Documentary Evidences' ||doc ===  'Affidavit of Disinterested Person 1 (Not Related) with ID' ||doc ===  'Affidavit of Disinterested Persons 2 (Not Related) with ID' || doc === 'Documentary Evidence/s of Parents'  }
+      multiple={true}
     />
   </div>
 ))}
@@ -771,7 +771,7 @@ const Below18Registration = () => {
         modifyMode: true,
         preserveData: true,
         backFromDelayedRegistration: true,
-        applicationType: 'Delayed Registration - Above 18'
+        applicationType: 'Delayed Registration - Below 18'
       };
 
   

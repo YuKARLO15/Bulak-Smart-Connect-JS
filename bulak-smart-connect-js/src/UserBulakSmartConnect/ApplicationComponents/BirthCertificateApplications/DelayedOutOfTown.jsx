@@ -7,15 +7,22 @@ import NavBar from '../../../NavigationComponents/NavSide';
 import { documentApplicationService } from '../../../services/documentApplicationService';
 import { localStorageManager } from '../../../services/localStorageManager';
 
-const requiredDocuments = [
+const baseRequiredDocuments = [
   'Negative Certification from PSA',
   'Self-Affidavit of Out of Town Registration attested by 2 witnesses with ID',
   'Barangay Certification',
-  'National ID (if not registered, register first)',
+  'National ID , ePhil ID or PhilSys transaction slip',
   'Unedited 2x2 front-facing photo, white background',
   'Any two (2) of the following documents of parents',
   'Any two (2) of the following documentary evidence'
 ];
+
+const maritalDocuments = [
+  ...baseRequiredDocuments,
+  'Certificate of Marriage of Parents (Marital Child)'
+];
+
+const nonMaritalDocuments = baseRequiredDocuments;
 
 const GovernmentIdTooltip = ({ children }) => {
   const acceptedIds = [
@@ -79,7 +86,7 @@ const documentDescriptions = {
   'Self-Affidavit of Out of Town Registration attested by 2 witnesses with ID': (<>
     - Notarized affidavit stating  that the birth occurred outside the place of registration, witnessed by two people with valid <GovernmentIdTooltip>government issued IDs</GovernmentIdTooltip></>) ,
   'Barangay Certification': '-  Issued by the Punong Barangay as proof of residency and with statement on facts of birth',
-  'National ID (if not registered, register first)': '- Valid National ID or ePhilID (register first if not yet available)',
+  'National ID , ePhil ID or PhilSys transaction slip': '- A valid National ID, ePhilID, or PhilSys transaction slip is required for this application. If you do not have any of these, please stay updated on the San Ildefonso National ID booth schedules, check other PhilSys registration centers, and secure your ID or transaction slip before proceeding.',
   'Unedited 2x2 front-facing photo, white background': '- Recent passport-style photo taken within the last 3 months with white background',
   'Transmittal through the PSO': '- Official transmittal document through the Provincial Statistics Office',
   
@@ -106,6 +113,7 @@ const DelayedOutOfTownRegistration = () => {
   const [uploadedDocumentsCount, setUploadedDocumentsCount] = useState(0);
   const navigate = useNavigate();
   const location = useLocation();
+   const [status, setStatus] = useState('');
   
   const isEditing = location.state?.isEditing || 
                     localStorage.getItem('isEditingBirthApplication') === 'true';
@@ -180,7 +188,12 @@ const DelayedOutOfTownRegistration = () => {
   }, [uploadedFiles]);
 
   useEffect(() => {
-    // Load data when component mounts
+   const maritalStatus = localStorage.getItem('maritalStatus');
+    if (maritalStatus) {
+      setStatus(maritalStatus);
+      console.log("Status loaded from localStorage:", maritalStatus);
+    }
+
     const loadData = async () => {
       try {
         setIsInitializing(true);
@@ -339,18 +352,28 @@ const DelayedOutOfTownRegistration = () => {
         }
         
         console.log("Application ID:", currentAppId);
-        console.log("Uploading file:", fileDataObj.name);
         
-        const file = dataURLtoFile(fileDataObj.data, fileDataObj.name, fileDataObj.type);
+        // Handle multiple files (array) or single file (object)
+        const filesToUpload = Array.isArray(fileDataObj) ? fileDataObj : [fileDataObj];
         
-        // Log the URL that will be called
-        const uploadUrl = `/document-applications/${currentAppId}/files`;
-        console.log("Uploading to URL:", uploadUrl);
+        for (const [index, fileData] of filesToUpload.entries()) {
+          console.log(`Uploading file ${index + 1}:`, fileData.name);
+          
+          const file = dataURLtoFile(fileData.data, fileData.name, fileData.type);
+          
+          // For multiple files, append index to label
+          const uploadLabel = filesToUpload.length > 1 ? `${label} - File ${index + 1}` : label;
+          
+          const response = await documentApplicationService.uploadFile(currentAppId, file, uploadLabel);
+          console.log(`Upload response for ${fileData.name}:`, response);
+        }
         
-        const response = await documentApplicationService.uploadFile(currentAppId, file, label);
-        console.log("Upload response:", response);
+        const fileCount = filesToUpload.length;
+        const successMessage = fileCount > 1 
+          ? `${fileCount} files uploaded successfully for "${label}"!`
+          : `"${label}" uploaded successfully!`;
         
-        showNotification(`"${label}" uploaded successfully!`, "success");
+        showNotification(successMessage, "success");
         
       } catch (error) {
         console.error(`Failed to upload "${label}":`, error);
@@ -364,15 +387,28 @@ const DelayedOutOfTownRegistration = () => {
             showNotification("Application not found. Creating new application...", "info");
             const createdApp = await createBackendApplication();
             if (createdApp) {
-              // Retry upload
+              // Retry upload for all files
               try {
-                const retryResponse = await documentApplicationService.uploadFile(
-                  createdApp.id, 
-                  dataURLtoFile(fileDataObj.data, fileDataObj.name, fileDataObj.type), 
-                  label
-                );
-                console.log("Retry upload response:", retryResponse);
-                showNotification(`"${label}" uploaded successfully!`, "success");
+                const filesToUpload = Array.isArray(fileDataObj) ? fileDataObj : [fileDataObj];
+                
+                for (const [index, fileData] of filesToUpload.entries()) {
+                  const file = dataURLtoFile(fileData.data, fileData.name, fileData.type);
+                  const uploadLabel = filesToUpload.length > 1 ? `${label} - File ${index + 1}` : label;
+                  
+                  const retryResponse = await documentApplicationService.uploadFile(
+                    createdApp.id, 
+                    file, 
+                    uploadLabel
+                  );
+                  console.log(`Retry upload response for ${fileData.name}:`, retryResponse);
+                }
+                
+                const fileCount = filesToUpload.length;
+                const successMessage = fileCount > 1 
+                  ? `${fileCount} files uploaded successfully for "${label}"!`
+                  : `"${label}" uploaded successfully!`;
+                
+                showNotification(successMessage, "success");
                 return;
               } catch (retryError) {
                 console.error("Retry upload failed:", retryError);
@@ -401,8 +437,9 @@ const DelayedOutOfTownRegistration = () => {
   };
 
   const isMandatoryComplete = () => {
-    // Check all required documents (for logging purposes only)
-    const allMandatoryDocsUploaded = requiredDocuments.every(doc => {
+        const currentDocuments = status === 'marital' ? maritalDocuments : nonMaritalDocuments;
+ 
+    const allMandatoryDocsUploaded = baseRequiredDocuments.every(doc => {
       const isUploaded = uploadedFiles[doc] === true;
       if (!isUploaded) {
         console.log(`Missing document: ${doc}`);
@@ -618,19 +655,19 @@ const DelayedOutOfTownRegistration = () => {
           )}
           <Container className="DelayedOutOfTownUpload">
             <Box>
-              {requiredDocuments.map((doc, index) => (
-    <div key={index} style={{ marginBottom: '16px' }}>
-      <FileUpload 
-        label={doc}
-        description={documentDescriptions[doc]}
-        onUpload={(isUploaded, fileDataObj) => 
-          handleFileUpload(doc, isUploaded, fileDataObj)
-        }
-        required={true}
-        disabled={isLoading}
-      />
-    </div>
-  ))}
+          {(status === 'marital' ? maritalDocuments : nonMaritalDocuments).map((doc, index) => (
+      <div key={index} style={{ marginBottom: '16px' }}>
+        <FileUpload 
+          label={doc} 
+          description={documentDescriptions[doc]}
+            onUpload={(isUploaded, fileDataObj) => 
+              handleFileUpload(doc, isUploaded, fileDataObj)
+            }
+          disabled={isLoading} 
+          multiple={true}
+        />
+      </div>
+    ))}
             </Box>
 
         
