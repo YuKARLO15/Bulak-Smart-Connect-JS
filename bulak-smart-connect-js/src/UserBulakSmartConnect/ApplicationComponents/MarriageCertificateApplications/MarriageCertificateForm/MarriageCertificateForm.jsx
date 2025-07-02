@@ -13,6 +13,7 @@ import {
   DialogActions,
   Container,
 } from '@mui/material';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import './MarriageCertificateForm.css';
 import HusbandForm from './HusbandForm';
 import WifeForm from './WifeForm';
@@ -545,10 +546,21 @@ const MarriageCertificateForm = () => {
           width: '100vw',
           margin: 0,
           marginBottom: '20px !important',
-          fontSize: { xs: '1.8rem', md: '2.5rem' }
+          fontSize: { xs: '1.8rem', md: '2.5rem' },
+          position: 'relative'
         }}
       >
-        {selectedOption || 'Marriage'} Application Form
+        <Box className="FormTitleContent">
+          <Button
+            variant="outlined"
+            className="back-button-home"
+            onClick={() => navigate('/MarriageDashboard')}
+            startIcon={<ArrowBackIcon />}
+          >
+            Back
+          </Button>
+          <span className="FormTitleText">{selectedOption || 'Marriage'} Application Form</span>
+        </Box>
       </Typography>
 
       {dataPreFilled && (
