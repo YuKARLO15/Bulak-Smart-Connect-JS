@@ -12,6 +12,7 @@ const UpdatesCheckbox = ({ formData, handleInputChange }) => {
           name="updates"
           checked={formData.updates}
           onChange={handleInputChange}
+          className='checkbox-inputSignUp'
         />
         <span>I want to receive updates via email.</span>
       </label>

@@ -1,29 +1,109 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Box, Button, Checkbox, FormControlLabel, Typography, Alert, Paper, Snackbar, CircularProgress } from '@mui/material';
+import { Box, Button, Checkbox, FormControlLabel, Typography, Alert, Paper, Snackbar, CircularProgress,  Tooltip } from '@mui/material';
 import FileUpload from '../FileUpload';
 import './DelayedAbove18.css';
 import NavBar from '../../../NavigationComponents/NavSide';
 import { documentApplicationService } from '../../../services/documentApplicationService';
 import { localStorageManager } from '../../../services/localStorageManager';
 
+
 const maritalDocuments = [
   'Negative Certification from PSA',
-  'Affidavit of (2) Disinterested Persons with ID',
-  'Certificate of Marriage, if married',
-  'National ID or ePhil ID',
+  'Affidavit of Disinterested Person 1 (Not Related) with ID',
+  'Affidavit of Disinterested Persons 2 (Not Related) with ID',
+  'Any (2) Documentary Evidences',
+  'Certificate of Marriage, if applicant is married',
+  'National ID , ePhil ID or PhilSys transaction slip',
   'Barangay Certification of Residency',
   'Unedited front-facing photo 2x2, white background',
   'Documentary evidences of parents',
   'Certificate of Marriage of Parents',
-  'Personal Appearance of Father or Affidavit of the document owner registrant stating why the document owner cannot appear personally; and death certificate in case the document owner is deceased',
 ];
 
 const nonMaritalDocuments = maritalDocuments
   .filter(doc => doc !== 'Certificate of Marriage of Parents')
   .concat([
-    'Personal Appearance of the Father or Affidavit of Admission of Paternity executed before a Notary Public',
+
   ]);
+
+
+const GovernmentIdTooltip = ({ children }) => {
+  const acceptedIds = [
+    'Philippine Passport',
+    'PhilSys ID or National ID',
+    "Driver's License",
+    'PRC ID',
+    'UMID (Unified Multi-Purpose ID)',
+    'SSS ID',
+    'GSIS eCard',
+    'OWWA ID',
+    'Senior Citizen ID',
+    'PWD ID',
+    "Voter's ID or Voter's Certification",
+    'Postal ID',
+    'Barangay ID or Barangay Clearance with photo',
+    'TIN ID',
+    'PhilHealth ID',
+    'Pag-IBIG Loyalty Card Plus',
+    'Indigenous Peoples (IP) ID or certification'
+  ];
+
+  return (
+    <Tooltip
+      title={
+        <Box>
+          <Typography variant="subtitle2" sx={{ fontWeight: 'bold', mb: 1 }}>
+            Accepted Government IDs:
+          </Typography>
+          {acceptedIds.map((id, index) => (
+            <Typography key={index} variant="body2" sx={{ fontSize: '0.75rem', mb: 0.5 }}>
+              • {id}
+            </Typography>
+          ))}
+        </Box>
+      }
+      arrow
+      placement="top"
+      sx={{
+        '& .MuiTooltip-tooltip': {
+          maxWidth: 300,
+          backgroundColor: 'rgba(0, 0, 0, 0.9)',
+        }
+      }}
+    >
+      <span style={{ 
+        textDecoration: 'underline', 
+        cursor: 'pointer',
+        color: '#1976d2',
+        fontWeight: 'bold'
+      }}>
+        {children}
+      </span>
+    </Tooltip>
+  );
+};
+  const documentDescriptions = {
+  'Negative Certification from PSA': '- Certificate showing no birth record exists in PSA database',
+   'Affidavit of Disinterested Person 1 (Not Related) with ID': (
+    <>
+      - Sworn statement from non-relative witness and witness <GovernmentIdTooltip>government issued ID</GovernmentIdTooltip>
+    </>
+  ),
+  'Affidavit of Disinterested Persons 2 (Not Related) with ID': (
+    <>
+      - Sworn statement from second non-relative witness and  witness <GovernmentIdTooltip>government issued ID</GovernmentIdTooltip>
+    </>
+  ),  'Certificate of Marriage, if married': '- Official marriage certificate if applicant is married',
+  'National ID , ePhil ID or PhilSys transaction slip': '- A valid National ID, ePhilID, or PhilSys transaction slip is required for this application. If you do not have any of these, please stay updated on the San Ildefonso National ID booth schedules, check other PhilSys registration centers, and secure your ID or transaction slip before proceeding.',
+  'Barangay Certification of Residency': '- Certificate of residency from local barangay',
+  'Unedited front-facing photo 2x2, white background': '- Recent passport-style photo with white background',
+  'Documentary evidences of parents': '- Birth certificates, marriage certificate, or death certificates of parents',
+  'Certificate of Marriage of Parents': '- Official marriage certificate of applicant\'s parents',
+  'Affidavit of the document owner registrant stating why the document owner cannot appear personally': '- Notarized affidavit explaining absence (affidavit can be obtained from a notary public, lawyer\'s office, or barangay hall), and death certificate if deceased',
+  'Personal Appearance of the Father or Affidavit of Admission of Paternity executed before a Notary Public': '- Father\'s personal appearance or notarized affidavit acknowledging paternity',
+  'Any (2) Documentary Evidences': '- Hospital records, baptismal certificate, school records or Philhealth records',
+};
 
 const Above18Registration = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -40,6 +120,9 @@ const Above18Registration = () => {
   const [uploadedDocumentsCount, setUploadedDocumentsCount] = useState(0); 
   const navigate = useNavigate();
   const location = useLocation();
+  const [documentOwnerNotPresent, setDocumentOwnerNotPresent] = useState(false);
+const[documentFatherNotPresent, setDocumentFatherNotPresent] = useState(false);
+
   
   const isEditing = location.state?.isEditing || 
                     localStorage.getItem('isEditingBirthApplication') === 'true';
@@ -571,53 +654,82 @@ const Above18Registration = () => {
                   </Typography>
                 </Box>
               )}
-              {(status === 'marital' ? maritalDocuments : nonMaritalDocuments).map((doc, index) => (
-                <FileUpload 
-                  key={index} 
-                  label={doc} 
-                  onUpload={(isUploaded, fileDataObj) => 
-                    handleFileUpload(doc, isUploaded, fileDataObj)
-                  } 
-                  required={true}
+                   {(status === 'marital' ? maritalDocuments : nonMaritalDocuments).map((doc, index) => (
+                   <FileUpload 
+      label={doc}
+      description={documentDescriptions[doc]}
+      onUpload={(isUploaded, fileDataObj) => 
+        handleFileUpload(doc, isUploaded, fileDataObj)
+      } 
+      required={true}
                   disabled={isLoading}
-                />
+                  multiple={true}
+    />
               ))}
 
-              <Typography variant="body1" className="SectionTitleDelayedAbove18">
-                Any two (2) of the following documentary evidence:
-              </Typography>
-              <Box>
+                       {/* Checkbox 1: Document owner cannot appear personally - ALWAYS VISIBLE */}
+              <Box sx={{ mt: 2, mb: 2 }}>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={documentOwnerNotPresent}
+                      onChange={(e) => setDocumentOwnerNotPresent(e.target.checked)}
+                      color="primary"
+                    />
+                  }
+                  label="Document owner cannot appear personally"
+                  />
+                      {documentOwnerNotPresent && (
                 <FileUpload 
-                  label="Documentary Evidence 1" 
+                  label="Affidavit of the document owner registrant stating why the document owner cannot appear personally"
+                  description={documentDescriptions['Affidavit of the document owner registrant stating why the document owner cannot appear personally']}
                   onUpload={(isUploaded, fileDataObj) => 
-                    handleFileUpload('Documentary Evidence 1', isUploaded, fileDataObj)
+                    handleFileUpload('Affidavit of the document owner registrant stating why the document owner cannot appear personally', isUploaded, fileDataObj)
                   } 
-                  required={true}
+                  required={false}
                   disabled={isLoading}
+                  multiple={true}
                 />
-                <FileUpload 
-                  label="Documentary Evidence 2" 
-                  onUpload={(isUploaded, fileDataObj) => 
-                    handleFileUpload('Documentary Evidence 2', isUploaded, fileDataObj)
-                  } 
-                  required={true}
-                  disabled={isLoading}
-                />
+              )}
               </Box>
+
+              {/* Checkbox 2: Father cannot appear personally - ONLY VISIBLE FOR NON-MARITAL */}
+              {status === 'non-marital' && (
+                <Box sx={{ mt: 2, mb: 2 }}>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={documentFatherNotPresent}
+                        onChange={(e) => setDocumentFatherNotPresent(e.target.checked)}
+                        color="primary"
+                      />
+                    }
+                    label="Father cannot appear personally"
+                  />
+                </Box>
+              )}
+
+              {/* Show affidavit upload if document owner checkbox is checked */}
+          
+
+              {/* Show father affidavit upload if father checkbox is checked */}
+              {documentFatherNotPresent && (
+                <FileUpload 
+                  label="Personal Appearance of the Father or Affidavit of Admission of Paternity executed before a Notary Public"
+                  description={documentDescriptions['Personal Appearance of the Father or Affidavit of Admission of Paternity executed before a Notary Public']}
+                  onUpload={(isUploaded, fileDataObj) => 
+                    handleFileUpload('Personal Appearance of the Father or Affidavit of Admission of Paternity executed before a Notary Public', isUploaded, fileDataObj)
+                  } 
+                  required={false}
+                  disabled={isLoading}
+                  multiple={true}
+                />
+              )}
+                
+
+          
               
-              {/* Debug info */}
-              <Box sx={{ mt: 2, p: 2, bgcolor: '#f5f5f5', borderRadius: 1 }}>
-                <Typography variant="caption">Form Status:</Typography>
-                <Typography variant="caption" component="div">
-                  Status: {status || 'Not set'}
-                </Typography>
-                <Typography variant="caption" component="div">
-                  Documents uploaded: {uploadedDocumentsCount}
-                </Typography>
-                <Typography variant="caption" component="div">
-                  Submit button enabled: {isMandatoryComplete() ? 'YES' : 'NO'}
-                </Typography>
-              </Box>
+    
             </Box>
           )}
 

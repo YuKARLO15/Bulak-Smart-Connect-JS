@@ -53,15 +53,16 @@ const FullNameSection = ({ formData, handleInputChange, errors }) => {
 
         {/* Extension Name Section */}
         <div className="checkbox-extension">
-          <label>
+          <label className="ReceiveUpdateText">
             <input
               type="checkbox"
               id="HasExtension"
               name="hasExtension"
               checked={formData.hasExtension || false}
               onChange={handleInputChange}
+               className="checkbox-inputSignUp"
             />
-            Check this box if the registrant has a name extension
+           <span> Check this box if the registrant has a name extension</span>
           </label>
           <div className="extension-name">
             {formData.hasExtension && (
