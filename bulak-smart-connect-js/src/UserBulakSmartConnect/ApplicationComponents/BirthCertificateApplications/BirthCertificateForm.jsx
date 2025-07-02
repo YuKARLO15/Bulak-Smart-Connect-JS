@@ -73,28 +73,32 @@ const BirthCertificateForm = () => {
     setSnackbar(prev => ({ ...prev, open: false }));
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      if (isEditing && editingApplicationId) {
-        try {
-          const backendApp = await documentApplicationService.getApplication(editingApplicationId);
-          if (backendApp && backendApp.formData) {
-            setFormData(backendApp.formData);
-          } else if (backendApp) {
-            setFormData(backendApp); // fallback if only formData not present
-          } else {
-            showNotification('Could not load application for editing.', 'error');
-          }
-        } catch (err) {
-          showNotification('There was a problem setting up edit mode. Please try again.', 'error');
+useEffect(() => {
+  const fetchData = async () => {
+    if (isEditing && editingApplicationId) {
+      try {
+        const backendApp = await documentApplicationService.getApplication(editingApplicationId);
+        if (backendApp && backendApp.formData) {
+          setFormData(backendApp.formData);
+          // Store the original application subtype for reference during editing
+          localStorage.setItem('originalApplicationSubtype', backendApp.applicationSubtype || '');
+        } else if (backendApp) {
+          setFormData(backendApp);
+          localStorage.setItem('originalApplicationSubtype', backendApp.applicationSubtype || '');
+        } else {
+          showNotification('Could not load application for editing.', 'error');
         }
-      } else {
-        setFormData({});
-        localStorage.removeItem('birthCertificateApplication');
+      } catch (err) {
+        showNotification('There was a problem setting up edit mode. Please try again.', 'error');
       }
-    };
-    fetchData();
-  }, [isEditing, editingApplicationId]);
+    } else {
+      setFormData({});
+      localStorage.removeItem('birthCertificateApplication');
+      localStorage.removeItem('originalApplicationSubtype');
+    }
+  };
+  fetchData();
+}, [isEditing, editingApplicationId]);
 
   const handleChange = e => {
     const { name, value, type, checked } = e.target;
@@ -183,31 +187,25 @@ const BirthCertificateForm = () => {
   const handlePrevious = () => setStep(prevStep => prevStep - 1);
 
   const handleSubmit = async e => {
-    if (e) e.preventDefault();
-    if (!validateStep()) return;
-    setIsLoading(true);
+  if (e) e.preventDefault();
+  if (!validateStep()) return;
+  setIsLoading(true);
 
+  try {
+    let applicationId = editingApplicationId;
+    let routeOption;
+    
+    if (isEditing && editingApplicationId) {
+      // For editing, get the original application data to preserve the subtype
     try {
-      let applicationId = editingApplicationId;
-      const selectedOption = sessionStorage.getItem('selectedBirthCertificateOption') || 'Regular application';
-      
-      // For editing, determine the route based on the existing application data
-      let routeOption = selectedOption;
-      
-      if (isEditing) {
-        // Debug logging
-        console.log('Editing mode - formData:', formData);
-        console.log('applicationSubtype from formData:', formData.applicationSubtype);
+    const originalApplication = await documentApplicationService.getApplication(editingApplicationId);
+    const originalSubtype = originalApplication.applicationSubtype || 
+                           originalApplication.formData?.applicationSubtype ||
+                           localStorage.getItem('originalApplicationSubtype');
         
-        // Check multiple possible locations for the application subtype
-        const applicationSubtype = formData.applicationSubtype || 
-                                 formData.applicationSubType || 
-                                 localStorage.getItem('editingApplicationSubtype');
+        console.log('Original application subtype:', originalSubtype);
         
-        console.log('Found applicationSubtype:', applicationSubtype);
-        
-        if (applicationSubtype) {
-          // Map backend subtypes back to frontend route keys
+        if (originalSubtype) {
           const subtypeToRouteMap = {
             'Regular Application (0-1 month)': 'Regular application',
             'Delayed Registration - Above 18': 'Above 18',
@@ -218,38 +216,45 @@ const BirthCertificateForm = () => {
             'Correction - Sex/Date of Birth': 'Sex DOB',
             'Correction - First Name': 'First Name'
           };
-          routeOption = subtypeToRouteMap[applicationSubtype] || 'Regular application';
-          console.log('Mapped routeOption:', routeOption);
+          routeOption = subtypeToRouteMap[originalSubtype] || 'Regular application';
+          console.log('Mapped routeOption for editing:', routeOption);
         } else {
-          console.log('No applicationSubtype found, defaulting to Regular application');
+          console.log('No original subtype found, defaulting to Regular application');
+          routeOption = 'Regular application';
         }
+      } catch (error) {
+        console.error('Error fetching original application:', error);
+        routeOption = 'Regular application';
       }
+    } else {
+      // For new applications, use the selected option from session storage
+      routeOption = sessionStorage.getItem('selectedBirthCertificateOption') || 'Regular application';
+    }
 
-      console.log('Final routeOption:', routeOption);
-      const backendType = backendTypeMap[routeOption] || backendTypeMap['Regular application'];
-      console.log('Backend type:', backendType);
+    console.log('Final routeOption:', routeOption);
+    const backendType = backendTypeMap[routeOption] || backendTypeMap['Regular application'];
+    console.log('Backend type:', backendType);
 
-
-      let backendResponse;
-      if (isEditing && editingApplicationId) {
-        backendResponse = await documentApplicationService.updateApplication(editingApplicationId, {
-          formData,
-          applicantName: `${formData.firstName || ''} ${formData.lastName || ''}`,
-          applicationType: backendType.applicationType,
-          applicationSubtype: backendType.applicationSubtype,
-          lastUpdated: new Date().toISOString(),
-        });
-        applicationId = backendResponse.id || editingApplicationId;
-        showNotification('Application updated successfully', 'success');
-      } else {
-        applicationId = 'BC-' + Date.now().toString().slice(-6);
-        const backendApplicationData = {
-          applicationType: backendType.applicationType,
-          applicationSubtype: backendType.applicationSubtype,
-          applicantName: `${formData.firstName || ''} ${formData.lastName || ''}`,
-          formData,
-          status: 'PENDING',
-        };
+    let backendResponse;
+    if (isEditing && editingApplicationId) {
+      backendResponse = await documentApplicationService.updateApplication(editingApplicationId, {
+        formData,
+        applicantName: `${formData.firstName || ''} ${formData.lastName || ''}`,
+        applicationType: backendType.applicationType,
+        applicationSubtype: backendType.applicationSubtype,
+        lastUpdated: new Date().toISOString(),
+      });
+      applicationId = backendResponse.id || editingApplicationId;
+      showNotification('Application updated successfully', 'success');
+    } else {
+      applicationId = 'BC-' + Date.now().toString().slice(-6);
+      const backendApplicationData = {
+        applicationType: backendType.applicationType,
+        applicationSubtype: backendType.applicationSubtype,
+        applicantName: `${formData.firstName || ''} ${formData.lastName || ''}`,
+        formData,
+        status: 'PENDING',
+      };
         backendResponse =
           await documentApplicationService.createApplication(backendApplicationData);
         if (!backendResponse || !backendResponse.id)

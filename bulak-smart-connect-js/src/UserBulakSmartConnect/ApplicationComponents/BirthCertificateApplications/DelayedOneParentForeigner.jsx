@@ -76,7 +76,7 @@ const documentDescriptions = {
 
   'Any two (2) of the following documents of parents': '- Any of the following: Certificate of Live Birth (COLB), Government Issued ID, Marriage Certificate, or Certificate of Death (if deceased)',
   
-  'Any two (2) of the following documentary evidence ': '- which may show the name of the child, date and place of birth, and name of the mother (and name of father, if the child has been acknowledged) Any of the following: Baptismal Certificate, Marriage Certificate, School Records, Income Tax Return, or PhilHealth MDR',
+  'Any two (2) of the following documentary evidence': '- which may show the name of the child, date and place of birth, and name of the mother (and name of father, if the child has been acknowledged) Any of the following: Baptismal Certificate, Marriage Certificate, School Records, Income Tax Return, or PhilHealth MDR',
   
 
   'Certificate of Marriage of Parents (Marital Child)': '- Official marriage certificate of applicant\'s parents (required for marital children)',
@@ -142,7 +142,7 @@ const DelayedOneParentForeignerRegistration = () => {
 
       const backendApplicationData = {
         applicationType: 'Birth Certificate',
-        applicationSubtype: 'Delayed Registration - One Parent Foreigner',
+        applicationSubtype: 'Delayed Registration - Foreign Parent',
         applicantName: `${formData.firstName || ''} ${formData.lastName || ''}`,
         applicantDetails: JSON.stringify({ ...formData }),
         formData: formData,
@@ -465,7 +465,7 @@ const currentDocuments = status === 'marital' ? maritalDocuments : nonMaritalDoc
         statusMessage: 'Application submitted with all required documents',
         applicantName: `${formData.firstName || ''} ${formData.lastName || ''}`,
         applicationType: 'Birth Certificate',
-        applicationSubtype: 'Delayed Registration - One Parent Foreigner',
+        applicationSubtype: 'Delayed Registration - Foreign Parent',
       };
       
       try {
@@ -502,7 +502,7 @@ const currentDocuments = status === 'marital' ? maritalDocuments : nonMaritalDoc
           id: currentAppId,
           type: 'Birth Certificate',
           applicationType: 'Delayed Registration',  
-          applicationSubtype: 'Delayed Registration - One Parent Foreigner',
+          applicationSubtype: 'Delayed Registration - Foreign Parent',
           date: new Date().toLocaleDateString(),
           status: 'Pending',
           message: `Birth Certificate application for ${formData.firstName || ''} ${formData.lastName || ''}`,
@@ -534,7 +534,7 @@ const currentDocuments = status === 'marital' ? maritalDocuments : nonMaritalDoc
           id: currentAppId,
           action: 'updated',
           type: 'Birth Certificate',
-          subtype: 'Delayed Registration - One Parent Foreigner'
+          subtype: 'Delayed Registration - Foreign Parent'
         }
       }));
 
@@ -635,7 +635,7 @@ const currentDocuments = status === 'marital' ? maritalDocuments : nonMaritalDoc
       modifyMode: true,
       preserveData: true,
       backFromDelayedRegistration: true,
-      applicationType: 'Delayed Registration - One Parent Foreigner'
+      applicationType: 'Birth Certificate'
     };
 
     try {
@@ -646,8 +646,8 @@ const currentDocuments = status === 'marital' ? maritalDocuments : nonMaritalDoc
       
       localStorage.setItem('modifyingApplication', JSON.stringify({
         id: applicationId,
-        type: 'Birth Certificate - Delayed Registration',
-        subtype: 'One Parent Foreigner',
+        type: 'Birth Certificate',
+        subtype: 'Delayed Registration - Foreign Parent',
         uploadedFiles: uploadedFiles,
         timestamp: new Date().toISOString()
       }));
