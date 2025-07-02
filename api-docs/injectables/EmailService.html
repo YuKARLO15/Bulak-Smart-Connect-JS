@@ -156,6 +156,22 @@
                             </li>
                             <li>
                                     <span class="modifier">Async</span>
+                                <a href="#sendAppointmentCancellation" >sendAppointmentCancellation</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#sendAppointmentConfirmation" >sendAppointmentConfirmation</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#sendAppointmentReminder" >sendAppointmentReminder</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#sendAppointmentStatusUpdate" >sendAppointmentStatusUpdate</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
                                 <a href="#sendOTP" >sendOTP</a>
                             </li>
                             <li>
@@ -328,6 +344,410 @@
                             </div>
                         <div class="io-description">
                             <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="sendAppointmentCancellation"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>sendAppointmentCancellation</b></span>
+                        <a href="#sendAppointmentCancellation"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>sendAppointmentCancellation(email: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, appointmentNumber: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, appointmentDetails: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, reason?: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="526"
+                                    class="link-to-prism">src/services/email.service.ts:526</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Send appointment cancellation email</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>email</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>appointmentNumber</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>appointmentDetails</td>
+                                            <td>
+                                                            <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>reason</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    Yes
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;void&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="sendAppointmentConfirmation"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>sendAppointmentConfirmation</b></span>
+                        <a href="#sendAppointmentConfirmation"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>sendAppointmentConfirmation(email: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, appointmentNumber: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, appointmentDetails: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="288"
+                                    class="link-to-prism">src/services/email.service.ts:288</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Send appointment confirmation email</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>email</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>appointmentNumber</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>appointmentDetails</td>
+                                            <td>
+                                                            <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;void&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="sendAppointmentReminder"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>sendAppointmentReminder</b></span>
+                        <a href="#sendAppointmentReminder"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>sendAppointmentReminder(email: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, appointmentNumber: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, appointmentDetails: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="627"
+                                    class="link-to-prism">src/services/email.service.ts:627</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Send appointment reminder email</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>email</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>appointmentNumber</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>appointmentDetails</td>
+                                            <td>
+                                                            <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;void&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="sendAppointmentStatusUpdate"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>sendAppointmentStatusUpdate</b></span>
+                        <a href="#sendAppointmentStatusUpdate"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>sendAppointmentStatusUpdate(email: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, appointmentNumber: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, newStatus: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, appointmentDetails: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="396"
+                                    class="link-to-prism">src/services/email.service.ts:396</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Send appointment status update email</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>email</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>appointmentNumber</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>newStatus</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>appointmentDetails</td>
+                                            <td>
+                                                            <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;void&gt;</code>
 
                         </div>
                             <div class="io-description">
@@ -969,6 +1389,449 @@ export class EmailService {
       subject,
       html,
     });
+  }
+
+  /**
+   * Send appointment confirmation email
+   */
+  async sendAppointmentConfirmation(
+    email: string,
+    appointmentNumber: string,
+    appointmentDetails: any,
+  ): Promise&lt;void&gt; {
+    const subject &#x3D; &#x27;Appointment Confirmed - Bulak LGU Smart Connect&#x27;;
+    
+    const html &#x3D; &#x60;
+      &lt;!DOCTYPE html&gt;
+      &lt;html&gt;
+      &lt;head&gt;
+        &lt;meta charset&#x3D;&quot;utf-8&quot;&gt;
+        &lt;meta name&#x3D;&quot;viewport&quot; content&#x3D;&quot;width&#x3D;device-width, initial-scale&#x3D;1.0&quot;&gt;
+        &lt;title&gt;Appointment Confirmed&lt;/title&gt;
+        &lt;style&gt;
+          body { margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f4f4f4; }
+          .container { max-width: 600px; margin: 0 auto; background-color: #ffffff; }
+          .header { background: linear-gradient(135deg, #28a745 0%, #20c997 100%); color: white; padding: 30px 20px; text-align: center; }
+          .content { padding: 30px 20px; }
+          .appointment-card { background-color: #f8f9fa; border-left: 4px solid #28a745; padding: 20px; margin: 20px 0; border-radius: 8px; }
+          .detail-row { display: flex; justify-content: space-between; margin: 10px 0; padding: 8px 0; border-bottom: 1px solid #e9ecef; }
+          .label { font-weight: bold; color: #495057; }
+          .value { color: #212529; }
+          .footer { background-color: #f8f9fa; padding: 20px; text-align: center; font-size: 12px; color: #6c757d; }
+          .important-note { background-color: #fff3cd; border: 1px solid #ffeaa7; padding: 15px; border-radius: 8px; margin: 20px 0; }
+          .btn { display: inline-block; padding: 12px 24px; background-color: #28a745; color: white; text-decoration: none; border-radius: 5px; margin: 10px 0; }
+        &lt;/style&gt;
+      &lt;/head&gt;
+      &lt;body&gt;
+        &lt;div class&#x3D;&quot;container&quot;&gt;
+          &lt;div class&#x3D;&quot;header&quot;&gt;
+            &lt;h1&gt;✅ Appointment Confirmed&lt;/h1&gt;
+            &lt;p&gt;Your appointment has been successfully booked!&lt;/p&gt;
+          &lt;/div&gt;
+          
+          &lt;div class&#x3D;&quot;content&quot;&gt;
+            &lt;p&gt;Dear ${appointmentDetails.firstName} ${appointmentDetails.lastName},&lt;/p&gt;
+            
+            &lt;p&gt;We&#x27;re pleased to confirm your appointment with the Municipal Civil Registrar&#x27;s Office.&lt;/p&gt;
+            
+            &lt;div class&#x3D;&quot;appointment-card&quot;&gt;
+              &lt;h3 style&#x3D;&quot;margin-top: 0; color: #28a745;&quot;&gt;Appointment Details&lt;/h3&gt;
+              &lt;div class&#x3D;&quot;detail-row&quot;&gt;
+                &lt;span class&#x3D;&quot;label&quot;&gt;Appointment ID:&lt;/span&gt;
+                &lt;span class&#x3D;&quot;value&quot;&gt;${appointmentNumber}&lt;/span&gt;
+              &lt;/div&gt;
+              &lt;div class&#x3D;&quot;detail-row&quot;&gt;
+                &lt;span class&#x3D;&quot;label&quot;&gt;Service Type:&lt;/span&gt;
+                &lt;span class&#x3D;&quot;value&quot;&gt;${appointmentDetails.type}&lt;/span&gt;
+              &lt;/div&gt;
+              &lt;div class&#x3D;&quot;detail-row&quot;&gt;
+                &lt;span class&#x3D;&quot;label&quot;&gt;Date:&lt;/span&gt;
+                &lt;span class&#x3D;&quot;value&quot;&gt;${appointmentDetails.date}&lt;/span&gt;
+              &lt;/div&gt;
+              &lt;div class&#x3D;&quot;detail-row&quot;&gt;
+                &lt;span class&#x3D;&quot;label&quot;&gt;Time:&lt;/span&gt;
+                &lt;span class&#x3D;&quot;value&quot;&gt;${appointmentDetails.time}&lt;/span&gt;
+              &lt;/div&gt;
+              &lt;div class&#x3D;&quot;detail-row&quot;&gt;
+                &lt;span class&#x3D;&quot;label&quot;&gt;Name:&lt;/span&gt;
+                &lt;span class&#x3D;&quot;value&quot;&gt;${appointmentDetails.firstName} ${appointmentDetails.lastName}&lt;/span&gt;
+              &lt;/div&gt;
+              ${appointmentDetails.phoneNumber ? &#x60;
+              &lt;div class&#x3D;&quot;detail-row&quot;&gt;
+                &lt;span class&#x3D;&quot;label&quot;&gt;Contact:&lt;/span&gt;
+                &lt;span class&#x3D;&quot;value&quot;&gt;${appointmentDetails.phoneNumber}&lt;/span&gt;
+              &lt;/div&gt;
+              &#x60; : &#x27;&#x27;}
+            &lt;/div&gt;
+            
+            &lt;div class&#x3D;&quot;important-note&quot;&gt;
+              &lt;h4 style&#x3D;&quot;margin-top: 0;&quot;&gt;📋 Important Reminders:&lt;/h4&gt;
+              &lt;ul style&#x3D;&quot;margin: 10px 0; padding-left: 20px;&quot;&gt;
+                &lt;li&gt;Please arrive &lt;strong&gt;15 minutes before&lt;/strong&gt; your scheduled time&lt;/li&gt;
+                &lt;li&gt;Bring all required documents and valid ID&lt;/li&gt;
+                &lt;li&gt;Late arrivals may need to reschedule&lt;/li&gt;
+                &lt;li&gt;Keep this confirmation email for your records&lt;/li&gt;
+              &lt;/ul&gt;
+            &lt;/div&gt;
+            
+            &lt;p&gt;If you need to make changes to your appointment, please contact our office as soon as possible.&lt;/p&gt;
+            
+            &lt;p&gt;Thank you for using Bulak LGU Smart Connect!&lt;/p&gt;
+          &lt;/div&gt;
+          
+          &lt;div class&#x3D;&quot;footer&quot;&gt;
+            &lt;p&gt;Municipal Civil Registrar&#x27;s Office&lt;br&gt;
+            Bulak Local Government Unit&lt;br&gt;
+            This is an automated message, please do not reply.&lt;/p&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/body&gt;
+      &lt;/html&gt;
+    &#x60;;
+
+    await this.transporter.sendMail({
+      from: this.configService.get(&#x27;EMAIL_FROM&#x27;),
+      to: email,
+      subject,
+      html,
+    });
+
+    console.log(&#x60;✅ Appointment confirmation email sent to ${email}&#x60;);
+  }
+
+  /**
+   * Send appointment status update email
+   */
+  async sendAppointmentStatusUpdate(
+    email: string,
+    appointmentNumber: string,
+    newStatus: string,
+    appointmentDetails: any,
+  ): Promise&lt;void&gt; {
+    const statusColors &#x3D; {
+      &#x27;confirmed&#x27;: &#x27;#28a745&#x27;,
+      &#x27;completed&#x27;: &#x27;#007bff&#x27;,
+      &#x27;cancelled&#x27;: &#x27;#dc3545&#x27;,
+      &#x27;pending&#x27;: &#x27;#ffc107&#x27;
+    };
+
+    const statusEmojis &#x3D; {
+      &#x27;confirmed&#x27;: &#x27;✅&#x27;,
+      &#x27;completed&#x27;: &#x27;🎉&#x27;,
+      &#x27;cancelled&#x27;: &#x27;❌&#x27;,
+      &#x27;pending&#x27;: &#x27;⏳&#x27;
+    };
+
+    const color &#x3D; statusColors[newStatus] || &#x27;#6c757d&#x27;;
+    const emoji &#x3D; statusEmojis[newStatus] || &#x27;📋&#x27;;
+    
+    const subject &#x3D; &#x60;Appointment ${newStatus.charAt(0).toUpperCase() + newStatus.slice(1)} - ${appointmentNumber}&#x60;;
+    
+    const html &#x3D; &#x60;
+      &lt;!DOCTYPE html&gt;
+      &lt;html&gt;
+      &lt;head&gt;
+        &lt;meta charset&#x3D;&quot;utf-8&quot;&gt;
+        &lt;meta name&#x3D;&quot;viewport&quot; content&#x3D;&quot;width&#x3D;device-width, initial-scale&#x3D;1.0&quot;&gt;
+        &lt;title&gt;Appointment Status Update&lt;/title&gt;
+        &lt;style&gt;
+          body { margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f4f4f4; }
+          .container { max-width: 600px; margin: 0 auto; background-color: #ffffff; }
+          .header { background: linear-gradient(135deg, ${color} 0%, ${color}cc 100%); color: white; padding: 30px 20px; text-align: center; }
+          .content { padding: 30px 20px; }
+          .status-card { background-color: #f8f9fa; border-left: 4px solid ${color}; padding: 20px; margin: 20px 0; border-radius: 8px; }
+          .detail-row { display: flex; justify-content: space-between; margin: 10px 0; padding: 8px 0; border-bottom: 1px solid #e9ecef; }
+          .label { font-weight: bold; color: #495057; }
+          .value { color: #212529; }
+          .footer { background-color: #f8f9fa; padding: 20px; text-align: center; font-size: 12px; color: #6c757d; }
+          .status-badge { display: inline-block; padding: 8px 16px; background-color: ${color}; color: white; border-radius: 20px; font-weight: bold; margin: 10px 0; }
+        &lt;/style&gt;
+      &lt;/head&gt;
+      &lt;body&gt;
+        &lt;div class&#x3D;&quot;container&quot;&gt;
+          &lt;div class&#x3D;&quot;header&quot;&gt;
+            &lt;h1&gt;${emoji} Appointment Update&lt;/h1&gt;
+            &lt;p&gt;Your appointment status has been updated&lt;/p&gt;
+          &lt;/div&gt;
+          
+          &lt;div class&#x3D;&quot;content&quot;&gt;
+            &lt;p&gt;Dear ${appointmentDetails.firstName} ${appointmentDetails.lastName},&lt;/p&gt;
+            
+            &lt;p&gt;We&#x27;re writing to inform you that your appointment status has been updated.&lt;/p&gt;
+            
+            &lt;div class&#x3D;&quot;status-card&quot;&gt;
+              &lt;h3 style&#x3D;&quot;margin-top: 0;&quot;&gt;Appointment Status&lt;/h3&gt;
+              &lt;div class&#x3D;&quot;status-badge&quot;&gt;${newStatus.toUpperCase()}&lt;/div&gt;
+              
+              &lt;div class&#x3D;&quot;detail-row&quot;&gt;
+                &lt;span class&#x3D;&quot;label&quot;&gt;Appointment ID:&lt;/span&gt;
+                &lt;span class&#x3D;&quot;value&quot;&gt;${appointmentNumber}&lt;/span&gt;
+              &lt;/div&gt;
+              &lt;div class&#x3D;&quot;detail-row&quot;&gt;
+                &lt;span class&#x3D;&quot;label&quot;&gt;Service Type:&lt;/span&gt;
+                &lt;span class&#x3D;&quot;value&quot;&gt;${appointmentDetails.type}&lt;/span&gt;
+              &lt;/div&gt;
+              &lt;div class&#x3D;&quot;detail-row&quot;&gt;
+                &lt;span class&#x3D;&quot;label&quot;&gt;Date:&lt;/span&gt;
+                &lt;span class&#x3D;&quot;value&quot;&gt;${appointmentDetails.date}&lt;/span&gt;
+              &lt;/div&gt;
+              &lt;div class&#x3D;&quot;detail-row&quot;&gt;
+                &lt;span class&#x3D;&quot;label&quot;&gt;Time:&lt;/span&gt;
+                &lt;span class&#x3D;&quot;value&quot;&gt;${appointmentDetails.time}&lt;/span&gt;
+              &lt;/div&gt;
+            &lt;/div&gt;
+            
+            ${newStatus &#x3D;&#x3D;&#x3D; &#x27;confirmed&#x27; ? &#x60;
+            &lt;div style&#x3D;&quot;background-color: #d4edda; border: 1px solid #c3e6cb; padding: 15px; border-radius: 8px; margin: 20px 0;&quot;&gt;
+              &lt;p&gt;&lt;strong&gt;Your appointment is confirmed!&lt;/strong&gt; Please remember to:&lt;/p&gt;
+              &lt;ul&gt;
+                &lt;li&gt;Arrive 15 minutes before your scheduled time&lt;/li&gt;
+                &lt;li&gt;Bring all required documents and valid ID&lt;/li&gt;
+                &lt;li&gt;Keep this confirmation for your records&lt;/li&gt;
+              &lt;/ul&gt;
+            &lt;/div&gt;
+            &#x60; : &#x27;&#x27;}
+            
+            ${newStatus &#x3D;&#x3D;&#x3D; &#x27;completed&#x27; ? &#x60;
+            &lt;div style&#x3D;&quot;background-color: #d1ecf1; border: 1px solid #bee5eb; padding: 15px; border-radius: 8px; margin: 20px 0;&quot;&gt;
+              &lt;p&gt;&lt;strong&gt;Your appointment has been completed!&lt;/strong&gt; Thank you for visiting our office.&lt;/p&gt;
+              &lt;p&gt;If you have any questions about your documents or need additional services, please don&#x27;t hesitate to contact us.&lt;/p&gt;
+            &lt;/div&gt;
+            &#x60; : &#x27;&#x27;}
+            
+            ${newStatus &#x3D;&#x3D;&#x3D; &#x27;cancelled&#x27; ? &#x60;
+            &lt;div style&#x3D;&quot;background-color: #f8d7da; border: 1px solid #f5c6cb; padding: 15px; border-radius: 8px; margin: 20px 0;&quot;&gt;
+              &lt;p&gt;&lt;strong&gt;Your appointment has been cancelled.&lt;/strong&gt;&lt;/p&gt;
+              &lt;p&gt;If you need to reschedule or have any questions, please contact our office or book a new appointment through our system.&lt;/p&gt;
+            &lt;/div&gt;
+            &#x60; : &#x27;&#x27;}
+            
+            &lt;p&gt;Thank you for using Bulak LGU Smart Connect!&lt;/p&gt;
+          &lt;/div&gt;
+          
+          &lt;div class&#x3D;&quot;footer&quot;&gt;
+            &lt;p&gt;Municipal Civil Registrar&#x27;s Office&lt;br&gt;
+            Bulak Local Government Unit&lt;br&gt;
+            This is an automated message, please do not reply.&lt;/p&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/body&gt;
+      &lt;/html&gt;
+    &#x60;;
+
+    await this.transporter.sendMail({
+      from: this.configService.get(&#x27;EMAIL_FROM&#x27;),
+      to: email,
+      subject,
+      html,
+    });
+
+    console.log(&#x60;✅ Appointment status update email sent to ${email} - Status: ${newStatus}&#x60;);
+  }
+
+  /**
+   * Send appointment cancellation email
+   */
+  async sendAppointmentCancellation(
+    email: string,
+    appointmentNumber: string,
+    appointmentDetails: any,
+    reason?: string,
+  ): Promise&lt;void&gt; {
+    const subject &#x3D; &#x60;Appointment Cancelled - ${appointmentNumber}&#x60;;
+    
+    const html &#x3D; &#x60;
+      &lt;!DOCTYPE html&gt;
+      &lt;html&gt;
+      &lt;head&gt;
+        &lt;meta charset&#x3D;&quot;utf-8&quot;&gt;
+        &lt;meta name&#x3D;&quot;viewport&quot; content&#x3D;&quot;width&#x3D;device-width, initial-scale&#x3D;1.0&quot;&gt;
+        &lt;title&gt;Appointment Cancelled&lt;/title&gt;
+        &lt;style&gt;
+          body { margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f4f4f4; }
+          .container { max-width: 600px; margin: 0 auto; background-color: #ffffff; }
+          .header { background: linear-gradient(135deg, #dc3545 0%, #c82333 100%); color: white; padding: 30px 20px; text-align: center; }
+          .content { padding: 30px 20px; }
+          .appointment-card { background-color: #f8f9fa; border-left: 4px solid #dc3545; padding: 20px; margin: 20px 0; border-radius: 8px; }
+          .detail-row { display: flex; justify-content: space-between; margin: 10px 0; padding: 8px 0; border-bottom: 1px solid #e9ecef; }
+          .label { font-weight: bold; color: #495057; }
+          .value { color: #212529; }
+          .footer { background-color: #f8f9fa; padding: 20px; text-align: center; font-size: 12px; color: #6c757d; }
+          .rebook-section { background-color: #e2f3ff; border: 1px solid #b8daff; padding: 20px; border-radius: 8px; margin: 20px 0; text-align: center; }
+          .btn { display: inline-block; padding: 12px 24px; background-color: #007bff; color: white; text-decoration: none; border-radius: 5px; margin: 10px 0; }
+        &lt;/style&gt;
+      &lt;/head&gt;
+      &lt;body&gt;
+        &lt;div class&#x3D;&quot;container&quot;&gt;
+          &lt;div class&#x3D;&quot;header&quot;&gt;
+            &lt;h1&gt;❌ Appointment Cancelled&lt;/h1&gt;
+            &lt;p&gt;We regret to inform you that your appointment has been cancelled&lt;/p&gt;
+          &lt;/div&gt;
+          
+          &lt;div class&#x3D;&quot;content&quot;&gt;
+            &lt;p&gt;Dear ${appointmentDetails.firstName} ${appointmentDetails.lastName},&lt;/p&gt;
+            
+            &lt;p&gt;We regret to inform you that your appointment scheduled with the Municipal Civil Registrar&#x27;s Office has been cancelled.&lt;/p&gt;
+            
+            &lt;div class&#x3D;&quot;appointment-card&quot;&gt;
+              &lt;h3 style&#x3D;&quot;margin-top: 0; color: #dc3545;&quot;&gt;Cancelled Appointment Details&lt;/h3&gt;
+              &lt;div class&#x3D;&quot;detail-row&quot;&gt;
+                &lt;span class&#x3D;&quot;label&quot;&gt;Appointment ID:&lt;/span&gt;
+                &lt;span class&#x3D;&quot;value&quot;&gt;${appointmentNumber}&lt;/span&gt;
+              &lt;/div&gt;
+              &lt;div class&#x3D;&quot;detail-row&quot;&gt;
+                &lt;span class&#x3D;&quot;label&quot;&gt;Service Type:&lt;/span&gt;
+                &lt;span class&#x3D;&quot;value&quot;&gt;${appointmentDetails.type}&lt;/span&gt;
+              &lt;/div&gt;
+              &lt;div class&#x3D;&quot;detail-row&quot;&gt;
+                &lt;span class&#x3D;&quot;label&quot;&gt;Scheduled Date:&lt;/span&gt;
+                &lt;span class&#x3D;&quot;value&quot;&gt;${appointmentDetails.date}&lt;/span&gt;
+              &lt;/div&gt;
+              &lt;div class&#x3D;&quot;detail-row&quot;&gt;
+                &lt;span class&#x3D;&quot;label&quot;&gt;Scheduled Time:&lt;/span&gt;
+                &lt;span class&#x3D;&quot;value&quot;&gt;${appointmentDetails.time}&lt;/span&gt;
+              &lt;/div&gt;
+              ${reason ? &#x60;
+              &lt;div class&#x3D;&quot;detail-row&quot;&gt;
+                &lt;span class&#x3D;&quot;label&quot;&gt;Reason:&lt;/span&gt;
+                &lt;span class&#x3D;&quot;value&quot;&gt;${reason}&lt;/span&gt;
+              &lt;/div&gt;
+              &#x60; : &#x27;&#x27;}
+            &lt;/div&gt;
+            
+            &lt;div class&#x3D;&quot;rebook-section&quot;&gt;
+              &lt;h4 style&#x3D;&quot;margin-top: 0;&quot;&gt;📅 Need to Reschedule?&lt;/h4&gt;
+              &lt;p&gt;You can easily book a new appointment through our online system or contact our office directly.&lt;/p&gt;
+              &lt;p&gt;We apologize for any inconvenience this may have caused.&lt;/p&gt;
+            &lt;/div&gt;
+            
+            &lt;p&gt;If you have any questions or concerns, please don&#x27;t hesitate to contact our office.&lt;/p&gt;
+            
+            &lt;p&gt;Thank you for your understanding.&lt;/p&gt;
+          &lt;/div&gt;
+          
+          &lt;div class&#x3D;&quot;footer&quot;&gt;
+            &lt;p&gt;Municipal Civil Registrar&#x27;s Office&lt;br&gt;
+            Bulak Local Government Unit&lt;br&gt;
+            This is an automated message, please do not reply.&lt;/p&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/body&gt;
+      &lt;/html&gt;
+    &#x60;;
+
+    await this.transporter.sendMail({
+      from: this.configService.get(&#x27;EMAIL_FROM&#x27;),
+      to: email,
+      subject,
+      html,
+    });
+
+    console.log(&#x60;✅ Appointment cancellation email sent to ${email}&#x60;);
+  }
+
+  /**
+   * Send appointment reminder email
+   */
+  async sendAppointmentReminder(
+    email: string,
+    appointmentNumber: string,
+    appointmentDetails: any,
+  ): Promise&lt;void&gt; {
+    const subject &#x3D; &#x60;Reminder: Appointment Tomorrow - ${appointmentNumber}&#x60;;
+    
+    const html &#x3D; &#x60;
+      &lt;!DOCTYPE html&gt;
+      &lt;html&gt;
+      &lt;head&gt;
+        &lt;meta charset&#x3D;&quot;utf-8&quot;&gt;
+        &lt;meta name&#x3D;&quot;viewport&quot; content&#x3D;&quot;width&#x3D;device-width, initial-scale&#x3D;1.0&quot;&gt;
+        &lt;title&gt;Appointment Reminder&lt;/title&gt;
+        &lt;style&gt;
+          body { margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f4f4f4; }
+          .container { max-width: 600px; margin: 0 auto; background-color: #ffffff; }
+          .header { background: linear-gradient(135deg, #007bff 0%, #0056b3 100%); color: white; padding: 30px 20px; text-align: center; }
+          .content { padding: 30px 20px; }
+          .appointment-card { background-color: #f8f9fa; border-left: 4px solid #007bff; padding: 20px; margin: 20px 0; border-radius: 8px; }
+          .detail-row { display: flex; justify-content: space-between; margin: 10px 0; padding: 8px 0; border-bottom: 1px solid #e9ecef; }
+          .label { font-weight: bold; color: #495057; }
+          .value { color: #212529; }
+          .footer { background-color: #f8f9fa; padding: 20px; text-align: center; font-size: 12px; color: #6c757d; }
+          .reminder-box { background-color: #fff3cd; border: 1px solid #ffeaa7; padding: 20px; border-radius: 8px; margin: 20px 0; }
+          .checklist { background-color: #d4edda; border: 1px solid #c3e6cb; padding: 20px; border-radius: 8px; margin: 20px 0; }
+        &lt;/style&gt;
+      &lt;/head&gt;
+      &lt;body&gt;
+        &lt;div class&#x3D;&quot;container&quot;&gt;
+          &lt;div class&#x3D;&quot;header&quot;&gt;
+            &lt;h1&gt;⏰ Appointment Reminder&lt;/h1&gt;
+            &lt;p&gt;Don&#x27;t forget about your appointment tomorrow!&lt;/p&gt;
+          &lt;/div&gt;
+          
+          &lt;div class&#x3D;&quot;content&quot;&gt;
+            &lt;p&gt;Dear ${appointmentDetails.firstName} ${appointmentDetails.lastName},&lt;/p&gt;
+            
+            &lt;p&gt;This is a friendly reminder about your upcoming appointment with the Municipal Civil Registrar&#x27;s Office.&lt;/p&gt;
+            
+            &lt;div class&#x3D;&quot;appointment-card&quot;&gt;
+              &lt;h3 style&#x3D;&quot;margin-top: 0; color: #007bff;&quot;&gt;Tomorrow&#x27;s Appointment&lt;/h3&gt;
+              &lt;div class&#x3D;&quot;detail-row&quot;&gt;
+                &lt;span class&#x3D;&quot;label&quot;&gt;Appointment ID:&lt;/span&gt;
+                &lt;span class&#x3D;&quot;value&quot;&gt;${appointmentNumber}&lt;/span&gt;
+              &lt;/div&gt;
+              &lt;div class&#x3D;&quot;detail-row&quot;&gt;
+                &lt;span class&#x3D;&quot;label&quot;&gt;Service Type:&lt;/span&gt;
+                &lt;span class&#x3D;&quot;value&quot;&gt;${appointmentDetails.type}&lt;/span&gt;
+              &lt;/div&gt;
+              &lt;div class&#x3D;&quot;detail-row&quot;&gt;
+                &lt;span class&#x3D;&quot;label&quot;&gt;Date:&lt;/span&gt;
+                &lt;span class&#x3D;&quot;value&quot;&gt;${appointmentDetails.date}&lt;/span&gt;
+              &lt;/div&gt;
+              &lt;div class&#x3D;&quot;detail-row&quot;&gt;
+                &lt;span class&#x3D;&quot;label&quot;&gt;Time:&lt;/span&gt;
+                &lt;span class&#x3D;&quot;value&quot;&gt;${appointmentDetails.time}&lt;/span&gt;
+              &lt;/div&gt;
+            &lt;/div&gt;
+            
+            &lt;div class&#x3D;&quot;checklist&quot;&gt;
+              &lt;h4 style&#x3D;&quot;margin-top: 0;&quot;&gt;📋 Pre-Appointment Checklist:&lt;/h4&gt;
+              &lt;ul style&#x3D;&quot;margin: 10px 0; padding-left: 20px;&quot;&gt;
+                &lt;li&gt;✅ Prepare all required documents&lt;/li&gt;
+                &lt;li&gt;✅ Bring valid government-issued ID&lt;/li&gt;
+                &lt;li&gt;✅ Arrive 15 minutes before scheduled time&lt;/li&gt;
+                &lt;li&gt;✅ Have this appointment confirmation ready&lt;/li&gt;
+                &lt;li&gt;✅ Bring exact payment if applicable&lt;/li&gt;
+              &lt;/ul&gt;
+            &lt;/div&gt;
+            
+            &lt;div class&#x3D;&quot;reminder-box&quot;&gt;
+              &lt;h4 style&#x3D;&quot;margin-top: 0;&quot;&gt;⚠️ Important:&lt;/h4&gt;
+              &lt;p&gt;Please arrive on time as late arrivals may need to reschedule. If you need to cancel or reschedule, please contact our office as soon as possible.&lt;/p&gt;
+            &lt;/div&gt;
+            
+            &lt;p&gt;We look forward to seeing you tomorrow!&lt;/p&gt;
+            
+            &lt;p&gt;Thank you for using Bulak LGU Smart Connect!&lt;/p&gt;
+          &lt;/div&gt;
+          
+          &lt;div class&#x3D;&quot;footer&quot;&gt;
+            &lt;p&gt;Municipal Civil Registrar&#x27;s Office&lt;br&gt;
+            Bulak Local Government Unit&lt;br&gt;
+            This is an automated message, please do not reply.&lt;/p&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/body&gt;
+      &lt;/html&gt;
+    &#x60;;
+
+    await this.transporter.sendMail({
+      from: this.configService.get(&#x27;EMAIL_FROM&#x27;),
+      to: email,
+      subject,
+      html,
+    });
+
+    console.log(&#x60;✅ Appointment reminder email sent to ${email}&#x60;);
   }
 }
 </code></pre>
