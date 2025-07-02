@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Box, Button, Typography, Alert, Snackbar, CircularProgress, Paper } from '@mui/material';
+import { Box, Button, Typography, Alert, Snackbar, CircularProgress, Paper, Checkbox, FormControlLabel, Tooltip } from '@mui/material';
 import FileUpload from '../FileUpload';
 import NavBar from '../../../NavigationComponents/NavSide';
 import './DelayedOneParentForeigner.css';
@@ -8,34 +8,81 @@ import { documentApplicationService } from '../../../services/documentApplicatio
 import { useLocation } from 'react-router-dom';
 import { localStorageManager } from '../../../services/localStorageManager';
 
-const requiredDocuments = [
+const baseRequiredDocuments = [
   'Negative Certification from PSA',
   'Affidavit of two (2) disinterested persons (with ID) / Affidavit of Out of Town Registration',
   'Barangay Certification issued by the Punong Barangay as proof of residency and with statement on facts of birth',
-  'National ID (if not registered, register first)',
-  'Unedited 2x2 front-facing photo taken within 3 months, white background:',
-];
-
-const parentDocuments = [
-  'Certificate of Live Birth (COLB)',
-  'Government Issued ID',
-  'Marriage Certificate',
-  'Certificate of Death (if deceased)',
-];
-
-const documentaryEvidence = [
-  'Baptismal Certificate',
-  'Marriage Certificate',
-  'School Records',
-  'Income Tax Return',
-  'PhilHealth MDR',
-];
-
-const additionalDocuments = [
-  'Certificate of Marriage of Parents (Marital Child)',
+  'National ID , ePhil ID or PhilSys transaction slip',
+  'Unedited 2x2 front-facing photo, white background',
+  'Any two (2) of the following documentary evidence',
+  'Any two (2) of the following documents of parents',
   'Birth Certificate of Parent/s',
-  'Valid Passport or BI Clearance or ACR I-CARD of the Foreign Parent',
+  'Valid Passport or BI Clearance or ACR I-CARD of the Foreign Parent'
 ];
+const maritalDocuments = [
+  ...baseRequiredDocuments,
+  'Certificate of Marriage of Parents (Marital Child)'
+];
+
+const nonMaritalDocuments = baseRequiredDocuments;
+
+const GovernmentIdTooltip = ({ children }) => {
+  const acceptedIds = [
+    'Philippine Passport',
+    'PhilSys ID or National ID',
+    "Driver's License",
+    'PRC ID',
+    'UMID (Unified Multi-Purpose ID)',
+    'SSS ID',
+    'GSIS eCard',
+    'OWWA ID',
+    'Senior Citizen ID',
+    'PWD ID',
+    "Voter's ID or Voter's Certification",
+    'Postal ID',
+    'Barangay ID or Barangay Clearance with photo',
+    'TIN ID',
+    'PhilHealth ID',
+    'Pag-IBIG Loyalty Card Plus',
+    'Indigenous Peoples (IP) ID or certification'
+  ];
+  return (
+    <Tooltip
+      title={
+        <Box>
+          <Typography variant="subtitle2" sx={{ fontWeight: 'bold', mb: 1 }}>
+            Accepted Government IDs:
+          </Typography>
+          {acceptedIds.map((id, index) => (
+            <Typography key={index} variant="body2" sx={{ fontSize: '0.75rem', mb: 0.5 }}>
+              • {id}
+            </Typography>
+          ))}
+        </Box>
+      }
+    >
+      {children}
+    </Tooltip>
+  );
+};
+
+const documentDescriptions = {
+  // Required Documents
+  'Negative Certification from PSA': '- Certificate showing no birth record exists in PSA database',
+  'Affidavit of two (2) disinterested persons (with ID) / Affidavit of Out of Town Registration': '- Sworn statements from two non-relative witnesses with valid IDs OR Out of Town Registration affidavit',
+  'Barangay Certification issued by the Punong Barangay as proof of residency and with statement on facts of birth': '- Official barangay certificate confirming residency and birth facts issued by the Punong Barangay',
+  'National ID , ePhil ID or PhilSys transaction slip': ' A valid National ID, ePhilID, or PhilSys transaction slip is required for this application. If you do not have any of these, please stay updated on the San Ildefonso National ID booth schedules, check other PhilSys registration centers, and secure your ID or transaction slip before proceeding.',
+  'Unedited 2x2 front-facing photo, white background': '- Recent passport-style photo taken within the last 3 months with white background',
+
+  'Any two (2) of the following documents of parents': '- Any of the following: Certificate of Live Birth (COLB), Government Issued ID, Marriage Certificate, or Certificate of Death (if deceased)',
+  
+  'Any two (2) of the following documentary evidence ': '- which may show the name of the child, date and place of birth, and name of the mother (and name of father, if the child has been acknowledged) Any of the following: Baptismal Certificate, Marriage Certificate, School Records, Income Tax Return, or PhilHealth MDR',
+  
+
+  'Certificate of Marriage of Parents (Marital Child)': '- Official marriage certificate of applicant\'s parents (required for marital children)',
+  'Birth Certificate of Parent/s': '- Birth certificate(s) of the applicant\'s parent(s)',
+  'Valid Passport or BI Clearance or ACR I-CARD of the Foreign Parent': '- Valid passport, Bureau of Immigration clearance, or ACR I-CARD of the foreign parent'
+};
 
 function dataURLtoFile(dataurl, filename, type) {
   try {
@@ -66,6 +113,7 @@ const DelayedOneParentForeignerRegistration = () => {
   const [uploadedDocumentsCount, setUploadedDocumentsCount] = useState(0);
   const [formData, setFormData] = useState({});
   const location = useLocation();
+    const [status, setStatus] = useState('');
 
   const navigate = useNavigate();
 
@@ -121,12 +169,21 @@ const DelayedOneParentForeignerRegistration = () => {
   };
 
   useEffect(() => {
+
+ 
+
     const count = Object.values(uploadedFiles).filter(Boolean).length;
     setUploadedDocumentsCount(count);
     console.log(`Uploaded documents count: ${count}`);
   }, [uploadedFiles]);
 
   useEffect(() => {
+    
+    const maritalStatus = localStorage.getItem('maritalStatus');
+    if (maritalStatus) {
+      setStatus(maritalStatus);
+      console.log("Status loaded from localStorage:", maritalStatus);
+    }
     const loadData = async () => {
       try {
         setIsInitializing(true);
@@ -315,26 +372,28 @@ const DelayedOneParentForeignerRegistration = () => {
     handleFileUpload(label, isUploaded, fileDataObj);
 
   const isMandatoryComplete = () => {
-    const allRequiredDocsUploaded = requiredDocuments.every(doc => {
-      const isUploaded = uploadedFiles[doc] === true;
-      if (!isUploaded) {
-        console.log(`Missing document: ${doc}`);
-      }
-      return isUploaded;
-    });
-    
-    if (allRequiredDocsUploaded) {
-      console.log("All required documents uploaded.");
-    } else {
-      console.log("Missing some required documents.");
+const currentDocuments = status === 'marital' ? maritalDocuments : nonMaritalDocuments;
+  
+  const allRequiredDocsUploaded = currentDocuments.every(doc => {
+    const isUploaded = uploadedFiles[doc] === true;
+    if (!isUploaded) {
+      console.log(`Missing document: ${doc}`);
     }
-    
-    if (uploadedDocumentsCount > 0) {
-      console.log("At least one document uploaded. Enabling submit button.");
-      return true;
-    }
-    
-    return allRequiredDocsUploaded;
+    return isUploaded;
+  });
+  
+  if (allRequiredDocsUploaded) {
+    console.log("All required documents uploaded.");
+  } else {
+    console.log("Missing some required documents.");
+  }
+  
+  if (uploadedDocumentsCount > 0) {
+    console.log("At least one document uploaded. Enabling submit button.");
+    return true;
+  }
+  
+  return allRequiredDocsUploaded;
   };
 
   const mapStatusForBackend = (frontendStatus) => {
@@ -489,58 +548,27 @@ const DelayedOneParentForeignerRegistration = () => {
                   </Box>
                 )}
           <Box>
-            {requiredDocuments.map((doc, index) => (
-              <FileUpload key={index} label={doc} onUpload={fileUploadWrapper(doc)} disabled={isLoading} />
-            ))}
+     {(status === 'marital' ? maritalDocuments : nonMaritalDocuments).map((doc, index) => (
+      <div key={index} style={{ marginBottom: '16px' }}>
+        <FileUpload 
+          label={doc} 
+          description={documentDescriptions[doc]}
+          onUpload={fileUploadWrapper(doc)} 
+          disabled={isLoading} 
+          multiple={true}
+        />
+      </div>
+    ))}
+
+            </Box>
+      <Box>
+          
+      
           </Box>
 
-          <Typography variant="body1" className="SectionTitleForeigner">
-            Any two (2) of the following documents of parents:
-          </Typography>
-          <Box>
-            {[...Array(2)].map((_, index) => (
-              <FileUpload
-                key={index}
-                label={`Parent Document ${index + 1}`}
-                onUpload={fileUploadWrapper(`Parent Document ${index + 1}`)}
-                disabled={isLoading}
-              />
-            ))}
-          </Box>
+      
 
-          <Typography variant="body1" className="SectionTitleForeigner">
-            Any two (2) of the following documentary evidence which may show the name of the child,
-            date and place of birth, and name of the mother (and name of father, if the child has been acknowledged)
-          </Typography>
-          <Box>
-            {[...Array(2)].map((_, index) => (
-              <FileUpload
-                key={index}
-                label={`Documentary Evidence ${index + 1}`}
-                onUpload={fileUploadWrapper(`Documentary Evidence ${index + 1}`)}
-                disabled={isLoading}
-              />
-            ))}
-          </Box>
-
-          <Box>
-            {additionalDocuments.map((doc, index) => (
-              <FileUpload key={index} label={doc} onUpload={fileUploadWrapper(doc)} disabled={isLoading} />
-            ))}
-          </Box>
-
-          <Box sx={{ mt: 2, p: 2, bgcolor: '#f5f5f5', borderRadius: 1 }}>
-            <Typography variant="caption">Form Status:</Typography>
-            <Typography variant="caption" component="div">
-              Documents uploaded: {uploadedDocumentsCount}
-            </Typography>
-            <Typography variant="caption" component="div">
-              Submit button enabled: {isMandatoryComplete() ? 'YES' : 'NO'}
-            </Typography>
-            <Typography variant="caption" component="div">
-              Application ID: {applicationId || 'Not set'}
-            </Typography>
-          </Box>
+  
 
           {isLoading && (
             <Box sx={{ display: 'flex', alignItems: 'center', my: 2 }}>
