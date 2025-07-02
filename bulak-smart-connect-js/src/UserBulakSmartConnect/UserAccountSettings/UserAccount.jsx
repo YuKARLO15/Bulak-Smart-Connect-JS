@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import config from '../../config/env.js';
 import './UserAccount.css';
 import NavBar from '../../NavigationComponents/NavSide';
 import EditIcon from '@mui/icons-material/Edit';
 import CloseIcon from '@mui/icons-material/Close';
-
+import OTPVerification from '../../components/OTPVerification';
+import { otpService } from '../../services/otpService';
 
 const UserAccount = () => {
-  const { user, getCurrentUserId } = useAuth();
+  const { user, getCurrentUserId, logout } = useAuth();
+  const navigate = useNavigate();
   const userId = getCurrentUserId();
 
   // Form states
@@ -25,6 +28,11 @@ const UserAccount = () => {
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [confirmationPassword, setConfirmationPassword] = useState('');
+
+  // OTP states
+  const [showOTPModal, setShowOTPModal] = useState(false);
+  const [pendingPasswordChange, setPendingPasswordChange] = useState(null);
+  const [otpPurpose, setOtpPurpose] = useState('password_reset');
 
   // Tab state
   const [activeTab, setActiveTab] = useState('profile');
@@ -52,6 +60,12 @@ const UserAccount = () => {
 
       try {
         const token = localStorage.getItem('token');
+        if (!token) {
+          setMessage({ text: '❌ No authentication token found', type: 'error' });
+          setLoading(false);
+          return;
+        }
+
         const response = await axios.get(`${config.API_BASE_URL}/auth/profile`, {
           headers: { Authorization: `Bearer ${token}` },
         });
@@ -70,7 +84,7 @@ const UserAccount = () => {
         }
       } catch (error) {
         console.error('Error fetching user data:', error);
-        setMessage({ text: 'Failed to load user data. Please try again.', type: 'error' });
+        setMessage({ text: '❌ Failed to load user data. Please try again.', type: 'error' });
       } finally {
         setLoading(false);
       }
@@ -79,7 +93,7 @@ const UserAccount = () => {
     fetchUserData();
   }, [userId]);
 
-const checkUsernameChangeEligibility = lastChangeDate => {
+  const checkUsernameChangeEligibility = lastChangeDate => {
     if (!lastChangeDate) {
       setCanChangeUsername(true);
       return;
@@ -103,7 +117,7 @@ const checkUsernameChangeEligibility = lastChangeDate => {
 
     if (isSensitiveEdit) {
       if (isEditing.email) updates.email = email;
-if (isEditing.phoneNumber) updates.contactNumber = phoneNumber; 
+      if (isEditing.phoneNumber) updates.contactNumber = phoneNumber; 
 
       setPendingUpdates(updates);
       setShowPasswordConfirmation(true);
@@ -126,7 +140,7 @@ if (isEditing.phoneNumber) updates.contactNumber = phoneNumber;
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      setMessage({ text: 'Profile updated successfully', type: 'success' });
+      setMessage({ text: '✅ Profile updated successfully!', type: 'success' });
       setIsEditing({
         email: false,
         phoneNumber: false,
@@ -140,67 +154,111 @@ if (isEditing.phoneNumber) updates.contactNumber = phoneNumber;
     } catch (error) {
       console.error('Error updating profile:', error);
       setMessage({
-        text: error.response?.data?.message || 'Failed to update profile',
+        text: `❌ ${error.response?.data?.message || 'Failed to update profile'}`,
         type: 'error',
       });
     }
   };
 
- const handlePasswordConfirmation = async e => {
-  e.preventDefault();
+  const handlePasswordConfirmation = async e => {
+    e.preventDefault();
 
-  try {
-    console.log('Attempting to verify password');
+    try {
+      console.log('Attempting to verify password');
 
-    const response = await axios.post(`${config.API_BASE_URL}/auth/login`, {
-      email: email,
-      emailOrUsername: email,
-      username: username,
-      password: confirmationPassword,
-    });
-
-    console.log('Verification response received');
-
- 
-    if (response.data && response.data.access_token) {
-      console.log('Password verification successful');
-      await submitProfileUpdates(pendingUpdates);
-    } else {
-      console.log('Password verification failed - unexpected response format');
-      setMessage({ text: 'Incorrect password. Please try again.', type: 'error' });
-    }
-  } catch (error) {
-    console.error('Error verifying password:', error);
-
-  
-    if (error.response) {
-      console.log('Error status:', error.response.status);
-      console.log('Error data:', error.response.data);
-      setMessage({
-        text: error.response.data.message || 'Incorrect password. Please try again.',
-        type: 'error',
+      const response = await axios.post(`${config.API_BASE_URL}/auth/login`, {
+        email: email,
+        emailOrUsername: email,
+        username: username,
+        password: confirmationPassword,
       });
-    } else {
-      setMessage({
-        text: 'Failed to verify password. Please try again.',
-        type: 'error',
-      });
+
+      console.log('Verification response received');
+
+      if (response.data && response.data.access_token) {
+        console.log('Password verification successful');
+        await submitProfileUpdates(pendingUpdates);
+      } else {
+        console.log('Password verification failed - unexpected response format');
+        setMessage({ text: '❌ Incorrect password. Please try again.', type: 'error' });
+      }
+    } catch (error) {
+      console.error('Error verifying password:', error);
+
+      if (error.response) {
+        console.log('Error status:', error.response.status);
+        console.log('Error data:', error.response.data);
+        setMessage({
+          text: `❌ ${error.response.data.message || 'Incorrect password. Please try again.'}`,
+          type: 'error',
+        });
+      } else {
+        setMessage({
+          text: '❌ Failed to verify password. Please try again.',
+          type: 'error',
+        });
+      }
     }
-  }
-};
+  };
+
+  // ✅ ENHANCED: Verify current password before sending OTP
+  const verifyCurrentPassword = async (currentPasswordToVerify) => {
+    try {
+      const response = await axios.post(`${config.API_BASE_URL}/auth/login`, {
+        email: email,
+        emailOrUsername: email,
+        username: username,
+        password: currentPasswordToVerify,
+      });
+
+      return response.data && response.data.access_token;
+    } catch (error) {
+      console.error('Current password verification failed:', error);
+      return false;
+    }
+  };
+
+  // Enhanced password change with proper validation and OTP verification
   const handleChangePassword = async e => {
     e.preventDefault();
     setMessage({ text: '', type: '' });
 
+    // Input validation
+    if (!currentPassword.trim()) {
+      setMessage({ text: '❌ Current password is required', type: 'error' });
+      return;
+    }
+
+    if (!newPassword.trim()) {
+      setMessage({ text: '❌ New password is required', type: 'error' });
+      return;
+    }
+
+    if (!confirmPassword.trim()) {
+      setMessage({ text: '❌ Password confirmation is required', type: 'error' });
+      return;
+    }
+
     if (newPassword !== confirmPassword) {
-      setMessage({ text: 'New passwords do not match', type: 'error' });
+      setMessage({ text: '❌ New passwords do not match', type: 'error' });
       return;
     }
 
     if (newPassword.length < 8) {
-      setMessage({ text: 'New password must be at least 8 characters long', type: 'error' });
+      setMessage({ text: '❌ New password must be at least 8 characters long', type: 'error' });
       return;
     }
+
+    // ✅ NEW: Check if new password is same as current password
+    if (currentPassword === newPassword) {
+      setMessage({ 
+        text: '❌ New password must be different from your current password', 
+        type: 'error' 
+      });
+      return;
+    }
+
+    // Password strength validation
     const hasUpperCase = /[A-Z]/.test(newPassword);
     const hasLowerCase = /[a-z]/.test(newPassword);
     const hasNumbers = /\d/.test(newPassword);
@@ -208,39 +266,111 @@ if (isEditing.phoneNumber) updates.contactNumber = phoneNumber;
 
     if (!hasUpperCase || !hasLowerCase || !hasNumbers || !hasSpecialChars) {
       setMessage({
-        text: 'Password must contain uppercase, lowercase, numbers, and special characters',
+        text: '❌ Password must contain uppercase, lowercase, numbers, and special characters',
         type: 'error',
       });
       return;
     }
 
     try {
+      setMessage({ text: '⏳ Verifying current password...', type: 'success' });
+
+      // ✅ NEW: Verify current password first
+      const isCurrentPasswordValid = await verifyCurrentPassword(currentPassword);
+      
+      if (!isCurrentPasswordValid) {
+        setMessage({ 
+          text: '❌ Current password is incorrect. Please check and try again.', 
+          type: 'error' 
+        });
+        return;
+      }
+
+      setMessage({ text: '✅ Current password verified. Sending OTP...', type: 'success' });
+
+      // Send OTP for password change verification
+      await otpService.sendOTP(email, 'password_reset');
+      
+      // Store pending password change data
+      setPendingPasswordChange({
+        currentPassword,
+        newPassword
+      });
+      
+      setShowOTPModal(true);
+      setMessage({ text: '📧 OTP sent to your email for verification', type: 'success' });
+    } catch (error) {
+      console.error('Error in password change process:', error);
+      setMessage({
+        text: `❌ Failed to send verification code: ${error.message}`,
+        type: 'error',
+      });
+    }
+  };
+
+  // Handle OTP verification success
+  const handleOTPVerified = async () => {
+    try {
+      setShowOTPModal(false);
+      setMessage({ text: '⏳ Updating password...', type: 'success' });
+
       const token = localStorage.getItem('token');
       await axios.post(
         `${config.API_BASE_URL}/auth/update-profile`,
         {
-          password: newPassword,
-          oldPassword: currentPassword, 
+          password: pendingPasswordChange.newPassword,
+          oldPassword: pendingPasswordChange.currentPassword, 
         },
         {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
 
-      setMessage({ text: 'Password updated successfully', type: 'success' });
+      // Clear form
       setCurrentPassword('');
       setNewPassword('');
       setConfirmPassword('');
-      setIsEditing({ ...isEditing, password: false });
+      setPendingPasswordChange(null);
+
+      setMessage({ 
+        text: '✅ Password updated successfully! You will be logged out in 3 seconds for security...', 
+        type: 'success' 
+      });
+
+      // Auto logout and redirect after password change
+      setTimeout(async () => {
+        try {
+          await logout();
+          navigate('/LogIn', { 
+            replace: true,
+            state: { 
+              message: '✅ Password changed successfully. Please log in with your new password.',
+              type: 'success'
+            }
+          });
+        } catch (error) {
+          console.error('Logout error:', error);
+          // Force logout even if API call fails
+          localStorage.clear();
+          navigate('/LogIn', { replace: true });
+        }
+      }, 3000);
+
     } catch (error) {
       console.error('Error changing password:', error);
       setMessage({
-        text:
-          error.response?.data?.message ||
-          'Failed to change password. Please check your current password.',
+        text: `❌ ${error.response?.data?.message || 'Failed to change password. Please try again.'}`,
         type: 'error',
       });
+      setPendingPasswordChange(null);
     }
+  };
+
+  // Handle OTP verification cancel
+  const handleOTPCancel = () => {
+    setShowOTPModal(false);
+    setPendingPasswordChange(null);
+    setMessage({ text: '❌ Password change cancelled', type: 'error' });
   };
 
   const cancelPasswordConfirmation = () => {
@@ -263,7 +393,6 @@ if (isEditing.phoneNumber) updates.contactNumber = phoneNumber;
 
     return `${days} days`;
   };
-
 
   if (loading) {
     return <div className="AccountLoaderUAcc">Loading...</div>;
@@ -294,6 +423,17 @@ if (isEditing.phoneNumber) updates.contactNumber = phoneNumber;
             Change Password
           </button>
         </div>
+
+        {/* OTP Verification Modal */}
+        {showOTPModal && (
+          <OTPVerification
+            email={email}
+            purpose={otpPurpose}
+            onVerified={handleOTPVerified}
+            onCancel={handleOTPCancel}
+            title="Verify Password Change"
+          />
+        )}
 
         {/* Password Confirmation Dialog */}
         {showPasswordConfirmation && (
@@ -337,22 +477,24 @@ if (isEditing.phoneNumber) updates.contactNumber = phoneNumber;
           <div className="TabContentUAcc">
             <form onSubmit={handleSaveProfile} className="AccountFormUAcc">
               <div className="FormGroupUAcc">
-                <label htmlFor="firstName">First name</label>
+                <label htmlFor="firstName">First name*</label>
                 <input
                   type="text"
                   id="firstName"
                   value={firstName}
                   onChange={e => setFirstName(e.target.value)}
+                  required
                 />
               </div>
 
               <div className="FormGroupUAcc">
-                <label htmlFor="lastName">Last name</label>
+                <label htmlFor="lastName">Last name*</label>
                 <input
                   type="text"
                   id="lastName"
                   value={lastName}
                   onChange={e => setLastName(e.target.value)}
+                  required
                 />
               </div>
 
@@ -394,7 +536,7 @@ if (isEditing.phoneNumber) updates.contactNumber = phoneNumber;
               </div>
 
               <div className="FormGroupUAcc">
-                <label htmlFor="email">E-mail</label>
+                <label htmlFor="email">E-mail*</label>
                 <div className="InputWithActionUAcc">
                   <input
                     type="email"
@@ -402,6 +544,7 @@ if (isEditing.phoneNumber) updates.contactNumber = phoneNumber;
                     value={email}
                     onChange={e => setEmail(e.target.value)}
                     disabled={!isEditing.email}
+                    required
                   />
                   {!isEditing.email ? (
                     <button

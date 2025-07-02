@@ -8,6 +8,7 @@ import { queueNotificationService } from '../../services/queueNotificationServic
 import FloatingAnnouncementFab from '../../LandingPageComponents/FloatingAnnouncement';
 import { Box, Button, Container, Grid, Typography, Card, CardContent } from '@mui/material';
 import config from '../../config/env.js';
+import { useAuth } from '../../context/AuthContext';
 
 // Format queue number to WK format
 const formatWKNumber = (queueNumber) => {
@@ -37,6 +38,8 @@ const getCurrentUserId = () => {
 };
 
 const WalkInQueueContainer = () => {
+  const { user } = useAuth(); // Get user from AuthContext
+  
   const [queuePosition, setQueuePosition] = useState(null); 
   const [currentQueue, setCurrentQueue] = useState([]);
   const [pendingQueues, setPendingQueues] = useState([]);
@@ -48,11 +51,35 @@ const WalkInQueueContainer = () => {
   const [notificationsSent, setNotificationsSent] = useState(new Set());
   const [lastNotifiedPosition, setLastNotifiedPosition] = useState(null);
 
-  // Function to get user email from localStorage
+  // Updated function to get user email
   const getUserEmail = () => {
     try {
-      const user = JSON.parse(localStorage.getItem('user') || '{}');
-      return user.email || null;
+      // First try AuthContext
+      if (user && user.email) {
+        console.log(`✅ Found email from AuthContext: ${user.email}`);
+        return user.email;
+      }
+      
+      // Fallback to localStorage
+      const possibleKeys = ['user', 'currentUser', 'userData', 'authUser'];
+      
+      for (const key of possibleKeys) {
+        const userData = localStorage.getItem(key);
+        if (userData) {
+          try {
+            const parsedUser = JSON.parse(userData);
+            if (parsedUser && parsedUser.email) {
+              console.log(`✅ Found email from localStorage['${key}']: ${parsedUser.email}`);
+              return parsedUser.email;
+            }
+          } catch (parseError) {
+            continue;
+          }
+        }
+      }
+      
+      console.log('❌ No email found in AuthContext or localStorage');
+      return null;
     } catch (e) {
       console.error('Error getting user email:', e);
       return null;
@@ -61,42 +88,65 @@ const WalkInQueueContainer = () => {
 
   // Enhanced function to check position and send notifications
   const checkPositionAndNotify = useCallback(async (position, queueData) => {
+    console.log('🔍 checkPositionAndNotify called with:', { position, queueData });
+    
     const userEmail = getUserEmail();
-    if (!userEmail || !queueData) return;
+    console.log('📧 User email from localStorage:', userEmail);
+    
+    if (!userEmail || !queueData) {
+      console.log('❌ Skipping notification - Missing email or queue data:', { userEmail, queueData });
+      return;
+    }
 
     const queueNumber = queueData.queueNumber || queueData.id;
+    console.log('🎫 Processing queue number:', queueNumber, 'at position:', position);
 
     try {
       // Send notification when user reaches position 3 (and hasn't been notified yet)
       if (position === 3 && !notificationsSent.has(`${queueNumber}_3`)) {
+        console.log('📧 Attempting to send position 3 notification for:', queueNumber);
         const estimatedMinutes = (position - 1) * 5; // Assuming 5 minutes per person
         
-        await queueNotificationService.sendQueuePositionAlert(
+        const result = await queueNotificationService.sendQueuePositionAlert(
           userEmail,
           queueNumber,
           position,
           `${estimatedMinutes} minutes`
         );
 
-        // Mark as notified
-        setNotificationsSent(prev => new Set([...prev, `${queueNumber}_3`]));
-        console.log('📧 Position 3 notification sent for queue:', queueNumber);
+        if (result && result.success !== false) {
+          // Mark as notified
+          setNotificationsSent(prev => new Set([...prev, `${queueNumber}_3`]));
+          console.log('✅ Position 3 notification sent successfully for queue:', queueNumber);
+        } else {
+          console.log('❌ Position 3 notification failed for queue:', queueNumber, result);
+        }
+      } else if (position === 3) {
+        console.log('⚠️ Position 3 notification already sent for:', queueNumber);
       }
 
       // Send notification when it's their turn (position 1 or "NOW SERVING")
       if ((position === 1 || position === 'NOW SERVING') && !notificationsSent.has(`${queueNumber}_serving`)) {
-        await queueNotificationService.sendNowServingAlert(userEmail, queueNumber);
+        console.log('📧 Attempting to send "now serving" notification for:', queueNumber);
         
-        // Mark as notified for serving
-        setNotificationsSent(prev => new Set([...prev, `${queueNumber}_serving`]));
-        console.log('📧 "Now serving" notification sent for queue:', queueNumber);
+        const result = await queueNotificationService.sendNowServingAlert(userEmail, queueNumber);
+        
+        if (result && result.success !== false) {
+          // Mark as notified for serving
+          setNotificationsSent(prev => new Set([...prev, `${queueNumber}_serving`]));
+          console.log('✅ "Now serving" notification sent successfully for queue:', queueNumber);
+        } else {
+          console.log('❌ "Now serving" notification failed for queue:', queueNumber, result);
+        }
+      } else if (position === 1 || position === 'NOW SERVING') {
+        console.log('⚠️ "Now serving" notification already sent for:', queueNumber);
       }
 
       // Update last notified position
       setLastNotifiedPosition(position);
 
     } catch (error) {
-      console.error('Error sending queue notification:', error);
+      console.error('❌ Error sending queue notification:', error);
       // Don't break the app if notification fails
     }
   }, [notificationsSent]);
@@ -290,31 +340,32 @@ const getAllUserQueues = () => {
           const servingQueue = validUserQueues.find(q => q.status === 'serving');
           
           if (servingQueue) {
-            console.log('User queue is being served');
+            console.log('🎯 User queue is being served');
             setQueuePosition('NOW SERVING');
             
             // ✅ NOTIFICATION: Check and notify for "now serving"
+            console.log('🔔 About to check notifications for serving queue:', servingQueue);
             await checkPositionAndNotify('NOW SERVING', servingQueue);
             
           } else if (pendingQueue) {
-            console.log('Found pending queue, getting position for:', pendingQueue.dbId);
+            console.log('⏳ Found pending queue, getting position for:', pendingQueue.dbId);
             try {
               const positionData = await queueService.getQueuePosition(pendingQueue.dbId);
-              console.log('Position data received:', positionData);
+              console.log('📍 Position data received:', positionData);
               
               if (positionData.status === 'serving') {
                 setQueuePosition('NOW SERVING');
-                // ✅ NOTIFICATION: Check and notify for "now serving"
+                console.log('🔔 About to check notifications for NOW SERVING');
                 await checkPositionAndNotify('NOW SERVING', pendingQueue);
               } else if (positionData.position > 0) {
                 setQueuePosition(positionData.position);
-                // ✅ NOTIFICATION: Check and notify for position 3
+                console.log('🔔 About to check notifications for position:', positionData.position);
                 await checkPositionAndNotify(positionData.position, pendingQueue);
               } else {
                 setQueuePosition(null);
               }
             } catch (error) {
-              console.error('Error fetching position:', error);
+              console.error('❌ Error fetching position:', error);
               setQueuePosition(null);
             }
           } else {

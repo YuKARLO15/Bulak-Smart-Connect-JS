@@ -4,12 +4,16 @@ import EditIcon from '@mui/icons-material/Edit';
 import MenuIcon from '@mui/icons-material/Menu';
 import './AdminAccount.css';
 import { useAuth } from '../../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 import NavBar from '../../NavigationComponents/NavSide';
+import OTPVerification from '../../components/OTPVerification';
+import { otpService } from '../../services/otpService';
 import axios from 'axios';
 import config from '../../config/env.js';
 
 const AccountManagement = () => {
   const { user: currentUser, logout } = useAuth();
+  const navigate = useNavigate();
   const [tabValue, setTabValue] = useState(0);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false); 
   const [loading, setLoading] = useState(true);
@@ -19,6 +23,11 @@ const AccountManagement = () => {
     phone: false,
     username: false
   });
+  
+  // OTP states
+  const [showOTPModal, setShowOTPModal] = useState(false);
+  const [pendingPasswordChange, setPendingPasswordChange] = useState(null);
+  const [otpPurpose, setOtpPurpose] = useState('password_reset');
   
   // Profile data state
   const [profileData, setProfileData] = useState({
@@ -49,7 +58,7 @@ const AccountManagement = () => {
         const token = localStorage.getItem('token');
         
         if (!token) {
-          setMessage({ text: 'No authentication token found', type: 'error' });
+          setMessage({ text: '❌ No authentication token found', type: 'error' });
           return;
         }
 
@@ -78,7 +87,7 @@ const AccountManagement = () => {
       } catch (error) {
         console.error('Error fetching admin profile:', error);
         setMessage({ 
-          text: error.response?.data?.message || 'Failed to load profile data', 
+          text: error.response?.data?.message || '❌ Failed to load profile data', 
           type: 'error' 
         });
       } finally {
@@ -125,7 +134,7 @@ const AccountManagement = () => {
   const handleEdit = (field) => {
     if (field === 'username' && !canChangeUsername) {
       setMessage({ 
-        text: `Username can only be changed once every 30 days. Time remaining: ${getTimeUntilUsernameChange()}`, 
+        text: `❌ Username can only be changed once every 30 days. Time remaining: ${getTimeUntilUsernameChange()}`, 
         type: 'error' 
       });
       return;
@@ -151,7 +160,7 @@ const AccountManagement = () => {
       const token = localStorage.getItem('token');
 
       if (!token) {
-        setMessage({ text: 'Authentication required', type: 'error' });
+        setMessage({ text: '❌ Authentication required', type: 'error' });
         return;
       }
 
@@ -180,7 +189,7 @@ const AccountManagement = () => {
         headers: { Authorization: `Bearer ${token}` }
       });
 
-      setMessage({ text: 'Profile updated successfully', type: 'success' });
+      setMessage({ text: '✅ Profile updated successfully!', type: 'success' });
       setEditMode({
         email: false,
         phone: false,
@@ -190,29 +199,56 @@ const AccountManagement = () => {
     } catch (error) {
       console.error('Error updating profile:', error);
       setMessage({
-        text: error.response?.data?.message || 'Failed to update profile',
+        text: `❌ ${error.response?.data?.message || 'Failed to update profile'}`,
         type: 'error'
       });
     }
   };
 
+  // ✅ ENHANCED: Verify current password before sending OTP
+  const verifyCurrentPassword = async (currentPasswordToVerify) => {
+    try {
+      const response = await axios.post(`${config.API_BASE_URL}/auth/login`, {
+        email: profileData.email,
+        emailOrUsername: profileData.email,
+        username: profileData.username,
+        password: currentPasswordToVerify,
+      });
+
+      return response.data && response.data.access_token;
+    } catch (error) {
+      console.error('Current password verification failed:', error);
+      return false;
+    }
+  };
+
+  // Enhanced password change with OTP verification
   const handleChangePassword = async () => {
     try {
       setMessage({ text: '', type: '' });
 
       // Validation
       if (!passwordData.currentPassword || !passwordData.newPassword || !passwordData.confirmPassword) {
-        setMessage({ text: 'All password fields are required', type: 'error' });
+        setMessage({ text: '❌ All password fields are required', type: 'error' });
         return;
       }
 
       if (passwordData.newPassword !== passwordData.confirmPassword) {
-        setMessage({ text: 'New passwords do not match', type: 'error' });
+        setMessage({ text: '❌ New passwords do not match', type: 'error' });
         return;
       }
 
       if (passwordData.newPassword.length < 8) {
-        setMessage({ text: 'New password must be at least 8 characters long', type: 'error' });
+        setMessage({ text: '❌ New password must be at least 8 characters long', type: 'error' });
+        return;
+      }
+
+      // ✅ NEW: Check if new password is same as current password
+      if (passwordData.currentPassword === passwordData.newPassword) {
+        setMessage({ 
+          text: '❌ New password must be different from your current password', 
+          type: 'error' 
+        });
         return;
       }
 
@@ -224,34 +260,109 @@ const AccountManagement = () => {
 
       if (!hasUpperCase || !hasLowerCase || !hasNumbers || !hasSpecialChars) {
         setMessage({
-          text: 'Password must contain uppercase, lowercase, numbers, and special characters',
+          text: '❌ Password must contain uppercase, lowercase, numbers, and special characters',
           type: 'error'
         });
         return;
       }
 
+      setMessage({ text: '⏳ Verifying current password...', type: 'success' });
+
+      // ✅ NEW: Verify current password first
+      const isCurrentPasswordValid = await verifyCurrentPassword(passwordData.currentPassword);
+      
+      if (!isCurrentPasswordValid) {
+        setMessage({ 
+          text: '❌ Current password is incorrect. Please check and try again.', 
+          type: 'error' 
+        });
+        return;
+      }
+
+      setMessage({ text: '✅ Current password verified. Sending OTP...', type: 'success' });
+
+      // Send OTP for password change verification
+      await otpService.sendOTP(profileData.email, 'password_reset');
+      
+      // Store pending password change data
+      setPendingPasswordChange({
+        currentPassword: passwordData.currentPassword,
+        newPassword: passwordData.newPassword
+      });
+      
+      setShowOTPModal(true);
+      setMessage({ text: '📧 OTP sent to your email for verification', type: 'success' });
+
+    } catch (error) {
+      console.error('Error in password change process:', error);
+      setMessage({
+        text: `❌ Failed to send verification code: ${error.message}`,
+        type: 'error'
+      });
+    }
+  };
+
+  // Handle OTP verification success
+  const handleOTPVerified = async () => {
+    try {
+      setShowOTPModal(false);
+      setMessage({ text: '⏳ Updating password...', type: 'success' });
+
       const token = localStorage.getItem('token');
       await axios.post(`${config.API_BASE_URL}/auth/update-profile`, {
-        password: passwordData.newPassword,
-        oldPassword: passwordData.currentPassword
+        password: pendingPasswordChange.newPassword,
+        oldPassword: pendingPasswordChange.currentPassword
       }, {
         headers: { Authorization: `Bearer ${token}` }
       });
 
-      setMessage({ text: 'Password updated successfully', type: 'success' });
+      // Clear form
       setPasswordData({
         currentPassword: '',
         newPassword: '',
         confirmPassword: ''
       });
+      setPendingPasswordChange(null);
+
+      setMessage({ 
+        text: '✅ Password updated successfully! You will be logged out in 3 seconds for security...', 
+        type: 'success' 
+      });
+
+      // Auto logout and redirect after password change
+      setTimeout(async () => {
+        try {
+          await logout();
+          navigate('/LogIn', { 
+            replace: true,
+            state: { 
+              message: '✅ Password changed successfully. Please log in with your new password.',
+              type: 'success'
+            }
+          });
+        } catch (error) {
+          console.error('Logout error:', error);
+          // Force logout even if API call fails
+          localStorage.clear();
+          navigate('/LogIn', { replace: true });
+        }
+      }, 3000);
 
     } catch (error) {
       console.error('Error changing password:', error);
       setMessage({
-        text: error.response?.data?.message || 'Failed to change password. Please check your current password.',
+        text: `❌ ${error.response?.data?.message || 'Failed to change password. Please try again.'}`,
         type: 'error'
       });
+      setPendingPasswordChange(null);
     }
+  };
+
+  // Handle OTP verification cancel
+  const handleOTPCancel = () => {
+    setShowOTPModal(false);
+    setPendingPasswordChange(null);
+    setMessage({ text: '❌ Password change cancelled', type: 'error' });
   };
 
   if (loading) {
@@ -289,6 +400,17 @@ const AccountManagement = () => {
             </Alert>
           )}
 
+          {/* OTP Verification Modal */}
+          {showOTPModal && (
+            <OTPVerification
+              email={profileData.email}
+              purpose={otpPurpose}
+              onVerified={handleOTPVerified}
+              onCancel={handleOTPCancel}
+              title="Verify Password Change"
+            />
+          )}
+
           {/* Tabs */}
           <Tabs 
             value={tabValue} 
@@ -304,7 +426,7 @@ const AccountManagement = () => {
           <Box className="admin-acc-tab-content" hidden={tabValue !== 0}>
             <Box className="admin-acc-input-row">
               <Box className="admin-acc-input-field">
-                <Typography className="admin-acc-field-label">First name</Typography>
+                <Typography className="admin-acc-field-label">First name*</Typography>
                 <TextField
                   fullWidth
                   name="firstName"
@@ -312,11 +434,12 @@ const AccountManagement = () => {
                   onChange={handleProfileChange}
                   variant="outlined"
                   className="admin-acc-profile-input"
+                  required
                 />
               </Box>
 
               <Box className="admin-acc-input-field">
-                <Typography className="admin-acc-field-label">Last name</Typography>
+                <Typography className="admin-acc-field-label">Last name*</Typography>
                 <TextField
                   fullWidth
                   name="lastName"
@@ -324,6 +447,7 @@ const AccountManagement = () => {
                   onChange={handleProfileChange}
                   variant="outlined"
                   className="admin-acc-profile-input"
+                  required
                 />
               </Box>
             </Box>
@@ -381,7 +505,7 @@ const AccountManagement = () => {
               </Box>
 
               <Box className="admin-acc-input-field">
-                <Typography className="admin-acc-field-label">E-mail</Typography>
+                <Typography className="admin-acc-field-label">E-mail*</Typography>
                 <TextField
                   fullWidth
                   name="email"
@@ -390,6 +514,7 @@ const AccountManagement = () => {
                   variant="outlined"
                   className="admin-acc-profile-input"
                   disabled={!editMode.email}
+                  required
                   InputProps={{
                     endAdornment: (
                       <IconButton onClick={() => handleEdit('email')}>
@@ -439,7 +564,7 @@ const AccountManagement = () => {
           {tabValue === 1 && (
             <Box className="admin-acc-tab-content">
               <Box className="admin-acc-input-field">
-                <Typography className="admin-acc-field-label">Current Password</Typography>
+                <Typography className="admin-acc-field-label">Current Password*</Typography>
                 <TextField
                   fullWidth
                   type="password"
@@ -448,11 +573,12 @@ const AccountManagement = () => {
                   onChange={handlePasswordChange}
                   variant="outlined"
                   className="admin-acc-profile-input"
+                  required
                 />
               </Box>
 
               <Box className="admin-acc-input-field">
-                <Typography className="admin-acc-field-label">New Password</Typography>
+                <Typography className="admin-acc-field-label">New Password*</Typography>
                 <TextField
                   fullWidth
                   type="password"
@@ -461,6 +587,7 @@ const AccountManagement = () => {
                   onChange={handlePasswordChange}
                   variant="outlined"
                   className="admin-acc-profile-input"
+                  required
                 />
                 <Typography variant="caption" color="textSecondary">
                   Password must be at least 8 characters and include uppercase, lowercase, numbers, and special characters.
@@ -468,7 +595,7 @@ const AccountManagement = () => {
               </Box>
 
               <Box className="admin-acc-input-field">
-                <Typography className="admin-acc-field-label">Confirm New Password</Typography>
+                <Typography className="admin-acc-field-label">Confirm New Password*</Typography>
                 <TextField
                   fullWidth
                   type="password"
@@ -477,6 +604,7 @@ const AccountManagement = () => {
                   onChange={handlePasswordChange}
                   variant="outlined"
                   className="admin-acc-profile-input"
+                  required
                 />
               </Box>
 
