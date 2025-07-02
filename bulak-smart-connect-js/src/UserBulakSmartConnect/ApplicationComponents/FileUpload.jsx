@@ -139,7 +139,7 @@ const FileUpload = ({ label, description, onUpload, multiple = false }) => {
             : uploadedFiles.length > 0 
               ? `${uploadedFiles.length} file(s) uploaded`
               : multiple 
-                ? 'Click to select multiple files'
+                ? 'Click to upload files'
                 : ' Click to upload'
           }
         </Typography>
