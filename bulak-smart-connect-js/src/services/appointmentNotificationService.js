@@ -20,8 +20,9 @@ class AppointmentNotificationService {
       const response = await axios.post(`${this.baseURL}/auth/notifications/appointment-confirmation`, {
         email: userEmail,
         appointmentNumber,
+        type: 'confirmation',
         appointmentDetails: {
-          type: appointmentDetails.reasonOfVisit || appointmentDetails.type,
+          type: appointmentDetails.reasonOfVisit || appointmentDetails.type || 'Civil Registry Service',
           date: appointmentDetails.appointmentDate || appointmentDetails.date,
           time: appointmentDetails.appointmentTime || appointmentDetails.time,
           firstName: appointmentDetails.firstName,
@@ -56,9 +57,10 @@ class AppointmentNotificationService {
       const response = await axios.post(`${this.baseURL}/auth/notifications/appointment-status-update`, {
         email: userEmail,
         appointmentNumber,
-        newStatus,
+        type: 'status_update',
+        status: newStatus,
         appointmentDetails: {
-          type: appointmentDetails.reasonOfVisit || appointmentDetails.type,
+          type: appointmentDetails.reasonOfVisit || appointmentDetails.type || 'Civil Registry Service',
           date: appointmentDetails.appointmentDate || appointmentDetails.date,
           time: appointmentDetails.appointmentTime || appointmentDetails.time,
           firstName: appointmentDetails.firstName,
@@ -93,9 +95,10 @@ class AppointmentNotificationService {
       const response = await axios.post(`${this.baseURL}/auth/notifications/appointment-cancellation`, {
         email: userEmail,
         appointmentNumber,
-        reason,
+        type: 'cancellation',
+        reason: reason || 'Cancelled by administrator',
         appointmentDetails: {
-          type: appointmentDetails.reasonOfVisit || appointmentDetails.type,
+          type: appointmentDetails.reasonOfVisit || appointmentDetails.type || 'Civil Registry Service',
           date: appointmentDetails.appointmentDate || appointmentDetails.date,
           time: appointmentDetails.appointmentTime || appointmentDetails.time,
           firstName: appointmentDetails.firstName,
@@ -129,8 +132,9 @@ class AppointmentNotificationService {
       const response = await axios.post(`${this.baseURL}/auth/notifications/appointment-reminder`, {
         email: userEmail,
         appointmentNumber,
+        type: 'reminder',
         appointmentDetails: {
-          type: appointmentDetails.reasonOfVisit || appointmentDetails.type,
+          type: appointmentDetails.reasonOfVisit || appointmentDetails.type || 'Civil Registry Service',
           date: appointmentDetails.appointmentDate || appointmentDetails.date,
           time: appointmentDetails.appointmentTime || appointmentDetails.time,
           firstName: appointmentDetails.firstName,
