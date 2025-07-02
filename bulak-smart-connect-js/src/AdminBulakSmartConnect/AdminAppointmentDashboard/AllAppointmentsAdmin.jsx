@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { appointmentService } from '../../services/appointmentService';
+import { appointmentNotificationService } from '../../services/appointmentNotificationService';
 import './AllAppointmentAdmin.css';
 import { Box, Typography, Card, CardContent, Button, Grid, Paper, CircularProgress, Container, Alert } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
@@ -162,9 +163,47 @@ const AllAppointmentsAdmin = () => {
 
   const handleStatusUpdate = async (appointmentId, newStatus) => {
     try {
+      console.log(`📝 Updating appointment ${appointmentId} status to: ${newStatus}`);
+      
+      const appointment = appointments.find(
+        app => (app.id || app._id || app.appointmentNumber) === appointmentId
+      );
+
+      if (!appointment) {
+        console.error('Appointment not found:', appointmentId);
+        setError('Appointment not found');
+        return;
+      }
+
       await appointmentService.updateAppointmentStatus(appointmentId, newStatus);
 
+      // 📧 ENHANCED EMAIL LOOKUP AND NOTIFICATION
+      const appointmentEmail = getAppointmentEmail(appointment);
+      if (appointmentEmail) {
+        try {
+          console.log(`📧 Sending status update notification to: ${appointmentEmail}`);
+          const notificationResult = await appointmentNotificationService.sendStatusUpdateNotification(
+            appointmentEmail,
+            appointment.appointmentNumber || appointmentId,
+            newStatus,
+            appointment
+          );
+
+          if (notificationResult.success) {
+            console.log('✅ Status update notification sent successfully');
+          } else {
+            console.log('⚠️ Status update notification failed:', notificationResult.error);
+          }
+        } catch (notificationError) {
+          console.error('❌ Error sending status update notification:', notificationError);
+        }
+      } else {
+        console.log('⚠️ No email found for appointment, skipping notification');
+      }
+
       await fetchAppointments();
+      alert(`Appointment ${newStatus} successfully! ${appointmentEmail ? 'Notification email sent.' : 'No email available for notification.'}`);
+      
     } catch (error) {
       console.error('Error updating appointment status:', error);
       setError('Failed to update appointment status. Please try again.');
@@ -180,9 +219,42 @@ const AllAppointmentsAdmin = () => {
 
   const confirmCancelAppointment = async () => {
     try {
+      console.log(`📝 Cancelling appointment ${cancelDialog.appointmentId}`);
+      
+      const appointment = appointments.find(
+        app => (app.id || app._id || app.appointmentNumber) === cancelDialog.appointmentId
+      );
+
       await appointmentService.updateAppointmentStatus(cancelDialog.appointmentId, 'cancelled');
+
+      // 📧 ENHANCED EMAIL LOOKUP AND NOTIFICATION
+      const appointmentEmail = getAppointmentEmail(appointment);
+      if (appointmentEmail) {
+        try {
+          console.log(`📧 Sending cancellation notification to: ${appointmentEmail}`);
+          const notificationResult = await appointmentNotificationService.sendCancellationNotification(
+            appointmentEmail,
+            appointment.appointmentNumber || cancelDialog.appointmentId,
+            appointment,
+            'Cancelled by administrator'
+          );
+
+          if (notificationResult.success) {
+            console.log('✅ Cancellation notification sent successfully');
+          } else {
+            console.log('⚠️ Cancellation notification failed:', notificationResult.error);
+          }
+        } catch (notificationError) {
+          console.error('❌ Error sending cancellation notification:', notificationError);
+        }
+      } else {
+        console.log('⚠️ No email found for appointment, skipping notification');
+      }
+
       await fetchAppointments();
       setCancelDialog({ show: false, appointmentId: null, appointmentName: '' });
+      alert(`Appointment cancelled successfully! ${appointmentEmail ? 'Notification email sent.' : 'No email available for notification.'}`);
+      
     } catch (error) {
       console.error('Error cancelling appointment:', error);
       setError('Failed to cancel appointment. Please try again.');
@@ -293,6 +365,32 @@ const AllAppointmentsAdmin = () => {
       return new Date(appointment.createdAt).toLocaleDateString();
     }
     return 'Date not specified';
+  };
+
+  const getAppointmentEmail = (appointment) => {
+    try {
+      // First check if email is directly in appointment
+      if (appointment.email) {
+        return appointment.email;
+      }
+
+      // Check if user object exists with email
+      if (appointment.user && appointment.user.email) {
+        return appointment.user.email;
+      }
+
+      // Check if userEmail field exists
+      if (appointment.userEmail) {
+        return appointment.userEmail;
+      }
+
+      // Log that no email was found for debugging
+      console.log('⚠️ No email found for appointment:', appointment.appointmentNumber || appointment.id);
+      return null;
+    } catch (error) {
+      console.error('Error getting appointment email:', error);
+      return null;
+    }
   };
 
   if (loading) {

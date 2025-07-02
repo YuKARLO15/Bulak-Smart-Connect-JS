@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import { appointmentService } from '../../services/appointmentService';
+import { appointmentNotificationService } from '../../services/appointmentNotificationService';
 import './AppointmentDetails.css';
 import UserInfoCard from './UserInfoCard';
 import NavBar from '../../NavigationComponents/NavSide';
@@ -38,11 +39,50 @@ const AppointmentDetailsCard = () => {
     }
   };
 
+  // Replace your existing handleStatusUpdate function with this enhanced version
   const handleStatusUpdate = async (newStatus) => {
     try {
+      console.log(`📝 Updating appointment ${id} status to: ${newStatus}`);
+      
+      if (!appointment) {
+        console.error('No appointment data available');
+        alert('Error: Appointment data not available');
+        return;
+      }
+
+      // Update status in database (keep your existing API call)
       await appointmentService.updateAppointmentStatus(id, newStatus);
+      
+      // Update local state (keep your existing state update)
       setAppointment(prev => ({ ...prev, status: newStatus }));
-      alert(`Appointment ${newStatus} successfully!`);
+
+      // 📧 SEND STATUS UPDATE NOTIFICATION (ENHANCED SECTION)
+      if (appointment.email) {
+        try {
+          console.log('📧 Sending status update notification...');
+          const notificationResult = await appointmentNotificationService.sendStatusUpdateNotification(
+            appointment.email,
+            appointment.appointmentNumber || id,
+            newStatus,
+            appointment
+          );
+
+          if (notificationResult.success) {
+            console.log('✅ Status update notification sent successfully');
+            alert(`Appointment ${newStatus} successfully! Notification email sent to ${appointment.email}.`);
+          } else {
+            console.log('⚠️ Status update notification failed:', notificationResult.error);
+            alert(`Appointment ${newStatus} successfully! However, notification email could not be sent.`);
+          }
+        } catch (notificationError) {
+          console.error('❌ Error sending status update notification:', notificationError);
+          alert(`Appointment ${newStatus} successfully! However, notification email could not be sent.`);
+        }
+      } else {
+        console.log('⚠️ No email found for appointment, skipping notification');
+        alert(`Appointment ${newStatus} successfully! No email available for notification.`);
+      }
+      
     } catch (error) {
       console.error('Error updating appointment status:', error);
       alert('Error updating appointment status');

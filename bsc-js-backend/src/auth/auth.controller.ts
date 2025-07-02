@@ -39,6 +39,7 @@ import {
   ApplicationNotificationDto,
 } from './dto/otp.dto';
 import { QueueNotificationDto } from './dto/queue-notification.dto';
+import { AppointmentNotificationDto } from './dto/appointment-notification.dto';
 
 interface RequestWithUser extends Request {
   user: AuthenticatedUser;
@@ -843,6 +844,237 @@ export class AuthController {
         success: false,
         message: 'Failed to send notification, but queue operation continues',
       };
+    }
+  }
+
+  @ApiOperation({
+    summary: 'Send appointment confirmation notification',
+    description: 'Send email notification when appointment is confirmed',
+  })
+  @ApiBody({
+    description: 'Appointment confirmation notification details',
+    schema: {
+      type: 'object',
+      properties: {
+        email: {
+          type: 'string',
+          format: 'email',
+          example: 'user@example.com',
+          description: 'Email address of appointment holder',
+        },
+        appointmentNumber: {
+          type: 'string',
+          example: 'APPT-2024-001',
+          description: 'Appointment number/ID',
+        },
+        type: {
+          type: 'string',
+          example: 'confirmation',
+          description: 'Type of notification',
+        },
+        appointmentDetails: {
+          type: 'object',
+          description: 'Appointment details',
+          properties: {
+            type: { type: 'string', example: 'Birth Certificate' },
+            date: { type: 'string', example: '2024-01-15' },
+            time: { type: 'string', example: '10:00 AM - 10:30 AM' },
+            firstName: { type: 'string', example: 'John' },
+            lastName: { type: 'string', example: 'Doe' },
+            phoneNumber: { type: 'string', example: '09123456789' },
+          },
+        },
+      },
+      required: ['email', 'appointmentNumber', 'appointmentDetails'],
+    },
+  })
+  @Post('notifications/appointment-confirmation')
+  async sendAppointmentConfirmation(
+    @Body() notificationDto: any,
+  ) {
+    try {
+      const { email, appointmentNumber, appointmentDetails } = notificationDto;
+
+      // Validate required fields
+      if (!email || !appointmentNumber || !appointmentDetails) {
+        throw new BadRequestException('Missing required fields: email, appointmentNumber, or appointmentDetails');
+      }
+
+      await this.emailService.sendAppointmentConfirmation(
+        email,
+        appointmentNumber,
+        appointmentDetails,
+      );
+
+      return {
+        success: true,
+        message: 'Appointment confirmation sent successfully',
+      };
+    } catch (error) {
+      console.error('Error sending appointment confirmation:', error);
+      throw new BadRequestException('Failed to send appointment confirmation');
+    }
+  }
+
+  @ApiOperation({
+    summary: 'Send appointment status update notification',
+    description: 'Send email notification when appointment status changes',
+  })
+  @ApiBody({
+    description: 'Appointment status update notification details',
+    schema: {
+      type: 'object',
+      properties: {
+        email: {
+          type: 'string',
+          format: 'email',
+          example: 'user@example.com',
+          description: 'Email address of appointment holder',
+        },
+        appointmentNumber: {
+          type: 'string',
+          example: 'APPT-2024-001',
+          description: 'Appointment number/ID',
+        },
+        type: {
+          type: 'string',
+          example: 'status_update',
+          description: 'Type of notification',
+        },
+        status: {
+          type: 'string',
+          example: 'confirmed',
+          description: 'New appointment status',
+        },
+        appointmentDetails: {
+          type: 'object',
+          description: 'Appointment details',
+        },
+      },
+      required: ['email', 'appointmentNumber', 'status', 'appointmentDetails'],
+    },
+  })
+  @Post('notifications/appointment-status-update')
+  async sendAppointmentStatusUpdate(
+    @Body() notificationDto: any,
+  ) {
+    try {
+      const { email, appointmentNumber, status, appointmentDetails } = notificationDto;
+
+      // Validate required fields
+      if (!email || !appointmentNumber || !status || !appointmentDetails) {
+        throw new BadRequestException('Missing required fields: email, appointmentNumber, status, or appointmentDetails');
+      }
+
+      await this.emailService.sendAppointmentStatusUpdate(
+        email,
+        appointmentNumber,
+        status,
+        appointmentDetails,
+      );
+
+      return {
+        success: true,
+        message: 'Appointment status update sent successfully',
+      };
+    } catch (error) {
+      console.error('Error sending appointment status update:', error);
+      throw new BadRequestException('Failed to send appointment status update');
+    }
+  }
+
+  @ApiOperation({
+    summary: 'Send appointment cancellation notification',
+    description: 'Send email notification when appointment is cancelled',
+  })
+  @ApiBody({
+    description: 'Appointment cancellation notification details',
+    schema: {
+      type: 'object',
+      properties: {
+        email: {
+          type: 'string',
+          format: 'email',
+          example: 'user@example.com',
+          description: 'Email address of appointment holder',
+        },
+        appointmentNumber: {
+          type: 'string',
+          example: 'APPT-2024-001',
+          description: 'Appointment number/ID',
+        },
+        type: {
+          type: 'string',
+          example: 'cancellation',
+          description: 'Type of notification',
+        },
+        reason: {
+          type: 'string',
+          example: 'Cancelled by administrator',
+          description: 'Cancellation reason',
+        },
+        appointmentDetails: {
+          type: 'object',
+          description: 'Appointment details',
+        },
+      },
+      required: ['email', 'appointmentNumber', 'appointmentDetails'],
+    },
+  })
+  @Post('notifications/appointment-cancellation')
+  async sendAppointmentCancellation(
+    @Body() notificationDto: any,
+  ) {
+    try {
+      const { email, appointmentNumber, appointmentDetails, reason } = notificationDto;
+
+      // Validate required fields
+      if (!email || !appointmentNumber || !appointmentDetails) {
+        throw new BadRequestException('Missing required fields: email, appointmentNumber, or appointmentDetails');
+      }
+
+      await this.emailService.sendAppointmentCancellation(
+        email,
+        appointmentNumber,
+        appointmentDetails,
+        reason,
+      );
+
+      return {
+        success: true,
+        message: 'Appointment cancellation sent successfully',
+      };
+    } catch (error) {
+      console.error('Error sending appointment cancellation:', error);
+      throw new BadRequestException('Failed to send appointment cancellation');
+    }
+  }
+
+  @ApiOperation({
+    summary: 'Send appointment reminder notification',
+    description: 'Send email reminder 24 hours before appointment',
+  })
+  @ApiBody({ type: AppointmentNotificationDto })
+  @Post('notifications/appointment-reminder')
+  async sendAppointmentReminder(
+    @Body() notificationDto: AppointmentNotificationDto,
+  ) {
+    try {
+      const { email, appointmentNumber, appointmentDetails } = notificationDto;
+
+      await this.emailService.sendAppointmentReminder(
+        email,
+        appointmentNumber,
+        appointmentDetails,
+      );
+
+      return {
+        success: true,
+        message: 'Appointment reminder sent successfully',
+      };
+    } catch (error) {
+      console.error('Error sending appointment reminder:', error);
+      throw new BadRequestException('Failed to send appointment reminder');
     }
   }
 }
