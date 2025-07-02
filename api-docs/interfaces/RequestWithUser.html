@@ -1054,13 +1054,10 @@ export class AuthController {
     summary: &#x27;Send appointment confirmation notification&#x27;,
     description: &#x27;Send email notification when appointment is confirmed&#x27;,
   })
+  @ApiBody({ type: AppointmentNotificationDto })
   @Post(&#x27;notifications/appointment-confirmation&#x27;)
   async sendAppointmentConfirmation(
-    @Body() notificationDto: {
-      email: string;
-      appointmentNumber: string;
-      appointmentDetails: any;
-    },
+    @Body() notificationDto: AppointmentNotificationDto,
   ) {
     try {
       const { email, appointmentNumber, appointmentDetails } &#x3D; notificationDto;
@@ -1085,22 +1082,23 @@ export class AuthController {
     summary: &#x27;Send appointment status update notification&#x27;,
     description: &#x27;Send email notification when appointment status changes&#x27;,
   })
+  @ApiBody({ type: AppointmentNotificationDto })
   @Post(&#x27;notifications/appointment-status-update&#x27;)
   async sendAppointmentStatusUpdate(
-    @Body() notificationDto: {
-      email: string;
-      appointmentNumber: string;
-      newStatus: string;
-      appointmentDetails: any;
-    },
+    @Body() notificationDto: AppointmentNotificationDto,
   ) {
     try {
-      const { email, appointmentNumber, newStatus, appointmentDetails } &#x3D; notificationDto;
+      const { email, appointmentNumber, status, appointmentDetails } &#x3D; notificationDto;
+
+      // Ensure status is provided for status updates
+      if (!status) {
+        throw new BadRequestException(&#x27;Status is required for status updates&#x27;);
+      }
 
       await this.emailService.sendAppointmentStatusUpdate(
         email,
         appointmentNumber,
-        newStatus,
+        status,
         appointmentDetails,
       );
 
@@ -1118,14 +1116,10 @@ export class AuthController {
     summary: &#x27;Send appointment cancellation notification&#x27;,
     description: &#x27;Send email notification when appointment is cancelled&#x27;,
   })
+  @ApiBody({ type: AppointmentNotificationDto })
   @Post(&#x27;notifications/appointment-cancellation&#x27;)
   async sendAppointmentCancellation(
-    @Body() notificationDto: {
-      email: string;
-      appointmentNumber: string;
-      appointmentDetails: any;
-      reason?: string;
-    },
+    @Body() notificationDto: AppointmentNotificationDto,
   ) {
     try {
       const { email, appointmentNumber, appointmentDetails, reason } &#x3D; notificationDto;
@@ -1151,13 +1145,10 @@ export class AuthController {
     summary: &#x27;Send appointment reminder notification&#x27;,
     description: &#x27;Send email reminder 24 hours before appointment&#x27;,
   })
+  @ApiBody({ type: AppointmentNotificationDto })
   @Post(&#x27;notifications/appointment-reminder&#x27;)
   async sendAppointmentReminder(
-    @Body() notificationDto: {
-      email: string;
-      appointmentNumber: string;
-      appointmentDetails: any;
-    },
+    @Body() notificationDto: AppointmentNotificationDto,
   ) {
     try {
       const { email, appointmentNumber, appointmentDetails } &#x3D; notificationDto;
