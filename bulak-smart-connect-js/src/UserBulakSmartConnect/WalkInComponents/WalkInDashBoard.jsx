@@ -8,6 +8,7 @@ import { queueNotificationService } from '../../services/queueNotificationServic
 import FloatingAnnouncementFab from '../../LandingPageComponents/FloatingAnnouncement';
 import { Box, Button, Container, Grid, Typography, Card, CardContent } from '@mui/material';
 import config from '../../config/env.js';
+import { useAuth } from '../../context/AuthContext';
 
 // Format queue number to WK format
 const formatWKNumber = (queueNumber) => {
@@ -37,6 +38,8 @@ const getCurrentUserId = () => {
 };
 
 const WalkInQueueContainer = () => {
+  const { user } = useAuth(); // Get user from AuthContext
+  
   const [queuePosition, setQueuePosition] = useState(null); 
   const [currentQueue, setCurrentQueue] = useState([]);
   const [pendingQueues, setPendingQueues] = useState([]);
@@ -48,11 +51,35 @@ const WalkInQueueContainer = () => {
   const [notificationsSent, setNotificationsSent] = useState(new Set());
   const [lastNotifiedPosition, setLastNotifiedPosition] = useState(null);
 
-  // Function to get user email from localStorage
+  // Updated function to get user email
   const getUserEmail = () => {
     try {
-      const user = JSON.parse(localStorage.getItem('user') || '{}');
-      return user.email || null;
+      // First try AuthContext
+      if (user && user.email) {
+        console.log(`✅ Found email from AuthContext: ${user.email}`);
+        return user.email;
+      }
+      
+      // Fallback to localStorage
+      const possibleKeys = ['user', 'currentUser', 'userData', 'authUser'];
+      
+      for (const key of possibleKeys) {
+        const userData = localStorage.getItem(key);
+        if (userData) {
+          try {
+            const parsedUser = JSON.parse(userData);
+            if (parsedUser && parsedUser.email) {
+              console.log(`✅ Found email from localStorage['${key}']: ${parsedUser.email}`);
+              return parsedUser.email;
+            }
+          } catch (parseError) {
+            continue;
+          }
+        }
+      }
+      
+      console.log('❌ No email found in AuthContext or localStorage');
+      return null;
     } catch (e) {
       console.error('Error getting user email:', e);
       return null;
