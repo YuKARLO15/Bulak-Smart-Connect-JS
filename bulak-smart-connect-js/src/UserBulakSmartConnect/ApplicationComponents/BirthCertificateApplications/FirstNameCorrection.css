@@ -140,16 +140,16 @@
 
 
 .SubmitButtonFirstName {
-  background-color: #184a5b !important; /* deep red */
+  background-color: #184a5b !important; 
   color: white !important;
   font-weight: bold;
   padding: 8px 24px;
   border-radius: 8px;
   transition: background-color 0.3s ease;
-  border: none !important; /* optional: remove border */
+  border: none !important; 
 }
 
 .SubmitButtonFirstName:hover {
-  background-color: #678c98 !important; /* darker red on hover */
+  background-color: #678c98 !important; 
   color: #f5f5f5 !important;
 }
