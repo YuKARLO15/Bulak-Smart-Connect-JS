@@ -39,6 +39,7 @@ import {
   ApplicationNotificationDto,
 } from './dto/otp.dto';
 import { QueueNotificationDto } from './dto/queue-notification.dto';
+import { AppointmentNotificationDto } from './dto/appointment-notification.dto';
 
 interface RequestWithUser extends Request {
   user: AuthenticatedUser;
@@ -843,6 +844,134 @@ export class AuthController {
         success: false,
         message: 'Failed to send notification, but queue operation continues',
       };
+    }
+  }
+
+  @ApiOperation({
+    summary: 'Send appointment confirmation notification',
+    description: 'Send email notification when appointment is confirmed',
+  })
+  @Post('notifications/appointment-confirmation')
+  async sendAppointmentConfirmation(
+    @Body() notificationDto: {
+      email: string;
+      appointmentNumber: string;
+      appointmentDetails: any;
+    },
+  ) {
+    try {
+      const { email, appointmentNumber, appointmentDetails } = notificationDto;
+
+      await this.emailService.sendAppointmentConfirmation(
+        email,
+        appointmentNumber,
+        appointmentDetails,
+      );
+
+      return {
+        success: true,
+        message: 'Appointment confirmation sent successfully',
+      };
+    } catch (error) {
+      console.error('Error sending appointment confirmation:', error);
+      throw new BadRequestException('Failed to send appointment confirmation');
+    }
+  }
+
+  @ApiOperation({
+    summary: 'Send appointment status update notification',
+    description: 'Send email notification when appointment status changes',
+  })
+  @Post('notifications/appointment-status-update')
+  async sendAppointmentStatusUpdate(
+    @Body() notificationDto: {
+      email: string;
+      appointmentNumber: string;
+      newStatus: string;
+      appointmentDetails: any;
+    },
+  ) {
+    try {
+      const { email, appointmentNumber, newStatus, appointmentDetails } = notificationDto;
+
+      await this.emailService.sendAppointmentStatusUpdate(
+        email,
+        appointmentNumber,
+        newStatus,
+        appointmentDetails,
+      );
+
+      return {
+        success: true,
+        message: 'Appointment status update sent successfully',
+      };
+    } catch (error) {
+      console.error('Error sending appointment status update:', error);
+      throw new BadRequestException('Failed to send appointment status update');
+    }
+  }
+
+  @ApiOperation({
+    summary: 'Send appointment cancellation notification',
+    description: 'Send email notification when appointment is cancelled',
+  })
+  @Post('notifications/appointment-cancellation')
+  async sendAppointmentCancellation(
+    @Body() notificationDto: {
+      email: string;
+      appointmentNumber: string;
+      appointmentDetails: any;
+      reason?: string;
+    },
+  ) {
+    try {
+      const { email, appointmentNumber, appointmentDetails, reason } = notificationDto;
+
+      await this.emailService.sendAppointmentCancellation(
+        email,
+        appointmentNumber,
+        appointmentDetails,
+        reason,
+      );
+
+      return {
+        success: true,
+        message: 'Appointment cancellation sent successfully',
+      };
+    } catch (error) {
+      console.error('Error sending appointment cancellation:', error);
+      throw new BadRequestException('Failed to send appointment cancellation');
+    }
+  }
+
+  @ApiOperation({
+    summary: 'Send appointment reminder notification',
+    description: 'Send email reminder 24 hours before appointment',
+  })
+  @Post('notifications/appointment-reminder')
+  async sendAppointmentReminder(
+    @Body() notificationDto: {
+      email: string;
+      appointmentNumber: string;
+      appointmentDetails: any;
+    },
+  ) {
+    try {
+      const { email, appointmentNumber, appointmentDetails } = notificationDto;
+
+      await this.emailService.sendAppointmentReminder(
+        email,
+        appointmentNumber,
+        appointmentDetails,
+      );
+
+      return {
+        success: true,
+        message: 'Appointment reminder sent successfully',
+      };
+    } catch (error) {
+      console.error('Error sending appointment reminder:', error);
+      throw new BadRequestException('Failed to send appointment reminder');
     }
   }
 }
