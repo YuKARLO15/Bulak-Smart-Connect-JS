@@ -10,6 +10,7 @@ import MarriageInformationBirthForm from './BirthCertificateForm/MarriageIdentif
 import AffidavitBirthForm from './BirthCertificateForm/BirthBackIdentifyingForm';
 import { documentApplicationService } from '../../../services/documentApplicationService';
 import { localStorageManager } from '../../../services/localStorageManager';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 const backendTypeMap = {
   'Regular application': {
@@ -43,7 +44,7 @@ const backendTypeMap = {
   'First Name': {
     applicationType: 'Birth Certificate',
     applicationSubtype: 'Correction - First Name',
-  }
+  },
 };
 
 const BirthCertificateForm = () => {
@@ -64,7 +65,7 @@ const BirthCertificateForm = () => {
     setSnackbar({
       open: true,
       message,
-      severity
+      severity,
     });
   };
 
@@ -82,10 +83,10 @@ const BirthCertificateForm = () => {
           } else if (backendApp) {
             setFormData(backendApp); // fallback if only formData not present
           } else {
-            showNotification("Could not load application for editing.", "error");
+            showNotification('Could not load application for editing.', 'error');
           }
         } catch (err) {
-          showNotification("There was a problem setting up edit mode. Please try again.", "error");
+          showNotification('There was a problem setting up edit mode. Please try again.', 'error');
         }
       } else {
         setFormData({});
@@ -93,7 +94,6 @@ const BirthCertificateForm = () => {
       }
     };
     fetchData();
-     
   }, [isEditing, editingApplicationId]);
 
   const handleChange = e => {
@@ -117,17 +117,46 @@ const BirthCertificateForm = () => {
 
   const requiredFields = {
     1: [
-      'lastName', 'firstName', 'birthMonth', 'birthDay', 'birthYear', 'sex', 'hospital', 'city',
-      'province', 'barangay', 'residence', 'typeOfBirth', 'birthOrder', 'birthWeight',
+      'lastName',
+      'firstName',
+      'birthMonth',
+      'birthDay',
+      'birthYear',
+      'sex',
+      'hospital',
+      'city',
+      'province',
+      'barangay',
+      'residence',
+      'typeOfBirth',
+      'birthOrder',
+      'birthWeight',
     ],
     2: [
-      'motherLastName', 'motherFirstName', 'motherCitizenship', 'motherReligion', 'motherTotalChildren',
-      'motherLivingChildren', 'motherDeceasedChildren', 'motherOccupation', 'motherAge', 'motherStreet',
+      'motherLastName',
+      'motherFirstName',
+      'motherCitizenship',
+      'motherReligion',
+      'motherTotalChildren',
+      'motherLivingChildren',
+      'motherDeceasedChildren',
+      'motherOccupation',
+      'motherAge',
+      'motherStreet',
       'motherCity',
     ],
     3: [
-      'fatherLastName', 'fatherFirstName', 'fatherCitizenship', 'fatherReligion', 'fatherOccupation',
-      'fatherAge', 'fatherStreet', 'fatherBarangay', 'fatherCity', 'fatherProvince', 'fatherCountry',
+      'fatherLastName',
+      'fatherFirstName',
+      'fatherCitizenship',
+      'fatherReligion',
+      'fatherOccupation',
+      'fatherAge',
+      'fatherStreet',
+      'fatherBarangay',
+      'fatherCity',
+      'fatherProvince',
+      'fatherCountry',
     ],
     4: [],
     5: [],
@@ -153,14 +182,15 @@ const BirthCertificateForm = () => {
 
   const handlePrevious = () => setStep(prevStep => prevStep - 1);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async e => {
     if (e) e.preventDefault();
     if (!validateStep()) return;
     setIsLoading(true);
 
     try {
       let applicationId = editingApplicationId;
-      const selectedOption = sessionStorage.getItem('selectedBirthCertificateOption') || 'Regular application';
+      const selectedOption =
+        sessionStorage.getItem('selectedBirthCertificateOption') || 'Regular application';
       const backendType = backendTypeMap[selectedOption] || backendTypeMap['Regular application'];
 
       // Data to send to backend
@@ -171,10 +201,10 @@ const BirthCertificateForm = () => {
           applicantName: `${formData.firstName || ''} ${formData.lastName || ''}`,
           applicationType: backendType.applicationType,
           applicationSubtype: backendType.applicationSubtype,
-          lastUpdated: new Date().toISOString()
+          lastUpdated: new Date().toISOString(),
         });
         applicationId = backendResponse.id || editingApplicationId;
-        showNotification("Application updated successfully", "success");
+        showNotification('Application updated successfully', 'success');
       } else {
         applicationId = 'BC-' + Date.now().toString().slice(-6);
         const backendApplicationData = {
@@ -182,12 +212,14 @@ const BirthCertificateForm = () => {
           applicationSubtype: backendType.applicationSubtype,
           applicantName: `${formData.firstName || ''} ${formData.lastName || ''}`,
           formData,
-          status: 'PENDING'
+          status: 'PENDING',
         };
-        backendResponse = await documentApplicationService.createApplication(backendApplicationData);
-        if (!backendResponse || !backendResponse.id) throw new Error('Backend did not return a valid application ID');
+        backendResponse =
+          await documentApplicationService.createApplication(backendApplicationData);
+        if (!backendResponse || !backendResponse.id)
+          throw new Error('Backend did not return a valid application ID');
         applicationId = backendResponse.id;
-        showNotification("Application created successfully", "success");
+        showNotification('Application created successfully', 'success');
       }
 
       // Update localStorage for offline/draft support
@@ -203,10 +235,12 @@ const BirthCertificateForm = () => {
           month: 'numeric',
           day: 'numeric',
         }),
-        status: isEditing ? localStorage.getItem('currentApplicationStatus') || 'Pending' : 'Pending',
+        status: isEditing
+          ? localStorage.getItem('currentApplicationStatus') || 'Pending'
+          : 'Pending',
         message: `Birth Certificate application for ${formData.firstName || ''} ${formData.lastName || ''}`,
         formData,
-        lastUpdated: new Date().toISOString()
+        lastUpdated: new Date().toISOString(),
       };
       if (appIndex >= 0) {
         existingApplications[appIndex] = applicationData;
@@ -225,13 +259,15 @@ const BirthCertificateForm = () => {
       }
 
       window.dispatchEvent(new Event('storage'));
-      window.dispatchEvent(new CustomEvent('customStorageUpdate', {
-        detail: {
-          id: applicationId,
-          type: backendType.applicationType,
-          action: isEditing ? 'updated' : 'created'
-        }
-      }));
+      window.dispatchEvent(
+        new CustomEvent('customStorageUpdate', {
+          detail: {
+            id: applicationId,
+            type: backendType.applicationType,
+            action: isEditing ? 'updated' : 'created',
+          },
+        })
+      );
 
       // Route map
       const routeMap = {
@@ -250,7 +286,10 @@ const BirthCertificateForm = () => {
       if (err.response && err.response.data) {
         showNotification(err.response.data.message || 'Error submitting application', 'error');
       } else {
-        showNotification('There was a problem submitting your application. Please try again.', 'error');
+        showNotification(
+          'There was a problem submitting your application. Please try again.',
+          'error'
+        );
       }
     } finally {
       setIsLoading(false);
@@ -260,21 +299,24 @@ const BirthCertificateForm = () => {
   return (
     <Box className="BirthCertificateFormContainer">
       <Typography variant="h4" className="BirthCertificateFormTitle">
-        Birth Certificate Application Form
+        <Box className="FormTitleHeader">
+          <Button
+            variant="outlined"
+            className="back-button-home-form"
+            onClick={() => navigate('/ApplicationForm')}
+            startIcon={<ArrowBackIcon />}
+          >
+            Back
+          </Button>
+          <span className="FormTitleText">Birth Certificate Application Form</span>
+        </Box>
       </Typography>
+
       <Paper className="BirthCertificateForm" elevation={3}>
         {step === 1 && (
           <>
-            <ChildIdentifyingForm
-              formData={formData}
-              handleChange={handleChange}
-              errors={errors}
-            />
-            <Button
-              variant="contained"
-              onClick={handleNext}
-              className="BirthCertificateFormButton"
-            >
+            <ChildIdentifyingForm formData={formData} handleChange={handleChange} errors={errors} />
+            <Button variant="contained" onClick={handleNext} className="BirthCertificateFormButton">
               Next
             </Button>
           </>
@@ -293,11 +335,7 @@ const BirthCertificateForm = () => {
             >
               Previous
             </Button>
-            <Button
-              variant="contained"
-              onClick={handleNext}
-              className="BirthCertificateFormButton"
-            >
+            <Button variant="contained" onClick={handleNext} className="BirthCertificateFormButton">
               Next
             </Button>
           </>
@@ -316,11 +354,7 @@ const BirthCertificateForm = () => {
             >
               Previous
             </Button>
-            <Button
-              variant="contained"
-              onClick={handleNext}
-              className="BirthCertificateFormButton"
-            >
+            <Button variant="contained" onClick={handleNext} className="BirthCertificateFormButton">
               Next
             </Button>
           </>
@@ -339,11 +373,7 @@ const BirthCertificateForm = () => {
             >
               Previous
             </Button>
-            <Button
-              variant="contained"
-              onClick={handleNext}
-              className="BirthCertificateFormButton"
-            >
+            <Button variant="contained" onClick={handleNext} className="BirthCertificateFormButton">
               Next
             </Button>
           </>
@@ -364,7 +394,7 @@ const BirthCertificateForm = () => {
               className="BirthCertificateFormButton"
               disabled={isLoading}
             >
-              {isLoading ? "Submitting..." : "Submit"}
+              {isLoading ? 'Submitting...' : 'Submit'}
             </Button>
           </>
         )}
@@ -375,11 +405,7 @@ const BirthCertificateForm = () => {
         onClose={handleCloseSnackbar}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
       >
-        <Alert
-          onClose={handleCloseSnackbar}
-          severity={snackbar.severity}
-          sx={{ width: '100%' }}
-        >
+        <Alert onClose={handleCloseSnackbar} severity={snackbar.severity} sx={{ width: '100%' }}>
           {snackbar.message}
         </Alert>
       </Snackbar>

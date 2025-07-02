@@ -1,49 +1,55 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Typography, Paper, Button, Divider, Alert, Snackbar, CircularProgress } from '@mui/material';
+import {
+  Box,
+  Typography,
+  Paper,
+  Button,
+  Divider,
+  Alert,
+  Snackbar,
+  CircularProgress,
+} from '@mui/material';
 import { useNavigate, useLocation } from 'react-router-dom';
 import './CopyBirthCertificate.css';
 import NavBar from '../../../../NavigationComponents/NavSide';
 import { documentApplicationService } from '../../../../services/documentApplicationService';
 import { localStorageManager } from '../../../../services/localStorageManager';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 const backendTypeMap = {
-  'Copy': {
+  Copy: {
     applicationType: 'Birth Certificate',
-    applicationSubtype: 'Request a Copy of Birth Certificate'
+    applicationSubtype: 'Request a Copy of Birth Certificate',
   },
   'Clerical Error': {
     applicationType: 'Birth Certificate',
-    applicationSubtype: 'Correction - Clerical Errors'
+    applicationSubtype: 'Correction - Clerical Errors',
   },
   'Sex DOB': {
     applicationType: 'Birth Certificate',
-    applicationSubtype: 'Correction - Sex/Date of Birth'
+    applicationSubtype: 'Correction - Sex/Date of Birth',
   },
   'First Name': {
     applicationType: 'Birth Certificate',
-    applicationSubtype: 'Correction - First Name'
-  }
+    applicationSubtype: 'Correction - First Name',
+  },
 };
 const uiTitleMap = {
-  'Copy': 'Request a Copy of Birth Certificate',
+  Copy: 'Request a Copy of Birth Certificate',
   'Clerical Error': 'Correction of Clerical Error',
   'Sex DOB': "Correction of Child's Sex / Date of Birth",
-  'First Name': 'Correction of First Name'
+  'First Name': 'Correction of First Name',
 };
 
 const CopyBirthCertificate = ({ formData = {}, handleChange, correctionType }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  
 
   const [selectedKind, setSelectedKind] = useState(
-    correctionType ||
-    location?.state?.correctionType ||
-    location?.state?.applicationType ||
-    'Copy'
+    correctionType || location?.state?.correctionType || location?.state?.applicationType || 'Copy'
   );
-const backendType = backendTypeMap[selectedKind] || backendTypeMap['Copy'];
-const uiTitle = uiTitleMap[selectedKind] || uiTitleMap['Copy'];
+  const backendType = backendTypeMap[selectedKind] || backendTypeMap['Copy'];
+  const uiTitle = uiTitleMap[selectedKind] || uiTitleMap['Copy'];
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [localFormData, setLocalFormData] = useState(formData || {});
@@ -55,19 +61,28 @@ const uiTitle = uiTitleMap[selectedKind] || uiTitleMap['Copy'];
   const requiredField = <span className="RequiredFieldCopyBirth">*</span>;
 
   const months = [
-    'January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December',
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
   ];
   const days = Array.from({ length: 31 }, (_, i) => i + 1);
   const currentYear = new Date().getFullYear();
   const years = Array.from({ length: 100 }, (_, i) => currentYear - i);
 
-  
   const showNotification = (message, severity = 'info') => {
     setSnackbar({
       open: true,
       message,
-      severity
+      severity,
     });
   };
 
@@ -75,11 +90,9 @@ const uiTitle = uiTitleMap[selectedKind] || uiTitleMap['Copy'];
     setSnackbar(prev => ({ ...prev, open: false }));
   };
 
-   const editingApplicationId = localStorage.getItem('editingApplicationId');
+  const editingApplicationId = localStorage.getItem('editingApplicationId');
   const isEditing =
-    location.state?.isEditing ||
-    localStorage.getItem('isEditingBirthApplication') === 'true';
-
+    location.state?.isEditing || localStorage.getItem('isEditingBirthApplication') === 'true';
 
   useEffect(() => {
     const fetchData = async () => {
@@ -97,7 +110,6 @@ const uiTitle = uiTitleMap[selectedKind] || uiTitleMap['Copy'];
             else if (subType === 'Correction - First Name') kind = 'First Name';
             else if (subType === 'Request a Copy of Birth Certificate') kind = 'Copy';
             setSelectedKind(kind);
-
           } else {
             const savedFormData = localStorage.getItem('birthCertificateApplication');
             if (savedFormData) setLocalFormData(JSON.parse(savedFormData));
@@ -114,14 +126,13 @@ const uiTitle = uiTitleMap[selectedKind] || uiTitleMap['Copy'];
         localStorage.removeItem('birthCertificateApplication');
         setSelectedKind(
           correctionType ||
-          location?.state?.correctionType ||
-          location?.state?.applicationType ||
-          'Copy'
+            location?.state?.correctionType ||
+            location?.state?.applicationType ||
+            'Copy'
         );
       }
     };
     fetchData();
-
   }, [isEditing, editingApplicationId]);
 
   const validateForm = () => {
@@ -137,12 +148,12 @@ const uiTitle = uiTitleMap[selectedKind] || uiTitleMap['Copy'];
       newErrors.motherFirstName = "Mother's first name is required";
     if (!localFormData.motherLastName?.trim())
       newErrors.motherLastName = "Mother's last name is required";
-     if (!hidePurposeSection) {
-    if (!localFormData.purpose) newErrors.purpose = 'Purpose is required';
-    if (localFormData.purpose === 'Others' && !localFormData.otherPurpose?.trim()) {
-      newErrors.otherPurpose = 'Please specify purpose';
+    if (!hidePurposeSection) {
+      if (!localFormData.purpose) newErrors.purpose = 'Purpose is required';
+      if (localFormData.purpose === 'Others' && !localFormData.otherPurpose?.trim()) {
+        newErrors.otherPurpose = 'Please specify purpose';
+      }
     }
-  }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -182,24 +193,23 @@ const uiTitle = uiTitleMap[selectedKind] || uiTitleMap['Copy'];
     let dataToSave = {
       ...localFormData,
       purpose: localFormData.purpose || '',
-      isCopyRequest: backendType.applicationSubtype.startsWith('Request a Copy')
+      isCopyRequest: backendType.applicationSubtype.startsWith('Request a Copy'),
     };
 
     try {
       let backendResponse;
       if (isEditing && editingApplicationId) {
-       backendResponse = await documentApplicationService.updateApplication(editingApplicationId, {
+        backendResponse = await documentApplicationService.updateApplication(editingApplicationId, {
           formData: dataToSave,
           applicantName: `${dataToSave.firstName || ''} ${dataToSave.lastName || ''}`,
           type: backendType.applicationType,
           applicationType: backendType.applicationType,
           applicationSubtype: backendType.applicationSubtype,
-          lastUpdated: new Date().toISOString()
+          lastUpdated: new Date().toISOString(),
         });
         applicationId = backendResponse.id || editingApplicationId;
-        showNotification("Application updated successfully", "success");
+        showNotification('Application updated successfully', 'success');
       } else {
-
         applicationId =
           (backendType.applicationSubtype.startsWith('Request a Copy') ? 'BC-' : 'BCC-') +
           Date.now().toString().slice(-6);
@@ -209,12 +219,14 @@ const uiTitle = uiTitleMap[selectedKind] || uiTitleMap['Copy'];
           applicantName: `${dataToSave.firstName || ''} ${dataToSave.lastName || ''}`,
           applicantDetails: JSON.stringify(dataToSave),
           formData: dataToSave,
-          status: 'PENDING'
+          status: 'PENDING',
         };
-        backendResponse = await documentApplicationService.createApplication(backendApplicationData);
-        if (!backendResponse || !backendResponse.id) throw new Error('Backend did not return a valid application ID');
+        backendResponse =
+          await documentApplicationService.createApplication(backendApplicationData);
+        if (!backendResponse || !backendResponse.id)
+          throw new Error('Backend did not return a valid application ID');
         applicationId = backendResponse.id;
-        showNotification("Application created successfully", "success");
+        showNotification('Application created successfully', 'success');
       }
 
       // Keep localStorage for fallback/offline, but always prefer backend
@@ -230,10 +242,12 @@ const uiTitle = uiTitleMap[selectedKind] || uiTitleMap['Copy'];
           month: 'numeric',
           day: 'numeric',
         }),
-        status: isEditing ? localStorage.getItem('currentApplicationStatus') || 'Pending' : 'Pending',
+        status: isEditing
+          ? localStorage.getItem('currentApplicationStatus') || 'Pending'
+          : 'Pending',
         message: `${backendType.applicationSubtype} for ${dataToSave.firstName || ''} ${dataToSave.lastName || ''}`,
         formData: dataToSave,
-        lastUpdated: new Date().toISOString()
+        lastUpdated: new Date().toISOString(),
       };
       if (appIndex >= 0) {
         existingApplications[appIndex] = applicationData;
@@ -253,13 +267,15 @@ const uiTitle = uiTitleMap[selectedKind] || uiTitleMap['Copy'];
 
       // Fire events
       window.dispatchEvent(new Event('storage'));
-      window.dispatchEvent(new CustomEvent('customStorageUpdate', {
-        detail: {
-          id: applicationId,
-          type: backendType.applicationType,
-          action: isEditing ? 'updated' : 'created'
-        }
-      }));
+      window.dispatchEvent(
+        new CustomEvent('customStorageUpdate', {
+          detail: {
+            id: applicationId,
+            type: backendType.applicationType,
+            action: isEditing ? 'updated' : 'created',
+          },
+        })
+      );
 
       setTimeout(() => {
         if (backendType.applicationSubtype.startsWith('Correction')) {
@@ -269,22 +285,23 @@ const uiTitle = uiTitleMap[selectedKind] || uiTitleMap['Copy'];
             navigate('/SexDobCorrection');
           } else if (selectedKind === 'First Name') {
             navigate('/FirstNameCorrection');
-          } 
-          else {
+          } else {
             navigate('/BirthApplicationSummary');
           }
         } else {
           navigate('/CTCBirthCertificate');
         }
       }, 1000);
-
     } catch (error) {
       setDebugInfo({
         message: error.message,
         response: error.response?.data,
-        status: error.response?.status
+        status: error.response?.status,
       });
-      showNotification(`Failed to ${isEditing ? "update" : "create"} application: ${error.message}`, "error");
+      showNotification(
+        `Failed to ${isEditing ? 'update' : 'create'} application: ${error.message}`,
+        'error'
+      );
     }
     setIsLoading(false);
   };
@@ -293,8 +310,21 @@ const uiTitle = uiTitleMap[selectedKind] || uiTitleMap['Copy'];
 
   return (
     <Box className={`CopyBirthCertificateContainer ${isSidebarOpen ? 'sidebar-open' : ''}`}>
+ <Typography variant="h4" className="FormTitle">
+  <Box className="FormTitleContent">
+    <Button
+      variant="outlined"
+      className="back-button-home-form-correction"
+      onClick={() => navigate('/ApplicationForm')}
+      startIcon={<ArrowBackIcon />}
+    >
+      Back
+    </Button>
+    <span className="FormTitleText">{uiTitleMap[selectedKind] || 'Birth Certificate Application'}</span>  
+  </Box>
+</Typography>
       <NavBar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
-      
+
       {/* Error summary */}
       {Object.keys(errors).length > 0 && (
         <div
@@ -319,7 +349,7 @@ const uiTitle = uiTitleMap[selectedKind] || uiTitleMap['Copy'];
           </ul>
         </div>
       )}
-      
+
       {/* Debug info display */}
       {debugInfo && (
         <Alert severity="error" sx={{ mb: 2 }}>
@@ -329,11 +359,7 @@ const uiTitle = uiTitleMap[selectedKind] || uiTitleMap['Copy'];
           </pre>
         </Alert>
       )}
-      
-      <Typography variant="h5" className="FormTitleCopyBirth">
-        {uiTitle}
-      </Typography>
-      
+
       <Box className="CopyBirthCertificateContainerCopyBirth">
         <Typography variant="body1" className="FormSubtitleCopyBirth">
           Please provide the information exactly as it appears on your birth certificate
@@ -695,7 +721,7 @@ const uiTitle = uiTitleMap[selectedKind] || uiTitleMap['Copy'];
                 Creating Application...
               </Box>
             ) : (
-              "NEXT"
+              'NEXT'
             )}
           </Button>
         </Box>
@@ -707,11 +733,7 @@ const uiTitle = uiTitleMap[selectedKind] || uiTitleMap['Copy'];
         onClose={handleCloseSnackbar}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
       >
-        <Alert
-          onClose={handleCloseSnackbar}
-          severity={snackbar.severity}
-          sx={{ width: '100%' }}
-        >
+        <Alert onClose={handleCloseSnackbar} severity={snackbar.severity} sx={{ width: '100%' }}>
           {snackbar.message}
         </Alert>
       </Snackbar>
