@@ -122,3 +122,34 @@
   flex-direction: column;
   gap: 28px;
 }
+
+.BackButtonFirstName {
+  border: solid 1px #184a5b !important; 
+  margin-right: 1vw !important;
+  color: #184a5b !important;
+  font-weight: bold;
+  padding: 8px 24px;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.BackButtonFirstName:hover {
+  background-color: #184a5b !important;
+  color: #f5f5f5 !important; 
+}
+
+
+.SubmitButtonFirstName {
+  background-color: #184a5b !important; /* deep red */
+  color: white !important;
+  font-weight: bold;
+  padding: 8px 24px;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+  border: none !important; /* optional: remove border */
+}
+
+.SubmitButtonFirstName:hover {
+  background-color: #678c98 !important; /* darker red on hover */
+  color: #f5f5f5 !important;
+}
