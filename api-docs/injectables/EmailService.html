@@ -375,8 +375,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="526"
-                                    class="link-to-prism">src/services/email.service.ts:526</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="518"
+                                    class="link-to-prism">src/services/email.service.ts:518</a></div>
                         </td>
                     </tr>
 
@@ -577,8 +577,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="627"
-                                    class="link-to-prism">src/services/email.service.ts:627</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="616"
+                                    class="link-to-prism">src/services/email.service.ts:616</a></div>
                         </td>
                     </tr>
 
@@ -672,8 +672,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="396"
-                                    class="link-to-prism">src/services/email.service.ts:396</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="389"
+                                    class="link-to-prism">src/services/email.service.ts:389</a></div>
                         </td>
                     </tr>
 
@@ -1419,7 +1419,6 @@ export class EmailService {
           .value { color: #212529; }
           .footer { background-color: #f8f9fa; padding: 20px; text-align: center; font-size: 12px; color: #6c757d; }
           .important-note { background-color: #fff3cd; border: 1px solid #ffeaa7; padding: 15px; border-radius: 8px; margin: 20px 0; }
-          .btn { display: inline-block; padding: 12px 24px; background-color: #28a745; color: white; text-decoration: none; border-radius: 5px; margin: 10px 0; }
         &lt;/style&gt;
       &lt;/head&gt;
       &lt;body&gt;
@@ -1430,7 +1429,7 @@ export class EmailService {
           &lt;/div&gt;
           
           &lt;div class&#x3D;&quot;content&quot;&gt;
-            &lt;p&gt;Dear ${appointmentDetails.firstName} ${appointmentDetails.lastName},&lt;/p&gt;
+            &lt;p&gt;Dear ${appointmentDetails.firstName || &#x27;Valued Client&#x27;} ${appointmentDetails.lastName || &#x27;&#x27;},&lt;/p&gt;
             
             &lt;p&gt;We&#x27;re pleased to confirm your appointment with the Municipal Civil Registrar&#x27;s Office.&lt;/p&gt;
             
@@ -1442,19 +1441,15 @@ export class EmailService {
               &lt;/div&gt;
               &lt;div class&#x3D;&quot;detail-row&quot;&gt;
                 &lt;span class&#x3D;&quot;label&quot;&gt;Service Type:&lt;/span&gt;
-                &lt;span class&#x3D;&quot;value&quot;&gt;${appointmentDetails.type}&lt;/span&gt;
+                &lt;span class&#x3D;&quot;value&quot;&gt;${appointmentDetails.type || appointmentDetails.reasonOfVisit || &#x27;Civil Registry Service&#x27;}&lt;/span&gt;
               &lt;/div&gt;
               &lt;div class&#x3D;&quot;detail-row&quot;&gt;
                 &lt;span class&#x3D;&quot;label&quot;&gt;Date:&lt;/span&gt;
-                &lt;span class&#x3D;&quot;value&quot;&gt;${appointmentDetails.date}&lt;/span&gt;
+                &lt;span class&#x3D;&quot;value&quot;&gt;${appointmentDetails.date || appointmentDetails.appointmentDate || &#x27;TBD&#x27;}&lt;/span&gt;
               &lt;/div&gt;
               &lt;div class&#x3D;&quot;detail-row&quot;&gt;
                 &lt;span class&#x3D;&quot;label&quot;&gt;Time:&lt;/span&gt;
-                &lt;span class&#x3D;&quot;value&quot;&gt;${appointmentDetails.time}&lt;/span&gt;
-              &lt;/div&gt;
-              &lt;div class&#x3D;&quot;detail-row&quot;&gt;
-                &lt;span class&#x3D;&quot;label&quot;&gt;Name:&lt;/span&gt;
-                &lt;span class&#x3D;&quot;value&quot;&gt;${appointmentDetails.firstName} ${appointmentDetails.lastName}&lt;/span&gt;
+                &lt;span class&#x3D;&quot;value&quot;&gt;${appointmentDetails.time || appointmentDetails.appointmentTime || &#x27;TBD&#x27;}&lt;/span&gt;
               &lt;/div&gt;
               ${appointmentDetails.phoneNumber ? &#x60;
               &lt;div class&#x3D;&quot;detail-row&quot;&gt;
@@ -1473,8 +1468,6 @@ export class EmailService {
                 &lt;li&gt;Keep this confirmation email for your records&lt;/li&gt;
               &lt;/ul&gt;
             &lt;/div&gt;
-            
-            &lt;p&gt;If you need to make changes to your appointment, please contact our office as soon as possible.&lt;/p&gt;
             
             &lt;p&gt;Thank you for using Bulak LGU Smart Connect!&lt;/p&gt;
           &lt;/div&gt;
@@ -1555,7 +1548,7 @@ export class EmailService {
           &lt;/div&gt;
           
           &lt;div class&#x3D;&quot;content&quot;&gt;
-            &lt;p&gt;Dear ${appointmentDetails.firstName} ${appointmentDetails.lastName},&lt;/p&gt;
+            &lt;p&gt;Dear ${appointmentDetails.firstName || &#x27;Valued Client&#x27;} ${appointmentDetails.lastName || &#x27;&#x27;},&lt;/p&gt;
             
             &lt;p&gt;We&#x27;re writing to inform you that your appointment status has been updated.&lt;/p&gt;
             
@@ -1569,15 +1562,15 @@ export class EmailService {
               &lt;/div&gt;
               &lt;div class&#x3D;&quot;detail-row&quot;&gt;
                 &lt;span class&#x3D;&quot;label&quot;&gt;Service Type:&lt;/span&gt;
-                &lt;span class&#x3D;&quot;value&quot;&gt;${appointmentDetails.type}&lt;/span&gt;
+                &lt;span class&#x3D;&quot;value&quot;&gt;${appointmentDetails.type || appointmentDetails.reasonOfVisit || &#x27;Civil Registry Service&#x27;}&lt;/span&gt;
               &lt;/div&gt;
               &lt;div class&#x3D;&quot;detail-row&quot;&gt;
                 &lt;span class&#x3D;&quot;label&quot;&gt;Date:&lt;/span&gt;
-                &lt;span class&#x3D;&quot;value&quot;&gt;${appointmentDetails.date}&lt;/span&gt;
+                &lt;span class&#x3D;&quot;value&quot;&gt;${appointmentDetails.date || appointmentDetails.appointmentDate || &#x27;TBD&#x27;}&lt;/span&gt;
               &lt;/div&gt;
               &lt;div class&#x3D;&quot;detail-row&quot;&gt;
                 &lt;span class&#x3D;&quot;label&quot;&gt;Time:&lt;/span&gt;
-                &lt;span class&#x3D;&quot;value&quot;&gt;${appointmentDetails.time}&lt;/span&gt;
+                &lt;span class&#x3D;&quot;value&quot;&gt;${appointmentDetails.time || appointmentDetails.appointmentTime || &#x27;TBD&#x27;}&lt;/span&gt;
               &lt;/div&gt;
             &lt;/div&gt;
             
@@ -1595,14 +1588,13 @@ export class EmailService {
             ${newStatus &#x3D;&#x3D;&#x3D; &#x27;completed&#x27; ? &#x60;
             &lt;div style&#x3D;&quot;background-color: #d1ecf1; border: 1px solid #bee5eb; padding: 15px; border-radius: 8px; margin: 20px 0;&quot;&gt;
               &lt;p&gt;&lt;strong&gt;Your appointment has been completed!&lt;/strong&gt; Thank you for visiting our office.&lt;/p&gt;
-              &lt;p&gt;If you have any questions about your documents or need additional services, please don&#x27;t hesitate to contact us.&lt;/p&gt;
             &lt;/div&gt;
             &#x60; : &#x27;&#x27;}
             
             ${newStatus &#x3D;&#x3D;&#x3D; &#x27;cancelled&#x27; ? &#x60;
             &lt;div style&#x3D;&quot;background-color: #f8d7da; border: 1px solid #f5c6cb; padding: 15px; border-radius: 8px; margin: 20px 0;&quot;&gt;
               &lt;p&gt;&lt;strong&gt;Your appointment has been cancelled.&lt;/strong&gt;&lt;/p&gt;
-              &lt;p&gt;If you need to reschedule or have any questions, please contact our office or book a new appointment through our system.&lt;/p&gt;
+              &lt;p&gt;If you need to reschedule, please contact our office or book a new appointment.&lt;/p&gt;
             &lt;/div&gt;
             &#x60; : &#x27;&#x27;}
             
@@ -1658,7 +1650,6 @@ export class EmailService {
           .value { color: #212529; }
           .footer { background-color: #f8f9fa; padding: 20px; text-align: center; font-size: 12px; color: #6c757d; }
           .rebook-section { background-color: #e2f3ff; border: 1px solid #b8daff; padding: 20px; border-radius: 8px; margin: 20px 0; text-align: center; }
-          .btn { display: inline-block; padding: 12px 24px; background-color: #007bff; color: white; text-decoration: none; border-radius: 5px; margin: 10px 0; }
         &lt;/style&gt;
       &lt;/head&gt;
       &lt;body&gt;
@@ -1669,9 +1660,9 @@ export class EmailService {
           &lt;/div&gt;
           
           &lt;div class&#x3D;&quot;content&quot;&gt;
-            &lt;p&gt;Dear ${appointmentDetails.firstName} ${appointmentDetails.lastName},&lt;/p&gt;
+            &lt;p&gt;Dear ${appointmentDetails.firstName || &#x27;Valued Client&#x27;} ${appointmentDetails.lastName || &#x27;&#x27;},&lt;/p&gt;
             
-            &lt;p&gt;We regret to inform you that your appointment scheduled with the Municipal Civil Registrar&#x27;s Office has been cancelled.&lt;/p&gt;
+            &lt;p&gt;We regret to inform you that your appointment has been cancelled.&lt;/p&gt;
             
             &lt;div class&#x3D;&quot;appointment-card&quot;&gt;
               &lt;h3 style&#x3D;&quot;margin-top: 0; color: #dc3545;&quot;&gt;Cancelled Appointment Details&lt;/h3&gt;
@@ -1681,15 +1672,15 @@ export class EmailService {
               &lt;/div&gt;
               &lt;div class&#x3D;&quot;detail-row&quot;&gt;
                 &lt;span class&#x3D;&quot;label&quot;&gt;Service Type:&lt;/span&gt;
-                &lt;span class&#x3D;&quot;value&quot;&gt;${appointmentDetails.type}&lt;/span&gt;
+                &lt;span class&#x3D;&quot;value&quot;&gt;${appointmentDetails.type || appointmentDetails.reasonOfVisit || &#x27;Civil Registry Service&#x27;}&lt;/span&gt;
               &lt;/div&gt;
               &lt;div class&#x3D;&quot;detail-row&quot;&gt;
                 &lt;span class&#x3D;&quot;label&quot;&gt;Scheduled Date:&lt;/span&gt;
-                &lt;span class&#x3D;&quot;value&quot;&gt;${appointmentDetails.date}&lt;/span&gt;
+                &lt;span class&#x3D;&quot;value&quot;&gt;${appointmentDetails.date || appointmentDetails.appointmentDate || &#x27;TBD&#x27;}&lt;/span&gt;
               &lt;/div&gt;
               &lt;div class&#x3D;&quot;detail-row&quot;&gt;
                 &lt;span class&#x3D;&quot;label&quot;&gt;Scheduled Time:&lt;/span&gt;
-                &lt;span class&#x3D;&quot;value&quot;&gt;${appointmentDetails.time}&lt;/span&gt;
+                &lt;span class&#x3D;&quot;value&quot;&gt;${appointmentDetails.time || appointmentDetails.appointmentTime || &#x27;TBD&#x27;}&lt;/span&gt;
               &lt;/div&gt;
               ${reason ? &#x60;
               &lt;div class&#x3D;&quot;detail-row&quot;&gt;
@@ -1701,11 +1692,9 @@ export class EmailService {
             
             &lt;div class&#x3D;&quot;rebook-section&quot;&gt;
               &lt;h4 style&#x3D;&quot;margin-top: 0;&quot;&gt;📅 Need to Reschedule?&lt;/h4&gt;
-              &lt;p&gt;You can easily book a new appointment through our online system or contact our office directly.&lt;/p&gt;
+              &lt;p&gt;You can easily book a new appointment through our online system.&lt;/p&gt;
               &lt;p&gt;We apologize for any inconvenience this may have caused.&lt;/p&gt;
             &lt;/div&gt;
-            
-            &lt;p&gt;If you have any questions or concerns, please don&#x27;t hesitate to contact our office.&lt;/p&gt;
             
             &lt;p&gt;Thank you for your understanding.&lt;/p&gt;
           &lt;/div&gt;
