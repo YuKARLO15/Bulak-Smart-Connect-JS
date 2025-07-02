@@ -851,13 +851,54 @@ export class AuthController {
     summary: 'Send appointment confirmation notification',
     description: 'Send email notification when appointment is confirmed',
   })
-  @ApiBody({ type: AppointmentNotificationDto })
+  @ApiBody({
+    description: 'Appointment confirmation notification details',
+    schema: {
+      type: 'object',
+      properties: {
+        email: {
+          type: 'string',
+          format: 'email',
+          example: 'user@example.com',
+          description: 'Email address of appointment holder',
+        },
+        appointmentNumber: {
+          type: 'string',
+          example: 'APPT-2024-001',
+          description: 'Appointment number/ID',
+        },
+        type: {
+          type: 'string',
+          example: 'confirmation',
+          description: 'Type of notification',
+        },
+        appointmentDetails: {
+          type: 'object',
+          description: 'Appointment details',
+          properties: {
+            type: { type: 'string', example: 'Birth Certificate' },
+            date: { type: 'string', example: '2024-01-15' },
+            time: { type: 'string', example: '10:00 AM - 10:30 AM' },
+            firstName: { type: 'string', example: 'John' },
+            lastName: { type: 'string', example: 'Doe' },
+            phoneNumber: { type: 'string', example: '09123456789' },
+          },
+        },
+      },
+      required: ['email', 'appointmentNumber', 'appointmentDetails'],
+    },
+  })
   @Post('notifications/appointment-confirmation')
   async sendAppointmentConfirmation(
-    @Body() notificationDto: AppointmentNotificationDto,
+    @Body() notificationDto: any,
   ) {
     try {
       const { email, appointmentNumber, appointmentDetails } = notificationDto;
+
+      // Validate required fields
+      if (!email || !appointmentNumber || !appointmentDetails) {
+        throw new BadRequestException('Missing required fields: email, appointmentNumber, or appointmentDetails');
+      }
 
       await this.emailService.sendAppointmentConfirmation(
         email,
@@ -879,17 +920,50 @@ export class AuthController {
     summary: 'Send appointment status update notification',
     description: 'Send email notification when appointment status changes',
   })
-  @ApiBody({ type: AppointmentNotificationDto })
+  @ApiBody({
+    description: 'Appointment status update notification details',
+    schema: {
+      type: 'object',
+      properties: {
+        email: {
+          type: 'string',
+          format: 'email',
+          example: 'user@example.com',
+          description: 'Email address of appointment holder',
+        },
+        appointmentNumber: {
+          type: 'string',
+          example: 'APPT-2024-001',
+          description: 'Appointment number/ID',
+        },
+        type: {
+          type: 'string',
+          example: 'status_update',
+          description: 'Type of notification',
+        },
+        status: {
+          type: 'string',
+          example: 'confirmed',
+          description: 'New appointment status',
+        },
+        appointmentDetails: {
+          type: 'object',
+          description: 'Appointment details',
+        },
+      },
+      required: ['email', 'appointmentNumber', 'status', 'appointmentDetails'],
+    },
+  })
   @Post('notifications/appointment-status-update')
   async sendAppointmentStatusUpdate(
-    @Body() notificationDto: AppointmentNotificationDto,
+    @Body() notificationDto: any,
   ) {
     try {
       const { email, appointmentNumber, status, appointmentDetails } = notificationDto;
 
-      // Ensure status is provided for status updates
-      if (!status) {
-        throw new BadRequestException('Status is required for status updates');
+      // Validate required fields
+      if (!email || !appointmentNumber || !status || !appointmentDetails) {
+        throw new BadRequestException('Missing required fields: email, appointmentNumber, status, or appointmentDetails');
       }
 
       await this.emailService.sendAppointmentStatusUpdate(
@@ -913,13 +987,51 @@ export class AuthController {
     summary: 'Send appointment cancellation notification',
     description: 'Send email notification when appointment is cancelled',
   })
-  @ApiBody({ type: AppointmentNotificationDto })
+  @ApiBody({
+    description: 'Appointment cancellation notification details',
+    schema: {
+      type: 'object',
+      properties: {
+        email: {
+          type: 'string',
+          format: 'email',
+          example: 'user@example.com',
+          description: 'Email address of appointment holder',
+        },
+        appointmentNumber: {
+          type: 'string',
+          example: 'APPT-2024-001',
+          description: 'Appointment number/ID',
+        },
+        type: {
+          type: 'string',
+          example: 'cancellation',
+          description: 'Type of notification',
+        },
+        reason: {
+          type: 'string',
+          example: 'Cancelled by administrator',
+          description: 'Cancellation reason',
+        },
+        appointmentDetails: {
+          type: 'object',
+          description: 'Appointment details',
+        },
+      },
+      required: ['email', 'appointmentNumber', 'appointmentDetails'],
+    },
+  })
   @Post('notifications/appointment-cancellation')
   async sendAppointmentCancellation(
-    @Body() notificationDto: AppointmentNotificationDto,
+    @Body() notificationDto: any,
   ) {
     try {
       const { email, appointmentNumber, appointmentDetails, reason } = notificationDto;
+
+      // Validate required fields
+      if (!email || !appointmentNumber || !appointmentDetails) {
+        throw new BadRequestException('Missing required fields: email, appointmentNumber, or appointmentDetails');
+      }
 
       await this.emailService.sendAppointmentCancellation(
         email,

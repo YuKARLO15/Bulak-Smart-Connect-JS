@@ -237,11 +237,42 @@ const AppointmentContainer = ({ onBack, preselectedDate }) => {
       return;
     }
 
-    // 📧 GET USER EMAIL FOR NOTIFICATIONS (ADD THIS SECTION)
-    const userEmail = getUserEmail();
+    // 📧 GET USER EMAIL FOR NOTIFICATIONS (ENHANCED TO MATCH QUEUE LOGIC)
+    const getUserEmailForNotification = () => {
+      try {
+        // First try from auth context (like queue system)
+        if (user && user.email) {
+          console.log('📧 Using email from auth context:', user.email);
+          return user.email;
+        }
+        
+        // Fallback to localStorage
+        const userData = localStorage.getItem('user');
+        if (userData) {
+          const parsedUser = JSON.parse(userData);
+          if (parsedUser.email) {
+            console.log('📧 Using email from localStorage:', parsedUser.email);
+            return parsedUser.email;
+          }
+        }
+        
+        // Check if user is in formData (for guests)
+        const token = localStorage.getItem('token');
+        if (token) {
+          console.log('📧 Token found, but no email in user data');
+        }
+        
+        return null;
+      } catch (error) {
+        console.error('Error getting user email for notification:', error);
+        return null;
+      }
+    };
+
+    const userEmail = getUserEmailForNotification();
     if (!userEmail) {
-      alert('Unable to get your email address for confirmation. Please make sure you are logged in.');
-      return;
+      console.warn('⚠️ No email found for notifications, but continuing with appointment creation');
+      // Don't block appointment creation if email is missing
     }
 
     try {
@@ -259,7 +290,7 @@ const AppointmentContainer = ({ onBack, preselectedDate }) => {
                          String(selectedDate.getDate()).padStart(2, '0'),
         appointmentTime: formData.time,
         isGuest: !isForSelf,
-        email: userEmail // ADD EMAIL TO APPOINTMENT DATA
+        // Don't add email to appointment data - keep it separate for notifications
       };
 
       console.log('Sending appointment data with date:', appointmentData.appointmentDate);
@@ -284,30 +315,51 @@ const AppointmentContainer = ({ onBack, preselectedDate }) => {
         dbId: result.id,
         createdAt: result.createdAt,
         updatedAt: result.updatedAt,
-        email: userEmail // ADD EMAIL TO NEW APPOINTMENT OBJECT
+        email: userEmail // Keep email for local reference
       };
 
       saveRecentAppointments(newAppointment);
 
-      // 📧 SEND CONFIRMATION NOTIFICATION (ADD THIS SECTION)
-      try {
-        console.log('📧 Sending appointment confirmation notification...');
-        const notificationResult = await appointmentNotificationService.sendAppointmentConfirmation(
-          userEmail,
-          newAppointment.appointmentNumber || newAppointment.id,
-          newAppointment
-        );
+      // 📧 SEND CONFIRMATION NOTIFICATION (ENHANCED ERROR HANDLING)
+      if (userEmail) {
+        try {
+          console.log('📧 Sending appointment confirmation notification to:', userEmail);
+          console.log('📧 Appointment details for notification:', {
+            appointmentNumber: newAppointment.appointmentNumber || newAppointment.id,
+            type: newAppointment.reasonOfVisit,
+            date: newAppointment.appointmentDate,
+            time: newAppointment.appointmentTime,
+            firstName: newAppointment.firstName,
+            lastName: newAppointment.lastName
+          });
 
-        if (notificationResult.success) {
-          console.log('✅ Confirmation notification sent successfully');
-          alert('Your appointment has been confirmed! A confirmation email has been sent to you.');
-        } else {
-          console.log('⚠️ Confirmation notification failed:', notificationResult.error);
+          const notificationResult = await appointmentNotificationService.sendAppointmentConfirmation(
+            userEmail,
+            newAppointment.appointmentNumber || newAppointment.id,
+            {
+              type: newAppointment.reasonOfVisit,
+              date: newAppointment.appointmentDate,
+              time: newAppointment.appointmentTime,
+              firstName: newAppointment.firstName,
+              lastName: newAppointment.lastName,
+              phoneNumber: newAppointment.phoneNumber
+            }
+          );
+
+          if (notificationResult.success) {
+            console.log('✅ Confirmation notification sent successfully');
+            alert('Your appointment has been confirmed! A confirmation email has been sent to you.');
+          } else {
+            console.log('⚠️ Confirmation notification failed:', notificationResult.error);
+            alert('Your appointment has been confirmed! However, we could not send the confirmation email.');
+          }
+        } catch (notificationError) {
+          console.error('❌ Error sending confirmation notification:', notificationError);
           alert('Your appointment has been confirmed! However, we could not send the confirmation email.');
         }
-      } catch (notificationError) {
-        console.error('❌ Error sending confirmation notification:', notificationError);
-        alert('Your appointment has been confirmed! However, we could not send the confirmation email.');
+      } else {
+        console.log('⚠️ No email available for notifications');
+        alert('Your appointment has been confirmed! No confirmation email will be sent as no email was found.');
       }
 
       navigate(`/QRCodeAppointment/${newAppointment.appointmentNumber || newAppointment.id}`, { 

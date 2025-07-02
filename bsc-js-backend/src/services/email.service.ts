@@ -310,7 +310,6 @@ export class EmailService {
           .value { color: #212529; }
           .footer { background-color: #f8f9fa; padding: 20px; text-align: center; font-size: 12px; color: #6c757d; }
           .important-note { background-color: #fff3cd; border: 1px solid #ffeaa7; padding: 15px; border-radius: 8px; margin: 20px 0; }
-          .btn { display: inline-block; padding: 12px 24px; background-color: #28a745; color: white; text-decoration: none; border-radius: 5px; margin: 10px 0; }
         </style>
       </head>
       <body>
@@ -321,7 +320,7 @@ export class EmailService {
           </div>
           
           <div class="content">
-            <p>Dear ${appointmentDetails.firstName} ${appointmentDetails.lastName},</p>
+            <p>Dear ${appointmentDetails.firstName || 'Valued Client'} ${appointmentDetails.lastName || ''},</p>
             
             <p>We're pleased to confirm your appointment with the Municipal Civil Registrar's Office.</p>
             
@@ -333,19 +332,15 @@ export class EmailService {
               </div>
               <div class="detail-row">
                 <span class="label">Service Type:</span>
-                <span class="value">${appointmentDetails.type}</span>
+                <span class="value">${appointmentDetails.type || appointmentDetails.reasonOfVisit || 'Civil Registry Service'}</span>
               </div>
               <div class="detail-row">
                 <span class="label">Date:</span>
-                <span class="value">${appointmentDetails.date}</span>
+                <span class="value">${appointmentDetails.date || appointmentDetails.appointmentDate || 'TBD'}</span>
               </div>
               <div class="detail-row">
                 <span class="label">Time:</span>
-                <span class="value">${appointmentDetails.time}</span>
-              </div>
-              <div class="detail-row">
-                <span class="label">Name:</span>
-                <span class="value">${appointmentDetails.firstName} ${appointmentDetails.lastName}</span>
+                <span class="value">${appointmentDetails.time || appointmentDetails.appointmentTime || 'TBD'}</span>
               </div>
               ${appointmentDetails.phoneNumber ? `
               <div class="detail-row">
@@ -364,8 +359,6 @@ export class EmailService {
                 <li>Keep this confirmation email for your records</li>
               </ul>
             </div>
-            
-            <p>If you need to make changes to your appointment, please contact our office as soon as possible.</p>
             
             <p>Thank you for using Bulak LGU Smart Connect!</p>
           </div>
@@ -446,7 +439,7 @@ export class EmailService {
           </div>
           
           <div class="content">
-            <p>Dear ${appointmentDetails.firstName} ${appointmentDetails.lastName},</p>
+            <p>Dear ${appointmentDetails.firstName || 'Valued Client'} ${appointmentDetails.lastName || ''},</p>
             
             <p>We're writing to inform you that your appointment status has been updated.</p>
             
@@ -460,15 +453,15 @@ export class EmailService {
               </div>
               <div class="detail-row">
                 <span class="label">Service Type:</span>
-                <span class="value">${appointmentDetails.type}</span>
+                <span class="value">${appointmentDetails.type || appointmentDetails.reasonOfVisit || 'Civil Registry Service'}</span>
               </div>
               <div class="detail-row">
                 <span class="label">Date:</span>
-                <span class="value">${appointmentDetails.date}</span>
+                <span class="value">${appointmentDetails.date || appointmentDetails.appointmentDate || 'TBD'}</span>
               </div>
               <div class="detail-row">
                 <span class="label">Time:</span>
-                <span class="value">${appointmentDetails.time}</span>
+                <span class="value">${appointmentDetails.time || appointmentDetails.appointmentTime || 'TBD'}</span>
               </div>
             </div>
             
@@ -486,14 +479,13 @@ export class EmailService {
             ${newStatus === 'completed' ? `
             <div style="background-color: #d1ecf1; border: 1px solid #bee5eb; padding: 15px; border-radius: 8px; margin: 20px 0;">
               <p><strong>Your appointment has been completed!</strong> Thank you for visiting our office.</p>
-              <p>If you have any questions about your documents or need additional services, please don't hesitate to contact us.</p>
             </div>
             ` : ''}
             
             ${newStatus === 'cancelled' ? `
             <div style="background-color: #f8d7da; border: 1px solid #f5c6cb; padding: 15px; border-radius: 8px; margin: 20px 0;">
               <p><strong>Your appointment has been cancelled.</strong></p>
-              <p>If you need to reschedule or have any questions, please contact our office or book a new appointment through our system.</p>
+              <p>If you need to reschedule, please contact our office or book a new appointment.</p>
             </div>
             ` : ''}
             
@@ -549,7 +541,6 @@ export class EmailService {
           .value { color: #212529; }
           .footer { background-color: #f8f9fa; padding: 20px; text-align: center; font-size: 12px; color: #6c757d; }
           .rebook-section { background-color: #e2f3ff; border: 1px solid #b8daff; padding: 20px; border-radius: 8px; margin: 20px 0; text-align: center; }
-          .btn { display: inline-block; padding: 12px 24px; background-color: #007bff; color: white; text-decoration: none; border-radius: 5px; margin: 10px 0; }
         </style>
       </head>
       <body>
@@ -560,9 +551,9 @@ export class EmailService {
           </div>
           
           <div class="content">
-            <p>Dear ${appointmentDetails.firstName} ${appointmentDetails.lastName},</p>
+            <p>Dear ${appointmentDetails.firstName || 'Valued Client'} ${appointmentDetails.lastName || ''},</p>
             
-            <p>We regret to inform you that your appointment scheduled with the Municipal Civil Registrar's Office has been cancelled.</p>
+            <p>We regret to inform you that your appointment has been cancelled.</p>
             
             <div class="appointment-card">
               <h3 style="margin-top: 0; color: #dc3545;">Cancelled Appointment Details</h3>
@@ -572,15 +563,15 @@ export class EmailService {
               </div>
               <div class="detail-row">
                 <span class="label">Service Type:</span>
-                <span class="value">${appointmentDetails.type}</span>
+                <span class="value">${appointmentDetails.type || appointmentDetails.reasonOfVisit || 'Civil Registry Service'}</span>
               </div>
               <div class="detail-row">
                 <span class="label">Scheduled Date:</span>
-                <span class="value">${appointmentDetails.date}</span>
+                <span class="value">${appointmentDetails.date || appointmentDetails.appointmentDate || 'TBD'}</span>
               </div>
               <div class="detail-row">
                 <span class="label">Scheduled Time:</span>
-                <span class="value">${appointmentDetails.time}</span>
+                <span class="value">${appointmentDetails.time || appointmentDetails.appointmentTime || 'TBD'}</span>
               </div>
               ${reason ? `
               <div class="detail-row">
@@ -592,11 +583,9 @@ export class EmailService {
             
             <div class="rebook-section">
               <h4 style="margin-top: 0;">📅 Need to Reschedule?</h4>
-              <p>You can easily book a new appointment through our online system or contact our office directly.</p>
+              <p>You can easily book a new appointment through our online system.</p>
               <p>We apologize for any inconvenience this may have caused.</p>
             </div>
-            
-            <p>If you have any questions or concerns, please don't hesitate to contact our office.</p>
             
             <p>Thank you for your understanding.</p>
           </div>

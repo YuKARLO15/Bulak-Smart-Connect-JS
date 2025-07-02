@@ -11,30 +11,51 @@ class AppointmentNotificationService {
    */
   async sendAppointmentConfirmation(userEmail, appointmentNumber, appointmentDetails) {
     try {
+      // Validate inputs first
+      if (!userEmail) {
+        console.log('⚠️ No email provided for appointment confirmation');
+        return { success: false, error: 'No email provided' };
+      }
+
+      if (!appointmentNumber) {
+        console.log('⚠️ No appointment number provided');
+        return { success: false, error: 'No appointment number provided' };
+      }
+
+      if (!appointmentDetails) {
+        console.log('⚠️ No appointment details provided');
+        return { success: false, error: 'No appointment details provided' };
+      }
+
       console.log('📧 Sending appointment confirmation notification...', {
         email: userEmail,
         appointmentNumber,
         details: appointmentDetails
       });
 
-      const response = await axios.post(`${this.baseURL}/auth/notifications/appointment-confirmation`, {
+      const payload = {
         email: userEmail,
         appointmentNumber,
         type: 'confirmation',
         appointmentDetails: {
-          type: appointmentDetails.reasonOfVisit || appointmentDetails.type || 'Civil Registry Service',
-          date: appointmentDetails.appointmentDate || appointmentDetails.date,
-          time: appointmentDetails.appointmentTime || appointmentDetails.time,
-          firstName: appointmentDetails.firstName,
-          lastName: appointmentDetails.lastName,
-          phoneNumber: appointmentDetails.phoneNumber
+          type: appointmentDetails.type || appointmentDetails.reasonOfVisit || 'Civil Registry Service',
+          date: appointmentDetails.date || appointmentDetails.appointmentDate,
+          time: appointmentDetails.time || appointmentDetails.appointmentTime,
+          firstName: appointmentDetails.firstName || 'N/A',
+          lastName: appointmentDetails.lastName || 'N/A',
+          phoneNumber: appointmentDetails.phoneNumber || ''
         }
-      });
+      };
+
+      console.log('📧 Sending payload:', payload);
+
+      const response = await axios.post(`${this.baseURL}/auth/notifications/appointment-confirmation`, payload);
 
       console.log('✅ Appointment confirmation notification sent:', response.data);
       return { success: true, data: response.data };
     } catch (error) {
       console.error('❌ Failed to send appointment confirmation:', error);
+      console.error('❌ Error details:', error.response?.data || error.message);
       return { 
         success: false, 
         error: error.response?.data?.message || error.message 
@@ -47,6 +68,11 @@ class AppointmentNotificationService {
    */
   async sendStatusUpdateNotification(userEmail, appointmentNumber, newStatus, appointmentDetails) {
     try {
+      if (!userEmail) {
+        console.log('⚠️ No email provided for status update');
+        return { success: false, error: 'No email provided' };
+      }
+
       console.log('📧 Sending appointment status update notification...', {
         email: userEmail,
         appointmentNumber,
@@ -54,7 +80,7 @@ class AppointmentNotificationService {
         details: appointmentDetails
       });
 
-      const response = await axios.post(`${this.baseURL}/auth/notifications/appointment-status-update`, {
+      const payload = {
         email: userEmail,
         appointmentNumber,
         type: 'status_update',
@@ -63,11 +89,13 @@ class AppointmentNotificationService {
           type: appointmentDetails.reasonOfVisit || appointmentDetails.type || 'Civil Registry Service',
           date: appointmentDetails.appointmentDate || appointmentDetails.date,
           time: appointmentDetails.appointmentTime || appointmentDetails.time,
-          firstName: appointmentDetails.firstName,
-          lastName: appointmentDetails.lastName,
-          phoneNumber: appointmentDetails.phoneNumber
+          firstName: appointmentDetails.firstName || 'N/A',
+          lastName: appointmentDetails.lastName || 'N/A',
+          phoneNumber: appointmentDetails.phoneNumber || ''
         }
-      });
+      };
+
+      const response = await axios.post(`${this.baseURL}/auth/notifications/appointment-status-update`, payload);
 
       console.log('✅ Appointment status update notification sent:', response.data);
       return { success: true, data: response.data };
@@ -85,6 +113,11 @@ class AppointmentNotificationService {
    */
   async sendCancellationNotification(userEmail, appointmentNumber, appointmentDetails, reason = '') {
     try {
+      if (!userEmail) {
+        console.log('⚠️ No email provided for cancellation notification');
+        return { success: false, error: 'No email provided' };
+      }
+
       console.log('📧 Sending appointment cancellation notification...', {
         email: userEmail,
         appointmentNumber,
@@ -92,7 +125,7 @@ class AppointmentNotificationService {
         details: appointmentDetails
       });
 
-      const response = await axios.post(`${this.baseURL}/auth/notifications/appointment-cancellation`, {
+      const payload = {
         email: userEmail,
         appointmentNumber,
         type: 'cancellation',
@@ -101,52 +134,18 @@ class AppointmentNotificationService {
           type: appointmentDetails.reasonOfVisit || appointmentDetails.type || 'Civil Registry Service',
           date: appointmentDetails.appointmentDate || appointmentDetails.date,
           time: appointmentDetails.appointmentTime || appointmentDetails.time,
-          firstName: appointmentDetails.firstName,
-          lastName: appointmentDetails.lastName,
-          phoneNumber: appointmentDetails.phoneNumber
+          firstName: appointmentDetails.firstName || 'N/A',
+          lastName: appointmentDetails.lastName || 'N/A',
+          phoneNumber: appointmentDetails.phoneNumber || ''
         }
-      });
+      };
+
+      const response = await axios.post(`${this.baseURL}/auth/notifications/appointment-cancellation`, payload);
 
       console.log('✅ Appointment cancellation notification sent:', response.data);
       return { success: true, data: response.data };
     } catch (error) {
       console.error('❌ Failed to send appointment cancellation:', error);
-      return { 
-        success: false, 
-        error: error.response?.data?.message || error.message 
-      };
-    }
-  }
-
-  /**
-   * Send appointment reminder notification
-   */
-  async sendAppointmentReminder(userEmail, appointmentNumber, appointmentDetails) {
-    try {
-      console.log('📧 Sending appointment reminder notification...', {
-        email: userEmail,
-        appointmentNumber,
-        details: appointmentDetails
-      });
-
-      const response = await axios.post(`${this.baseURL}/auth/notifications/appointment-reminder`, {
-        email: userEmail,
-        appointmentNumber,
-        type: 'reminder',
-        appointmentDetails: {
-          type: appointmentDetails.reasonOfVisit || appointmentDetails.type || 'Civil Registry Service',
-          date: appointmentDetails.appointmentDate || appointmentDetails.date,
-          time: appointmentDetails.appointmentTime || appointmentDetails.time,
-          firstName: appointmentDetails.firstName,
-          lastName: appointmentDetails.lastName,
-          phoneNumber: appointmentDetails.phoneNumber
-        }
-      });
-
-      console.log('✅ Appointment reminder notification sent:', response.data);
-      return { success: true, data: response.data };
-    } catch (error) {
-      console.error('❌ Failed to send appointment reminder:', error);
       return { 
         success: false, 
         error: error.response?.data?.message || error.message 
