@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { appointmentService } from '../../services/appointmentService';
+import { appointmentNotificationService } from '../../services/appointmentNotificationService';
 import './AllAppointmentAdmin.css';
 import { Box, Typography, Card, CardContent, Button, Grid, Paper, CircularProgress, Container, Alert } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
@@ -162,9 +163,51 @@ const AllAppointmentsAdmin = () => {
 
   const handleStatusUpdate = async (appointmentId, newStatus) => {
     try {
+      console.log(`📝 Updating appointment ${appointmentId} status to: ${newStatus}`);
+      
+      // Find the appointment to get email and details (keep your existing logic)
+      const appointment = appointments.find(
+        app => (app.id || app._id || app.appointmentNumber) === appointmentId
+      );
+
+      if (!appointment) {
+        console.error('Appointment not found:', appointmentId);
+        setError('Appointment not found');
+        return;
+      }
+
+      // Update status in database (keep your existing API call)
       await appointmentService.updateAppointmentStatus(appointmentId, newStatus);
 
+      // 📧 SEND STATUS UPDATE NOTIFICATION (ADD THIS SECTION)
+      if (appointment.email) {
+        try {
+          console.log('📧 Sending status update notification...');
+          const notificationResult = await appointmentNotificationService.sendStatusUpdateNotification(
+            appointment.email,
+            appointment.appointmentNumber || appointmentId,
+            newStatus,
+            appointment
+          );
+
+          if (notificationResult.success) {
+            console.log('✅ Status update notification sent successfully');
+          } else {
+            console.log('⚠️ Status update notification failed:', notificationResult.error);
+          }
+        } catch (notificationError) {
+          console.error('❌ Error sending status update notification:', notificationError);
+        }
+      } else {
+        console.log('⚠️ No email found for appointment, skipping notification');
+      }
+
+      // Keep your existing refresh logic
       await fetchAppointments();
+
+      // Enhanced success message
+      alert(`Appointment ${newStatus} successfully! ${appointment.email ? 'Notification email sent.' : ''}`);
+      
     } catch (error) {
       console.error('Error updating appointment status:', error);
       setError('Failed to update appointment status. Please try again.');
@@ -180,9 +223,44 @@ const AllAppointmentsAdmin = () => {
 
   const confirmCancelAppointment = async () => {
     try {
+      console.log(`📝 Cancelling appointment ${cancelDialog.appointmentId}`);
+      
+      // Find the appointment details (keep your existing logic)
+      const appointment = appointments.find(
+        app => (app.id || app._id || app.appointmentNumber) === cancelDialog.appointmentId
+      );
+
+      // Update status to cancelled (keep your existing API call)
       await appointmentService.updateAppointmentStatus(cancelDialog.appointmentId, 'cancelled');
+
+      // 📧 SEND CANCELLATION NOTIFICATION (ADD THIS SECTION)
+      if (appointment && appointment.email) {
+        try {
+          console.log('📧 Sending cancellation notification...');
+          const notificationResult = await appointmentNotificationService.sendCancellationNotification(
+            appointment.email,
+            appointment.appointmentNumber || cancelDialog.appointmentId,
+            appointment,
+            'Cancelled by administrator'
+          );
+
+          if (notificationResult.success) {
+            console.log('✅ Cancellation notification sent successfully');
+          } else {
+            console.log('⚠️ Cancellation notification failed:', notificationResult.error);
+          }
+        } catch (notificationError) {
+          console.error('❌ Error sending cancellation notification:', notificationError);
+        }
+      }
+
+      // Keep your existing refresh and dialog closing logic
       await fetchAppointments();
       setCancelDialog({ show: false, appointmentId: null, appointmentName: '' });
+      
+      // Enhanced success message
+      alert(`Appointment cancelled successfully! ${appointment?.email ? 'Notification email sent.' : ''}`);
+      
     } catch (error) {
       console.error('Error cancelling appointment:', error);
       setError('Failed to cancel appointment. Please try again.');

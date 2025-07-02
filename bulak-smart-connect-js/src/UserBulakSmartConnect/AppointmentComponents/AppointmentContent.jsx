@@ -3,6 +3,7 @@ import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import DatePickerInputAppointForm from './DataPickerAppointmentForm';
 import { appointmentService } from '../../services/appointmentService'; 
+import { appointmentNotificationService } from '../../services/appointmentNotificationService';
 import axios from 'axios';
 import config from '../../config/env.js';
 import { FormControl, InputLabel, Select, MenuItem, FormHelperText } from '@mui/material';
@@ -70,6 +71,29 @@ const AppointmentContainer = ({ onBack, preselectedDate }) => {
   const [tooltip, setTooltip] = useState(false);
   const [availableSlots, setAvailableSlots] = useState([]);
   const [loadingSlots, setLoadingSlots] = useState(false);
+
+  const { user } = useAuth();
+
+  const getUserEmail = () => {
+    try {
+      // First try from auth context
+      if (user && user.email) {
+        return user.email;
+      }
+      
+      // Fallback to localStorage
+      const userData = localStorage.getItem('user');
+      if (userData) {
+        const parsedUser = JSON.parse(userData);
+        return parsedUser.email || null;
+      }
+      
+      return null;
+    } catch (error) {
+      console.error('Error getting user email:', error);
+      return null;
+    }
+  };
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -213,6 +237,13 @@ const AppointmentContainer = ({ onBack, preselectedDate }) => {
       return;
     }
 
+    // 📧 GET USER EMAIL FOR NOTIFICATIONS (ADD THIS SECTION)
+    const userEmail = getUserEmail();
+    if (!userEmail) {
+      alert('Unable to get your email address for confirmation. Please make sure you are logged in.');
+      return;
+    }
+
     try {
       setIsSubmitting(true);
 
@@ -227,7 +258,8 @@ const AppointmentContainer = ({ onBack, preselectedDate }) => {
                          String(selectedDate.getMonth() + 1).padStart(2, '0') + '-' + 
                          String(selectedDate.getDate()).padStart(2, '0'),
         appointmentTime: formData.time,
-        isGuest: !isForSelf
+        isGuest: !isForSelf,
+        email: userEmail // ADD EMAIL TO APPOINTMENT DATA
       };
 
       console.log('Sending appointment data with date:', appointmentData.appointmentDate);
@@ -251,12 +283,32 @@ const AppointmentContainer = ({ onBack, preselectedDate }) => {
         status: result.status || 'pending',
         dbId: result.id,
         createdAt: result.createdAt,
-        updatedAt: result.updatedAt
+        updatedAt: result.updatedAt,
+        email: userEmail // ADD EMAIL TO NEW APPOINTMENT OBJECT
       };
 
       saveRecentAppointments(newAppointment);
 
-      alert('Your appointment has been confirmed!');
+      // 📧 SEND CONFIRMATION NOTIFICATION (ADD THIS SECTION)
+      try {
+        console.log('📧 Sending appointment confirmation notification...');
+        const notificationResult = await appointmentNotificationService.sendAppointmentConfirmation(
+          userEmail,
+          newAppointment.appointmentNumber || newAppointment.id,
+          newAppointment
+        );
+
+        if (notificationResult.success) {
+          console.log('✅ Confirmation notification sent successfully');
+          alert('Your appointment has been confirmed! A confirmation email has been sent to you.');
+        } else {
+          console.log('⚠️ Confirmation notification failed:', notificationResult.error);
+          alert('Your appointment has been confirmed! However, we could not send the confirmation email.');
+        }
+      } catch (notificationError) {
+        console.error('❌ Error sending confirmation notification:', notificationError);
+        alert('Your appointment has been confirmed! However, we could not send the confirmation email.');
+      }
 
       navigate(`/QRCodeAppointment/${newAppointment.appointmentNumber || newAppointment.id}`, { 
         state: { appointment: newAppointment } 
