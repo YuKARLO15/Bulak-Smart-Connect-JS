@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Box, Button, Checkbox, FormControlLabel, Typography, Alert, Paper, Snackbar, CircularProgress, Container } from '@mui/material';
+import { Box, Button, Checkbox, FormControlLabel, Typography, Alert, Paper, Snackbar, CircularProgress, Container, Tooltip } from '@mui/material';
 import FileUpload from '../FileUpload';
 import './DelayedBelow18.css';
 import NavBar from '../../../NavigationComponents/NavSide';
@@ -10,14 +10,90 @@ import { localStorageManager } from '../../../services/localStorageManager';
 const mandatoryDocuments = [
   'Negative Certification from PSA',
   'Two (2) Documentary Evidences',
-  'Affidavit of Disinterested Person 1 (Not Related)',
-  'Affidavit of Disinterested Persons 2 (Not Related)',
+  'Affidavit of Disinterested Person 1 (Not Related) with ID',
+  'Affidavit of Disinterested Persons 2 (Not Related) with ID',
   'Unedited Front-Facing Photo (2x2, White Background)',
   'Documentary Evidence/s of Parents',
   'Barangay Certification of Residency',
-  'National ID or ePhil ID'
+  'National ID , ePhil ID or PhilSys transaction slip'
   
 ];
+const GovernmentIdTooltip = ({ children }) => {
+  const acceptedIds = [
+    'Philippine Passport',
+    'PhilSys ID or National ID',
+    "Driver's License",
+    'PRC ID',
+    'UMID (Unified Multi-Purpose ID)',
+    'SSS ID',
+    'GSIS eCard',
+    'OWWA ID',
+    'Senior Citizen ID',
+    'PWD ID',
+    "Voter's ID or Voter's Certification",
+    'Postal ID',
+    'Barangay ID or Barangay Clearance with photo',
+    'TIN ID',
+    'PhilHealth ID',
+    'Pag-IBIG Loyalty Card Plus',
+    'Indigenous Peoples (IP) ID or certification'
+  ];
+
+  return (
+    <Tooltip
+      title={
+        <Box>
+          <Typography variant="subtitle2" sx={{ fontWeight: 'bold', mb: 1 }}>
+            Accepted Government IDs:
+          </Typography>
+          {acceptedIds.map((id, index) => (
+            <Typography key={index} variant="body2" sx={{ fontSize: '0.75rem', mb: 0.5 }}>
+              • {id}
+            </Typography>
+          ))}
+        </Box>
+      }
+      arrow
+      placement="top"
+      sx={{
+        '& .MuiTooltip-tooltip': {
+          maxWidth: 300,
+          backgroundColor: 'rgba(0, 0, 0, 0.9)',
+        }
+      }}
+    >
+      <span style={{ 
+        textDecoration: 'underline', 
+        cursor: 'pointer',
+        color: '#1976d2',
+        fontWeight: 'bold'
+      }}>
+        {children}
+      </span>
+    </Tooltip>
+  );
+};
+
+const documentDescriptions = {
+  'Negative Certification from PSA': '- Certificate showing no birth record exists in PSA database',
+  'Two (2) Documentary Evidences': '- Hospital records, baptismal certificate, school records, MDR, Philhealth records, etc.',
+    'Affidavit of Disinterested Person 1 (Not Related) with ID': (
+    <>
+      - Sworn statement from non-relative witness and witness <GovernmentIdTooltip>government issued ID</GovernmentIdTooltip>
+    </>
+  ),
+  'Affidavit of Disinterested Persons 2 (Not Related) with ID': (
+    <>
+      - Sworn statement from second non-relative witness and  witness <GovernmentIdTooltip>government issued ID</GovernmentIdTooltip>
+    </>
+  ),
+  'Unedited Front-Facing Photo (2x2, White Background)': '- Recent passport-style photo with white background',
+  'Documentary Evidence/s of Parents': '- Birth certificate of parents, marriage certificate, etc.',
+  'Barangay Certification of Residency': '- Certificate of residency from local barangay',
+  'National ID , ePhil ID or PhilSys transaction slip': '- A valid National ID, ePhilID, or PhilSys transaction slip is required for this application. If you do not have any of these, please stay updated on the San Ildefonso National ID booth schedules, check other PhilSys registration centers, and secure your ID or transaction slip before proceeding.',
+  'Certificate of Marriage of Parents': '- Official marriage certificate of applicant\'s parents',
+  'Affidavit of Whereabouts of the Mother': '- Sworn statement explaining mother\'s absence'
+};
 
 const Below18Registration = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -255,7 +331,7 @@ const Below18Registration = () => {
     }
   }
 
-  const handleFileUpload = async (label, isUploaded, fileDataObj) => {
+    const handleFileUpload = async (label, isUploaded, fileDataObj) => {
     // Create application if needed before uploading files
     if (!backendApplicationCreated && isUploaded) {
       setIsLoading(true);
@@ -290,18 +366,28 @@ const Below18Registration = () => {
         }
         
         console.log("Application ID:", currentAppId);
-        console.log("Uploading file:", fileDataObj.name);
         
-        const file = dataURLtoFile(fileDataObj.data, fileDataObj.name, fileDataObj.type);
+        // Handle multiple files (array) or single file (object)
+        const filesToUpload = Array.isArray(fileDataObj) ? fileDataObj : [fileDataObj];
         
-        // Log the URL that will be called
-        const uploadUrl = `/document-applications/${currentAppId}/files`;
-        console.log("Uploading to URL:", uploadUrl);
+        for (const [index, fileData] of filesToUpload.entries()) {
+          console.log(`Uploading file ${index + 1}:`, fileData.name);
+          
+          const file = dataURLtoFile(fileData.data, fileData.name, fileData.type);
+          
+          // For multiple files, append index to label
+          const uploadLabel = filesToUpload.length > 1 ? `${label} - File ${index + 1}` : label;
+          
+          const response = await documentApplicationService.uploadFile(currentAppId, file, uploadLabel);
+          console.log(`Upload response for ${fileData.name}:`, response);
+        }
         
-        const response = await documentApplicationService.uploadFile(currentAppId, file, label);
-        console.log("Upload response:", response);
+        const fileCount = filesToUpload.length;
+        const successMessage = fileCount > 1 
+          ? `${fileCount} files uploaded successfully for "${label}"!`
+          : `"${label}" uploaded successfully!`;
         
-        showNotification(`"${label}" uploaded successfully!`, "success");
+        showNotification(successMessage, "success");
         
       } catch (error) {
         console.error(`Failed to upload "${label}":`, error);
@@ -315,15 +401,28 @@ const Below18Registration = () => {
             showNotification("Application not found. Creating new application...", "info");
             const createdApp = await createBackendApplication();
             if (createdApp) {
-              // Retry upload
+              // Retry upload for all files
               try {
-                const retryResponse = await documentApplicationService.uploadFile(
-                  createdApp.id, 
-                  dataURLtoFile(fileDataObj.data, fileDataObj.name, fileDataObj.type), 
-                  label
-                );
-                console.log("Retry upload response:", retryResponse);
-                showNotification(`"${label}" uploaded successfully!`, "success");
+                const filesToUpload = Array.isArray(fileDataObj) ? fileDataObj : [fileDataObj];
+                
+                for (const [index, fileData] of filesToUpload.entries()) {
+                  const file = dataURLtoFile(fileData.data, fileData.name, fileData.type);
+                  const uploadLabel = filesToUpload.length > 1 ? `${label} - File ${index + 1}` : label;
+                  
+                  const retryResponse = await documentApplicationService.uploadFile(
+                    createdApp.id, 
+                    file, 
+                    uploadLabel
+                  );
+                  console.log(`Retry upload response for ${fileData.name}:`, retryResponse);
+                }
+                
+                const fileCount = filesToUpload.length;
+                const successMessage = fileCount > 1 
+                  ? `${fileCount} files uploaded successfully for "${label}"!`
+                  : `"${label}" uploaded successfully!`;
+                
+                showNotification(successMessage, "success");
                 return;
               } catch (retryError) {
                 console.error("Retry upload failed:", retryError);
@@ -574,17 +673,20 @@ const Below18Registration = () => {
                     </Typography>
                   </Box>
                 )}
-                {mandatoryDocuments.map((doc, index) => (
-                  <FileUpload
-                    key={index}
-                    label={doc}
-                    onUpload={(isUploaded, fileDataObj) =>
-                      handleFileUpload(doc, isUploaded, fileDataObj)
-                    }
-                    required={true}
-                    disabled={isLoading}
-                  />
-                ))}
+{mandatoryDocuments.map((doc, index) => (
+  <div key={index} style={{ marginBottom: '16px' }}>
+    <FileUpload
+      label={doc}
+      description={documentDescriptions[doc]}
+      onUpload={(isUploaded, fileDataObj) =>
+        handleFileUpload(doc, isUploaded, fileDataObj)
+      }
+      required={true}
+      disabled={isLoading}
+      multiple={doc === 'Two (2) Documentary Evidences' ||doc ===  'Affidavit of Disinterested Person 1 (Not Related) with ID' ||doc ===  'Affidavit of Disinterested Persons 2 (Not Related) with ID' || doc === 'Documentary Evidence/s of Parents'  }
+    />
+  </div>
+))}
               </Box>
 
               <Box>
@@ -612,14 +714,15 @@ const Below18Registration = () => {
                 />
                 
                 {motherNotPresent && (
-                  <FileUpload
-                    label="Affidavit of Whereabouts of the Mother"
-                    onUpload={(isUploaded, fileDataObj) =>
-                      handleFileUpload('Affidavit of Whereabouts of the Mother', isUploaded, fileDataObj)
-                    }
-                    required={true}
-                    disabled={isLoading}
-                  />
+                 <FileUpload
+      label="Affidavit of Whereabouts of the Mother"
+      description={documentDescriptions['Affidavit of Whereabouts of the Mother']}
+      onUpload={(isUploaded, fileDataObj) =>
+        handleFileUpload('Affidavit of Whereabouts of the Mother', isUploaded, fileDataObj)
+      }
+      required={true}
+      disabled={isLoading}
+    />
                 )}
               </Box>
               

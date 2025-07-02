@@ -161,9 +161,46 @@ const BirthCertificateForm = () => {
     try {
       let applicationId = editingApplicationId;
       const selectedOption = sessionStorage.getItem('selectedBirthCertificateOption') || 'Regular application';
-      const backendType = backendTypeMap[selectedOption] || backendTypeMap['Regular application'];
+      
+      // For editing, determine the route based on the existing application data
+      let routeOption = selectedOption;
+      
+      if (isEditing) {
+        // Debug logging
+        console.log('Editing mode - formData:', formData);
+        console.log('applicationSubtype from formData:', formData.applicationSubtype);
+        
+        // Check multiple possible locations for the application subtype
+        const applicationSubtype = formData.applicationSubtype || 
+                                 formData.applicationSubType || 
+                                 localStorage.getItem('editingApplicationSubtype');
+        
+        console.log('Found applicationSubtype:', applicationSubtype);
+        
+        if (applicationSubtype) {
+          // Map backend subtypes back to frontend route keys
+          const subtypeToRouteMap = {
+            'Regular Application (0-1 month)': 'Regular application',
+            'Delayed Registration - Above 18': 'Above 18',
+            'Delayed Registration - Below 18': 'Below 18',
+            'Delayed Registration - Foreign Parent': 'Foreign Parent',
+            'Delayed Registration - Out of Town': 'Out of town',
+            'Correction - Clerical Errors': 'Clerical Error',
+            'Correction - Sex/Date of Birth': 'Sex DOB',
+            'Correction - First Name': 'First Name'
+          };
+          routeOption = subtypeToRouteMap[applicationSubtype] || 'Regular application';
+          console.log('Mapped routeOption:', routeOption);
+        } else {
+          console.log('No applicationSubtype found, defaulting to Regular application');
+        }
+      }
 
-      // Data to send to backend
+      console.log('Final routeOption:', routeOption);
+      const backendType = backendTypeMap[routeOption] || backendTypeMap['Regular application'];
+      console.log('Backend type:', backendType);
+
+
       let backendResponse;
       if (isEditing && editingApplicationId) {
         backendResponse = await documentApplicationService.updateApplication(editingApplicationId, {
@@ -190,7 +227,6 @@ const BirthCertificateForm = () => {
         showNotification("Application created successfully", "success");
       }
 
-      // Update localStorage for offline/draft support
       const existingApplications = JSON.parse(localStorage.getItem('applications') || '[]');
       const appIndex = existingApplications.findIndex(app => app.id === applicationId);
       const applicationData = {
@@ -233,7 +269,7 @@ const BirthCertificateForm = () => {
         }
       }));
 
-      // Route map
+      // Route map - use routeOption instead of selectedOption for editing
       const routeMap = {
         'Regular application': '/BirthApplicationSummary',
         'Request copy': '/RequestACopyBirthCertificate',
@@ -245,7 +281,7 @@ const BirthCertificateForm = () => {
         'Sex DOB': '/SexDobCorrection',
         'First Name': '/FirstNameCorrection',
       };
-      navigate(routeMap[selectedOption] || '/BirthApplicationSummary');
+      navigate(routeMap[routeOption] || '/BirthApplicationSummary');
     } catch (err) {
       if (err.response && err.response.data) {
         showNotification(err.response.data.message || 'Error submitting application', 'error');

@@ -10,7 +10,7 @@ import { localStorageManager } from '../../../services/localStorageManager';
 const maritalDocuments = [
   'Negative Certification from PSA',
   'Affidavit of (2) Disinterested Persons with ID',
-  'Certificate of Marriage, if married',
+  'Certificate of Marriage, if applicant is married',
   'National ID or ePhil ID',
   'Barangay Certification of Residency',
   'Unedited front-facing photo 2x2, white background',
@@ -24,6 +24,20 @@ const nonMaritalDocuments = maritalDocuments
   .concat([
     'Personal Appearance of the Father or Affidavit of Admission of Paternity executed before a Notary Public',
   ]);
+
+  const documentDescriptions = {
+  'Negative Certification from PSA': '- Certificate showing no birth record exists in PSA database',
+  'Affidavit of (2) Disinterested Persons with ID': '- Sworn statements from two non-relative witnesses with valid IDs',
+  'Certificate of Marriage, if married': '- Official marriage certificate if applicant is married',
+  'National ID or ePhil ID': '- Valid government-issued identification card',
+  'Barangay Certification of Residency': '- Certificate of residency from local barangay',
+  'Unedited front-facing photo 2x2, white background': '- Recent passport-style photo with white background',
+  'Documentary evidences of parents': '- Birth certificates, marriage certificate, or death certificates of parents',
+  'Certificate of Marriage of Parents': '- Official marriage certificate of applicant\'s parents',
+  'Personal Appearance of Father or Affidavit of the document owner registrant stating why the document owner cannot appear personally; and death certificate in case the document owner is deceased': '- Father\'s personal appearance or notarized affidavit explaining absence, plus death certificate if applicable',
+  'Personal Appearance of the Father or Affidavit of Admission of Paternity executed before a Notary Public': '- Father\'s personal appearance or notarized affidavit acknowledging paternity',
+  'Documentary Evidence 1': '- Hospital records, baptismal certificate, school records, Philhealth records, etc.',
+};
 
 const Above18Registration = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -572,37 +586,40 @@ const Above18Registration = () => {
                 </Box>
               )}
               {(status === 'marital' ? maritalDocuments : nonMaritalDocuments).map((doc, index) => (
-                <FileUpload 
-                  key={index} 
-                  label={doc} 
-                  onUpload={(isUploaded, fileDataObj) => 
-                    handleFileUpload(doc, isUploaded, fileDataObj)
-                  } 
-                  required={true}
+                   <FileUpload 
+      label={doc}
+      description={documentDescriptions[doc]}
+      onUpload={(isUploaded, fileDataObj) => 
+        handleFileUpload(doc, isUploaded, fileDataObj)
+      } 
+      required={true}
                   disabled={isLoading}
-                />
+                  multiple={doc === 'Affidavit of (2) Disinterested Persons with ID'}
+    />
               ))}
 
               <Typography variant="body1" className="SectionTitleDelayedAbove18">
                 Any two (2) of the following documentary evidence:
               </Typography>
               <Box>
-                <FileUpload 
-                  label="Documentary Evidence 1" 
-                  onUpload={(isUploaded, fileDataObj) => 
-                    handleFileUpload('Documentary Evidence 1', isUploaded, fileDataObj)
-                  } 
-                  required={true}
-                  disabled={isLoading}
-                />
-                <FileUpload 
-                  label="Documentary Evidence 2" 
-                  onUpload={(isUploaded, fileDataObj) => 
-                    handleFileUpload('Documentary Evidence 2', isUploaded, fileDataObj)
-                  } 
-                  required={true}
-                  disabled={isLoading}
-                />
+                    <FileUpload 
+      label="Documentary Evidence 1"
+      description={documentDescriptions['Documentary Evidence 1']}
+      onUpload={(isUploaded, fileDataObj) => 
+        handleFileUpload('Documentary Evidence 1', isUploaded, fileDataObj)
+      } 
+      required={true}
+      disabled={isLoading}
+    />
+                  <FileUpload 
+      label="Documentary Evidence 1"
+      description={documentDescriptions['Documentary Evidence 1']}
+      onUpload={(isUploaded, fileDataObj) => 
+        handleFileUpload('Documentary Evidence 1', isUploaded, fileDataObj)
+      } 
+      required={true}
+      disabled={isLoading}
+    />
               </Box>
               
               {/* Debug info */}
