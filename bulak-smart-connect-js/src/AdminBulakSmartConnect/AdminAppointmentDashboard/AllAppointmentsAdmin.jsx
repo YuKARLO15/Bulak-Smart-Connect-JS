@@ -165,7 +165,6 @@ const AllAppointmentsAdmin = () => {
     try {
       console.log(`📝 Updating appointment ${appointmentId} status to: ${newStatus}`);
       
-      // Find the appointment to get email and details (keep your existing logic)
       const appointment = appointments.find(
         app => (app.id || app._id || app.appointmentNumber) === appointmentId
       );
@@ -176,15 +175,15 @@ const AllAppointmentsAdmin = () => {
         return;
       }
 
-      // Update status in database (keep your existing API call)
       await appointmentService.updateAppointmentStatus(appointmentId, newStatus);
 
-      // 📧 SEND STATUS UPDATE NOTIFICATION (ADD THIS SECTION)
-      if (appointment.email) {
+      // 📧 ENHANCED EMAIL LOOKUP AND NOTIFICATION
+      const appointmentEmail = getAppointmentEmail(appointment);
+      if (appointmentEmail) {
         try {
-          console.log('📧 Sending status update notification...');
+          console.log(`📧 Sending status update notification to: ${appointmentEmail}`);
           const notificationResult = await appointmentNotificationService.sendStatusUpdateNotification(
-            appointment.email,
+            appointmentEmail,
             appointment.appointmentNumber || appointmentId,
             newStatus,
             appointment
@@ -202,11 +201,8 @@ const AllAppointmentsAdmin = () => {
         console.log('⚠️ No email found for appointment, skipping notification');
       }
 
-      // Keep your existing refresh logic
       await fetchAppointments();
-
-      // Enhanced success message
-      alert(`Appointment ${newStatus} successfully! ${appointment.email ? 'Notification email sent.' : ''}`);
+      alert(`Appointment ${newStatus} successfully! ${appointmentEmail ? 'Notification email sent.' : 'No email available for notification.'}`);
       
     } catch (error) {
       console.error('Error updating appointment status:', error);
@@ -225,20 +221,19 @@ const AllAppointmentsAdmin = () => {
     try {
       console.log(`📝 Cancelling appointment ${cancelDialog.appointmentId}`);
       
-      // Find the appointment details (keep your existing logic)
       const appointment = appointments.find(
         app => (app.id || app._id || app.appointmentNumber) === cancelDialog.appointmentId
       );
 
-      // Update status to cancelled (keep your existing API call)
       await appointmentService.updateAppointmentStatus(cancelDialog.appointmentId, 'cancelled');
 
-      // 📧 SEND CANCELLATION NOTIFICATION (ADD THIS SECTION)
-      if (appointment && appointment.email) {
+      // 📧 ENHANCED EMAIL LOOKUP AND NOTIFICATION
+      const appointmentEmail = getAppointmentEmail(appointment);
+      if (appointmentEmail) {
         try {
-          console.log('📧 Sending cancellation notification...');
+          console.log(`📧 Sending cancellation notification to: ${appointmentEmail}`);
           const notificationResult = await appointmentNotificationService.sendCancellationNotification(
-            appointment.email,
+            appointmentEmail,
             appointment.appointmentNumber || cancelDialog.appointmentId,
             appointment,
             'Cancelled by administrator'
@@ -252,14 +247,13 @@ const AllAppointmentsAdmin = () => {
         } catch (notificationError) {
           console.error('❌ Error sending cancellation notification:', notificationError);
         }
+      } else {
+        console.log('⚠️ No email found for appointment, skipping notification');
       }
 
-      // Keep your existing refresh and dialog closing logic
       await fetchAppointments();
       setCancelDialog({ show: false, appointmentId: null, appointmentName: '' });
-      
-      // Enhanced success message
-      alert(`Appointment cancelled successfully! ${appointment?.email ? 'Notification email sent.' : ''}`);
+      alert(`Appointment cancelled successfully! ${appointmentEmail ? 'Notification email sent.' : 'No email available for notification.'}`);
       
     } catch (error) {
       console.error('Error cancelling appointment:', error);
@@ -371,6 +365,32 @@ const AllAppointmentsAdmin = () => {
       return new Date(appointment.createdAt).toLocaleDateString();
     }
     return 'Date not specified';
+  };
+
+  const getAppointmentEmail = (appointment) => {
+    try {
+      // First check if email is directly in appointment
+      if (appointment.email) {
+        return appointment.email;
+      }
+
+      // Check if user object exists with email
+      if (appointment.user && appointment.user.email) {
+        return appointment.user.email;
+      }
+
+      // Check if userEmail field exists
+      if (appointment.userEmail) {
+        return appointment.userEmail;
+      }
+
+      // Log that no email was found for debugging
+      console.log('⚠️ No email found for appointment:', appointment.appointmentNumber || appointment.id);
+      return null;
+    } catch (error) {
+      console.error('Error getting appointment email:', error);
+      return null;
+    }
   };
 
   if (loading) {

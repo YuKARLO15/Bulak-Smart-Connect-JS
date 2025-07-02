@@ -39,6 +39,7 @@ const AppointmentDetailsCard = () => {
     }
   };
 
+  // Replace your existing handleStatusUpdate function with this enhanced version
   const handleStatusUpdate = async (newStatus) => {
     try {
       console.log(`📝 Updating appointment ${id} status to: ${newStatus}`);
@@ -55,7 +56,7 @@ const AppointmentDetailsCard = () => {
       // Update local state (keep your existing state update)
       setAppointment(prev => ({ ...prev, status: newStatus }));
 
-      // 📧 SEND STATUS UPDATE NOTIFICATION (ADD THIS SECTION)
+      // 📧 SEND STATUS UPDATE NOTIFICATION (ENHANCED SECTION)
       if (appointment.email) {
         try {
           console.log('📧 Sending status update notification...');
@@ -79,7 +80,7 @@ const AppointmentDetailsCard = () => {
         }
       } else {
         console.log('⚠️ No email found for appointment, skipping notification');
-        alert(`Appointment ${newStatus} successfully!`);
+        alert(`Appointment ${newStatus} successfully! No email available for notification.`);
       }
       
     } catch (error) {
