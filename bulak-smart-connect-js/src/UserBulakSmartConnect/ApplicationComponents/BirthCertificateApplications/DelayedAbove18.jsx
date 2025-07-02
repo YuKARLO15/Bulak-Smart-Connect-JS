@@ -19,8 +19,6 @@ const maritalDocuments = [
   'Unedited front-facing photo 2x2, white background',
   'Documentary evidences of parents',
   'Certificate of Marriage of Parents',
-
-
 ];
 
 const nonMaritalDocuments = maritalDocuments
@@ -680,7 +678,19 @@ const[documentFatherNotPresent, setDocumentFatherNotPresent] = useState(false);
                     />
                   }
                   label="Document owner cannot appear personally"
+                  />
+                      {documentOwnerNotPresent && (
+                <FileUpload 
+                  label="Affidavit of the document owner registrant stating why the document owner cannot appear personally"
+                  description={documentDescriptions['Affidavit of the document owner registrant stating why the document owner cannot appear personally']}
+                  onUpload={(isUploaded, fileDataObj) => 
+                    handleFileUpload('Affidavit of the document owner registrant stating why the document owner cannot appear personally', isUploaded, fileDataObj)
+                  } 
+                  required={false}
+                  disabled={isLoading}
+                  multiple={true}
                 />
+              )}
               </Box>
 
               {/* Checkbox 2: Father cannot appear personally - ONLY VISIBLE FOR NON-MARITAL */}
@@ -700,18 +710,7 @@ const[documentFatherNotPresent, setDocumentFatherNotPresent] = useState(false);
               )}
 
               {/* Show affidavit upload if document owner checkbox is checked */}
-              {documentOwnerNotPresent && (
-                <FileUpload 
-                  label="Affidavit of the document owner registrant stating why the document owner cannot appear personally"
-                  description={documentDescriptions['Affidavit of the document owner registrant stating why the document owner cannot appear personally']}
-                  onUpload={(isUploaded, fileDataObj) => 
-                    handleFileUpload('Affidavit of the document owner registrant stating why the document owner cannot appear personally', isUploaded, fileDataObj)
-                  } 
-                  required={false}
-                  disabled={isLoading}
-                  multiple={true}
-                />
-              )}
+          
 
               {/* Show father affidavit upload if father checkbox is checked */}
               {documentFatherNotPresent && (
