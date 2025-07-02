@@ -74,7 +74,7 @@ const MarriageDashboard = () => {
           >
             Back
           </Button>
-          <span className="FormTitleText">Birth Certificate Application</span>
+          <span className="FormTitleText">Marriage Certificate Application</span>
         </Box>
       </Typography>
       

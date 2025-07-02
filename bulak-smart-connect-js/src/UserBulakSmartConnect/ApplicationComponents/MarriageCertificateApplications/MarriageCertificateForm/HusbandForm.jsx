@@ -1,4 +1,5 @@
 import React from 'react';
+// import './MarriageCertificateForm.css';
 import './MarriageCertificateForm.css';
 
 const HusbandForm = ({ formData, handleChange, errors, isMarriageLicense = false }) => {
