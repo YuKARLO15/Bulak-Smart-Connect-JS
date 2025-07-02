@@ -46,6 +46,7 @@ const GovernmentIdTooltip = ({ children }) => {
     'Pag-IBIG Loyalty Card Plus',
     'Indigenous Peoples (IP) ID or certification'
   ];
+
   return (
     <Tooltip
       title={
@@ -60,12 +61,26 @@ const GovernmentIdTooltip = ({ children }) => {
           ))}
         </Box>
       }
+      arrow
+      placement="top"
+      sx={{
+        '& .MuiTooltip-tooltip': {
+          maxWidth: 300,
+          backgroundColor: 'rgba(0, 0, 0, 0.9)',
+        }
+      }}
     >
-      {children}
+      <span style={{ 
+        textDecoration: 'underline', 
+        cursor: 'pointer',
+        color: '#1976d2',
+        fontWeight: 'bold'
+      }}>
+        {children}
+      </span>
     </Tooltip>
   );
 };
-
 const documentDescriptions = {
   // Required Documents
   'Negative Certification from PSA': '- Certificate showing no birth record exists in PSA database',
@@ -74,7 +89,8 @@ const documentDescriptions = {
   'National ID , ePhil ID or PhilSys transaction slip': ' A valid National ID, ePhilID, or PhilSys transaction slip is required for this application. If you do not have any of these, please stay updated on the San Ildefonso National ID booth schedules, check other PhilSys registration centers, and secure your ID or transaction slip before proceeding.',
   'Unedited 2x2 front-facing photo, white background': '- Recent passport-style photo taken within the last 3 months with white background',
 
-  'Any two (2) of the following documents of parents': '- Any of the following: Certificate of Live Birth (COLB), Government Issued ID, Marriage Certificate, or Certificate of Death (if deceased)',
+  'Any two (2) of the following documents of parents':(<>
+   - Any of the following: Certificate of Live Birth (COLB), <GovernmentIdTooltip> Government Issued ID</GovernmentIdTooltip>, Marriage Certificate, or Certificate of Death (if deceased) </>), 
   
   'Any two (2) of the following documentary evidence': '- which may show the name of the child, date and place of birth, and name of the mother (and name of father, if the child has been acknowledged) Any of the following: Baptismal Certificate, Marriage Certificate, School Records, Income Tax Return, or PhilHealth MDR',
   
