@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Radio, RadioGroup, FormControlLabel, Typography, Box, Paper, Button } from '@mui/material';
 import './BirthCertificateDashboard.css';
 import NavBar from '../../../NavigationComponents/NavSide';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 const applicationTypeMap = {
   'Request copy': 'Copy',
@@ -56,8 +57,8 @@ const BirthCertificateDashboard = () => {
       localStorage.removeItem('birthCertificateApplication');
       localStorage.removeItem('editingApplication');
       localStorage.removeItem('currentApplicationStatus');
-      navigate('/RequestACopyBirthCertificate', { 
-        state: { correctionType: applicationTypeMap[selectedOption] } 
+      navigate('/RequestACopyBirthCertificate', {
+        state: { correctionType: applicationTypeMap[selectedOption] },
       });
       return;
     }
@@ -75,8 +76,19 @@ const BirthCertificateDashboard = () => {
     <Box className={`BirthDashboardContainer ${isSidebarOpen ? 'sidebar-open' : ''}`}>
       <NavBar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
       <Typography variant="h4" className="FormTitle">
-        Birth Certificate Application
+        <Box className="FormTitleContent">
+          <Button
+            variant="outlined"
+            className="back-button-home"
+            onClick={() => navigate('/ApplicationForm')}
+             startIcon={<ArrowBackIcon />}
+          >
+            Back
+          </Button>
+          <span className="FormTitleText">Birth Certificate Application</span>
+        </Box>
       </Typography>
+
       <Paper className="FormPaper" elevation={3}>
         <Box className="Section">
           <Typography variant="h6" className="SectionTitle">
@@ -191,7 +203,8 @@ const BirthCertificateDashboard = () => {
                 variant="body1"
                 color={!hasVisitedPrivacyPolicy ? 'text.disabled' : 'text.primary'}
               >
-                I agree to the Data Privacy Notice and Terms and Conditions | Sumasang-ayon ako sa Data Privacy Notice at Terms and Conditions 
+                I agree to the Data Privacy Notice and Terms and Conditions | Sumasang-ayon ako sa
+                Data Privacy Notice at Terms and Conditions
               </Typography>
             }
             className="BirthDashRadioGroup"
