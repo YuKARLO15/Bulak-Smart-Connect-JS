@@ -1,22 +1,68 @@
-.CertificateFormTitle {
-  text-align: center;
-  margin-bottom: 2rem;
-  color: #fff;
+/* Main container for full screen responsiveness */
+.MarriageCertificateFormContainer {
+  width: 100vw !important;
+  min-height: 100vh !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  box-sizing: border-box !important;
+  overflow-x: hidden !important;
+  transition: margin-left 0.3s ease;
+}
+
+/* Sidebar responsive styles */
+.MarriageCertificateFormContainer.sidebar-open {
+  margin-left: 250px;
+  width: calc(100vw - 250px);
+}
+
+.CertificateFormTitle, .MarriageCertificateFormTitle {
+  font-weight: 600 !important;
+  background-color: #184a5b !important;
+  text-align: center !important;
+  color: white !important;
+  padding: 20px !important;
+  width: 100vw !important;
+  margin: 0 !important;
+  margin-bottom: 20px !important;
+  box-sizing: border-box !important;
+  font-size: 1.8rem !important;
+}
+
+@media (max-width: 768px) {
+  .CertificateFormTitle, .MarriageCertificateFormTitle {
+    font-size: 1.8rem !important;
+    padding: 20px 15px !important;
+  }
 }
 
 .AffidavitCertificateForm {
-  width: 80vw !important;
-  margin-top: 10px;
+  width: 100% !important;
+  max-width: 1200px !important;
+  margin: 10px auto !important;
   justify-content: center;
   align-items: center;
   box-sizing: border-box;
 }
 
 .MarriageCertificateForm {
-  margin-top: 10px;
-  padding: 2.5rem;
-  width: 80vw;
-  margin-left: 10vw;
+  width: 100% !important;
+  max-width: 1200px !important;
+  margin: 0 auto !important;
+  padding: 2.5rem !important;
+  box-sizing: border-box !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .MarriageCertificateForm {
+    padding: 1.5rem !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .MarriageCertificateForm {
+    padding: 1rem !important;
+  }
 }
 
 .section {
@@ -458,4 +504,97 @@ label:not([data-required])::after {
 
 .wife-checkbox-label input[type="checkbox"]:hover {
   border-color: #1c4d5a;
+}
+
+/* Responsive form elements */
+.husband-input-group, .wife-input-group, .input-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.husband-input-container, .wife-input-container, .input-container {
+  flex: 1;
+  min-width: 200px;
+  position: relative;
+}
+
+@media (max-width: 768px) {
+  .husband-input-container, .wife-input-container, .input-container {
+    min-width: 100%;
+    flex-basis: 100%;
+  }
+  
+  .husband-radio-group, .wife-radio-group, .radio-group {
+    flex-direction: column;
+    gap: 1rem !important;
+    margin-left: 0 !important;
+    align-items: flex-start !important;
+  }
+  
+  .husband-radio-group {
+    gap: 1rem !important;
+    margin-left: 0 !important;
+  }
+  
+  .wife-radio-group {
+    gap: 1rem !important;
+    margin-left: 0 !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .husband-input-group, .wife-input-group, .input-group {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .MarriageCertificateFormButtonContainer {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: stretch;
+  }
+  
+  .MarriageCertificateFormButton {
+    width: 100% !important;
+    margin: 0 !important;
+  }
+}
+
+/* Form Title and Back Button Styles */
+.FormTitleContent {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.FormTitleText {
+  flex-grow: 1;
+  text-align: center;
+}
+
+.back-button-home {
+  position: absolute !important;
+  left: 60px !important;
+  background-color: #184a5b !important;
+  color: #f5f5f5 !important;
+  border-color: none !important;
+  border: #f5f5f5 !important;
+  font-size: 0.85rem !important;
+  padding: 6px 14px !important;
+}
+
+.back-button-home:hover {
+  background-color: white !important;
+  color: #184a5b !important;
+}
+
+@media (max-width: 768px) {
+  .back-button-home {
+    left: 20px !important;
+    font-size: 0.75rem !important;
+    padding: 4px 8px !important;
+  }
 }

@@ -13,6 +13,7 @@ import {
   DialogActions,
   Container,
 } from '@mui/material';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import './MarriageCertificateForm.css';
 import HusbandForm from './HusbandForm';
 import WifeForm from './WifeForm';
@@ -20,6 +21,7 @@ import MarriageDetailsForm from './MarriageDetailsForm';
 import MarriageAffidavitForm from './MarriageAffidavitForm';
 import { addApplication, getApplicationsByType, updateApplication } from '../../ApplicationData';
 import { documentApplicationService } from '../../../../services/documentApplicationService';
+import NavBar from '../../../../NavigationComponents/NavSide';
 const MarriageCertificateForm = () => {
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({});
@@ -31,6 +33,7 @@ const MarriageCertificateForm = () => {
   const [previousLicenseData, setPreviousLicenseData] = useState(null);
   const [showDataDialog, setShowDataDialog] = useState(false);
   const [isAffidavitFormValid, setIsAffidavitFormValid] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const navigate = useNavigate();
   useEffect(() => {
@@ -462,7 +465,17 @@ const MarriageCertificateForm = () => {
     }
   };
   return (
-    <Box className="MarriageCertificateFormContainer">
+    <Box className={`MarriageCertificateFormContainer ${isSidebarOpen ? 'sidebar-open' : ''}`} sx={{ 
+      width: '100vw', 
+      minHeight: '100vh', 
+      margin: 0, 
+      padding: 0, 
+      boxSizing: 'border-box',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center'
+    }}>
+      <NavBar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
       <Dialog
         open={showDataDialog}
         aria-labelledby="previous-data-dialog-title"
@@ -521,18 +534,56 @@ const MarriageCertificateForm = () => {
           </Button>
         </DialogActions>
       </Dialog>
-      <Typography variant="h4" className="MarriageCertificateFormTitle">
-        {selectedOption || 'Marriage'} Application Form
+      <Typography 
+        variant="h4" 
+        className="MarriageCertificateFormTitle"
+        sx={{
+          fontWeight: '600 !important',
+          backgroundColor: '#184a5b !important',
+          textAlign: 'center !important',
+          color: 'white !important',
+          padding: '20px !important',
+          width: '100vw',
+          margin: 0,
+          marginBottom: '20px !important',
+          fontSize: { xs: '1.8rem', md: '2.5rem' },
+          position: 'relative'
+        }}
+      >
+        <Box className="FormTitleContent">
+          <Button
+            variant="outlined"
+            className="back-button-home"
+            onClick={() => navigate('/MarriageDashboard')}
+            startIcon={<ArrowBackIcon />}
+          >
+            Back
+          </Button>
+          <span className="FormTitleText">{selectedOption || 'Marriage'} Application Form</span>
+        </Box>
       </Typography>
 
       {dataPreFilled && (
-        <Alert severity="info" sx={{ mb: 2 }}>
+        <Alert severity="info" sx={{ mb: 2, mx: 2, width: '100%', maxWidth: '1200px' }}>
           Using data from your previous Marriage License application. Please verify all information
           is still correct.
         </Alert>
       )}
 
-      <Paper className="MarriageCertificateForm" elevation={3}>
+      <Paper className="MarriageCertificateForm" elevation={3} sx={{
+        width: '100%',
+        maxWidth: '1200px',
+        margin: '0 auto',
+        padding: '2.5rem',
+        '@media (max-width: 768px)': {
+          padding: '1.5rem',
+          margin: '0 10px'
+        },
+        '@media (max-width: 480px)': {
+          padding: '1rem',
+          margin: '0 5px'
+        }
+      }}>
         {step === 1 && (
           <>
             <HusbandForm formData={formData} handleChange={handleChange} errors={errors} />
