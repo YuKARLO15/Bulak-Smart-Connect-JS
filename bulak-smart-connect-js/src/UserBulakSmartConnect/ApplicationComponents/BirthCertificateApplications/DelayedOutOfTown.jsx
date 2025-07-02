@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Box, Button, Typography, Alert, Paper, Snackbar, CircularProgress, Container } from '@mui/material';
+import { Box, Button, Typography, Alert, Paper, Snackbar, CircularProgress, Container, Tooltip } from '@mui/material';
 import FileUpload from '../FileUpload';
 import './DelayedOutOfTown.css';
 import NavBar from '../../../NavigationComponents/NavSide';
@@ -10,27 +10,87 @@ import { localStorageManager } from '../../../services/localStorageManager';
 const requiredDocuments = [
   'Negative Certification from PSA',
   'Self-Affidavit of Out of Town Registration attested by 2 witnesses with ID',
-  'Barangay Certification issued by the Punong Barangay as proof of residency and with statement on facts of birth',
+  'Barangay Certification',
   'National ID (if not registered, register first)',
-  'Unedited 2x2 front-facing photo taken within 3 months, white background',
-  'Transmittal through the PSO',
+  'Unedited 2x2 front-facing photo, white background',
+  'Any two (2) of the following documents of parents',
+  'Any two (2) of the following documentary evidence'
 ];
 
-const parentDocuments = [
-  'Certificate of Live Birth (COLB)',
-  'Government Issued ID',
-  'Marriage Certificate',
-  'Certificate of Death (if deceased)',
-];
+const GovernmentIdTooltip = ({ children }) => {
+  const acceptedIds = [
+    'Philippine Passport',
+    'PhilSys ID or National ID',
+    "Driver's License",
+    'PRC ID',
+    'UMID (Unified Multi-Purpose ID)',
+    'SSS ID',
+    'GSIS eCard',
+    'OWWA ID',
+    'Senior Citizen ID',
+    'PWD ID',
+    "Voter's ID or Voter's Certification",
+    'Postal ID',
+    'Barangay ID or Barangay Clearance with photo',
+    'TIN ID',
+    'PhilHealth ID',
+    'Pag-IBIG Loyalty Card Plus',
+    'Indigenous Peoples (IP) ID or certification'
+  ];
 
-const documentaryEvidence = [
-  'Baptismal Certificate',
-  'Marriage Certificate',
-  'School Records',
-  'Income Tax Return',
-  'PhilHealth MDR',
-  "Voter's Registration Record (COMELEC)",
-];
+  return (
+    <Tooltip
+      title={
+        <Box>
+          <Typography variant="subtitle2" sx={{ fontWeight: 'bold', mb: 1 }}>
+            Accepted Government IDs:
+          </Typography>
+          {acceptedIds.map((id, index) => (
+            <Typography key={index} variant="body2" sx={{ fontSize: '0.75rem', mb: 0.5 }}>
+              • {id}
+            </Typography>
+          ))}
+        </Box>
+      }
+      arrow
+      placement="top"
+      sx={{
+        '& .MuiTooltip-tooltip': {
+          maxWidth: 300,
+          backgroundColor: 'rgba(0, 0, 0, 0.9)',
+        }
+      }}
+    >
+      <span style={{ 
+        textDecoration: 'underline', 
+        cursor: 'pointer',
+        color: '#1976d2',
+        fontWeight: 'bold'
+      }}>
+        {children}
+      </span>
+    </Tooltip>
+  );
+};
+
+const documentDescriptions = {
+  // Required Documents
+  'Negative Certification from PSA': '- Certificate showing no birth record exists in PSA database',
+  'Self-Affidavit of Out of Town Registration attested by 2 witnesses with ID': (<>
+    - Notarized affidavit stating  that the birth occurred outside the place of registration, witnessed by two people with valid <GovernmentIdTooltip>government issued IDs</GovernmentIdTooltip></>) ,
+  'Barangay Certification': '-  Issued by the Punong Barangay as proof of residency and with statement on facts of birth',
+  'National ID (if not registered, register first)': '- Valid National ID or ePhilID (register first if not yet available)',
+  'Unedited 2x2 front-facing photo, white background': '- Recent passport-style photo taken within the last 3 months with white background',
+  'Transmittal through the PSO': '- Official transmittal document through the Provincial Statistics Office',
+  
+  // Parent Documents
+  'Any two (2) of the following documents of parents': (<>
+    - Any of the following: Certificate of Live Birth (COLB), <GovernmentIdTooltip> Government Issued ID</GovernmentIdTooltip>, Marriage Certificate, or Certificate of Death (if deceased) </>),  
+  // Documentary Evidence
+  'Any two (2) of the following documentary evidence': '- Any of the following: Baptismal Certificate, Marriage Certificate, School Records, Income Tax Return, PhilHealth MDR, or Voter\'s Registration Record (COMELEC)',
+};
+
+
 
 const DelayedOutOfTownRegistration = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -559,65 +619,25 @@ const DelayedOutOfTownRegistration = () => {
           <Container className="DelayedOutOfTownUpload">
             <Box>
               {requiredDocuments.map((doc, index) => (
-                <FileUpload 
-                  key={index} 
-                  label={doc} 
-                  onUpload={(isUploaded, fileDataObj) => 
-                    handleFileUpload(doc, isUploaded, fileDataObj)
-                  }
-                  required={true}
-                  disabled={isLoading}
-                />
-              ))}
+    <div key={index} style={{ marginBottom: '16px' }}>
+      <FileUpload 
+        label={doc}
+        description={documentDescriptions[doc]}
+        onUpload={(isUploaded, fileDataObj) => 
+          handleFileUpload(doc, isUploaded, fileDataObj)
+        }
+        required={true}
+        disabled={isLoading}
+      />
+    </div>
+  ))}
             </Box>
 
-            <Typography variant="body1" className="SectionTitleDelayedOutOfTown">
-              Any two (2) of the following documents of parents:
-            </Typography>
-
-            <Box>
-              {[...Array(2)].map((_, index) => (
-                <FileUpload
-                  key={index}
-                  label={`Parent Document ${index + 1}`}
-                  onUpload={(isUploaded, fileDataObj) => 
-                    handleFileUpload(`Parent Document ${index + 1}`, isUploaded, fileDataObj)
-                  }
-                  required={true}
-                  disabled={isLoading}
-                />
-              ))}
-            </Box>
-
-            <Typography variant="body1" className="SectionTitleDelayedOutOfTown">
-              Any two (2) of the following documentary evidence:
-            </Typography>
-
-            <Box>
-              {[...Array(2)].map((_, index) => (
-                <FileUpload
-                  key={index}
-                  label={`Documentary Evidence ${index + 1}`}
-                  onUpload={(isUploaded, fileDataObj) => 
-                    handleFileUpload(`Documentary Evidence ${index + 1}`, isUploaded, fileDataObj)
-                  }
-                  required={true}
-                  disabled={isLoading}
-                />
-              ))}
-            </Box>
+        
           </Container>
           
-          {/* Debug info box */}
-          <Box sx={{ mt: 2, p: 2, bgcolor: '#f5f5f5', borderRadius: 1 }}>
-            <Typography variant="caption">Form Status:</Typography>
-            <Typography variant="caption" component="div">
-              Documents uploaded: {uploadedDocumentsCount}
-            </Typography>
-            <Typography variant="caption" component="div">
-              Submit button enabled: {isMandatoryComplete() ? 'YES' : 'NO'}
-            </Typography>
-          </Box>
+   
+    
           
           <Box className="ImportantNotes">
             <Typography variant="h6">IMPORTANT NOTES:</Typography>

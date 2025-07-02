@@ -13,11 +13,11 @@
 .OnlineApplicationTitle {
   font-size: 30px !important;
   font-weight: 600 !important;
-  text-align: start !important;
+  text-align: left !important;
   margin-bottom: 10vh !important;
   color: #fff6f6 !important;
   padding: 20px;
-  margin-left: 10vw !important;
+  margin-left: 38vw !important;
 }
 .CertificateCard {
   background-color: #fff6f6 !important;
