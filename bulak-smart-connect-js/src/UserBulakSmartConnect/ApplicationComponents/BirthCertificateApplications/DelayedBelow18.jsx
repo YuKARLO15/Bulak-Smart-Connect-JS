@@ -771,7 +771,7 @@ const Below18Registration = () => {
         modifyMode: true,
         preserveData: true,
         backFromDelayedRegistration: true,
-        applicationType: 'Delayed Registration - Above 18'
+        applicationType: 'Delayed Registration - Below 18'
       };
 
   

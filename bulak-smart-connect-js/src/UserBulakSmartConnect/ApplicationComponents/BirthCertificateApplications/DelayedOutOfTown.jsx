@@ -352,18 +352,28 @@ const DelayedOutOfTownRegistration = () => {
         }
         
         console.log("Application ID:", currentAppId);
-        console.log("Uploading file:", fileDataObj.name);
         
-        const file = dataURLtoFile(fileDataObj.data, fileDataObj.name, fileDataObj.type);
+        // Handle multiple files (array) or single file (object)
+        const filesToUpload = Array.isArray(fileDataObj) ? fileDataObj : [fileDataObj];
         
-        // Log the URL that will be called
-        const uploadUrl = `/document-applications/${currentAppId}/files`;
-        console.log("Uploading to URL:", uploadUrl);
+        for (const [index, fileData] of filesToUpload.entries()) {
+          console.log(`Uploading file ${index + 1}:`, fileData.name);
+          
+          const file = dataURLtoFile(fileData.data, fileData.name, fileData.type);
+          
+          // For multiple files, append index to label
+          const uploadLabel = filesToUpload.length > 1 ? `${label} - File ${index + 1}` : label;
+          
+          const response = await documentApplicationService.uploadFile(currentAppId, file, uploadLabel);
+          console.log(`Upload response for ${fileData.name}:`, response);
+        }
         
-        const response = await documentApplicationService.uploadFile(currentAppId, file, label);
-        console.log("Upload response:", response);
+        const fileCount = filesToUpload.length;
+        const successMessage = fileCount > 1 
+          ? `${fileCount} files uploaded successfully for "${label}"!`
+          : `"${label}" uploaded successfully!`;
         
-        showNotification(`"${label}" uploaded successfully!`, "success");
+        showNotification(successMessage, "success");
         
       } catch (error) {
         console.error(`Failed to upload "${label}":`, error);
@@ -377,15 +387,28 @@ const DelayedOutOfTownRegistration = () => {
             showNotification("Application not found. Creating new application...", "info");
             const createdApp = await createBackendApplication();
             if (createdApp) {
-              // Retry upload
+              // Retry upload for all files
               try {
-                const retryResponse = await documentApplicationService.uploadFile(
-                  createdApp.id, 
-                  dataURLtoFile(fileDataObj.data, fileDataObj.name, fileDataObj.type), 
-                  label
-                );
-                console.log("Retry upload response:", retryResponse);
-                showNotification(`"${label}" uploaded successfully!`, "success");
+                const filesToUpload = Array.isArray(fileDataObj) ? fileDataObj : [fileDataObj];
+                
+                for (const [index, fileData] of filesToUpload.entries()) {
+                  const file = dataURLtoFile(fileData.data, fileData.name, fileData.type);
+                  const uploadLabel = filesToUpload.length > 1 ? `${label} - File ${index + 1}` : label;
+                  
+                  const retryResponse = await documentApplicationService.uploadFile(
+                    createdApp.id, 
+                    file, 
+                    uploadLabel
+                  );
+                  console.log(`Retry upload response for ${fileData.name}:`, retryResponse);
+                }
+                
+                const fileCount = filesToUpload.length;
+                const successMessage = fileCount > 1 
+                  ? `${fileCount} files uploaded successfully for "${label}"!`
+                  : `"${label}" uploaded successfully!`;
+                
+                showNotification(successMessage, "success");
                 return;
               } catch (retryError) {
                 console.error("Retry upload failed:", retryError);

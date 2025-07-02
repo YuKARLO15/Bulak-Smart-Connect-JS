@@ -281,6 +281,7 @@ const DelayedOneParentForeignerRegistration = () => {
   }, [isEditing]);
 
   const handleFileUpload = async (label, isUploaded, fileDataObj) => {
+    // Create application if needed before uploading files
     if (!backendApplicationCreated && isUploaded) {
       setIsLoading(true);
       const createdApp = await createBackendApplication();
@@ -292,6 +293,7 @@ const DelayedOneParentForeignerRegistration = () => {
       }
     }
     
+    // Update the uploadedFiles state
     setUploadedFiles(prevState => {
       const newState = { ...prevState, [label]: isUploaded };
       console.log("Updated uploadedFiles:", newState);
@@ -304,6 +306,7 @@ const DelayedOneParentForeignerRegistration = () => {
         [label]: fileDataObj,
       }));
 
+      // === Upload to backend ===
       try {
         const currentAppId = applicationId || localStorage.getItem('currentApplicationId');
         if (!currentAppId) {
@@ -312,36 +315,63 @@ const DelayedOneParentForeignerRegistration = () => {
         }
         
         console.log("Application ID:", currentAppId);
-        console.log("Uploading file:", fileDataObj.name);
         
-        const file = dataURLtoFile(fileDataObj.data, fileDataObj.name, fileDataObj.type);
+        // Handle multiple files (array) or single file (object)
+        const filesToUpload = Array.isArray(fileDataObj) ? fileDataObj : [fileDataObj];
         
-        const uploadUrl = `/document-applications/${currentAppId}/files`;
-        console.log("Uploading to URL:", uploadUrl);
+        for (const [index, fileData] of filesToUpload.entries()) {
+          console.log(`Uploading file ${index + 1}:`, fileData.name);
+          
+          const file = dataURLtoFile(fileData.data, fileData.name, fileData.type);
+          
+          // For multiple files, append index to label
+          const uploadLabel = filesToUpload.length > 1 ? `${label} - File ${index + 1}` : label;
+          
+          const response = await documentApplicationService.uploadFile(currentAppId, file, uploadLabel);
+          console.log(`Upload response for ${fileData.name}:`, response);
+        }
         
-        const response = await documentApplicationService.uploadFile(currentAppId, file, label);
-        console.log("Upload response:", response);
+        const fileCount = filesToUpload.length;
+        const successMessage = fileCount > 1 
+          ? `${fileCount} files uploaded successfully for "${label}"!`
+          : `"${label}" uploaded successfully!`;
         
-        showNotification(`"${label}" uploaded successfully!`, "success");
+        showNotification(successMessage, "success");
         
       } catch (error) {
         console.error(`Failed to upload "${label}":`, error);
         
+        // Show detailed error information
         if (error.response) {
           console.error("Server response:", error.response.status, error.response.data);
           
+          // If error is 404 (application not found), try to create it and retry upload
           if (error.response.status === 404) {
             showNotification("Application not found. Creating new application...", "info");
             const createdApp = await createBackendApplication();
             if (createdApp) {
+              // Retry upload for all files
               try {
-                const retryResponse = await documentApplicationService.uploadFile(
-                  createdApp.id, 
-                  dataURLtoFile(fileDataObj.data, fileDataObj.name, fileDataObj.type), 
-                  label
-                );
-                console.log("Retry upload response:", retryResponse);
-                showNotification(`"${label}" uploaded successfully!`, "success");
+                const filesToUpload = Array.isArray(fileDataObj) ? fileDataObj : [fileDataObj];
+                
+                for (const [index, fileData] of filesToUpload.entries()) {
+                  const file = dataURLtoFile(fileData.data, fileData.name, fileData.type);
+                  const uploadLabel = filesToUpload.length > 1 ? `${label} - File ${index + 1}` : label;
+                  
+                  const retryResponse = await documentApplicationService.uploadFile(
+                    createdApp.id, 
+                    file, 
+                    uploadLabel
+                  );
+                  console.log(`Retry upload response for ${fileData.name}:`, retryResponse);
+                }
+                
+                const fileCount = filesToUpload.length;
+                const successMessage = fileCount > 1 
+                  ? `${fileCount} files uploaded successfully for "${label}"!`
+                  : `"${label}" uploaded successfully!`;
+                
+                showNotification(successMessage, "success");
                 return;
               } catch (retryError) {
                 console.error("Retry upload failed:", retryError);
@@ -354,6 +384,7 @@ const DelayedOneParentForeignerRegistration = () => {
           showNotification(`Failed to upload "${label}": ${error.message}`, "error");
         }
         
+        // Revert the upload state on error
         setUploadedFiles(prevState => ({
           ...prevState,
           [label]: false,
@@ -367,7 +398,6 @@ const DelayedOneParentForeignerRegistration = () => {
       });
     }
   };
-
   const fileUploadWrapper = label => (isUploaded, fileDataObj) =>
     handleFileUpload(label, isUploaded, fileDataObj);
 
