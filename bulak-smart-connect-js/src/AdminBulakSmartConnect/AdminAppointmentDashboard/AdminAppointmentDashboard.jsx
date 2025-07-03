@@ -167,13 +167,7 @@ const AdminAppointmentDashboard = () => {
       <NavBar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
       {/* Top Navigation Bar */}
       <div className="admin-appointment-dashboard-header">
-        <button
-          className="admin-appointment-dashboard-menu-icon"
-          onClick={() => setIsSidebarOpen(true)}
-          aria-label="Open navigation"
-        >
-          <span>&#9776;</span>
-        </button>
+   
         <h1 className="admin-appointment-dashboard-title">APPOINTMENT</h1>
       </div>
 
@@ -189,8 +183,8 @@ const AdminAppointmentDashboard = () => {
             </div>
           </div>
 
-          {/* Available Slots Card */}
-          <div className="admin-appointment-dashboard-available-slots-card">
+
+           {/* <div className="admin-appointment-dashboard-available-slots-card">
             <h2 className="admin-appointment-dashboard-card-title">AVAILABLE SLOTS</h2>
             <div className="admin-appointment-dashboard-calendar-container">
               <div className="admin-appointment-dashboard-calendar-header">
@@ -219,7 +213,7 @@ const AdminAppointmentDashboard = () => {
               </div>
               <div className="admin-appointment-dashboard-calendar-days">{generateCalendar()}</div>
             </div>
-          </div>
+          </div>  * */}
 
           {/* Chart Card */}
           <div className="admin-appointment-dashboard-chart-card">
