@@ -1,7 +1,7 @@
-/* HusbandForm specific styles */
+/* WifeForm specific styles */
 
 /* Input textbox styling */
-.husband-input {
+.wife-input {
   width: 100%;
   padding: 10px;
   border: 1px solid #1c4d5a !important;
@@ -12,104 +12,76 @@
   transition: border-color 0.3s ease, background-color 0.3s ease;
 }
 
-.husband-input:focus {
+.wife-input:focus {
   border-color: #1c4d5a !important;
   background-color: #fff !important;
   outline: none;
   box-shadow: 0 0 0 2px rgba(28, 77, 90, 0.2);
 }
 
-.husband-input:hover {
+.wife-input:hover {
   border-color: #1c4d5a !important;
 }
 
-.husband-input::placeholder {
+.wife-input::placeholder {
   color: #184a5b;
   opacity: 0.7;
 }
 
 /* Select dropdown styling */
-.husband-select {
+.wife-select {
   width: 100%;
   padding: 10px;
   border: 1px solid #1c4d5a !important;
   border-radius: 4px;
   font-size: 14px;
   background-color: white !important;
-  color: #184a5b !important;
+  color: #1c4d5a !important;
   transition: border-color 0.3s ease, background-color 0.3s ease;
   cursor: pointer;
 }
 
-.husband-select:focus {
+.wife-select:focus {
   border-color: #1c4d5a !important;
   background-color: #fff !important;
   outline: none;
   box-shadow: 0 0 0 2px rgba(28, 77, 90, 0.2);
 }
 
-.husband-select:hover {
+.wife-select:hover {
   border-color: #1c4d5a !important;
 }
 
 /* Textarea styling for addresses */
-.husband-input[name="husbandFatherAddress"],
-.husband-input[name="husbandMotherAddress"] {
+.wife-input[name="wifeFatherAddress"],
+.wife-input[name="wifeMotherAddress"] {
   width: 100%;
   padding: 10px;
-  border: 2px solid #1c4d5a !important;
+  border: 1px solid #1c4d5a !important;
   border-radius: 4px;
   font-size: 14px;
   background-color: white !important;
-  color: #184a5b !important;
+  color: #1c4d5a !important;
   transition: border-color 0.3s ease, background-color 0.3s ease;
   resize: vertical;
   min-height: 60px;
 }
 
-.husband-input[name="husbandFatherAddress"]:focus,
-.husband-input[name="husbandMotherAddress"]:focus {
+.wife-input[name="wifeFatherAddress"]:focus,
+.wife-input[name="wifeMotherAddress"]:focus {
   border-color: #1c4d5a !important;
   background-color: #fff !important;
   outline: none;
   box-shadow: 0 0 0 2px rgba(28, 77, 90, 0.2);
-}
-
-/* Wali input styling (inherits from husband-input but with additional specificity) */
-.wali-input {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #1c4d5a !important;
-  border-radius: 4px;
-  font-size: 14px;
-  background-color: white !important;
-  color: #184a5b !important;
-  transition: border-color 0.3s ease, background-color 0.3s ease;
-}
-
-.wali-input:focus {
-  border-color: #1c4d5a !important;
-  background-color: #fff !important;
-  outline: none;
-  box-shadow: 0 0 0 2px rgba(28, 77, 90, 0.2);
-}
-
-.wali-input:hover {
-  border-color: #1c4d5a !important;
-}
-
-.wali-input::placeholder {
-  color: #184a5b;
-  opacity: 0.7;
 }
 
 /* Section styling */
-.husband-section {
+.wife-section {
   margin-bottom: 2.5rem;
   border-radius: 5px;
 }
 
-.husband-heading {
+.wife-heading {
   color: #fff;
   margin-bottom: 1.5rem;
   padding-bottom: 0.5rem;
@@ -122,7 +94,7 @@
   border-radius: 8px;
 }
 
-.husband-subheading {
+.wife-subheading {
   color: #34495e;
   margin: 1rem 0;
   font-size: 1.2rem;
@@ -130,38 +102,38 @@
 }
 
 /* Label styling */
-.husband-label {
+.wife-label {
   display: block;
   margin-bottom: 0.7rem;
   font-weight: 500;
   color: #333;
 }
 
-.husband-label::after {
+.wife-label::after {
   content: ' *';
   color: #e74c3c;
 }
 
-.husband-label:not([data-required])::after {
+.wife-label:not([data-required])::after {
   content: '';
 }
 
 /* Input group layout */
-.husband-input-group {
+.wife-input-group {
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
   margin-bottom: 1.5rem;
 }
 
-.husband-input-container {
+.wife-input-container {
   flex: 1;
   min-width: 200px;
   position: relative;
 }
 
 /* Radio button styling */
-.husband-radio-group {
+.wife-radio-group {
   display: flex;
   gap: 5rem;
   align-items: left;
@@ -169,20 +141,20 @@
   margin-bottom: 1rem;
 }
 
-.husband-radio {
+.wife-radio {
   margin-right: 6px;
   cursor: pointer;
   accent-color: #1c4d5a;
 }
 
-.husband-radio-container {
+.wife-radio-container {
   display: flex;
   align-items: center;
   gap: 0.5rem;
 }
 
 /* Checkbox styling */
-.husband-checkbox-group {
+.wife-checkbox-group {
   margin: 1rem 0;
   padding: 1rem;
   background-color: #f8f9fa;
@@ -190,7 +162,7 @@
   border: 1px solid #e9ecef;
 }
 
-.husband-checkbox-label {
+.wife-checkbox-label {
   display: flex;
   align-items: center;
   gap: 0.75rem;
@@ -200,17 +172,17 @@
   margin: 0;
 }
 
-.husband-checkbox-label::after {
+.wife-checkbox-label::after {
   content: '';
 }
 
-.husband-checkbox-label input[type="checkbox"] {
+.wife-checkbox-label input[type="checkbox"] {
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
   width: 18px;
   height: 18px;
-  border: 2px solid #ccc;
+  border: 1px solid #ccc;
   border-radius: 3px;
   background-color: #fff;
   cursor: pointer;
@@ -218,12 +190,12 @@
   transition: all 0.2s ease;
 }
 
-.husband-checkbox-label input[type="checkbox"]:checked {
+.wife-checkbox-label input[type="checkbox"]:checked {
   background-color: #1c4d5a;
   border-color: #1c4d5a;
 }
 
-.husband-checkbox-label input[type="checkbox"]:checked::after {
+.wife-checkbox-label input[type="checkbox"]:checked::after {
   content: '✓';
   position: absolute;
   top: 50%;
@@ -234,12 +206,12 @@
   font-weight: bold;
 }
 
-.husband-checkbox-label input[type="checkbox"]:hover {
+.wife-checkbox-label input[type="checkbox"]:hover {
   border-color: #1c4d5a;
 }
 
 /* Error styling */
-.husband-error {
+.wife-error {
   color: #e74c3c;
   font-size: 12px;
   position: absolute;
@@ -249,12 +221,12 @@
 
 /* Responsive design */
 @media (max-width: 768px) {
-  .husband-input-container {
+  .wife-input-container {
     min-width: 100%;
     flex-basis: 100%;
   }
   
-  .husband-radio-group {
+  .wife-radio-group {
     flex-direction: column;
     gap: 1rem !important;
     margin-left: 0 !important;
@@ -263,9 +235,8 @@
 }
 
 @media (max-width: 480px) {
-  .husband-input-group {
+  .wife-input-group {
     flex-direction: column;
     gap: 0.5rem;
   }
 }
-

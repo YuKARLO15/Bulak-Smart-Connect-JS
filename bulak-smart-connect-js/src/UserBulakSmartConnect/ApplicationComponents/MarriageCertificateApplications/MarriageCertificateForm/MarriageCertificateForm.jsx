@@ -22,6 +22,8 @@ import MarriageAffidavitForm from './MarriageAffidavitForm';
 import { addApplication, getApplicationsByType, updateApplication } from '../../ApplicationData';
 import { documentApplicationService } from '../../../../services/documentApplicationService';
 import NavBar from '../../../../NavigationComponents/NavSide';
+
+
 const MarriageCertificateForm = () => {
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({});
@@ -464,6 +466,7 @@ const MarriageCertificateForm = () => {
       alert('There was an error submitting your application. Please try again.');
     }
   };
+  
   return (
     <Box className={`MarriageCertificateFormContainer ${isSidebarOpen ? 'sidebar-open' : ''}`} sx={{ 
       width: '100vw', 
