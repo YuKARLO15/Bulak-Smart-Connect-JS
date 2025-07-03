@@ -24,7 +24,7 @@
 }
 
 .husband-input::placeholder {
-  color: #184a5b;
+  color: #1c4d5a;
   opacity: 0.7;
 }
 
@@ -36,7 +36,7 @@
   border-radius: 4px;
   font-size: 14px;
   background-color: white !important;
-  color: #184a5b !important;
+  color: #1c4d5a !important;
   transition: border-color 0.3s ease, background-color 0.3s ease;
   cursor: pointer;
 }
@@ -61,7 +61,7 @@
   border-radius: 4px;
   font-size: 14px;
   background-color: white !important;
-  color: #184a5b !important;
+  color: #1c4d5a !important;
   transition: border-color 0.3s ease, background-color 0.3s ease;
   resize: vertical;
   min-height: 60px;
@@ -83,7 +83,7 @@
   border-radius: 4px;
   font-size: 14px;
   background-color: white !important;
-  color: #184a5b !important;
+  color: #1c4d5a !important;
   transition: border-color 0.3s ease, background-color 0.3s ease;
 }
 
