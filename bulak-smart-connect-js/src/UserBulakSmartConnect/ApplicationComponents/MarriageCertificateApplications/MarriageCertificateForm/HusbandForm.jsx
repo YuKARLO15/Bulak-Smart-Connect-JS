@@ -1,10 +1,56 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 // import './MarriageCertificateForm.css';
 import './MarriageCertificateForm.css';
 
 const HusbandForm = ({ formData, handleChange, errors, isMarriageLicense = false }) => {
   const selectedOption = localStorage.getItem('selectedMarriageOption');
   const isLicenseApplication = isMarriageLicense || selectedOption === 'Marriage License';
+
+  // Function to calculate age based on birth date
+  const calculateAge = (day, month, year) => {
+    if (!day || !month || !year) return '';
+    
+    const today = new Date();
+    const birthDate = new Date(year, getMonthNumber(month) - 1, day);
+    
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+    
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+    
+    return age.toString();
+  };
+
+  // Helper function to convert month name to number
+  const getMonthNumber = (monthName) => {
+    const months = {
+      'January': 1, 'February': 2, 'March': 3, 'April': 4,
+      'May': 5, 'June': 6, 'July': 7, 'August': 8,
+      'September': 9, 'October': 10, 'November': 11, 'December': 12
+    };
+    return months[monthName] || 0;
+  };
+
+  // Auto-calculate age when birth date changes
+  useEffect(() => {
+    const { husbandBirthDay, husbandBirthMonth, husbandBirthYear } = formData;
+    
+    if (husbandBirthDay && husbandBirthMonth && husbandBirthYear) {
+      const calculatedAge = calculateAge(husbandBirthDay, husbandBirthMonth, husbandBirthYear);
+      
+      // Only update if the calculated age is different from current age
+      if (calculatedAge !== formData.husbandAge) {
+        handleChange({
+          target: {
+            name: 'husbandAge',
+            value: calculatedAge
+          }
+        });
+      }
+    }
+  }, [formData.husbandBirthDay, formData.husbandBirthMonth, formData.husbandBirthYear, formData.husbandAge, handleChange]);
   
   return (
     <section className="husband-section section">
@@ -156,6 +202,8 @@ const HusbandForm = ({ formData, handleChange, errors, isMarriageLicense = false
             placeholder="Age"
             value={formData.husbandAge || ''}
             onChange={handleChange}
+            readOnly
+            style={{ backgroundColor: '#f5f5f5', cursor: 'not-allowed' }}
           />
           {errors.husbandAge && (
             <span className="husband-error error-message">{errors.husbandAge}</span>
