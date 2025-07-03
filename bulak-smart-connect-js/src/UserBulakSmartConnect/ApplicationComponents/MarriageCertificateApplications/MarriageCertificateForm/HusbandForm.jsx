@@ -1,6 +1,7 @@
 import React from 'react';
 // import './MarriageCertificateForm.css';
 import './MarriageCertificateForm.css';
+import './HusbandForm.css';
 
 const HusbandForm = ({ formData, handleChange, errors, isMarriageLicense = false }) => {
   const selectedOption = localStorage.getItem('selectedMarriageOption');

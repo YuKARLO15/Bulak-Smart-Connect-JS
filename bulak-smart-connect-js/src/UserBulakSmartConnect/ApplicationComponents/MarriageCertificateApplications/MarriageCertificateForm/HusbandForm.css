@@ -1,4 +1,271 @@
-.husband-input-container input-container_{
-    background-color: brown !important;
+/* HusbandForm specific styles */
+
+/* Input textbox styling */
+.husband-input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #1c4d5a !important;
+  border-radius: 4px;
+  font-size: 14px;
+  background-color: white !important;
+  color: #184a5b !important;
+  transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+
+.husband-input:focus {
+  border-color: #1c4d5a !important;
+  background-color: #fff !important;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(28, 77, 90, 0.2);
+}
+
+.husband-input:hover {
+  border-color: #1c4d5a !important;
+}
+
+.husband-input::placeholder {
+  color: #184a5b;
+  opacity: 0.7;
+}
+
+/* Select dropdown styling */
+.husband-select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #1c4d5a !important;
+  border-radius: 4px;
+  font-size: 14px;
+  background-color: white !important;
+  color: #184a5b !important;
+  transition: border-color 0.3s ease, background-color 0.3s ease;
+  cursor: pointer;
+}
+
+.husband-select:focus {
+  border-color: #1c4d5a !important;
+  background-color: #fff !important;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(28, 77, 90, 0.2);
+}
+
+.husband-select:hover {
+  border-color: #1c4d5a !important;
+}
+
+/* Textarea styling for addresses */
+.husband-input[name="husbandFatherAddress"],
+.husband-input[name="husbandMotherAddress"] {
+  width: 100%;
+  padding: 10px;
+  border: 2px solid #1c4d5a !important;
+  border-radius: 4px;
+  font-size: 14px;
+  background-color: white !important;
+  color: #184a5b !important;
+  transition: border-color 0.3s ease, background-color 0.3s ease;
+  resize: vertical;
+  min-height: 60px;
+}
+
+.husband-input[name="husbandFatherAddress"]:focus,
+.husband-input[name="husbandMotherAddress"]:focus {
+  border-color: #1c4d5a !important;
+  background-color: #fff !important;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(28, 77, 90, 0.2);
+}
+
+/* Wali input styling (inherits from husband-input but with additional specificity) */
+.wali-input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #1c4d5a !important;
+  border-radius: 4px;
+  font-size: 14px;
+  background-color: white !important;
+  color: #184a5b !important;
+  transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+
+.wali-input:focus {
+  border-color: #1c4d5a !important;
+  background-color: #fff !important;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(28, 77, 90, 0.2);
+}
+
+.wali-input:hover {
+  border-color: #1c4d5a !important;
+}
+
+.wali-input::placeholder {
+  color: #184a5b;
+  opacity: 0.7;
+}
+
+/* Section styling */
+.husband-section {
+  margin-bottom: 2.5rem;
+  border-radius: 5px;
+}
+
+.husband-heading {
+  color: #fff;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.5rem;
+  text-transform: uppercase;
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-align: center;
+  background-color: #1c4d5a;
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+.husband-subheading {
+  color: #34495e;
+  margin: 1rem 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+/* Label styling */
+.husband-label {
+  display: block;
+  margin-bottom: 0.7rem;
+  font-weight: 500;
+  color: #333;
+}
+
+.husband-label::after {
+  content: ' *';
+  color: #e74c3c;
+}
+
+.husband-label:not([data-required])::after {
+  content: '';
+}
+
+/* Input group layout */
+.husband-input-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.husband-input-container {
+  flex: 1;
+  min-width: 200px;
+  position: relative;
+}
+
+/* Radio button styling */
+.husband-radio-group {
+  display: flex;
+  gap: 5rem;
+  align-items: left;
+  margin-left: 25px;
+  margin-bottom: 1rem;
+}
+
+.husband-radio {
+  margin-right: 6px;
+  cursor: pointer;
+  accent-color: #1c4d5a;
+}
+
+.husband-radio-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Checkbox styling */
+.husband-checkbox-group {
+  margin: 1rem 0;
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border-radius: 4px;
+  border: 1px solid #e9ecef;
+}
+
+.husband-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-weight: 500;
+  color: #333;
+  cursor: pointer;
+  margin: 0;
+}
+
+.husband-checkbox-label::after {
+  content: '';
+}
+
+.husband-checkbox-label input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 2px solid #ccc;
+  border-radius: 3px;
+  background-color: #fff;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.husband-checkbox-label input[type="checkbox"]:checked {
+  background-color: #1c4d5a;
+  border-color: #1c4d5a;
+}
+
+.husband-checkbox-label input[type="checkbox"]:checked::after {
+  content: '✓';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.husband-checkbox-label input[type="checkbox"]:hover {
+  border-color: #1c4d5a;
+}
+
+/* Error styling */
+.husband-error {
+  color: #e74c3c;
+  font-size: 12px;
+  position: absolute;
+  bottom: -18px;
+  left: 0;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .husband-input-container {
+    min-width: 100%;
+    flex-basis: 100%;
+  }
+  
+  .husband-radio-group {
+    flex-direction: column;
+    gap: 1rem !important;
+    margin-left: 0 !important;
+    align-items: flex-start !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .husband-input-group {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
 }
 
