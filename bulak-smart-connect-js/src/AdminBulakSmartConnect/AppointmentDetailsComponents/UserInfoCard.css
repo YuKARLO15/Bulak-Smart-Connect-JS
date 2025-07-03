@@ -43,6 +43,56 @@
   margin-bottom: 30px;
   gap: 20px;
 }
+.status-actions {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.btn-back {
+  background-color: #aab7b8;
+  color: white;
+  order: -1; 
+}
+
+.btn-back:hover:not(:disabled) {
+  background-color: #779294;
+}
+
+.btn-next {
+  background-color: #326471;
+  color: white;
+}
+
+.btn-next:hover:not(:disabled) {
+  background-color: #1e404b;
+}
+
+.back-icon {
+  font-size: 16px;
+  margin-right: 6px;
+  display: inline-block;
+  transition: transform 0.2s ease;
+}
+
+.btn-back:hover .back-icon {
+  transform: translateX(-2px);
+}
+
+.status-actions .btn-confirm,
+.status-actions .btn-complete,
+.status-actions .btn-cancel {
+  margin-left: auto;
+}
+
+
+.status-actions .btn-confirm ~ .btn-cancel,
+.status-actions .btn-complete ~ .btn-cancel {
+  margin-left: 0;
+}
 
 @media (max-width: 768px) {
   .details-grid {

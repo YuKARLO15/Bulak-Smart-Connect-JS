@@ -47,11 +47,20 @@ const UserInfoCard = ({ data, onBack, onNext, onStatusUpdate }) => {
   };
 
   const getStatusActions = () => {
-    if (!data?.status) return null;
+    if (!data?.status) return (
+      <div className="status-actions">
+        <button 
+          className="btn-back"
+          onClick={onBack}
+          disabled={updating}
+        >
+         <span className="back-icon">←</span> Back
+        </button>
+      </div>
+    );
 
     const status = data.status.toLowerCase();
     
-    // Only show status update buttons for pending or confirmed statuses
     if (status === 'pending' || status === 'confirmed') {
       const actionText = status === 'pending' ? 'Confirm' : 'Complete';
       const actionStatus = status === 'pending' ? 'confirmed' : 'completed';
@@ -59,6 +68,14 @@ const UserInfoCard = ({ data, onBack, onNext, onStatusUpdate }) => {
       
       return (
         <div className="status-actions">
+          <button 
+            className="btn-back"
+            onClick={onBack}
+            disabled={updating}
+            
+          >
+            Back
+          </button>
           <button 
             className={buttonClass}
             onClick={() => handleStatusUpdate(actionStatus)}
@@ -95,9 +112,19 @@ const UserInfoCard = ({ data, onBack, onNext, onStatusUpdate }) => {
           </button>
         </div>
       );
+    } else {
+      return (
+        <div className="status-actions">
+          <button 
+            className="btn-back"
+            onClick={onBack}
+            disabled={updating}
+          >
+            Back
+          </button>
+        </div>
+      );
     }
-    
-    return null;
   };
 
   return (
