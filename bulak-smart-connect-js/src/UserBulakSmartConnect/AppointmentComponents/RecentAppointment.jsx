@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Box, Typography, Card, CardContent, Button, CircularProgress } from '@mui/material';
+import { Box, Typography, Card, CardContent, Button, CircularProgress, Container } from '@mui/material';
 import { getRecentAppointments, saveRecentAppointments } from './RecentAppointmentData';
 import { appointmentService } from '../../services/appointmentService';
 import './RecentAppointment.css';
@@ -160,12 +160,6 @@ const RecentAppointments = () => {
                 <Typography variant="body1" className="AppointmentTypeAppointment">
                   {appointment.reasonOfVisit || appointment.type}
                 </Typography>
-                <Typography variant="body2" className="AppointmentDateAppointment">
-                  {appointment.appointmentDate || appointment.date}
-                </Typography>
-                <Typography variant="body2" className="AppointmentTimeAppointment">
-                  {appointment.appointmentTime || appointment.time}
-                </Typography>
                 {appointment.status && (
                   <Typography variant="body2" className="AppointmentStatusAppointment">
                     Status:{' '}
@@ -187,14 +181,23 @@ const RecentAppointments = () => {
                     </span>
                   </Typography>
                 )}
-              </div>
-              <Button
+                <Container className="AppointmentDetailsContainer">
+                <Typography variant="body2" className="AppointmentDateAppointment">
+                  Schedule : {appointment.appointmentDate || appointment.date}  
+                </Typography>
+                <Typography variant="body2" className="AppointmentTimeAppointment">
+                  {appointment.appointmentTime || appointment.time}
+                </Typography>
+            </Container>
+                <Button
                 size="small"
-                className="SeeMoreAppointment"
+                className="SeeMoreAppointment1"
                 onClick={() => handleSeeMore(appointment)}
               >
                 See More
               </Button>
+              </div>
+            
             </Box>
           ))
         )}

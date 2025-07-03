@@ -1,16 +1,16 @@
 .RecentAppointmentsAppointment {
   display: flex;
   flex-direction: column;
-  background-color: #fffbfa !important;
-  padding: 15px;
-  border-radius: 8px;
+  background: white !important;
+  padding: 20px;
+  border-radius: 12px;
   height: 70vh !important;
   overflow-y: auto;
   max-height: 80vh !important;
   direction: rtl;
-
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1) !important;
+  border: 1px solid #e0e0e0;
 }
-
 
 .RecentAppointmentsAppointment .MuiCardContent-root {
   height: 100%;
@@ -19,56 +19,118 @@
   direction: rtl;
 }
 
-
 .RecentAppointmentsAppointment::-webkit-scrollbar,
 .RecentAppointmentsAppointment .MuiCardContent-root::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
 }
 
 .RecentAppointmentsAppointment::-webkit-scrollbar-track,
 .RecentAppointmentsAppointment .MuiCardContent-root::-webkit-scrollbar-track {
-  background: #f1f1f1;
-  border-radius: 4px;
+  background: #f8f9fa;
+  border-radius: 3px;
 }
 
 .RecentAppointmentsAppointment::-webkit-scrollbar-thumb,
 .RecentAppointmentsAppointment .MuiCardContent-root::-webkit-scrollbar-thumb {
   background: #1b4d5b;
-  border-radius: 4px;
+  border-radius: 3px;
 }
 
 .RecentAppointmentsAppointment::-webkit-scrollbar-thumb:hover,
 .RecentAppointmentsAppointment .MuiCardContent-root::-webkit-scrollbar-thumb:hover {
-  background: #0f3a45;
+  background: #134046;
 }
+
 .AppointmentItemAppointment {
   display: flex;
   justify-content: space-between;
-  width: 20vw;
+  width: 19vw;
   align-items: center;
-  background-color: #e0e0e0;
-  padding: 10px;
-  border-radius: 5px;
-  margin-top: 10px;
-  direction: ltr; 
+  background: #f8f9fa;
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  direction: ltr;
+  border: 1px solid #e9ecef;
+  transition: all 0.3s ease;
 }
+
+.AppointmentItemAppointment:hover {
+  background: #e9ecef;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
 .AppointmentDivider {
   display: flex;
   flex-direction: column;
+  gap: 4px;
 }
-.SeeMoreAppointment {
-  text-decoration: underline !important;
+
+.SeeMoreAppointment1 {
   color: #1b4d5b !important;
+  font-weight: 500 !important;
+  padding: 3px 16px !important;
+  border: 1px solid #1b4d5b !important;
+  border-radius: 6px !important;
+  background: transparent !important;
+  transition: all 0.3s ease !important;
+  text-transform: none !important;
+  min-width: 15vw !important;
+  margin-left:7% !important; 
+  z-index: 10 !important;
+  };
+
+
+.SeeMoreAppointment1:hover {
+  background-color: #1b4d5b !important;
+  color: white !important;
+  transform: translateY(-2px) !important;
 }
+
 .AppointmentTypeAppointment {
-  font-size: 20px;
+  font-size: 16px !important;
   font-weight: 600 !important;
-  color: #1b4d5b;
+  color: #1b4d5b !important;
+  margin-bottom: 2px !important;
 }
+
+.AppointmentDateAppointment {
+  font-size: 13px !important;
+  color: #555 !important;
+  font-weight: 500 !important;
+}
+.AppointmentDetailsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 8px !important;
+ margin-bottom: 8px;
+  width: 15vw !important;
+
+  
+
+}
+.AppointmentTimeAppointment {
+  font-size: 13px !important;
+  color: #666 !important;
+  text-align: center;
+}
+
+.AppointmentStatusAppointment {
+  font-size: 12px !important;
+  color: #666 !important;
+  margin-top: 4px !important;
+}
+
 .SectionTitleAppointment {
-  font-size: 18px;
-  font-weight: 600;
-  color: #1b4d5b;
-  margin-bottom: 10px;
+  font-size: 18px !important;
+  font-weight: 700 !important;
+  color: #1b4d5b !important;
+  margin-bottom: 16px !important;
   text-align: center !important;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #f0f0f0;
+    z-index: 10 !important;
+  
 }
