@@ -1,5 +1,6 @@
 import React from 'react';
 import './MarriageCertificateForm.css';
+import './MarriageDetailsForm.css';
 
 const MarriageDetailsForm = ({ formData, handleChange, errors }) => {
   // Create arrays for dropdown options
@@ -20,7 +21,7 @@ const MarriageDetailsForm = ({ formData, handleChange, errors }) => {
       <h3>III. MARRIAGE DETAILS</h3>
 
       {/* Place of Marriage */}
-      <label>15. PLACE OF MARRIAGE *</label>
+      <label>15. PLACE OF MARRIAGE <span style={{color: 'red'}}>*</span></label>
       <div className="input-group">
         <div className="input-container">
           <input
@@ -81,7 +82,7 @@ const MarriageDetailsForm = ({ formData, handleChange, errors }) => {
       </div>
 
       {/* Date of Marriage - CONVERTED TO DROPDOWNS */}
-      <label>16. DATE OF MARRIAGE *</label>
+      <label>16. DATE OF MARRIAGE <span style={{color: 'red'}}>*</span></label>
       <div className="input-group">
         <div className="input-container">
           <select
@@ -134,7 +135,7 @@ const MarriageDetailsForm = ({ formData, handleChange, errors }) => {
       </div>
 
       {/* Time of Marriage */}
-      <label>17. TIME OF MARRIAGE</label>
+      <label>17. TIME OF MARRIAGE<span style={{color: 'red'}}>*</span></label>
       <div className="input-group">
         <div className="input-container">
           <input
