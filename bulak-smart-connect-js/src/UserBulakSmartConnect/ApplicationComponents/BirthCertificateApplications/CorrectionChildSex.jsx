@@ -801,7 +801,7 @@ const SexDobCorrection = () => {
             <Typography variant="body2">PAYMENT:</Typography>
             <Typography variant="body2">1. Filing Fee - PHP 300.00</Typography>
             <Typography variant="body2">
-              2. Newspaper Publication - PHP 3,500.00 (or newspaper of your choice)
+              2. Newspaper Publication - PHP 3,500.00 (newspaper of your choice)
             </Typography>
             <Typography variant="body2">
               3. Other Fees - PHP 500.00 (notarized, new PSA corrected copy)
