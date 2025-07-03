@@ -1,0 +1,147 @@
+/* MarriageDetailsForm specific styles */
+
+/* Section styling */
+.section {
+  margin-bottom: 2rem;
+}
+
+.section h3 {
+  color: #fff;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.5rem;
+  text-transform: uppercase;
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-align: center;
+  background-color: #1c4d5a;
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+/* Label styling */
+label {
+  display: block;
+  margin-bottom: 0.7rem;
+  font-weight: 500;
+  color: #333;
+}
+
+label::after {
+  content: ' *';
+  color: #e74c3c;
+}
+
+label:not([data-required])::after {
+  content: '';
+}
+
+/* Input group layout */
+.input-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.input-container {
+  flex: 1;
+  min-width: 200px;
+  position: relative;
+}
+
+.input-container.full-width {
+  flex-basis: 100%;
+}
+
+/* Input textbox styling */
+.input-container input[type='text'] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #1c4d5a !important;
+  border-radius: 4px;
+  font-size: 14px;
+  background-color: white !important;
+  color: #1c4d5a !important;
+  transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+
+.input-container input[type='text']:focus {
+  border-color: #1c4d5a !important;
+  background-color: #fff !important;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(28, 77, 90, 0.2);
+}
+
+.input-container input[type='text']:hover {
+  border-color: #1c4d5a !important;
+}
+
+.input-container input[type='text']::placeholder {
+  color: #1c4d5a;
+  opacity: 0.7;
+}
+
+/* Select dropdown styling */
+.input-container select,
+.form-select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #1c4d5a !important;
+  border-radius: 4px;
+  font-size: 14px;
+  background-color: white !important;
+  color: #1c4d5a !important;
+  transition: border-color 0.3s ease, background-color 0.3s ease;
+  cursor: pointer;
+}
+
+.input-container select:focus,
+.form-select:focus {
+  border-color: #1c4d5a !important;
+  background-color: #fff !important;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(28, 77, 90, 0.2);
+}
+
+.input-container select:hover,
+.form-select:hover {
+  border-color: #1c4d5a !important;
+}
+
+/* Error styling */
+.error-message {
+  color: #e74c3c;
+  font-size: 12px;
+  position: absolute;
+  bottom: -18px;
+  left: 0;
+}
+
+/* Info and note text styling */
+.info-text {
+  font-size: 14px;
+  color: #7f8c8d;
+  margin-bottom: 1rem;
+}
+
+.note-text {
+  font-size: 14px;
+  color: #e74c3c;
+  font-weight: bold;
+  margin-top: 1rem;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .input-container {
+    min-width: 100%;
+    flex-basis: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .input-group {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}
