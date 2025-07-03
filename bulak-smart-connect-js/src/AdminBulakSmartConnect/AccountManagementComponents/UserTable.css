@@ -89,13 +89,13 @@ td {
   font-weight: bold;
 }
 
-.role.admin {
+.role.super_admin {
   background-color: #3c6670;
   color: #ffffff;
   font-weight: 500;
 }
 
-.role.manager {
+.role.admin {
   background-color: #e2e381;
   color: #000;
   font-weight: 500;

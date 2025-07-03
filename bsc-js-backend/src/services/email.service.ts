@@ -281,4 +281,436 @@ export class EmailService {
       html,
     });
   }
+
+  /**
+   * Send appointment confirmation email
+   */
+  async sendAppointmentConfirmation(
+    email: string,
+    appointmentNumber: string,
+    appointmentDetails: any,
+  ): Promise<void> {
+    const subject = 'Appointment Confirmed - Bulak LGU Smart Connect';
+    
+    const html = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Appointment Confirmed</title>
+        <style>
+          body { margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f4f4f4; }
+          .container { max-width: 600px; margin: 0 auto; background-color: #ffffff; }
+          .header { background: linear-gradient(135deg, #28a745 0%, #20c997 100%); color: white; padding: 30px 20px; text-align: center; }
+          .content { padding: 30px 20px; }
+          .appointment-card { background-color: #f8f9fa; border-left: 4px solid #28a745; padding: 20px; margin: 20px 0; border-radius: 8px; }
+          .detail-row { display: flex; justify-content: space-between; margin: 10px 0; padding: 8px 0; border-bottom: 1px solid #e9ecef; }
+          .label { font-weight: bold; color: #495057; }
+          .value { color: #212529; }
+          .footer { background-color: #f8f9fa; padding: 20px; text-align: center; font-size: 12px; color: #6c757d; }
+          .important-note { background-color: #fff3cd; border: 1px solid #ffeaa7; padding: 15px; border-radius: 8px; margin: 20px 0; }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <div class="header">
+            <h1>✅ Appointment Confirmed</h1>
+            <p>Your appointment has been successfully booked!</p>
+          </div>
+          
+          <div class="content">
+            <p>Dear ${appointmentDetails.firstName || 'Valued Client'} ${appointmentDetails.lastName || ''},</p>
+            
+            <p>We're pleased to confirm your appointment with the Municipal Civil Registrar's Office.</p>
+            
+            <div class="appointment-card">
+              <h3 style="margin-top: 0; color: #28a745;">Appointment Details</h3>
+              <div class="detail-row">
+                <span class="label">Appointment ID:</span>
+                <span class="value">${appointmentNumber}</span>
+              </div>
+              <div class="detail-row">
+                <span class="label">Service Type:</span>
+                <span class="value">${appointmentDetails.type || appointmentDetails.reasonOfVisit || 'Civil Registry Service'}</span>
+              </div>
+              <div class="detail-row">
+                <span class="label">Date:</span>
+                <span class="value">${appointmentDetails.date || appointmentDetails.appointmentDate || 'TBD'}</span>
+              </div>
+              <div class="detail-row">
+                <span class="label">Time:</span>
+                <span class="value">${appointmentDetails.time || appointmentDetails.appointmentTime || 'TBD'}</span>
+              </div>
+              ${appointmentDetails.phoneNumber ? `
+              <div class="detail-row">
+                <span class="label">Contact:</span>
+                <span class="value">${appointmentDetails.phoneNumber}</span>
+              </div>
+              ` : ''}
+            </div>
+            
+            <div class="important-note">
+              <h4 style="margin-top: 0;">📋 Important Reminders:</h4>
+              <ul style="margin: 10px 0; padding-left: 20px;">
+                <li>Please arrive <strong>15 minutes before</strong> your scheduled time</li>
+                <li>Bring all required documents and valid ID</li>
+                <li>Late arrivals may need to reschedule</li>
+                <li>Keep this confirmation email for your records</li>
+              </ul>
+            </div>
+            
+            <p>Thank you for using Bulak LGU Smart Connect!</p>
+          </div>
+          
+          <div class="footer">
+            <p>Municipal Civil Registrar's Office<br>
+            Bulak Local Government Unit<br>
+            This is an automated message, please do not reply.</p>
+          </div>
+        </div>
+      </body>
+      </html>
+    `;
+
+    await this.transporter.sendMail({
+      from: this.configService.get('EMAIL_FROM'),
+      to: email,
+      subject,
+      html,
+    });
+
+    console.log(`✅ Appointment confirmation email sent to ${email}`);
+  }
+
+  /**
+   * Send appointment status update email
+   */
+  async sendAppointmentStatusUpdate(
+    email: string,
+    appointmentNumber: string,
+    newStatus: string,
+    appointmentDetails: any,
+  ): Promise<void> {
+    const statusColors = {
+      'confirmed': '#28a745',
+      'completed': '#007bff',
+      'cancelled': '#dc3545',
+      'pending': '#ffc107'
+    };
+
+    const statusEmojis = {
+      'confirmed': '✅',
+      'completed': '🎉',
+      'cancelled': '❌',
+      'pending': '⏳'
+    };
+
+    const color = statusColors[newStatus] || '#6c757d';
+    const emoji = statusEmojis[newStatus] || '📋';
+    
+    const subject = `Appointment ${newStatus.charAt(0).toUpperCase() + newStatus.slice(1)} - ${appointmentNumber}`;
+    
+    const html = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Appointment Status Update</title>
+        <style>
+          body { margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f4f4f4; }
+          .container { max-width: 600px; margin: 0 auto; background-color: #ffffff; }
+          .header { background: linear-gradient(135deg, ${color} 0%, ${color}cc 100%); color: white; padding: 30px 20px; text-align: center; }
+          .content { padding: 30px 20px; }
+          .status-card { background-color: #f8f9fa; border-left: 4px solid ${color}; padding: 20px; margin: 20px 0; border-radius: 8px; }
+          .detail-row { display: flex; justify-content: space-between; margin: 10px 0; padding: 8px 0; border-bottom: 1px solid #e9ecef; }
+          .label { font-weight: bold; color: #495057; }
+          .value { color: #212529; }
+          .footer { background-color: #f8f9fa; padding: 20px; text-align: center; font-size: 12px; color: #6c757d; }
+          .status-badge { display: inline-block; padding: 8px 16px; background-color: ${color}; color: white; border-radius: 20px; font-weight: bold; margin: 10px 0; }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <div class="header">
+            <h1>${emoji} Appointment Update</h1>
+            <p>Your appointment status has been updated</p>
+          </div>
+          
+          <div class="content">
+            <p>Dear ${appointmentDetails.firstName || 'Valued Client'} ${appointmentDetails.lastName || ''},</p>
+            
+            <p>We're writing to inform you that your appointment status has been updated.</p>
+            
+            <div class="status-card">
+              <h3 style="margin-top: 0;">Appointment Status</h3>
+              <div class="status-badge">${newStatus.toUpperCase()}</div>
+              
+              <div class="detail-row">
+                <span class="label">Appointment ID:</span>
+                <span class="value">${appointmentNumber}</span>
+              </div>
+              <div class="detail-row">
+                <span class="label">Service Type:</span>
+                <span class="value">${appointmentDetails.type || appointmentDetails.reasonOfVisit || 'Civil Registry Service'}</span>
+              </div>
+              <div class="detail-row">
+                <span class="label">Date:</span>
+                <span class="value">${appointmentDetails.date || appointmentDetails.appointmentDate || 'TBD'}</span>
+              </div>
+              <div class="detail-row">
+                <span class="label">Time:</span>
+                <span class="value">${appointmentDetails.time || appointmentDetails.appointmentTime || 'TBD'}</span>
+              </div>
+            </div>
+            
+            ${newStatus === 'confirmed' ? `
+            <div style="background-color: #d4edda; border: 1px solid #c3e6cb; padding: 15px; border-radius: 8px; margin: 20px 0;">
+              <p><strong>Your appointment is confirmed!</strong> Please remember to:</p>
+              <ul>
+                <li>Arrive 15 minutes before your scheduled time</li>
+                <li>Bring all required documents and valid ID</li>
+                <li>Keep this confirmation for your records</li>
+              </ul>
+            </div>
+            ` : ''}
+            
+            ${newStatus === 'completed' ? `
+            <div style="background-color: #d1ecf1; border: 1px solid #bee5eb; padding: 15px; border-radius: 8px; margin: 20px 0;">
+              <p><strong>Your appointment has been completed!</strong> Thank you for visiting our office.</p>
+            </div>
+            ` : ''}
+            
+            ${newStatus === 'cancelled' ? `
+            <div style="background-color: #f8d7da; border: 1px solid #f5c6cb; padding: 15px; border-radius: 8px; margin: 20px 0;">
+              <p><strong>Your appointment has been cancelled.</strong></p>
+              <p>If you need to reschedule, please contact our office or book a new appointment.</p>
+            </div>
+            ` : ''}
+            
+            <p>Thank you for using Bulak LGU Smart Connect!</p>
+          </div>
+          
+          <div class="footer">
+            <p>Municipal Civil Registrar's Office<br>
+            Bulak Local Government Unit<br>
+            This is an automated message, please do not reply.</p>
+          </div>
+        </div>
+      </body>
+      </html>
+    `;
+
+    await this.transporter.sendMail({
+      from: this.configService.get('EMAIL_FROM'),
+      to: email,
+      subject,
+      html,
+    });
+
+    console.log(`✅ Appointment status update email sent to ${email} - Status: ${newStatus}`);
+  }
+
+  /**
+   * Send appointment cancellation email
+   */
+  async sendAppointmentCancellation(
+    email: string,
+    appointmentNumber: string,
+    appointmentDetails: any,
+    reason?: string,
+  ): Promise<void> {
+    const subject = `Appointment Cancelled - ${appointmentNumber}`;
+    
+    const html = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Appointment Cancelled</title>
+        <style>
+          body { margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f4f4f4; }
+          .container { max-width: 600px; margin: 0 auto; background-color: #ffffff; }
+          .header { background: linear-gradient(135deg, #dc3545 0%, #c82333 100%); color: white; padding: 30px 20px; text-align: center; }
+          .content { padding: 30px 20px; }
+          .appointment-card { background-color: #f8f9fa; border-left: 4px solid #dc3545; padding: 20px; margin: 20px 0; border-radius: 8px; }
+          .detail-row { display: flex; justify-content: space-between; margin: 10px 0; padding: 8px 0; border-bottom: 1px solid #e9ecef; }
+          .label { font-weight: bold; color: #495057; }
+          .value { color: #212529; }
+          .footer { background-color: #f8f9fa; padding: 20px; text-align: center; font-size: 12px; color: #6c757d; }
+          .rebook-section { background-color: #e2f3ff; border: 1px solid #b8daff; padding: 20px; border-radius: 8px; margin: 20px 0; text-align: center; }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <div class="header">
+            <h1>❌ Appointment Cancelled</h1>
+            <p>We regret to inform you that your appointment has been cancelled</p>
+          </div>
+          
+          <div class="content">
+            <p>Dear ${appointmentDetails.firstName || 'Valued Client'} ${appointmentDetails.lastName || ''},</p>
+            
+            <p>We regret to inform you that your appointment has been cancelled.</p>
+            
+            <div class="appointment-card">
+              <h3 style="margin-top: 0; color: #dc3545;">Cancelled Appointment Details</h3>
+              <div class="detail-row">
+                <span class="label">Appointment ID:</span>
+                <span class="value">${appointmentNumber}</span>
+              </div>
+              <div class="detail-row">
+                <span class="label">Service Type:</span>
+                <span class="value">${appointmentDetails.type || appointmentDetails.reasonOfVisit || 'Civil Registry Service'}</span>
+              </div>
+              <div class="detail-row">
+                <span class="label">Scheduled Date:</span>
+                <span class="value">${appointmentDetails.date || appointmentDetails.appointmentDate || 'TBD'}</span>
+              </div>
+              <div class="detail-row">
+                <span class="label">Scheduled Time:</span>
+                <span class="value">${appointmentDetails.time || appointmentDetails.appointmentTime || 'TBD'}</span>
+              </div>
+              ${reason ? `
+              <div class="detail-row">
+                <span class="label">Reason:</span>
+                <span class="value">${reason}</span>
+              </div>
+              ` : ''}
+            </div>
+            
+            <div class="rebook-section">
+              <h4 style="margin-top: 0;">📅 Need to Reschedule?</h4>
+              <p>You can easily book a new appointment through our online system.</p>
+              <p>We apologize for any inconvenience this may have caused.</p>
+            </div>
+            
+            <p>Thank you for your understanding.</p>
+          </div>
+          
+          <div class="footer">
+            <p>Municipal Civil Registrar's Office<br>
+            Bulak Local Government Unit<br>
+            This is an automated message, please do not reply.</p>
+          </div>
+        </div>
+      </body>
+      </html>
+    `;
+
+    await this.transporter.sendMail({
+      from: this.configService.get('EMAIL_FROM'),
+      to: email,
+      subject,
+      html,
+    });
+
+    console.log(`✅ Appointment cancellation email sent to ${email}`);
+  }
+
+  /**
+   * Send appointment reminder email
+   */
+  async sendAppointmentReminder(
+    email: string,
+    appointmentNumber: string,
+    appointmentDetails: any,
+  ): Promise<void> {
+    const subject = `Reminder: Appointment Tomorrow - ${appointmentNumber}`;
+    
+    const html = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Appointment Reminder</title>
+        <style>
+          body { margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f4f4f4; }
+          .container { max-width: 600px; margin: 0 auto; background-color: #ffffff; }
+          .header { background: linear-gradient(135deg, #007bff 0%, #0056b3 100%); color: white; padding: 30px 20px; text-align: center; }
+          .content { padding: 30px 20px; }
+          .appointment-card { background-color: #f8f9fa; border-left: 4px solid #007bff; padding: 20px; margin: 20px 0; border-radius: 8px; }
+          .detail-row { display: flex; justify-content: space-between; margin: 10px 0; padding: 8px 0; border-bottom: 1px solid #e9ecef; }
+          .label { font-weight: bold; color: #495057; }
+          .value { color: #212529; }
+          .footer { background-color: #f8f9fa; padding: 20px; text-align: center; font-size: 12px; color: #6c757d; }
+          .reminder-box { background-color: #fff3cd; border: 1px solid #ffeaa7; padding: 20px; border-radius: 8px; margin: 20px 0; }
+          .checklist { background-color: #d4edda; border: 1px solid #c3e6cb; padding: 20px; border-radius: 8px; margin: 20px 0; }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <div class="header">
+            <h1>⏰ Appointment Reminder</h1>
+            <p>Don't forget about your appointment tomorrow!</p>
+          </div>
+          
+          <div class="content">
+            <p>Dear ${appointmentDetails.firstName} ${appointmentDetails.lastName},</p>
+            
+            <p>This is a friendly reminder about your upcoming appointment with the Municipal Civil Registrar's Office.</p>
+            
+            <div class="appointment-card">
+              <h3 style="margin-top: 0; color: #007bff;">Tomorrow's Appointment</h3>
+              <div class="detail-row">
+                <span class="label">Appointment ID:</span>
+                <span class="value">${appointmentNumber}</span>
+              </div>
+              <div class="detail-row">
+                <span class="label">Service Type:</span>
+                <span class="value">${appointmentDetails.type}</span>
+              </div>
+              <div class="detail-row">
+                <span class="label">Date:</span>
+                <span class="value">${appointmentDetails.date}</span>
+              </div>
+              <div class="detail-row">
+                <span class="label">Time:</span>
+                <span class="value">${appointmentDetails.time}</span>
+              </div>
+            </div>
+            
+            <div class="checklist">
+              <h4 style="margin-top: 0;">📋 Pre-Appointment Checklist:</h4>
+              <ul style="margin: 10px 0; padding-left: 20px;">
+                <li>✅ Prepare all required documents</li>
+                <li>✅ Bring valid government-issued ID</li>
+                <li>✅ Arrive 15 minutes before scheduled time</li>
+                <li>✅ Have this appointment confirmation ready</li>
+                <li>✅ Bring exact payment if applicable</li>
+              </ul>
+            </div>
+            
+            <div class="reminder-box">
+              <h4 style="margin-top: 0;">⚠️ Important:</h4>
+              <p>Please arrive on time as late arrivals may need to reschedule. If you need to cancel or reschedule, please contact our office as soon as possible.</p>
+            </div>
+            
+            <p>We look forward to seeing you tomorrow!</p>
+            
+            <p>Thank you for using Bulak LGU Smart Connect!</p>
+          </div>
+          
+          <div class="footer">
+            <p>Municipal Civil Registrar's Office<br>
+            Bulak Local Government Unit<br>
+            This is an automated message, please do not reply.</p>
+          </div>
+        </div>
+      </body>
+      </html>
+    `;
+
+    await this.transporter.sendMail({
+      from: this.configService.get('EMAIL_FROM'),
+      to: email,
+      subject,
+      html,
+    });
+
+    console.log(`✅ Appointment reminder email sent to ${email}`);
+  }
 }

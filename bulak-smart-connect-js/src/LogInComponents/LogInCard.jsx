@@ -16,11 +16,12 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import ForgotPassword from './ForgotPassword';
 import './LogInCard.css';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { Link as RouterLink, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext'; //Current AuthContext to handle login and roles
 import { authService } from '../services/api'; //API Service to NestJS, initially used on early iteration of the login, without the roles
 
 export default function LogInCard({ onLogin }) {
+  const location = useLocation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState(false);
@@ -49,6 +50,18 @@ export default function LogInCard({ onLogin }) {
       setRememberMe(true);
     }
   }, []);
+
+  // Show message from password change redirect
+  useEffect(() => {
+    if (location.state?.message) {
+      setMessage({ 
+        text: location.state.message, 
+        type: location.state.type || 'success' 
+      });
+      // Clear the state so message doesn't persist on refresh
+      window.history.replaceState({}, document.title);
+    }
+  }, [location.state]);
 
   const toggleLoginType = () => {
     const newType = loginType === 'email' ? 'username' : 'email';

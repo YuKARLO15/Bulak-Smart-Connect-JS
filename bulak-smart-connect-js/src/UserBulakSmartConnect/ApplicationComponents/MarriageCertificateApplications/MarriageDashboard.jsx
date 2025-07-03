@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Box, Paper, Typography, FormControlLabel, Radio, RadioGroup, Button } from '@mui/material';
 import './MarriageDashboard.css';
 import NavBar from '../../../NavigationComponents/NavSide';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 const MarriageDashboard = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -59,8 +60,22 @@ const MarriageDashboard = () => {
     <Box className={`ContainerMDashboard ${isSidebarOpen ? 'sidebar-openMDashboard' : ''}`}>
       <NavBar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
       
-      <Typography variant="h4" className="TitleMDashboard">
+      {/* <Typography variant="h4" className="TitleMDashboard">
         Marriage Application
+      </Typography> */}
+
+       <Typography variant="h4" className="FormTitle">
+        <Box className="FormTitleContent">
+          <Button
+            variant="outlined"
+            className="back-button-home"
+            onClick={() => navigate('/ApplicationForm')}
+             startIcon={<ArrowBackIcon />}
+          >
+            Back
+          </Button>
+          <span className="FormTitleText">Marriage Certificate Application</span>
+        </Box>
       </Typography>
       
       <Paper className="PaperMDashboard" elevation={3}>
