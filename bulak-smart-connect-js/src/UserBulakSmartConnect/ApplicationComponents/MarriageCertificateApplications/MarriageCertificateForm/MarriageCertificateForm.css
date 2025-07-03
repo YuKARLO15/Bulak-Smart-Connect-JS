@@ -154,12 +154,12 @@
   border: 1px solid #ccc;
   border-radius: 4px;
   font-size: 14px;
-  background-color: #fff;
-  color: #333;
+  background-color: white !important;
+  color: #184a5b !important;
 }
 
 .husband-select:focus {
-  border-color: #3498db;
+  border-color: #4e7691;
   outline: none;
 }
 

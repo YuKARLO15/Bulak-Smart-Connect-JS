@@ -15,8 +15,8 @@ const HusbandForm = ({ formData, handleChange, errors, isMarriageLicense = false
 
       {/* Full Name */}
       <label className="husband-label">1. FULL NAME *</label>
-      <div className="husband-input-group input-group">
-        <div className="husband-input-container input-container">
+      <div className="husband-input-group input-group husband-name">
+        <div className="husband-input-container input-container ">
           <input
             type="text"
             name="husbandFirstName"
