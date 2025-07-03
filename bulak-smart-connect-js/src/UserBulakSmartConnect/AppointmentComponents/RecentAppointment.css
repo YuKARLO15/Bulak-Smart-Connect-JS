@@ -4,8 +4,43 @@
   background-color: #fffbfa !important;
   padding: 15px;
   border-radius: 8px;
+  height: 70vh !important;
+  overflow-y: auto;
+  max-height: 80vh !important;
+  direction: rtl;
+
 }
 
+
+.RecentAppointmentsAppointment .MuiCardContent-root {
+  height: 100%;
+  overflow-y: auto;
+  padding: 0 !important;
+  direction: rtl;
+}
+
+
+.RecentAppointmentsAppointment::-webkit-scrollbar,
+.RecentAppointmentsAppointment .MuiCardContent-root::-webkit-scrollbar {
+  width: 8px;
+}
+
+.RecentAppointmentsAppointment::-webkit-scrollbar-track,
+.RecentAppointmentsAppointment .MuiCardContent-root::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.RecentAppointmentsAppointment::-webkit-scrollbar-thumb,
+.RecentAppointmentsAppointment .MuiCardContent-root::-webkit-scrollbar-thumb {
+  background: #1b4d5b;
+  border-radius: 4px;
+}
+
+.RecentAppointmentsAppointment::-webkit-scrollbar-thumb:hover,
+.RecentAppointmentsAppointment .MuiCardContent-root::-webkit-scrollbar-thumb:hover {
+  background: #0f3a45;
+}
 .AppointmentItemAppointment {
   display: flex;
   justify-content: space-between;
@@ -15,6 +50,7 @@
   padding: 10px;
   border-radius: 5px;
   margin-top: 10px;
+  direction: ltr; 
 }
 .AppointmentDivider {
   display: flex;
@@ -28,4 +64,11 @@
   font-size: 20px;
   font-weight: 600 !important;
   color: #1b4d5b;
+}
+.SectionTitleAppointment {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1b4d5b;
+  margin-bottom: 10px;
+  text-align: center !important;
 }

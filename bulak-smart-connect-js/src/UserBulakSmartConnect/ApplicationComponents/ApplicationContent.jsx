@@ -24,7 +24,6 @@ const ApplicationContent = () => {
       requirementsRoute: '/RequirementMarriageList'
     }
   ];
-
   return (
     <>
       <div className="OnlineApplicationTitleContainer">
