@@ -80,7 +80,9 @@ const AppointmentDashboard = () => {
               </Button>
             
           </Box>
+             <Box className="RecentAppointmentsDesktop">
               <RecentAppointments />
+            </Box>
             </Box>
             
             <Box className="RightSectionContentAppointment">
@@ -129,8 +131,13 @@ const AppointmentDashboard = () => {
                   </Typography>
                 </CardContent>
               </Card>
+              </Box>
+              
             </Box>
-          </Box>
+            
+            <Box className="RecentAppointmentsMobile">
+          <RecentAppointments />
+        </Box>
           
           <Box className="AnnouncementButtonContainer">
             <FloatingAnnouncementButton />

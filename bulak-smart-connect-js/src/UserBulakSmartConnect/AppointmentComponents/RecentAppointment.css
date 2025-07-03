@@ -4,7 +4,7 @@
   background: white !important;
   padding: 20px;
   border-radius: 12px;
-  height: 70vh !important;
+  height: 65vh !important;
   overflow-y: auto;
   max-height: 80vh !important;
   direction: rtl;
@@ -28,6 +28,7 @@
 .RecentAppointmentsAppointment .MuiCardContent-root::-webkit-scrollbar-track {
   background: #f8f9fa;
   border-radius: 3px;
+  margin-top: 50px !important;
 }
 
 .RecentAppointmentsAppointment::-webkit-scrollbar-thumb,
@@ -77,10 +78,9 @@
   transition: all 0.3s ease !important;
   text-transform: none !important;
   min-width: 15vw !important;
-  margin-left:7% !important; 
+  margin-left: 7% !important;
   z-index: 10 !important;
-  };
-
+}
 
 .SeeMoreAppointment1:hover {
   background-color: #1b4d5b !important;
@@ -100,17 +100,16 @@
   color: #555 !important;
   font-weight: 500 !important;
 }
+
 .AppointmentDetailsContainer {
   display: flex;
   flex-direction: column;
   gap: 4px;
   margin-top: 8px !important;
- margin-bottom: 8px;
+  margin-bottom: 8px;
   width: 15vw !important;
-
-  
-
 }
+
 .AppointmentTimeAppointment {
   font-size: 13px !important;
   color: #666 !important;
@@ -131,6 +130,262 @@
   text-align: center !important;
   padding-bottom: 8px;
   border-bottom: 2px solid #f0f0f0;
-    z-index: 10 !important;
+  z-index: 10 !important;
+}
+
+/* Responsive Design - Media Queries */
+
+/* Large Desktop (1200px and above) */
+@media (min-width: 1200px) {
+  .RecentAppointmentsAppointment {
+    padding: 24px;
+    height: 70vh !important;
+  }
   
+  .AppointmentItemAppointment {
+    width: 20vw;
+    padding: 18px;
+  }
+  
+  .AppointmentDetailsContainer {
+    width: 16vw !important;
+  }
+  
+  .SeeMoreAppointment1 {
+    min-width: 16vw !important;
+  }
+}
+
+/* Desktop/Laptop (1024px to 1199px) */
+@media (max-width: 1199px) and (min-width: 1024px) {
+  .AppointmentItemAppointment {
+    width: 22vw;
+  }
+  
+  .AppointmentDetailsContainer {
+    width: 17vw !important;
+  }
+  
+  .SeeMoreAppointment1 {
+    min-width: 17vw !important;
+  }
+}
+
+/* Tablet Landscape (768px to 1023px) */
+@media (max-width: 1023px) and (min-width: 768px) {
+  .RecentAppointmentsAppointment {
+    height: auto !important;
+    max-height: 60vh !important;
+    padding: 20px;
+  }
+  
+  .AppointmentItemAppointment {
+    width: 100%;
+    padding: 14px;
+  }
+  
+  .AppointmentDetailsContainer {
+    width: 100% !important;
+  }
+  
+  .SeeMoreAppointment1 {
+    min-width: 200px !important;
+    margin-left: 0 !important;
+    align-self: center;
+  }
+  
+  .SectionTitleAppointment {
+    font-size: 1.1rem !important;
+  }
+}
+
+/* Tablet Portrait (481px to 767px) */
+@media (max-width: 767px) and (min-width: 481px) {
+  .RecentAppointmentsAppointment {
+    height: auto !important;
+    max-height: 50vh !important;
+    padding: 16px;
+  }
+  
+  .AppointmentItemAppointment {
+    width: 100%;
+    padding: 12px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  
+  .AppointmentDetailsContainer {
+    width: 100% !important;
+    margin-top: 4px !important;
+    margin-bottom: 4px;
+  }
+  
+  .SeeMoreAppointment1 {
+    min-width: 180px !important;
+    margin-left: 0 !important;
+    align-self: center;
+    padding: 8px 16px !important;
+  }
+  
+  .SectionTitleAppointment {
+    font-size: 1rem !important;
+    margin-bottom: 12px !important;
+  }
+  
+  .AppointmentTypeAppointment {
+    font-size: 14px !important;
+  }
+  
+  .AppointmentDateAppointment,
+  .AppointmentTimeAppointment {
+    font-size: 12px !important;
+  }
+}
+
+/* Mobile Landscape (376px to 480px) */
+@media (max-width: 480px) and (min-width: 376px) {
+  .RecentAppointmentsAppointment {
+    height: auto !important;
+    max-height: 45vh !important;
+    padding: 12px;
+  }
+  
+  .AppointmentItemAppointment {
+    width: 100%;
+    padding: 10px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+  
+  .AppointmentDetailsContainer {
+    width: 100% !important;
+    margin-top: 2px !important;
+    margin-bottom: 2px;
+  }
+  
+  .SeeMoreAppointment1 {
+    min-width: 150px !important;
+    margin-left: 0 !important;
+    align-self: center;
+    padding: 6px 12px !important;
+    font-size: 0.9rem !important;
+  }
+  
+  .SectionTitleAppointment {
+    font-size: 0.95rem !important;
+    margin-bottom: 10px !important;
+  }
+  
+  .AppointmentTypeAppointment {
+    font-size: 13px !important;
+  }
+  
+  .AppointmentDateAppointment,
+  .AppointmentTimeAppointment {
+    font-size: 11px !important;
+  }
+  
+  .AppointmentStatusAppointment {
+    font-size: 11px !important;
+  }
+}
+
+/* Mobile Portrait (320px to 375px) */
+@media (max-width: 375px) {
+  .RecentAppointmentsAppointment {
+    height: auto !important;
+    max-height: 40vh !important;
+    padding: 8px;
+  }
+  
+  .AppointmentItemAppointment {
+    width: 100%;
+    padding: 8px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+  
+  .AppointmentDetailsContainer {
+    width: 100% !important;
+    margin-top: 2px !important;
+    margin-bottom: 2px;
+  }
+  
+  .SeeMoreAppointment1 {
+    min-width: 120px !important;
+    margin-left: 0 !important;
+    align-self: center;
+    padding: 4px 8px !important;
+    font-size: 0.8rem !important;
+  }
+  
+  .SectionTitleAppointment {
+    font-size: 0.9rem !important;
+    margin-bottom: 8px !important;
+  }
+  
+  .AppointmentTypeAppointment {
+    font-size: 12px !important;
+  }
+  
+  .AppointmentDateAppointment,
+  .AppointmentTimeAppointment {
+    font-size: 10px !important;
+  }
+  
+  .AppointmentStatusAppointment {
+    font-size: 10px !important;
+  }
+}
+
+/* Extra Small Devices (below 320px) */
+@media (max-width: 319px) {
+  .RecentAppointmentsAppointment {
+    height: auto !important;
+    max-height: 35vh !important;
+    padding: 6px;
+  }
+  
+  .AppointmentItemAppointment {
+    width: 100%;
+    padding: 6px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+  }
+  
+  .AppointmentDetailsContainer {
+    width: 100% !important;
+    margin-top: 1px !important;
+    margin-bottom: 1px;
+  }
+  
+  .SeeMoreAppointment1 {
+    min-width: 100px !important;
+    margin-left: 0 !important;
+    align-self: center;
+    padding: 2px 6px !important;
+    font-size: 0.75rem !important;
+  }
+  
+  .SectionTitleAppointment {
+    font-size: 0.8rem !important;
+    margin-bottom: 6px !important;
+  }
+  
+  .AppointmentTypeAppointment {
+    font-size: 11px !important;
+  }
+  
+  .AppointmentDateAppointment,
+  .AppointmentTimeAppointment {
+    font-size: 9px !important;
+  }
+  
+  .AppointmentStatusAppointment {
+    font-size: 9px !important;
+  }
 }
