@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Box, Button, Typography, Alert, CircularProgress, Snackbar } from '@mui/material';
+import { Box, Button, Typography, Alert, CircularProgress, Snackbar,Tooltip } from '@mui/material';
 import FileUpload from '../FileUpload';
 import NavBar from '../../../NavigationComponents/NavSide';
 import './MarriageCertificateApplication.css';
@@ -12,6 +12,71 @@ const requiredDocuments = [
   'Valid ID of Groom',
   'Certificate of Marriage from the Officiant',
 ];
+
+const GovernmentIdTooltip = ({ children }) => {
+  const acceptedIds = [
+    'Philippine Passport',
+    'PhilSys ID or National ID',
+    "Driver's License",
+    'PRC ID',
+    'UMID (Unified Multi-Purpose ID)',
+    'SSS ID',
+    'GSIS eCard',
+    'OWWA ID',
+    'Senior Citizen ID',
+    'PWD ID',
+    "Voter's ID or Voter's Certification",
+    'Postal ID',
+    'Barangay ID or Barangay Clearance with photo',
+    'TIN ID',
+    'PhilHealth ID',
+    'Pag-IBIG Loyalty Card Plus',
+    'Indigenous Peoples (IP) ID or certification'
+  ];
+
+  return (
+    <Tooltip
+      title={
+        <Box>
+          <Typography variant="subtitle2" sx={{ fontWeight: 'bold', mb: 1 }}>
+            Accepted Government IDs:
+          </Typography>
+          {acceptedIds.map((id, index) => (
+            <Typography key={index} variant="body2" sx={{ fontSize: '0.75rem', mb: 0.5 }}>
+              • {id}
+            </Typography>
+          ))}
+        </Box>
+      }
+      arrow
+      placement="top"
+      sx={{
+        '& .MuiTooltip-tooltip': {
+          maxWidth: 300,
+          backgroundColor: 'rgba(0, 0, 0, 0.9)',
+        }
+      }}
+    >
+      <span style={{ 
+        textDecoration: 'underline', 
+        cursor: 'pointer',
+        color: '#1976d2',
+        fontWeight: 'bold'
+      }}>
+        {children}
+      </span>
+    </Tooltip>
+  );
+};
+
+
+const documentDescriptions = {
+  'Marriage License': '- Official marriage license issued by the local civil registrar',
+  'Valid ID of Bride': (  <> <GovernmentIdTooltip> Government-issued ID </GovernmentIdTooltip>of the bride </> ),
+  'Valid ID of Groom':(  <> <GovernmentIdTooltip> Government-issued ID </GovernmentIdTooltip>of the groom </> ),
+  'Certificate of Marriage from the Officiant': '- Marriage certificate signed by the wedding officiant (priest, pastor, judge, etc.)',
+};
+
 
 const dataURLtoFile = (dataurl, filename, mimeType) => {
   if (dataurl instanceof File) return dataurl;
@@ -212,69 +277,141 @@ const MarriageCertificateApplication = () => {
   }, [navigate]);
 
   const handleFileUpload = async (label, isUploaded, fileDataObj) => {
-    const currentAppId = applicationId || localStorage.getItem('currentApplicationId');
-
-    if (!backendApplicationCreated && !currentAppId && isUploaded) {
+    console.log(`File upload for "${label}":`, { isUploaded, fileDataObj });
+    
+    // Create application if needed before uploading files
+    if (!backendApplicationCreated && isUploaded) {
       setIsLoading(true);
       const createdApp = await createBackendApplication();
       setIsLoading(false);
-
+      
       if (!createdApp) {
-        showNotification('Failed to create application. Cannot upload files.', 'error');
+        showNotification("Failed to register application. Cannot upload files.", "error");
         return;
       }
     }
-
-    setUploadedFiles(prevState => ({
-      ...prevState,
-      [label]: isUploaded,
-    }));
-
+    
+    // Update the uploadedFiles state
+    setUploadedFiles(prevState => {
+      const newState = { ...prevState, [label]: isUploaded };
+      console.log("Updated uploadedFiles:", newState);
+      return newState;
+    });
+  
     if (isUploaded && fileDataObj) {
       setFileData(prevState => ({
         ...prevState,
         [label]: fileDataObj,
       }));
-
+  
+      // Upload to backend
       try {
-        const effectiveAppId = applicationId || localStorage.getItem('currentApplicationId');
-
-        if (!effectiveAppId) {
-          showNotification('Application ID is missing. Cannot upload file.', 'error');
+        const currentAppId = applicationId || localStorage.getItem('currentApplicationId');
+        if (!currentAppId) {
+          showNotification("Application ID is missing. Cannot upload file.", "error");
+          setUploadedFiles(prevState => ({ ...prevState, [label]: false }));
           return;
         }
-
-        console.log('Uploading file to application ID:', effectiveAppId);
-        console.log('Uploading file:', fileDataObj.name);
-
-        setIsLoading(true);
-        const file = dataURLtoFile(fileDataObj.data, fileDataObj.name, fileDataObj.type);
-
-        const response = await documentApplicationService.uploadFile(effectiveAppId, file, label);
-        console.log('Upload response:', response);
-        setIsLoading(false);
-
-        showNotification(`"${label}" uploaded successfully!`, 'success');
+        
+        console.log("Application ID:", currentAppId);
+        
+        // Ensure we handle both single files and multiple files correctly
+        let filesToUpload = [];
+        
+        if (Array.isArray(fileDataObj)) {
+          // Multiple files - already an array
+          filesToUpload = fileDataObj;
+        } else if (fileDataObj && typeof fileDataObj === 'object') {
+          // Single file - convert to array
+          filesToUpload = [fileDataObj];
+        } else {
+          console.error("Invalid file data format:", fileDataObj);
+          showNotification("Invalid file data format", "error");
+          setUploadedFiles(prevState => ({ ...prevState, [label]: false }));
+          return;
+        }
+        
+        console.log(`Processing ${filesToUpload.length} file(s) for "${label}":`, filesToUpload);
+        
+        for (const [index, fileData] of filesToUpload.entries()) {
+          if (!fileData || !fileData.data || !fileData.name) {
+            console.error(`Invalid file data at index ${index}:`, fileData);
+            continue;
+          }
+          
+          console.log(`Uploading file ${index + 1}/${filesToUpload.length}:`, {
+            name: fileData.name,
+            type: fileData.type,
+            size: fileData.data?.length || 0
+          });
+          
+          try {
+            const file = dataURLtoFile(fileData.data, fileData.name, fileData.type);
+            const uploadLabel = filesToUpload.length > 1 ? `${label} - File ${index + 1}` : label;
+            
+            const response = await documentApplicationService.uploadFile(currentAppId, file, uploadLabel);
+            console.log(`Upload response for ${fileData.name}:`, response);
+          } catch (fileError) {
+            console.error(`Failed to upload file ${fileData.name}:`, fileError);
+            throw fileError;
+          }
+        }
+        
+        const fileCount = filesToUpload.length;
+        const successMessage = fileCount > 1 
+          ? `${fileCount} files uploaded successfully for "${label}"!`
+          : `"${label}" uploaded successfully!`;
+        
+        showNotification(successMessage, "success");
+        
       } catch (error) {
         console.error(`Failed to upload "${label}":`, error);
-        setIsLoading(false);
-
+        
         if (error.response) {
-          console.error('Server response:', error.response.status, error.response.data);
-          showNotification(
-            `Failed to upload "${label}": ${error.response.data?.message || error.message}`,
-            'error'
-          );
+          console.error("Server response:", error.response.status, error.response.data);
+          
+          if (error.response.status === 404) {
+            showNotification("Application not found. Creating new application...", "info");
+            const createdApp = await createBackendApplication();
+            if (createdApp) {
+              try {
+                const filesToUpload = Array.isArray(fileDataObj) ? fileDataObj : [fileDataObj];
+                
+                for (const [index, fileData] of filesToUpload.entries()) {
+                  if (!fileData || !fileData.data || !fileData.name) continue;
+                  
+                  const file = dataURLtoFile(fileData.data, fileData.name, fileData.type);
+                  const uploadLabel = filesToUpload.length > 1 ? `${label} - File ${index + 1}` : label;
+                  
+                  await documentApplicationService.uploadFile(createdApp.id, file, uploadLabel);
+                }
+                
+                const fileCount = filesToUpload.length;
+                const successMessage = fileCount > 1 
+                  ? `${fileCount} files uploaded successfully for "${label}"!`
+                  : `"${label}" uploaded successfully!`;
+                
+                showNotification(successMessage, "success");
+                return;
+              } catch (retryError) {
+                console.error("Retry upload failed:", retryError);
+              }
+            }
+          }
+          
+          showNotification(`Failed to upload "${label}": ${error.response.data?.message || error.message}`, "error");
         } else {
-          showNotification(`Failed to upload "${label}": ${error.message}`, 'error');
+          showNotification(`Failed to upload "${label}": ${error.message}`, "error");
         }
-
+        
+        // Reset upload state on error
         setUploadedFiles(prevState => ({
           ...prevState,
           [label]: false,
         }));
       }
     } else {
+      // Remove file data when upload is cancelled
       setFileData(prevState => {
         const newState = { ...prevState };
         delete newState[label];
@@ -521,9 +658,11 @@ const MarriageCertificateApplication = () => {
           <FileUpload
             key={index}
             label={doc}
+            description={documentDescriptions[doc]}
             onUpload={(isUploaded, fileDataObj) => handleFileUpload(doc, isUploaded, fileDataObj)}
             required={true}
             disabled={isLoading}
+            multiple={true}
           />
         ))}
       </Box>

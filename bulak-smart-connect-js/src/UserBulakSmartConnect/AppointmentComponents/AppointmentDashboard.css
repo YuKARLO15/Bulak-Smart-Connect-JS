@@ -1,62 +1,334 @@
 .AppointmentDashboardContainer {
   display: flex;
   flex-direction: column;
-  margin-top: 5vh !important;
-  font-family: Arial, sans-serif;
+  margin-top: 3vh !important;
+  font-family: 'Roboto', 'Arial', sans-serif;
+  padding: 20px;
+  max-width: 1100px;
+  margin: 5vh auto 0;
+ 
 }
 
 .HeaderAppointment {
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  background-color: #9eb2b8;
-  height: 20vh;
-  padding: 20px;
-  border-radius: 8px;
+  background: linear-gradient(135deg, #1b4d5b 0%, #2c7a8a 100%);
+  padding: 15px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(27, 77, 91, 0.2);
+  margin-bottom: 10px;
 }
 
-.TitleAppointment {
-  font-weight: 600 !important;
-}
-.RightSectionAppointment {
-  width: 30vw;
-}
-
-.ButtonAppointment {
-  background-color: #1b4d5b !important;
+.HeaderContentAppointment {
+  flex: 1;
   color: white;
 }
 
+.TitleAppointment {
+  font-weight: 700 !important;
+  font-size: 1.2rem !important;
+  line-height: 1.2;
+  margin-bottom: 8px !important;
+
+}
+
+
+.RightSectionAppointment {
+  min-width: 280px;
+  display: flex;
+  justify-content: flex-end;
+}
+.ButtonAppointment {
+  background: linear-gradient(45deg, #699ba9, #59a8b8) !important;
+  color: white !important;
+  padding: 7px 16px !important;
+
+  font-weight: 600 !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 12px rgba(27, 77, 91, 0.3) !important;
+  transition: all 0.3s ease !important;
+  text-transform: none !important;
+  border: none !important;
+}
+
+.ButtonAppointment:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(27, 77, 91, 0.4) !important;
+  background: linear-gradient(45deg, #134046, #1f5e6b) !important;
+}
+
+
 .ContentAppointment {
   display: flex;
-  gap: 20px;
+  gap: 32px;
   margin-top: 20px;
 }
 
-.AvailableSlotsAppointment,
-.AnnouncementAppointment {
+.LeftSectionAppointment {
   flex: 1;
-  padding: 15px;
-  border-radius: 8px;
+  width: 20vw !important;
+  max-width: 23vw !important;
 }
+
+.RightSectionContentAppointment {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.ContentAppointmentrequirements {
+  background: white !important;
+  border-radius: 12px !important;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1) !important;
+  transition: all 0.3s ease;
+}
+
+.ContentAppointmentrequirements:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15) !important;
+}
+
 .AvailableSlotsAppointment {
-  background-color: #fffbfa;
+  background: white !important;
+  border-radius: 12px !important;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1) !important;
+  transition: all 0.3s ease;
 }
-.AnnouncementAppointment {
-  margin-top: 10px;
-  background-color: #9eb2b8 !important;
-  color: white !important ;
+
+.AvailableSlotsAppointment:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15) !important;
 }
 
 .CalendarAppointment {
   width: 100%;
   border: none;
+  border-radius: 8px;
+  font-family: inherit;
+  margin: 16px 0;
 }
 
-.AnnouncementTextAppointment {
-  margin-top: 10px;
+.CalendarAppointment .react-calendar__tile {
+  padding: 10px;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+ 
 }
+.CalendarAppointment .react-calendar__tile--now {
+  background: linear-gradient(135deg, #1b4d5b 0%, #2c7a8a 100%) !important;
+  color: white !important;
+  font-weight: 600 !important;
+  border: 2px solid #fff !important;
+  box-shadow: 0 2px 8px rgba(27, 77, 91, 0.3) !important;
+}
+
+.CalendarAppointment .react-calendar__tile--now:hover {
+  background: linear-gradient(135deg, #134046, #1f5e6b) !important;
+  transform: scale(1.05);
+}
+
+.CalendarAppointment .react-calendar__tile:hover {
+  background: linear-gradient(135deg, #134046, #1f5e6b) !important;
+  transform: scale(1.05);
+  color: white !important;
+}
+
+.CalendarAppointment .react-calendar__tile--active {
+  background: #1b4d5b !important;
+  color: white !important;
+}
+
+.CalendarAppointment .react-calendar__tile--disabled {
+  background-color: #f5f5f5;
+  color: #3d3b3b !important;
+  cursor: not-allowed;
+}
+
+.CalendarHelperText {
+  color: #666 !important;
+  font-style: italic;
+  text-align: center;
+  margin-top: 12px !important;
+  font-size: 0.9rem !important;
+}
+
 .SectionTitleAppointment {
-  font-weight: bolder !important;
-  color: #1b4d5b;
+  font-weight: 700 !important;
+  color: #1b4d5b !important;
+  font-size: 1.2rem !important;
+  margin-bottom: 16px !important;
+  z-index: 10 !important;
+}
+
+.SectionTitleAppointmentRequirements {
+  font-weight: 700 !important;
+  color: white !important;
+  background: linear-gradient(135deg, #1b4d5b 0%, #2c7a8a 100%);
+  text-align: center;
+  padding: 20px;
+  margin: 0 !important;
+  border-radius: 12px 12px 0 0;
+}
+
+.RequirementItem {
+  cursor: pointer;
+  padding: 12px 16px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  color: #1b4d5b !important;
+  font-weight: 500 !important;
+  margin-bottom: 12px !important;
+text-decoration: underline !important;
+  background: white;
+  display: block;
+  text-align: center;
+  padding-left: 20px !important;
+    padding-right: 20px !important;
+}
+
+.RequirementItem:hover {
+  background-color: #1b4d5b !important;
+  color: white !important;
+  transform: translateY(-1px);
+}
+
+.SectionDescriptionAppointment {
+  font-size: 0.95rem !important;
+  color: #555 !important;
+  margin: 16px 20px !important;
+  line-height: 1.6;
+  background: #f8f9fa;
+  padding: 12px;
+  border-radius: 8px;
+  border-left: 4px solid #1b4d5b;
+}
+
+.SectionDescriptionAppointment strong {
+  color: #1b4d5b !important;
+}
+
+.RequirementsList {
+  margin: 0 20px 20px 20px;
+  padding: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.AnnouncementButtonContainer {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 1000;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .ContentAppointment {
+    flex-direction: column;
+    gap: 24px;
+  }
+  
+  .RightSectionAppointment {
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .AppointmentDashboardContainer {
+    padding: 16px;
+    margin-top: 2vh !important;
+  }
+  
+  .HeaderAppointment {
+    flex-direction: column;
+    gap: 20px;
+    text-align: center;
+    padding: 24px;
+  }
+  
+  .HeaderContentAppointment {
+    text-align: center;
+  }
+  
+  .TitleAppointment {
+    font-size: 1.6rem !important;
+  }
+  
+  .HeaderAppointment .TitleAppointment:last-child {
+    font-size: 1.4rem !important;
+  }
+  
+  .ButtonAppointment {
+    padding: 12px 24px !important;
+    font-size: 1rem !important;
+  }
+  
+  .ContentAppointment {
+    gap: 20px;
+  }
+  
+  .SectionTitleAppointmentRequirements {
+    padding: 16px;
+    font-size: 1.1rem !important;
+  }
+  
+  .SectionDescriptionAppointment {
+    margin: 12px 16px !important;
+    padding: 10px;
+    font-size: 0.9rem !important;
+  }
+  
+  .RequirementsList {
+    margin: 0 16px 16px 16px;
+  }
+  
+  .RequirementItem {
+    padding: 10px 14px;
+    font-size: 0.9rem !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .AppointmentDashboardContainer {
+    padding: 12px;
+  }
+  
+  .HeaderAppointment {
+    padding: 20px;
+  }
+  
+  .TitleAppointment {
+    font-size: 1.4rem !important;
+  }
+  
+  .HeaderAppointment .TitleAppointment:last-child {
+    font-size: 1.2rem !important;
+  }
+  
+  .ButtonAppointment {
+    padding: 10px 20px !important;
+    font-size: 0.95rem !important;
+  }
+  
+  .ContentAppointment {
+    gap: 16px;
+  }
+  
+  .CalendarAppointment .react-calendar__tile {
+    padding: 8px;
+    font-size: 0.9rem;
+  }
+  
+  .AnnouncementButtonContainer {
+    bottom: 16px;
+    right: 16px;
+  }
 }

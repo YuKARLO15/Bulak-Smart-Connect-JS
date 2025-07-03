@@ -7,8 +7,10 @@ import RecentAppointments from './RecentAppointment';
 import AppointmentContainer from './AppointmentContent';
 import { announcementService } from '../../services/announcementService';
 import FloatingAnnouncementButton from '../../LandingPageComponents/FloatingAnnouncement';
+import { useNavigate } from 'react-router-dom';
 
 const AppointmentDashboard = () => {
+  const navigate = useNavigate();
   const [showAppointmentContent, setShowAppointmentContent] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
   const [announcements, setAnnouncements] = useState([]);
@@ -40,6 +42,14 @@ const AppointmentDashboard = () => {
     }
   };
 
+  const handleRequirementClick = (type) => {
+    if (type === 'birth') {
+      navigate('/RequirementBirthList');
+    } else if (type === 'marriage') {
+      navigate('/RequirementMarriageList');
+    }
+  };
+
   return (
     <Box className="AppointmentDashboardContainer">
       {showAppointmentContent ? (
@@ -49,27 +59,59 @@ const AppointmentDashboard = () => {
         />
       ) : (
         <>
-          <Box className="HeaderAppointment">
+     
+     
+         <Box className="ContentAppointment">
+              <Box className="LeftSectionAppointment">
+                     <Box className="HeaderAppointment">
             <Box className="HeaderContentAppointment">
               <Typography variant="h4" className="TitleAppointment">
                 SKIP LONG WAITING LINES
               </Typography>
-              <Typography variant="h5" className="TitleAppointment">
-                AND BOOK YOUR APPOINTMENT
-              </Typography>
+           
             </Box>
-            <Button
-              variant="contained"
-              className="ButtonAppointment"
-              onClick={handleBookAppointment}
-            >
-              BOOK APPOINTMENT
-            </Button>
+           
+              <Button
+                variant="contained"
+                className="ButtonAppointment"
+                onClick={handleBookAppointment}
+              >
+                BOOK AN APPOINTMENT !
+              </Button>
+            
           </Box>
-
-          <Box className="ContentAppointment">
-            <RecentAppointments />
-            <Box className="RightSectionAppointment">
+              <RecentAppointments />
+            </Box>
+            
+            <Box className="RightSectionContentAppointment">
+              <Card className="ContentAppointmentrequirements">
+                <Typography variant="h6" className="SectionTitleAppointmentRequirements">
+                  Documents Requirements 
+                </Typography>
+                <Typography variant="body2" className="SectionDescriptionAppointment">
+                  <strong>Important:</strong> Please review and prepare all required documents before scheduling your appointment.
+                </Typography>
+              
+                <Box className="RequirementsList">
+                  <Typography 
+                    variant="body2" 
+                    className="RequirementItem"
+                    onClick={() => handleRequirementClick('birth')}
+                    style={{ cursor: 'pointer' }}
+                  >
+                  View Birth Certificate Requirements
+                  </Typography>
+                  <Typography 
+                    variant="body2" 
+                    className="RequirementItem"
+                    onClick={() => handleRequirementClick('marriage')}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    View Marriage Certificate Requirements
+                  </Typography>
+                </Box>
+              </Card>
+              
               <Card className="AvailableSlotsAppointment">
                 <CardContent>
                   <Typography variant="h6" className="SectionTitleAppointment">
@@ -86,12 +128,12 @@ const AppointmentDashboard = () => {
                     Click on a date to book an appointment
                   </Typography>
                 </CardContent>
-                </Card>
-                 <Box className="AnnouncementButtonContainer">
-          <FloatingAnnouncementButton />
-          </Box>
-
+              </Card>
             </Box>
+          </Box>
+          
+          <Box className="AnnouncementButtonContainer">
+            <FloatingAnnouncementButton />
           </Box>
         </>
       )}

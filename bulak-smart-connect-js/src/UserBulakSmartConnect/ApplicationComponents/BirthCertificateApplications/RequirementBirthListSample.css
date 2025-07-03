@@ -13,8 +13,12 @@
     color: #1976d2;
     margin-bottom: 16px;
     font-weight: 600;
+
   }
-  
+  .requirement-main-title {
+    position: fixed;
+    top: 0;
+  }
   .RequirementDivider {
     margin: 16px 0 !important;
   }
