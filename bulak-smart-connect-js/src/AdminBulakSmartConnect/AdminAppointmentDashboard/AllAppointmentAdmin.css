@@ -186,14 +186,14 @@
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
   transition: all 0.3s ease;
   position: relative;
-  overflow: hidden;
-  height: 20vh; 
+  overflow: visible; /* Changed from hidden to visible */
+  height: auto; /* Changed from 20vh to auto */
+  min-height: 200px; /* Added minimum height */
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   backdrop-filter: blur(10px);
 }
-
 .appointment-card:hover {
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
   transform: translateY(-3px);
@@ -312,7 +312,11 @@
   align-items: center;
   z-index: 2;
   position: relative;
-  min-height: 30px;
+  min-height: 50px; /* Increased minimum height */
+  margin-top: 12px; /* Added margin */
+  padding-top: 12px; /* Added padding */
+  border-top: 1px solid rgba(28, 77, 90, 0.1); 
+  overflow: visible; 
 }
 
 .view-details-btn {
@@ -400,12 +404,15 @@
   gap: 8px;
   align-items: center;
   justify-content: flex-end;
+  flex-wrap: wrap; 
+  position: relative;
+  z-index: 3;
 }
-
 .status-buttons {
   display: flex;
-  gap: 4px;
+  gap: 6px;
   align-items: center;
+  flex-wrap: wrap;
 }
 
 .confirm-btn,
@@ -800,4 +807,378 @@
 
 .discard-btn-ApptAdmin:hover {
   background-color: #5a6268;
+}
+
+
+@media (max-width: 1400px) {
+  .appointment-info-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+  }
+  
+  .info-value {
+    max-width: 110px;
+    font-size: 12px;
+  }
+  
+  .appointment-card {
+    height: auto;
+    min-height: 180px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .appointment-info-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+  
+  .info-value {
+    max-width: 100px;
+    font-size: 12px;
+  }
+  
+  .appointment-card {
+    height: auto;
+    min-height: 200px;
+  }
+  
+  .appointment-card-footer {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(28, 77, 90, 0.1);
+  }
+}
+
+@media (max-width: 992px) {
+  .all-appointments-admin {
+    padding: 12px;
+  }
+  
+  .appointment-info-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  
+  .appointment-card {
+    height: auto;
+    min-height: 220px;
+    padding: 14px 16px;
+  }
+  
+  .appointment-actions {
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: space-between;
+  }
+  
+  .status-buttons {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  
+  .confirm-btn,
+  .complete-btn,
+  .cancel-btn {
+    padding: 8px 12px;
+    font-size: 11px;
+    min-width: 70px;
+    white-space: nowrap;
+  }
+  
+  .view-details-btn {
+    padding: 8px 16px;
+    font-size: 11px;
+    min-width: 80px;
+  }
+}
+
+@media (max-width: 768px) {
+  .all-appointments-admin {
+    padding: 10px;
+  }
+  
+  .appointment-info-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+  
+  .appointment-card {
+    height: auto;
+    min-height: 240px;
+    padding: 12px 16px;
+  }
+  
+  .client-name {
+    font-size: 14px;
+    max-width: 180px;
+  }
+  
+  .info-value {
+    max-width: 140px;
+    font-size: 11px;
+  }
+  
+  .all-appointments-filters {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+  
+  .search-group {
+    min-width: unset;
+  }
+  
+  /* Ensure appointment actions are always visible */
+  .appointment-card-footer {
+    margin-top: 15px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(28, 77, 90, 0.1);
+    min-height: 50px;
+  }
+  
+  .appointment-actions {
+    flex-direction: column;
+    gap: 10px;
+    align-items: stretch;
+  }
+  
+  .status-buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  
+  .confirm-btn,
+  .complete-btn,
+  .cancel-btn {
+    flex: 1;
+    padding: 10px 8px;
+    font-size: 11px;
+    min-width: 60px;
+    text-align: center;
+  }
+  
+  .view-details-btn {
+    width: 100%;
+    padding: 12px;
+    font-size: 12px;
+    text-align: center;
+    margin-bottom: 8px;
+  }
+}
+
+@media (max-width: 576px) {
+  .all-appointments-admin {
+    padding: 8px;
+  }
+  
+  .appointment-info-grid {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+  
+  .appointment-card {
+    height: auto;
+    min-height: 280px;
+    padding: 12px 14px;
+  }
+  
+  .client-name {
+    font-size: 14px;
+    max-width: 200px;
+  }
+  
+  .info-value {
+    max-width: 100%;
+    font-size: 12px;
+  }
+  
+  .appointment-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+  
+  .appointment-card-footer {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 2px solid rgba(28, 77, 90, 0.1);
+    min-height: 80px;
+  }
+  
+  .appointment-actions {
+    flex-direction: column;
+    gap: 12px;
+    align-items: stretch;
+  }
+  
+  .status-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .confirm-btn,
+  .complete-btn,
+  .cancel-btn {
+    width: 100%;
+    padding: 12px;
+    font-size: 12px;
+    text-align: center;
+  }
+  
+  .view-details-btn {
+    width: 100%;
+    padding: 12px;
+    font-size: 12px;
+    text-align: center;
+    margin-bottom: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .appointment-card {
+    height: auto;
+    min-height: 300px;
+    padding: 10px 12px;
+  }
+  
+  .appointment-card-footer {
+    min-height: 90px;
+  }
+  
+  .status-buttons {
+    gap: 10px;
+  }
+  
+  .confirm-btn,
+  .complete-btn,
+  .cancel-btn {
+    padding: 14px 12px;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  
+  .view-details-btn {
+    padding: 14px 12px;
+    font-size: 13px;
+  }
+}
+
+/* Additional media query for very small screens */
+@media (max-width: 320px) {
+  .all-appointments-admin {
+    padding: 5px;
+  }
+  
+  .appointment-card {
+    min-height: 320px;
+    padding: 8px 10px;
+  }
+  
+  .appointment-card-footer {
+    min-height: 100px;
+    padding-top: 15px;
+  }
+  
+  .status-buttons {
+    gap: 8px;
+  }
+  
+  .confirm-btn,
+  .complete-btn,
+  .cancel-btn {
+    width: 100%;
+    padding: 15px 10px;
+    font-size: 12px;
+  }
+  
+  .view-details-btn {
+    padding: 15px 10px;
+    font-size: 12px;
+  }
+}
+
+/* Landscape orientation adjustments */
+@media (max-width: 768px) and (orientation: landscape) {
+  .appointment-card {
+    min-height: 200px;
+  }
+  
+  .appointment-actions {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  
+  .status-buttons {
+    flex-direction: row;
+    gap: 6px;
+  }
+  
+  .confirm-btn,
+  .complete-btn,
+  .cancel-btn {
+    flex: 1;
+    min-width: 60px;
+    padding: 8px 10px;
+    font-size: 11px;
+  }
+  
+  .view-details-btn {
+    width: auto;
+    flex-grow: 1;
+    padding: 8px 12px;
+    font-size: 11px;
+  }
+}
+
+/* Touch-friendly button sizing */
+@media (hover: none) and (pointer: coarse) {
+  .confirm-btn,
+  .complete-btn,
+  .cancel-btn,
+  .view-details-btn {
+    min-height: 44px;
+    padding: 12px 16px;
+    font-size: 14px;
+  }
+  
+  .appointment-card-footer {
+    min-height: 60px;
+  }
+}
+
+/* Ensure buttons don't get cut off */
+.appointment-card-footer {
+  overflow: visible;
+  position: relative;
+  z-index: 1;
+}
+
+.appointment-actions {
+  position: relative;
+  z-index: 2;
+}
+
+/* Prevent button text from wrapping inappropriately */
+.confirm-btn,
+.complete-btn,
+.cancel-btn,
+.view-details-btn {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Ensure minimum button sizes for accessibility */
+.confirm-btn,
+.complete-btn,
+.cancel-btn,
+.view-details-btn {
+  min-height: 36px;
+  min-width: 60px;
 }
