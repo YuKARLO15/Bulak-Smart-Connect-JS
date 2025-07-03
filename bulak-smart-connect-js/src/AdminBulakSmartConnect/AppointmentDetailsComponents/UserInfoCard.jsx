@@ -3,6 +3,7 @@ import './UserInfoCard.css';
 
 const UserInfoCard = ({ data, onBack, onNext, onStatusUpdate }) => {
   const [updating, setUpdating] = useState(false);
+  const [cancelDialog, setCancelDialog] = useState({ show: false, appointmentId: null, appointmentName: '' });
 
   const getStatusColor = (status) => {
     switch (status?.toLowerCase()) {
@@ -23,62 +24,141 @@ const UserInfoCard = ({ data, onBack, onNext, onStatusUpdate }) => {
     }
   };
 
-  const getStatusActions = () => {
-  if (!data?.status) return null;
+  const handleCancelAppointment = () => {
+    const clientName = `${data.firstName || ''} ${data.middleInitial || ''} ${data.lastName || ''}`.trim() || 'Anonymous User';
+    setCancelDialog({
+      show: true,
+      appointmentId: data.applicationNumber,
+      appointmentName: clientName
+    });
+  };
 
-  const status = data.status.toLowerCase();
-  
-  // Only show status update buttons for pending or confirmed statuses
-  if (status === 'pending' || status === 'confirmed') {
-    const actionText = status === 'pending' ? 'Confirm' : 'Complete';
-    const actionStatus = status === 'pending' ? 'confirmed' : 'completed';
-    const buttonClass = status === 'pending' ? 'btn-confirm' : 'btn-complete';
-    
-    return (
-      <div className="status-actions">
-        <button 
-          className={buttonClass}
-          onClick={() => handleStatusUpdate(actionStatus)}
-          disabled={updating}
-        >
-          {updating ? 'Updating...' : actionText}
-        </button>
-        <button 
-          className="btn-cancel"
-          onClick={() => handleStatusUpdate('cancelled')}
-          disabled={updating}
-        >
-          {updating ? 'Updating...' : 'Cancel'}
-        </button>
-      </div>
-    );
-  } else if (status === 'completed') {
-    // Show navigation buttons when completed
-    return (
+  const confirmCancelAppointment = async () => {
+    try {
+      await handleStatusUpdate('cancelled');
+      setCancelDialog({ show: false, appointmentId: null, appointmentName: '' });
+    } catch (error) {
+      console.error('Error cancelling appointment:', error);
+    }
+  };
+
+  const discardCancelAppointment = () => {
+    setCancelDialog({ show: false, appointmentId: null, appointmentName: '' });
+  };
+
+  const getStatusActions = () => {
+    if (!data?.status) return (
       <div className="status-actions">
         <button 
           className="btn-back"
           onClick={onBack}
           disabled={updating}
         >
-          Back
-        </button>
-        <button 
-          className="btn-next"
-          onClick={onNext}
-          disabled={updating}
-        >
-          Next
+         <span className="back-icon">←</span> Back
         </button>
       </div>
     );
-  }
-  
-  return null;
-};
+
+    const status = data.status.toLowerCase();
+    
+    if (status === 'pending' || status === 'confirmed') {
+      const actionText = status === 'pending' ? 'Confirm' : 'Complete';
+      const actionStatus = status === 'pending' ? 'confirmed' : 'completed';
+      const buttonClass = status === 'pending' ? 'btn-confirm' : 'btn-complete';
+      
+      return (
+        <div className="status-actions">
+          <button 
+            className="btn-back"
+            onClick={onBack}
+            disabled={updating}
+            
+          >
+            Back
+          </button>
+          <button 
+            className={buttonClass}
+            onClick={() => handleStatusUpdate(actionStatus)}
+            disabled={updating}
+          >
+            {updating ? 'Updating...' : actionText}
+          </button>
+          <button 
+            className="btn-cancel"
+            onClick={handleCancelAppointment}
+            disabled={updating}
+          >
+            {updating ? 'Updating...' : 'Cancel'}
+          </button>
+        </div>
+      );
+    } else if (status === 'completed') {
+      // Show navigation buttons when completed
+      return (
+        <div className="status-actions">
+          <button 
+            className="btn-back"
+            onClick={onBack}
+            disabled={updating}
+          >
+            Back
+          </button>
+          <button 
+            className="btn-next"
+            onClick={onNext}
+            disabled={updating}
+          >
+            Next
+          </button>
+        </div>
+      );
+    } else {
+      return (
+        <div className="status-actions">
+          <button 
+            className="btn-back"
+            onClick={onBack}
+            disabled={updating}
+          >
+            Back
+          </button>
+        </div>
+      );
+    }
+  };
 
   return (
     <div className="info-card">
+      {cancelDialog.show && (
+        <div className="cancel-dialog-overlay-ApptAdmin">
+          <div className="cancel-dialog-ApptAdmin">
+            <div className="cancel-dialog-header-ApptAdmin">
+              <h3>Cancel Appointment</h3>
+            </div>
+            <div className="cancel-dialog-body-ApptAdmin">
+              <p>You are about to cancel appointment ID: </p>
+              <p><strong>{cancelDialog.appointmentId}</strong></p>
+              <p>Client: <strong>{cancelDialog.appointmentName}</strong></p>
+              <p>Are you sure you want to proceed?</p>
+            </div>
+            <div className="cancel-dialog-footer-ApptAdmin">
+              <button 
+                className="proceed-btn-ApptAdmin" 
+                onClick={confirmCancelAppointment}
+              >
+                Proceed
+              </button>
+              <button 
+                className="discard-btn-ApptAdmin" 
+                onClick={discardCancelAppointment}
+              >
+                Discard
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="appointment-header">
         <h2>
           Application Number: <span className="app-number">{data.applicationNumber}</span>
