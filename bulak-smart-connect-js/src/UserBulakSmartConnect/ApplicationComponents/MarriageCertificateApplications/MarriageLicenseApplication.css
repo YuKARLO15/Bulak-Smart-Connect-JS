@@ -43,7 +43,9 @@
   flex-direction: column;
   gap: 28px;
 }
-
+.uploaded-files-list {
+  color: #184a5b;
+}
 .SectionTitleMarriageLicense {
   font-weight: 550 !important;
   margin-bottom: 10px;
