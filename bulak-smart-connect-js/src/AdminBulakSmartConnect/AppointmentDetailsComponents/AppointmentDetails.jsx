@@ -30,7 +30,9 @@ const AppointmentDetailsCard = () => {
       }
       
       // If not in state, fetch from API
+      console.log('📧 Fetching appointment with user details for notifications...');
       const appointmentData = await appointmentService.getAppointmentById(id);
+      console.log('📧 Appointment data with user relationship:', appointmentData);
       setAppointment(appointmentData);
     } catch (error) {
       console.error('Error fetching appointment details:', error);
@@ -39,7 +41,43 @@ const AppointmentDetailsCard = () => {
     }
   };
 
-  // Replace your existing handleStatusUpdate function with this enhanced version
+  // Enhanced email lookup function
+  const getAppointmentEmail = (appointment) => {
+    try {
+      // Check user relationship first
+      if (appointment.user && appointment.user.email) {
+        console.log('📧 Found email in appointment.user.email:', appointment.user.email);
+        return appointment.user.email;
+      }
+      
+      // Check direct email field
+      if (appointment.email) {
+        console.log('📧 Found email in appointment.email:', appointment.email);
+        return appointment.email;
+      }
+      
+      // Check if User object exists with email (different casing)
+      if (appointment.User && appointment.User.email) {
+        console.log('📧 Found email in appointment.User.email:', appointment.User.email);
+        return appointment.User.email;
+      }
+      
+      // Check if userEmail field exists
+      if (appointment.userEmail) {
+        console.log('📧 Found email in appointment.userEmail:', appointment.userEmail);
+        return appointment.userEmail;
+      }
+      
+      console.log('⚠️ No email found for appointment. Available fields:', Object.keys(appointment));
+      console.log('📋 User object:', appointment.user);
+      return null;
+    } catch (error) {
+      console.error('Error getting appointment email:', error);
+      return null;
+    }
+  };
+
+  // Enhanced handleStatusUpdate function
   const handleStatusUpdate = async (newStatus) => {
     try {
       console.log(`📝 Updating appointment ${id} status to: ${newStatus}`);
@@ -56,12 +94,14 @@ const AppointmentDetailsCard = () => {
       // Update local state (keep your existing state update)
       setAppointment(prev => ({ ...prev, status: newStatus }));
 
-      // 📧 SEND STATUS UPDATE NOTIFICATION (ENHANCED SECTION)
-      if (appointment.email) {
+      // 📧 SEND STATUS UPDATE NOTIFICATION
+      const appointmentEmail = getAppointmentEmail(appointment);
+      
+      if (appointmentEmail) {
         try {
-          console.log('📧 Sending status update notification...');
+          console.log(`📧 Sending status update notification to: ${appointmentEmail}`);
           const notificationResult = await appointmentNotificationService.sendStatusUpdateNotification(
-            appointment.email,
+            appointmentEmail,
             appointment.appointmentNumber || id,
             newStatus,
             appointment
@@ -69,7 +109,7 @@ const AppointmentDetailsCard = () => {
 
           if (notificationResult.success) {
             console.log('✅ Status update notification sent successfully');
-            alert(`Appointment ${newStatus} successfully! Notification email sent to ${appointment.email}.`);
+            alert(`Appointment ${newStatus} successfully! Notification email sent to ${appointmentEmail}.`);
           } else {
             console.log('⚠️ Status update notification failed:', notificationResult.error);
             alert(`Appointment ${newStatus} successfully! However, notification email could not be sent.`);
@@ -80,6 +120,7 @@ const AppointmentDetailsCard = () => {
         }
       } else {
         console.log('⚠️ No email found for appointment, skipping notification');
+        console.log('📋 Available appointment fields:', Object.keys(appointment));
         alert(`Appointment ${newStatus} successfully! No email available for notification.`);
       }
       
@@ -94,8 +135,6 @@ const AppointmentDetailsCard = () => {
   };
 
   const handleNext = () => {
-    // You can implement any next action here
-    // For now, let's just show available status updates
     if (appointment?.status === 'pending') {
       const action = window.confirm('Confirm this appointment?');
       if (action) {
@@ -122,13 +161,16 @@ const AppointmentDetailsCard = () => {
       });
     };
 
+    // Enhanced email lookup for display
+    const appointmentEmail = getAppointmentEmail(appointment);
+
     return {
       applicationNumber: appointment.appointmentNumber || appointment.id || 'N/A',
       lastName: appointment.lastName || 'Not provided',
       firstName: appointment.firstName || 'Not provided',
       middleInitial: appointment.middleInitial || '',
       phone: appointment.phoneNumber || 'Not provided',
-      email: appointment.email || 'Not provided',
+      email: appointmentEmail || 'Not provided',
       applicationType: appointment.reasonOfVisit || 'Not specified',
       subType: appointment.appointmentTime ? `(${appointment.appointmentTime})` : '',
       submissionDate: formatDate(appointment.appointmentDate),

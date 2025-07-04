@@ -66,8 +66,9 @@ export class AppointmentService {
     }
   }
 
-  async findAll(): Promise<Appointment[]> {
+  async findAll(options?: { relations?: string[] }): Promise<Appointment[]> {
     return this.appointmentRepository.find({
+      relations: options?.relations || ['user'],
       order: {
         appointmentDate: 'ASC',
         appointmentTime: 'ASC',
@@ -85,9 +86,13 @@ export class AppointmentService {
     });
   }
 
-  async findOne(id: number): Promise<Appointment> {
+  async findOne(
+    id: number,
+    options?: { relations?: string[] },
+  ): Promise<Appointment> {
     const appointment = await this.appointmentRepository.findOne({
       where: { id },
+      relations: options?.relations || ['user'],
     });
 
     if (!appointment) {
