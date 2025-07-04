@@ -444,7 +444,7 @@ const UserAccount = () => {
               <form className="DialogFormGroupUAcc" onSubmit={handlePasswordConfirmation}>
                 <div className="DialogFormGroupUAcc">
                   <label className="DialogLabel" htmlFor="confirmationPassword">
-                    Password*
+                    Password
                   </label>
                   <input
                     type="password"
@@ -477,7 +477,7 @@ const UserAccount = () => {
           <div className="TabContentUAcc">
             <form onSubmit={handleSaveProfile} className="AccountFormUAcc">
               <div className="FormGroupUAcc">
-                <label htmlFor="firstName">First name*</label>
+                <label htmlFor="firstName">First name<span style={{color: 'red'}}>*</span></label>
                 <input
                   type="text"
                   id="firstName"
@@ -488,7 +488,7 @@ const UserAccount = () => {
               </div>
 
               <div className="FormGroupUAcc">
-                <label htmlFor="lastName">Last name*</label>
+                <label htmlFor="lastName">Last name<span style={{color: 'red'}}>*</span></label>
                 <input
                   type="text"
                   id="lastName"
@@ -536,7 +536,7 @@ const UserAccount = () => {
               </div>
 
               <div className="FormGroupUAcc">
-                <label htmlFor="email">E-mail*</label>
+                <label htmlFor="email">E-mail<span style={{color: 'red'}}>*</span></label>
                 <div className="InputWithActionUAcc">
                   <input
                     type="email"
@@ -611,7 +611,7 @@ const UserAccount = () => {
             <div className="PasswordTabCardUAcc">
               <form onSubmit={handleChangePassword} className="PasswordFormUAcc">
                 <div className="FormGroupUAcc">
-                  <label htmlFor="currentPassword">Current Password*</label>
+                  <label htmlFor="currentPassword">Current Password<span style={{color: 'red'}}> *</span></label>
                   <input
                     type="password"
                     id="currentPassword"
@@ -622,7 +622,7 @@ const UserAccount = () => {
                 </div>
 
                 <div className="FormGroupUAcc">
-                  <label htmlFor="newPassword">New Password*</label>
+                  <label htmlFor="newPassword">New Password<span style={{color: 'red'}}> *</span></label>
                   <input
                     type="password"
                     id="newPassword"
@@ -636,7 +636,7 @@ const UserAccount = () => {
                 </div>
 
                 <div className="FormGroupUAcc">
-                  <label htmlFor="confirmPassword">Confirm New Password*</label>
+                  <label htmlFor="confirmPassword">Confirm New Password <span style={{color: 'red'}}> *</span></label>
                   <input
                     type="password"
                     id="confirmPassword"
