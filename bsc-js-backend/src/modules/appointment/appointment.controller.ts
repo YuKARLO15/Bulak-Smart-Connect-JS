@@ -56,9 +56,12 @@ export class AppointmentController {
   @UseGuards(RolesGuard)
   @Roles('admin', 'staff', 'super_admin')
   @ApiOperation({ summary: 'Get all appointments (Admin/Staff only)' })
-  async findAll() {
+  async findAll(@Query('includeUser') includeUser?: string) {
     this.logger.log('Fetching all appointments');
-    return this.appointmentService.findAll();
+
+    const relations = includeUser === 'false' ? [] : ['user'];
+
+    return this.appointmentService.findAll({ relations });
   }
 
   @Get('mine')
@@ -116,9 +119,13 @@ export class AppointmentController {
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: string) {
-    this.logger.log(`Fetching appointment with ID: ${id}`);
-    return this.appointmentService.findOne(+id);
+  @ApiOperation({ summary: 'Get appointment by ID' })
+  async findOne(@Param('id') id: string, @Query('includeUser') includeUser?: string) {
+    this.logger.log(`Fetching appointment ${id}`);
+
+    const relations = includeUser === 'false' ? [] : ['user'];
+
+    return this.appointmentService.findOne(+id, { relations });
   }
 
   @Get('by-number/:number')
