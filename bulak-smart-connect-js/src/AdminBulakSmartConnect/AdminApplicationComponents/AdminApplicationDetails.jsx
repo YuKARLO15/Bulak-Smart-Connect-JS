@@ -410,7 +410,7 @@ const getApplicantDisplayName = (app) => {
   }
     return [
       'Copy of Birth Certificate',
-      'Request for Copy of Birth Certificate',
+      'Request a Copy of Birth Certificate',
     'Correction - Clerical Errors',
     'Correction - Sex/Date of Birth',
     'Correction - First Name'
