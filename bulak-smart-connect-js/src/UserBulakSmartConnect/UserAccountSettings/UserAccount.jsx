@@ -614,13 +614,6 @@ const UserAccount = () => {
                 <div className="PhoneInputContainerUAcc">
                   <div className="PhoneInputWrapperUAcc">
                     <input
-                      type="text"
-                      value="+63"
-                      disabled
-                      className="CountryCodeUAcc"
-                      readOnly
-                    />
-                    <input
                       type="tel"
                       id="phoneNumber"
                       value={phoneNumber}
@@ -638,7 +631,7 @@ const UserAccount = () => {
                     <button
                       type="button"
                       onClick={() => setIsEditing({ ...isEditing, phoneNumber: true })}
-                      className="EditButtonUAcc"
+                      className="PhoneEditButtonUAcc"
                     >
                        <EditIcon fontSize="small" />
                     </button>
@@ -646,7 +639,7 @@ const UserAccount = () => {
                     <button
                       type="button"
                       onClick={() => setIsEditing({ ...isEditing, phoneNumber: false })}
-                      className="CancelButtonUAcc"
+                      className="PhoneCancelButtonUAcc"
                     >
                     <CloseIcon fontSize="small" />
                     </button>
