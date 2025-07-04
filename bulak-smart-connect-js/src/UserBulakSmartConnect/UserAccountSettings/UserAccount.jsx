@@ -136,6 +136,13 @@ const UserAccount = () => {
       return;
     }
 
+    // Phone number validation - exactly 10 digits
+    const phoneRegex = /^\d{10}$/;
+    if (!phoneRegex.test(phoneNumber)) {
+      setMessage({ text: '❌ Phone number must be exactly 10 digits', type: 'error' });
+      return;
+    }
+
     const updates = { firstName, lastName };
 
     const isSensitiveEdit =
@@ -421,6 +428,14 @@ const UserAccount = () => {
     return `${days} days`;
   };
 
+  // Phone number formatting and validation
+  const handlePhoneNumberChange = (e) => {
+    const value = e.target.value.replace(/\D/g, ''); // Remove all non-digit characters
+    if (value.length <= 10) {
+      setPhoneNumber(value);
+    }
+  };
+
   if (loading) {
     return <div className="AccountLoaderUAcc">Loading...</div>;
   }
@@ -596,15 +611,29 @@ const UserAccount = () => {
 
               <div className="FormGroupUAcc">
                 <label htmlFor="phoneNumber">Phone number<span style={{color: 'red'}}> *</span></label>
-                <div className="InputWithActionUAcc">
-                  <input
-                    type="tel"
-                    id="phoneNumber"
-                    value={phoneNumber}
-                    onChange={e => setPhoneNumber(e.target.value)}
-                    disabled={!isEditing.phoneNumber}
-                    required
-                  />
+                <div className="PhoneInputContainerUAcc">
+                  <div className="PhoneInputWrapperUAcc">
+                    <input
+                      type="text"
+                      value="+63"
+                      disabled
+                      className="CountryCodeUAcc"
+                      readOnly
+                    />
+                    <input
+                      type="tel"
+                      id="phoneNumber"
+                      value={phoneNumber}
+                      onChange={handlePhoneNumberChange}
+                      disabled={!isEditing.phoneNumber}
+                      required
+                      maxLength="10"
+                      placeholder="Enter 10-digit phone number"
+                      pattern="[0-9]{10}"
+                      title="Please enter exactly 10 digits"
+                      className="PhoneNumberInputUAcc"
+                    />
+                  </div>
                   {!isEditing.phoneNumber ? (
                     <button
                       type="button"
@@ -623,6 +652,11 @@ const UserAccount = () => {
                     </button>
                   )}
                 </div>
+                {isEditing.phoneNumber && (
+                  <p className="FieldHintUAcc">
+                    Please enter a valid 10-digit phone number without any special characters or spaces.
+                  </p>
+                )}
               </div>
 
               <div className="ActionsUAcc">
