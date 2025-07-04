@@ -33,6 +33,7 @@ import { documentApplicationService } from '../../services/documentApplicationSe
 import AdminCopyBirthPreview from './AdminCopyBirthPreview';
 import AdminMarriageAffidavitDetails from './AdminMarriageAffidavitDetails';
 import SearchIcon from '@mui/icons-material/Search'; 
+import userService from '../../services/userService';
 
 
 
@@ -52,7 +53,24 @@ const AdminApplicationDetails = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [affidavit, setAffidavitTab] = useState(0);
     const [searchTerm, setSearchTerm] = useState('');
-  const currentUser = 'dennissegailfrancisco'; 
+const [userContactInfo, setUserContactInfo] = useState(null);
+
+useEffect(() => {
+  const fetchUserContactInfo = async () => {
+    if (selectedApplication?.userId) {
+      try {
+    
+        const userInfo = await userService.getUserById(selectedApplication.userId);
+        setUserContactInfo(userInfo);
+      } catch (error) {
+        console.error('Error fetching user contact info:', error);
+      }
+    }
+  };
+
+  fetchUserContactInfo();
+}, [selectedApplication]);
+  
   useEffect(() => {
     let isMounted = true;
     setLoading(true);
@@ -533,6 +551,46 @@ const getApplicantDisplayName = (app) => {
           {selectedApplication ? (
             <Box className="DetailsSectionAdminAppForm">
               <Paper elevation={3} className="ApplicationDetailsPaperAdminAppForm">
+           <Paper elevation={2} className="SummaryCardAppAdminPreview">
+  <Grid container alignItems="center" spacing={2}>
+    <Grid item xs={12} md={4}>
+      <Typography variant="h6" className="SummaryLabelAppAdminPreview">
+        Application ID:
+      </Typography>
+      <Typography variant="body1" className="SummaryValueAppAdminPreview">
+        {selectedApplication?.id || 'N/A'}
+      </Typography>
+    </Grid>
+    <Grid item xs={12} md={4}>
+      <Typography variant="h6" className="SummaryLabelAppAdminPreview">
+        Application Status:
+      </Typography>
+      <Typography variant="body1" className="SummaryValueAppAdminPreview">
+        {selectedApplication?.status || 'N/A'}
+      </Typography>
+    </Grid>
+    <Grid item xs={12} md={4}>
+      <Typography variant="h6" className="SummaryLabelAppAdminPreview">
+        Applicant Contact Info:
+      </Typography>
+      <Typography variant="body2" className="SummaryValueAppAdminPreview">
+        <strong>Email:</strong> {userContactInfo?.email ||
+          selectedApplication?.userEmail ||
+          selectedApplication?.formData?.userEmail ||
+          'N/A'}
+      </Typography>
+      <Typography variant="body2" className="SummaryValueAppAdminPreview">
+        <strong>Phone:</strong> {userContactInfo?.phoneNumber ||
+          userContactInfo?.contactNumber ||
+          selectedApplication?.userPhone ||
+          selectedApplication?.formData?.userPhone ||
+          'N/A'}
+      </Typography>
+    </Grid>
+
+  </Grid>
+</Paper>
+                
                 <Box className="ToggleBarAdminAppForm">
                   <Button
                     variant="contained"
@@ -547,6 +605,8 @@ const getApplicantDisplayName = (app) => {
                   >
                     Application Form
                   </Button>
+                  
+                  
 { (!isCopyOrCorrectionOfBirthCertificate(selectedApplication) || 
    (getApplicationType(selectedApplication) === 'Birth Certificate' && 
     selectedApplication.applicationType === 'Request copy') ||
@@ -611,9 +671,11 @@ const getApplicantDisplayName = (app) => {
       />
     )}
   </>
-) : (
+                    ) : (
+                        
     
-      <>
+                        <>
+                      
       {getApplicationSubtype(selectedApplication) === 'Marriage Certificate' ? (
   <AdminMarriageApplicationView applicationData={selectedApplication} />
 ) : (getApplicationType(selectedApplication) === 'Marriage License' || 
@@ -1638,6 +1700,9 @@ const getApplicantDisplayName = (app) => {
                 )}
 
                 <Box className="StatusSectionAdminAppForm">
+               
+   
+                  
                   <Typography
                     variant="subtitle1"
                     className={`StatusDisplayAdminAppForm status-${(selectedApplication.status || 'pending').toLowerCase().replace(/\s+/g, '-')}AdminAppForm`}
@@ -1666,6 +1731,7 @@ const getApplicantDisplayName = (app) => {
                     >
                       Update Status
                     </Button>
+                    
                   </Box>
                 </Box>
               </Paper>

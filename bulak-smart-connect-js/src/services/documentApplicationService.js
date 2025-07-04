@@ -10,7 +10,18 @@ const apiClient = axios.create({
     'Accept': 'application/json'
   }
 });
-
+const saveApplicationWithUserInfo = async (applicationData, userAccountInfo) => {
+  const applicationWithContact = {
+    ...applicationData,
+    userEmail: userAccountInfo.email,
+    userPhone: userAccountInfo.phoneNumber,
+    username: userAccountInfo.username,
+    submissionDate: new Date().toISOString()
+  };
+  
+  // Save the enhanced application data
+  return await documentApplicationService.saveApplication(applicationWithContact);
+};
 // Add request interceptor to include auth token in all requests
 apiClient.interceptors.request.use(
   (config) => {
