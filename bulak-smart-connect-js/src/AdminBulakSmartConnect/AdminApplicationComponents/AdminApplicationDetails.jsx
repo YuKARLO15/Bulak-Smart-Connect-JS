@@ -409,7 +409,8 @@ const getApplicantDisplayName = (app) => {
     return false;
   }
     return [
-    'Copy of Birth Certificate',
+      'Copy of Birth Certificate',
+      'Request for Copy of Birth Certificate',
     'Correction - Clerical Errors',
     'Correction - Sex/Date of Birth',
     'Correction - First Name'
@@ -551,25 +552,31 @@ const getApplicantDisplayName = (app) => {
           {selectedApplication ? (
             <Box className="DetailsSectionAdminAppForm">
               <Paper elevation={3} className="ApplicationDetailsPaperAdminAppForm">
-           <Paper elevation={2} className="SummaryCardAppAdminPreview">
-  <Grid container alignItems="center" spacing={2}>
-    <Grid item xs={12} md={4}>
+                <Paper elevation={2} className="SummaryCardAppAdminPreview">
+          <Typography variant="h5" className="SummaryTitleAppAdminPreview">
+      Application Details: 
+      </Typography>
+                  <Grid container  spacing={1} className="SummaryGridAppAdminPreview">
+           
+    <Grid item xs={12} md={4} className='SummaryGridItemAppAdminPreview'>
       <Typography variant="h6" className="SummaryLabelAppAdminPreview">
         Application ID:
       </Typography>
       <Typography variant="body1" className="SummaryValueAppAdminPreview">
         {selectedApplication?.id || 'N/A'}
-      </Typography>
-    </Grid>
-    <Grid item xs={12} md={4}>
-      <Typography variant="h6" className="SummaryLabelAppAdminPreview">
+                      </Typography>
+     
+                    </Grid>
+                    <Grid item xs={12} md={4} className='SummaryGridItemAppAdminPreview'>
+      
+                       <Typography variant="h8" className="SummaryLabelAppAdminPreview">
         Application Status:
       </Typography>
       <Typography variant="body1" className="SummaryValueAppAdminPreview">
         {selectedApplication?.status || 'N/A'}
       </Typography>
     </Grid>
-    <Grid item xs={12} md={4}>
+    <Grid item xs={12} md={4} className='SummaryGridItemAppAdminPreview'>
       <Typography variant="h6" className="SummaryLabelAppAdminPreview">
         Applicant Contact Info:
       </Typography>
@@ -587,8 +594,18 @@ const getApplicantDisplayName = (app) => {
           'N/A'}
       </Typography>
     </Grid>
-
-  </Grid>
+                  </Grid>
+   <Box className="SummaryButtonAppAdminPreview">                                
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={handleOpenStatusDialog}
+                      className="UpdateStatusButtonAdminAppForm"
+                    >
+                      Update Status
+                    </Button>
+                     </Box>
+             
 </Paper>
                 
                 <Box className="ToggleBarAdminAppForm">
@@ -1646,14 +1663,7 @@ const getApplicantDisplayName = (app) => {
                           </Grid>
                         </Grid>
                         
-                        <Grid container>
-                          <Grid item xs={12} style={{ padding: '15px 5px 5px' }}>
-                     
-                            <Typography variant="body2" color="textSecondary">
-                              Date: {new Date().toISOString().split('T')[0]}
-                            </Typography>
-                          </Grid>
-                        </Grid>
+                  
                       </>
                     ) : (
                       <Box className="NoFormViewAvailableAdminAppForm">
@@ -1674,16 +1684,7 @@ const getApplicantDisplayName = (app) => {
                       <Typography variant="h5" className="SectionTitleAdminAppForm">
                         Uploaded Documents
                       </Typography>
-                      <Typography variant="h6" color="primary">
-                        {getApplicationSubtype(selectedApplication) || getApplicationType(selectedApplication)}
-                      </Typography>
-                      <Typography variant="body1" className="SubtitleAdminAppForm">
-                        Applicant: {selectedApplication.formData?.firstName || 'Unknown'}{' '}
-                        {selectedApplication.formData?.lastName || ''}
-                      </Typography>
-                      <Typography variant="body2" className="SubtitleAdminAppForm">
-                        Application ID: {selectedApplication.id}
-                      </Typography>
+
                     </Box>
 
                     <Divider style={{ margin: '10px 0 20px' }} />

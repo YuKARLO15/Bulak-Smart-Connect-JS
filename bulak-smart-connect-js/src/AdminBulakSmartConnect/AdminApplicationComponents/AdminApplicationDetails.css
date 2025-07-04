@@ -426,12 +426,35 @@ color: #184a5b !important;
 }
 
 .SummaryLabelAppAdminPreview {
-  font-weight: 600;
+  font-weight: 600 !important;
   color: #184a5b !important;
   margin-bottom: 4px;
+  font-size: 1rem !important;
 }
 
 .SummaryValueAppAdminPreview {
 color: #184a5b !important;
   margin-bottom: 8px !important;
+}
+.SummaryTitleAppAdminPreview{
+  font-weight: 600 !important;
+  color: #184a5b !important;
+  margin-bottom: 4px;
+
+}
+.SummaryGridAppAdminPreview {
+display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+}
+.SummaryGridItemAppAdminPreview {
+  border-right: #184a5b 1px solid;
+  
+}
+.SummaryButtonAppAdminPreview {
+  display: flex;
+  justify-content: right;
+  margin-right: 40px;
 }
