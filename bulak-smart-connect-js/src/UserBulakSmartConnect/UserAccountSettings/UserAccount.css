@@ -84,20 +84,72 @@ justify-content: center;
 /* Tab Content */
 .TabContentUAcc {
   padding: 30px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Responsive design for TabContentUAcc */
+@media (max-width: 1024px) {
+  .TabContentUAcc {
+    padding: 25px;
+  }
+}
+
+@media (max-width: 768px) {
+  .TabContentUAcc {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .TabContentUAcc {
+    padding: 15px 10px;
+  }
 }
 
 .PasswordTabCardUAcc {
   background-color: #fff;
   border-radius: 8px;
   padding: 20px;
- width: 100%;
+  width: 100%;
   margin: 0 auto;
+  box-sizing: border-box;
 }
 
 .PasswordRequirementsUAcc {
   font-size: 13px;
   color: #666;
   margin-top: 5px;
+  width: calc(100% - 30px);
+  margin-left: 15px;
+  margin-right: 15px;
+  min-width: 300px;
+  max-width: 500px;
+  line-height: 1.4;
+  padding: 8px 10px;
+  box-sizing: border-box;
+}
+
+/* Responsive adjustments for PasswordRequirementsUAcc */
+@media (max-width: 768px) {
+  .PasswordRequirementsUAcc {
+    width: calc(100% - 20px);
+    margin-left: 10px;
+    margin-right: 10px;
+    min-width: 250px;
+    max-width: none;
+    padding: 8px 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .PasswordRequirementsUAcc {
+    width: calc(100% - 10px);
+    margin-left: 5px;
+    margin-right: 5px;
+    min-width: 200px;
+    padding: 8px 10px;
+  }
 }
 
 /* Account Form */
@@ -105,8 +157,12 @@ justify-content: center;
 .PasswordFormUAcc {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 20px;
-  width: 70vw;
+  gap: 10px;
+  width: 100%;
+  margin-bottom: none !important;
+  max-width: 70vw;
+  margin: 0 auto;
+  box-sizing: border-box;
 }
 
 @media (min-width: 600px) {
@@ -121,6 +177,111 @@ justify-content: center;
   }
 }
 
+/* Additional responsive adjustments */
+@media (max-width: 1024px) {
+  .AccountFormUAcc,
+  .PasswordFormUAcc {
+    max-width: 80vw;
+  }
+}
+
+@media (max-width: 768px) {
+  .AccountFormUAcc,
+  .PasswordFormUAcc {
+    max-width: 90vw;
+    gap: 15px;
+  }
+  
+  .AccountFormUAcc {
+    grid-template-columns: 1fr;
+  }
+  
+  .FormGroupUAcc:nth-child(5),
+  .ActionsUAcc {
+    grid-column: span 1;
+  }
+}
+
+@media (max-width: 480px) {
+  .AccountFormUAcc,
+  .PasswordFormUAcc {
+    max-width: 95vw;
+    gap: 10px;
+  }
+}
+
+/* Responsive styling for password form inputs */
+.PasswordFormUAcc .FormGroupUAcc input {
+  width: calc(100% - 30px);
+  margin: 0 15px;
+  min-width: 300px;
+  max-width: 500px;
+  padding: 10px;
+  border: 1px solid #1c4d5a !important;
+  border-radius: 4px;
+  font-size: 14px;
+  background-color: white !important;
+  color: #1c4d5a !important;
+  transition: border-color 0.3s ease, background-color 0.3s ease;
+  box-sizing: border-box;
+}
+
+.PasswordFormUAcc .FormGroupUAcc input:focus {
+  border-color: #1c4d5a !important;
+  background-color: #fff !important;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(28, 77, 90, 0.2);
+}
+
+.PasswordFormUAcc .FormGroupUAcc input:hover {
+  border-color: #1c4d5a !important;
+}
+
+.PasswordFormUAcc .FormGroupUAcc input::placeholder {
+  color: #1c4d5a;
+  opacity: 0.7;
+}
+
+/* Responsive adjustments for password form inputs */
+@media (max-width: 768px) {
+  .PasswordFormUAcc .FormGroupUAcc input {
+    width: calc(100% - 20px);
+    margin: 0 10px;
+    min-width: 250px;
+    max-width: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .PasswordFormUAcc .FormGroupUAcc input {
+    width: calc(100% - 10px);
+    margin: 0 5px;
+    min-width: 200px;
+  }
+}
+
+/* PasswordTabCardUAcc responsive adjustments */
+@media (max-width: 1024px) {
+  .PasswordTabCardUAcc {
+    padding: 18px;
+  }
+}
+
+@media (max-width: 768px) {
+  .PasswordTabCardUAcc {
+    padding: 15px;
+    margin: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .PasswordTabCardUAcc {
+    padding: 10px;
+    margin: 0;
+    border-radius: 6px;
+  }
+}
+
 .FormGroupUAcc {
   margin-bottom: 20px;
 }
@@ -128,80 +289,132 @@ justify-content: center;
 .FormGroupUAcc label {
   display: block;
   margin-bottom: 8px;
-  font-weight: 500;
+  /* font-weight: 500; */
   color: #2c3e50;
   font-size: 15px;
+  margin-left: 20px;
+  font-weight: bold;
 }
 
 .FormGroupUAcc input {
   width: 100%;
-  padding: 12px 15px;
-  border: 1px solid #e0e0e0;
-  border-radius: 6px;
-  font-size: 16px;
-  transition: all 0.2s ease;
-  background-color: #fff;
-  color: #184a5b;
+  padding: 10px;
+  /* margin: 0 15px; */
+  border: 1px solid #1c4d5a !important;
+  border-radius: 4px;
+  font-size: 14px;
+  background-color: white !important;
+  color: #1c4d5a !important;
+  transition: border-color 0.3s ease, background-color 0.3s ease;
+  box-sizing: border-box;
 }
 
 .FormGroupUAcc input:focus {
+  border-color: #1c4d5a !important;
+  background-color: #fff !important;
   outline: none;
-  border-color: #184a5b;
-  box-shadow: 0 0 0 2px rgba(24, 74, 91, 0.1);
+  box-shadow: 0 0 0 2px rgba(28, 77, 90, 0.2);
+}
+
+.FormGroupUAcc input:hover {
+  border-color: #1c4d5a !important;
+}
+
+.FormGroupUAcc input::placeholder {
+  color: #1c4d5a;
+  opacity: 0.7;
 }
 
 .FormGroupUAcc input:disabled {
-  background-color: #f9f9f9;
+  background-color: #f9f9f9 !important;
   cursor: not-allowed;
-  color: #184a5b;
+  color: #1c4d5a !important;
+  border-color: #1c4d5a !important;
 }
 
 .InputWithActionUAcc {
   display: flex;
   align-items: center;
+  margin: 0 15px;
 }
 
 .InputWithActionUAcc input {
   flex: 1;
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
-  color: #184a5b !important;
+  color: #1c4d5a !important;
+  padding: 10px;
+  margin: 0;
+  border: 1px solid #1c4d5a !important;
+  border-radius: 4px 0 0 4px;
+  font-size: 14px;
+  background-color: white !important;
+  transition: border-color 0.3s ease, background-color 0.3s ease;
+  box-sizing: border-box;
+}
+
+.InputWithActionUAcc input:focus {
+  border-color: #1c4d5a !important;
+  background-color: #fff !important;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(28, 77, 90, 0.2);
+}
+
+.InputWithActionUAcc input:hover {
+  border-color: #1c4d5a !important;
+}
+
+.InputWithActionUAcc input::placeholder {
+  color: #1c4d5a;
+  opacity: 0.7;
+}
+
+.InputWithActionUAcc input:disabled {
+  background-color: #f9f9f9 !important;
+  cursor: not-allowed;
+  color: #1c4d5a !important;
+  border-color: #1c4d5a !important;
 }
  
 
 .EditButtonUAcc,
 .CancelButtonUAcc {
   width: 60px;
-  height: 46px;
+  height: 42px;
   background: none;
-  border: 1px solid #e0e0e0;
+  border: 1px solid #1c4d5a !important;
   border-left: none;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-top-right-radius: 6px;
-  border-bottom-right-radius: 6px;
-  color: #184a5b;
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+  color: #1c4d5a !important;
   transition: all 0.2s ease;
+  background-color: white !important;
 }
 
 .EditButtonUAcc:hover {
-  background-color: #f5f5f5;
+  background-color: #f5f5f5 !important;
+  border-color: #1c4d5a !important;
 }
 
 .EditButtonUAcc:disabled {
   cursor: not-allowed;
   opacity: 0.5;
-  color: #999;
+  color: #999 !important;
+  border-color: #ccc !important;
 }
 
 .CancelButtonUAcc {
-  background-color: #f5f5f5;
+  background-color: #f5f5f5 !important;
+  border-color: #1c4d5a !important;
 }
 
 .CancelButtonUAcc:hover {
-  background-color: #e8e8e8;
+  background-color: #e8e8e8 !important;
+  border-color: #1c4d5a !important;
 }
 
 .SaveButtonUAcc {
@@ -269,6 +482,36 @@ justify-content: center;
   justify-content: flex-end;
 }
 
+/* Responsive styling for password form actions */
+.PasswordFormUAcc .ActionsUAcc {
+  margin-top: 25px;
+  margin-left: 15px;
+  margin-right: 15px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* Responsive adjustments for password form actions */
+@media (max-width: 768px) {
+  .PasswordFormUAcc .ActionsUAcc {
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .PasswordFormUAcc .ActionsUAcc {
+    margin-left: 5px;
+    margin-right: 5px;
+    justify-content: center;
+  }
+  
+  .PasswordFormUAcc .SaveButtonUAcc {
+    width: 100%;
+    max-width: 300px;
+  }
+}
+
 /* Password Confirmation Dialog Styles */
 .PasswordConfirmationOverlayUAcc {
   position: fixed;
@@ -321,12 +564,31 @@ justify-content: center;
 
 .PasswordConfirmationDialogUAcc input {
   width: 100%;
-  padding: 12px 15px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  background-color: #fff;
-  color: #184a5b;
-  font-size: 16px;
+  padding: 10px;
+  margin: 0 15px;
+  border: 1px solid #1c4d5a !important;
+  border-radius: 4px;
+  background-color: white !important;
+  color: #1c4d5a !important;
+  font-size: 14px;
+  transition: border-color 0.3s ease, background-color 0.3s ease;
+  box-sizing: border-box;
+}
+
+.PasswordConfirmationDialogUAcc input:focus {
+  border-color: #1c4d5a !important;
+  background-color: #fff !important;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(28, 77, 90, 0.2);
+}
+
+.PasswordConfirmationDialogUAcc input:hover {
+  border-color: #1c4d5a !important;
+}
+
+.PasswordConfirmationDialogUAcc input::placeholder {
+  color: #1c4d5a;
+  opacity: 0.7;
 }
 
 .DialogActionsUAcc {
@@ -353,4 +615,104 @@ justify-content: center;
   flex: 1;
   height: auto;
   padding: 12px 15px;
+}
+
+/* Specific styling for first name and last name inputs */
+.FormGroupUAcc input#firstName,
+.FormGroupUAcc input#lastName {
+  width: calc(100% - 30px);
+  margin: 0 15px;
+  min-width: 300px;
+  max-width: 500px;
+}
+
+/* Responsive adjustments for firstName and lastName inputs */
+@media (max-width: 768px) {
+  .FormGroupUAcc input#firstName,
+  .FormGroupUAcc input#lastName {
+    width: calc(100% - 20px);
+    margin: 0 10px;
+    min-width: 250px;
+    max-width: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .FormGroupUAcc input#firstName,
+  .FormGroupUAcc input#lastName {
+    width: calc(100% - 10px);
+    margin: 0 5px;
+    min-width: 200px;
+  }
+}
+
+/* Make InputWithActionUAcc containers match the width of firstName/lastName inputs */
+.FormGroupUAcc .InputWithActionUAcc {
+  width: calc(100% - 30px);
+  margin: 0 15px;
+  min-width: 300px;
+  max-width: 500px;
+}
+
+.FormGroupUAcc .InputWithActionUAcc input {
+  margin: 0;
+  width: 100%;
+}
+
+/* Responsive adjustments for InputWithActionUAcc */
+@media (max-width: 768px) {
+  .FormGroupUAcc .InputWithActionUAcc {
+    width: calc(100% - 20px);
+    margin: 0 10px;
+    min-width: 250px;
+    max-width: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .FormGroupUAcc .InputWithActionUAcc {
+    width: calc(100% - 10px);
+    margin: 0 5px;
+    min-width: 200px;
+  }
+}
+
+/* Responsive styling for password form labels */
+.PasswordFormUAcc .FormGroupUAcc label {
+  margin-left: 15px;
+  display: block;
+  margin-bottom: 8px;
+  color: #2c3e50;
+  font-size: 15px;
+  font-weight: bold;
+}
+
+/* Responsive adjustments for password form labels */
+@media (max-width: 768px) {
+  .PasswordFormUAcc .FormGroupUAcc label {
+    margin-left: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .PasswordFormUAcc .FormGroupUAcc label {
+    margin-left: 5px;
+  }
+}
+
+/* Enhanced responsive styling for password form groups */
+.PasswordFormUAcc .FormGroupUAcc {
+  margin-bottom: 20px;
+}
+
+@media (max-width: 768px) {
+  .PasswordFormUAcc .FormGroupUAcc {
+    margin-bottom: 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .PasswordFormUAcc .FormGroupUAcc {
+    margin-bottom: 15px;
+  }
 }

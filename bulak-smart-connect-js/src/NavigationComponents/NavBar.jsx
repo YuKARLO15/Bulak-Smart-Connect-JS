@@ -39,7 +39,7 @@ const NavBar = () => {
             <Button className='HomeButtonNav'>Home</Button>
           </RouterLink>
         
-          <Button onClick={() => setOpenInstallPrompt(true)}>Download</Button>
+          <Button onClick={() => setOpenInstallPrompt(true)}>Install</Button>
 
           {isAuthenticated ? (
             <>

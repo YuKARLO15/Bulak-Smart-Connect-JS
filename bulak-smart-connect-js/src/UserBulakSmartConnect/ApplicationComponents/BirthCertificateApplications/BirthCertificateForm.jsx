@@ -10,8 +10,9 @@ import MarriageInformationBirthForm from './BirthCertificateForm/MarriageIdentif
 import AffidavitBirthForm from './BirthCertificateForm/BirthBackIdentifyingForm';
 import { documentApplicationService } from '../../../services/documentApplicationService';
 import { localStorageManager } from '../../../services/localStorageManager';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'; 
+import { useAuth } from '../../../context/AuthContext';
+import userService from '../../../services/userService';
 const backendTypeMap = {
   'Regular application': {
     applicationType: 'Birth Certificate',
@@ -53,7 +54,7 @@ const BirthCertificateForm = () => {
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'info' });
-
+ const { getCurrentUserId } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -186,62 +187,86 @@ useEffect(() => {
 
   const handlePrevious = () => setStep(prevStep => prevStep - 1);
 
-  const handleSubmit = async e => {
+const handleSubmit = async e => {
   if (e) e.preventDefault();
   if (!validateStep()) return;
   setIsLoading(true);
 
   try {
+    // 1. Get current user ID from context
+    const userId = getCurrentUserId && getCurrentUserId();
+
+    // 2. Fetch latest user data from backend, fallback to localStorage
+    let userData = {};
+    if (userId) {
+      try {
+        userData = await userService.getUserById(userId);
+      } catch (err) {
+        showNotification('Could not fetch user info, using local data.', 'warning');
+        userData = JSON.parse(localStorage.getItem('currentUser') || '{}');
+      }
+    } else {
+      userData = JSON.parse(localStorage.getItem('currentUser') || '{}');
+    }
+
+    // 3. Use userData for contact info
+    const userEmail = userData.email || '';
+    const userPhone = userData.contactNumber || userData.phoneNumber || '';
+    const username = userData.username || '';
+    const firstName = userData.firstName || '';
+    const lastName = userData.lastName || '';
+    const fullName = userData.name || `${firstName} ${lastName}`.trim();
+
     let applicationId = editingApplicationId;
     let routeOption;
-    
+
     if (isEditing && editingApplicationId) {
-      // For editing, get the original application data to preserve the subtype
-    try {
-    const originalApplication = await documentApplicationService.getApplication(editingApplicationId);
-    const originalSubtype = originalApplication.applicationSubtype || 
-                           originalApplication.formData?.applicationSubtype ||
-                           localStorage.getItem('originalApplicationSubtype');
-        
-        console.log('Original application subtype:', originalSubtype);
-        
-        if (originalSubtype) {
-          const subtypeToRouteMap = {
-            'Regular Application (0-1 month)': 'Regular application',
-            'Delayed Registration - Above 18': 'Above 18',
-            'Delayed Registration - Below 18': 'Below 18',
-            'Delayed Registration - Foreign Parent': 'Foreign Parent',
-            'Delayed Registration - Out of Town': 'Out of town',
-            'Correction - Clerical Errors': 'Clerical Error',
-            'Correction - Sex/Date of Birth': 'Sex DOB',
-            'Correction - First Name': 'First Name'
-          };
-          routeOption = subtypeToRouteMap[originalSubtype] || 'Regular application';
-          console.log('Mapped routeOption for editing:', routeOption);
-        } else {
-          console.log('No original subtype found, defaulting to Regular application');
-          routeOption = 'Regular application';
-        }
+      try {
+        const originalApplication = await documentApplicationService.getApplication(editingApplicationId);
+        const originalSubtype = originalApplication.applicationSubtype ||
+          originalApplication.formData?.applicationSubtype ||
+          localStorage.getItem('originalApplicationSubtype');
+        const subtypeToRouteMap = {
+          'Regular Application (0-1 month)': 'Regular application',
+          'Delayed Registration - Above 18': 'Above 18',
+          'Delayed Registration - Below 18': 'Below 18',
+          'Delayed Registration - Foreign Parent': 'Foreign Parent',
+          'Delayed Registration - Out of Town': 'Out of town',
+          'Correction - Clerical Errors': 'Clerical Error',
+          'Correction - Sex/Date of Birth': 'Sex DOB',
+          'Correction - First Name': 'First Name'
+        };
+        routeOption = subtypeToRouteMap[originalSubtype] || 'Regular application';
       } catch (error) {
-        console.error('Error fetching original application:', error);
         routeOption = 'Regular application';
       }
     } else {
-      // For new applications, use the selected option from session storage
       routeOption = sessionStorage.getItem('selectedBirthCertificateOption') || 'Regular application';
     }
 
-    console.log('Final routeOption:', routeOption);
     const backendType = backendTypeMap[routeOption] || backendTypeMap['Regular application'];
-    console.log('Backend type:', backendType);
+
+    // Enhanced form data with user contact information
+    const enhancedFormData = {
+      ...formData,
+      userEmail,
+      userPhone,
+      username,
+      applicantFullName: fullName,
+      submissionDate: new Date().toISOString()
+    };
 
     let backendResponse;
     if (isEditing && editingApplicationId) {
       backendResponse = await documentApplicationService.updateApplication(editingApplicationId, {
-        formData,
+        formData: enhancedFormData,
         applicantName: `${formData.firstName || ''} ${formData.lastName || ''}`,
         applicationType: backendType.applicationType,
         applicationSubtype: backendType.applicationSubtype,
+        userEmail,
+        userPhone,
+        username,
+        applicantFullName: fullName,
         lastUpdated: new Date().toISOString(),
       });
       applicationId = backendResponse.id || editingApplicationId;
@@ -252,90 +277,99 @@ useEffect(() => {
         applicationType: backendType.applicationType,
         applicationSubtype: backendType.applicationSubtype,
         applicantName: `${formData.firstName || ''} ${formData.lastName || ''}`,
-        formData,
+        formData: enhancedFormData,
+        userEmail,
+        userPhone,
+        username,
+        applicantFullName: fullName,
         status: 'PENDING',
+        submissionDate: new Date().toISOString(),
       };
-        backendResponse =
-          await documentApplicationService.createApplication(backendApplicationData);
-        if (!backendResponse || !backendResponse.id)
-          throw new Error('Backend did not return a valid application ID');
-        applicationId = backendResponse.id;
-        showNotification('Application created successfully', 'success');
-      }
-
-      const existingApplications = JSON.parse(localStorage.getItem('applications') || '[]');
-      const appIndex = existingApplications.findIndex(app => app.id === applicationId);
-      const applicationData = {
-        id: applicationId,
-        type: backendType.applicationType,
-        applicationType: backendType.applicationType,
-        applicationSubtype: backendType.applicationSubtype,
-        date: new Date().toLocaleDateString('en-US', {
-          year: 'numeric',
-          month: 'numeric',
-          day: 'numeric',
-        }),
-        status: isEditing
-          ? localStorage.getItem('currentApplicationStatus') || 'Pending'
-          : 'Pending',
-        message: `Birth Certificate application for ${formData.firstName || ''} ${formData.lastName || ''}`,
-        formData,
-        lastUpdated: new Date().toISOString(),
-      };
-      if (appIndex >= 0) {
-        existingApplications[appIndex] = applicationData;
-      } else {
-        existingApplications.push(applicationData);
-      }
-      localStorage.setItem('applications', JSON.stringify(existingApplications));
-      localStorage.setItem('currentApplicationId', applicationId);
-      localStorage.setItem('birthCertificateApplication', JSON.stringify(formData));
-
-      // Clean up edit flags
-      if (isEditing) {
-        localStorage.removeItem('isEditingBirthApplication');
-        localStorage.removeItem('editingApplicationId');
-        localStorage.removeItem('editingApplication');
-      }
-
-      window.dispatchEvent(new Event('storage'));
-      window.dispatchEvent(
-        new CustomEvent('customStorageUpdate', {
-          detail: {
-            id: applicationId,
-            type: backendType.applicationType,
-            action: isEditing ? 'updated' : 'created',
-          },
-        })
-      );
-
-      // Route map - use routeOption instead of selectedOption for editing
-      const routeMap = {
-        'Regular application': '/BirthApplicationSummary',
-        'Request copy': '/RequestACopyBirthCertificate',
-        'Above 18': '/Above18Registration',
-        'Below 18': '/Below18Registration',
-        'Foreign Parent': '/DelayedOneParentForeignerRegistration',
-        'Out of town': '/DelayedOutOfTownRegistration',
-        'Clerical Error': '/ClericalErrorApplication',
-        'Sex DOB': '/SexDobCorrection',
-        'First Name': '/FirstNameCorrection',
-      };
-      navigate(routeMap[routeOption] || '/BirthApplicationSummary');
-    } catch (err) {
-      if (err.response && err.response.data) {
-        showNotification(err.response.data.message || 'Error submitting application', 'error');
-      } else {
-        showNotification(
-          'There was a problem submitting your application. Please try again.',
-          'error'
-        );
-      }
-    } finally {
-      setIsLoading(false);
+      backendResponse = await documentApplicationService.createApplication(backendApplicationData);
+      if (!backendResponse || !backendResponse.id)
+        throw new Error('Backend did not return a valid application ID');
+      applicationId = backendResponse.id;
+      showNotification('Application created successfully', 'success');
     }
-  };
 
+    // LocalStorage update (for offline/fallback)
+    const existingApplications = JSON.parse(localStorage.getItem('applications') || '[]');
+    const appIndex = existingApplications.findIndex(app => app.id === applicationId);
+    const applicationData = {
+      id: applicationId,
+      type: backendType.applicationType,
+      applicationType: backendType.applicationType,
+      applicationSubtype: backendType.applicationSubtype,
+      date: new Date().toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'numeric',
+        day: 'numeric',
+      }),
+      status: isEditing
+        ? localStorage.getItem('currentApplicationStatus') || 'Pending'
+        : 'Pending',
+      message: `Birth Certificate application for ${formData.firstName || ''} ${formData.lastName || ''}`,
+      formData: enhancedFormData,
+      userEmail,
+      userPhone,
+      username,
+      applicantFullName: fullName,
+      lastUpdated: new Date().toISOString(),
+    };
+
+    if (appIndex >= 0) {
+      existingApplications[appIndex] = applicationData;
+    } else {
+      existingApplications.push(applicationData);
+    }
+    localStorage.setItem('applications', JSON.stringify(existingApplications));
+    localStorage.setItem('currentApplicationId', applicationId);
+    localStorage.setItem('birthCertificateApplication', JSON.stringify(enhancedFormData));
+
+    // Clean up edit flags
+    if (isEditing) {
+      localStorage.removeItem('isEditingBirthApplication');
+      localStorage.removeItem('editingApplicationId');
+      localStorage.removeItem('editingApplication');
+    }
+
+    window.dispatchEvent(new Event('storage'));
+    window.dispatchEvent(
+      new CustomEvent('customStorageUpdate', {
+        detail: {
+          id: applicationId,
+          type: backendType.applicationType,
+          action: isEditing ? 'updated' : 'created',
+        },
+      })
+    );
+
+    // Route map
+    const routeMap = {
+      'Regular application': '/BirthApplicationSummary',
+      'Request copy': '/RequestACopyBirthCertificate',
+      'Above 18': '/Above18Registration',
+      'Below 18': '/Below18Registration',
+      'Foreign Parent': '/DelayedOneParentForeignerRegistration',
+      'Out of town': '/DelayedOutOfTownRegistration',
+      'Clerical Error': '/ClericalErrorApplication',
+      'Sex DOB': '/SexDobCorrection',
+      'First Name': '/FirstNameCorrection',
+    };
+    navigate(routeMap[routeOption] || '/BirthApplicationSummary');
+  } catch (err) {
+    if (err.response && err.response.data) {
+      showNotification(err.response.data.message || 'Error submitting application', 'error');
+    } else {
+      showNotification(
+        'There was a problem submitting your application. Please try again.',
+        'error'
+      );
+    }
+  } finally {
+    setIsLoading(false);
+  }
+};
   return (
     <Box className="BirthCertificateFormContainer">
       <Typography variant="h4" className="BirthCertificateFormTitle">

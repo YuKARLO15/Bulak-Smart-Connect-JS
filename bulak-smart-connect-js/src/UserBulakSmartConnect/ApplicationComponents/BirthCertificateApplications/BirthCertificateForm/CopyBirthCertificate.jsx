@@ -361,11 +361,26 @@ const CopyBirthCertificate = ({ formData = {}, handleChange, correctionType }) =
       )}
 
       <Box className="CopyBirthCertificateContainerCopyBirth">
-        <Typography variant="body1" className="FormSubtitleCopyBirth">
-          Please provide the information exactly as it appears on your birth certificate
-        </Typography>
+
+
+    
 
         <Paper elevation={3} className="FormPaperCopyBirth">
+            <Box className="FormNoteCopyBirth">
+            <Typography variant="body2">
+              Note:  The information you provide should exactly match what appears on your birth
+              certificate record. Inaccurate information may result in delay or inability to locate
+              your records.
+            </Typography>
+          
+            <ul>
+              <li className="FormNoteItemCopyBirth">
+                if you are female, please enter your maiden name.
+                 </li>
+              </ul>
+           
+          </Box>
+       
           {/* Personal Information Section */}
           <Box className="FormSectionCopyBirth">
             <Typography variant="h6" className="SectionTitleCopyBirth">
@@ -694,13 +709,7 @@ const CopyBirthCertificate = ({ formData = {}, handleChange, correctionType }) =
             </Box>
           )}
 
-          <Box className="FormNoteCopyBirth">
-            <Typography variant="body2">
-              Note: The information you provide should exactly match what appears on your birth
-              certificate record. Inaccurate information may result in delay or inability to locate
-              your records.
-            </Typography>
-          </Box>
+      
         </Paper>
 
         <Box
