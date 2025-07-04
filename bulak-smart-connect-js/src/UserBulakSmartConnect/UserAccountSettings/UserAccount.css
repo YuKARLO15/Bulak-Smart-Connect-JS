@@ -84,6 +84,27 @@ justify-content: center;
 /* Tab Content */
 .TabContentUAcc {
   padding: 30px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Responsive design for TabContentUAcc */
+@media (max-width: 1024px) {
+  .TabContentUAcc {
+    padding: 25px;
+  }
+}
+
+@media (max-width: 768px) {
+  .TabContentUAcc {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .TabContentUAcc {
+    padding: 15px 10px;
+  }
 }
 
 .PasswordTabCardUAcc {
@@ -106,7 +127,10 @@ justify-content: center;
   display: grid;
   grid-template-columns: 1fr;
   gap: 20px;
-  width: 70vw;
+  width: 100%;
+  max-width: 70vw;
+  margin: 0 auto;
+  box-sizing: border-box;
 }
 
 @media (min-width: 600px) {
@@ -121,6 +145,39 @@ justify-content: center;
   }
 }
 
+/* Additional responsive adjustments */
+@media (max-width: 1024px) {
+  .AccountFormUAcc,
+  .PasswordFormUAcc {
+    max-width: 80vw;
+  }
+}
+
+@media (max-width: 768px) {
+  .AccountFormUAcc,
+  .PasswordFormUAcc {
+    max-width: 90vw;
+    gap: 15px;
+  }
+  
+  .AccountFormUAcc {
+    grid-template-columns: 1fr;
+  }
+  
+  .FormGroupUAcc:nth-child(5),
+  .ActionsUAcc {
+    grid-column: span 1;
+  }
+}
+
+@media (max-width: 480px) {
+  .AccountFormUAcc,
+  .PasswordFormUAcc {
+    max-width: 95vw;
+    gap: 10px;
+  }
+}
+
 .FormGroupUAcc {
   margin-bottom: 20px;
 }
@@ -128,9 +185,11 @@ justify-content: center;
 .FormGroupUAcc label {
   display: block;
   margin-bottom: 8px;
-  font-weight: 500;
+  /* font-weight: 500; */
   color: #2c3e50;
   font-size: 15px;
+  margin-left: 20px;
+  font-weight: bold;
 }
 
 .FormGroupUAcc input {
@@ -431,4 +490,55 @@ justify-content: center;
   margin: 0 15px;
   min-width: 300px;
   max-width: 500px;
+}
+
+/* Responsive adjustments for firstName and lastName inputs */
+@media (max-width: 768px) {
+  .FormGroupUAcc input#firstName,
+  .FormGroupUAcc input#lastName {
+    width: calc(100% - 20px);
+    margin: 0 10px;
+    min-width: 250px;
+    max-width: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .FormGroupUAcc input#firstName,
+  .FormGroupUAcc input#lastName {
+    width: calc(100% - 10px);
+    margin: 0 5px;
+    min-width: 200px;
+  }
+}
+
+/* Make InputWithActionUAcc containers match the width of firstName/lastName inputs */
+.FormGroupUAcc .InputWithActionUAcc {
+  width: calc(100% - 30px);
+  margin: 0 15px;
+  min-width: 300px;
+  max-width: 500px;
+}
+
+.FormGroupUAcc .InputWithActionUAcc input {
+  margin: 0;
+  width: 100%;
+}
+
+/* Responsive adjustments for InputWithActionUAcc */
+@media (max-width: 768px) {
+  .FormGroupUAcc .InputWithActionUAcc {
+    width: calc(100% - 20px);
+    margin: 0 10px;
+    min-width: 250px;
+    max-width: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .FormGroupUAcc .InputWithActionUAcc {
+    width: calc(100% - 10px);
+    margin: 0 5px;
+    min-width: 200px;
+  }
 }
