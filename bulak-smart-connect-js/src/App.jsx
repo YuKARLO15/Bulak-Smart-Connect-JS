@@ -9,6 +9,8 @@ import Unauthorized from './components/Unauthorized';
 import InstallPrompt from './components/InstallPrompt';
 import OfflineIndicator from './components/OfflineIndicator';
 import OTPTest from './components/OTPTest';
+import FloatingAnnouncementButton from './LandingPageComponents/FloatingAnnouncement';
+import { Box, Button, Container, Grid, Typography, Card, CardContent } from '@mui/material';
 
 //-----------SERVICES --------------//
 //import { localStorageManager } from './services/localStorageManager';
@@ -192,7 +194,9 @@ function App() {
         
         </Route>
       </Routes>
-    
+     <Box className="AnnouncementButtonContainer">
+          <FloatingAnnouncementButton />
+          </Box>
       <OfflineIndicator />
     </AuthProvider>
   );
