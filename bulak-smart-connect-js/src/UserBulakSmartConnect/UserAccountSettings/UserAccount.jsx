@@ -110,6 +110,32 @@ const UserAccount = () => {
     e.preventDefault();
     setMessage({ text: '', type: '' });
 
+    // Validation for required fields
+    if (!firstName.trim()) {
+      setMessage({ text: '❌ First name is required', type: 'error' });
+      return;
+    }
+
+    if (!lastName.trim()) {
+      setMessage({ text: '❌ Last name is required', type: 'error' });
+      return;
+    }
+
+    if (!username.trim()) {
+      setMessage({ text: '❌ Username is required', type: 'error' });
+      return;
+    }
+
+    if (!email.trim()) {
+      setMessage({ text: '❌ Email is required', type: 'error' });
+      return;
+    }
+
+    if (!phoneNumber.trim()) {
+      setMessage({ text: '❌ Phone number is required', type: 'error' });
+      return;
+    }
+
     const updates = { firstName, lastName };
 
     const isSensitiveEdit =
@@ -118,6 +144,7 @@ const UserAccount = () => {
     if (isSensitiveEdit) {
       if (isEditing.email) updates.email = email;
       if (isEditing.phoneNumber) updates.contactNumber = phoneNumber; 
+      if (isEditing.username && canChangeUsername) updates.username = username;
 
       setPendingUpdates(updates);
       setShowPasswordConfirmation(true);
@@ -444,7 +471,7 @@ const UserAccount = () => {
               <form className="DialogFormGroupUAcc" onSubmit={handlePasswordConfirmation}>
                 <div className="DialogFormGroupUAcc">
                   <label className="DialogLabel" htmlFor="confirmationPassword">
-                    Password*
+                    Password
                   </label>
                   <input
                     type="password"
@@ -477,7 +504,7 @@ const UserAccount = () => {
           <div className="TabContentUAcc">
             <form onSubmit={handleSaveProfile} className="AccountFormUAcc">
               <div className="FormGroupUAcc">
-                <label htmlFor="firstName">First name*</label>
+                <label htmlFor="firstName">First name<span style={{color: 'red'}}> *</span></label>
                 <input
                   type="text"
                   id="firstName"
@@ -488,7 +515,7 @@ const UserAccount = () => {
               </div>
 
               <div className="FormGroupUAcc">
-                <label htmlFor="lastName">Last name*</label>
+                <label htmlFor="lastName">Last name<span style={{color: 'red'}}> *</span></label>
                 <input
                   type="text"
                   id="lastName"
@@ -499,7 +526,7 @@ const UserAccount = () => {
               </div>
 
               <div className="FormGroupUAcc">
-                <label htmlFor="username">Username</label>
+                <label htmlFor="username">Username<span style={{color: 'red'}}> *</span></label>
                 <div className="InputWithActionUAcc">
                   <input
                     type="text"
@@ -507,6 +534,7 @@ const UserAccount = () => {
                     value={username}
                     onChange={e => setUsername(e.target.value)}
                     disabled={!canChangeUsername || !isEditing.username}
+                    required
                   />
                   {!isEditing.username ? (
                     <button
@@ -523,7 +551,7 @@ const UserAccount = () => {
                       onClick={() => setIsEditing({ ...isEditing, username: false })}
                       className="CancelButtonUAcc"
                     >
-                      <i className="fas fa-times"></i>
+                      <CloseIcon fontSize="small" />
                     </button>
                   )}
                 </div>
@@ -536,7 +564,7 @@ const UserAccount = () => {
               </div>
 
               <div className="FormGroupUAcc">
-                <label htmlFor="email">E-mail*</label>
+                <label htmlFor="email">E-mail<span style={{color: 'red'}}> *</span></label>
                 <div className="InputWithActionUAcc">
                   <input
                     type="email"
@@ -567,7 +595,7 @@ const UserAccount = () => {
               </div>
 
               <div className="FormGroupUAcc">
-                <label htmlFor="phoneNumber">Phone number</label>
+                <label htmlFor="phoneNumber">Phone number<span style={{color: 'red'}}> *</span></label>
                 <div className="InputWithActionUAcc">
                   <input
                     type="tel"
@@ -575,6 +603,7 @@ const UserAccount = () => {
                     value={phoneNumber}
                     onChange={e => setPhoneNumber(e.target.value)}
                     disabled={!isEditing.phoneNumber}
+                    required
                   />
                   {!isEditing.phoneNumber ? (
                     <button
@@ -611,7 +640,7 @@ const UserAccount = () => {
             <div className="PasswordTabCardUAcc">
               <form onSubmit={handleChangePassword} className="PasswordFormUAcc">
                 <div className="FormGroupUAcc">
-                  <label htmlFor="currentPassword">Current Password*</label>
+                  <label htmlFor="currentPassword">Current Password<span style={{color: 'red'}}> *</span></label>
                   <input
                     type="password"
                     id="currentPassword"
@@ -622,7 +651,7 @@ const UserAccount = () => {
                 </div>
 
                 <div className="FormGroupUAcc">
-                  <label htmlFor="newPassword">New Password*</label>
+                  <label htmlFor="newPassword">New Password<span style={{color: 'red'}}> *</span></label>
                   <input
                     type="password"
                     id="newPassword"
@@ -636,7 +665,7 @@ const UserAccount = () => {
                 </div>
 
                 <div className="FormGroupUAcc">
-                  <label htmlFor="confirmPassword">Confirm New Password*</label>
+                  <label htmlFor="confirmPassword">Confirm New Password <span style={{color: 'red'}}> *</span></label>
                   <input
                     type="password"
                     id="confirmPassword"

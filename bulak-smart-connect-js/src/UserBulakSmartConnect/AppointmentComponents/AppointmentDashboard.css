@@ -14,7 +14,8 @@
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  background: linear-gradient(135deg, #1b4d5b 0%, #2c7a8a 100%);
+  /* background: linear-gradient(135deg, #1b4d5b 0%, #2c7a8a 100%); */
+  border: 2px solid #1b4d5b;
   padding: 15px;
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(27, 77, 91, 0.2);
@@ -23,7 +24,7 @@
 
 .HeaderContentAppointment {
   flex: 1;
-  color: white;
+  color: #1b4d5b;
 }
 
 .TitleAppointment {
@@ -167,6 +168,13 @@
 .RecentAppointmentsMobile {
   display: none;
   margin-top: 20px;
+  border: 2px solid #1b4d5b;
+  border-radius: 8px;
+}
+
+.RecentAppointmentsDesktop{
+  border: 2px solid #1b4d5b;
+  border-radius: 8px;
 }
 
 .SectionTitleAppointmentRequirements {
@@ -213,7 +221,7 @@ text-decoration: underline !important;
 }
 
 .SectionDescriptionAppointment strong {
-  color: #1b4d5b !important;
+  color: rgb(212, 33, 33) !important;
 }
 
 .RequirementsList {
@@ -277,6 +285,8 @@ text-decoration: underline !important;
     .RecentAppointmentsMobile {
     display: block;
     margin-top: 24px;
+    border: 2px solid #1b4d5b;
+    border-radius: 8px;
   }
   
   .AppointmentDashboardContainer {
@@ -314,6 +324,8 @@ text-decoration: underline !important;
    .RecentAppointmentsMobile {
     display: block;
     margin-top: 20px;
+    border: 2px solid #1b4d5b;
+    border-radius: 8px;
   }
     .RecentAppointmentsDesktop {
     display: none;
@@ -394,6 +406,8 @@ text-decoration: underline !important;
   .RecentAppointmentsMobile {
     display: block;
     margin-top: 16px;
+    border: 1.5px solid #1b4d5b;
+    border-radius: 6px;
   }
   
   .HeaderAppointment {
@@ -467,6 +481,8 @@ text-decoration: underline !important;
     margin-top: 12px;
     /* Add some bottom padding to account for floating button */
     padding-bottom: 80px;
+    border: 1px solid #1b4d5b;
+    border-radius: 6px;
   }
   
   .HeaderAppointment {
@@ -545,6 +561,8 @@ text-decoration: underline !important;
     margin-top: 8px;
     /* Add bottom padding for floating button */
     padding-bottom: 70px;
+    border: 1px solid #1b4d5b;
+    border-radius: 4px;
   }
   
   .HeaderAppointment {
@@ -597,5 +615,41 @@ text-decoration: underline !important;
   .CalendarHelperText {
     font-size: 0.7rem !important;
     margin-top: 6px !important;
+  }
+}
+
+/* Responsive border styling for Recent Appointments */
+@media (max-width: 1023px) and (min-width: 768px) {
+  .RecentAppointmentsMobile {
+    border: 2px solid #1b4d5b;
+    border-radius: 8px;
+  }
+}
+
+@media (max-width: 767px) and (min-width: 481px) {
+  .RecentAppointmentsMobile {
+    border: 2px solid #1b4d5b;
+    border-radius: 8px;
+  }
+}
+
+@media (max-width: 480px) and (min-width: 376px) {
+  .RecentAppointmentsMobile {
+    border: 1.5px solid #1b4d5b;
+    border-radius: 6px;
+  }
+}
+
+@media (max-width: 375px) {
+  .RecentAppointmentsMobile {
+    border: 1px solid #1b4d5b;
+    border-radius: 6px;
+  }
+}
+
+@media (max-width: 319px) {
+  .RecentAppointmentsMobile {
+    border: 1px solid #1b4d5b;
+    border-radius: 4px;
   }
 }
