@@ -91,7 +91,7 @@ const AppointmentDashboard = () => {
                   Documents Requirements 
                 </Typography>
                 <Typography variant="body2" className="SectionDescriptionAppointment">
-                  <strong>Important:</strong> Please review and prepare all required documents before scheduling your appointment.
+                  <strong>Important! </strong> Please review and prepare all required documents before scheduling your appointment.
                 </Typography>
               
                 <Box className="RequirementsList">
