@@ -14,7 +14,8 @@
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  background: linear-gradient(135deg, #1b4d5b 0%, #2c7a8a 100%);
+  /* background: linear-gradient(135deg, #1b4d5b 0%, #2c7a8a 100%); */
+  border: 2px solid #1b4d5b;
   padding: 15px;
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(27, 77, 91, 0.2);
@@ -23,7 +24,7 @@
 
 .HeaderContentAppointment {
   flex: 1;
-  color: white;
+  color: #1b4d5b;
 }
 
 .TitleAppointment {
@@ -167,6 +168,11 @@
 .RecentAppointmentsMobile {
   display: none;
   margin-top: 20px;
+}
+
+.RecentAppointmentsDesktop{
+  border: 2px solid #1b4d5b;
+  border-radius: 8px;
 }
 
 .SectionTitleAppointmentRequirements {
