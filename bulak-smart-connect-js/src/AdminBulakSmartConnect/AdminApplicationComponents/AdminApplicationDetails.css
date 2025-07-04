@@ -117,6 +117,7 @@ color: #184a5b !important;
   justify-content: space-between;
   align-items: center;
   margin-top: 4px;
+  
 }
 .ApplicationIdAdminAppForm {
   color: #666;
@@ -289,8 +290,17 @@ color: #184a5b !important;
   padding: 16px;
   border-radius: 8px;
   box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.05);
-}
 
+}
+.ApplicationDetailsPaperAdminAppForm{
+  height: auto !important;
+}
+.StatusSectionAdminAppForm{
+  margin-top: 20px;
+  padding: 20px;
+  border-top:#184a5b 1px solid; ;
+  box-shadow: 5px 3px rgba(1, 0, 0, 0);
+}
 .SectionTitleAdminAppForm {
   margin-top: 10px !important;
   margin-bottom: 15px !important;
