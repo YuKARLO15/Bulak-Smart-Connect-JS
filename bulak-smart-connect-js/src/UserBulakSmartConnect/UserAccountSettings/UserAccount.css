@@ -830,19 +830,19 @@ justify-content: center;
 .PhoneEditButtonUAcc:hover,
 .PhoneCancelButtonUAcc:hover {
   background-color: #f5f5f5 !important;
-  border-color: #1c4d5a !important;
+  border-left-color: #1c4d5a !important;
 }
 
 .PhoneEditButtonUAcc:disabled {
   cursor: not-allowed;
   opacity: 0.5;
   color: #999 !important;
-  border-color: #ccc !important;
+  border-left-color: #ccc !important;
 }
 
 .PhoneCancelButtonUAcc {
   background-color: #f5f5f5 !important;
-  border-color: #1c4d5a !important;
+  border-left-color: #1c4d5a !important;
 }
 
 /* Responsive adjustments for phone input container */

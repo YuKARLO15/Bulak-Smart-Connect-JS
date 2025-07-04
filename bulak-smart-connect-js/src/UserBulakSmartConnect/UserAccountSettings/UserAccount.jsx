@@ -613,6 +613,7 @@ const UserAccount = () => {
                 <label htmlFor="phoneNumber">Phone number<span style={{color: 'red'}}> *</span></label>
                 <div className="PhoneInputContainerUAcc">
                   <div className="PhoneInputWrapperUAcc">
+                    <div className="CountryCodeUAcc">+63</div>
                     <input
                       type="tel"
                       id="phoneNumber"
