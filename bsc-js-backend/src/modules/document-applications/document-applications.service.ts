@@ -48,11 +48,19 @@ export class DocumentApplicationsService {
     return await this.documentApplicationRepository.save(application);
   }
 
-  async findAll(userId?: number): Promise<DocumentApplication[]> {
+  async findAll(
+    userId?: number,
+    options?: { relations?: string[] },
+  ): Promise<DocumentApplication[]> {
     const query = this.documentApplicationRepository
       .createQueryBuilder('app')
       .leftJoinAndSelect('app.files', 'files')
       .orderBy('app.createdAt', 'DESC');
+
+    // Include user relationship when requested (for admin notifications)
+    if (options?.relations?.includes('user')) {
+      query.leftJoinAndSelect('app.user', 'user');
+    }
 
     if (userId) {
       query.where('app.userId = :userId', { userId });
@@ -61,12 +69,21 @@ export class DocumentApplicationsService {
     return await query.getMany();
   }
 
-  async findOne(id: string, userId?: number): Promise<DocumentApplication> {
+  async findOne(
+    id: string,
+    userId?: number,
+    options?: { relations?: string[] },
+  ): Promise<DocumentApplication> {
     const query = this.documentApplicationRepository
       .createQueryBuilder('app')
       .leftJoinAndSelect('app.files', 'files')
       .leftJoinAndSelect('app.statusHistory', 'history')
       .where('app.id = :id', { id });
+
+    // Include user relationship when requested (for admin notifications)
+    if (options?.relations?.includes('user')) {
+      query.leftJoinAndSelect('app.user', 'user');
+    }
 
     if (userId) {
       query.andWhere('app.userId = :userId', { userId });

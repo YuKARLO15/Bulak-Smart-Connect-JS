@@ -96,13 +96,18 @@ export class DocumentApplicationsController {
   async findAll(
     @Query('status') status?: string,
     @User() user?: AuthenticatedUser,
+    @Query('includeUser') includeUser?: string,
   ) {
     const userId = user?.roles.some((role) =>
       ['admin', 'super_admin', 'staff'].includes(role.name),
     )
       ? undefined
       : user?.id;
-    return this.documentApplicationsService.findAll(userId);
+
+    // Include user relationship when requested (for admin notifications)
+    const relations = includeUser === 'true' ? ['user'] : [];
+
+    return this.documentApplicationsService.findAll(userId, { relations });
   }
 
   @Get(':id/files')
@@ -153,13 +158,21 @@ export class DocumentApplicationsController {
 
   @Get(':id')
   @ApiOperation({ summary: 'Get specific application' })
-  async findOne(@Param('id') id: string, @User() user: AuthenticatedUser) {
+  async findOne(
+    @Param('id') id: string,
+    @User() user: AuthenticatedUser,
+    @Query('includeUser') includeUser?: string,
+  ) {
     const userId = user.roles.some((role) =>
       ['admin', 'super_admin', 'staff'].includes(role.name),
     )
       ? undefined
       : user.id;
-    return this.documentApplicationsService.findOne(id, userId);
+
+    // Include user relationship when requested (for admin notifications)
+    const relations = includeUser === 'true' ? ['user'] : [];
+
+    return this.documentApplicationsService.findOne(id, userId, { relations });
   }
 
   @Get('files/:fileId/download')
