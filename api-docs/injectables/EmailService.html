@@ -172,6 +172,22 @@
                             </li>
                             <li>
                                     <span class="modifier">Async</span>
+                                <a href="#sendDocumentApplicationApproval" >sendDocumentApplicationApproval</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#sendDocumentApplicationConfirmation" >sendDocumentApplicationConfirmation</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#sendDocumentApplicationRejection" >sendDocumentApplicationRejection</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#sendDocumentApplicationStatusUpdate" >sendDocumentApplicationStatusUpdate</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
                                 <a href="#sendOTP" >sendOTP</a>
                             </li>
                             <li>
@@ -739,6 +755,558 @@
 
                                             <td>
                                                     No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;void&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="sendDocumentApplicationApproval"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>sendDocumentApplicationApproval</b></span>
+                        <a href="#sendDocumentApplicationApproval"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>sendDocumentApplicationApproval(email: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, applicationId: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, applicationType: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, applicationSubtype?: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, applicantName?: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="956"
+                                    class="link-to-prism">src/services/email.service.ts:956</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Send document application approval email</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>email</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>applicationId</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>applicationType</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>applicationSubtype</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    Yes
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>applicantName</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    Yes
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;void&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="sendDocumentApplicationConfirmation"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>sendDocumentApplicationConfirmation</b></span>
+                        <a href="#sendDocumentApplicationConfirmation"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>sendDocumentApplicationConfirmation(email: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, applicationId: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, applicationType: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, applicationSubtype?: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, applicantName?: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, submissionDate?: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, status: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="720"
+                                    class="link-to-prism">src/services/email.service.ts:720</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Send document application confirmation email</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Default value</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>email</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+                                            <td>
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+                                                <td>applicationId</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+                                            <td>
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+                                                <td>applicationType</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+                                            <td>
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+                                                <td>applicationSubtype</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    Yes
+                                            </td>
+
+                                            <td>
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+                                                <td>applicantName</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    Yes
+                                            </td>
+
+                                            <td>
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+                                                <td>submissionDate</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    Yes
+                                            </td>
+
+                                            <td>
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+                                                <td>status</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+                                            <td>
+                                                    <code>&#x27;Pending&#x27;</code>
+                                            </td>
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;void&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="sendDocumentApplicationRejection"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>sendDocumentApplicationRejection</b></span>
+                        <a href="#sendDocumentApplicationRejection"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>sendDocumentApplicationRejection(email: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, applicationId: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, applicationType: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, applicationSubtype?: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, applicantName?: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, rejectionReason?: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="976"
+                                    class="link-to-prism">src/services/email.service.ts:976</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Send document application rejection email</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>email</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>applicationId</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>applicationType</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>applicationSubtype</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    Yes
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>applicantName</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    Yes
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>rejectionReason</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    Yes
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;void&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="sendDocumentApplicationStatusUpdate"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>sendDocumentApplicationStatusUpdate</b></span>
+                        <a href="#sendDocumentApplicationStatusUpdate"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>sendDocumentApplicationStatusUpdate(email: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, applicationId: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, newStatus: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, applicationType: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, applicationSubtype?: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, applicantName?: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, previousStatus?: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="825"
+                                    class="link-to-prism">src/services/email.service.ts:825</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Send document application status update email</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>email</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>applicationId</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>newStatus</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>applicationType</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>applicationSubtype</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    Yes
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>applicantName</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    Yes
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>previousStatus</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    Yes
                                             </td>
 
 
@@ -1821,6 +2389,360 @@ export class EmailService {
     });
 
     console.log(&#x60;✅ Appointment reminder email sent to ${email}&#x60;);
+  }
+
+  /**
+   * Send document application confirmation email
+   */
+  async sendDocumentApplicationConfirmation(
+    email: string,
+    applicationId: string,
+    applicationType: string,
+    applicationSubtype?: string,
+    applicantName?: string,
+    submissionDate?: string,
+    status: string &#x3D; &#x27;Pending&#x27;
+  ): Promise&lt;void&gt; {
+    const subject &#x3D; &#x60;Application Submitted - ${applicationId}&#x60;;
+    
+    const html &#x3D; &#x60;
+      &lt;!DOCTYPE html&gt;
+      &lt;html&gt;
+      &lt;head&gt;
+        &lt;meta charset&#x3D;&quot;utf-8&quot;&gt;
+        &lt;meta name&#x3D;&quot;viewport&quot; content&#x3D;&quot;width&#x3D;device-width, initial-scale&#x3D;1.0&quot;&gt;
+        &lt;title&gt;Application Confirmation&lt;/title&gt;
+        &lt;style&gt;
+          body { margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f4f4f4; }
+          .container { max-width: 600px; margin: 0 auto; background-color: #ffffff; }
+          .header { background: linear-gradient(135deg, #28a745 0%, #20c997 100%); color: white; padding: 30px 20px; text-align: center; }
+          .content { padding: 30px 20px; }
+          .application-card { background-color: #f8f9fa; border-left: 4px solid #28a745; padding: 20px; margin: 20px 0; border-radius: 8px; }
+          .detail-row { display: flex; justify-content: space-between; margin: 10px 0; padding: 8px 0; border-bottom: 1px solid #e9ecef; }
+          .label { font-weight: bold; color: #495057; }
+          .value { color: #212529; }
+          .footer { background-color: #f8f9fa; padding: 20px; text-align: center; font-size: 12px; color: #6c757d; }
+          .status-badge { display: inline-block; padding: 8px 16px; background-color: #ffc107; color: #212529; border-radius: 20px; font-weight: bold; margin: 10px 0; }
+        &lt;/style&gt;
+      &lt;/head&gt;
+      &lt;body&gt;
+        &lt;div class&#x3D;&quot;container&quot;&gt;
+          &lt;div class&#x3D;&quot;header&quot;&gt;
+            &lt;h1&gt;✅ Application Submitted&lt;/h1&gt;
+            &lt;p&gt;Your document application has been successfully submitted!&lt;/p&gt;
+          &lt;/div&gt;
+          
+          &lt;div class&#x3D;&quot;content&quot;&gt;
+            &lt;p&gt;Dear ${applicantName || &#x27;Valued Client&#x27;},&lt;/p&gt;
+            
+            &lt;p&gt;Thank you for submitting your document application through Bulak LGU Smart Connect.&lt;/p&gt;
+            
+            &lt;div class&#x3D;&quot;application-card&quot;&gt;
+              &lt;h3 style&#x3D;&quot;margin-top: 0; color: #28a745;&quot;&gt;Application Details&lt;/h3&gt;
+              &lt;div class&#x3D;&quot;detail-row&quot;&gt;
+                &lt;span class&#x3D;&quot;label&quot;&gt;Application ID:&lt;/span&gt;
+                &lt;span class&#x3D;&quot;value&quot;&gt;${applicationId}&lt;/span&gt;
+              &lt;/div&gt;
+              &lt;div class&#x3D;&quot;detail-row&quot;&gt;
+                &lt;span class&#x3D;&quot;label&quot;&gt;Document Type:&lt;/span&gt;
+                &lt;span class&#x3D;&quot;value&quot;&gt;${applicationType}&lt;/span&gt;
+              &lt;/div&gt;
+              ${applicationSubtype ? &#x60;
+              &lt;div class&#x3D;&quot;detail-row&quot;&gt;
+                &lt;span class&#x3D;&quot;label&quot;&gt;Service Type:&lt;/span&gt;
+                &lt;span class&#x3D;&quot;value&quot;&gt;${applicationSubtype}&lt;/span&gt;
+              &lt;/div&gt;
+              &#x60; : &#x27;&#x27;}
+              &lt;div class&#x3D;&quot;detail-row&quot;&gt;
+                &lt;span class&#x3D;&quot;label&quot;&gt;Submission Date:&lt;/span&gt;
+                &lt;span class&#x3D;&quot;value&quot;&gt;${submissionDate || new Date().toLocaleDateString()}&lt;/span&gt;
+              &lt;/div&gt;
+              &lt;div class&#x3D;&quot;detail-row&quot;&gt;
+                &lt;span class&#x3D;&quot;label&quot;&gt;Status:&lt;/span&gt;
+                &lt;span class&#x3D;&quot;value&quot;&gt;&lt;span class&#x3D;&quot;status-badge&quot;&gt;${status}&lt;/span&gt;&lt;/span&gt;
+              &lt;/div&gt;
+            &lt;/div&gt;
+            
+            &lt;div style&#x3D;&quot;background-color: #d1ecf1; border: 1px solid #bee5eb; padding: 15px; border-radius: 8px; margin: 20px 0;&quot;&gt;
+              &lt;h4 style&#x3D;&quot;margin-top: 0;&quot;&gt;📋 What&#x27;s Next?&lt;/h4&gt;
+              &lt;ul style&#x3D;&quot;margin: 10px 0; padding-left: 20px;&quot;&gt;
+                &lt;li&gt;Your application is being reviewed by our staff&lt;/li&gt;
+                &lt;li&gt;You&#x27;ll receive updates via email when status changes&lt;/li&gt;
+                &lt;li&gt;Keep this confirmation email for your records&lt;/li&gt;
+                &lt;li&gt;Processing time varies by document type&lt;/li&gt;
+              &lt;/ul&gt;
+            &lt;/div&gt;
+            
+            &lt;p&gt;Thank you for using Bulak LGU Smart Connect!&lt;/p&gt;
+          &lt;/div&gt;
+          
+          &lt;div class&#x3D;&quot;footer&quot;&gt;
+            &lt;p&gt;Municipal Civil Registrar&#x27;s Office&lt;br&gt;
+            Bulak Local Government Unit&lt;br&gt;
+            This is an automated message, please do not reply.&lt;/p&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/body&gt;
+      &lt;/html&gt;
+    &#x60;;
+
+    await this.transporter.sendMail({
+      from: this.configService.get(&#x27;EMAIL_FROM&#x27;),
+      to: email,
+      subject,
+      html,
+    });
+
+    console.log(&#x60;✅ Document application confirmation email sent to ${email}&#x60;);
+  }
+
+  /**
+   * Send document application status update email
+   */
+  async sendDocumentApplicationStatusUpdate(
+    email: string,
+    applicationId: string,
+    newStatus: string,
+    applicationType: string,
+    applicationSubtype?: string,
+    applicantName?: string,
+    previousStatus?: string
+  ): Promise&lt;void&gt; {
+    const statusColors &#x3D; {
+      &#x27;pending&#x27;: &#x27;#ffc107&#x27;,
+      &#x27;approved&#x27;: &#x27;#28a745&#x27;,
+      &#x27;declined&#x27;: &#x27;#dc3545&#x27;,
+      &#x27;rejected&#x27;: &#x27;#dc3545&#x27;,
+      &#x27;ready for pickup&#x27;: &#x27;#007bff&#x27;,
+      &#x27;completed&#x27;: &#x27;#17a2b8&#x27;
+    };
+
+    const statusEmojis &#x3D; {
+      &#x27;pending&#x27;: &#x27;⏳&#x27;,
+      &#x27;approved&#x27;: &#x27;✅&#x27;,
+      &#x27;declined&#x27;: &#x27;❌&#x27;,
+      &#x27;rejected&#x27;: &#x27;❌&#x27;,
+      &#x27;ready for pickup&#x27;: &#x27;📦&#x27;,
+      &#x27;completed&#x27;: &#x27;🎉&#x27;
+    };
+
+    const color &#x3D; statusColors[newStatus.toLowerCase()] || &#x27;#6c757d&#x27;;
+    const emoji &#x3D; statusEmojis[newStatus.toLowerCase()] || &#x27;📋&#x27;;
+    
+    const subject &#x3D; &#x60;Application ${newStatus.charAt(0).toUpperCase() + newStatus.slice(1)} - ${applicationId}&#x60;;
+    
+    const html &#x3D; &#x60;
+      &lt;!DOCTYPE html&gt;
+      &lt;html&gt;
+      &lt;head&gt;
+        &lt;meta charset&#x3D;&quot;utf-8&quot;&gt;
+        &lt;meta name&#x3D;&quot;viewport&quot; content&#x3D;&quot;width&#x3D;device-width, initial-scale&#x3D;1.0&quot;&gt;
+        &lt;title&gt;Application Status Update&lt;/title&gt;
+        &lt;style&gt;
+          body { margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f4f4f4; }
+          .container { max-width: 600px; margin: 0 auto; background-color: #ffffff; }
+          .header { background: linear-gradient(135deg, ${color} 0%, ${color}cc 100%); color: white; padding: 30px 20px; text-align: center; }
+          .content { padding: 30px 20px; }
+          .status-card { background-color: #f8f9fa; border-left: 4px solid ${color}; padding: 20px; margin: 20px 0; border-radius: 8px; }
+          .detail-row { display: flex; justify-content: space-between; margin: 10px 0; padding: 8px 0; border-bottom: 1px solid #e9ecef; }
+          .label { font-weight: bold; color: #495057; }
+          .value { color: #212529; }
+          .footer { background-color: #f8f9fa; padding: 20px; text-align: center; font-size: 12px; color: #6c757d; }
+          .status-badge { display: inline-block; padding: 8px 16px; background-color: ${color}; color: white; border-radius: 20px; font-weight: bold; margin: 10px 0; }
+        &lt;/style&gt;
+      &lt;/head&gt;
+      &lt;body&gt;
+        &lt;div class&#x3D;&quot;container&quot;&gt;
+          &lt;div class&#x3D;&quot;header&quot;&gt;
+            &lt;h1&gt;${emoji} Application Update&lt;/h1&gt;
+            &lt;p&gt;Your application status has been updated&lt;/p&gt;
+          &lt;/div&gt;
+          
+          &lt;div class&#x3D;&quot;content&quot;&gt;
+            &lt;p&gt;Dear ${applicantName || &#x27;Valued Client&#x27;},&lt;/p&gt;
+            
+            &lt;p&gt;We&#x27;re writing to inform you that your document application status has been updated.&lt;/p&gt;
+            
+            &lt;div class&#x3D;&quot;status-card&quot;&gt;
+              &lt;h3 style&#x3D;&quot;margin-top: 0;&quot;&gt;Application Status&lt;/h3&gt;
+              &lt;div class&#x3D;&quot;status-badge&quot;&gt;${newStatus.toUpperCase()}&lt;/div&gt;
+              
+              &lt;div class&#x3D;&quot;detail-row&quot;&gt;
+                &lt;span class&#x3D;&quot;label&quot;&gt;Application ID:&lt;/span&gt;
+                &lt;span class&#x3D;&quot;value&quot;&gt;${applicationId}&lt;/span&gt;
+              &lt;/div&gt;
+              &lt;div class&#x3D;&quot;detail-row&quot;&gt;
+                &lt;span class&#x3D;&quot;label&quot;&gt;Document Type:&lt;/span&gt;
+                &lt;span class&#x3D;&quot;value&quot;&gt;${applicationType}&lt;/span&gt;
+              &lt;/div&gt;
+              ${applicationSubtype ? &#x60;
+              &lt;div class&#x3D;&quot;detail-row&quot;&gt;
+                &lt;span class&#x3D;&quot;label&quot;&gt;Service Type:&lt;/span&gt;
+                &lt;span class&#x3D;&quot;value&quot;&gt;${applicationSubtype}&lt;/span&gt;
+              &lt;/div&gt;
+              &#x60; : &#x27;&#x27;}
+            &lt;/div&gt;
+            
+            ${newStatus.toLowerCase() &#x3D;&#x3D;&#x3D; &#x27;approved&#x27; ? &#x60;
+            &lt;div style&#x3D;&quot;background-color: #d4edda; border: 1px solid #c3e6cb; padding: 15px; border-radius: 8px; margin: 20px 0;&quot;&gt;
+              &lt;p&gt;&lt;strong&gt;Great news! Your application has been approved!&lt;/strong&gt;&lt;/p&gt;
+              &lt;p&gt;Your document will be processed and prepared for release.&lt;/p&gt;
+            &lt;/div&gt;
+            &#x60; : &#x27;&#x27;}
+            
+            ${newStatus.toLowerCase() &#x3D;&#x3D;&#x3D; &#x27;ready for pickup&#x27; ? &#x60;
+            &lt;div style&#x3D;&quot;background-color: #d1ecf1; border: 1px solid #bee5eb; padding: 15px; border-radius: 8px; margin: 20px 0;&quot;&gt;
+              &lt;p&gt;&lt;strong&gt;Your document is ready for pickup!&lt;/strong&gt;&lt;/p&gt;
+              &lt;p&gt;Please visit our office during business hours to collect your document. Bring a valid ID and this email confirmation.&lt;/p&gt;
+            &lt;/div&gt;
+            &#x60; : &#x27;&#x27;}
+            
+            ${(newStatus.toLowerCase() &#x3D;&#x3D;&#x3D; &#x27;declined&#x27; || newStatus.toLowerCase() &#x3D;&#x3D;&#x3D; &#x27;rejected&#x27;) ? &#x60;
+            &lt;div style&#x3D;&quot;background-color: #f8d7da; border: 1px solid #f5c6cb; padding: 15px; border-radius: 8px; margin: 20px 0;&quot;&gt;
+              &lt;p&gt;&lt;strong&gt;Your application has been declined.&lt;/strong&gt;&lt;/p&gt;
+              &lt;p&gt;Please contact our office for more information or to resubmit with the required corrections.&lt;/p&gt;
+            &lt;/div&gt;
+            &#x60; : &#x27;&#x27;}
+            
+            &lt;p&gt;Thank you for using Bulak LGU Smart Connect!&lt;/p&gt;
+          &lt;/div&gt;
+          
+          &lt;div class&#x3D;&quot;footer&quot;&gt;
+            &lt;p&gt;Municipal Civil Registrar&#x27;s Office&lt;br&gt;
+            Bulak Local Government Unit&lt;br&gt;
+            This is an automated message, please do not reply.&lt;/p&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/body&gt;
+      &lt;/html&gt;
+    &#x60;;
+
+    await this.transporter.sendMail({
+      from: this.configService.get(&#x27;EMAIL_FROM&#x27;),
+      to: email,
+      subject,
+      html,
+    });
+
+    console.log(&#x60;✅ Document application status update email sent to ${email} - Status: ${newStatus}&#x60;);
+  }
+
+  /**
+   * Send document application approval email
+   */
+  async sendDocumentApplicationApproval(
+    email: string,
+    applicationId: string,
+    applicationType: string,
+    applicationSubtype?: string,
+    applicantName?: string
+  ): Promise&lt;void&gt; {
+    return this.sendDocumentApplicationStatusUpdate(
+      email,
+      applicationId,
+      &#x27;approved&#x27;,
+      applicationType,
+      applicationSubtype,
+      applicantName
+    );
+  }
+
+  /**
+   * Send document application rejection email
+   */
+  async sendDocumentApplicationRejection(
+    email: string,
+    applicationId: string,
+    applicationType: string,
+    applicationSubtype?: string,
+    applicantName?: string,
+    rejectionReason?: string
+  ): Promise&lt;void&gt; {
+    const subject &#x3D; &#x60;Application Declined - ${applicationId}&#x60;;
+    
+    const html &#x3D; &#x60;
+      &lt;!DOCTYPE html&gt;
+      &lt;html&gt;
+      &lt;head&gt;
+        &lt;meta charset&#x3D;&quot;utf-8&quot;&gt;
+        &lt;meta name&#x3D;&quot;viewport&quot; content&#x3D;&quot;width&#x3D;device-width, initial-scale&#x3D;1.0&quot;&gt;
+        &lt;title&gt;Application Declined&lt;/title&gt;
+        &lt;style&gt;
+          body { margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f4f4f4; }
+          .container { max-width: 600px; margin: 0 auto; background-color: #ffffff; }
+          .header { background: linear-gradient(135deg, #dc3545 0%, #c82333 100%); color: white; padding: 30px 20px; text-align: center; }
+          .content { padding: 30px 20px; }
+          .application-card { background-color: #f8f9fa; border-left: 4px solid #dc3545; padding: 20px; margin: 20px 0; border-radius: 8px; }
+          .detail-row { display: flex; justify-content: space-between; margin: 10px 0; padding: 8px 0; border-bottom: 1px solid #e9ecef; }
+          .label { font-weight: bold; color: #495057; }
+          .value { color: #212529; }
+          .footer { background-color: #f8f9fa; padding: 20px; text-align: center; font-size: 12px; color: #6c757d; }
+          .resubmit-section { background-color: #e2f3ff; border: 1px solid #b8daff; padding: 20px; border-radius: 8px; margin: 20px 0; text-align: center; }
+        &lt;/style&gt;
+      &lt;/head&gt;
+      &lt;body&gt;
+        &lt;div class&#x3D;&quot;container&quot;&gt;
+          &lt;div class&#x3D;&quot;header&quot;&gt;
+            &lt;h1&gt;❌ Application Declined&lt;/h1&gt;
+            &lt;p&gt;We regret to inform you that your application requires review&lt;/p&gt;
+          &lt;/div&gt;
+          
+          &lt;div class&#x3D;&quot;content&quot;&gt;
+            &lt;p&gt;Dear ${applicantName || &#x27;Valued Client&#x27;},&lt;/p&gt;
+            
+            &lt;p&gt;We regret to inform you that your document application has been declined.&lt;/p&gt;
+            
+            &lt;div class&#x3D;&quot;application-card&quot;&gt;
+              &lt;h3 style&#x3D;&quot;margin-top: 0; color: #dc3545;&quot;&gt;Declined Application Details&lt;/h3&gt;
+              &lt;div class&#x3D;&quot;detail-row&quot;&gt;
+                &lt;span class&#x3D;&quot;label&quot;&gt;Application ID:&lt;/span&gt;
+                &lt;span class&#x3D;&quot;value&quot;&gt;${applicationId}&lt;/span&gt;
+              &lt;/div&gt;
+              &lt;div class&#x3D;&quot;detail-row&quot;&gt;
+                &lt;span class&#x3D;&quot;label&quot;&gt;Document Type:&lt;/span&gt;
+                &lt;span class&#x3D;&quot;value&quot;&gt;${applicationType}&lt;/span&gt;
+              &lt;/div&gt;
+              ${applicationSubtype ? &#x60;
+              &lt;div class&#x3D;&quot;detail-row&quot;&gt;
+                &lt;span class&#x3D;&quot;label&quot;&gt;Service Type:&lt;/span&gt;
+                &lt;span class&#x3D;&quot;value&quot;&gt;${applicationSubtype}&lt;/span&gt;
+              &lt;/div&gt;
+              &#x60; : &#x27;&#x27;}
+              ${rejectionReason ? &#x60;
+              &lt;div class&#x3D;&quot;detail-row&quot;&gt;
+                &lt;span class&#x3D;&quot;label&quot;&gt;Reason:&lt;/span&gt;
+                &lt;span class&#x3D;&quot;value&quot;&gt;${rejectionReason}&lt;/span&gt;
+              &lt;/div&gt;
+              &#x60; : &#x27;&#x27;}
+            &lt;/div&gt;
+            
+            &lt;div class&#x3D;&quot;resubmit-section&quot;&gt;
+              &lt;h4 style&#x3D;&quot;margin-top: 0;&quot;&gt;📝 Need to Resubmit?&lt;/h4&gt;
+              &lt;p&gt;You can submit a new application with the required corrections.&lt;/p&gt;
+              &lt;p&gt;Please contact our office if you need assistance with the requirements.&lt;/p&gt;
+            &lt;/div&gt;
+            
+            &lt;p&gt;We apologize for any inconvenience this may have caused.&lt;/p&gt;
+          &lt;/div&gt;
+          
+          &lt;div class&#x3D;&quot;footer&quot;&gt;
+            &lt;p&gt;Municipal Civil Registrar&#x27;s Office&lt;br&gt;
+            Bulak Local Government Unit&lt;br&gt;
+            This is an automated message, please do not reply.&lt;/p&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/body&gt;
+      &lt;/html&gt;
+    &#x60;;
+
+    await this.transporter.sendMail({
+      from: this.configService.get(&#x27;EMAIL_FROM&#x27;),
+      to: email,
+      subject,
+      html,
+    });
+
+    console.log(&#x60;✅ Document application rejection email sent to ${email}&#x60;);
   }
 }
 </code></pre>

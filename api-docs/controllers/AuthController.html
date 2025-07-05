@@ -910,8 +910,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="1143"
-                                    class="link-to-prism">src/auth/auth.controller.ts:1143</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="1160"
+                                    class="link-to-prism">src/auth/auth.controller.ts:1160</a></div>
                         </td>
                     </tr>
 
@@ -1160,8 +1160,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="1169"
-                                    class="link-to-prism">src/auth/auth.controller.ts:1169</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="1193"
+                                    class="link-to-prism">src/auth/auth.controller.ts:1193</a></div>
                         </td>
                     </tr>
 
@@ -1238,8 +1238,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="1115"
-                                    class="link-to-prism">src/auth/auth.controller.ts:1115</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="1123"
+                                    class="link-to-prism">src/auth/auth.controller.ts:1123</a></div>
                         </td>
                     </tr>
 
@@ -3165,7 +3165,15 @@ export class AuthController {
       this.logger.log(&#x60;Sending application confirmation notification to: ${dto.email}&#x60;);
       
       // Use your existing email service to send application confirmation
-      // Implementation similar to appointment notifications
+      await this.emailService.sendDocumentApplicationConfirmation(
+        dto.email,
+        dto.applicationId,
+        dto.applicationType,
+        dto.applicationSubtype,
+        dto.applicantName,
+        dto.submissionDate,
+        dto.status
+      );
       
       return {
         success: true,
@@ -3194,7 +3202,16 @@ export class AuthController {
       this.logger.log(&#x60;Sending application status update notification to: ${dto.email}&#x60;);
       
       // Use your existing email service
-    
+      await this.emailService.sendDocumentApplicationStatusUpdate(
+        dto.email,
+        dto.applicationId,
+        dto.newStatus,
+        dto.applicationType,
+        dto.applicationSubtype,
+        dto.applicantName,
+        dto.previousStatus
+      );
+  
       return {
         success: true,
         message: &#x27;Application status update notification sent successfully&#x27;
@@ -3220,7 +3237,14 @@ export class AuthController {
       this.logger.log(&#x60;Sending application approval notification to: ${dto.email}&#x60;);
       
       // Use your existing email service
-    
+      await this.emailService.sendDocumentApplicationApproval(
+        dto.email,
+        dto.applicationId,
+        dto.applicationType,
+        dto.applicationSubtype,
+        dto.applicantName
+      );
+  
       return {
         success: true,
         message: &#x27;Application approval notification sent successfully&#x27;
@@ -3247,7 +3271,15 @@ export class AuthController {
       this.logger.log(&#x60;Sending application rejection notification to: ${dto.email}&#x60;);
       
       // Use your existing email service
-    
+      await this.emailService.sendDocumentApplicationRejection(
+        dto.email,
+        dto.applicationId,
+        dto.applicationType,
+        dto.applicationSubtype,
+        dto.applicantName,
+        dto.rejectionReason
+      );
+  
       return {
         success: true,
         message: &#x27;Application rejection notification sent successfully&#x27;
