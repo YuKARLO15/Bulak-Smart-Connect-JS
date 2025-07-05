@@ -34,6 +34,7 @@ import AdminCopyBirthPreview from './AdminCopyBirthPreview';
 import AdminMarriageAffidavitDetails from './AdminMarriageAffidavitDetails';
 import SearchIcon from '@mui/icons-material/Search'; 
 import userService from '../../services/userService';
+import { documentApplicationNotificationService } from '../../services/documentApplicationNotificationService';
 
 
 
@@ -302,6 +303,51 @@ const getApplicantDisplayName = (app) => {
       });
 
  
+      // 📧 ENHANCED EMAIL LOOKUP AND NOTIFICATION (SAME AS APPOINTMENT SYSTEM)
+      const applicationEmail = getApplicationEmail(selectedApplication);
+      
+      if (applicationEmail) {
+        try {
+          console.log(`📧 Sending status update notification to: ${applicationEmail}`);
+          
+          // Choose the appropriate notification based on status
+          let notificationResult;
+          if (newStatus.toLowerCase() === 'approved') {
+            notificationResult = await documentApplicationNotificationService.sendApprovalNotification(
+              applicationEmail,
+              selectedApplication.id,
+              selectedApplication
+            );
+          } else if (newStatus.toLowerCase() === 'decline' || newStatus.toLowerCase() === 'declined') {
+            notificationResult = await documentApplicationNotificationService.sendRejectionNotification(
+              applicationEmail,
+              selectedApplication.id,
+              selectedApplication,
+              statusMessage || 'Application declined by administrator'
+            );
+          } else {
+            notificationResult = await documentApplicationNotificationService.sendStatusUpdateNotification(
+              applicationEmail,
+              selectedApplication.id,
+              newStatus,
+              selectedApplication
+            );
+          }
+
+          if (notificationResult.success) {
+            console.log('✅ Status update notification sent successfully');
+          } else {
+            console.log('⚠️ Status update notification failed:', notificationResult.error);
+          }
+        } catch (notificationError) {
+          console.error('❌ Error sending status update notification:', notificationError);
+        }
+      } else {
+        console.log('⚠️ No email found for application, skipping notification');
+        console.log('📋 Available application fields:', Object.keys(selectedApplication));
+      }
+
+      // Keep your existing refresh logic
       const updatedApplications = await documentApplicationService.getAllApplications();
       setApplications(updatedApplications);
       const updated = updatedApplications.find(app => app.id === selectedApplication.id);
@@ -309,6 +355,9 @@ const getApplicantDisplayName = (app) => {
 
       setStatusUpdateDialog(false);
       
+      // Enhanced success message
+      const emailMessage = applicationEmail ? `Notification sent to ${applicationEmail}` : 'No email available for notification';
+      alert(`Application status updated to ${newStatus} successfully! ${emailMessage}`);
       
       window.dispatchEvent(new Event('storage'));
     } catch (err) {

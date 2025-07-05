@@ -1,4 +1,43 @@
-import { apiClient } from './api';
+import axios from 'axios';
+import config from '../config/env.js';
+
+// Create an axios instance with common configurations
+const apiClient = axios.create({
+  baseURL: config.API_BASE_URL,
+  withCredentials: true,
+  timeout: config.API_TIMEOUT,
+  headers: {
+    'Accept': 'application/json'
+  }
+});
+
+// Add request interceptor to include auth token in all requests
+apiClient.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
+// Add response interceptor to check if the response is actually JSON
+apiClient.interceptors.response.use(
+  (response) => {
+    const contentType = response.headers['content-type'];
+    if (contentType && contentType.includes('text/html')) {
+      return Promise.reject(new Error('Received HTML instead of JSON. You might need to log in again.'));
+    }
+    return response;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
 
 export const documentApplicationNotificationService = {
   /**
