@@ -1,0 +1,173 @@
+.govph-footer {
+  background: #efefef;
+  color: #505050;
+  padding: 2rem 1rem;
+  font-family: 'Roboto', Arial, sans-serif;
+  font-size: 1rem;
+  box-sizing: border-box;
+  margin-top: 2rem; /* Add some space from content above */
+}
+
+.footer-row {
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 1280px;
+  margin: 0 auto;
+  gap: 2rem;
+  justify-content: center;
+  padding: 0 1rem;
+}
+
+.footer-col {
+  flex: 1 1 300px;
+  min-width: 250px;
+  margin-bottom: 1.5rem;
+  padding: 0 0.5rem;
+}
+
+.logo-col {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  flex-direction: row;
+}
+
+.govph-logo {
+  width: 90px;
+  height: 90px;
+  object-fit: contain;
+  opacity: 0.15;
+  flex-shrink: 0;
+}
+
+.footer-col h4 {
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 1em;
+  margin-bottom: 0.5em;
+  color: #505050;
+}
+
+.footer-col p {
+  font-size: 0.9em;
+  line-height: 1.4;
+  margin-bottom: 1em;
+}
+
+.footer-col ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-col ul li {
+  margin-bottom: 0.4em;
+}
+
+.footer-col ul li a {
+  color: #505050;
+  text-decoration: none;
+  font-size: 0.9em;
+  line-height: 1.3;
+}
+
+.footer-col ul li a:hover {
+  text-decoration: underline;
+}
+
+
+@media (max-width: 1024px) and (min-width: 769px) {
+  .govph-footer {
+    padding: 1.75rem 1rem;
+  }
+  .footer-row {
+    gap: 1.2rem;
+    justify-content: space-around; 
+  }
+  .footer-col {
+    flex: 1 1 260px; 
+    min-width: 200px;
+  }
+  .govph-logo {
+    width: 80px;
+    height: 80px;
+  }
+  .footer-col h4 {
+    font-size: 1.05em;
+  }
+  .footer-col p,
+  .footer-col ul li a {
+    font-size: 0.9em;
+  }
+}
+
+@media (max-width: 768px) {
+  .govph-footer {
+    padding: 1.5rem 0.5rem;
+  }
+  .footer-row {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    padding: 0 0.5rem;
+  }
+  .footer-col {
+    flex: 1 1 100%;
+    text-align: center;
+    padding: 0;
+  }
+  .logo-col {
+    justify-content: center;
+    align-items: center;
+  }
+  .govph-logo {
+    width: 70px;
+    height: 70px;
+  }
+}
+
+/* Mobile portrait */
+@media (max-width: 480px) {
+  .govph-footer {
+    padding: 1rem 0.25rem;
+    font-size: 0.9rem;
+  }
+  .footer-row {
+    gap: 0.75rem;
+  }
+  .logo-col {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  .govph-logo {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto;
+  }
+  .footer-col h4 {
+    font-size: 0.95em;
+  }
+  .footer-col p,
+  .footer-col ul li a {
+    font-size: 0.85em;
+  }
+}
+
+/* Extra small devices */
+@media (max-width: 320px) {
+  .govph-footer {
+    padding: 0.75rem 0.15rem;
+    font-size: 0.85rem;
+  }
+  .govph-logo {
+    width: 50px;
+    height: 50px;
+  }
+  .footer-col h4 {
+    font-size: 0.9em;
+  }
+  .footer-col p,
+  .footer-col ul li a {
+    font-size: 0.8em;
+  }
+}
