@@ -713,4 +713,358 @@ export class EmailService {
 
     console.log(`✅ Appointment reminder email sent to ${email}`);
   }
+
+  /**
+   * Send document application confirmation email
+   */
+  async sendDocumentApplicationConfirmation(
+    email: string,
+    applicationId: string,
+    applicationType: string,
+    applicationSubtype?: string,
+    applicantName?: string,
+    submissionDate?: string,
+    status: string = 'Pending'
+  ): Promise<void> {
+    const subject = `Application Submitted - ${applicationId}`;
+    
+    const html = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Application Confirmation</title>
+        <style>
+          body { margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f4f4f4; }
+          .container { max-width: 600px; margin: 0 auto; background-color: #ffffff; }
+          .header { background: linear-gradient(135deg, #28a745 0%, #20c997 100%); color: white; padding: 30px 20px; text-align: center; }
+          .content { padding: 30px 20px; }
+          .application-card { background-color: #f8f9fa; border-left: 4px solid #28a745; padding: 20px; margin: 20px 0; border-radius: 8px; }
+          .detail-row { display: flex; justify-content: space-between; margin: 10px 0; padding: 8px 0; border-bottom: 1px solid #e9ecef; }
+          .label { font-weight: bold; color: #495057; }
+          .value { color: #212529; }
+          .footer { background-color: #f8f9fa; padding: 20px; text-align: center; font-size: 12px; color: #6c757d; }
+          .status-badge { display: inline-block; padding: 8px 16px; background-color: #ffc107; color: #212529; border-radius: 20px; font-weight: bold; margin: 10px 0; }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <div class="header">
+            <h1>✅ Application Submitted</h1>
+            <p>Your document application has been successfully submitted!</p>
+          </div>
+          
+          <div class="content">
+            <p>Dear ${applicantName || 'Valued Client'},</p>
+            
+            <p>Thank you for submitting your document application through Bulak LGU Smart Connect.</p>
+            
+            <div class="application-card">
+              <h3 style="margin-top: 0; color: #28a745;">Application Details</h3>
+              <div class="detail-row">
+                <span class="label">Application ID:</span>
+                <span class="value">${applicationId}</span>
+              </div>
+              <div class="detail-row">
+                <span class="label">Document Type:</span>
+                <span class="value">${applicationType}</span>
+              </div>
+              ${applicationSubtype ? `
+              <div class="detail-row">
+                <span class="label">Service Type:</span>
+                <span class="value">${applicationSubtype}</span>
+              </div>
+              ` : ''}
+              <div class="detail-row">
+                <span class="label">Submission Date:</span>
+                <span class="value">${submissionDate || new Date().toLocaleDateString()}</span>
+              </div>
+              <div class="detail-row">
+                <span class="label">Status:</span>
+                <span class="value"><span class="status-badge">${status}</span></span>
+              </div>
+            </div>
+            
+            <div style="background-color: #d1ecf1; border: 1px solid #bee5eb; padding: 15px; border-radius: 8px; margin: 20px 0;">
+              <h4 style="margin-top: 0;">📋 What's Next?</h4>
+              <ul style="margin: 10px 0; padding-left: 20px;">
+                <li>Your application is being reviewed by our staff</li>
+                <li>You'll receive updates via email when status changes</li>
+                <li>Keep this confirmation email for your records</li>
+                <li>Processing time varies by document type</li>
+              </ul>
+            </div>
+            
+            <p>Thank you for using Bulak LGU Smart Connect!</p>
+          </div>
+          
+          <div class="footer">
+            <p>Municipal Civil Registrar's Office<br>
+            Bulak Local Government Unit<br>
+            This is an automated message, please do not reply.</p>
+          </div>
+        </div>
+      </body>
+      </html>
+    `;
+
+    await this.transporter.sendMail({
+      from: this.configService.get('EMAIL_FROM'),
+      to: email,
+      subject,
+      html,
+    });
+
+    console.log(`✅ Document application confirmation email sent to ${email}`);
+  }
+
+  /**
+   * Send document application status update email
+   */
+  async sendDocumentApplicationStatusUpdate(
+    email: string,
+    applicationId: string,
+    newStatus: string,
+    applicationType: string,
+    applicationSubtype?: string,
+    applicantName?: string,
+    previousStatus?: string
+  ): Promise<void> {
+    const statusColors = {
+      'pending': '#ffc107',
+      'approved': '#28a745',
+      'declined': '#dc3545',
+      'rejected': '#dc3545',
+      'ready for pickup': '#007bff',
+      'completed': '#17a2b8'
+    };
+
+    const statusEmojis = {
+      'pending': '⏳',
+      'approved': '✅',
+      'declined': '❌',
+      'rejected': '❌',
+      'ready for pickup': '📦',
+      'completed': '🎉'
+    };
+
+    const color = statusColors[newStatus.toLowerCase()] || '#6c757d';
+    const emoji = statusEmojis[newStatus.toLowerCase()] || '📋';
+    
+    const subject = `Application ${newStatus.charAt(0).toUpperCase() + newStatus.slice(1)} - ${applicationId}`;
+    
+    const html = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Application Status Update</title>
+        <style>
+          body { margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f4f4f4; }
+          .container { max-width: 600px; margin: 0 auto; background-color: #ffffff; }
+          .header { background: linear-gradient(135deg, ${color} 0%, ${color}cc 100%); color: white; padding: 30px 20px; text-align: center; }
+          .content { padding: 30px 20px; }
+          .status-card { background-color: #f8f9fa; border-left: 4px solid ${color}; padding: 20px; margin: 20px 0; border-radius: 8px; }
+          .detail-row { display: flex; justify-content: space-between; margin: 10px 0; padding: 8px 0; border-bottom: 1px solid #e9ecef; }
+          .label { font-weight: bold; color: #495057; }
+          .value { color: #212529; }
+          .footer { background-color: #f8f9fa; padding: 20px; text-align: center; font-size: 12px; color: #6c757d; }
+          .status-badge { display: inline-block; padding: 8px 16px; background-color: ${color}; color: white; border-radius: 20px; font-weight: bold; margin: 10px 0; }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <div class="header">
+            <h1>${emoji} Application Update</h1>
+            <p>Your application status has been updated</p>
+          </div>
+          
+          <div class="content">
+            <p>Dear ${applicantName || 'Valued Client'},</p>
+            
+            <p>We're writing to inform you that your document application status has been updated.</p>
+            
+            <div class="status-card">
+              <h3 style="margin-top: 0;">Application Status</h3>
+              <div class="status-badge">${newStatus.toUpperCase()}</div>
+              
+              <div class="detail-row">
+                <span class="label">Application ID:</span>
+                <span class="value">${applicationId}</span>
+              </div>
+              <div class="detail-row">
+                <span class="label">Document Type:</span>
+                <span class="value">${applicationType}</span>
+              </div>
+              ${applicationSubtype ? `
+              <div class="detail-row">
+                <span class="label">Service Type:</span>
+                <span class="value">${applicationSubtype}</span>
+              </div>
+              ` : ''}
+            </div>
+            
+            ${newStatus.toLowerCase() === 'approved' ? `
+            <div style="background-color: #d4edda; border: 1px solid #c3e6cb; padding: 15px; border-radius: 8px; margin: 20px 0;">
+              <p><strong>Great news! Your application has been approved!</strong></p>
+              <p>Your document will be processed and prepared for release.</p>
+            </div>
+            ` : ''}
+            
+            ${newStatus.toLowerCase() === 'ready for pickup' ? `
+            <div style="background-color: #d1ecf1; border: 1px solid #bee5eb; padding: 15px; border-radius: 8px; margin: 20px 0;">
+              <p><strong>Your document is ready for pickup!</strong></p>
+              <p>Please visit our office during business hours to collect your document. Bring a valid ID and this email confirmation.</p>
+            </div>
+            ` : ''}
+            
+            ${(newStatus.toLowerCase() === 'declined' || newStatus.toLowerCase() === 'rejected') ? `
+            <div style="background-color: #f8d7da; border: 1px solid #f5c6cb; padding: 15px; border-radius: 8px; margin: 20px 0;">
+              <p><strong>Your application has been declined.</strong></p>
+              <p>Please contact our office for more information or to resubmit with the required corrections.</p>
+            </div>
+            ` : ''}
+            
+            <p>Thank you for using Bulak LGU Smart Connect!</p>
+          </div>
+          
+          <div class="footer">
+            <p>Municipal Civil Registrar's Office<br>
+            Bulak Local Government Unit<br>
+            This is an automated message, please do not reply.</p>
+          </div>
+        </div>
+      </body>
+      </html>
+    `;
+
+    await this.transporter.sendMail({
+      from: this.configService.get('EMAIL_FROM'),
+      to: email,
+      subject,
+      html,
+    });
+
+    console.log(`✅ Document application status update email sent to ${email} - Status: ${newStatus}`);
+  }
+
+  /**
+   * Send document application approval email
+   */
+  async sendDocumentApplicationApproval(
+    email: string,
+    applicationId: string,
+    applicationType: string,
+    applicationSubtype?: string,
+    applicantName?: string
+  ): Promise<void> {
+    return this.sendDocumentApplicationStatusUpdate(
+      email,
+      applicationId,
+      'approved',
+      applicationType,
+      applicationSubtype,
+      applicantName
+    );
+  }
+
+  /**
+   * Send document application rejection email
+   */
+  async sendDocumentApplicationRejection(
+    email: string,
+    applicationId: string,
+    applicationType: string,
+    applicationSubtype?: string,
+    applicantName?: string,
+    rejectionReason?: string
+  ): Promise<void> {
+    const subject = `Application Declined - ${applicationId}`;
+    
+    const html = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Application Declined</title>
+        <style>
+          body { margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f4f4f4; }
+          .container { max-width: 600px; margin: 0 auto; background-color: #ffffff; }
+          .header { background: linear-gradient(135deg, #dc3545 0%, #c82333 100%); color: white; padding: 30px 20px; text-align: center; }
+          .content { padding: 30px 20px; }
+          .application-card { background-color: #f8f9fa; border-left: 4px solid #dc3545; padding: 20px; margin: 20px 0; border-radius: 8px; }
+          .detail-row { display: flex; justify-content: space-between; margin: 10px 0; padding: 8px 0; border-bottom: 1px solid #e9ecef; }
+          .label { font-weight: bold; color: #495057; }
+          .value { color: #212529; }
+          .footer { background-color: #f8f9fa; padding: 20px; text-align: center; font-size: 12px; color: #6c757d; }
+          .resubmit-section { background-color: #e2f3ff; border: 1px solid #b8daff; padding: 20px; border-radius: 8px; margin: 20px 0; text-align: center; }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <div class="header">
+            <h1>❌ Application Declined</h1>
+            <p>We regret to inform you that your application requires review</p>
+          </div>
+          
+          <div class="content">
+            <p>Dear ${applicantName || 'Valued Client'},</p>
+            
+            <p>We regret to inform you that your document application has been declined.</p>
+            
+            <div class="application-card">
+              <h3 style="margin-top: 0; color: #dc3545;">Declined Application Details</h3>
+              <div class="detail-row">
+                <span class="label">Application ID:</span>
+                <span class="value">${applicationId}</span>
+              </div>
+              <div class="detail-row">
+                <span class="label">Document Type:</span>
+                <span class="value">${applicationType}</span>
+              </div>
+              ${applicationSubtype ? `
+              <div class="detail-row">
+                <span class="label">Service Type:</span>
+                <span class="value">${applicationSubtype}</span>
+              </div>
+              ` : ''}
+              ${rejectionReason ? `
+              <div class="detail-row">
+                <span class="label">Reason:</span>
+                <span class="value">${rejectionReason}</span>
+              </div>
+              ` : ''}
+            </div>
+            
+            <div class="resubmit-section">
+              <h4 style="margin-top: 0;">📝 Need to Resubmit?</h4>
+              <p>You can submit a new application with the required corrections.</p>
+              <p>Please contact our office if you need assistance with the requirements.</p>
+            </div>
+            
+            <p>We apologize for any inconvenience this may have caused.</p>
+          </div>
+          
+          <div class="footer">
+            <p>Municipal Civil Registrar's Office<br>
+            Bulak Local Government Unit<br>
+            This is an automated message, please do not reply.</p>
+          </div>
+        </div>
+      </body>
+      </html>
+    `;
+
+    await this.transporter.sendMail({
+      from: this.configService.get('EMAIL_FROM'),
+      to: email,
+      subject,
+      html,
+    });
+
+    console.log(`✅ Document application rejection email sent to ${email}`);
+  }
 }
