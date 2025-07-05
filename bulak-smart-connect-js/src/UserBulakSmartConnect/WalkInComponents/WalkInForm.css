@@ -23,8 +23,8 @@
   font-size: 22px;
   color: white;
   padding: 20px;
-  text-align: center;
-  margin-left: 5vw;
+  text-align: center !important;
+  margin-left: 43vw;
 }
 
 .FormTitleWalkIn {
@@ -63,29 +63,40 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  padding-left: 50px;
-  padding-right: 50px;
+  padding-left: 20px;
+  padding-right: 20px;
   padding-top: 20px;
 }
 
 .FormGroupWalkIn.SmallWalkIn {
-  flex: 0.3;
+  flex: 0.4;
 }
 
 .FormGroupWalkIn label {
-  font-size: 14px;
+  display: block;
   margin-bottom: 8px;
-  color: #555;
+  font-weight: 500;
+  color: #1c4d5a !important;
+  font-size: 14px;
 }
 
 .FormGroupWalkIn input,
 .FormGroupWalkIn select {
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  width: 100%;
+  padding: 8px;
+  border-radius: 6px;
   font-size: 16px;
-  background-color: #f9f9f9;
-  color: #184a5b;
+  border: 1.5px solid #2a5764 !important;
+  background-color: #fffdfd;
+  box-shadow: inset 0px 3px 2px rgba(0, 0, 0, 0.1);
+  color: #1c4d5a !important;
+}
+
+.FormGroupWalkIn input:focus,
+.FormGroupWalkIn select:focus {
+  outline: none;
+  border: 2px solid #24677a;
+  color: #1c4d5a !important;
 }
 
 .FormGroupWalkIn select {
@@ -94,6 +105,14 @@
   background-repeat: no-repeat;
   background-position: right 10px center;
   padding-right: 30px;
+  width: 100%;
+  padding: 8px;
+  border-radius: 6px;
+  font-size: 16px;
+  border: 1.5px solid #2a5764 !important;
+  background-color: #fffdfd;
+  box-shadow: inset 0px 3px 2px rgba(0, 0, 0, 0.1);
+  color: #1c4d5a !important;
 }
 
 .FormActionsWalkIn {
