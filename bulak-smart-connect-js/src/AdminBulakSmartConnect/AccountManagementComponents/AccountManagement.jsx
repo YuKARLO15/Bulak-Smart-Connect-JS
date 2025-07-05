@@ -50,14 +50,10 @@ const AdminAccountManagement = () => {
         queryParams.search = search.trim();
       }
       
-      const response = await userService.getAllUsers(queryParams);
+       const response = await userService.getAllUsers(queryParams);
 
-      // Filter out citizens - only show admin, staff, and super_admin users
+      // Show all users - admin, staff, super_admin, and citizens
       const transformedUsers = response.users
-        .filter(user => {
-          const userRoles = Array.isArray(user.roles) ? user.roles : [user.roles || user.defaultRole || 'citizen'];
-          return userRoles.some(role => ['admin', 'staff', 'super_admin'].includes(role));
-        })
         .map(user => ({
           id: user.id,
           name: user.name || `${user.firstName || ''} ${user.lastName || ''}`.trim(),
@@ -76,6 +72,7 @@ const AdminAccountManagement = () => {
           createdAt: user.createdAt,
           updatedAt: user.updatedAt
         }));
+
 
       setUsers(transformedUsers);
       
@@ -102,8 +99,8 @@ const AdminAccountManagement = () => {
       
       // Filter out citizens
       localUsers = localUsers.filter(user => {
-        const userRoles = Array.isArray(user.roles) ? user.roles : [user.roles || 'citizen'];
-        return userRoles.some(role => ['admin', 'staff', 'super_admin'].includes(role));
+        const userRoles = Array.isArray(user.roles) ? user.roles : [user.roles ];
+        return userRoles.some(role => ['citizen','admin', 'staff', 'super_admin'].includes(role));
       });
       
       setUsers(localUsers);

@@ -94,7 +94,11 @@ td {
   color: #ffffff;
   font-weight: 500;
 }
-
+.role.citizen {
+  background-color: #b5c1ba !important;
+  color: #184a5b;
+  font-weight: 500;
+}
 .role.admin {
   background-color: #e2e381;
   color: #000;
