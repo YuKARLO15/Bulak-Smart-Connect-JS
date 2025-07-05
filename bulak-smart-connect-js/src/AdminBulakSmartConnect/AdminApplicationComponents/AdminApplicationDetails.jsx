@@ -293,6 +293,50 @@ const getApplicantDisplayName = (app) => {
   const lastName = app.formData?.lastName || '';
   return firstName && lastName ? `${firstName} ${lastName}` : 'Unknown';
 };
+
+// Enhanced email lookup function (SAME AS APPOINTMENT SYSTEM)
+const getApplicationEmail = (application) => {
+  try {
+    // Check user relationship first (main method for appointment/queue system)
+    if (application.user && application.user.email) {
+      console.log('📧 Found email in application.user.email:', application.user.email);
+      return application.user.email;
+    }
+    
+    // Check direct email field
+    if (application.email) {
+      console.log('📧 Found email in application.email:', application.email);
+      return application.email;
+    }
+    
+    // Check if User object exists with email (different casing)
+    if (application.User && application.User.email) {
+      console.log('📧 Found email in application.User.email:', application.User.email);
+      return application.User.email;
+    }
+    
+    // Check if userEmail field exists
+    if (application.userEmail) {
+      console.log('📧 Found email in application.userEmail:', application.userEmail);
+      return application.userEmail;
+    }
+
+    // Check userContactInfo from your existing logic
+    if (userContactInfo?.email) {
+      console.log('📧 Found email in userContactInfo.email:', userContactInfo.email);
+      return userContactInfo.email;
+    }
+    
+    console.log('⚠️ No email found for application. Available fields:', Object.keys(application));
+    console.log('📋 User object:', application.user);
+    console.log('📋 UserContactInfo:', userContactInfo);
+    return null;
+  } catch (error) {
+    console.error('Error getting application email:', error);
+    return null;
+  }
+};
+
   const handleUpdateStatus = async () => {
     try {
 
