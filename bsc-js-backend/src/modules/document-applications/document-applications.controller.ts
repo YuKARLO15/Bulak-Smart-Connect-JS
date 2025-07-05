@@ -95,8 +95,8 @@ export class DocumentApplicationsController {
   @ApiOperation({ summary: 'Get user applications' })
   async findAll(
     @Query('status') status?: string,
-    @User() user?: AuthenticatedUser,
     @Query('includeUser') includeUser?: string,
+    @User() user?: AuthenticatedUser,
   ) {
     const userId = user?.roles.some((role) =>
       ['admin', 'super_admin', 'staff'].includes(role.name),
