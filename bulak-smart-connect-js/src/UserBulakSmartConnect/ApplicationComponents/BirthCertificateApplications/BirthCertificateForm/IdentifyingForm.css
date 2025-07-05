@@ -69,7 +69,8 @@
   font-size: 0.875rem;
   margin-bottom: 4px;
   white-space: normal;
-  color: #1d4e5f;
+  color: #1c4d5a !important;
+  font-weight: 500;
 }
 
 .RequiredFieldChild {
@@ -79,35 +80,74 @@
 .FormInputChild {
   width: 100%;
   padding: 8px;
-  margin-top: 10px;
-  border: 1px solid #ccc;
-  background-color: #ffffff;
-  color: #1d4e5f;
-  height: 40px;
-  border-radius: 4px;
+  border-radius: 6px;
+  font-size: 16px;
+  border: 1.5px solid #2a5764 !important;
+  background-color: #fffdfd;
+  box-shadow: inset 0px 3px 2px rgba(0, 0, 0, 0.1);
+  color: #1c4d5a !important;
   box-sizing: border-box;
-  height: 36px;
+  height: 40px;
+  margin-top: 4px;
+}
+
+.FormInputChild:focus {
+  outline: none;
+  border: 2px solid #24677a !important;
+  color: #1c4d5a !important;
+}
+
+.FormInputChild::placeholder {
+  color: rgba(28, 77, 90, 0.6) !important;
 }
 
 .SmallInputChild {
-  width: 100px;
+  width: 150px;
   padding: 8px;
-  height: 40px;
-  background-color: #ffffff;
-  color: #1d4e5f;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  border-radius: 6px;
+  font-size: 16px;
+  border: 1.5px solid #2a5764 !important;
+  background-color: #fffdfd;
+  box-shadow: inset 0px 3px 2px rgba(0, 0, 0, 0.1);
+  color: #1c4d5a !important;
   box-sizing: border-box;
-  height: 36px;
+  height: 40px;
+  margin-top: 4px;
+}
+
+.SmallInputChild:focus {
+  outline: none;
+  border: 2px solid #24677a !important;
+  color: #1c4d5a !important;
+}
+
+.SmallInputChild::placeholder {
+  color: rgba(28, 77, 90, 0.6) !important;
+  font-size: 12px !important;
 }
 
 .SelectInputChild {
   padding: 8px;
-  border: 1px solid #ccc;
-  color: #1d4e5f;
-  border-radius: 4px;
-  height: 36px;
+  border-radius: 6px;
+  font-size: 16px;
+  border: 1.5px solid #2a5764 !important;
+  background-color: #fffdfd;
+  box-shadow: inset 0px 3px 2px rgba(0, 0, 0, 0.1);
+  color: #1c4d5a !important;
+  height: 40px;
   box-sizing: border-box;
+  cursor: pointer;
+}
+
+.SelectInputChild:focus {
+  outline: none;
+  border: 2px solid #24677a !important;
+  color: #1c4d5a !important;
+}
+
+.SelectInputChild option {
+  color: #1c4d5a !important;
+  background-color: #fffdfd;
 }
 
 .DateSelectChild {
@@ -270,8 +310,10 @@
   flex-wrap: wrap;
 }
 
+
 .WeightUnitChild {
   white-space: nowrap;
+  size: 8px !important;
 }
 
 .NotRequiredLabelChild {
@@ -338,7 +380,8 @@
   }
 
   .SmallInputChild {
-    width: 100%;
+    width: 180px;
+    max-width: 100%;
   }
 
   .FormLabelChild {

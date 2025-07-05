@@ -68,7 +68,7 @@
 
 .SelectInputChild {
   background-color: #fff;
-  color: #1c4d5a;
+  color: #1c4d5a !important;
 }
 
 .FormNoteCopyBirth {
@@ -128,6 +128,122 @@
 .CopyBirthCertificateContainer.sidebar-open {
   margin-left: 250px;
   width: 80vw;
+}
+
+/* Form Input and Select Styling - Matching SignUp Form */
+.FormInputChild {
+  width: 100%;
+  padding: 8px;
+  border-radius: 6px;
+  font-size: 16px;
+  border: 1.5px solid #2a5764 !important;
+  background-color: #fffdfd;
+  box-shadow: inset 0px 3px 2px rgba(0, 0, 0, 0.1);
+  color: #1c4d5a !important;
+  box-sizing: border-box;
+  height: 40px;
+  margin-top: 4px;
+}
+
+.FormInputChild:focus {
+  outline: none;
+  border: 2px solid #24677a !important;
+  color: #1c4d5a !important;
+}
+
+.FormInputChild::placeholder {
+  color: rgba(28, 77, 90, 0.6) !important;
+}
+
+.SelectInputChild {
+  width: 100%;
+  padding: 8px;
+  border-radius: 6px;
+  font-size: 16px;
+  border: 1.5px solid #2a5764 !important;
+  background-color: #fffdfd;
+  box-shadow: inset 0px 3px 2px rgba(0, 0, 0, 0.1);
+  color: #1c4d5a !important;
+  box-sizing: border-box;
+  height: 40px;
+  margin-top: 4px;
+  cursor: pointer;
+}
+
+.SelectInputChild:focus {
+  outline: none;
+  border: 2px solid #24677a !important;
+  color: #1c4d5a !important;
+}
+
+.SelectInputChild option {
+  color: #1c4d5a !important;
+  background-color: #fffdfd;
+}
+
+/* Form Layout Styles */
+.FormRowChild {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.FormGroupChild {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.FormLabelChild {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: #1c4d5a !important;
+  font-size: 16px;
+}
+
+.DateInputsRowChild {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.DateInputsRowChild .FormGroupChild {
+  flex: 1;
+}
+
+/* Error State Styling */
+.FormInputChild.InputError,
+.SelectInputChild.InputError {
+  border: 1.5px solid #d32f2f !important;
+  background-color: #fff8f8;
+}
+
+.FormInputChild.InputError:focus,
+.SelectInputChild.InputError:focus {
+  border: 2px solid #d32f2f !important;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .FormRowChild,
+  .DateInputsRowChild {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .FormInputChild,
+  .SelectInputChild {
+    font-size: 16px; /* Prevents zoom on iOS */
+  }
+}
+
+@media (max-width: 480px) {
+  .FormInputChild,
+  .SelectInputChild {
+    padding: 10px 8px;
+    height: 44px; /* Better touch target on mobile */
+  }
 }
 
 @media (max-width: 600px) {

@@ -49,6 +49,76 @@
   margin-top: 24px !important;
 }
 
+/* Override Material-UI TextField styles to match SignUpForm */
+.MarriageFormPlaceField .MuiOutlinedInput-root {
+  border-radius: 6px !important;
+  background-color: #fffdfd !important;
+  box-shadow: inset 0px 3px 2px rgba(0, 0, 0, 0.1) !important;
+}
+
+.MarriageFormPlaceField .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline {
+  border: 1.5px solid #2a5764 !important;
+}
+
+.MarriageFormPlaceField .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+  border: 1.5px solid #2a5764 !important;
+}
+
+.MarriageFormPlaceField .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border: 2px solid #24677a !important;
+}
+
+.MarriageFormPlaceField .MuiOutlinedInput-input {
+  padding: 8px 12px !important;
+  font-size: 16px !important;
+  color: #1d4e5f !important;
+  height: 29px !important;
+}
+
+.MarriageFormPlaceField .MuiInputLabel-root {
+  color: #1d4e5f !important;
+  font-size: 16px !important;
+}
+
+.MarriageFormPlaceField .MuiInputLabel-root.Mui-focused {
+  color: #24677a !important;
+}
+
+/* Override Material-UI Select styles to match SignUpForm and City/Municipality styling */
+.MarriageFormDateField .MuiOutlinedInput-root {
+  border-radius: 6px !important;
+  background-color: #fffdfd !important;
+  box-shadow: inset 0px 3px 2px rgba(0, 0, 0, 0.1) !important;
+}
+
+.MarriageFormDateField .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline {
+  border: 1.5px solid #2a5764 !important;
+}
+
+.MarriageFormDateField .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+  border: 1.5px solid #2a5764 !important;
+}
+
+.MarriageFormDateField .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border: 2px solid #24677a !important;
+}
+
+.MarriageFormDateField .MuiSelect-select {
+  padding: 8px 12px !important;
+  font-size: 16px !important;
+  color: #1d4e5f !important;
+  height: 29px !important;
+}
+
+.MarriageFormDateField .MuiInputLabel-root {
+  color: #1d4e5f !important;
+  font-size: 16px !important;
+}
+
+.MarriageFormDateField .MuiInputLabel-root.Mui-focused {
+  color: #24677a !important;
+}
+
 /* Responsive adjustments */
 @media (max-width: 600px) {
   .MarriageFormHeader {
