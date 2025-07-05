@@ -1,15 +1,13 @@
-/* LogInContent.css */
 .LogInContainerContent {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   padding: 70px;
-background-color: #184a5b;
-  min-height:542px;
+  background-color: #184a5b;
+  min-height: 542px;
   text-align: center;
   border-radius: 10px 0 0 10px;
-
 }
 
 .WelcomeMessage {
@@ -21,7 +19,7 @@ background-color: #184a5b;
   font-weight: bold;
   color: #fff;
   margin-bottom: 16px;
-  font-size: 2rem; /* Default size for mobile */
+  font-size: 2rem;
   font-weight: 600 !important;
 }
 
@@ -43,51 +41,253 @@ background-color: #184a5b;
   text-transform: uppercase;
   padding: 12px 30px;
   font-size: 1rem;
-  &:hover {
-    border-color: #184a5b;
-    background-color: #184a5b;
-    color: #fff !important;
+}
+
+.SignUpButton:hover {
+  border-color: #ffffff !important;
+  background-color: #ffffff !important;
+  color: #184a5b !important;
+}
+
+@media (max-width: 575px) {
+  .LogInContainerContent {
+    padding: 20px;
+    min-height: auto;
+    border-radius: 10px;
+    margin: 10px;
+    width: calc(95% - 20px);
+  }
+  
+  .WelcomeMessage {
+    font-size: 0.9rem;
+    margin-bottom: 12px;
+  }
+  
+  .MainTitle {
+    font-size: 1.8rem;
+    margin-bottom: 12px;
+  }
+  
+  .PlaceholderText {
+    font-size: 0.9rem;
+    margin-bottom: 20px !important;
+    max-width: 280px;
+  }
+  
+  .SignUpButton {
+    font-size: 0.9rem;
+    padding: 10px 25px;
   }
 }
 
-/* Media Queries for Responsiveness */
-@media (min-width: 600px) {
-  .MainTitle {
-    font-size: 2.5rem; /* Larger font size for tablets */
+@media (min-width: 576px) and (max-width: 767px) {
+  .LogInContainerContent {
+    padding: 30px;
+    min-height: auto;
+    border-radius: 10px;
+    width: 90%;
   }
+  
+  .WelcomeMessage {
+    font-size: 1rem;
+    margin-bottom: 14px;
+  }
+  
+  .MainTitle {
+    font-size: 2rem;
+    margin-bottom: 14px;
+  }
+  
+  .PlaceholderText {
+    font-size: 0.95rem;
+    margin-bottom: 24px !important;
+    max-width: 350px;
+  }
+  
+  .SignUpButton {
+    font-size: 1rem;
+    padding: 12px 35px;
+  }
+}
 
+@media (min-width: 768px) and (max-width: 991px) {
+  .LogInContainerContent {
+    padding: 40px;
+    border-radius: 10px;
+    width: 400px;
+    min-height: auto;
+  }
+  
+  .WelcomeMessage {
+    font-size: 1.1rem;
+    margin-bottom: 15px;
+  }
+  
+  .MainTitle {
+    font-size: 2.2rem;
+    margin-bottom: 15px;
+  }
+  
+  .PlaceholderText {
+    font-size: 1rem;
+    margin-bottom: 28px !important;
+    max-width: 420px;
+  }
+  
+  .SignUpButton {
+    font-size: 1.1rem;
+    padding: 14px 40px;
+  }
+}
+
+@media (min-width: 992px) and (max-width: 1199px) {
+  .LogInContainerContent {
+    padding: 50px;
+    border-radius: 10px 0 0 10px;
+    min-height: 542px;
+  }
+  
+  .WelcomeMessage {
+    font-size: 1.2rem;
+    margin-bottom: 16px;
+  }
+  
+  .MainTitle {
+    font-size: 2.4rem;
+    margin-bottom: 16px;
+  }
+  
+  .PlaceholderText {
+    font-size: 1.05rem;
+    margin-bottom: 32px !important;
+    max-width: 480px;
+  }
+  
   .SignUpButton {
     font-size: 1.2rem;
-    padding: 15px 40px;
+    padding: 15px 45px;
   }
 }
 
-@media (min-width: 768px) {
-  .LogInContainer {
-    padding: 32px;
+@media (min-width: 1200px) and (max-width: 1399px) {
+  .LogInContainerContent {
+    padding: 60px;
+    border-radius: 10px 0 0 10px;
+    min-height: 542px;
   }
-
+  
+  .WelcomeMessage {
+    font-size: 1.3rem;
+    margin-bottom: 16px;
+  }
+  
   .MainTitle {
-    font-size: 3rem; /* Larger font size for larger devices like tablets */
+    font-size: 2.6rem;
+    margin-bottom: 16px;
   }
-
+  
+  .PlaceholderText {
+    font-size: 1.1rem;
+    margin-bottom: 32px !important;
+    max-width: 500px;
+  }
+  
   .SignUpButton {
-    font-size: 1.5rem;
-    padding: 20px 50px;
+    font-size: 1.3rem;
+    padding: 16px 50px;
   }
 }
 
-@media (min-width: 1024px) {
-  .LogInContainer {
-    padding: 48px;
+@media (min-width: 1400px) {
+  .LogInContainerContent {
+    padding: 70px;
+    border-radius: 10px 0 0 10px;
+    min-height: 542px;
   }
-
+  
+  .WelcomeMessage {
+    font-size: 1.4rem;
+    margin-bottom: 16px;
+  }
+  
   .MainTitle {
-    font-size: 4rem; /* Larger font size for desktops */
+    font-size: 2.8rem;
+    margin-bottom: 16px;
   }
-
+  
+  .PlaceholderText {
+    font-size: 1.2rem;
+    margin-bottom: 32px !important;
+    max-width: 520px;
+  }
+  
   .SignUpButton {
-    font-size: 1.5rem;
-    padding: 20px 60px;
+    font-size: 1.4rem;
+    padding: 18px 55px;
+  }
+}
+
+@media (orientation: portrait) and (max-width: 991px) {
+  .LogInContainerContent {
+    padding: 20px;
+    min-height: auto;
+    border-radius: 5px !important;
+    margin: 10px;
+    width: calc(90% - 20px);
+    margin-top: 10vh !important;
+
+  }
+  
+  .MainTitle {
+    font-size: 1.8rem !important;
+    margin-top: 20px !important;
+    margin-bottom: 30px !important;
+  }
+  
+  .PlaceholderText {
+    max-width: 300px;
+    font-size: 0.9rem !important;
+    margin-bottom: 20px !important;
+  }
+}
+
+@media (orientation: landscape) and (max-height: 600px) {
+  .LogInContainerContent {
+    padding: 15px;
+    min-height: auto;
+    border-radius: 10px;
+    width: 85%;
+    max-width: 450px;
+  }
+  
+  .WelcomeMessage {
+    font-size: 0.8rem;
+    margin-bottom: 6px;
+  }
+  
+  .MainTitle {
+    font-size: 1.4rem;
+    margin-bottom: 6px;
+  }
+  
+  .PlaceholderText {
+    font-size: 0.8rem;
+    margin-bottom: 12px !important;
+    max-width: 350px;
+  }
+  
+  .SignUpButton {
+    font-size: 0.8rem;
+    padding: 6px 18px;
+  }
+}
+
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .LogInContainerContent {
+    border-radius: 12px 0 0 12px;
+  }
+  
+  .SignUpButton {
+    border-radius: 10px;
   }
 }
