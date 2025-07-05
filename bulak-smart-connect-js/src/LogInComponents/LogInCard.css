@@ -107,7 +107,6 @@
   color: #184a5b !important;
 }
 
-/* Password visibility toggle button styling */
 .TextField .MuiInputAdornment-root .MuiIconButton-root {
   color: #ffffff !important;
 }
@@ -116,13 +115,165 @@
   background-color: rgba(255, 255, 255, 0.1) !important;
 }
 
-/* Input field text color */
 .TextField .MuiOutlinedInput-input {
   color: #ffffff !important;
 }
 
-/* Placeholder text color */
 .TextField .MuiOutlinedInput-input::placeholder {
   color: rgba(255, 255, 255, 0.7) !important;
   opacity: 1;
+}
+
+@media (max-width: 575px) {
+  .LogInCardContainer {
+    width: calc(95% - 20px);
+    padding: 20px;
+    max-height: none;
+    margin: 10px;
+  }
+  
+  .LogInTitle {
+    font-size: 1.8rem !important;
+    margin-bottom: 12px;
+  }
+  
+  .LogInForm {
+    gap: 12px;
+  }
+  
+  .TextField {
+    font-size: 14px;
+  }
+  
+  .LoginButton {
+    padding: 12px;
+    font-size: 16px;
+  }
+}
+
+@media (min-width: 576px) and (max-width: 767px) {
+  .LogInCardContainer {
+    width: calc(90% - 20px);
+    padding: 30px;
+    max-height: none;
+    margin: 10px;
+  }
+  
+  .LogInTitle {
+    font-size: 2rem !important;
+    margin-bottom: 14px;
+  }
+  
+  .LogInForm {
+    gap: 14px;
+  }
+  
+  .LoginButton {
+    padding: 14px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  .LogInCardContainer {
+    width: calc(90% - 20px);
+    max-width: calc(400px - 20px);
+    padding: 40px;
+    margin: 10px;
+  }
+  
+  .LogInTitle {
+    font-size: 2.2rem !important;
+  }
+  
+  .LogInForm {
+    gap: 15px;
+  }
+}
+
+@media (min-width: 992px) and (max-width: 1199px) {
+  .LogInCardContainer {
+    width: 420px;
+    padding: 50px;
+  }
+  
+  .LogInTitle {
+    font-size: 2.4rem !important;
+  }
+}
+
+@media (min-width: 1200px) and (max-width: 1399px) {
+  .LogInCardContainer {
+    width: 450px;
+    padding: 60px;
+  }
+  
+  .LogInTitle {
+    font-size: 2.5rem !important;
+  }
+}
+
+@media (min-width: 1400px) {
+  .LogInCardContainer {
+    width: 480px;
+    padding: 75px;
+  }
+  
+  .LogInTitle {
+    font-size: 2.6rem !important;
+  }
+  
+  .LogInForm {
+    gap: 18px;
+  }
+}
+
+@media (orientation: portrait) and (max-width: 991px) {
+  .LogInCardContainer {
+    width: calc(90% - 20px);
+    max-width: calc(85vw - 20px);
+    padding: 25px;
+    max-height: none;
+    margin: 10px;
+  }
+  
+  .LogInTitle {
+    font-size: 1.9rem !important;
+  }
+}
+
+@media (orientation: landscape) and (max-height: 600px) {
+  .LogInCardContainer {
+    padding: 20px;
+    max-height: none;
+    width: calc(85% - 20px);
+    max-width: calc(450px - 20px);
+    margin: 10px;
+  }
+  
+  .LogInTitle {
+    font-size: 1.8rem !important;
+    margin-bottom: 10px;
+  }
+  
+  .LogInForm {
+    gap: 10px;
+  }
+  
+  .LoginButton {
+    padding: 10px;
+  }
+}
+
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .LogInCardContainer {
+    border-radius: 12px;
+  }
+  
+  .TextField {
+    border-radius: 12px;
+  }
+  
+  .LoginButton {
+    border-radius: 10px;
+  }
 }

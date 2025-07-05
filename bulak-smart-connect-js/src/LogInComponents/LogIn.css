@@ -33,17 +33,91 @@
   background-color: rgba(208, 215, 222, 0.7);
   z-index: -1;
 }
-@media (max-width: 480px) {
+
+/* Extra Small Devices (Portrait Phones) */
+@media (max-width: 575px) {
   .LogInContainer {
-    display: flex;
     flex-direction: column;
+    padding: 15px;
+    margin-top: 2vh;
+    height: auto;
+    min-height: 100vh;
+  }
+  
+  .LogIn::before {
+    background-attachment: scroll;
   }
 }
 
-@media (max-width: 768px) {
+/* Small Devices (Landscape Phones) */
+@media (min-width: 576px) and (max-width: 767px) {
   .LogInContainer {
-    display: flex;
     flex-direction: column;
     padding: 20px;
+    margin-top: 3vh;
+  }
+  
+  .LogIn::before {
+    background-attachment: scroll;
+  }
+}
+
+/* Medium Devices (Tablets) */
+@media (min-width: 768px) and (max-width: 991px) {
+  .LogInContainer {
+    flex-direction: column;
+    padding: 25px;
+    margin-top: 4vh;
+  }
+}
+
+/* Large Devices (Small Laptops) */
+@media (min-width: 992px) and (max-width: 1199px) {
+  .LogInContainer {
+    flex-direction: row;
+    padding: 30px;
+    margin-top: 5vh;
+  }
+}
+
+/* Extra Large Devices (Large Laptops and Desktops) */
+@media (min-width: 1200px) and (max-width: 1399px) {
+  .LogInContainer {
+    flex-direction: row;
+    padding: 40px;
+    margin-top: 6vh;
+  }
+}
+
+/* XXL Devices (Large Desktops) */
+@media (min-width: 1400px) {
+  .LogInContainer {
+    flex-direction: row;
+    padding: 50px;
+    margin-top: 7vh;
+    max-width: 1600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+/* Portrait Orientation */
+@media (orientation: portrait) and (max-width: 991px) {
+  .LogInContainer {
+    flex-direction: column;
+    height: auto;
+    min-height: 100vh;
+  }
+}
+
+/* Landscape Orientation for Mobile/Tablet */
+@media (orientation: landscape) and (max-height: 600px) {
+  .LogInContainer {
+    margin-top: 2vh;
+    padding: 10px;
+  }
+  
+  .LogIn::before {
+    background-attachment: scroll;
   }
 }
