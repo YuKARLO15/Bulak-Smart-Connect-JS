@@ -117,6 +117,7 @@ color: #184a5b !important;
   justify-content: space-between;
   align-items: center;
   margin-top: 4px;
+  
 }
 .ApplicationIdAdminAppForm {
   color: #666;
@@ -284,10 +285,22 @@ color: #184a5b !important;
   margin: 24px 0;
 }
 
-.DetailsSectionAdminAppForm {
+.AppDetailsSectionAdminAppForm {
   margin-bottom: 24px;
-}
+  padding: 16px;
+  border-radius: 8px;
+  box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.05);
 
+}
+.ApplicationDetailsPaperAdminAppForm{
+  height: auto !important;
+}
+.StatusSectionAdminAppForm{
+  margin-top: 20px;
+  padding: 20px;
+  border-top:#184a5b 1px solid; ;
+  box-shadow: 5px 3px rgba(1, 0, 0, 0);
+}
 .SectionTitleAdminAppForm {
   margin-top: 10px !important;
   margin-bottom: 15px !important;
@@ -414,3 +427,44 @@ color: #184a5b !important;
   margin: 0 auto 10px !important;
 }
 
+.SummaryCardAppAdminPreview {
+  margin-bottom: 24px;
+  padding: 24px 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(24, 74, 91, 0.08);
+  background: #fafdff;
+}
+
+.SummaryLabelAppAdminPreview {
+  font-weight: 600 !important;
+  color: #184a5b !important;
+  margin-bottom: 4px;
+  font-size: 1rem !important;
+}
+
+.SummaryValueAppAdminPreview {
+color: #184a5b !important;
+  margin-bottom: 8px !important;
+}
+.SummaryTitleAppAdminPreview{
+  font-weight: 600 !important;
+  color: #184a5b !important;
+  margin-bottom: 4px;
+
+}
+.SummaryGridAppAdminPreview {
+display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+}
+.SummaryGridItemAppAdminPreview {
+  border-right: #184a5b 1px solid;
+  
+}
+.SummaryButtonAppAdminPreview {
+  display: flex;
+  justify-content: right;
+  margin-right: 40px;
+}

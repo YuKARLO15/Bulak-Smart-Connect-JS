@@ -72,11 +72,17 @@
 }
 
 .FormNoteCopyBirth {
-  margin-top: 24px;
+  margin-bottom: 24px;
   padding: 16px;
   background-color: #f5f5f5;
   border-radius: 4px;
-  border-left: 4px solid#1C4D5A;
+  border-top: 4px solid#1C4D5A;
+}
+.FormNoteItemCopyBirth{
+  margin-top: 10px;
+  margin-left: 30px;
+  font-size: 15px;
+  color: #1c4d5a;
 }
 .FormLabelCopyBirth {
   font-size: 16px;
