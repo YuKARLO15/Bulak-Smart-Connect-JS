@@ -361,10 +361,6 @@ const CopyBirthCertificate = ({ formData = {}, handleChange, correctionType }) =
       )}
 
       <Box className="CopyBirthCertificateContainerCopyBirth">
-
-
-    
-
         <Paper elevation={3} className="FormPaperCopyBirth">
             <Box className="FormNoteCopyBirth">
             <Typography variant="body2">
