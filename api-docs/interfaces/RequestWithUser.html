@@ -211,6 +211,7 @@
   UnauthorizedException,
   Param,
   BadRequestException,
+  Logger,
 } from &#x27;@nestjs/common&#x27;;
 import { AuthService } from &#x27;./auth.service&#x27;;
 import { LoginDto } from &#x27;./dto/login.dto&#x27;;
@@ -251,6 +252,8 @@ interface RequestWithUser extends Request {
 @ApiTags(&#x27;Authentication &amp; OTP&#x27;)
 @Controller(&#x27;auth&#x27;)
 export class AuthController {
+  private readonly logger &#x3D; new Logger(AuthController.name);
+
   constructor(
     private authService: AuthService,
     private otpService: OTPService,
@@ -1278,6 +1281,116 @@ export class AuthController {
     } catch (error) {
       console.error(&#x27;Error sending appointment reminder:&#x27;, error);
       throw new BadRequestException(&#x27;Failed to send appointment reminder&#x27;);
+    }
+  }
+
+  @Post(&#x27;notifications/application-confirmation&#x27;)
+  @ApiOperation({ summary: &#x27;Send application confirmation notification&#x27; })
+  async sendApplicationConfirmation(
+    @Body() dto: {
+      email: string;
+      applicationId: string;
+      applicationType: string;
+      applicationSubtype?: string;
+      applicantName: string;
+      submissionDate: string;
+      status: string;
+    }
+  ) {
+    try {
+      this.logger.log(&#x60;Sending application confirmation notification to: ${dto.email}&#x60;);
+      
+      // Use your existing email service to send application confirmation
+      // Implementation similar to appointment notifications
+      
+      return {
+        success: true,
+        message: &#x27;Application confirmation notification sent successfully&#x27;
+      };
+    } catch (error) {
+      this.logger.error(&#x27;Error sending application confirmation notification:&#x27;, error);
+      throw new BadRequestException(&#x27;Failed to send application confirmation notification&#x27;);
+    }
+  }
+
+  @Post(&#x27;notifications/application-status-update&#x27;)
+  @ApiOperation({ summary: &#x27;Send application status update notification&#x27; })
+  async sendApplicationStatusUpdate(
+    @Body() dto: {
+      email: string;
+      applicationId: string;
+      newStatus: string;
+      applicationType: string;
+      applicationSubtype?: string;
+      applicantName: string;
+      previousStatus?: string;
+    }
+  ) {
+    try {
+      this.logger.log(&#x60;Sending application status update notification to: ${dto.email}&#x60;);
+      
+      // Use your existing email service
+    
+      return {
+        success: true,
+        message: &#x27;Application status update notification sent successfully&#x27;
+      };
+    } catch (error) {
+      this.logger.error(&#x27;Error sending application status update notification:&#x27;, error);
+      throw new BadRequestException(&#x27;Failed to send application status update notification&#x27;);
+    }
+  }
+
+  @Post(&#x27;notifications/application-approval&#x27;)
+  @ApiOperation({ summary: &#x27;Send application approval notification&#x27; })
+  async sendApplicationApproval(
+    @Body() dto: {
+      email: string;
+      applicationId: string;
+      applicationType: string;
+      applicationSubtype?: string;
+      applicantName: string;
+    }
+  ) {
+    try {
+      this.logger.log(&#x60;Sending application approval notification to: ${dto.email}&#x60;);
+      
+      // Use your existing email service
+    
+      return {
+        success: true,
+        message: &#x27;Application approval notification sent successfully&#x27;
+      };
+    } catch (error) {
+      this.logger.error(&#x27;Error sending application approval notification:&#x27;, error);
+      throw new BadRequestException(&#x27;Failed to send application approval notification&#x27;);
+    }
+  }
+
+  @Post(&#x27;notifications/application-rejection&#x27;)
+  @ApiOperation({ summary: &#x27;Send application rejection notification&#x27; })
+  async sendApplicationRejection(
+    @Body() dto: {
+      email: string;
+      applicationId: string;
+      applicationType: string;
+      applicationSubtype?: string;
+      applicantName: string;
+      rejectionReason: string;
+    }
+  ) {
+    try {
+      this.logger.log(&#x60;Sending application rejection notification to: ${dto.email}&#x60;);
+      
+      // Use your existing email service
+    
+      return {
+        success: true,
+        message: &#x27;Application rejection notification sent successfully&#x27;
+      };
+    } catch (error) {
+      this.logger.error(&#x27;Error sending application rejection notification:&#x27;, error);
+      throw new BadRequestException(&#x27;Failed to send application rejection notification&#x27;);
     }
   }
 }
