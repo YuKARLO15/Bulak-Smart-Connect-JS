@@ -1098,7 +1098,15 @@ export class AuthController {
       this.logger.log(`Sending application confirmation notification to: ${dto.email}`);
       
       // Use your existing email service to send application confirmation
-      // Implementation similar to appointment notifications
+      await this.emailService.sendDocumentApplicationConfirmation(
+        dto.email,
+        dto.applicationId,
+        dto.applicationType,
+        dto.applicationSubtype,
+        dto.applicantName,
+        dto.submissionDate,
+        dto.status
+      );
       
       return {
         success: true,
@@ -1127,7 +1135,16 @@ export class AuthController {
       this.logger.log(`Sending application status update notification to: ${dto.email}`);
       
       // Use your existing email service
-    
+      await this.emailService.sendDocumentApplicationStatusUpdate(
+        dto.email,
+        dto.applicationId,
+        dto.newStatus,
+        dto.applicationType,
+        dto.applicationSubtype,
+        dto.applicantName,
+        dto.previousStatus
+      );
+  
       return {
         success: true,
         message: 'Application status update notification sent successfully'
@@ -1153,7 +1170,14 @@ export class AuthController {
       this.logger.log(`Sending application approval notification to: ${dto.email}`);
       
       // Use your existing email service
-    
+      await this.emailService.sendDocumentApplicationApproval(
+        dto.email,
+        dto.applicationId,
+        dto.applicationType,
+        dto.applicationSubtype,
+        dto.applicantName
+      );
+  
       return {
         success: true,
         message: 'Application approval notification sent successfully'
@@ -1180,7 +1204,15 @@ export class AuthController {
       this.logger.log(`Sending application rejection notification to: ${dto.email}`);
       
       // Use your existing email service
-    
+      await this.emailService.sendDocumentApplicationRejection(
+        dto.email,
+        dto.applicationId,
+        dto.applicationType,
+        dto.applicationSubtype,
+        dto.applicantName,
+        dto.rejectionReason
+      );
+  
       return {
         success: true,
         message: 'Application rejection notification sent successfully'
