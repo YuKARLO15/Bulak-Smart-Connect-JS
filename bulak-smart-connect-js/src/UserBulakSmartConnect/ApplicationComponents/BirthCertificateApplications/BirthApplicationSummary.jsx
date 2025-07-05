@@ -417,7 +417,7 @@ const uiTitleMap = {
             <Grid container spacing={2} className="InfoGridSummaryBirth">
               <Grid item xs={12} md={4}>
                 <Typography variant="subtitle2" className="FieldLabelSummaryBirth">
-                  Full Name:
+                  <strong>Full Name:</strong>
                 </Typography>
                 <Typography variant="body1" className="FieldValueSummaryBirth">
                   {formData?.firstName || 'N/A'} {formData?.middleName || ''}{' '}
@@ -428,7 +428,7 @@ const uiTitleMap = {
 
               <Grid item xs={12} md={4}>
                 <Typography variant="subtitle2" className="FieldLabelSummaryBirth">
-                  Date of Birth:
+                   <strong>Date of Birth: </strong>
                 </Typography>
                 <Typography variant="body1" className="FieldValueSummaryBirth">
                   {formData?.birthMonth
@@ -439,7 +439,7 @@ const uiTitleMap = {
 
               <Grid item xs={12} md={4}>
                 <Typography variant="subtitle2" className="FieldLabelSummaryBirth">
-                  Place of Birth:
+                  <strong>Place of Birth:</strong>
                 </Typography>
                 <Typography variant="body1" className="FieldValueSummaryBirth">
                   {formData?.city && formData?.province
@@ -459,13 +459,13 @@ const uiTitleMap = {
 
           <Box className="ContentSectionSummaryBirth">
             <Typography variant="h6" className="SectionTitleSummaryBirth">
-              Parents Information
+              Parents Information 
             </Typography>
 
             <Grid container spacing={2} className="InfoGridSummaryBirth">
               <Grid item xs={12} md={6}>
                 <Typography variant="subtitle2" className="FieldLabelSummaryBirth">
-                  Mother's Maiden Name:
+                  <strong>Mother's Maiden Name:</strong>
                 </Typography>
                 <Typography variant="body1" className="FieldValueSummaryBirth">
                   {formData?.motherFirstName
@@ -476,7 +476,7 @@ const uiTitleMap = {
 
               <Grid item xs={12} md={6}>
                 <Typography variant="subtitle2" className="FieldLabelSummaryBirth">
-                  Father's Name:
+                   <strong>Father's Name:</strong>
                 </Typography>
                 <Typography variant="body1" className="FieldValueSummaryBirth">
                   {formData?.fatherFirstName
@@ -497,7 +497,7 @@ const uiTitleMap = {
             <Grid container spacing={2} className="InfoGridSummaryBirth">
               <Grid item xs={12} md={6}>
                 <Typography variant="subtitle2" className="FieldLabelSummaryBirth">
-                  Purpose of Request:
+                   <strong>Purpose of Request:</strong>
                 </Typography>
                 <Typography variant="body1" className="FieldValueSummaryBirth">
                   {formData?.purpose || 'N/A'}
