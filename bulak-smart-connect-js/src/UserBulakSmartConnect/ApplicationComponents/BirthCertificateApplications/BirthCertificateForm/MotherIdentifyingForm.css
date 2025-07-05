@@ -64,17 +64,18 @@
 .FormInputMother {
   width: 100%;
   padding: 8px 12px;
-  border: 1px solid #ccc;
-  background: #fff;
+  border: 1.5px solid #2a5764;
+  background-color: #fffdfd;
   color: #1d4e5f;
   height: 45px;
-  border-radius: 4px;
-  font-size: 14px;
+  border-radius: 6px;
+  font-size: 16px;
   box-sizing: border-box;
+  box-shadow: inset 0px 3px 2px rgba(0, 0, 0, 0.1);
 }
 
 .FormInputMother:focus {
-  border-color: #1d4e5f;
+  border: 2px solid #24677a;
   outline: none;
 }
 
@@ -103,11 +104,18 @@
 
 .SelectInputMother {
   padding: 8px 12px;
-  border: 1px solid #ccc;
+  border: 1.5px solid #2a5764;
+  background-color: #fffdfd;
   color: #1d4e5f;
-  border-radius: 4px;
-  font-size: 14px;
+  border-radius: 6px;
+  font-size: 16px;
   min-width: 120px;
+  box-shadow: inset 0px 3px 2px rgba(0, 0, 0, 0.1);
+}
+
+.SelectInputMother:focus {
+  border: 2px solid #24677a;
+  outline: none;
 }
 
 .SmallInputMother {
