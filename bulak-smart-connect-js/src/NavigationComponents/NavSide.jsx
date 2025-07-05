@@ -140,13 +140,13 @@ const NavBar = ({ isSidebarOpen, setIsSidebarOpen }) => {
                 >
                   <ManageAccountsIcon /> User Management
                 </Link>
-                
+{/*                 
                 <Link 
                   to="/system-settings" 
                   className={isActive('/system-settings') ? 'active' : ''}
                 >
                   <TuneIcon /> System Settings
-                </Link>
+                </Link> */}
               </>
             )}
 
