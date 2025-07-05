@@ -110,6 +110,39 @@ const UserAccount = () => {
     e.preventDefault();
     setMessage({ text: '', type: '' });
 
+    // Validation for required fields
+    if (!firstName.trim()) {
+      setMessage({ text: '❌ First name is required', type: 'error' });
+      return;
+    }
+
+    if (!lastName.trim()) {
+      setMessage({ text: '❌ Last name is required', type: 'error' });
+      return;
+    }
+
+    if (!username.trim()) {
+      setMessage({ text: '❌ Username is required', type: 'error' });
+      return;
+    }
+
+    if (!email.trim()) {
+      setMessage({ text: '❌ Email is required', type: 'error' });
+      return;
+    }
+
+    if (!phoneNumber.trim()) {
+      setMessage({ text: '❌ Phone number is required', type: 'error' });
+      return;
+    }
+
+    // Phone number validation - exactly 10 digits
+    const phoneRegex = /^\d{10}$/;
+    if (!phoneRegex.test(phoneNumber)) {
+      setMessage({ text: '❌ Phone number must be exactly 10 digits', type: 'error' });
+      return;
+    }
+
     const updates = { firstName, lastName };
 
     const isSensitiveEdit =
@@ -118,6 +151,7 @@ const UserAccount = () => {
     if (isSensitiveEdit) {
       if (isEditing.email) updates.email = email;
       if (isEditing.phoneNumber) updates.contactNumber = phoneNumber; 
+      if (isEditing.username && canChangeUsername) updates.username = username;
 
       setPendingUpdates(updates);
       setShowPasswordConfirmation(true);
@@ -394,6 +428,14 @@ const UserAccount = () => {
     return `${days} days`;
   };
 
+  // Phone number formatting and validation
+  const handlePhoneNumberChange = (e) => {
+    const value = e.target.value.replace(/\D/g, ''); // Remove all non-digit characters
+    if (value.length <= 10) {
+      setPhoneNumber(value);
+    }
+  };
+
   if (loading) {
     return <div className="AccountLoaderUAcc">Loading...</div>;
   }
@@ -444,7 +486,7 @@ const UserAccount = () => {
               <form className="DialogFormGroupUAcc" onSubmit={handlePasswordConfirmation}>
                 <div className="DialogFormGroupUAcc">
                   <label className="DialogLabel" htmlFor="confirmationPassword">
-                    Password*
+                    Password
                   </label>
                   <input
                     type="password"
@@ -477,7 +519,7 @@ const UserAccount = () => {
           <div className="TabContentUAcc">
             <form onSubmit={handleSaveProfile} className="AccountFormUAcc">
               <div className="FormGroupUAcc">
-                <label htmlFor="firstName">First name*</label>
+                <label htmlFor="firstName">First name<span style={{color: 'red'}}> *</span></label>
                 <input
                   type="text"
                   id="firstName"
@@ -488,7 +530,7 @@ const UserAccount = () => {
               </div>
 
               <div className="FormGroupUAcc">
-                <label htmlFor="lastName">Last name*</label>
+                <label htmlFor="lastName">Last name<span style={{color: 'red'}}> *</span></label>
                 <input
                   type="text"
                   id="lastName"
@@ -499,7 +541,7 @@ const UserAccount = () => {
               </div>
 
               <div className="FormGroupUAcc">
-                <label htmlFor="username">Username</label>
+                <label htmlFor="username">Username<span style={{color: 'red'}}> *</span></label>
                 <div className="InputWithActionUAcc">
                   <input
                     type="text"
@@ -507,6 +549,7 @@ const UserAccount = () => {
                     value={username}
                     onChange={e => setUsername(e.target.value)}
                     disabled={!canChangeUsername || !isEditing.username}
+                    required
                   />
                   {!isEditing.username ? (
                     <button
@@ -523,7 +566,7 @@ const UserAccount = () => {
                       onClick={() => setIsEditing({ ...isEditing, username: false })}
                       className="CancelButtonUAcc"
                     >
-                      <i className="fas fa-times"></i>
+                      <CloseIcon fontSize="small" />
                     </button>
                   )}
                 </div>
@@ -536,7 +579,7 @@ const UserAccount = () => {
               </div>
 
               <div className="FormGroupUAcc">
-                <label htmlFor="email">E-mail*</label>
+                <label htmlFor="email">E-mail<span style={{color: 'red'}}> *</span></label>
                 <div className="InputWithActionUAcc">
                   <input
                     type="email"
@@ -567,20 +610,29 @@ const UserAccount = () => {
               </div>
 
               <div className="FormGroupUAcc">
-                <label htmlFor="phoneNumber">Phone number</label>
-                <div className="InputWithActionUAcc">
-                  <input
-                    type="tel"
-                    id="phoneNumber"
-                    value={phoneNumber}
-                    onChange={e => setPhoneNumber(e.target.value)}
-                    disabled={!isEditing.phoneNumber}
-                  />
+                <label htmlFor="phoneNumber">Phone number<span style={{color: 'red'}}> *</span></label>
+                <div className="PhoneInputContainerUAcc">
+                  <div className="PhoneInputWrapperUAcc">
+                    <div className="CountryCodeUAcc">+63</div>
+                    <input
+                      type="tel"
+                      id="phoneNumber"
+                      value={phoneNumber}
+                      onChange={handlePhoneNumberChange}
+                      disabled={!isEditing.phoneNumber}
+                      required
+                      maxLength="10"
+                      placeholder="Enter 10-digit phone number"
+                      pattern="[0-9]{10}"
+                      title="Please enter exactly 10 digits"
+                      className="PhoneNumberInputUAcc"
+                    />
+                  </div>
                   {!isEditing.phoneNumber ? (
                     <button
                       type="button"
                       onClick={() => setIsEditing({ ...isEditing, phoneNumber: true })}
-                      className="EditButtonUAcc"
+                      className="PhoneEditButtonUAcc"
                     >
                        <EditIcon fontSize="small" />
                     </button>
@@ -588,12 +640,17 @@ const UserAccount = () => {
                     <button
                       type="button"
                       onClick={() => setIsEditing({ ...isEditing, phoneNumber: false })}
-                      className="CancelButtonUAcc"
+                      className="PhoneCancelButtonUAcc"
                     >
                     <CloseIcon fontSize="small" />
                     </button>
                   )}
                 </div>
+                {isEditing.phoneNumber && (
+                  <p className="FieldHintUAcc">
+                    Please enter a valid 10-digit phone number without any special characters or spaces.
+                  </p>
+                )}
               </div>
 
               <div className="ActionsUAcc">
@@ -611,7 +668,7 @@ const UserAccount = () => {
             <div className="PasswordTabCardUAcc">
               <form onSubmit={handleChangePassword} className="PasswordFormUAcc">
                 <div className="FormGroupUAcc">
-                  <label htmlFor="currentPassword">Current Password*</label>
+                  <label htmlFor="currentPassword">Current Password<span style={{color: 'red'}}> *</span></label>
                   <input
                     type="password"
                     id="currentPassword"
@@ -622,7 +679,7 @@ const UserAccount = () => {
                 </div>
 
                 <div className="FormGroupUAcc">
-                  <label htmlFor="newPassword">New Password*</label>
+                  <label htmlFor="newPassword">New Password<span style={{color: 'red'}}> *</span></label>
                   <input
                     type="password"
                     id="newPassword"
@@ -636,7 +693,7 @@ const UserAccount = () => {
                 </div>
 
                 <div className="FormGroupUAcc">
-                  <label htmlFor="confirmPassword">Confirm New Password*</label>
+                  <label htmlFor="confirmPassword">Confirm New Password <span style={{color: 'red'}}> *</span></label>
                   <input
                     type="password"
                     id="confirmPassword"

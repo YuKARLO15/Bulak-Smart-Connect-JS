@@ -1,5 +1,6 @@
 import React from 'react';
 import './MarriageCertificateForm.css';
+import './MarriageDetailsForm.css';
 
 const MarriageDetailsForm = ({ formData, handleChange, errors }) => {
   // Create arrays for dropdown options
@@ -15,12 +16,17 @@ const MarriageDetailsForm = ({ formData, handleChange, errors }) => {
   const currentYear = new Date().getFullYear();
   const years = Array.from({ length: 100 }, (_, i) => currentYear - i);
 
+  // Time options
+  const hours = Array.from({ length: 12 }, (_, i) => i + 1); // 1-12
+  const minutes = Array.from({ length: 60 }, (_, i) => i.toString().padStart(2, '0')); // 00-59
+  const amPm = ['AM', 'PM'];
+
   return (
     <section className="section">
       <h3>III. MARRIAGE DETAILS</h3>
 
       {/* Place of Marriage */}
-      <label>15. PLACE OF MARRIAGE *</label>
+      <label>15. PLACE OF MARRIAGE <span style={{color: 'red'}}>*</span></label>
       <div className="input-group">
         <div className="input-container">
           <input
@@ -81,7 +87,7 @@ const MarriageDetailsForm = ({ formData, handleChange, errors }) => {
       </div>
 
       {/* Date of Marriage - CONVERTED TO DROPDOWNS */}
-      <label>16. DATE OF MARRIAGE *</label>
+      <label>16. DATE OF MARRIAGE <span style={{color: 'red'}}>*</span></label>
       <div className="input-group">
         <div className="input-container">
           <select
@@ -134,17 +140,55 @@ const MarriageDetailsForm = ({ formData, handleChange, errors }) => {
       </div>
 
       {/* Time of Marriage */}
-      <label>17. TIME OF MARRIAGE</label>
+      <label>17. TIME OF MARRIAGE<span style={{color: 'red'}}>*</span></label>
       <div className="input-group">
         <div className="input-container">
-          <input
-            type="text"
-            name="marriageTime"
-            placeholder="Time of Marriage"
-            value={formData.marriageTime || ''}
+          <select
+            name="marriageHour"
+            value={formData.marriageHour || ''}
             onChange={handleChange}
-          />
-          {errors.marriageTime && <span className="error-message">{errors.marriageTime}</span>}
+            className="form-select"
+          >
+            <option value="">Hour</option>
+            {hours.map(hour => (
+              <option key={hour} value={hour}>
+                {hour}
+              </option>
+            ))}
+          </select>
+          {errors.marriageHour && <span className="error-message">{errors.marriageHour}</span>}
+        </div>
+        <div className="input-container">
+          <select
+            name="marriageMinute"
+            value={formData.marriageMinute || ''}
+            onChange={handleChange}
+            className="form-select"
+          >
+            <option value="">Minute</option>
+            {minutes.map(minute => (
+              <option key={minute} value={minute}>
+                {minute}
+              </option>
+            ))}
+          </select>
+          {errors.marriageMinute && <span className="error-message">{errors.marriageMinute}</span>}
+        </div>
+        <div className="input-container">
+          <select
+            name="marriageAmPm"
+            value={formData.marriageAmPm || ''}
+            onChange={handleChange}
+            className="form-select"
+          >
+            <option value="">AM/PM</option>
+            {amPm.map(period => (
+              <option key={period} value={period}>
+                {period}
+              </option>
+            ))}
+          </select>
+          {errors.marriageAmPm && <span className="error-message">{errors.marriageAmPm}</span>}
         </div>
       </div>
 

@@ -256,7 +256,9 @@ const MarriageCertificateForm = () => {
       'marriageMonth',
       'marriageDay',
       'marriageYear',
-      'marriageTime',
+      'marriageHour',
+      'marriageMinute',
+      'marriageAmPm',
     ],
     4: [
       'witness1FirstName',
@@ -466,7 +468,7 @@ const MarriageCertificateForm = () => {
       alert('There was an error submitting your application. Please try again.');
     }
   };
-  
+
   return (
     <Box className={`MarriageCertificateFormContainer ${isSidebarOpen ? 'sidebar-open' : ''}`} sx={{ 
       width: '100vw', 

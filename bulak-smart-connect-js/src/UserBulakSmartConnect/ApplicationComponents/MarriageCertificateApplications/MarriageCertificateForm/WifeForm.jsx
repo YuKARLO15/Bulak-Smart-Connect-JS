@@ -203,7 +203,7 @@ const WifeForm = ({ formData, handleChange, errors, isMarriageLicense = false })
       </div>
 
       {/* Place of Birth */}
-      <label className="wife-label"style={{fontWeight: 'bold'}}>3. PLACE OF BIRTH (Lugar ng Kapanganakan) <span style={{color: 'red'}}>*</span></label>
+      <label className="wife-label" style={{fontWeight: 'bold'}}>3. PLACE OF BIRTH (Lugar ng Kapanganakan) <span style={{color: 'red'}}>*</span></label>
       <div className="wife-input-group input-group">
         <div className="wife-input-container input-container">
           <input
@@ -291,7 +291,7 @@ const WifeForm = ({ formData, handleChange, errors, isMarriageLicense = false })
       </div>
 
       {/* Residence */}
-      <label className="wife-label"style={{fontWeight: 'bold'}}>5. RESIDENCE <span style={{color: 'red'}}>*</span></label>
+      <label className="wife-label" style={{fontWeight: 'bold'}}>5. RESIDENCE <span style={{color: 'red'}}>*</span></label>
       <div className="wife-input-group input-group">
         <div className="wife-input-container input-container">
           <input
@@ -359,7 +359,7 @@ const WifeForm = ({ formData, handleChange, errors, isMarriageLicense = false })
       </div>
 
       {/* Religion */}
-      <label className="wife-label"style={{fontWeight: 'bold'}}>6. RELIGION/RELIGIOUS SECT <span style={{color: 'red'}}>*</span></label>
+      <label className="wife-label" style={{fontWeight: 'bold'}}>6. RELIGION/RELIGIOUS SECT <span style={{color: 'red'}}>*</span></label>
       <div className="wife-input-group input-group">
         <div className="wife-input-container input-container">
           <input

@@ -159,12 +159,12 @@ const NavBar = ({ isSidebarOpen, setIsSidebarOpen }) => {
             </Link>
             
             {/* Settings */}
-            <Link 
+            {/* <Link 
               to="/settings" 
               className={isActive('/settings') ? 'active' : ''}
             >
               <SettingsIcon /> Settings
-            </Link>
+            </Link> */}
           </div>
           
           <div className="Logout">

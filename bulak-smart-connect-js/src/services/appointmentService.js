@@ -34,9 +34,17 @@ export const appointmentService = {
   // Get all appointments (admin only)
   fetchAllAppointments: async () => {
     try {
-      console.log('Fetching all appointments from /appointments');
-      const response = await api.get('/appointments');
-      console.log('All appointments fetched:', response.data);
+      console.log('📧 Fetching all appointments with user data for notifications...');
+      // Always include user data for admin operations
+      const response = await api.get('/appointments?includeUser=true');
+      console.log('📧 All appointments with user data fetched:', response.data);
+      
+      // Log email availability for debugging
+      response.data.forEach(appointment => {
+        const email = appointment.user?.email || appointment.email;
+        console.log(`📧 Appointment ${appointment.appointmentNumber || appointment.id}: Email = ${email || 'NOT FOUND'}`);
+      });
+      
       return response.data;
     } catch (error) {
       console.error('Error fetching all appointments:', error);
@@ -44,12 +52,17 @@ export const appointmentService = {
     }
   },
 
-  // Get appointment by ID 
+  // Get appointment by ID (admin)
   getAppointmentById: async (appointmentId) => {
     try {
-      console.log(`Fetching appointment by ID: ${appointmentId}`);
-      const response = await api.get(`/appointments/${appointmentId}`);
-      console.log('Appointment fetched by ID:', response.data);
+      console.log(`📧 Fetching appointment ${appointmentId} with user data for notifications...`);
+      // Always include user data for admin operations
+      const response = await api.get(`/appointments/${appointmentId}?includeUser=true`);
+      console.log('📧 Appointment with user data fetched:', response.data);
+      
+      const email = response.data.user?.email || response.data.email;
+      console.log(`📧 Appointment ${appointmentId}: Email = ${email || 'NOT FOUND'}`);
+      
       return response.data;
     } catch (error) {
       console.error(`Error fetching appointment ${appointmentId}:`, error);

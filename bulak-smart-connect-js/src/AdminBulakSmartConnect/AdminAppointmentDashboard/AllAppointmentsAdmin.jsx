@@ -14,7 +14,7 @@ const AllAppointmentsAdmin = () => {
   const [error, setError] = useState(null);
   const [statusFilter, setStatusFilter] = useState('all');
   const [typeFilter, setTypeFilter] = useState('all');
-   const [cancelDialog, setCancelDialog] = useState({ show: false, appointmentId: null, appointmentName: '' });
+  const [cancelDialog, setCancelDialog] = useState({ show: false, appointmentId: null, appointmentName: '' });
 
 
   const [dateRangeFilter, setDateRangeFilter] = useState({
@@ -48,6 +48,41 @@ const AllAppointmentsAdmin = () => {
       setFilteredAppointments([]);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const getAppointmentEmail = (appointment) => {
+    try {
+      // Check user relationship first
+      if (appointment.user && appointment.user.email) {
+        console.log('📧 Found email in appointment.user.email:', appointment.user.email);
+        return appointment.user.email;
+      }
+      
+      // Check direct email field
+      if (appointment.email) {
+        console.log('📧 Found email in appointment.email:', appointment.email);
+        return appointment.email;
+      }
+      
+      // Check if User object exists with email (different casing)
+      if (appointment.User && appointment.User.email) {
+        console.log('📧 Found email in appointment.User.email:', appointment.User.email);
+        return appointment.User.email;
+      }
+      
+      // Check if userEmail field exists
+      if (appointment.userEmail) {
+        console.log('📧 Found email in appointment.userEmail:', appointment.userEmail);
+        return appointment.userEmail;
+      }
+      
+      console.log('⚠️ No email found for appointment. Available fields:', Object.keys(appointment));
+      console.log('📋 User object:', appointment.user);
+      return null;
+    } catch (error) {
+      console.error('Error getting appointment email:', error);
+      return null;
     }
   };
 
@@ -165,20 +200,43 @@ const AllAppointmentsAdmin = () => {
     try {
       console.log(`📝 Updating appointment ${appointmentId} status to: ${newStatus}`);
       
-      const appointment = appointments.find(
-        app => (app.id || app._id || app.appointmentNumber) === appointmentId
-      );
+      // ENHANCED APPOINTMENT MATCHING LOGIC
+      const appointment = appointments.find(app => {
+        // Check all possible ID fields
+        const appId = app.id || app._id;
+        const appNumber = app.appointmentNumber;
+        
+        console.log(`🔍 Checking appointment - ID: ${appId}, Number: ${appNumber}, Looking for: ${appointmentId}`);
+        
+        return (
+          appId === appointmentId || 
+          appNumber === appointmentId ||
+          String(appId) === String(appointmentId) ||
+          String(appNumber) === String(appointmentId)
+        );
+      });
 
       if (!appointment) {
         console.error('Appointment not found:', appointmentId);
+        console.log('📋 Available appointments:', appointments.map(app => ({
+          id: app.id || app._id,
+          appointmentNumber: app.appointmentNumber
+        })));
         setError('Appointment not found');
         return;
       }
 
-      await appointmentService.updateAppointmentStatus(appointmentId, newStatus);
+      console.log('✅ Found appointment:', appointment);
+
+      // Update status in database - use the actual database ID, not the appointment number
+      const databaseId = appointment.id || appointment._id;
+      console.log(`📝 Updating appointment in database with ID: ${databaseId}`);
+      
+      await appointmentService.updateAppointmentStatus(databaseId, newStatus);
 
       // 📧 ENHANCED EMAIL LOOKUP AND NOTIFICATION
       const appointmentEmail = getAppointmentEmail(appointment);
+      
       if (appointmentEmail) {
         try {
           console.log(`📧 Sending status update notification to: ${appointmentEmail}`);
@@ -199,16 +257,19 @@ const AllAppointmentsAdmin = () => {
         }
       } else {
         console.log('⚠️ No email found for appointment, skipping notification');
+        console.log('📋 Available appointment fields:', Object.keys(appointment));
       }
 
       await fetchAppointments();
-      alert(`Appointment ${newStatus} successfully! ${appointmentEmail ? 'Notification email sent.' : 'No email available for notification.'}`);
+
+      alert(`Appointment ${newStatus} successfully! ${appointmentEmail ? `Notification sent to ${appointmentEmail}` : 'No email available for notification.'}`);
       
     } catch (error) {
       console.error('Error updating appointment status:', error);
       setError('Failed to update appointment status. Please try again.');
     }
   };
+
   const handleCancelAppointment = (appointmentId, appointmentName) => {
     setCancelDialog({
       show: true,
@@ -221,14 +282,43 @@ const AllAppointmentsAdmin = () => {
     try {
       console.log(`📝 Cancelling appointment ${cancelDialog.appointmentId}`);
       
-      const appointment = appointments.find(
-        app => (app.id || app._id || app.appointmentNumber) === cancelDialog.appointmentId
-      );
+      // ENHANCED APPOINTMENT MATCHING LOGIC
+      const appointment = appointments.find(app => {
+        // Check all possible ID fields
+        const appId = app.id || app._id;
+        const appNumber = app.appointmentNumber;
+        
+        console.log(`🔍 Checking appointment - ID: ${appId}, Number: ${appNumber}, Looking for: ${cancelDialog.appointmentId}`);
+        
+        return (
+          appId === cancelDialog.appointmentId || 
+          appNumber === cancelDialog.appointmentId ||
+          String(appId) === String(cancelDialog.appointmentId) ||
+          String(appNumber) === String(cancelDialog.appointmentId)
+        );
+      });
 
-      await appointmentService.updateAppointmentStatus(cancelDialog.appointmentId, 'cancelled');
+      if (!appointment) {
+        console.error('Appointment not found:', cancelDialog.appointmentId);
+        console.log('📋 Available appointments:', appointments.map(app => ({
+          id: app.id || app._id,
+          appointmentNumber: app.appointmentNumber
+        })));
+        setError('Appointment not found');
+        return;
+      }
+
+      console.log('✅ Found appointment for cancellation:', appointment);
+
+      // Update status to cancelled - use the actual database ID, not the appointment number
+      const databaseId = appointment.id || appointment._id;
+      console.log(`📝 Cancelling appointment in database with ID: ${databaseId}`);
+      
+      await appointmentService.updateAppointmentStatus(databaseId, 'cancelled');
 
       // 📧 ENHANCED EMAIL LOOKUP AND NOTIFICATION
       const appointmentEmail = getAppointmentEmail(appointment);
+      
       if (appointmentEmail) {
         try {
           console.log(`📧 Sending cancellation notification to: ${appointmentEmail}`);
@@ -249,11 +339,13 @@ const AllAppointmentsAdmin = () => {
         }
       } else {
         console.log('⚠️ No email found for appointment, skipping notification');
+        console.log('📋 Available appointment fields:', Object.keys(appointment));
       }
 
       await fetchAppointments();
       setCancelDialog({ show: false, appointmentId: null, appointmentName: '' });
-      alert(`Appointment cancelled successfully! ${appointmentEmail ? 'Notification email sent.' : 'No email available for notification.'}`);
+      
+      alert(`Appointment cancelled successfully! ${appointmentEmail ? `Notification sent to ${appointmentEmail}` : 'No email available for notification.'}`);
       
     } catch (error) {
       console.error('Error cancelling appointment:', error);
@@ -305,7 +397,7 @@ const AllAppointmentsAdmin = () => {
   };
 
   const getAppointmentId = appointment => {
-    return appointment.appointmentNumber || 'N/A';
+    return appointment.appointmentNumber || appointment.id || appointment._id || 'N/A';
   };
 
   const handleSearchChange = event => {
@@ -365,32 +457,6 @@ const AllAppointmentsAdmin = () => {
       return new Date(appointment.createdAt).toLocaleDateString();
     }
     return 'Date not specified';
-  };
-
-  const getAppointmentEmail = (appointment) => {
-    try {
-      // First check if email is directly in appointment
-      if (appointment.email) {
-        return appointment.email;
-      }
-
-      // Check if user object exists with email
-      if (appointment.user && appointment.user.email) {
-        return appointment.user.email;
-      }
-
-      // Check if userEmail field exists
-      if (appointment.userEmail) {
-        return appointment.userEmail;
-      }
-
-      // Log that no email was found for debugging
-      console.log('⚠️ No email found for appointment:', appointment.appointmentNumber || appointment.id);
-      return null;
-    } catch (error) {
-      console.error('Error getting appointment email:', error);
-      return null;
-    }
   };
 
   if (loading) {
@@ -644,7 +710,7 @@ const AllAppointmentsAdmin = () => {
                         <button
                           className="confirm-btn"
                           onClick={() =>
-                            handleStatusUpdate(getAppointmentId(appointment), 'confirmed')
+                            handleStatusUpdate(appointment.appointmentNumber || appointment.id || appointment._id, 'confirmed')
                           }
                         >
                           Confirm
@@ -655,7 +721,7 @@ const AllAppointmentsAdmin = () => {
                         <button
                           className="complete-btn"
                           onClick={() =>
-                            handleStatusUpdate(getAppointmentId(appointment), 'completed')
+                            handleStatusUpdate(appointment.appointmentNumber || appointment.id || appointment._id, 'completed')
                           }
                         >
                           Complete
@@ -665,7 +731,7 @@ const AllAppointmentsAdmin = () => {
                       <button
                         className="cancel-btn"
                         onClick={() =>
-                          handleCancelAppointment(getAppointmentId(appointment), getClientName(appointment))
+                          handleCancelAppointment(appointment.appointmentNumber || appointment.id || appointment._id, getClientName(appointment))
                         }
                       >
                         Cancel
