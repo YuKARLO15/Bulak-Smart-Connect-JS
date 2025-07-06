@@ -6,6 +6,7 @@ import NavBar from '../../../NavigationComponents/NavSide';
 import './CTCBirthCertificate.css';
 import { documentApplicationService } from '../../../services/documentApplicationService';
 import { localStorageManager } from '../../../services/localStorageManager';
+import { documentApplicationNotificationService } from '../../../services/documentApplicationNotificationService';
 
 const GovernmentIdTooltip = ({ children }) => {
   const acceptedIds = [
@@ -426,6 +427,31 @@ const CTCBirthCertificate = () => {
         showNotification('Application submitted successfully! Note: Some data may not be saved locally due to storage limitations.', 'warning');
       } else {
         showNotification('Application submitted successfully!', 'success');
+      }
+
+      // 📧 ADD THIS AFTER SUCCESSFUL SUBMISSION
+      const userEmail = user?.email;
+      if (userEmail) {
+        try {
+          console.log('📧 Sending application confirmation notification to:', userEmail);
+          const notificationResult = await documentApplicationNotificationService.sendApplicationConfirmation(
+            userEmail,
+            currentAppId,
+            {
+              type: 'Birth Certificate',
+              subtype: 'Certified True Copy',
+              applicantName: `${formData.firstName || ''} ${formData.lastName || ''}`.trim(),
+              submissionDate: new Date().toLocaleDateString(),
+              status: 'Pending'
+            }
+          );
+
+          if (notificationResult.success) {
+            console.log('✅ Confirmation notification sent successfully');
+          }
+        } catch (notificationError) {
+          console.error('❌ Error sending confirmation notification:', notificationError);
+        }
       }
 
       window.dispatchEvent(new Event('storage'));
