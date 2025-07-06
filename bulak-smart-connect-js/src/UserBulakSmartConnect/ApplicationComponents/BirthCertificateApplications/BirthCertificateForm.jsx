@@ -369,7 +369,9 @@ const handleSubmit = async e => {
   } finally {
     setIsLoading(false);
   }
-};
+  };
+  
+  
   return (
     <Box className="BirthCertificateFormContainer">
       <Typography variant="h4" className="BirthCertificateFormTitle">
@@ -387,9 +389,17 @@ const handleSubmit = async e => {
       </Typography>
 
       <Paper className="BirthCertificateForm" elevation={3}>
-        {step === 1 && (
+      {step === 1 && (
           <>
             <ChildIdentifyingForm formData={formData} handleChange={handleChange} errors={errors} />
+            <Box className="FormProgressContainer">
+              <Typography variant="body2">
+                Step {step} of 5
+              </Typography>
+              <Box className="FormProgressBar">
+                <Box className="FormProgressFill" sx={{ width: `${(step / 5) * 100}%` }} />
+              </Box>
+            </Box>
             <Button variant="contained" onClick={handleNext} className="BirthCertificateFormButton">
               Next
             </Button>
@@ -402,6 +412,14 @@ const handleSubmit = async e => {
               handleChange={handleChange}
               errors={errors}
             />
+            <Box className="FormProgressContainer">
+              <Typography variant="body2">
+                Step {step} of 5
+              </Typography>
+              <Box className="FormProgressBar">
+                <Box className="FormProgressFill" sx={{ width: `${(step / 5) * 100}%` }} />
+              </Box>
+            </Box>
             <Button
               variant="contained"
               onClick={handlePrevious}
@@ -421,6 +439,14 @@ const handleSubmit = async e => {
               handleChange={handleChange}
               errors={errors}
             />
+            <Box className="FormProgressContainer">
+              <Typography variant="body2">
+                Step {step} of 5
+              </Typography>
+              <Box className="FormProgressBar">
+                <Box className="FormProgressFill" sx={{ width: `${(step / 5) * 100}%` }} />
+              </Box>
+            </Box>
             <Button
               variant="contained"
               onClick={handlePrevious}
@@ -440,6 +466,14 @@ const handleSubmit = async e => {
               handleChange={handleChange}
               errors={errors}
             />
+            <Box className="FormProgressContainer">
+              <Typography variant="body2">
+                Step {step} of 5
+              </Typography>
+              <Box className="FormProgressBar">
+                <Box className="FormProgressFill" sx={{ width: `${(step / 5) * 100}%` }} />
+              </Box>
+            </Box>
             <Button
               variant="contained"
               onClick={handlePrevious}
@@ -455,6 +489,14 @@ const handleSubmit = async e => {
         {step === 5 && (
           <>
             <AffidavitBirthForm formData={formData} handleChange={handleChange} />
+            <Box className="FormProgressContainer">
+              <Typography variant="body2">
+                Step {step} of 5
+              </Typography>
+              <Box className="FormProgressBar">
+                <Box className="FormProgressFill" sx={{ width: `${(step / 5) * 100}%` }} />
+              </Box>
+            </Box>
             <Button
               variant="contained"
               onClick={handlePrevious}
