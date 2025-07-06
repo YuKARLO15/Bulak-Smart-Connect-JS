@@ -204,3 +204,19 @@
   width: 100%;
   max-width: 900px;
 }
+@media (max-width: 768px) {
+  .TitleDelayedAbove18{
+    font-size: 1rem !important;
+
+  }
+
+}
+
+@media  (max-width: 425px) {
+
+ .TitleDelayedAbove18 {
+    font-size: 0.8rem !important;
+    width: 100%;
+  }
+
+}

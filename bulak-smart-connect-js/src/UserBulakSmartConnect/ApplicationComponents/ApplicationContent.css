@@ -2,11 +2,10 @@
   display: flex;
   flex-direction: column;
   width: 80vw;
-  margin-top: 5vw;
+ 
   box-sizing: border-box;
   align-items: center;
   background: linear-gradient(135deg, #f8fafb 0%, #f1f5f9 100%);
-  padding: 40px 20px;
   border-radius: 16px;
   box-shadow: 0 8px 32px rgba(24, 74, 91, 0.08);
 }
@@ -56,7 +55,7 @@
   display: flex;
   flex-direction: column;
   border: 2px solid #e2e8f0;
-  margin: 20px auto;
+  margin: 10px auto;
   box-sizing: border-box;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
@@ -202,8 +201,7 @@
 @media (min-width: 1200px) {
   .ApplicationContentContainer {
     width: 75vw;
-    margin-top: 3vw;
-    padding: 50px 30px;
+
   }
 
   .OnlineApplicationTitle1 {
@@ -213,7 +211,6 @@
   .CertificateCard {
     max-width: 480px;
     min-height: 460px;
-    padding: 32px 24px;
   }
 
   .Icon {
@@ -229,7 +226,7 @@
 
   .ApplicationDescription {
     font-size: 17px;
-    min-height: 60px;
+    min-height: 50px;
   }
 
   .Actions {
@@ -247,8 +244,7 @@
 @media (max-width: 1199px) {
   .ApplicationContentContainer {
     width: 85vw;
-    margin-top: 4vw;
-    padding: 40px 25px;
+   
   }
 
   .OnlineApplicationTitle1 {
@@ -257,13 +253,14 @@
 
   .CertificateCard {
     max-width: 400px;
-    min-height: 380x;
+    min-height: 380px;
+    max-height: 380px;
     padding: 24px 20px;
   }
 
   .Icon {
-    width: 90px;
-    height: 90px;
+    width: 80px;
+    height: 80px;
     padding: 18px;
   }
 
@@ -538,44 +535,50 @@
 @media (min-width: 1440px) {
   .ApplicationContentContainer {
     width: 70vw;
-    margin-top: 2vw;
-    padding: 60px 40px;
+    padding: 20px ;
+    margin-bottom: 0;
+    padding-bottom: 0;
   }
 
   .OnlineApplicationTitle1 {
-    font-size: 42px !important;
+    font-size: 32px !important;
   }
 
   .CertificateCard {
-    max-width: 520px;
-    min-height: 500px;
-    padding: 40px 28px;
+    max-width: 480px;
+    min-height: 350px;
+    max-height: 450px !important;
+    margin-bottom: 0;
+    padding-bottom: 5px;
+    padding-top: 10px;
   }
 
   .Icon {
-    width: 140px;
-    height: 140px;
+    width: 120px;
+    height: 120px;
     padding: 28px;
   }
 
   .CardTitle {
-    font-size: 28px !important;
-    min-height: 90px;
+    font-size: 25px !important;
+    min-height: 70px;
   }
 
   .ApplicationDescription {
     font-size: 19px;
-    min-height: 70px;
+    margin-bottom: 0;
+  
   }
 
   .Actions {
-    min-height: 110px;
+    min-height: 40px;
+    margin-top: 0;
   }
 
   .RequestBtn {
     width: 220px;
-    height: 58px;
-    font-size: 19px !important;
+    height: 35px;
+    font-size: 16px !important;
   }
 }
 

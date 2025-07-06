@@ -681,7 +681,6 @@ const MarriageCertificateApplication = () => {
 
   return (
     <div className={`MarriageCertificateContainer ${isSidebarOpen ? 'sidebar-open' : ''}`}>
-      <NavBar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
       <Typography variant="h5" className="TitleMarriageCertificate">
         MARRIAGE CERTIFICATE APPLICATION
       </Typography>

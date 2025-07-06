@@ -468,20 +468,7 @@ const DelayedOutOfTownRegistration = () => {
       console.log("Need at least 2 documentary evidence documents");
     }
 
-    // For debugging:
-    if (allMandatoryDocsUploaded && parentDocsUploaded && evidenceUploaded) {
-      console.log("All documents uploaded. Button should be enabled.");
-    } else {
-      console.log("Missing some documents.");
-    }
     
-    // CHANGED: Enable the submit button if at least one document has been uploaded
-    if (uploadedDocumentsCount > 0) {
-      console.log("At least one document uploaded. Enabling submit button.");
-      return true;
-    }
-    
-    // Only require all documents if the above condition isn't met
     return allMandatoryDocsUploaded && parentDocsUploaded && evidenceUploaded;
   };
 

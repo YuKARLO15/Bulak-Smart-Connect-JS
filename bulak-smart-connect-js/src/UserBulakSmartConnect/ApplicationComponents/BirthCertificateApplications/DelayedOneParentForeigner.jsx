@@ -437,10 +437,7 @@ const currentDocuments = status === 'marital' ? maritalDocuments : nonMaritalDoc
     console.log("Missing some required documents.");
   }
   
-  if (uploadedDocumentsCount > 0) {
-    console.log("At least one document uploaded. Enabling submit button.");
-    return true;
-  }
+
   
   return allRequiredDocsUploaded;
   };

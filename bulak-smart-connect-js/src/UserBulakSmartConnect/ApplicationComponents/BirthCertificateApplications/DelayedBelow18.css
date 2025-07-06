@@ -106,3 +106,19 @@
   color: #bdbdbd !important;
   border: none !important;
 }
+@media (max-width: 768px) {
+  .FormTitleBelow18{
+    font-size: 1rem !important;
+
+  }
+
+}
+
+@media  (max-width: 425px) {
+
+ .FormTitleBelow18 {
+    font-size: 0.8rem !important;
+    width: 100%;
+  }
+
+}

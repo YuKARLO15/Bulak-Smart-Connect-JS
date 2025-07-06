@@ -83,7 +83,6 @@ const uiTitleMap = {
     setApplicationId(currentId);
     let application = null;
 
-    // FIRST: Try backend via documentApplicationService
     try {
       application = await documentApplicationService.getApplication(currentId);
     } catch (backendErr) {
@@ -366,7 +365,7 @@ const uiTitleMap = {
       <Box className="MainContainerSummaryBirth">
         
              <div className="ApplicationDetails">
-  {(applicationStatus !== 'Pending' || statusMessage) && (
+{(applicationStatus !== 'Pending' || statusMessage) && (
     <Box className="StatusSection" sx={{ marginTop: '15px', marginBottom: '15px' }}>
       <Typography 
         className="ApplicationStatus"
@@ -390,8 +389,41 @@ const uiTitleMap = {
           }}
         >
           Message from Administrator: {statusMessage}
-                </Typography>
-                
+        </Typography>
+      )}
+
+      {/* Appointment link for approved applications */}
+      {(applicationStatus?.toLowerCase() === 'ready for pickup' || applicationStatus?.toLowerCase() === 'ready for pickup') && (
+        <Box sx={{ marginTop: '20px', borderTop: '1px solid #ccc', paddingTop: '10px' }}>
+          <Typography 
+            variant="body2"
+            sx={{ 
+              fontSize: '0.9rem',
+              marginBottom: '8px',
+              color: '#1c4d5a'
+            }}
+          >
+            You may book an appointment to pick up your document for faster transaction.
+          </Typography>
+          <Button
+            variant="contained"
+            color="primary"
+            size="small"
+            onClick={() => navigate('/AppointmentForm')}
+            sx={{
+              backgroundColor: '#f5f5f5',
+              color: '#1c4d5a',
+              fontWeight: '600 !important',
+              border: '1px solid #1c4d5a',
+              '&:hover': {
+                backgroundColor: '#0f3a47',
+                color: '#f5f5f5'
+              }
+            }}
+          >
+            Book Appointment
+          </Button>
+        </Box>
       )}
     </Box>
   )}
