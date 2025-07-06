@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Typography, Button, Paper, Alert, Tooltip, CircularProgress, Snackbar } from '@mui/material';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useAuth } from '../../../context/AuthContext';
 import FileUpload from '../FileUpload';
 import NavBar from '../../../NavigationComponents/NavSide';
 import './CTCBirthCertificate.css';
 import { documentApplicationService } from '../../../services/documentApplicationService';
 import { localStorageManager } from '../../../services/localStorageManager';
+import { documentApplicationNotificationService } from '../../../services/documentApplicationNotificationService';
 
 const GovernmentIdTooltip = ({ children }) => {
   const acceptedIds = [
@@ -82,6 +84,7 @@ const CTCBirthCertificate = () => {
   
   const navigate = useNavigate();
   const location = useLocation();
+  const { user } = useAuth();
 
   const isEditing = location.state?.isEditing || 
                     localStorage.getItem('isEditingBirthApplication') === 'true';
@@ -426,6 +429,39 @@ const CTCBirthCertificate = () => {
         showNotification('Application submitted successfully! Note: Some data may not be saved locally due to storage limitations.', 'warning');
       } else {
         showNotification('Application submitted successfully!', 'success');
+      }
+
+      // 📧 SEND CONFIRMATION NOTIFICATION
+      const userEmail = user?.email;
+      if (userEmail) {
+        try {
+          console.log('📧 Sending application confirmation notification to:', userEmail);
+          const notificationResult = await documentApplicationNotificationService.sendApplicationConfirmation(
+            userEmail,
+            currentAppId,
+            {
+              type: 'Birth Certificate',
+              subtype: 'Certified True Copy',
+              applicantName: `${formData.firstName || ''} ${formData.lastName || ''}`.trim(),
+              submissionDate: new Date().toLocaleDateString(),
+              status: 'Pending'
+            }
+          );
+
+          if (notificationResult.success) {
+            console.log('✅ Confirmation notification sent successfully');
+            showNotification('Application submitted successfully! A confirmation email has been sent to you.', 'success');
+          } else {
+            console.log('⚠️ Confirmation notification failed:', notificationResult.error);
+            showNotification('Application submitted successfully! However, we could not send the confirmation email.', 'warning');
+          }
+        } catch (notificationError) {
+          console.error('❌ Error sending confirmation notification:', notificationError);
+          showNotification('Application submitted successfully! However, we could not send the confirmation email.', 'warning');
+        }
+      } else {
+        console.log('⚠️ No email available for notifications');
+        showNotification('Application submitted successfully! No confirmation email will be sent as no email was found.', 'success');
       }
 
       window.dispatchEvent(new Event('storage'));
