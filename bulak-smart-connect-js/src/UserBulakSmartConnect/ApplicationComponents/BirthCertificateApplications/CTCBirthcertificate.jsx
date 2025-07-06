@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Typography, Button, Paper, Alert, Tooltip, CircularProgress, Snackbar } from '@mui/material';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useAuth } from '../../../context/AuthContext';
 import FileUpload from '../FileUpload';
 import NavBar from '../../../NavigationComponents/NavSide';
 import './CTCBirthCertificate.css';
@@ -83,6 +84,7 @@ const CTCBirthCertificate = () => {
   
   const navigate = useNavigate();
   const location = useLocation();
+  const { user } = useAuth();
 
   const isEditing = location.state?.isEditing || 
                     localStorage.getItem('isEditingBirthApplication') === 'true';
