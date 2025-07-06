@@ -14,7 +14,7 @@ const Steps = () => {
 
       <Grid container spacing={1} className="StepsGrid">
         {/* Step 1 */}
-        <Grid item xs={1} md={3} className="StepItem">
+        <Grid item xs={3} sm={3} md={3} lg={3} className="StepItem">
           <Typography variant="h3" className="StepNumber">
             1
           </Typography>
@@ -27,12 +27,12 @@ const Steps = () => {
         </Grid>
 
         {/* Arrow */}
-        <Grid item xs={1} md={1} className="Arrow">
+        <Grid item xs={1} sm={1} md={1} lg={1} className="Arrow">
           →
         </Grid>
 
         {/* Step 2 */}
-        <Grid item xs={1} md={4} className="StepItem">
+        <Grid item xs={4} sm={4} md={4} lg={4} className="StepItem">
           <Typography variant="h3" className="StepNumber">
             2
           </Typography>
@@ -45,12 +45,12 @@ const Steps = () => {
         </Grid>
 
         {/* Arrow */}
-        <Grid item xs={1} md={1} className="Arrow">
+        <Grid item xs={1} sm={1} md={1} lg={1} className="Arrow">
           →
         </Grid>
 
         {/* Step 3 */}
-        <Grid item xs={1} md={3} className="StepItem">
+        <Grid item xs={3} sm={3} md={3} lg={3} className="StepItem">
           <Typography variant="h3" className="StepNumber">
             3
           </Typography>

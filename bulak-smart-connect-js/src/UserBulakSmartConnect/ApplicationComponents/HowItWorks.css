@@ -6,30 +6,38 @@
   border-bottom: #003366 1px solid;
   width: 80vw;
   margin-top: 5vh;
+  box-sizing: border-box;
 }
 
 .StepsTitle {
   font-weight: bold !important;
   color: #003366;
+  font-size: 1.8rem;
 }
 
 .StepsSubtitle {
   margin-bottom: 20px;
   color: #333;
+  font-size: 1rem;
 }
 
 .StepsGrid {
   display: flex;
-  justify-content: start;
+  justify-content: space-between;
   align-items: center;
+  flex-wrap: nowrap;
 }
+
 .StepTitle {
   font-weight: bold !important;
   color: #003366;
+  font-size: 1.1rem;
 }
 
 .StepItem {
   text-align: center;
+  flex: 1;
+  min-width: 0;
 }
 
 .StepNumber {
@@ -49,4 +57,259 @@
   font-weight: bold;
   color: #003366;
   text-align: center;
+  margin: 0 5px;
+  flex-shrink: 0;
+}
+
+/* Tablet Styles (768px - 1024px) */
+@media (max-width: 1024px) {
+  .StepsContainer {
+    width: 85vw;
+    padding: 18px;
+    margin-top: 4vh;
+  }
+  
+  .StepsTitle {
+    font-size: 1.6rem;
+  }
+  
+  .StepsSubtitle {
+    font-size: 0.95rem;
+  }
+  
+  .StepTitle {
+    font-size: 0.8rem !important;
+  }
+  
+  .StepNumber {
+    font-size: 2.5rem !important;
+    margin-top: 1.5vh !important;
+  }
+  
+  .StepDesc {
+    font-size: 0.7rem !important;
+  }
+  
+  .Arrow {
+    font-size: 1.8rem;
+    margin: 0 3px;
+  }
+}
+
+/* Large Mobile Styles (481px - 767px) */
+@media (max-width: 767px) {
+  .StepsContainer {
+    width: 90vw;
+    padding: 15px;
+    margin-top: 3vh;
+  }
+  
+  .StepsTitle {
+    font-size: 1.4rem !important;
+   
+  }
+  
+  .StepsSubtitle {
+    font-size: 0.9rem !important;
+  
+    margin-bottom: 25px;
+  }
+  
+  .StepTitle {
+    font-size: 0.9rem !important;
+  }
+  
+  .StepNumber {
+    font-size: 2.2rem !important;
+    margin-top: 1vh !important;
+  }
+  
+  .StepDesc {
+    font-size: 0.8rem !important;
+    padding: 0 5px;
+  }
+  
+  .Arrow {
+    font-size: 1.5rem;
+    margin: 0 2px;
+  }
+}
+
+/* Small Mobile Styles (320px - 480px) */
+@media (max-width: 480px) {
+  .StepsContainer {
+    width: 95vw;
+    padding: 12px;
+    margin-top: 2vh;
+  }
+  
+  .StepsTitle {
+    font-size: 1.3rem;
+  }
+  
+  .StepsSubtitle {
+    font-size: 0.85rem;
+    margin-bottom: 20px;
+  }
+  
+  .StepTitle {
+    font-size: 0.8rem !important;
+    text-align: left;
+  }
+  
+  .StepNumber {
+    font-size: 1.8rem !important;
+    margin-bottom: 5px;
+    text-align: left;
+  }
+  
+  .StepDesc {
+    font-size: 0.5rem !important;
+    padding: 0 3px;
+    text-align: left;
+  }
+  
+  .Arrow {
+    font-size: 1.2rem;
+    margin: 0 1px;
+  }
+}
+
+/* Extra Small Mobile Styles (max 375px) */
+@media (max-width: 375px) {
+  .StepsContainer {
+    width: 98vw;
+    padding: 10px;
+    margin-top: 1.5vh;
+  }
+  
+  .StepsTitle {
+    font-size: 1.2rem;
+  }
+  
+  .StepsSubtitle {
+    font-size: 0.8rem;
+    margin-bottom: 15px;
+  }
+  
+  .StepTitle {
+    font-size: 0.75rem;
+  }
+  
+  .StepNumber {
+    font-size: 1.6rem;
+    margin-top: 0.5vh !important;
+  }
+  
+  .StepDesc {
+    font-size: 0.7rem;
+    padding: 0 2px;
+  }
+  
+  .Arrow {
+    font-size: 1rem;
+    margin: 0 1px;
+  }
+}
+
+/* Very Small Mobile Styles (max 319px) */
+@media (max-width: 319px) {
+  .StepsContainer {
+    width: 100vw;
+    padding: 8px;
+    margin-top: 1vh;
+    margin-left: 0;
+  }
+  
+  .StepsTitle {
+    font-size: 1.1rem;
+  }
+  
+  .StepsSubtitle {
+    font-size: 0.75rem;
+    margin-bottom: 12px;
+  }
+  
+  .StepTitle {
+    font-size: 0.7rem;
+  }
+  
+  .StepNumber {
+    font-size: 1.4rem;
+  }
+  
+  .StepDesc {
+    font-size: 0.65rem;
+    padding: 0 1px;
+  }
+  
+  .Arrow {
+    font-size: 0.9rem;
+    margin: 0;
+  }
+}
+
+/* Very Large Screens (1440px+) */
+@media (min-width: 1440px) {
+  .StepsContainer {
+    width: 75vw;
+    padding: 25px;
+    margin-top: 6vh;
+  }
+  
+  .StepsTitle {
+    font-size: 2rem;
+  }
+  
+  .StepsSubtitle {
+    font-size: 1.1rem;
+  }
+  
+  .StepTitle {
+    font-size: 1.2rem;
+  }
+  
+  .StepNumber {
+    font-size: 3.5rem;
+    margin-top: 3vh !important;
+  }
+  
+  .StepDesc {
+    font-size: 1rem;
+  }
+  
+  .Arrow {
+    font-size: 2.5rem;
+    margin: 0 8px;
+  }
+}
+
+/* Landscape Mobile Orientation */
+@media (max-height: 500px) and (orientation: landscape) {
+  .StepsContainer {
+    margin-top: 2vh;
+    padding: 10px;
+  }
+  
+  .StepsTitle {
+    font-size: 1.3rem;
+  }
+  
+  .StepTitle {
+    font-size: 0.8rem;
+  }
+  
+  .StepNumber {
+    font-size: 1.8rem;
+    margin-top: 1vh !important;
+  }
+  
+  .StepDesc {
+    font-size: 0.75rem;
+  }
+  
+  .Arrow {
+    font-size: 1.5rem;
+    margin: 0 2px;
+  }
 }
