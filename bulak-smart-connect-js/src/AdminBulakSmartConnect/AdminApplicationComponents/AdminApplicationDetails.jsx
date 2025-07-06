@@ -339,14 +339,15 @@ const getApplicationEmail = (application) => {
 
   const handleUpdateStatus = async () => {
     try {
+      console.log(`📝 Updating application ${selectedApplication.id} status to: ${newStatus}`);
 
+      // Update status in database
       await documentApplicationService.updateApplication(selectedApplication.id, {
-        status: newStatus, 
+        status: newStatus,
         statusMessage: statusMessage,
         lastUpdated: new Date().toISOString()
       });
 
- 
       // 📧 ENHANCED EMAIL LOOKUP AND NOTIFICATION (SAME AS APPOINTMENT SYSTEM)
       const applicationEmail = getApplicationEmail(selectedApplication);
       
@@ -354,19 +355,32 @@ const getApplicationEmail = (application) => {
         try {
           console.log(`📧 Sending status update notification to: ${applicationEmail}`);
           
+          // Get applicant name for notification
+          const applicantName = selectedApplication.applicantName || 
+                             `${selectedApplication.formData?.firstName || ''} ${selectedApplication.formData?.lastName || ''}`.trim() ||
+                             'Valued Client';
+        
           // Choose the appropriate notification based on status
           let notificationResult;
           if (newStatus.toLowerCase() === 'approved') {
             notificationResult = await documentApplicationNotificationService.sendApprovalNotification(
               applicationEmail,
               selectedApplication.id,
-              selectedApplication
+              {
+                applicationType: selectedApplication.applicationType || 'Birth Certificate',
+                applicationSubtype: selectedApplication.applicationSubtype,
+                applicantName: applicantName
+              }
             );
           } else if (newStatus.toLowerCase() === 'decline' || newStatus.toLowerCase() === 'declined') {
             notificationResult = await documentApplicationNotificationService.sendRejectionNotification(
               applicationEmail,
               selectedApplication.id,
-              selectedApplication,
+              {
+                applicationType: selectedApplication.applicationType || 'Birth Certificate',
+                applicationSubtype: selectedApplication.applicationSubtype,
+                applicantName: applicantName
+              },
               statusMessage || 'Application declined by administrator'
             );
           } else {
@@ -374,7 +388,11 @@ const getApplicationEmail = (application) => {
               applicationEmail,
               selectedApplication.id,
               newStatus,
-              selectedApplication
+              {
+                applicationType: selectedApplication.applicationType || 'Birth Certificate',
+                applicationSubtype: selectedApplication.applicationSubtype,
+                applicantName: applicantName
+              }
             );
           }
 
@@ -391,7 +409,7 @@ const getApplicationEmail = (application) => {
         console.log('📋 Available application fields:', Object.keys(selectedApplication));
       }
 
-      // Keep your existing refresh logic
+      // Refresh applications list
       const updatedApplications = await documentApplicationService.getAllApplications();
       setApplications(updatedApplications);
       const updated = updatedApplications.find(app => app.id === selectedApplication.id);
