@@ -5,6 +5,8 @@ import FileUpload from '../FileUpload';
 import NavBar from '../../../NavigationComponents/NavSide';
 import './MarriageCertificateApplication.css';
 import { documentApplicationService } from '../../../services/documentApplicationService';
+import { documentApplicationNotificationService } from '../../../services/documentApplicationNotificationService';
+import { useAuth } from '../../../context/AuthContext';
 
 const requiredDocuments = [
   'Marriage License',
@@ -116,6 +118,7 @@ const MarriageCertificateApplication = () => {
   const [backendApplicationCreated, setBackendApplicationCreated] = useState(false);
   const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'info' });
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   const createBackendApplication = async (existingFormData = {}) => {
     try {
@@ -498,6 +501,46 @@ const MarriageCertificateApplication = () => {
       localStorage.setItem('marriageApplicationId', effectiveAppId);
 
       showNotification('Application submitted successfully!', 'success');
+
+      // 📧 SEND CONFIRMATION NOTIFICATION (ENHANCED)
+      const userEmail = user?.email;
+      if (userEmail) {
+        try {
+          console.log('📧 Sending application confirmation notification to:', userEmail);
+          const husbandName = completeFormData.husbandFirstName && completeFormData.husbandLastName 
+            ? `${completeFormData.husbandFirstName} ${completeFormData.husbandLastName}` 
+            : 'Husband';
+          const wifeName = completeFormData.wifeFirstName && completeFormData.wifeLastName 
+            ? `${completeFormData.wifeFirstName} ${completeFormData.wifeLastName}` 
+            : 'Wife';
+          const applicantName = `${husbandName} & ${wifeName}`;
+
+          const notificationResult = await documentApplicationNotificationService.sendApplicationConfirmation(
+            userEmail,
+            effectiveAppId,
+            {
+              type: 'Marriage Certificate',
+              subtype: 'Marriage Certificate Application',
+              applicantName: applicantName,
+              submissionDate: new Date().toLocaleDateString(),
+              status: 'Pending'
+            }
+          );
+
+          if (notificationResult.success) {
+            console.log('✅ Confirmation notification sent successfully');
+            showNotification('Application submitted successfully! A confirmation email has been sent to you.', 'success');
+          } else {
+            console.log('⚠️ Confirmation notification failed:', notificationResult.error);
+            showNotification('Application submitted successfully! However, we could not send the confirmation email.', 'warning');
+          }
+        } catch (notificationError) {
+          console.error('❌ Error sending confirmation notification:', notificationError);
+          showNotification('Application submitted successfully! However, we could not send the confirmation email.', 'warning');
+        }
+      } else {
+        console.log('⚠️ No email available for notifications');
+      }
 
       setTimeout(() => {
         navigate('/MarriageSummaryForm', {
