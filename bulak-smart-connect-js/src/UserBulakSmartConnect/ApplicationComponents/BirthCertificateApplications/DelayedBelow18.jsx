@@ -451,9 +451,6 @@ const Below18Registration = () => {
   };
 
   const isMandatoryComplete = () => {
-
-
-    // Check all required documents
     const allMandatoryDocsUploaded = mandatoryDocuments.every(doc => {
       const isUploaded = uploadedFiles[doc] === true;
       if (!isUploaded) {
@@ -462,7 +459,7 @@ const Below18Registration = () => {
       return isUploaded;
     });
 
-    // Check if Certificate of Marriage of Parents is uploaded if marital status is 'marital'
+
     const isCertificateOfMarriageUploaded = 
       maritalStatus !== 'marital' || uploadedFiles['Certificate of Marriage of Parents'] === true;
     
@@ -470,7 +467,6 @@ const Below18Registration = () => {
       console.log("Missing Certificate of Marriage of Parents");
     }
 
-    // Check if Affidavit of Whereabouts of the Mother is uploaded if mother is not present
     const isMotherAffidavitUploaded = 
       !motherNotPresent || uploadedFiles['Affidavit of Whereabouts of the Mother'] === true;
     
@@ -478,18 +474,6 @@ const Below18Registration = () => {
       console.log("Missing Affidavit of Whereabouts of the Mother");
     }
 
-    // For debugging:
-    if (allMandatoryDocsUploaded && isCertificateOfMarriageUploaded && isMotherAffidavitUploaded) {
-      console.log("All documents uploaded. Button should be enabled.");
-    } else {
-      console.log("Missing documents. Button should be disabled.");
-    }
-    
-    // Force enable the submit button if the user has uploaded at least one document
-    if (uploadedDocumentsCount > 0) {
-      console.log("At least one document uploaded. Enabling submit button.");
-      return true;
-    }
     
     return allMandatoryDocsUploaded && isCertificateOfMarriageUploaded && isMotherAffidavitUploaded;
   };
