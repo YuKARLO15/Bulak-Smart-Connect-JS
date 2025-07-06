@@ -24,18 +24,19 @@ const ApplicationContent = () => {
       requirementsRoute: '/RequirementMarriageList'
     }
   ];
+  
   return (
     <>
       <div className="OnlineApplicationTitleContainer">
-        <Typography variant="h4" className="OnlineApplicationTitle">
+        <Typography variant="h8" className="OnlineApplicationTitle1">
           ONLINE APPLICATION
         </Typography>
       </div>
       <div className="ApplicationContentContainer">
-        <Box sx={{ padding: 2}}>
-          <Grid container spacing={2}>
+        <Box sx={{ padding: { xs: 1, sm: 2 } }}>
+          <Grid container spacing={2} direction={{ xs: 'column', sm: 'row' }}>
             {certificates.map((cert, index) => (
-              <Grid item xs={15} sm={6} key={index}>
+              <Grid item xs={12} sm={6} key={index}>
                 <Card className="CertificateCard"> 
                   <CardContent>
                     <Typography variant="h5" className="CardTitle">
@@ -43,7 +44,7 @@ const ApplicationContent = () => {
                       {cert.title}
                     </Typography>
                     <ul className="Details">
-                    <li className='ApplicationDescription' >{cert.details}</li>
+                      <li className='ApplicationDescription'>{cert.details}</li>
                     </ul>
                     <div className="Actions">
                       <RouterLink to={cert.requirementsRoute}>
