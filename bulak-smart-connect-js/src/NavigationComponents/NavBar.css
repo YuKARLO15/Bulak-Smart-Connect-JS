@@ -9,11 +9,13 @@
   width: 100vw;
   box-shadow: 0px 4px 12px -2px rgba(50, 75, 100, 0.08);
   z-index: 100;
+  box-sizing: border-box;
 }
 
 .LogoNavBar {
   width: 250px;
   margin-left: 50px;
+  height: auto;
 }
 
 /* Divider after logo */
@@ -30,12 +32,13 @@
   display: flex;
   align-items: center;
   flex-direction: row;
-  justify-content: right;
+  justify-content: flex-end;
   margin-left: auto;
   margin-right: 50px;
   color: #184a5b !important;
   font-weight: 600 !important;
   gap: 10px;
+  flex-wrap: wrap;
 }
 
 .NavBarContainer Button {
@@ -51,6 +54,7 @@
   letter-spacing: 0.01em;
   position: relative;
   overflow: hidden;
+  white-space: nowrap;
 }
 
 .NavBarContainer Button:hover,
@@ -59,8 +63,6 @@
   color: #15516b;
   box-shadow: 0 2px 8px 0 rgba(24,74,91,0.07);
 }
-
-
 
 .MuiMenu-paper {
   background: #f8fafc !important;
@@ -76,14 +78,239 @@
   margin: 2px 0;
   transition: background 0.1s;
 }
+
 .ServiceItem:hover {
   background-color: #d5dcdd!important;
 }
 
-@media (max-width: 700px) {
-  .LogoNavBar { width: 160px; margin-left: 10px; }
-  .LogoNavBar::after { margin: 0 9px 0 6px; height: 24px; }
-  .NavBarContainer { padding: 8px 6vw; }
-  .NavButtons { margin-right: 4vw; gap: 2px; }
-  .NavBarContainer Button { padding: 6px 12px; font-size: 13px !important; }
+/* Tablet Styles (768px - 1024px) */
+@media (max-width: 1024px) {
+  .LogoNavBar {
+    width: 200px;
+    margin-left: 30px;
+  }
+  
+  .LogoNavBar::after {
+    margin: 0 20px 0 12px;
+    height: 32px;
+  }
+  
+  .NavButtons {
+    margin-right: 30px;
+    gap: 8px;
+  }
+  
+  .NavBarContainer Button {
+    padding: 6px 16px;
+    font-size: 15px !important;
+  }
+  
+  .NavBarContainer {
+    padding: 8px 15px;
+  }
+}
+
+/* Large Mobile Styles (481px - 767px) */
+@media (max-width: 767px) {
+  .LogoNavBar {
+    width: 160px;
+    margin-left: 15px;
+  }
+  
+  .LogoNavBar::after {
+    margin: 0 12px 0 8px;
+    height: 28px;
+  }
+  
+  .NavBarContainer {
+    padding: 8px 10px;
+  }
+  
+  .NavButtons {
+    margin-right: 15px;
+    gap: 6px;
+  }
+  
+  .NavBarContainer Button {
+    padding: 6px 12px;
+    font-size: 14px !important;
+  }
+  
+  .MuiMenu-paper {
+    min-width: 200px !important;
+  }
+}
+
+
+@media (max-width: 480px) {
+  .NavBarContainer {
+    padding: 6px 8px;
+    flex-wrap: nowrap;
+  }
+  
+  .LogoNavBar {
+    width: 120px;
+    margin-left: 5px;
+  }
+  
+  .LogoNavBar::after {
+    margin: 0 8px 0 4px;
+    height: 24px;
+  }
+  
+  .NavButtons {
+    margin-right: 5px;
+    gap: 4px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+  
+  .NavBarContainer Button {
+    padding: 5px 8px;
+    font-size: 12px !important;
+    margin: 0 1px;
+    border-radius: 18px;
+  }
+  
+  .MuiMenu-paper {
+    min-width: 180px !important;
+    max-width: 90vw !important;
+  }
+  
+  .ServiceItem {
+    padding: 8px 12px !important;
+  }
+  
+  .ServiceIcon {
+    min-width: 36px !important;
+  }
+}
+@media (max-width: 375px) {
+  .NavBarContainer {
+    padding: 4px 6px;
+    flex-wrap: nowrap;
+  }
+  
+  .LogoNavBar {
+    width: 100px;
+    margin-left: 3px;
+  }
+  
+  .LogoNavBar::after {
+    margin: 0 6px 0 3px;
+    height: 20px;
+  }
+  
+  .NavButtons {
+    margin-right: 3px;
+    gap: 3px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+  
+  .NavBarContainer Button {
+    padding: 4px 6px;
+    font-size: 11px !important;
+    margin: 0 1px;
+    border-radius: 16px;
+    min-width: auto;
+  }
+  
+  .MuiMenu-paper {
+    min-width: 150px !important;
+    max-width: 95vw !important;
+  }
+  
+  .ServiceItem {
+    padding: 6px 8px !important;
+  }
+  
+  .ServiceIcon {
+    min-width: 32px !important;
+  }
+}
+
+/* Extra Small Mobile Styles (max 319px) */
+@media (max-width: 319px) {
+  .NavBarContainer {
+    padding: 3px 4px;
+  }
+  
+  .LogoNavBar {
+    width: 90px;
+    margin-left: 2px;
+  }
+  
+  .LogoNavBar::after {
+    margin: 0 4px 0 2px;
+    height: 18px;
+  }
+  
+  .NavButtons {
+    margin-right: 2px;
+    gap: 2px;
+   
+  }
+  
+  .NavBarContainer Button {
+    padding: 3px 5px;
+    font-size: 8px !important;
+    border-radius: 14px;
+  }
+  
+  .MuiMenu-paper {
+    min-width: 140px !important;
+    max-width: 98vw !important;
+  }
+  
+  .ServiceItem {
+    padding: 4px 6px !important;
+  }
+}
+/* Very Large Screens (1440px+) */
+@media (min-width: 1440px) {
+  .LogoNavBar {
+    width: 280px;
+    margin-left: 80px;
+  }
+  
+  .LogoNavBar::after {
+    margin: 0 40px 0 24px;
+    height: 40px;
+  }
+  
+  .NavButtons {
+    margin-right: 80px;
+    gap: 15px;
+  }
+  
+  .NavBarContainer Button {
+    padding: 10px 26px;
+    font-size: 17px !important;
+  }
+  
+  .NavBarContainer {
+    padding: 12px 30px;
+  }
+}
+
+/* Landscape Mobile Orientation */
+@media (max-height: 500px) and (orientation: landscape) {
+  .NavBarContainer {
+    padding: 4px 15px;
+  }
+  
+  .LogoNavBar {
+    width: 140px;
+  }
+  
+  .LogoNavBar::after {
+    height: 20px;
+    margin: 0 10px 0 6px;
+  }
+  
+  .NavBarContainer Button {
+    padding: 4px 10px;
+    font-size: 13px !important;
+  }
 }
