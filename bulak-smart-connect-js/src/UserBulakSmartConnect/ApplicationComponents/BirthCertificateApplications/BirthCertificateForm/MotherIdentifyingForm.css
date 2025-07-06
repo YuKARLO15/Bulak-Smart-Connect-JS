@@ -198,6 +198,35 @@
   transform: rotate(45deg);
 }
 
+/* Error Styles for Validation */
+.FormInputMother.error,
+.SelectInputMother.error {
+  border: 2px solid #dc3545 !important;
+  background-color: #fff5f5;
+}
+
+.ErrorMessageMother {
+  color: #dc3545;
+  font-size: 0.8rem;
+  margin-top: 4px;
+  display: block;
+  font-weight: 500;
+}
+
+.RequiredFieldMother {
+  color: #dc3545;
+  font-weight: bold;
+  margin-left: 2px;
+}
+
+/* Focus styles for error inputs */
+.FormInputMother.error:focus,
+.SelectInputMother.error:focus {
+  border-color: #dc3545;
+  box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+  outline: none;
+}
+
 /* For better responsive behavior */
 @media screen and (max-width: 768px) {
   .FormRowMother {

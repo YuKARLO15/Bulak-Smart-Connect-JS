@@ -60,6 +60,7 @@ const BirthCertificateForm = () => {
   
   // Create refs for each form step
   const childFormRef = useRef();
+  const motherFormRef = useRef();
 
   const isEditing =
     location.state?.isEditing || localStorage.getItem('isEditingBirthApplication') === 'true';
@@ -149,7 +150,10 @@ useEffect(() => {
       'motherOccupation',
       'motherAge',
       'motherStreet',
+      'motherBarangay',
       'motherCity',
+      'motherProvince',
+      'motherCountry',
     ],
     3: [
       'fatherLastName',
@@ -187,6 +191,15 @@ useEffect(() => {
     if (step === 1) {
       if (childFormRef.current && childFormRef.current.validateAllFields) {
         const isValid = childFormRef.current.validateAllFields();
+        if (isValid) {
+          setStep(prevStep => prevStep + 1);
+        }
+      }
+    } 
+    // For step 2, use the mother form's validation
+    else if (step === 2) {
+      if (motherFormRef.current && motherFormRef.current.validateAllFields) {
+        const isValid = motherFormRef.current.validateAllFields();
         if (isValid) {
           setStep(prevStep => prevStep + 1);
         }
@@ -420,6 +433,7 @@ const handleSubmit = async e => {
         {step === 2 && (
           <>
             <MotherInformationBirthForm
+              ref={motherFormRef}
               formData={formData}
               handleChange={handleChange}
               errors={errors}
