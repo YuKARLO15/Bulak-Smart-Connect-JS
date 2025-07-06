@@ -645,9 +645,8 @@ const Below18Registration = () => {
 
   return (
     <div className={`FormContainerBelow18 ${isSidebarOpen ? 'SidebarOpenBelow18' : ''}`}>
-      <NavBar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
       <Typography variant="h5" className="FormTitleBelow18">
-          Applying for Delayed Registration - Below 18 Years Old
+          Application for Delayed Registration - Below 18 
       </Typography>
    
       
