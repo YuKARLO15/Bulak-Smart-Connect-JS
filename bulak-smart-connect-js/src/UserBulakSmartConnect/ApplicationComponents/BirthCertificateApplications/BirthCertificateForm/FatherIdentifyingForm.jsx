@@ -1,10 +1,17 @@
 import React, { useState, forwardRef, useImperativeHandle } from 'react';
+import {
+  FormControl,
+  FormControlLabel,
+  Radio,
+  RadioGroup,
+  Typography,
+} from '@mui/material';
 import './FatherIdentifyingForm.css';
 
 const FatherIdentifyingForm = forwardRef(({ formData, handleChange }, ref) => {
   const [showExtension, setShowExtension] = useState(formData?.fatherHasExtension || false);
-  const [notAcknowledgedByFather, setNotAcknowledgedByFather] = useState(
-    formData?.notAcknowledgedByFather || false
+  const [fatherAcknowledgment, setFatherAcknowledgment] = useState(
+    formData?.fatherAcknowledgment || ''
   );
   const [errors, setErrors] = useState({});
 
@@ -62,8 +69,13 @@ const FatherIdentifyingForm = forwardRef(({ formData, handleChange }, ref) => {
   const validateForm = () => {
     const newErrors = {};
 
-    // Only validate if father is acknowledged
-    if (!notAcknowledgedByFather) {
+    // First validate that father acknowledgment is selected (required)
+    if (!formData?.fatherAcknowledgment) {
+      newErrors.fatherAcknowledgment = 'Please select if the father acknowledges the child';
+    }
+
+    // Only validate father fields if father acknowledges the child
+    if (formData?.fatherAcknowledgment === 'acknowledged') {
       // Required fields validation based on the parent form's required fields for step 3
       if (!formData?.fatherLastName?.trim()) {
         newErrors.fatherLastName = 'This field is required';
@@ -108,8 +120,8 @@ const FatherIdentifyingForm = forwardRef(({ formData, handleChange }, ref) => {
   const validateField = (name, value) => {
     let error = '';
 
-    // Only validate if father is acknowledged
-    if (!notAcknowledgedByFather) {
+    // Only validate if father acknowledges the child
+    if (formData?.fatherAcknowledgment === 'acknowledged') {
       switch (name) {
         case 'fatherLastName':
           if (!value?.trim()) {
@@ -190,10 +202,17 @@ const FatherIdentifyingForm = forwardRef(({ formData, handleChange }, ref) => {
       if (!isValid) {
         // Find first error element and scroll to it
         setTimeout(() => {
-          const firstErrorElement = document.querySelector('.FormInputFather.error, .SelectInputFather.error');
+          // Check for radio button error first, then other errors
+          const firstErrorElement = document.querySelector('.FatherAcknowledgmentFormControl.Mui-error, .FormInputFather.error, .SelectInputFather.error');
           if (firstErrorElement) {
             firstErrorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            firstErrorElement.focus();
+            // Focus on the first radio button if that's the error
+            const radioButton = firstErrorElement.querySelector('input[type="radio"]');
+            if (radioButton) {
+              radioButton.focus();
+            } else {
+              firstErrorElement.focus();
+            }
           }
         }, 100);
       }
@@ -202,19 +221,43 @@ const FatherIdentifyingForm = forwardRef(({ formData, handleChange }, ref) => {
     }
   }));
 
-  const handleNotAcknowledgedChange = e => {
-    const isChecked = e.target.checked;
-    setNotAcknowledgedByFather(isChecked);
+  const handleFatherAcknowledgmentChange = e => {
+    const value = e.target.value;
+    setFatherAcknowledgment(value);
     
-    // Clear all errors when "not acknowledged" is checked
-    if (isChecked) {
-      setErrors({});
+    // Clear the acknowledgment error when user makes a selection
+    if (errors.fatherAcknowledgment) {
+      setErrors(prev => {
+        const newErrors = { ...prev };
+        delete newErrors.fatherAcknowledgment;
+        return newErrors;
+      });
+    }
+    
+    // Clear all father-related errors when switching to "not acknowledged"
+    if (value === 'not-acknowledged') {
+      setErrors(prev => {
+        const newErrors = { ...prev };
+        // Remove father-specific errors
+        delete newErrors.fatherLastName;
+        delete newErrors.fatherFirstName;
+        delete newErrors.fatherCitizenship;
+        delete newErrors.fatherReligion;
+        delete newErrors.fatherOccupation;
+        delete newErrors.fatherAge;
+        delete newErrors.fatherStreet;
+        delete newErrors.fatherBarangay;
+        delete newErrors.fatherCity;
+        delete newErrors.fatherProvince;
+        delete newErrors.fatherCountry;
+        return newErrors;
+      });
     }
     
     handleChange({
       target: {
-        name: 'notAcknowledgedByFather',
-        value: isChecked,
+        name: 'fatherAcknowledgment',
+        value: value,
       },
     });
   };
@@ -223,30 +266,61 @@ const FatherIdentifyingForm = forwardRef(({ formData, handleChange }, ref) => {
     <div className="BirthFormContainerFather">
       <div className="FormHeaderFather">III. FATHER IDENTIFYING INFORMATION</div>
 
-      <div className="NotAcknowledgedCheckboxContainer CheckboxContainerFather">
-        <input
-          type="checkbox"
-          id="notAcknowledgedByFather"
-          checked={notAcknowledgedByFather}
-          onChange={handleNotAcknowledgedChange}
-          className="CheckboxInputFather"
-        />
-        <label htmlFor="notAcknowledgedByFather" className="CheckboxLabelFather">
-          Not acknowledged by father
-        </label>
+      {/* Father Acknowledgment Selection */}
+      <div className="FatherAcknowledgmentContainer">
+        <Typography className="FatherAcknowledgmentTitle">
+          Father's Acknowledgment Status <span style={{ color: 'red' }}>*</span>
+        </Typography>
+        <FormControl 
+          component="fieldset" 
+          className={`FatherAcknowledgmentFormControl ${errors.fatherAcknowledgment ? 'Mui-error' : ''}`}
+        >
+          <RadioGroup
+            row
+            name="fatherAcknowledgment"
+            value={formData?.fatherAcknowledgment || ""}
+            onChange={handleFatherAcknowledgmentChange}
+          >
+            <FormControlLabel 
+              value="acknowledged" 
+              control={<Radio />} 
+              label="Acknowledged by Father" 
+            />
+            <FormControlLabel 
+              value="not-acknowledged" 
+              control={<Radio />} 
+              label="Not Acknowledged by Father" 
+            />
+          </RadioGroup>
+          {errors.fatherAcknowledgment && (
+            <Typography 
+              variant="caption" 
+              sx={{ 
+                color: '#d32f2f', 
+                fontSize: '0.75rem', 
+                marginTop: '3px',
+                display: 'block'
+              }}
+            >
+              {errors.fatherAcknowledgment}
+            </Typography>
+          )}
+        </FormControl>
       </div>
 
-      <div className="FormContentFather">
+      {/* Father Information Form - Only show if acknowledged */}
+      {formData?.fatherAcknowledgment === 'acknowledged' && (
+        <div className="FormContentFather">
         {/* Full Name Section */}
         <div className="FormSectionFather">
           <div className="SectionTitleFather">
-            14. FULL NAME (Buong Pangalan) {!notAcknowledgedByFather && requiredField}
+            14. FULL NAME (Buong Pangalan) {requiredField}
           </div>
 
           <div className="FormRowFather">
             <div className="FormGroupFather">
               <label className="FormLabelFather">
-                First Name (Pangalan) {!notAcknowledgedByFather && requiredField}
+                First Name (Pangalan) {requiredField}
               </label>
               <input
                 type="text"
@@ -255,7 +329,7 @@ const FatherIdentifyingForm = forwardRef(({ formData, handleChange }, ref) => {
                 onChange={handleInputChange}
                 onBlur={handleBlur}
                 className={`FormInputFather ${errors.fatherFirstName ? 'error' : ''}`}
-                required={!notAcknowledgedByFather}
+                required
               />
               {errors.fatherFirstName && <span className="ErrorMessageFather">{errors.fatherFirstName}</span>}
             </div>
@@ -273,7 +347,7 @@ const FatherIdentifyingForm = forwardRef(({ formData, handleChange }, ref) => {
 
             <div className="FormGroupFather">
               <label className="FormLabelFather">
-                Last Name (Apelyido) {!notAcknowledgedByFather && requiredField}
+                Last Name (Apelyido) {requiredField}
               </label>
               <input
                 type="text"
@@ -282,7 +356,7 @@ const FatherIdentifyingForm = forwardRef(({ formData, handleChange }, ref) => {
                 onChange={handleInputChange}
                 onBlur={handleBlur}
                 className={`FormInputFather ${errors.fatherLastName ? 'error' : ''}`}
-                required={!notAcknowledgedByFather}
+                required
               />
               {errors.fatherLastName && <span className="ErrorMessageFather">{errors.fatherLastName}</span>}
             </div>
@@ -327,7 +401,7 @@ const FatherIdentifyingForm = forwardRef(({ formData, handleChange }, ref) => {
           <div className="FormRowFather">
             <div className="FormGroupFather" style={{ flex: 1 }}>
               <div className="SectionTitleHalfFather">
-                15. CITIZENSHIP {!notAcknowledgedByFather && requiredField}
+                15. CITIZENSHIP {requiredField}
               </div>
               <input
                 type="text"
@@ -336,14 +410,14 @@ const FatherIdentifyingForm = forwardRef(({ formData, handleChange }, ref) => {
                 onChange={handleInputChange}
                 onBlur={handleBlur}
                 className={`FormInputFather ${errors.fatherCitizenship ? 'error' : ''}`}
-                required={!notAcknowledgedByFather}
+                required
               />
               {errors.fatherCitizenship && <span className="ErrorMessageFather">{errors.fatherCitizenship}</span>}
             </div>
 
             <div className="FormGroupFather" style={{ flex: 1 }}>
               <div className="SectionTitleHalfFather">
-                16. RELIGION/ RELIGIOUS SECT {!notAcknowledgedByFather && requiredField}
+                16. RELIGION/ RELIGIOUS SECT {requiredField}
               </div>
               <input
                 type="text"
@@ -352,7 +426,7 @@ const FatherIdentifyingForm = forwardRef(({ formData, handleChange }, ref) => {
                 onChange={handleInputChange}
                 onBlur={handleBlur}
                 className={`FormInputFather ${errors.fatherReligion ? 'error' : ''}`}
-                required={!notAcknowledgedByFather}
+                required
               />
               {errors.fatherReligion && <span className="ErrorMessageFather">{errors.fatherReligion}</span>}
             </div>
@@ -364,7 +438,7 @@ const FatherIdentifyingForm = forwardRef(({ formData, handleChange }, ref) => {
           <div className="FormRowFather">
             <div className="FormGroupFather" style={{ flex: 1 }}>
               <div className="SectionTitleHalfFather">
-                17. OCCUPATION {!notAcknowledgedByFather && requiredField}
+                17. OCCUPATION {requiredField}
               </div>
               <input
                 type="text"
@@ -373,14 +447,14 @@ const FatherIdentifyingForm = forwardRef(({ formData, handleChange }, ref) => {
                 onChange={handleInputChange}
                 onBlur={handleBlur}
                 className={`FormInputFather ${errors.fatherOccupation ? 'error' : ''}`}
-                required={!notAcknowledgedByFather}
+                required
               />
               {errors.fatherOccupation && <span className="ErrorMessageFather">{errors.fatherOccupation}</span>}
             </div>
 
             <div className="FormGroupFather" style={{ flex: 1 }}>
               <div className="SectionTitleHalfFather">
-                18. AGE at the time of this birth: {!notAcknowledgedByFather && requiredField}
+                18. AGE at the time of this birth: {requiredField}
               </div>
               <input
                 type="text"
@@ -390,7 +464,7 @@ const FatherIdentifyingForm = forwardRef(({ formData, handleChange }, ref) => {
                 onBlur={handleBlur}
                 className={`FormInputFather ${errors.fatherAge ? 'error' : ''}`}
                 placeholder="Enter number only"
-                required={!notAcknowledgedByFather}
+                required
               />
               {errors.fatherAge && <span className="ErrorMessageFather">{errors.fatherAge}</span>}
             </div>
@@ -400,13 +474,13 @@ const FatherIdentifyingForm = forwardRef(({ formData, handleChange }, ref) => {
         {/* Residence Section */}
         <div className="FormSectionFather">
           <div className="SectionTitleFather">
-            19. RESIDENCE {!notAcknowledgedByFather && requiredField}
+            19. RESIDENCE {requiredField}
           </div>
 
           <div className="FormRowFather">
             <div className="FormGroupFather">
               <label className="FormLabelFather">
-                House NO., Street {!notAcknowledgedByFather && requiredField}
+                House NO., Street {requiredField}
               </label>
               <input
                 type="text"
@@ -415,14 +489,14 @@ const FatherIdentifyingForm = forwardRef(({ formData, handleChange }, ref) => {
                 onChange={handleInputChange}
                 onBlur={handleBlur}
                 className={`FormInputFather ${errors.fatherStreet ? 'error' : ''}`}
-                required={!notAcknowledgedByFather}
+                required
               />
               {errors.fatherStreet && <span className="ErrorMessageFather">{errors.fatherStreet}</span>}
             </div>
 
             <div className="FormGroupFather">
               <label className="FormLabelFather">
-                Barangay {!notAcknowledgedByFather && requiredField}
+                Barangay {requiredField}
               </label>
               <input
                 type="text"
@@ -431,7 +505,7 @@ const FatherIdentifyingForm = forwardRef(({ formData, handleChange }, ref) => {
                 onChange={handleInputChange}
                 onBlur={handleBlur}
                 className={`FormInputFather ${errors.fatherBarangay ? 'error' : ''}`}
-                required={!notAcknowledgedByFather}
+                required
               />
               {errors.fatherBarangay && <span className="ErrorMessageFather">{errors.fatherBarangay}</span>}
             </div>
@@ -440,7 +514,7 @@ const FatherIdentifyingForm = forwardRef(({ formData, handleChange }, ref) => {
           <div className="FormRowFather">
             <div className="FormGroupFather">
               <label className="FormLabelFather">
-                City/Municipality {!notAcknowledgedByFather && requiredField}
+                City/Municipality {requiredField}
               </label>
               <input
                 type="text"
@@ -449,14 +523,14 @@ const FatherIdentifyingForm = forwardRef(({ formData, handleChange }, ref) => {
                 onChange={handleInputChange}
                 onBlur={handleBlur}
                 className={`FormInputFather ${errors.fatherCity ? 'error' : ''}`}
-                required={!notAcknowledgedByFather}
+                required
               />
               {errors.fatherCity && <span className="ErrorMessageFather">{errors.fatherCity}</span>}
             </div>
 
             <div className="FormGroupFather">
               <label className="FormLabelFather">
-                Province {!notAcknowledgedByFather && requiredField}
+                Province {requiredField}
               </label>
               <input
                 type="text"
@@ -465,7 +539,7 @@ const FatherIdentifyingForm = forwardRef(({ formData, handleChange }, ref) => {
                 onChange={handleInputChange}
                 onBlur={handleBlur}
                 className={`FormInputFather ${errors.fatherProvince ? 'error' : ''}`}
-                required={!notAcknowledgedByFather}
+                required
               />
               {errors.fatherProvince && <span className="ErrorMessageFather">{errors.fatherProvince}</span>}
             </div>
@@ -474,7 +548,7 @@ const FatherIdentifyingForm = forwardRef(({ formData, handleChange }, ref) => {
           <div className="FormRowFather">
             <div className="FormGroupFather">
               <label className="FormLabelFather">
-                Country {!notAcknowledgedByFather && requiredField}
+                Country {requiredField}
               </label>
               <input
                 type="text"
@@ -483,13 +557,14 @@ const FatherIdentifyingForm = forwardRef(({ formData, handleChange }, ref) => {
                 onChange={handleInputChange}
                 onBlur={handleBlur}
                 className={`FormInputFather ${errors.fatherCountry ? 'error' : ''}`}
-                required={!notAcknowledgedByFather}
+                required
               />
               {errors.fatherCountry && <span className="ErrorMessageFather">{errors.fatherCountry}</span>}
             </div>
           </div>
         </div>
-      </div>
+        </div>
+      )}
     </div>
   );
 });

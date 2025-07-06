@@ -14,6 +14,23 @@
   text-transform: uppercase;
   text-align: center;
 }
+
+.FatherAcknowledgmentContainer {
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #ddd;
+}
+
+.FatherAcknowledgmentTitle {
+  font-weight: bold !important;
+  font-size: 16px !important;
+  color: #1e4e5f;
+  margin-bottom: 10px !important;
+}
+
+.FatherAcknowledgmentFormControl {
+  margin-top: 8px !important;
+}
 .NotAcknowledgedCheckboxContainer {
   display: flex;
   align-items: center;
@@ -177,6 +194,15 @@
   .SelectInputFather {
     width: 100%;
   }
+}
+
+/* Radio button group error styling for father acknowledgment */
+.FatherAcknowledgmentFormControl.Mui-error .MuiFormControlLabel-root .MuiRadio-root {
+  color: #dc3545;
+}
+
+.FatherAcknowledgmentFormControl.Mui-error .MuiFormControlLabel-root .MuiFormControlLabel-label {
+  color: #dc3545;
 }
 
 /* Error Styles for Validation */
