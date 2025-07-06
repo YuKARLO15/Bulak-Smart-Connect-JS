@@ -313,7 +313,7 @@ const getChildBirthPlace = () => {
   };
 
   const shouldShowPaternityAffidavit = () => {
-    if (formData?.maritalStatus === "marital" || formData?.fatherLastName == null) {
+    if (formData.ParentsMarriage == "marital" || formData?.fatherLastName == '') {
       return false;
     }
     return true;
