@@ -570,7 +570,7 @@ const currentDocuments = status === 'marital' ? maritalDocuments : nonMaritalDoc
 
   return (
     <div className={`DelayedOneParentForeignerContainer ${isSidebarOpen ? 'sidebar-open' : ''}`}>
-      <NavBar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
+      
 
       <Typography variant="h5" className="TitleDelayedOneParentForeigner">
         Delayed Registration of Birth (One Parent is a Foreigner)
@@ -582,6 +582,8 @@ const currentDocuments = status === 'marital' ? maritalDocuments : nonMaritalDoc
         </Box>
       ) : (
           <Paper elevation={3} className="DocumentsPaperDelayedOneParentForeigner">
+
+            
               <Typography variant="body1" className="SectionTitleForeigner">
         Mandatory Requirements:
       </Typography>

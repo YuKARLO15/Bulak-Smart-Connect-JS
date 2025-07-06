@@ -161,9 +161,11 @@
   .SubmitButtonOutOfTown {
     order: 1;
   }
+  .TitleDelayedOutOfTown{
+    font-size: 1rem !important;
+  }
 }
 
-/* File upload container improvements */
 .file-upload-container {
   border: 1px solid #e0e0e0;
   border-radius: 4px;
@@ -171,7 +173,7 @@
   margin-bottom: 16px;
   transition: all 0.2s ease;
   background-color: #fcfcfc;
-  width: 100%; /* Ensure container takes full width */
+  width: 100%; 
 }
 
 .file-upload-container:hover {

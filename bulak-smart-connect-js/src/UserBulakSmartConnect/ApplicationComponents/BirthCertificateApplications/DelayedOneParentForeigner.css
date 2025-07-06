@@ -160,3 +160,20 @@
   width: 100%;
   max-width: 900px;
 }
+
+@media (max-width: 768px) {
+  .TitleDelayedOneParentForeigner {
+    font-size: 0.8rem !important;
+
+  }
+
+}
+
+@media  (max-width: 425px) {
+
+ .TitleDelayedOneParentForeigner {
+    font-size: 0.8rem !important;
+    width: 100%;
+  }
+
+}

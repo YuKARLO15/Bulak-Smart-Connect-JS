@@ -40,12 +40,10 @@ const RecentApplicationsComponent = () => {
     const fetchApplications = async () => {
       try {
         setLoading(true);
-        // Use the backend service instead of local getApplications
         const fetchedApplications = await documentApplicationService.getUserApplications();
         setApplications(fetchedApplications);
       } catch (err) {
         setError('Error loading applications: ' + err.message);
-        // Fallback to local data if backend fails
         try {
           const localApps = getApplications();
           setApplications(localApps);
@@ -58,7 +56,6 @@ const RecentApplicationsComponent = () => {
     };
     fetchApplications();
     
-
     const handleStorageChange = e => {
       if (e.key === 'applications') {
         fetchApplications();
@@ -66,20 +63,18 @@ const RecentApplicationsComponent = () => {
     };
 
     window.addEventListener('storage', handleStorageChange);
-
     return () => {
       window.removeEventListener('storage', handleStorageChange);
     };
   }, [location.pathname]);
 
-
-   const handleOpenDialog = () => {
+  const handleOpenDialog = () => {
     setDialogOpen(true);
   };
 
   const handleCloseDialog = () => {
     setDialogOpen(false);
-    };
+  };
     
   const handleApplicationSelect = (type) => {
     setDialogOpen(false);
@@ -90,35 +85,21 @@ const RecentApplicationsComponent = () => {
     }
   };
 
-
-  const StatusColor = status => {
+  const getStatusChipClass = (status) => {
     switch (status) {
       case 'Approved':
-        return '#4caf50'; // Green
+        return 'StatusChipApproved';
       case 'Pending':
-        return '#ff9800'; // Orange
+        return 'StatusChipPending';
       case 'Declined':
-        return '#f44336'; // Red
+        return 'StatusChipDeclined';
       default:
-        return '#184a5b'; // Default blue
-    }
-  };
-
-  const StatusBgColor = status => {
-    switch (status) {
-      case 'Approved':
-        return 'rgba(76, 175, 80, 0.1)'; // Light green
-      case 'Pending':
-        return 'rgba(255, 152, 0, 0.1)'; // Light orange
-      case 'Declined':
-        return 'rgba(244, 67, 54, 0.1)'; // Light red
-      default:
-        return 'rgba(24, 74, 91, 0.1)'; // Light blue
+        return 'StatusChipDefault';
     }
   };
 
   const handleViewSummary = async (application) => {
-    try {
+   try {
       // First, try to get full application data from backend
       let applicationData;
       
@@ -442,136 +423,163 @@ const RecentApplicationsComponent = () => {
     );
   }
 
+  if (loading) {
+    return (
+      <Box className="LoadingContainerApplications">
+        <CircularProgress size={30} />
+        <Typography variant="body2">
+          Loading recent applications...
+        </Typography>
+      </Box>
+    );
+  }
+
+  if (error) {
+    return (
+      <Box className="ErrorContainerApplications">
+        <Alert severity="error">{error}</Alert>
+      </Box>
+    );
+  }
+
+  if (applications.length === 0) {
+    return (
+      <div className="RecentApplicationsDivider">
+        <Typography variant="h5" className="RecentApplicationsTitle">
+          RECENT APPLICATIONS
+        </Typography>
+        <Card className="NoApplicationsCard" elevation={0}>
+          <CardContent>
+            <Typography variant="body1">
+              You have no recent applications.
+            </Typography>
+            <Button
+              variant="contained"
+              className="StartApplicationBtn"
+              onClick={handleOpenDialog}
+            >
+              Start a New Application
+            </Button>
+            
+            <Dialog
+              open={dialogOpen}
+              onClose={handleCloseDialog}
+              maxWidth="xs"
+              fullWidth
+              className="ApplicationDialog"
+            >
+              <DialogTitle className="ApplicationDialogTitle">
+                Select Application Type
+                <IconButton onClick={handleCloseDialog} className="ApplicationDialogCloseButton">
+                  <CloseIcon />
+                </IconButton>
+              </DialogTitle>
+              <DialogContent className="ApplicationDialogContent">
+                <Stack spacing={0} divider={<Divider />}>
+                  <Button
+                    onClick={() => handleApplicationSelect('marriage')}
+                    className="ApplicationDialogButton"
+                  >
+                    <FavoriteIcon className="ApplicationDialogIcon" />
+                    <Box className="ApplicationDialogButtonText">
+                      <Typography className="ApplicationDialogButtonTitle">Marriage Certificate</Typography>
+                      <Typography variant="body2" className="ApplicationDialogButtonSubtitle">
+                        Apply for a marriage certificate or license
+                      </Typography>
+                    </Box>
+                  </Button>
+                  
+                  <Button
+                    onClick={() => handleApplicationSelect('birth')}
+                    className="ApplicationDialogButton"
+                  >
+                    <AssignmentIcon className="ApplicationDialogIcon" />
+                    <Box className="ApplicationDialogButtonText">
+                      <Typography className="ApplicationDialogButtonTitle">Birth Certificate</Typography>
+                      <Typography variant="body2" className="ApplicationDialogButtonSubtitle">
+                        Apply for a birth certificate
+                      </Typography>
+                    </Box>
+                  </Button>
+                </Stack>
+              </DialogContent>
+            </Dialog>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
   return (
     <div className="RecentApplicationsDivider">
       <Typography variant="h5" className="RecentApplicationsTitle">
         RECENT APPLICATIONS
       </Typography>
-      <Divider sx={{ mb: 2 }} />
+      <Divider className="ApplicationListDivider" />
       <List disablePadding className="applicationList">
         {applications.map((app, index) => (
-          <ListItem key={app.id || index} disablePadding sx={{ mb: 1.5 }} className="applicationListItem">
-            <Card 
-              className="ApplicationCard" 
-              elevation={0}
-              sx={{ 
-                borderLeft: `3px solid ${StatusColor(app.status)}`,
-                width: '100%',
-                height: 'auto',
-                backgroundColor: '#fff',
-                transition: 'transform 0.2s',
-                '&:hover': {
-                  transform: 'translateY(-2px)',
-                  boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)'
-                }
-              }}
+          <ListItem key={app.id || index} disablePadding className="applicationListItem">
+  <Card 
+    className={`ApplicationCard Status${app.status}`} 
+    elevation={0}
+  >
+    <CardContent className="ApplicationCardContent">
+      <Grid container alignItems="center" spacing={1}>
+        <Grid item xs={12} sm={7}>
+          <Box>
+        
+            <Box className="ApplicationTitleRow">
+              <Typography 
+                className="ApplicationCardTitle"
+                onClick={() => handleViewSummary(app)}
+              >
+                {app.applicationType || app.type || 'Failed Fetching Application'}
+              </Typography>
+              <Typography className="ApplicationSubtype">
+                {app.applicationSubtype || app.subType}
+              </Typography>
+              <Chip
+                label={app.status}
+                size="small"
+                className={`ApplicationStatusChip ${getStatusChipClass(app.status)}`}
+              />
+            </Box>
+            
+            <Box className="ApplicationInfoContainer">
+              <Typography className="ApplicationApplicant">
+                Applicant: {app.formData?.firstName || ''} {app.formData?.middleName || ''} {app.formData?.lastName || ''}
+              </Typography>
+              <Typography className="ApplicationId">
+                ID: {app.id || 'N/A'}
+              </Typography>
+              <Typography className="ApplicationDate">
+                {app.date}
+              </Typography>
+            </Box>
+            
+            {app.message && (
+              <Typography className="ApplicationDescriptionText">
+                {app.message}
+              </Typography>
+            )}
+          </Box>
+        </Grid>
+        
+        <Grid item xs={12} sm={5}>
+          <Box className="ApplicationButtonContainer">
+            <Button
+              size="small"
+              className="ViewSummaryBtn"
+              onClick={() => handleViewSummary(app)}
             >
-              <CardContent sx={{ py: 1.5, px: 2 }}>
-                <Grid container alignItems="center" spacing={1}>
-                  <Grid item xs={12} sm={7}>
-                    <Box>
-                      <Box display="flex" alignItems="center" mb={0.5}>
-                        <Typography 
-                          className="ApplicationCardTitle"
-                          onClick={() => handleViewSummary(app)}
-                          sx={{ 
-                            fontSize: '0.95rem', 
-                            fontWeight: 500, 
-                            color: '#184a5b',
-                            cursor: 'pointer',
-                            '&:hover': { textDecoration: 'underline' }
-                          }}
-                        >
-                                       {app.applicationType || app.type || 'Failed Fetching Application'}
-                        </Typography>
-                                             <Chip
-      label={app.applicationSubtype || app.subType}
-      size="medium"
-      sx={{
-        ml: 1,
-        backgroundColor: '#EAF6F7',
-        color: '#20505C',
-        fontSize: '0.8rem',
-        fontWeight: 500,
-        borderRadius: '4px',
-        '& .MuiChip-label': { px: 1 }
-      }}
-    />
-                        <Chip
-                          label={app.status}
-                          size="small"
-                          sx={{
-                            ml: 1,
-                            height: '20px',
-                            fontSize: '0.7rem',
-                            fontWeight: 500,
-                            backgroundColor: StatusBgColor(app.status),
-                            color: StatusColor(app.status),
-                            borderRadius: '4px',
-                            '& .MuiChip-label': { px: 1 }
-                          }}
-                        />
-                      
-                      </Box>
-                      
-                 <Box display="flex" alignItems="left" mb={0.5} flexDirection={{ xs: 'column' }}>
-                        <Typography sx={{ fontSize: '0.8rem', color: '#184a5b', fontWeight: 400 }}>
-    Applicant: {app.formData?.firstName || ''} {app.formData?.middleName || ''} {app.formData?.lastName || ''}
-  </Typography>
-                        <Typography className="ApplicationId" sx={{ fontSize: '0.75rem', color: '#666', mr: 1.5 }}>
-                          ID: {app.id || 'N/A'}
-                        </Typography>
-                        <Typography className="ApplicationDate" sx={{ fontSize: '0.75rem', color: '#666' }}>
-                          {app.date}
-                        </Typography>
-         
-                      </Box>
-                      
-                      {app.message && (
-                        <Typography 
-                          className="ApplicationDescription" 
-                          sx={{ 
-                            fontSize: '0.8rem', 
-                            color: '#555',
-                            display: '-webkit-box',
-                            WebkitLineClamp: 1,
-                            WebkitBoxOrient: 'vertical',
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis'
-                          }}
-                        >
-                          {app.message}
-                        </Typography>
-                      )}
-                    </Box>
-                  </Grid>
-                  
-                  <Grid item xs={12} sm={5}>
-                    <Box display="flex" justifyContent="flex-end">
-                      <Button
-                        size="small"
-                        className="ViewSummaryBtn"
-                        onClick={() => handleViewSummary(app)}
-                        sx={{ 
-                          color: '#184a5b', 
-                          border: '1px solid #8aacb5',
-                          textTransform: 'none',
-                          fontSize: '0.75rem',
-                          py: 0.5,
-                          minWidth: '100px',
-                          '&:hover': {
-                            backgroundColor: 'rgba(24, 74, 91, 0.04)'
-                          }
-                        }}
-                      >
-                        View Application
-                      </Button>
-                    </Box>
-                  </Grid>
-                </Grid>
-              </CardContent>
-            </Card>
-          </ListItem>
+              View Application
+            </Button>
+          </Box>
+        </Grid>
+      </Grid>
+    </CardContent>
+  </Card>
+</ListItem>
         ))}
       </List>
     </div>
