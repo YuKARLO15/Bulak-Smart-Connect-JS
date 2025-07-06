@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState, forwardRef, useImperativeHandle, useEffect } from 'react';
 import {
   TextField,
   Typography,
@@ -15,7 +15,8 @@ import {
 } from '@mui/material';
 import './MarriageIdentifyingForm.css';
 
-const MarriageInformationBirthForm = ({ formData, handleChange, errors }) => {
+const MarriageInformationBirthForm = forwardRef(({ formData, handleChange }, ref) => {
+  const [errors, setErrors] = useState({});
   const requiredField = <span style={{ color: 'red' }}>*</span>;
 
   const currentYear = new Date().getFullYear();
@@ -25,25 +26,173 @@ const MarriageInformationBirthForm = ({ formData, handleChange, errors }) => {
     'July', 'August', 'September', 'October', 'November', 'December',
   ];
   const days = Array.from({ length: 31 }, (_, i) => i + 1);
-useEffect(() => {
-  if (formData.ParentsMarriage) {
-    localStorage.setItem('maritalStatus', formData.ParentsMarriage);
-  }
-}, [formData.ParentsMarriage]);
+
+  // Handle input change with validation
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    
+    // Clear error for this field when user starts typing
+    if (errors[name]) {
+      setErrors(prev => {
+        const newErrors = { ...prev };
+        delete newErrors[name];
+        return newErrors;
+      });
+    }
+    
+    handleChange(e);
+  };
+
+  // Handle select change with validation
+  const handleSelectChange = (e) => {
+    const { name, value } = e.target;
+    
+    // Clear error for this field when user selects
+    if (errors[name]) {
+      setErrors(prev => {
+        const newErrors = { ...prev };
+        delete newErrors[name];
+        return newErrors;
+      });
+    }
+    
+    handleChange(e);
+  };
+
+  // Handle radio change and clear errors when switching to non-marital
+  const handleParentsMarriageChange = (e) => {
+    const { value } = e.target;
+    
+    // Clear the ParentsMarriage error when user makes a selection
+    if (errors.ParentsMarriage) {
+      setErrors(prev => {
+        const newErrors = { ...prev };
+        delete newErrors.ParentsMarriage;
+        return newErrors;
+      });
+    }
+    
+    // Clear all marriage-related errors when switching to non-marital
+    if (value === 'non-marital') {
+      setErrors(prev => {
+        const newErrors = { ...prev };
+        // Remove marriage-specific errors but keep ParentsMarriage error handling above
+        delete newErrors.marriageMonth;
+        delete newErrors.marriageDay;
+        delete newErrors.marriageYear;
+        delete newErrors.marriageCity;
+        delete newErrors.marriageProvince;
+        delete newErrors.marriageCountry;
+        return newErrors;
+      });
+    }
+    
+    handleChange(e);
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+
+    // First validate that ParentsMarriage is selected (required)
+    if (!formData?.ParentsMarriage) {
+      newErrors.ParentsMarriage = 'Please select if the child is marital or non-marital';
+    }
+
+    // Only validate marriage fields if child is marital
+    if (formData.ParentsMarriage === 'marital') {
+      // Date validation
+      if (!formData?.marriageMonth?.trim()) {
+        newErrors.marriageMonth = 'This field is required';
+      }
+      if (!formData?.marriageDay) {
+        newErrors.marriageDay = 'This field is required';
+      }
+      if (!formData?.marriageYear) {
+        newErrors.marriageYear = 'This field is required';
+      }
+      
+      // Place validation
+      if (!formData?.marriageCity?.trim()) {
+        newErrors.marriageCity = 'This field is required';
+      }
+      if (!formData?.marriageProvince?.trim()) {
+        newErrors.marriageProvince = 'This field is required';
+      }
+      if (!formData?.marriageCountry?.trim()) {
+        newErrors.marriageCountry = 'This field is required';
+      }
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  // Expose validation function to parent component
+  useImperativeHandle(ref, () => ({
+    validateForm,
+    // New function to validate all fields at once (for Next button)
+    validateAllFields: () => {
+      const isValid = validateForm();
+      
+      // If validation fails, scroll to first error
+      if (!isValid) {
+        // Find first error element and scroll to it
+        setTimeout(() => {
+          // Check for radio button error first, then other errors
+          const firstErrorElement = document.querySelector('.MarriageChildStatusFormControl.Mui-error, .Mui-error');
+          if (firstErrorElement) {
+            firstErrorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            // Focus on the first radio button if that's the error
+            const radioButton = firstErrorElement.querySelector('input[type="radio"]');
+            if (radioButton) {
+              radioButton.focus();
+            }
+          }
+        }, 100);
+      }
+      
+      return isValid;
+    }
+  }));
+
+  useEffect(() => {
+    if (formData.ParentsMarriage) {
+      localStorage.setItem('maritalStatus', formData.ParentsMarriage);
+    }
+  }, [formData.ParentsMarriage]);
   return (
     <Box className="MarriageInformationBirthFormContainer">
       <Box className="MarriageChildStatusContainer">
-        <Typography className="MarriageFormTitle">Child's Status</Typography>
-        <FormControl component="fieldset" className="MarriageChildStatusFormControl">
+        <Typography className="MarriageFormTitle">
+          Child's Status <span style={{ color: 'red' }}>*</span>
+        </Typography>
+        <FormControl 
+          component="fieldset" 
+          className="MarriageChildStatusFormControl"
+          error={!!errors.ParentsMarriage}
+        >
           <RadioGroup
             row
             name="ParentsMarriage"
             value={formData.ParentsMarriage || ""}
-            onChange={handleChange}
+            onChange={handleParentsMarriageChange}
           >
             <FormControlLabel value="marital" control={<Radio />} label="Marital Child" />
             <FormControlLabel value="non-marital" control={<Radio />} label="Non-Marital Child" />
           </RadioGroup>
+          {errors.ParentsMarriage && (
+            <Typography 
+              variant="caption" 
+              sx={{ 
+                color: '#d32f2f', 
+                fontSize: '0.75rem', 
+                marginTop: '3px',
+                display: 'block'
+              }}
+            >
+              {errors.ParentsMarriage}
+            </Typography>
+          )}
         </FormControl>
       </Box>
 
@@ -67,7 +216,7 @@ useEffect(() => {
                     id="marriage-month"
                     name="marriageMonth"
                     value={formData.marriageMonth || ''}
-                    onChange={handleChange}
+                    onChange={handleSelectChange}
                     required
                     error={!!errors.marriageMonth}
                   >
@@ -77,6 +226,11 @@ useEffect(() => {
                       </MenuItem>
                     ))}
                   </Select>
+                  {errors.marriageMonth && (
+                    <Typography variant="caption" sx={{ color: '#d32f2f', fontSize: '0.75rem', marginTop: '3px', marginLeft: '14px' }}>
+                      {errors.marriageMonth}
+                    </Typography>
+                  )}
                 </FormControl>
               </Grid>
 
@@ -88,7 +242,7 @@ useEffect(() => {
                     id="marriage-day"
                     name="marriageDay"
                     value={formData.marriageDay || ''}
-                    onChange={handleChange}
+                    onChange={handleSelectChange}
                     required
                     error={!!errors.marriageDay}
                   >
@@ -98,6 +252,11 @@ useEffect(() => {
                       </MenuItem>
                     ))}
                   </Select>
+                  {errors.marriageDay && (
+                    <Typography variant="caption" sx={{ color: '#d32f2f', fontSize: '0.75rem', marginTop: '3px', marginLeft: '14px' }}>
+                      {errors.marriageDay}
+                    </Typography>
+                  )}
                 </FormControl>
               </Grid>
 
@@ -109,7 +268,7 @@ useEffect(() => {
                     id="marriage-year"
                     name="marriageYear"
                     value={formData.marriageYear || ''}
-                    onChange={handleChange}
+                    onChange={handleSelectChange}
                     required
                     error={!!errors.marriageYear}
                   >
@@ -119,6 +278,11 @@ useEffect(() => {
                       </MenuItem>
                     ))}
                   </Select>
+                  {errors.marriageYear && (
+                    <Typography variant="caption" sx={{ color: '#d32f2f', fontSize: '0.75rem', marginTop: '3px', marginLeft: '14px' }}>
+                      {errors.marriageYear}
+                    </Typography>
+                  )}
                 </FormControl>
               </Grid>
 
@@ -135,7 +299,7 @@ useEffect(() => {
                   name="marriageCity"
                   label="City / Municipality"
                   value={formData.marriageCity || ''}
-                  onChange={handleChange}
+                  onChange={handleInputChange}
                   required
                   error={!!errors.marriageCity}
                   helperText={errors.marriageCity}
@@ -150,7 +314,7 @@ useEffect(() => {
                   name="marriageProvince"
                   label="Province"
                   value={formData.marriageProvince || ''}
-                  onChange={handleChange}
+                  onChange={handleInputChange}
                   required
                   error={!!errors.marriageProvince}
                   helperText={errors.marriageProvince}
@@ -165,7 +329,7 @@ useEffect(() => {
                   name="marriageCountry"
                   label="Country"
                   value={formData.marriageCountry || ''}
-                  onChange={handleChange}
+                  onChange={handleInputChange}
                   required
                   error={!!errors.marriageCountry}
                   helperText={errors.marriageCountry}
@@ -185,6 +349,6 @@ useEffect(() => {
       )}
     </Box>
   );
-};
+});
 
 export default MarriageInformationBirthForm;
