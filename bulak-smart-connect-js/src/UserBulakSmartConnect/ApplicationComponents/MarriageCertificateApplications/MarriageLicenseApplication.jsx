@@ -21,13 +21,13 @@ import './MarriageLicenseApplication.css';
 import { documentApplicationService } from '../../../services/documentApplicationService';
 
 const mandatoryDocumentsHusband = [
-  'Birth / Baptismal Certificate (Husband)',
-  'Cenomar (PSA) (Husband)',
+  'Birth / Baptismal Certificate (Groom)',
+  'Cenomar (PSA) (Groom)',
 ];
 
 const mandatoryDocumentsWife = [
-  'Birth / Baptismal Certificate (Wife)',
-  'Cenomar (PSA) (Wife)',
+  'Birth / Baptismal Certificate (Bride)',
+  'Cenomar (PSA) (Bride)',
 ];
 
 const sharedMandatoryDocuments = [
@@ -604,17 +604,18 @@ const handleFileUpload = async (label, isUploaded, fileDataObj) => {
 
   return (
     <div className={`MarriageLicenseContainer ${isSidebarOpen ? 'sidebar-open' : ''}`}>
-      <NavBar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
       <Typography variant="h5" className="TitleMarriageLicense">
         MARRIAGE CERTIFICATE APPLICATION
       </Typography>
-      <Typography className="SubtitleMarriageLicense">Application for Marriage License</Typography>
+    
 
+      <Box className="MandatoryDocumentsMarriageLicense">
       {applicationId && (
         <Typography variant="body2" className="ApplicationIdMarriageLicense">
           Application ID: {applicationId}
         </Typography>
       )}
+<Typography variant="body1" className="SectionTitleMarriageLicense"> Select if applicable </Typography>
 
       <Box className="ApplicantTypeSectionMarriageLicense">
         <FormControlLabel
@@ -648,8 +649,6 @@ const handleFileUpload = async (label, isUploaded, fileDataObj) => {
           label="Annulled"
         />
       </Box>
-
-      <Box className="MandatoryDocumentsMarriageLicense">
         <Typography variant="body1" className="SectionTitleMarriageLicense">
           Mandatory Documents:
         </Typography>
@@ -663,7 +662,7 @@ const handleFileUpload = async (label, isUploaded, fileDataObj) => {
         )}
         
         <Typography variant="h6" sx={{ mt: 2, mb: 1, color: '#184a5b' }}>
-          Husband's Documents:
+          Groom's Documents:
         </Typography>
         {mandatoryDocumentsHusband.map((doc, index) => (
           <FileUpload
@@ -678,7 +677,7 @@ const handleFileUpload = async (label, isUploaded, fileDataObj) => {
         ))}
 
         <Typography variant="h6" sx={{ mt: 2, mb: 1, color: '#184a5b' }}>
-          Wife's Documents:
+          Bride's Documents:
         </Typography>
         {mandatoryDocumentsWife.map((doc, index) => (
           <FileUpload
@@ -1041,7 +1040,7 @@ const handleFileUpload = async (label, isUploaded, fileDataObj) => {
         <Button
           variant="contained"
           disabled={!isFormComplete || isLoading || isSubmitted}
-          sx={{ marginTop: '20px', minWidth: '120px' }}
+          sx={{  minWidth: '120px' }}
           onClick={handleSubmit}
           className="SubmitButtonMarriageLicense"
         >
