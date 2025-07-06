@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, forwardRef, useImperativeHandle } from 'react';
 import './IdentifyingForm.css';
 
-const ChildIdentifyingForm = ({ formData, handleChange }) => {
+const ChildIdentifyingForm = forwardRef(({ formData, handleChange }, ref) => {
   const [showExtension, setShowExtension] = useState(false);
+  const [errors, setErrors] = useState({});
   const requiredField = <span className="RequiredFieldChild">*</span>;
 
   const validateNumberOnly = e => {
@@ -12,6 +13,213 @@ const ChildIdentifyingForm = ({ formData, handleChange }) => {
 
     handleChange(e);
   };
+
+  // Handle number input change with validation
+  const handleNumberInputChange = (e) => {
+    if (!/^\d*$/.test(e.target.value)) {
+      return;
+    }
+
+    const { name } = e.target;
+    
+    // Clear error for this field when user starts typing
+    if (errors[name]) {
+      setErrors(prev => {
+        const newErrors = { ...prev };
+        delete newErrors[name];
+        return newErrors;
+      });
+    }
+    
+    handleChange(e);
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+
+    // Required fields validation (excluding hospital and multipleBirthOrder)
+    if (!formData?.lastName?.trim()) {
+      newErrors.lastName = 'This field is required';
+    }
+    if (!formData?.firstName?.trim()) {
+      newErrors.firstName = 'This field is required';
+    }
+    if (!formData?.birthMonth) {
+      newErrors.birthMonth = 'This field is required';
+    }
+    if (!formData?.birthDay) {
+      newErrors.birthDay = 'This field is required';
+    }
+    if (!formData?.birthYear) {
+      newErrors.birthYear = 'This field is required';
+    }
+    if (!formData?.sex) {
+      newErrors.sex = 'This field is required';
+    }
+    // Hospital is not required (excluded)
+    if (!formData?.city?.trim()) {
+      newErrors.city = 'This field is required';
+    }
+    if (!formData?.province?.trim()) {
+      newErrors.province = 'This field is required';
+    }
+    if (!formData?.barangay?.trim()) {
+      newErrors.barangay = 'This field is required';
+    }
+    if (!formData?.typeOfBirth) {
+      newErrors.typeOfBirth = 'This field is required';
+    }
+    // Multiple birth order is not required (excluded)
+    if (!formData?.birthOrder?.trim()) {
+      newErrors.birthOrder = 'This field is required';
+    }
+    if (!formData?.birthWeight?.trim()) {
+      newErrors.birthWeight = 'This field is required';
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  // Validate individual field
+  const validateField = (name, value) => {
+    let error = '';
+
+    switch (name) {
+      case 'lastName':
+        if (!value?.trim()) {
+          error = 'This field is required';
+        }
+        break;
+      case 'firstName':
+        if (!value?.trim()) {
+          error = 'This field is required';
+        }
+        break;
+      case 'birthMonth':
+        if (!value) {
+          error = 'This field is required';
+        }
+        break;
+      case 'birthDay':
+        if (!value) {
+          error = 'This field is required';
+        }
+        break;
+      case 'birthYear':
+        if (!value) {
+          error = 'This field is required';
+        }
+        break;
+      case 'sex':
+        if (!value) {
+          error = 'This field is required';
+        }
+        break;
+      case 'city':
+        if (!value?.trim()) {
+          error = 'This field is required';
+        }
+        break;
+      case 'province':
+        if (!value?.trim()) {
+          error = 'This field is required';
+        }
+        break;
+      case 'barangay':
+        if (!value?.trim()) {
+          error = 'This field is required';
+        }
+        break;
+      case 'typeOfBirth':
+        if (!value) {
+          error = 'This field is required';
+        }
+        break;
+      case 'birthOrder':
+        if (!value?.trim()) {
+          error = 'This field is required';
+        }
+        break;
+      case 'birthWeight':
+        if (!value?.trim()) {
+          error = 'This field is required';
+        }
+        break;
+      default:
+        break;
+    }
+
+    return error;
+  };
+
+  // Handle input change and clear errors
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    
+    // Clear error for this field when user starts typing
+    if (errors[name]) {
+      setErrors(prev => {
+        const newErrors = { ...prev };
+        delete newErrors[name];
+        return newErrors;
+      });
+    }
+    
+    handleChange(e);
+  };
+
+  // Handle blur event for validation
+  const handleBlur = (e) => {
+    const { name, value } = e.target;
+    const error = validateField(name, value);
+    
+    if (error) {
+      setErrors(prev => ({
+        ...prev,
+        [name]: error
+      }));
+    }
+  };
+
+  // Handle radio button change (immediate validation)
+  const handleRadioChange = (e) => {
+    const { name } = e.target;
+    
+    // Clear error for radio buttons immediately when selected
+    if (errors[name]) {
+      setErrors(prev => {
+        const newErrors = { ...prev };
+        delete newErrors[name];
+        return newErrors;
+      });
+    }
+    
+    handleChange(e);
+  };
+
+  // Expose validation function to parent component
+  useImperativeHandle(ref, () => ({
+    validateForm,
+    // New function to validate all fields at once (for Next button)
+    validateAllFields: () => {
+      const isValid = validateForm();
+      
+      // If validation fails, scroll to first error
+      if (!isValid) {
+        // Find first error element and scroll to it
+        setTimeout(() => {
+          const firstErrorElement = document.querySelector('.FormInputChild.error, .SelectInputChild.error, .SmallInputChild.error');
+          if (firstErrorElement) {
+            firstErrorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            firstErrorElement.focus();
+          }
+        }, 100);
+      }
+      
+      return isValid;
+    }
+  }));
 
   return (
     <div className="BirthFormContainerChild">
@@ -29,10 +237,12 @@ const ChildIdentifyingForm = ({ formData, handleChange }) => {
                 type="text"
                 name="lastName"
                 value={formData?.lastName || ''}
-                onChange={handleChange}
-                className="FormInputChild"
+                onChange={handleInputChange}
+                onBlur={handleBlur}
+                className={`FormInputChild ${errors.lastName ? 'error' : ''}`}
                 required
               />
+              {errors.lastName && <span className="ErrorMessageChild">{errors.lastName}</span>}
             </div>
 
             <div className="FormGroupChild">
@@ -41,15 +251,17 @@ const ChildIdentifyingForm = ({ formData, handleChange }) => {
                 type="text"
                 name="firstName"
                 value={formData?.firstName || ''}
-                onChange={handleChange}
-                className="FormInputChild"
+                onChange={handleInputChange}
+                onBlur={handleBlur}
+                className={`FormInputChild ${errors.firstName ? 'error' : ''}`}
                 required
               />
+              {errors.firstName && <span className="ErrorMessageChild">{errors.firstName}</span>}
             </div>
 
             <div className="FormGroupChild">
               <label className="FormLabelChild">
-                Middle Name (Gitnang Pangalan) {requiredField}
+                Middle Name (Gitnang Pangalan)
               </label>
               <input
                 type="text"
@@ -57,7 +269,6 @@ const ChildIdentifyingForm = ({ formData, handleChange }) => {
                 value={formData?.middleName || ''}
                 onChange={handleChange}
                 className="FormInputChild"
-                required
               />
             </div>
           </div>
@@ -113,8 +324,9 @@ const ChildIdentifyingForm = ({ formData, handleChange }) => {
                   <select
                     name="birthMonth"
                     value={formData?.birthMonth || ''}
-                    onChange={handleChange}
-                    className="SelectInputChild DateSelectChild"
+                    onChange={handleInputChange}
+                    onBlur={handleBlur}
+                    className={`SelectInputChild DateSelectChild ${errors.birthMonth ? 'error' : ''}`}
                     required
                   >
                     <option value="">Select</option>
@@ -141,8 +353,9 @@ const ChildIdentifyingForm = ({ formData, handleChange }) => {
                   <select
                     name="birthDay"
                     value={formData?.birthDay || ''}
-                    onChange={handleChange}
-                    className="SelectInputChild DateSelectChild"
+                    onChange={handleInputChange}
+                    onBlur={handleBlur}
+                    className={`SelectInputChild DateSelectChild ${errors.birthDay ? 'error' : ''}`}
                     required
                   >
                     <option value="">Select</option>
@@ -156,8 +369,9 @@ const ChildIdentifyingForm = ({ formData, handleChange }) => {
                   <select
                     name="birthYear"
                     value={formData?.birthYear || ''}
-                    onChange={handleChange}
-                    className="SelectInputChild DateSelectChild"
+                    onChange={handleInputChange}
+                    onBlur={handleBlur}
+                    className={`SelectInputChild DateSelectChild ${errors.birthYear ? 'error' : ''}`}
                     required
                   >
                     <option value="">Select</option>
@@ -171,6 +385,11 @@ const ChildIdentifyingForm = ({ formData, handleChange }) => {
                     })}
                   </select>
                 </div>
+                {(errors.birthMonth || errors.birthDay || errors.birthYear) && (
+                  <div className="ErrorMessageChild">
+                    {errors.birthMonth || errors.birthDay || errors.birthYear}
+                  </div>
+                )}
               </div>
             </div>
 
@@ -189,7 +408,7 @@ const ChildIdentifyingForm = ({ formData, handleChange }) => {
                         name="sex"
                         value="Male"
                         checked={formData?.sex === 'Male'}
-                        onChange={handleChange}
+                        onChange={handleRadioChange}
                         className="RadioInputChild"
                         required
                       />
@@ -201,7 +420,7 @@ const ChildIdentifyingForm = ({ formData, handleChange }) => {
                         name="sex"
                         value="Female"
                         checked={formData?.sex === 'Female'}
-                        onChange={handleChange}
+                        onChange={handleRadioChange}
                         className="RadioInputChild"
                         required
                       />
@@ -209,6 +428,7 @@ const ChildIdentifyingForm = ({ formData, handleChange }) => {
                     </label>
                   </div>
                 </div>
+                {errors.sex && <div className="ErrorMessageChild">{errors.sex}</div>}
               </div>
             </div>
           </div>
@@ -232,36 +452,45 @@ const ChildIdentifyingForm = ({ formData, handleChange }) => {
 
           <div className="FormRowChild">
             <div className="FormGroupChild">
-              <label className="FormLabelChild">City/Municipality</label>
+              <label className="FormLabelChild">City/Municipality {requiredField}</label>
               <input
                 type="text"
                 name="city"
                 value={formData?.city || ''}
-                onChange={handleChange}
-                className="FormInputChild"
+                onChange={handleInputChange}
+                onBlur={handleBlur}
+                className={`FormInputChild ${errors.city ? 'error' : ''}`}
+                required
               />
+              {errors.city && <span className="ErrorMessageChild">{errors.city}</span>}
             </div>
 
             <div className="FormGroupChild">
-              <label className="FormLabelChild">Province</label>
+              <label className="FormLabelChild">Province {requiredField}</label>
               <input
                 type="text"
                 name="province"
                 value={formData?.province || ''}
-                onChange={handleChange}
-                className="FormInputChild"
+                onChange={handleInputChange}
+                onBlur={handleBlur}
+                className={`FormInputChild ${errors.province ? 'error' : ''}`}
+                required
               />
+              {errors.province && <span className="ErrorMessageChild">{errors.province}</span>}
             </div>
 
             <div className="FormGroupChild">
-              <label className="FormLabelChild">Barangay</label>
+              <label className="FormLabelChild">Barangay {requiredField}</label>
               <input
                 type="text"
                 name="barangay"
                 value={formData?.barangay || ''}
-                onChange={handleChange}
-                className="FormInputChild"
+                onChange={handleInputChange}
+                onBlur={handleBlur}
+                className={`FormInputChild ${errors.barangay ? 'error' : ''}`}
+                required
               />
+              {errors.barangay && <span className="ErrorMessageChild">{errors.barangay}</span>}
             </div>
           </div>
 
@@ -287,7 +516,7 @@ const ChildIdentifyingForm = ({ formData, handleChange }) => {
         <div className="FormSectionChild">
           <div className="FormRowChild">
             <div className="FormGroupChild" style={{ flex: 1 }}>
-              <div className="SectionTitleHalfChild">5. A. TYPE OF BIRTH</div>
+              <div className="SectionTitleHalfChild">5. A. TYPE OF BIRTH {requiredField}</div>
               <div className="TypeBirthContainerChild">
                 <div className="RadioGroupChild">
                   <label className="RadioLabelChild">
@@ -296,8 +525,9 @@ const ChildIdentifyingForm = ({ formData, handleChange }) => {
                       name="typeOfBirth"
                       value="Single"
                       checked={formData?.typeOfBirth === 'Single'}
-                      onChange={handleChange}
+                      onChange={handleRadioChange}
                       className="RadioInputChild"
+                      required
                     />
                     Single
                   </label>
@@ -307,8 +537,9 @@ const ChildIdentifyingForm = ({ formData, handleChange }) => {
                       name="typeOfBirth"
                       value="Twins"
                       checked={formData?.typeOfBirth === 'Twins'}
-                      onChange={handleChange}
+                      onChange={handleRadioChange}
                       className="RadioInputChild"
+                      required
                     />
                     Twins
                   </label>
@@ -318,12 +549,14 @@ const ChildIdentifyingForm = ({ formData, handleChange }) => {
                       name="typeOfBirth"
                       value="Triples, etc."
                       checked={formData?.typeOfBirth === 'Triples, etc.'}
-                      onChange={handleChange}
+                      onChange={handleRadioChange}
                       className="RadioInputChild"
+                      required
                     />
                     Triples, etc.
                   </label>
                 </div>
+                {errors.typeOfBirth && <div className="ErrorMessageChild">{errors.typeOfBirth}</div>}
               </div>
             </div>
             <div className="FormGroupChild" style={{ flex: 1 }}>
@@ -377,7 +610,7 @@ const ChildIdentifyingForm = ({ formData, handleChange }) => {
         </div>
 
         <div className="FormSectionChild">
-          <div className="SectionTitleChild">C. BIRTH ORDER</div>
+          <div className="SectionTitleChild">C. BIRTH ORDER {requiredField}</div>
           <div className="FormRowChild">
             <div className="BirthOrderContainerChild">
               <div className="BirthOrderContainerChild">
@@ -385,10 +618,13 @@ const ChildIdentifyingForm = ({ formData, handleChange }) => {
                   type="text"
                   name="birthOrder"
                   value={formData?.birthOrder || ''}
-                  onChange={validateNumberOnly}
-                  className="FormInputChild"
+                  onChange={handleNumberInputChange}
+                  onBlur={handleBlur}
+                  className={`FormInputChild ${errors.birthOrder ? 'error' : ''}`}
                   placeholder="Enter number only"
+                  required
                 />
+                {errors.birthOrder && <span className="ErrorMessageChild">{errors.birthOrder}</span>}
               </div>
               <div className="BirthOrderNoteChild">
                 LIVE BIRTH AND FETAL DEATHS (INCLUDING THIS DELIVERY)
@@ -401,22 +637,27 @@ const ChildIdentifyingForm = ({ formData, handleChange }) => {
         <div className="FormSectionChild">
           <div className="FormRowChild">
             <div className="WeightContainerChild">
-              <label className="FormLabelChild">6. WEIGHT AT BIRTH</label>
+              <label className="FormLabelChild">6. WEIGHT AT BIRTH {requiredField}</label>
               <input
                 type="text"
                 name="birthWeight"
                 value={formData?.birthWeight || ''}
-                onChange={validateNumberOnly} // Use the number validation function here
-                className="SmallInputChild"
+                onChange={handleNumberInputChange}
+                onBlur={handleBlur}
+                className={`SmallInputChild ${errors.birthWeight ? 'error' : ''}`}
                 placeholder="Enter Number only"
+                required
               />
               <span className="WeightUnitChild">grams</span>
+              {errors.birthWeight && <div className="ErrorMessageChild">{errors.birthWeight}</div>}
             </div>
           </div>
         </div>
       </div>
     </div>
   );
-};
+});
+
+ChildIdentifyingForm.displayName = 'ChildIdentifyingForm';
 
 export default ChildIdentifyingForm;

@@ -5,8 +5,10 @@ import FileUpload from '../FileUpload';
 import NavBar from '../../../NavigationComponents/NavSide';
 import './DelayedOneParentForeigner.css';
 import { documentApplicationService } from '../../../services/documentApplicationService';
+import { documentApplicationNotificationService } from '../../../services/documentApplicationNotificationService';
 import { useLocation } from 'react-router-dom';
 import { localStorageManager } from '../../../services/localStorageManager';
+import { useAuth } from '../../../context/AuthContext';
 
 const baseRequiredDocuments = [
   'Negative Certification from PSA',
@@ -132,6 +134,7 @@ const DelayedOneParentForeignerRegistration = () => {
     const [status, setStatus] = useState('');
 
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   const isEditing = location.state?.isEditing || 
                     localStorage.getItem('isEditingBirthApplication') === 'true';
@@ -541,6 +544,7 @@ const currentDocuments = status === 'marital' ? maritalDocuments : nonMaritalDoc
         showNotification('Application submitted successfully!', 'success');
       }
 
+      // Dispatch storage events
       window.dispatchEvent(new Event('storage'));
       window.dispatchEvent(new CustomEvent('customStorageUpdate', {
         detail: {
@@ -552,6 +556,38 @@ const currentDocuments = status === 'marital' ? maritalDocuments : nonMaritalDoc
       }));
 
       console.log('Application submitted successfully');
+      
+      // 📧 SEND CONFIRMATION NOTIFICATION (ENHANCED)
+      const userEmail = user?.email;
+      if (userEmail) {
+        try {
+          console.log('📧 Sending application confirmation notification to:', userEmail);
+          const notificationResult = await documentApplicationNotificationService.sendApplicationConfirmation(
+            userEmail,
+            currentAppId,
+            {
+              type: 'Birth Certificate',
+              subtype: 'Delayed Registration - Foreign Parent',
+              applicantName: `${formData.firstName || ''} ${formData.lastName || ''}`.trim(),
+              submissionDate: new Date().toLocaleDateString(),
+              status: 'Pending'
+            }
+          );
+
+          if (notificationResult.success) {
+            console.log('✅ Confirmation notification sent successfully');
+            showNotification('Application submitted successfully! A confirmation email has been sent to you.', 'success');
+          } else {
+            console.log('⚠️ Confirmation notification failed:', notificationResult.error);
+            showNotification('Application submitted successfully! However, we could not send the confirmation email.', 'warning');
+          }
+        } catch (notificationError) {
+          console.error('❌ Error sending confirmation notification:', notificationError);
+          showNotification('Application submitted successfully! However, we could not send the confirmation email.', 'warning');
+        }
+      } else {
+        console.log('⚠️ No email available for notifications');
+      }
       
       setTimeout(() => {
         navigate('/BirthApplicationSummary');

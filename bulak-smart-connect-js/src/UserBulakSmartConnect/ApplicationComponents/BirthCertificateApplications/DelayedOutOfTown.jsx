@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
+import { Box, Typography, Button, Paper, Alert, Tooltip, CircularProgress, Snackbar, Container } from '@mui/material';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Box, Button, Typography, Alert, Paper, Snackbar, CircularProgress, Container, Tooltip } from '@mui/material';
+import { useAuth } from '../../../context/AuthContext';
 import FileUpload from '../FileUpload';
-import './DelayedOutOfTown.css';
 import NavBar from '../../../NavigationComponents/NavSide';
+import './DelayedOutOfTown.css';
 import { documentApplicationService } from '../../../services/documentApplicationService';
 import { localStorageManager } from '../../../services/localStorageManager';
+import { documentApplicationNotificationService } from '../../../services/documentApplicationNotificationService'; // ADD THIS IMPORT
 
 const baseRequiredDocuments = [
   'Negative Certification from PSA',
@@ -100,6 +102,7 @@ const documentDescriptions = {
 
 
 const DelayedOutOfTownRegistration = () => {
+  const { user } = useAuth();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState({});
   const [fileData, setFileData] = useState({});
@@ -574,6 +577,35 @@ const DelayedOutOfTownRegistration = () => {
         'birthCertificateApplication', 
         JSON.stringify(updatedFormData)
       );
+
+      // 📧 SEND CONFIRMATION NOTIFICATION (ENHANCED)
+      const userEmail = user?.email;
+      if (userEmail) {
+        try {
+          console.log('📧 Sending application confirmation notification to:', userEmail);
+          const notificationResult = await documentApplicationNotificationService.sendApplicationConfirmation(
+            userEmail,
+            currentAppId,
+            {
+              type: 'Birth Certificate',
+              subtype: 'Delayed Registration - Out of Town',
+              applicantName: `${formData.firstName || ''} ${formData.lastName || ''}`.trim(),
+              submissionDate: new Date().toLocaleDateString(),
+              status: 'Pending'
+            }
+          );
+
+          if (notificationResult.success) {
+            console.log('✅ Confirmation notification sent successfully');
+          } else {
+            console.log('⚠️ Confirmation notification failed:', notificationResult.error);
+          }
+        } catch (notificationError) {
+          console.error('❌ Error sending confirmation notification:', notificationError);
+        }
+      } else {
+        console.log('⚠️ No email available for notifications');
+      }
 
       if (!applicationsStored || !formDataStored) {
         showNotification('Application submitted successfully! Note: Some data may not be saved locally due to storage limitations.', 'warning');

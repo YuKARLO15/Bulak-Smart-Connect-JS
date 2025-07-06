@@ -14,6 +14,23 @@
   text-transform: uppercase;
   text-align: center;
 }
+
+.FatherAcknowledgmentContainer {
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #ddd;
+}
+
+.FatherAcknowledgmentTitle {
+  font-weight: bold !important;
+  font-size: 16px !important;
+  color: #1e4e5f;
+  margin-bottom: 10px !important;
+}
+
+.FatherAcknowledgmentFormControl {
+  margin-top: 8px !important;
+}
 .NotAcknowledgedCheckboxContainer {
   display: flex;
   align-items: center;
@@ -177,4 +194,42 @@
   .SelectInputFather {
     width: 100%;
   }
+}
+
+/* Radio button group error styling for father acknowledgment */
+.FatherAcknowledgmentFormControl.Mui-error .MuiFormControlLabel-root .MuiRadio-root {
+  color: #dc3545;
+}
+
+.FatherAcknowledgmentFormControl.Mui-error .MuiFormControlLabel-root .MuiFormControlLabel-label {
+  color: #dc3545;
+}
+
+/* Error Styles for Validation */
+.FormInputFather.error,
+.SelectInputFather.error {
+  border: 2px solid #dc3545 !important;
+  background-color: #fff5f5;
+}
+
+.ErrorMessageFather {
+  color: #dc3545;
+  font-size: 0.8rem;
+  margin-top: 4px;
+  display: block;
+  font-weight: 500;
+}
+
+.RequiredFieldFather {
+  color: #dc3545;
+  font-weight: bold;
+  margin-left: 2px;
+}
+
+/* Focus styles for error inputs */
+.FormInputFather.error:focus,
+.SelectInputFather.error:focus {
+  border-color: #dc3545;
+  box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+  outline: none;
 }

@@ -34,6 +34,7 @@ import AdminCopyBirthPreview from './AdminCopyBirthPreview';
 import AdminMarriageAffidavitDetails from './AdminMarriageAffidavitDetails';
 import SearchIcon from '@mui/icons-material/Search';
 import userService from '../../services/userService';
+import { documentApplicationNotificationService } from '../../services/documentApplicationNotificationService';
 
 const AdminApplicationDetails = () => {
   const { id } = useParams();
@@ -306,20 +307,131 @@ const AdminApplicationDetails = () => {
     const lastName = app.formData?.lastName || '';
     return firstName && lastName ? `${firstName} ${lastName}` : 'Unknown';
   };
+
+// Enhanced email lookup function (SAME AS APPOINTMENT SYSTEM)
+const getApplicationEmail = (application) => {
+  try {
+    // Check user relationship first (main method for appointment/queue system)
+    if (application.user && application.user.email) {
+      console.log('📧 Found email in application.user.email:', application.user.email);
+      return application.user.email;
+    }
+    
+    // Check direct email field
+    if (application.email) {
+      console.log('📧 Found email in application.email:', application.email);
+      return application.email;
+    }
+    
+    // Check if User object exists with email (different casing)
+    if (application.User && application.User.email) {
+      console.log('📧 Found email in application.User.email:', application.User.email);
+      return application.User.email;
+    }
+    
+    // Check if userEmail field exists
+    if (application.userEmail) {
+      console.log('📧 Found email in application.userEmail:', application.userEmail);
+      return application.userEmail;
+    }
+
+    // Check userContactInfo from your existing logic
+    if (userContactInfo?.email) {
+      console.log('📧 Found email in userContactInfo.email:', userContactInfo.email);
+      return userContactInfo.email;
+    }
+    
+    console.log('⚠️ No email found for application. Available fields:', Object.keys(application));
+    console.log('📋 User object:', application.user);
+    console.log('📋 UserContactInfo:', userContactInfo);
+    return null;
+  } catch (error) {
+    console.error('Error getting application email:', error);
+    return null;
+  }
+};
+
   const handleUpdateStatus = async () => {
     try {
+      console.log(`📝 Updating application ${selectedApplication.id} status to: ${newStatus}`);
+      // Update status in database
       await documentApplicationService.updateApplication(selectedApplication.id, {
         status: newStatus,
         statusMessage: statusMessage,
         lastUpdated: new Date().toISOString(),
       });
 
+      // 📧 ENHANCED EMAIL LOOKUP AND NOTIFICATION (SAME AS APPOINTMENT SYSTEM)
+      const applicationEmail = getApplicationEmail(selectedApplication);
+      
+      if (applicationEmail) {
+        try {
+          console.log(`📧 Sending status update notification to: ${applicationEmail}`);
+          
+          // Get applicant name for notification
+          const applicantName = selectedApplication.applicantName || 
+                             `${selectedApplication.formData?.firstName || ''} ${selectedApplication.formData?.lastName || ''}`.trim() ||
+                             'Valued Client';
+        
+          // Choose the appropriate notification based on status
+          let notificationResult;
+          if (newStatus.toLowerCase() === 'approved') {
+            notificationResult = await documentApplicationNotificationService.sendApprovalNotification(
+              applicationEmail,
+              selectedApplication.id,
+              {
+                applicationType: selectedApplication.applicationType || 'Birth Certificate',
+                applicationSubtype: selectedApplication.applicationSubtype,
+                applicantName: applicantName
+              }
+            );
+          } else if (newStatus.toLowerCase() === 'decline' || newStatus.toLowerCase() === 'declined') {
+            notificationResult = await documentApplicationNotificationService.sendRejectionNotification(
+              applicationEmail,
+              selectedApplication.id,
+              {
+                applicationType: selectedApplication.applicationType || 'Birth Certificate',
+                applicationSubtype: selectedApplication.applicationSubtype,
+                applicantName: applicantName
+              },
+              statusMessage || 'Application declined by administrator'
+            );
+          } else {
+            notificationResult = await documentApplicationNotificationService.sendStatusUpdateNotification(
+              applicationEmail,
+              selectedApplication.id,
+              newStatus,
+              {
+                applicationType: selectedApplication.applicationType || 'Birth Certificate',
+                applicationSubtype: selectedApplication.applicationSubtype,
+                applicantName: applicantName
+              }
+            );
+          }
+
+          if (notificationResult.success) {
+            console.log('✅ Status update notification sent successfully');
+          } else {
+            console.log('⚠️ Status update notification failed:', notificationResult.error);
+          }
+        } catch (notificationError) {
+          console.error('❌ Error sending status update notification:', notificationError);
+        }
+      } else {
+        console.log('⚠️ No email found for application, skipping notification');
+        console.log('📋 Available application fields:', Object.keys(selectedApplication));
+      }
+
+      // Refresh applications list
       const updatedApplications = await documentApplicationService.getAllApplications();
       setApplications(updatedApplications);
       const updated = updatedApplications.find(app => app.id === selectedApplication.id);
       setSelectedApplication(updated);
 
       setStatusUpdateDialog(false);
+      // Enhanced success message
+      const emailMessage = applicationEmail ? `Notification sent to ${applicationEmail}` : 'No email available for notification';
+      alert(`Application status updated to ${newStatus} successfully! ${emailMessage}`);
 
       window.dispatchEvent(new Event('storage'));
     } catch (err) {

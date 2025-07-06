@@ -5,7 +5,9 @@ import FileUpload from '../FileUpload';
 import NavBar from '../../../NavigationComponents/NavSide';
 import './CorrectionClericalError.css';
 import { documentApplicationService } from '../../../services/documentApplicationService';
+import { documentApplicationNotificationService } from '../../../services/documentApplicationNotificationService';
 import { localStorageManager } from '../../../services/localStorageManager';
+import { useAuth } from '../../../context/AuthContext';
 
 const fileCategories = [
   'PSA copy of wrong document',
@@ -128,6 +130,8 @@ const CorrectionClericalError = () => {
   
   const isEditing = location.state?.isEditing || 
                     localStorage.getItem('isEditingBirthApplication') === 'true';
+
+  const { user } = useAuth(); // Get authenticated user for email
 
   // Show snackbar notification
   const showNotification = (message, severity = 'info') => {
@@ -610,6 +614,39 @@ const CorrectionClericalError = () => {
         navigate('/BirthApplicationSummary');
       }, 2000);
 
+      // 📧 ADD CONFIRMATION NOTIFICATION (INSERT AFTER SUCCESSFUL SUBMISSION)
+      const userEmail = user?.email;
+      if (userEmail) {
+        try {
+          console.log('📧 Sending application confirmation notification to:', userEmail);
+          const notificationResult = await documentApplicationNotificationService.sendApplicationConfirmation(
+            userEmail,
+            currentAppId,
+            {
+              type: 'Birth Certificate',
+              subtype: 'Correction - Clerical Errors',
+              applicantName: `${formData.firstName || ''} ${formData.lastName || ''}`.trim(),
+              submissionDate: new Date().toLocaleDateString(),
+              status: 'Pending'
+            }
+          );
+
+          if (notificationResult.success) {
+            console.log('✅ Confirmation notification sent successfully');
+            showNotification('Application submitted successfully! A confirmation email has been sent to you.', 'success');
+          } else {
+            console.log('⚠️ Confirmation notification failed:', notificationResult.error);
+            showNotification('Application submitted successfully! However, we could not send the confirmation email.', 'warning');
+          }
+        } catch (notificationError) {
+          console.error('❌ Error sending confirmation notification:', notificationError);
+          showNotification('Application submitted successfully! However, we could not send the confirmation email.', 'warning');
+        }
+      } else {
+        console.log('⚠️ No email available for notifications');
+        showNotification('Application submitted successfully! No confirmation email will be sent as no email was found.', 'success');
+      }
+
     } catch (error) {
       console.error('Error submitting application:', error);
       showNotification(`Error submitting application: ${error.message}`, "error");
@@ -813,7 +850,7 @@ const CorrectionClericalError = () => {
         
       } catch (error) {
         console.error('Error saving modify state:', error);
-        showNotification('Error saving current state. Some data may be lost.', 'warning');
+        showNotification('Error saving current state: ' + error.message, 'warning');
         
         
         navigate('/RequestACopyBirthCertificate', { 

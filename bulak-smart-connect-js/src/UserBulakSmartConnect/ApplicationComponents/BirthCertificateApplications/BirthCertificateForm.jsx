@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Button, Typography, Box, Paper, Alert, Snackbar } from '@mui/material';
 import BirthCertificateApplicationData from './BirthCertificateApplicationData';
@@ -54,9 +54,15 @@ const BirthCertificateForm = () => {
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'info' });
- const { getCurrentUserId } = useAuth();
+  const { getCurrentUserId } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  
+  // Create refs for each form step
+  const childFormRef = useRef();
+  const motherFormRef = useRef();
+  const fatherFormRef = useRef();
+  const marriageFormRef = useRef();
 
   const isEditing =
     location.state?.isEditing || localStorage.getItem('isEditingBirthApplication') === 'true';
@@ -128,11 +134,9 @@ useEffect(() => {
       'birthDay',
       'birthYear',
       'sex',
-      'hospital',
       'city',
       'province',
       'barangay',
-      'residence',
       'typeOfBirth',
       'birthOrder',
       'birthWeight',
@@ -148,7 +152,10 @@ useEffect(() => {
       'motherOccupation',
       'motherAge',
       'motherStreet',
+      'motherBarangay',
       'motherCity',
+      'motherProvince',
+      'motherCountry',
     ],
     3: [
       'fatherLastName',
@@ -182,7 +189,45 @@ useEffect(() => {
   };
 
   const handleNext = () => {
-    if (validateStep()) setStep(prevStep => prevStep + 1);
+    // For step 1, use the child form's validation
+    if (step === 1) {
+      if (childFormRef.current && childFormRef.current.validateAllFields) {
+        const isValid = childFormRef.current.validateAllFields();
+        if (isValid) {
+          setStep(prevStep => prevStep + 1);
+        }
+      }
+    } 
+    // For step 2, use the mother form's validation
+    else if (step === 2) {
+      if (motherFormRef.current && motherFormRef.current.validateAllFields) {
+        const isValid = motherFormRef.current.validateAllFields();
+        if (isValid) {
+          setStep(prevStep => prevStep + 1);
+        }
+      }
+    }
+    // For step 3, use the father form's validation
+    else if (step === 3) {
+      if (fatherFormRef.current && fatherFormRef.current.validateAllFields) {
+        const isValid = fatherFormRef.current.validateAllFields();
+        if (isValid) {
+          setStep(prevStep => prevStep + 1);
+        }
+      }
+    }
+    // For step 4, use the marriage form's validation
+    else if (step === 4) {
+      if (marriageFormRef.current && marriageFormRef.current.validateAllFields) {
+        const isValid = marriageFormRef.current.validateAllFields();
+        if (isValid) {
+          setStep(prevStep => prevStep + 1);
+        }
+      }
+    } else {
+      // For other steps, use the original validation
+      if (validateStep()) setStep(prevStep => prevStep + 1);
+    }
   };
 
   const handlePrevious = () => setStep(prevStep => prevStep - 1);
@@ -391,7 +436,7 @@ const handleSubmit = async e => {
       <Paper className="BirthCertificateForm" elevation={3}>
       {step === 1 && (
           <>
-            <ChildIdentifyingForm formData={formData} handleChange={handleChange} errors={errors} />
+            <ChildIdentifyingForm ref={childFormRef} formData={formData} handleChange={handleChange} errors={errors} />
             <Box className="FormProgressContainer">
               <Typography variant="body2">
                 Step {step} of 5
@@ -408,6 +453,7 @@ const handleSubmit = async e => {
         {step === 2 && (
           <>
             <MotherInformationBirthForm
+              ref={motherFormRef}
               formData={formData}
               handleChange={handleChange}
               errors={errors}
@@ -435,6 +481,7 @@ const handleSubmit = async e => {
         {step === 3 && (
           <>
             <FatherInformationBirthForm
+              ref={fatherFormRef}
               formData={formData}
               handleChange={handleChange}
               errors={errors}
@@ -462,6 +509,7 @@ const handleSubmit = async e => {
         {step === 4 && (
           <>
             <MarriageInformationBirthForm
+              ref={marriageFormRef}
               formData={formData}
               handleChange={handleChange}
               errors={errors}
