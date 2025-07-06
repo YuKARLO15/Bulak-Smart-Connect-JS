@@ -1,7 +1,7 @@
 .MainContainerCTCBirth {
-  padding: 20px;
+
   width: 100vw;
-  margin: 0 auto;
+
   justify-content: center;
   align-items: center;
   display: flex;
@@ -14,10 +14,15 @@
 }
 
 .TitleCTCBirth {
-  color: #1c4d5a;
-  margin-bottom: 10px !important;
-  text-align: center;
   font-weight: 600 !important;
+  background-color: #184a5b;
+  text-align: center;
+  color: white;
+  padding: 20px !important;
+  width: 100vw;
+  margin-bottom: 20px;
+  font-size: 30px !important;
+  margin-bottom: 30px !important;
 }
 
 .SubtitleCTCBirth {
@@ -96,10 +101,7 @@
 }
 
 @media (max-width: 600px) {
-  .MainContainerCTCBirth {
-    padding: 15px;
-  }
-
+ 
   .DocumentsPaperCTCBirth {
     padding: 15px;
   }
@@ -117,4 +119,20 @@
   .SidebarOpenCTCBirth {
     margin-left: 0;
   }
+}
+@media (max-width: 768px) {
+  .TitleCTCBirth{
+    font-size: 1rem !important;
+
+  }
+
+}
+
+@media  (max-width: 425px) {
+
+ .TitleCTCBirth{
+    font-size: 0.8rem !important;
+    width: 100%;
+  }
+
 }
