@@ -9,7 +9,23 @@ import { localStorageManager } from '../../../services/localStorageManager';
 
 const fileCategories = [
   'PSA copy of wrong document',
-  'MCA copy of wrong document',
+  'MCR copy of wrong document',
+  'Church record document owner & relatives',
+  'School record document owner & relatives',
+  'Marriage certificate document owner (if married) & relatives',
+  'Birth certificate document owner & relatives',
+  'Comelec record document owner & relatives',
+  'Identification cards',
+  'Others',
+];
+
+// Add mandatory and supporting document categories
+const mandatoryDocuments = [
+  'PSA copy of wrong document',
+  'MCR copy of wrong document'
+];
+
+const supportingDocuments = [
   'Church record document owner & relatives',
   'School record document owner & relatives',
   'Marriage certificate document owner (if married) & relatives',
@@ -76,7 +92,7 @@ const GovernmentIdTooltip = ({ children }) => {
 };
 const documentDescriptions = {
   'PSA copy of wrong document': '- Official PSA certified true copy of the birth certificate containing the clerical error',
-  'MCA copy of wrong document': '- Municipal Civil Registry Office certified true copy of the birth certificate containing the clerical error',
+  'MCR copy of wrong document': '- Municipal Civil Registry Office certified true copy of the birth certificate containing the clerical error',
   'Church record document owner & relatives': '- Baptismal certificate or other church records of the document owner showing the correct details',
   'School record document owner & relatives': '- Official school records, transcripts, or enrollment documents of the document owner with the correct details',
   'Marriage certificate document owner (if married) & relatives': '- Official marriage certificate of the document owner (if applicable) and relatives displaying the correct details',
@@ -453,12 +469,12 @@ const CorrectionClericalError = () => {
     };
   
 
-  const isAnyOptionSelected = Object.values(selectedOptions).some(val => val);
-  const isFilesComplete = fileCategories.every(cat => uploadedFiles[cat]);
-  const isFormComplete = isAnyOptionSelected && isFilesComplete;
+ const isAnyOptionSelected = Object.values(selectedOptions).some(val => val);
   
-  // Force enable submit button if at least one document is uploaded
-  const forceEnableSubmit = uploadedDocumentsCount > 0 && isAnyOptionSelected;
+
+  const areMandatoryDocumentsUploaded = mandatoryDocuments.every(doc => uploadedFiles[doc]);
+    const canSubmit = isAnyOptionSelected && areMandatoryDocumentsUploaded;
+
 
   const mapStatusForBackend = (frontendStatus) => {
     const statusMap = {
@@ -652,20 +668,45 @@ const CorrectionClericalError = () => {
             </Grid>
           </Box>
 
-          <Box sx={{ marginBottom: 3 }}>
-            {fileCategories.map((category, index) => (
-                <FileUpload
-        label={category}
-        description={documentDescriptions[category]}
-        onUpload={(isUploaded, fileDataObj) => 
-          handleFileUpload(category, isUploaded, fileDataObj)
-        }
-        required={true}
-        disabled={isLoading}
-        multiple={true}
-      />
+             <Box sx={{ marginBottom: 3 }}>
+            <Typography className="SectionTitleClerical" variant="h6" sx={{ mb: 2, fontWeight: 'bold' }}>
+              Mandatory Documents:
+            </Typography>
+            {mandatoryDocuments.map((category, index) => (
+              <FileUpload
+                key={`mandatory-${index}`}
+                label={category}
+                description={documentDescriptions[category]}
+                onUpload={(isUploaded, fileDataObj) => 
+                  handleFileUpload(category, isUploaded, fileDataObj)
+                }
+                required={true}
+                disabled={isLoading}
+                multiple={true}
+              />
+            ))}
+            
+            <Typography className="SectionTitleClerical" variant="h6" sx={{ mt: 4, mb: 2, fontWeight: 'bold' }}>
+              Supporting Documents (Optional):
+            </Typography>
+            <Typography variant="body2" sx={{ mb: 2, color: 'text.secondary', fontStyle: 'italic' }}>
+              Upload any of the following supporting documents to strengthen your application:
+            </Typography>
+            {supportingDocuments.map((category, index) => (
+              <FileUpload
+                key={`supporting-${index}`}
+                label={category}
+                description={documentDescriptions[category]}
+                onUpload={(isUploaded, fileDataObj) => 
+                  handleFileUpload(category, isUploaded, fileDataObj)
+                }
+                required={false}
+                disabled={isLoading}
+                multiple={true}
+              />
             ))}
           </Box>
+
 
           <Box className="ImpotantNotesClerical">
             <Typography variant="h6" className="ImportantNote">
@@ -793,7 +834,7 @@ const CorrectionClericalError = () => {
             <Button
               variant="contained"
               color="primary"
-              disabled={!forceEnableSubmit || isLoading || isSubmitted}
+              disabled={!canSubmit|| isLoading || isSubmitted}
               onClick={handleSubmit}
               className="SubmitButtonClerical"
             >

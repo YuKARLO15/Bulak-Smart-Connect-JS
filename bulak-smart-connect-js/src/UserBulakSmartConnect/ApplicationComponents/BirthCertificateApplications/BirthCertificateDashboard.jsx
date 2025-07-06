@@ -10,7 +10,7 @@ const applicationTypeMap = {
   'Clerical Error': 'Clerical Error',
   'Sex DOB': 'Sex DOB',
   'First Name': 'First Name',
-  // Add other mappings as needed
+
 };
 
 const BirthCertificateDashboard = () => {
@@ -135,12 +135,14 @@ const BirthCertificateDashboard = () => {
             value={selectedOption}
             onChange={e => setSelectedOption(e.target.value)}
             className="BirthDashRadioGroup"
-          >
+          > 
             <FormControlLabel
               value="Clerical Error"
               control={<Radio />}
-              label="Correction of Clerical Errors"
+              label="Correction of Clerical Errors ( First Name, Last Name, Middle Name, others)"
+
             />
+          
             <FormControlLabel
               value="Sex DOB"
               control={<Radio />}

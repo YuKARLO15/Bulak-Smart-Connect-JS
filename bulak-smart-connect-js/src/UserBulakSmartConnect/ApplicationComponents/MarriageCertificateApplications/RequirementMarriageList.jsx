@@ -33,15 +33,17 @@ const RequirementMarriageList = () => {
           >
             Back
           </Button>
-          <Typography variant="h5">Requirements for Application of Marriage License</Typography>
+          <Typography variant="h5">Requirements for Application of Marriage </Typography>
         </Box>
 
         {/* General Requirements */}
         <Box className="marriage-requirement-section">
-          <Typography variant="h6" className="marriage-requirement-section-title">
-            Basic Requirements
+          <Typography variant="h6" className="marriage-requirement-section-title1">
+            For Marriage License Registration 
           </Typography>
-           
+           <Typography variant="h6" className="marriage-requirement-section-title3">
+          Mandatory Requirements
+          </Typography>
           <List dense className="marriage-requirement-list">
             <ListItem>
               <ListItemIcon>
@@ -66,28 +68,30 @@ const RequirementMarriageList = () => {
                 <CheckCircleOutlineIcon fontSize="small" />
               </ListItemIcon>
               <ListItemText primary="4. Official Receipt" />
-              <List dense className="marriage-requirement-nested-list">
-                <ListItem>
+              
+            </ListItem>
+             <ListItem  className="marriage-requirement-nested-list">
                   <ListItemText 
                     primary="- Civil Wedding - P 650.00"
                     className="marriage-requirement-subitem" 
                   />
                 </ListItem>
-                <ListItem>
+                <ListItem className="marriage-requirement-nested-list">
                   <ListItemText 
                     primary="- Church Wedding - P 400.00"
                     className="marriage-requirement-subitem" 
                   />
                 </ListItem>
-              </List>
-            </ListItem>
           </List>
+          
+       <Typography variant="h6" className="marriage-requirement-section-title3">
+           Additional Requirements
+          </Typography>
         </Box>
 
-        <Divider />
 
         {/* Foreign National Requirements */}
-        <Box className="marriage-requirement-section">
+        <Box className="marriage-requirement-section2">
           <Typography variant="h6" className="marriage-requirement-section-title">
             For Foreign National
           </Typography>
@@ -108,10 +112,10 @@ const RequirementMarriageList = () => {
           </List>
         </Box>
 
-        <Divider />
+      
 
         {/* Widow/Widower Requirements */}
-        <Box className="marriage-requirement-section">
+        <Box className="marriage-requirement-section2">
           <Typography variant="h6" className="marriage-requirement-section-title">
             For Widow/Widower
           </Typography>
@@ -132,10 +136,10 @@ const RequirementMarriageList = () => {
           </List>
         </Box>
 
-        <Divider />
+
 
         {/* Annulled Requirements */}
-        <Box className="marriage-requirement-section">
+        <Box className="marriage-requirement-section2">
           <Typography variant="h6" className="marriage-requirement-section-title">
             For annulled
           </Typography>
@@ -155,13 +159,42 @@ const RequirementMarriageList = () => {
             </ListItem>
           </List>
         </Box>
+          {/* Marriage Certificate Requirements */}
+        <Box className="marriage-requirement-section">
+          <Typography variant="h6" className="marriage-requirement-section-title1">
+            For Marriage Certificate Registration
+          </Typography>
+           
+          <List dense className="marriage-requirement-list">
+            <ListItem>
+              <ListItemIcon>
+                <CheckCircleOutlineIcon fontSize="small" />
+              </ListItemIcon>
+              <ListItemText primary="Marriage License" />
+            </ListItem>
+            <ListItem>
+              <ListItemIcon>
+                <CheckCircleOutlineIcon fontSize="small" />
+              </ListItemIcon>
+              <ListItemText primary="Valid ID of Bride" />
+            </ListItem>
+            <ListItem>
+              <ListItemIcon>
+                <CheckCircleOutlineIcon fontSize="small" />
+              </ListItemIcon>
+              <ListItemText primary="Valid ID of Groom" />
+            </ListItem>
+            <ListItem>
+              <ListItemIcon>
+                <CheckCircleOutlineIcon fontSize="small" />
+              </ListItemIcon>
+              <ListItemText primary="Certificate of Marriage from the Officiant" />
+            </ListItem>
+          </List>
+        </Box>
       </Paper>
     </Box>
   );
 };
 
 export default RequirementMarriageList;
-
-
-
-

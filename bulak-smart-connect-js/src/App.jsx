@@ -32,7 +32,7 @@ import UserDashboard from './UserBulakSmartConnect/UserDashboard/UserDashboard';
 import AppoionmentForm from './UserBulakSmartConnect/AppointmentComponents/AppointemtForm';
 import QRCodeAppointment from './UserBulakSmartConnect/AppointmentComponents/QRCodeAppointment';
 import QRCodePage from './UserBulakSmartConnect/QRCodeComponents/QR';
-
+import RequirementDeathList from './UserBulakSmartConnect/AppointmentComponents/RequirementDeathList';
 //Application//
 import ApplicationForm from './UserBulakSmartConnect/ApplicationComponents/ApplicationForm';
 import ClericalErrorApplication from './UserBulakSmartConnect/ApplicationComponents/BirthCertificateApplications/CorrectionClericalError';
@@ -188,7 +188,8 @@ function App() {
           <Route path="/RequirementBirthList" element={<RequirementBirthList />} />
           <Route path="/MarriageSummaryForm" element={<MarriageSummaryForm />} />
           <Route path="/RequirementMarriageList" element={<RequirementMarriageList />} />
-            <Route path="/UserAccount" element={<UserAccount />} />
+          <Route path="/UserAccount" element={<UserAccount />} />
+          <Route path="/RequirementDeathCertificateList" element={<RequirementDeathList />} /> 
 
           {/* User Privacy Policy */}
         

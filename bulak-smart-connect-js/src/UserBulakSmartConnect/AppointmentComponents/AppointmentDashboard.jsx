@@ -48,6 +48,9 @@ const AppointmentDashboard = () => {
     } else if (type === 'marriage') {
       navigate('/RequirementMarriageList');
     }
+    else if (type === 'death') {
+      navigate('/RequirementDeathCertificateList');
+    }
   };
 
   return (
@@ -109,7 +112,15 @@ const AppointmentDashboard = () => {
                     onClick={() => handleRequirementClick('marriage')}
                     style={{ cursor: 'pointer' }}
                   >
-                    View Marriage Certificate Requirements
+                    View Marriage License Requirements
+                    </Typography>
+                        <Typography 
+                    variant="body2" 
+                    className="RequirementItem"
+                    onClick={() => handleRequirementClick('death')}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    View Death Certificate Requirements
                   </Typography>
                 </Box>
               </Card>

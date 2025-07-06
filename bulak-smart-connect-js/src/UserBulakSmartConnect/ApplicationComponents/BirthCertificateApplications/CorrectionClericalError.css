@@ -116,7 +116,10 @@
   transition: background-color 0.3s ease;
   border: none !important; 
 }
-
+.SubmitButtonClerical:disabled {
+  background-color: #b6c6d2 !important; 
+  color: #f5f5f5 !important;
+}
 .SubmitButtonClerical:hover {
   background-color: #678c98 !important; 
   color: #f5f5f5 !important;
