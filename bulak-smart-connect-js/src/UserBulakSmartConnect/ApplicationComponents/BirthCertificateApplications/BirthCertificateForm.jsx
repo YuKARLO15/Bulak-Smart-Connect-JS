@@ -62,6 +62,7 @@ const BirthCertificateForm = () => {
   const childFormRef = useRef();
   const motherFormRef = useRef();
   const fatherFormRef = useRef();
+  const marriageFormRef = useRef();
 
   const isEditing =
     location.state?.isEditing || localStorage.getItem('isEditingBirthApplication') === 'true';
@@ -210,6 +211,15 @@ useEffect(() => {
     else if (step === 3) {
       if (fatherFormRef.current && fatherFormRef.current.validateAllFields) {
         const isValid = fatherFormRef.current.validateAllFields();
+        if (isValid) {
+          setStep(prevStep => prevStep + 1);
+        }
+      }
+    }
+    // For step 4, use the marriage form's validation
+    else if (step === 4) {
+      if (marriageFormRef.current && marriageFormRef.current.validateAllFields) {
+        const isValid = marriageFormRef.current.validateAllFields();
         if (isValid) {
           setStep(prevStep => prevStep + 1);
         }
@@ -499,6 +509,7 @@ const handleSubmit = async e => {
         {step === 4 && (
           <>
             <MarriageInformationBirthForm
+              ref={marriageFormRef}
               formData={formData}
               handleChange={handleChange}
               errors={errors}
