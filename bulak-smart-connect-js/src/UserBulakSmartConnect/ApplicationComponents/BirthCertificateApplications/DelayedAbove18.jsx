@@ -463,43 +463,29 @@ const[documentFatherNotPresent, setDocumentFatherNotPresent] = useState(false);
       return false;
     }
 
-    // Get the required documents based on status
+   
     const requiredDocs = status === 'marital' ? maritalDocuments : nonMaritalDocuments;
     
-    // Log the current state for debugging
+
     console.log("Current uploadedFiles state:", uploadedFiles);
     console.log("Required docs:", requiredDocs);
     
-    // Check all required documents
-    const allRequiredDocsUploaded = requiredDocs.every(doc => {
-      const isUploaded = uploadedFiles[doc] === true;
-      if (!isUploaded) {
-        console.log(`Missing document: ${doc}`);
-      }
-      return isUploaded;
-    });
-
-    // Check documentary evidences
-    const evidence1Uploaded = uploadedFiles['Documentary Evidence 1'] === true;
-    const evidence2Uploaded = uploadedFiles['Documentary Evidence 2'] === true;
-    
-    if (!evidence1Uploaded) console.log("Missing Documentary Evidence 1");
-    if (!evidence2Uploaded) console.log("Missing Documentary Evidence 2");
-
-    // For debugging:
-    if (allRequiredDocsUploaded && evidence1Uploaded && evidence2Uploaded) {
-      console.log("All documents uploaded. Button should be enabled.");
-    } else {
-      console.log("Missing documents. Button should be disabled.");
+       const filteredRequiredDocs = requiredDocs.filter(doc => 
+    doc !== 'Certificate of Marriage, if applicant is married'
+  );
+   const allRequiredDocsUploaded = filteredRequiredDocs.every(doc => {
+    const isUploaded = uploadedFiles[doc] === true;
+    if (!isUploaded) {
+      console.log(`Missing document: ${doc}`);
     }
-    
-    // Force enable the submit button if at least one document has been uploaded
-    if (uploadedDocumentsCount > 0) {
-      console.log("At least one document uploaded. Enabling submit button.");
-      return true;
-    }
-    
-    return allRequiredDocsUploaded && evidence1Uploaded && evidence2Uploaded;
+    return isUploaded;
+  });
+
+
+
+  
+ 
+    return allRequiredDocsUploaded ;
   };
 
   const mapStatusForBackend = (frontendStatus) => {
