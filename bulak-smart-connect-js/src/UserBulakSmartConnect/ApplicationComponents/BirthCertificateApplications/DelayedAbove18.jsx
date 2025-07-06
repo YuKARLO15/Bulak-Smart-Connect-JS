@@ -650,7 +650,6 @@ const[documentFatherNotPresent, setDocumentFatherNotPresent] = useState(false);
 
   return (
     <div className={`DelayedAbove18Container ${isSidebarOpen ? 'sidebar-open' : ''}`}>
-      <NavBar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
       <Typography variant="h5" className="TitleDelayedAbove18">
        Application for Delayed Registration Above 18
       </Typography>
