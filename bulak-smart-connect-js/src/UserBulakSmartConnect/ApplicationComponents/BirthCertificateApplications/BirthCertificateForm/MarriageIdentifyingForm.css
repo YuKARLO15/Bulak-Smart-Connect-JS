@@ -49,6 +49,39 @@
   margin-top: 24px !important;
 }
 
+/* Error Styles for Validation */
+.MarriageFormDateField .MuiOutlinedInput-root.Mui-error {
+  border-color: #d32f2f;
+}
+
+.MarriageFormPlaceField .MuiOutlinedInput-root.Mui-error {
+  border-color: #d32f2f;
+}
+
+.MarriageFormDateField .MuiOutlinedInput-root.Mui-error .MuiOutlinedInput-notchedOutline {
+  border-color: #d32f2f;
+}
+
+.MarriageFormPlaceField .MuiOutlinedInput-root.Mui-error .MuiOutlinedInput-notchedOutline {
+  border-color: #d32f2f;
+}
+
+/* Radio button group error styling */
+.MarriageChildStatusFormControl.Mui-error .MuiFormControlLabel-root .MuiRadio-root {
+  color: #d32f2f;
+}
+
+.MarriageChildStatusFormControl.Mui-error .MuiFormControlLabel-root .MuiFormControlLabel-label {
+  color: #d32f2f;
+}
+
+/* Focus styles for error inputs */
+.MarriageFormDateField .MuiOutlinedInput-root.Mui-error.Mui-focused .MuiOutlinedInput-notchedOutline,
+.MarriageFormPlaceField .MuiOutlinedInput-root.Mui-error.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: #d32f2f;
+  box-shadow: 0 0 0 0.2rem rgba(211, 47, 47, 0.25);
+}
+
 /* Override Material-UI TextField styles to match SignUpForm */
 .MarriageFormPlaceField .MuiOutlinedInput-root {
   border-radius: 6px !important;
