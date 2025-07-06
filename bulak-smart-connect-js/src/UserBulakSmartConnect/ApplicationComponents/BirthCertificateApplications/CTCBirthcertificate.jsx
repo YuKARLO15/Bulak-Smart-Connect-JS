@@ -431,7 +431,7 @@ const CTCBirthCertificate = () => {
         showNotification('Application submitted successfully!', 'success');
       }
 
-      // 📧 ADD THIS AFTER SUCCESSFUL SUBMISSION
+      // 📧 SEND CONFIRMATION NOTIFICATION
       const userEmail = user?.email;
       if (userEmail) {
         try {
@@ -450,10 +450,18 @@ const CTCBirthCertificate = () => {
 
           if (notificationResult.success) {
             console.log('✅ Confirmation notification sent successfully');
+            showNotification('Application submitted successfully! A confirmation email has been sent to you.', 'success');
+          } else {
+            console.log('⚠️ Confirmation notification failed:', notificationResult.error);
+            showNotification('Application submitted successfully! However, we could not send the confirmation email.', 'warning');
           }
         } catch (notificationError) {
           console.error('❌ Error sending confirmation notification:', notificationError);
+          showNotification('Application submitted successfully! However, we could not send the confirmation email.', 'warning');
         }
+      } else {
+        console.log('⚠️ No email available for notifications');
+        showNotification('Application submitted successfully! No confirmation email will be sent as no email was found.', 'success');
       }
 
       window.dispatchEvent(new Event('storage'));
