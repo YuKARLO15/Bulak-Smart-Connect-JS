@@ -20,25 +20,13 @@ const MockAuthProvider = ({ children, value }) => {
     ...value,
   };
 
-  return (
-    <AuthContext.Provider value={defaultValue}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={defaultValue}>{children}</AuthContext.Provider>;
 };
 
-export const renderWithProviders = (
-  ui,
-  {
-    authValue = {},
-    ...renderOptions
-  } = {}
-) => {
+export const renderWithProviders = (ui, { authValue = {}, ...renderOptions } = {}) => {
   const Wrapper = ({ children }) => (
     <BrowserRouter>
-      <MockAuthProvider value={authValue}>
-        {children}
-      </MockAuthProvider>
+      <MockAuthProvider value={authValue}>{children}</MockAuthProvider>
     </BrowserRouter>
   );
 

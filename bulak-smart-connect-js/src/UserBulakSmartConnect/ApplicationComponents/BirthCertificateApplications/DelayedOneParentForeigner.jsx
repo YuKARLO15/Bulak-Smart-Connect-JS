@@ -1,6 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Box, Button, Typography, Alert, Snackbar, CircularProgress, Paper, Checkbox, FormControlLabel, Tooltip } from '@mui/material';
+import {
+  Box,
+  Button,
+  Typography,
+  Alert,
+  Snackbar,
+  CircularProgress,
+  Paper,
+  Checkbox,
+  FormControlLabel,
+  Tooltip,
+} from '@mui/material';
 import FileUpload from '../FileUpload';
 import NavBar from '../../../NavigationComponents/NavSide';
 import './DelayedOneParentForeigner.css';
@@ -19,11 +30,11 @@ const baseRequiredDocuments = [
   'Any two (2) of the following documentary evidence',
   'Any two (2) of the following documents of parents',
   'Birth Certificate of Parent/s',
-  'Valid Passport or BI Clearance or ACR I-CARD of the Foreign Parent'
+  'Valid Passport or BI Clearance or ACR I-CARD of the Foreign Parent',
 ];
 const maritalDocuments = [
   ...baseRequiredDocuments,
-  'Certificate of Marriage of Parents (Marital Child)'
+  'Certificate of Marriage of Parents (Marital Child)',
 ];
 
 const nonMaritalDocuments = baseRequiredDocuments;
@@ -46,7 +57,7 @@ const GovernmentIdTooltip = ({ children }) => {
     'TIN ID',
     'PhilHealth ID',
     'Pag-IBIG Loyalty Card Plus',
-    'Indigenous Peoples (IP) ID or certification'
+    'Indigenous Peoples (IP) ID or certification',
   ];
 
   return (
@@ -69,15 +80,17 @@ const GovernmentIdTooltip = ({ children }) => {
         '& .MuiTooltip-tooltip': {
           maxWidth: 300,
           backgroundColor: 'rgba(0, 0, 0, 0.9)',
-        }
+        },
       }}
     >
-      <span style={{ 
-        textDecoration: 'underline', 
-        cursor: 'pointer',
-        color: '#1976d2',
-        fontWeight: 'bold'
-      }}>
+      <span
+        style={{
+          textDecoration: 'underline',
+          cursor: 'pointer',
+          color: '#1976d2',
+          fontWeight: 'bold',
+        }}
+      >
         {children}
       </span>
     </Tooltip>
@@ -86,20 +99,31 @@ const GovernmentIdTooltip = ({ children }) => {
 const documentDescriptions = {
   // Required Documents
   'Negative Certification from PSA': '- Certificate showing no birth record exists in PSA database',
-  'Affidavit of two (2) disinterested persons (with ID) / Affidavit of Out of Town Registration': '- Sworn statements from two non-relative witnesses with valid IDs OR Out of Town Registration affidavit',
-  'Barangay Certification issued by the Punong Barangay as proof of residency and with statement on facts of birth': '- Official barangay certificate confirming residency and birth facts issued by the Punong Barangay',
-  'National ID , ePhil ID or PhilSys transaction slip': ' A valid National ID, ePhilID, or PhilSys transaction slip is required for this application. If you do not have any of these, please stay updated on the San Ildefonso National ID booth schedules, check other PhilSys registration centers, and secure your ID or transaction slip before proceeding.',
-  'Unedited 2x2 front-facing photo, white background': '- Recent passport-style photo taken within the last 3 months with white background',
+  'Affidavit of two (2) disinterested persons (with ID) / Affidavit of Out of Town Registration':
+    '- Sworn statements from two non-relative witnesses with valid IDs OR Out of Town Registration affidavit',
+  'Barangay Certification issued by the Punong Barangay as proof of residency and with statement on facts of birth':
+    '- Official barangay certificate confirming residency and birth facts issued by the Punong Barangay',
+  'National ID , ePhil ID or PhilSys transaction slip':
+    ' A valid National ID, ePhilID, or PhilSys transaction slip is required for this application. If you do not have any of these, please stay updated on the San Ildefonso National ID booth schedules, check other PhilSys registration centers, and secure your ID or transaction slip before proceeding.',
+  'Unedited 2x2 front-facing photo, white background':
+    '- Recent passport-style photo taken within the last 3 months with white background',
 
-  'Any two (2) of the following documents of parents':(<>
-   - Any of the following: Certificate of Live Birth (COLB), <GovernmentIdTooltip> Government Issued ID</GovernmentIdTooltip>, Marriage Certificate, or Certificate of Death (if deceased) </>), 
-  
-  'Any two (2) of the following documentary evidence': '- which may show the name of the child, date and place of birth, and name of the mother (and name of father, if the child has been acknowledged) Any of the following: Baptismal Certificate, Marriage Certificate, School Records, Income Tax Return, or PhilHealth MDR',
-  
+  'Any two (2) of the following documents of parents': (
+    <>
+      - Any of the following: Certificate of Live Birth (COLB),{' '}
+      <GovernmentIdTooltip> Government Issued ID</GovernmentIdTooltip>, Marriage Certificate, or
+      Certificate of Death (if deceased){' '}
+    </>
+  ),
 
-  'Certificate of Marriage of Parents (Marital Child)': '- Official marriage certificate of applicant\'s parents (required for marital children)',
-  'Birth Certificate of Parent/s': '- Birth certificate(s) of the applicant\'s parent(s)',
-  'Valid Passport or BI Clearance or ACR I-CARD of the Foreign Parent': '- Valid passport, Bureau of Immigration clearance, or ACR I-CARD of the foreign parent'
+  'Any two (2) of the following documentary evidence':
+    '- which may show the name of the child, date and place of birth, and name of the mother (and name of father, if the child has been acknowledged) Any of the following: Baptismal Certificate, Marriage Certificate, School Records, Income Tax Return, or PhilHealth MDR',
+
+  'Certificate of Marriage of Parents (Marital Child)':
+    "- Official marriage certificate of applicant's parents (required for marital children)",
+  'Birth Certificate of Parent/s': "- Birth certificate(s) of the applicant's parent(s)",
+  'Valid Passport or BI Clearance or ACR I-CARD of the Foreign Parent':
+    '- Valid passport, Bureau of Immigration clearance, or ACR I-CARD of the foreign parent',
 };
 
 function dataURLtoFile(dataurl, filename, type) {
@@ -131,13 +155,13 @@ const DelayedOneParentForeignerRegistration = () => {
   const [uploadedDocumentsCount, setUploadedDocumentsCount] = useState(0);
   const [formData, setFormData] = useState({});
   const location = useLocation();
-    const [status, setStatus] = useState('');
+  const [status, setStatus] = useState('');
 
   const navigate = useNavigate();
   const { user } = useAuth();
 
-  const isEditing = location.state?.isEditing || 
-                    localStorage.getItem('isEditingBirthApplication') === 'true';
+  const isEditing =
+    location.state?.isEditing || localStorage.getItem('isEditingBirthApplication') === 'true';
 
   const showNotification = (message, severity = 'info') => {
     setSnackbar({ open: true, message, severity });
@@ -146,17 +170,17 @@ const DelayedOneParentForeignerRegistration = () => {
 
   const createBackendApplication = async () => {
     try {
-      console.log("Creating application in backend...");
-      
+      console.log('Creating application in backend...');
+
       const currentId = localStorage.getItem('currentApplicationId');
       let appId = currentId;
-      
+
       if (!appId) {
         appId = 'BC-' + Date.now().toString().slice(-6);
-        console.log("Generated new application ID:", appId);
+        console.log('Generated new application ID:', appId);
         localStorage.setItem('currentApplicationId', appId);
       }
-      
+
       setApplicationId(appId);
 
       const backendApplicationData = {
@@ -165,72 +189,71 @@ const DelayedOneParentForeignerRegistration = () => {
         applicantName: `${formData.firstName || ''} ${formData.lastName || ''}`,
         applicantDetails: JSON.stringify({ ...formData }),
         formData: formData,
-        status: 'PENDING'
+        status: 'PENDING',
       };
 
-      console.log("Creating application with data:", backendApplicationData);
-      
+      console.log('Creating application with data:', backendApplicationData);
+
       const response = await documentApplicationService.createApplication(backendApplicationData);
-      console.log("Backend created application:", response);
-      
+      console.log('Backend created application:', response);
+
       if (response && response.id) {
         localStorage.setItem('currentApplicationId', response.id);
         setApplicationId(response.id);
         setBackendApplicationCreated(true);
       }
-      
+
       return response;
     } catch (error) {
-      console.error("Failed to create application in backend:", error);
-      showNotification(`Failed to register application: ${error.message}. Please try again.`, "error");
+      console.error('Failed to create application in backend:', error);
+      showNotification(
+        `Failed to register application: ${error.message}. Please try again.`,
+        'error'
+      );
       return null;
     }
   };
 
   useEffect(() => {
-
- 
-
     const count = Object.values(uploadedFiles).filter(Boolean).length;
     setUploadedDocumentsCount(count);
     console.log(`Uploaded documents count: ${count}`);
   }, [uploadedFiles]);
 
   useEffect(() => {
-    
     const maritalStatus = localStorage.getItem('maritalStatus');
     if (maritalStatus) {
       setStatus(maritalStatus);
-      console.log("Status loaded from localStorage:", maritalStatus);
+      console.log('Status loaded from localStorage:', maritalStatus);
     }
     const loadData = async () => {
       try {
         setIsInitializing(true);
-        
+
         if (isEditing) {
-          console.log("Loading data for editing...");
+          console.log('Loading data for editing...');
           const editingId = localStorage.getItem('editingApplicationId');
-          console.log("Editing application ID:", editingId);
-          
+          console.log('Editing application ID:', editingId);
+
           if (editingId) {
             setApplicationId(editingId);
-            
+
             try {
               const backendApp = await documentApplicationService.getApplication(editingId);
               if (backendApp) {
                 setBackendApplicationCreated(true);
-                console.log("Application exists in backend:", backendApp);
+                console.log('Application exists in backend:', backendApp);
               }
             } catch (error) {
-              console.warn("Application may not exist in backend:", error);
+              console.warn('Application may not exist in backend:', error);
             }
           }
-          
+
           const applications = JSON.parse(localStorage.getItem('applications') || '[]');
           const applicationToEdit = applications.find(app => app.id === editingId);
-          
+
           if (applicationToEdit) {
-            console.log("Found application to edit:", applicationToEdit);
+            console.log('Found application to edit:', applicationToEdit);
             if (applicationToEdit.uploadedFiles) {
               setUploadedFiles(applicationToEdit.uploadedFiles || {});
             }
@@ -245,23 +268,23 @@ const DelayedOneParentForeignerRegistration = () => {
               if (parsedData.uploadedFiles) {
                 setUploadedFiles(parsedData.uploadedFiles || {});
               }
-              console.log("Loaded form data from birthCertificateApplication");
+              console.log('Loaded form data from birthCertificateApplication');
             }
           }
         } else {
           const currentId = localStorage.getItem('currentApplicationId');
           if (currentId) {
             setApplicationId(currentId);
-            
+
             try {
               const backendApp = await documentApplicationService.getApplication(currentId);
               if (backendApp) {
                 setBackendApplicationCreated(true);
-                console.log("Application exists in backend:", backendApp);
+                console.log('Application exists in backend:', backendApp);
               }
             } catch (error) {
-              console.warn("Application may not exist in backend:", error);
-              
+              console.warn('Application may not exist in backend:', error);
+
               const currentApplicationData = localStorage.getItem('birthCertificateApplication');
               if (currentApplicationData) {
                 const parsedData = JSON.parse(currentApplicationData);
@@ -270,7 +293,7 @@ const DelayedOneParentForeignerRegistration = () => {
               }
             }
           }
-          
+
           const currentApplicationData = localStorage.getItem('birthCertificateApplication');
           if (currentApplicationData) {
             const parsedData = JSON.parse(currentApplicationData);
@@ -280,22 +303,22 @@ const DelayedOneParentForeignerRegistration = () => {
             }
           }
         }
-        
+
         const usage = localStorageManager.getCurrentUsage();
         console.log(`📊 Current storage usage: ${usage.percentage.toFixed(1)}%`);
-        
+
         if (usage.isNearFull) {
           console.warn('⚠️ localStorage is getting full, performing cleanup...');
           await localStorageManager.performCleanup(0.2);
         }
       } catch (error) {
-        console.error("Error during initialization:", error);
-        showNotification("Error loading application data", "error");
+        console.error('Error during initialization:', error);
+        showNotification('Error loading application data', 'error');
       } finally {
         setIsInitializing(false);
       }
     };
-    
+
     loadData();
   }, [isEditing]);
 
@@ -305,17 +328,17 @@ const DelayedOneParentForeignerRegistration = () => {
       setIsLoading(true);
       const createdApp = await createBackendApplication();
       setIsLoading(false);
-      
+
       if (!createdApp) {
-        showNotification("Failed to register application. Cannot upload files.", "error");
+        showNotification('Failed to register application. Cannot upload files.', 'error');
         return;
       }
     }
-    
+
     // Update the uploadedFiles state
     setUploadedFiles(prevState => {
       const newState = { ...prevState, [label]: isUploaded };
-      console.log("Updated uploadedFiles:", newState);
+      console.log('Updated uploadedFiles:', newState);
       return newState;
     });
 
@@ -329,80 +352,89 @@ const DelayedOneParentForeignerRegistration = () => {
       try {
         const currentAppId = applicationId || localStorage.getItem('currentApplicationId');
         if (!currentAppId) {
-          showNotification("Application ID is missing. Cannot upload file.", "error");
+          showNotification('Application ID is missing. Cannot upload file.', 'error');
           return;
         }
-        
-        console.log("Application ID:", currentAppId);
-        
+
+        console.log('Application ID:', currentAppId);
+
         // Handle multiple files (array) or single file (object)
         const filesToUpload = Array.isArray(fileDataObj) ? fileDataObj : [fileDataObj];
-        
+
         for (const [index, fileData] of filesToUpload.entries()) {
           console.log(`Uploading file ${index + 1}:`, fileData.name);
-          
+
           const file = dataURLtoFile(fileData.data, fileData.name, fileData.type);
-          
+
           // For multiple files, append index to label
           const uploadLabel = filesToUpload.length > 1 ? `${label} - File ${index + 1}` : label;
-          
-          const response = await documentApplicationService.uploadFile(currentAppId, file, uploadLabel);
+
+          const response = await documentApplicationService.uploadFile(
+            currentAppId,
+            file,
+            uploadLabel
+          );
           console.log(`Upload response for ${fileData.name}:`, response);
         }
-        
+
         const fileCount = filesToUpload.length;
-        const successMessage = fileCount > 1 
-          ? `${fileCount} files uploaded successfully for "${label}"!`
-          : `"${label}" uploaded successfully!`;
-        
-        showNotification(successMessage, "success");
-        
+        const successMessage =
+          fileCount > 1
+            ? `${fileCount} files uploaded successfully for "${label}"!`
+            : `"${label}" uploaded successfully!`;
+
+        showNotification(successMessage, 'success');
       } catch (error) {
         console.error(`Failed to upload "${label}":`, error);
-        
+
         // Show detailed error information
         if (error.response) {
-          console.error("Server response:", error.response.status, error.response.data);
-          
+          console.error('Server response:', error.response.status, error.response.data);
+
           // If error is 404 (application not found), try to create it and retry upload
           if (error.response.status === 404) {
-            showNotification("Application not found. Creating new application...", "info");
+            showNotification('Application not found. Creating new application...', 'info');
             const createdApp = await createBackendApplication();
             if (createdApp) {
               // Retry upload for all files
               try {
                 const filesToUpload = Array.isArray(fileDataObj) ? fileDataObj : [fileDataObj];
-                
+
                 for (const [index, fileData] of filesToUpload.entries()) {
                   const file = dataURLtoFile(fileData.data, fileData.name, fileData.type);
-                  const uploadLabel = filesToUpload.length > 1 ? `${label} - File ${index + 1}` : label;
-                  
+                  const uploadLabel =
+                    filesToUpload.length > 1 ? `${label} - File ${index + 1}` : label;
+
                   const retryResponse = await documentApplicationService.uploadFile(
-                    createdApp.id, 
-                    file, 
+                    createdApp.id,
+                    file,
                     uploadLabel
                   );
                   console.log(`Retry upload response for ${fileData.name}:`, retryResponse);
                 }
-                
+
                 const fileCount = filesToUpload.length;
-                const successMessage = fileCount > 1 
-                  ? `${fileCount} files uploaded successfully for "${label}"!`
-                  : `"${label}" uploaded successfully!`;
-                
-                showNotification(successMessage, "success");
+                const successMessage =
+                  fileCount > 1
+                    ? `${fileCount} files uploaded successfully for "${label}"!`
+                    : `"${label}" uploaded successfully!`;
+
+                showNotification(successMessage, 'success');
                 return;
               } catch (retryError) {
-                console.error("Retry upload failed:", retryError);
+                console.error('Retry upload failed:', retryError);
               }
             }
           }
-          
-          showNotification(`Failed to upload "${label}": ${error.response.data?.message || error.message}`, "error");
+
+          showNotification(
+            `Failed to upload "${label}": ${error.response.data?.message || error.message}`,
+            'error'
+          );
         } else {
-          showNotification(`Failed to upload "${label}": ${error.message}`, "error");
+          showNotification(`Failed to upload "${label}": ${error.message}`, 'error');
         }
-        
+
         // Revert the upload state on error
         setUploadedFiles(prevState => ({
           ...prevState,
@@ -421,38 +453,36 @@ const DelayedOneParentForeignerRegistration = () => {
     handleFileUpload(label, isUploaded, fileDataObj);
 
   const isMandatoryComplete = () => {
-const currentDocuments = status === 'marital' ? maritalDocuments : nonMaritalDocuments;
-  
-  const allRequiredDocsUploaded = currentDocuments.every(doc => {
-    const isUploaded = uploadedFiles[doc] === true;
-    if (!isUploaded) {
-      console.log(`Missing document: ${doc}`);
-    }
-    return isUploaded;
-  });
-  
-  if (allRequiredDocsUploaded) {
-    console.log("All required documents uploaded.");
-  } else {
-    console.log("Missing some required documents.");
-  }
-  
+    const currentDocuments = status === 'marital' ? maritalDocuments : nonMaritalDocuments;
 
-  
-  return allRequiredDocsUploaded;
+    const allRequiredDocsUploaded = currentDocuments.every(doc => {
+      const isUploaded = uploadedFiles[doc] === true;
+      if (!isUploaded) {
+        console.log(`Missing document: ${doc}`);
+      }
+      return isUploaded;
+    });
+
+    if (allRequiredDocsUploaded) {
+      console.log('All required documents uploaded.');
+    } else {
+      console.log('Missing some required documents.');
+    }
+
+    return allRequiredDocsUploaded;
   };
 
-  const mapStatusForBackend = (frontendStatus) => {
+  const mapStatusForBackend = frontendStatus => {
     const statusMap = {
-      'Submitted': 'Pending',
-      'SUBMITTED': 'Pending',
-      'Pending': 'Pending',
-      'Approved': 'Approved',
-      'Rejected': 'Rejected',
-      'Declined': 'Rejected',
-      'Ready for Pickup': 'Ready for Pickup'
+      Submitted: 'Pending',
+      SUBMITTED: 'Pending',
+      Pending: 'Pending',
+      Approved: 'Approved',
+      Rejected: 'Rejected',
+      Declined: 'Rejected',
+      'Ready for Pickup': 'Ready for Pickup',
     };
-    
+
     return statusMap[frontendStatus] || 'Pending';
   };
 
@@ -460,11 +490,11 @@ const currentDocuments = status === 'marital' ? maritalDocuments : nonMaritalDoc
     try {
       setIsLoading(true);
       setIsSubmitted(true);
-      
+
       const currentAppId = applicationId || localStorage.getItem('currentApplicationId');
       if (!currentAppId) {
-        console.error("No application ID found");
-        showNotification("Application ID is missing. Cannot proceed.", "error");
+        console.error('No application ID found');
+        showNotification('Application ID is missing. Cannot proceed.', 'error');
         setIsLoading(false);
         setIsSubmitted(false);
         return;
@@ -483,20 +513,26 @@ const currentDocuments = status === 'marital' ? maritalDocuments : nonMaritalDoc
         applicationType: 'Birth Certificate',
         applicationSubtype: 'Delayed Registration - Foreign Parent',
       };
-      
+
       try {
-        const response = await documentApplicationService.updateApplication(currentAppId, backendData);
+        const response = await documentApplicationService.updateApplication(
+          currentAppId,
+          backendData
+        );
         console.log('Application status updated in backend:', response);
       } catch (error) {
         console.error('Failed to update backend status:', error);
-        showNotification("Warning: Failed to update backend status. Continuing with local update.", "warning");
+        showNotification(
+          'Warning: Failed to update backend status. Continuing with local update.',
+          'warning'
+        );
       }
 
       const updatedFormData = {
         ...formData,
         uploadedFiles: fileData,
         status: 'Pending',
-        submittedAt: new Date().toISOString()
+        submittedAt: new Date().toISOString(),
       };
 
       const applications = JSON.parse(localStorage.getItem('applications') || '[]');
@@ -507,95 +543,109 @@ const currentDocuments = status === 'marital' ? maritalDocuments : nonMaritalDoc
           ...applications[appIndex],
           formData: {
             ...applications[appIndex].formData,
-            ...updatedFormData
+            ...updatedFormData,
           },
           uploadedFiles: fileData,
           status: 'Pending',
-          lastUpdated: new Date().toISOString()
+          lastUpdated: new Date().toISOString(),
         };
       } else {
         applications.push({
           id: currentAppId,
           type: 'Birth Certificate',
-          applicationType: 'Delayed Registration',  
+          applicationType: 'Delayed Registration',
           applicationSubtype: 'Delayed Registration - Foreign Parent',
           date: new Date().toLocaleDateString(),
           status: 'Pending',
           message: `Birth Certificate application for ${formData.firstName || ''} ${formData.lastName || ''}`,
           formData: updatedFormData,
           uploadedFiles: fileData,
-          lastUpdated: new Date().toISOString()
+          lastUpdated: new Date().toISOString(),
         });
       }
 
       const applicationsStored = await localStorageManager.safeSetItem(
-        'applications', 
+        'applications',
         JSON.stringify(applications)
       );
-      
+
       const formDataStored = await localStorageManager.safeSetItem(
-        'birthCertificateApplication', 
+        'birthCertificateApplication',
         JSON.stringify(updatedFormData)
       );
 
       if (!applicationsStored || !formDataStored) {
-        showNotification('Application submitted successfully! Note: Some data may not be saved locally due to storage limitations.', 'warning');
+        showNotification(
+          'Application submitted successfully! Note: Some data may not be saved locally due to storage limitations.',
+          'warning'
+        );
       } else {
         showNotification('Application submitted successfully!', 'success');
       }
 
       // Dispatch storage events
       window.dispatchEvent(new Event('storage'));
-      window.dispatchEvent(new CustomEvent('customStorageUpdate', {
-        detail: {
-          id: currentAppId,
-          action: 'updated',
-          type: 'Birth Certificate',
-          subtype: 'Delayed Registration - Foreign Parent'
-        }
-      }));
+      window.dispatchEvent(
+        new CustomEvent('customStorageUpdate', {
+          detail: {
+            id: currentAppId,
+            action: 'updated',
+            type: 'Birth Certificate',
+            subtype: 'Delayed Registration - Foreign Parent',
+          },
+        })
+      );
 
       console.log('Application submitted successfully');
-      
+
       // 📧 SEND CONFIRMATION NOTIFICATION (ENHANCED)
       const userEmail = user?.email;
       if (userEmail) {
         try {
           console.log('📧 Sending application confirmation notification to:', userEmail);
-          const notificationResult = await documentApplicationNotificationService.sendApplicationConfirmation(
-            userEmail,
-            currentAppId,
-            {
-              type: 'Birth Certificate',
-              subtype: 'Delayed Registration - Foreign Parent',
-              applicantName: `${formData.firstName || ''} ${formData.lastName || ''}`.trim(),
-              submissionDate: new Date().toLocaleDateString(),
-              status: 'Pending'
-            }
-          );
+          const notificationResult =
+            await documentApplicationNotificationService.sendApplicationConfirmation(
+              userEmail,
+              currentAppId,
+              {
+                type: 'Birth Certificate',
+                subtype: 'Delayed Registration - Foreign Parent',
+                applicantName: `${formData.firstName || ''} ${formData.lastName || ''}`.trim(),
+                submissionDate: new Date().toLocaleDateString(),
+                status: 'Pending',
+              }
+            );
 
           if (notificationResult.success) {
             console.log('✅ Confirmation notification sent successfully');
-            showNotification('Application submitted successfully! A confirmation email has been sent to you.', 'success');
+            showNotification(
+              'Application submitted successfully! A confirmation email has been sent to you.',
+              'success'
+            );
           } else {
             console.log('⚠️ Confirmation notification failed:', notificationResult.error);
-            showNotification('Application submitted successfully! However, we could not send the confirmation email.', 'warning');
+            showNotification(
+              'Application submitted successfully! However, we could not send the confirmation email.',
+              'warning'
+            );
           }
         } catch (notificationError) {
           console.error('❌ Error sending confirmation notification:', notificationError);
-          showNotification('Application submitted successfully! However, we could not send the confirmation email.', 'warning');
+          showNotification(
+            'Application submitted successfully! However, we could not send the confirmation email.',
+            'warning'
+          );
         }
       } else {
         console.log('⚠️ No email available for notifications');
       }
-      
+
       setTimeout(() => {
         navigate('/BirthApplicationSummary');
       }, 2000);
-
     } catch (error) {
       console.error('Error submitting application:', error);
-      showNotification(`Error submitting application: ${error.message}`, "error");
+      showNotification(`Error submitting application: ${error.message}`, 'error');
       setIsLoading(false);
       setIsSubmitted(false);
     }
@@ -603,8 +653,6 @@ const currentDocuments = status === 'marital' ? maritalDocuments : nonMaritalDoc
 
   return (
     <div className={`DelayedOneParentForeignerContainer ${isSidebarOpen ? 'sidebar-open' : ''}`}>
-      
-
       <Typography variant="h5" className="TitleDelayedOneParentForeigner">
         Delayed Registration of Birth (One Parent is a Foreigner)
       </Typography>
@@ -614,42 +662,32 @@ const currentDocuments = status === 'marital' ? maritalDocuments : nonMaritalDoc
           <CircularProgress />
         </Box>
       ) : (
-          <Paper elevation={3} className="DocumentsPaperDelayedOneParentForeigner">
-
-            
-              <Typography variant="body1" className="SectionTitleForeigner">
-        Mandatory Requirements:
-      </Typography>
-              {isLoading && !backendApplicationCreated && (
-                  <Box sx={{ display: 'flex', alignItems: 'center', my: 2 }}>
-                    <CircularProgress size={20} sx={{ mr: 1 }} />
-                    <Typography variant="body2" color="text.secondary">
-                      Creating application record... Please wait.
-                    </Typography>
-                  </Box>
-                )}
-          <Box>
-     {(status === 'marital' ? maritalDocuments : nonMaritalDocuments).map((doc, index) => (
-      <div key={index} style={{ marginBottom: '16px' }}>
-        <FileUpload 
-          label={doc} 
-          description={documentDescriptions[doc]}
-          onUpload={fileUploadWrapper(doc)} 
-          disabled={isLoading} 
-          multiple={true}
-        />
-      </div>
-    ))}
-
+        <Paper elevation={3} className="DocumentsPaperDelayedOneParentForeigner">
+          <Typography variant="body1" className="SectionTitleForeigner">
+            Mandatory Requirements:
+          </Typography>
+          {isLoading && !backendApplicationCreated && (
+            <Box sx={{ display: 'flex', alignItems: 'center', my: 2 }}>
+              <CircularProgress size={20} sx={{ mr: 1 }} />
+              <Typography variant="body2" color="text.secondary">
+                Creating application record... Please wait.
+              </Typography>
             </Box>
-      <Box>
-          
-      
+          )}
+          <Box>
+            {(status === 'marital' ? maritalDocuments : nonMaritalDocuments).map((doc, index) => (
+              <div key={index} style={{ marginBottom: '16px' }}>
+                <FileUpload
+                  label={doc}
+                  description={documentDescriptions[doc]}
+                  onUpload={fileUploadWrapper(doc)}
+                  disabled={isLoading}
+                  multiple={true}
+                />
+              </div>
+            ))}
           </Box>
-
-      
-
-  
+          <Box></Box>
 
           {isLoading && (
             <Box sx={{ display: 'flex', alignItems: 'center', my: 2 }}>
@@ -666,85 +704,90 @@ const currentDocuments = status === 'marital' ? maritalDocuments : nonMaritalDoc
             </Alert>
           )}
 
-            <Box className="ButtonContainerDelayedOneParentForeigner">
-   <Button
-  variant="outlined"
-  color="primary"
-  onClick={() => {
-    const modifyApplicationState = {
-      applicationId: applicationId,
-      isEditing: true, 
-      editingApplicationId: applicationId,
-      formData: {
-        ...formData,
-        uploadedFiles: uploadedFiles,
-        fileData: fileData,
-        lastModified: new Date().toISOString()
-      },
-      uploadedFiles: uploadedFiles,
-      fileData: fileData,
-      modifyMode: true,
-      preserveData: true,
-      backFromDelayedRegistration: true,
-      applicationType: 'Birth Certificate'
-    };
+          <Box className="ButtonContainerDelayedOneParentForeigner">
+            <Button
+              variant="outlined"
+              color="primary"
+              onClick={() => {
+                const modifyApplicationState = {
+                  applicationId: applicationId,
+                  isEditing: true,
+                  editingApplicationId: applicationId,
+                  formData: {
+                    ...formData,
+                    uploadedFiles: uploadedFiles,
+                    fileData: fileData,
+                    lastModified: new Date().toISOString(),
+                  },
+                  uploadedFiles: uploadedFiles,
+                  fileData: fileData,
+                  modifyMode: true,
+                  preserveData: true,
+                  backFromDelayedRegistration: true,
+                  applicationType: 'Birth Certificate',
+                };
 
-    try {
-      localStorage.setItem('birthCertificateApplication', JSON.stringify(modifyApplicationState.formData));
-      localStorage.setItem('isEditingBirthApplication', 'true');
-      localStorage.setItem('editingApplicationId', applicationId);
-      localStorage.setItem('currentApplicationId', applicationId);
-      
-      localStorage.setItem('modifyingApplication', JSON.stringify({
-        id: applicationId,
-        type: 'Birth Certificate',
-        subtype: 'Delayed Registration - Foreign Parent',
-        uploadedFiles: uploadedFiles,
-        timestamp: new Date().toISOString()
-      }));
+                try {
+                  localStorage.setItem(
+                    'birthCertificateApplication',
+                    JSON.stringify(modifyApplicationState.formData)
+                  );
+                  localStorage.setItem('isEditingBirthApplication', 'true');
+                  localStorage.setItem('editingApplicationId', applicationId);
+                  localStorage.setItem('currentApplicationId', applicationId);
 
-      const applications = JSON.parse(localStorage.getItem('applications') || '[]');
-      const appIndex = applications.findIndex(app => app.id === applicationId);
-      
-      if (appIndex >= 0) {
-        applications[appIndex] = {
-          ...applications[appIndex],
-          formData: modifyApplicationState.formData,
-          uploadedFiles: uploadedFiles,
-          status: applications[appIndex].status || 'In Progress',
-          lastModified: new Date().toISOString(),
-          isBeingModified: true
-        };
-        
-        localStorage.setItem('applications', JSON.stringify(applications));
-      }
+                  localStorage.setItem(
+                    'modifyingApplication',
+                    JSON.stringify({
+                      id: applicationId,
+                      type: 'Birth Certificate',
+                      subtype: 'Delayed Registration - Foreign Parent',
+                      uploadedFiles: uploadedFiles,
+                      timestamp: new Date().toISOString(),
+                    })
+                  );
 
-      console.log('Navigating back with modify state:', modifyApplicationState);
-       
-      navigate('/BirthCertificateForm', { 
-        state: modifyApplicationState,
-        replace: false 
-      });
-      
-    } catch (error) {
-      console.error('Error saving modify state:', error);
-      showNotification('Error saving current state. Some data may be lost.', 'warning');
+                  const applications = JSON.parse(localStorage.getItem('applications') || '[]');
+                  const appIndex = applications.findIndex(app => app.id === applicationId);
 
-      navigate('/BirthCertificateForm', { 
-        state: { 
-          applicationId: applicationId,
-          isEditing: true,
-          editingApplicationId: applicationId,
-          formData: formData
-        } 
-      });
-    }
-  }}
-  className="BackButtonDelayedAbove18"
-  disabled={isLoading}
->
-  Back
-</Button>
+                  if (appIndex >= 0) {
+                    applications[appIndex] = {
+                      ...applications[appIndex],
+                      formData: modifyApplicationState.formData,
+                      uploadedFiles: uploadedFiles,
+                      status: applications[appIndex].status || 'In Progress',
+                      lastModified: new Date().toISOString(),
+                      isBeingModified: true,
+                    };
+
+                    localStorage.setItem('applications', JSON.stringify(applications));
+                  }
+
+                  console.log('Navigating back with modify state:', modifyApplicationState);
+
+                  navigate('/BirthCertificateForm', {
+                    state: modifyApplicationState,
+                    replace: false,
+                  });
+                } catch (error) {
+                  console.error('Error saving modify state:', error);
+                  showNotification('Error saving current state. Some data may be lost.', 'warning');
+
+                  navigate('/BirthCertificateForm', {
+                    state: {
+                      applicationId: applicationId,
+                      isEditing: true,
+                      editingApplicationId: applicationId,
+                      formData: formData,
+                    },
+                  });
+                }
+              }}
+              className="BackButtonDelayedAbove18"
+              disabled={isLoading}
+            >
+              Back
+            </Button>
             <Button
               variant="contained"
               color="primary"
@@ -753,7 +796,7 @@ const currentDocuments = status === 'marital' ? maritalDocuments : nonMaritalDoc
               onClick={handleSubmit}
               className="SubmitButtonOneParentForeigner"
             >
-              {isLoading ? "Submitting..." : "Submit"}
+              {isLoading ? 'Submitting...' : 'Submit'}
             </Button>
           </Box>
         </Paper>

@@ -7,7 +7,7 @@ import './AppointmentContent.css';
 export default function DatePickerInputAppointForm({ value, onChange, error }) {
   const [showCalendar, setShowCalendar] = useState(false);
   const inputRef = useRef();
-    
+
   React.useEffect(() => {
     function handleClick(e) {
       if (inputRef.current && !inputRef.current.contains(e.target)) {
@@ -15,8 +15,7 @@ export default function DatePickerInputAppointForm({ value, onChange, error }) {
       }
     }
     if (showCalendar) document.addEventListener('mousedown', handleClick);
-    return () =>
-      document.removeEventListener('mousedown', handleClick);
+    return () => document.removeEventListener('mousedown', handleClick);
   }, [showCalendar]);
 
   function formatDate(date) {
@@ -43,8 +42,7 @@ export default function DatePickerInputAppointForm({ value, onChange, error }) {
     borderRadius: '4px',
     cursor: 'pointer',
     height: '90px !important', // Match height of other inputs
-    overflow: 'hidden'
-    
+    overflow: 'hidden',
   };
 
   return (
@@ -65,32 +63,35 @@ export default function DatePickerInputAppointForm({ value, onChange, error }) {
           height: '45px',
           padding: '0 12px',
           fontSize: '14px',
-          outline: 'none'
+          outline: 'none',
         }}
       />
-      <span 
+      <span
         style={{
           position: 'absolute',
           right: '10px',
           top: '50%',
           transform: 'translateY(-50%)',
           color: '#6b7280',
-          pointerEvents: 'none' // Prevents icon from blocking clicks
+          pointerEvents: 'none', // Prevents icon from blocking clicks
         }}
       >
         <CalendarTodayIcon fontSize="small" />
       </span>
-      
+
       {showCalendar && (
-        <div className="CalendarPopupAppointForm" style={{
-          position: 'absolute',
-          zIndex: 100,
-          marginTop: '4px',
-          boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
-          borderRadius: '8px',
-          overflow: 'hidden',
-          backgroundColor: 'white'
-        }}>
+        <div
+          className="CalendarPopupAppointForm"
+          style={{
+            position: 'absolute',
+            zIndex: 100,
+            marginTop: '4px',
+            boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+            borderRadius: '8px',
+            overflow: 'hidden',
+            backgroundColor: 'white',
+          }}
+        >
           <Calendar
             value={value}
             onChange={date => {
@@ -105,7 +106,14 @@ export default function DatePickerInputAppointForm({ value, onChange, error }) {
           />
         </div>
       )}
-      {error && <span className="ErrorTextAppointForm" style={{ color: '#ef4444', fontSize: '12px', marginTop: '4px' }}>{error}</span>}
+      {error && (
+        <span
+          className="ErrorTextAppointForm"
+          style={{ color: '#ef4444', fontSize: '12px', marginTop: '4px' }}
+        >
+          {error}
+        </span>
+      )}
     </div>
   );
 }

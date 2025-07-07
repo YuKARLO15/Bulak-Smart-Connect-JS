@@ -3,8 +3,8 @@
   bottom: 32px;
   right: 32px;
   z-index: 1300;
-  box-shadow: 0 6px 24px rgba(0,0,0,0.18);
-  background-color: #184a5b   !important;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.18);
+  background-color: #184a5b !important;
   color: #fff;
 }
 
@@ -17,7 +17,7 @@
   width: 350px;
   max-height: 500px;
   border-radius: 24px;
-  box-shadow: 0 6px 24px rgba(0,0,0,0.25);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.25);
 }
 
 .DialogTitleFab {
@@ -47,7 +47,7 @@
   border-radius: 12px;
   background: #d5dcdd;
   height: auto;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
   /* Add this to ensure content stays within the container */
   overflow-wrap: break-word;
   word-wrap: break-word;
@@ -105,7 +105,7 @@
   align-items: center;
   justify-content: center;
   padding: 0;
-  top: -17px;   
-  right: 35px;  
+  top: -17px;
+  right: 35px;
   z-index: 1400;
 }

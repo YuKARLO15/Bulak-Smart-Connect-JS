@@ -10,7 +10,6 @@ const applicationTypeMap = {
   'Clerical Error': 'Clerical Error',
   'Sex DOB': 'Sex DOB',
   'First Name': 'First Name',
-
 };
 
 const BirthCertificateDashboard = () => {
@@ -81,7 +80,7 @@ const BirthCertificateDashboard = () => {
             variant="outlined"
             className="back-button-home"
             onClick={() => navigate('/ApplicationForm')}
-             startIcon={<ArrowBackIcon />}
+            startIcon={<ArrowBackIcon />}
           >
             Back
           </Button>
@@ -135,14 +134,13 @@ const BirthCertificateDashboard = () => {
             value={selectedOption}
             onChange={e => setSelectedOption(e.target.value)}
             className="BirthDashRadioGroup"
-          > 
+          >
             <FormControlLabel
               value="Clerical Error"
               control={<Radio />}
               label="Correction of Clerical Errors ( First Name, Last Name, Middle Name, others)"
-
             />
-          
+
             <FormControlLabel
               value="Sex DOB"
               control={<Radio />}

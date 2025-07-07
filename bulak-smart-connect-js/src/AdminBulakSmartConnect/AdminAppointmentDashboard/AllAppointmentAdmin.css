@@ -51,12 +51,12 @@
   font-size: 14px;
   transition: all 0.3s ease;
   background: linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%);
-    color: #154249;
+  color: #154249;
 }
 
 .search-input:focus {
   outline: none;
-  border-color: #1C4D5A;
+  border-color: #1c4d5a;
   box-shadow: 0 0 0 3px rgba(28, 77, 90, 0.15);
   transform: translateY(-1px);
   color: #154249;
@@ -71,7 +71,7 @@
 }
 
 .filter-group select,
-.filter-group input[type="date"] {
+.filter-group input[type='date'] {
   padding: 12px 16px;
   border: 2px solid #e1e8ed;
   border-radius: 8px;
@@ -84,9 +84,9 @@
 }
 
 .filter-group select:focus,
-.filter-group input[type="date"]:focus {
+.filter-group input[type='date']:focus {
   outline: none;
-  border-color: #1C4D5A;
+  border-color: #1c4d5a;
   box-shadow: 0 0 0 3px rgba(28, 77, 90, 0.15);
   transform: translateY(-1px);
 }
@@ -131,7 +131,7 @@
   background: linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%);
   border-radius: 12px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  border-left: 4px solid #1C4D5A;
+  border-left: 4px solid #1c4d5a;
 }
 
 .appointments-summary h3 {
@@ -207,7 +207,7 @@
   left: 0;
   width: 4px;
   height: 100%;
-  background: linear-gradient(180deg, #1C4D5A 0%, #2A5A68 100%);
+  background: linear-gradient(180deg, #1c4d5a 0%, #2a5a68 100%);
   border-radius: 0 2px 2px 0;
 }
 
@@ -315,12 +315,12 @@
   min-height: 50px; /* Increased minimum height */
   margin-top: 12px; /* Added margin */
   padding-top: 12px; /* Added padding */
-  border-top: 1px solid rgba(28, 77, 90, 0.1); 
-  overflow: visible; 
+  border-top: 1px solid rgba(28, 77, 90, 0.1);
+  overflow: visible;
 }
 
 .view-details-btn {
-  background: linear-gradient(145deg, #1C4D5A 0%, #2A5A68 100%);
+  background: linear-gradient(145deg, #1c4d5a 0%, #2a5a68 100%);
   color: white;
   border: none;
   padding: 8px 16px;
@@ -388,7 +388,7 @@
   width: 40px;
   height: 40px;
   border: 4px solid rgba(28, 77, 90, 0.1);
-  border-top: 4px solid #1C4D5A;
+  border-top: 4px solid #1c4d5a;
   border-radius: 50%;
   animation: spin 1s linear infinite;
   margin-bottom: 20px;
@@ -404,7 +404,7 @@
   gap: 8px;
   align-items: center;
   justify-content: flex-end;
-  flex-wrap: wrap; 
+  flex-wrap: wrap;
   position: relative;
   z-index: 3;
 }
@@ -430,7 +430,6 @@
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
   position: relative;
   overflow: hidden;
-  
 }
 
 .confirm-btn {
@@ -468,33 +467,37 @@
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 /* Status-specific styling with gradients */
-.appointment-card[data-status="confirmed"] .status-badge {
+.appointment-card[data-status='confirmed'] .status-badge {
   background: linear-gradient(145deg, #27ae60 0%, #229954 100%);
   color: white;
 }
 
-.appointment-card[data-status="pending"] .status-badge {
+.appointment-card[data-status='pending'] .status-badge {
   background: linear-gradient(145deg, #f39c12 0%, #e67e22 100%);
   color: white;
 }
 
-.appointment-card[data-status="cancelled"] .status-badge,
-.appointment-card[data-status="declined"] .status-badge {
+.appointment-card[data-status='cancelled'] .status-badge,
+.appointment-card[data-status='declined'] .status-badge {
   background: linear-gradient(145deg, #e74c3c 0%, #c0392b 100%);
   color: white;
 }
 
-.appointment-card[data-status="completed"] {
+.appointment-card[data-status='completed'] {
   opacity: 0.9;
   border-color: rgba(39, 174, 96, 0.3);
 }
 
-.appointment-card[data-status="completed"]::before {
+.appointment-card[data-status='completed']::before {
   background: linear-gradient(180deg, #27ae60 0%, #229954 100%);
 }
 /* Add these styles to your AllAppointmentAdmin.css file */
@@ -589,7 +592,7 @@
     flex-direction: column;
     align-items: stretch;
   }
-  
+
   .date-input {
     min-width: unset;
     width: 100%;
@@ -602,7 +605,7 @@
     grid-template-columns: 1fr 1fr 1fr 1fr;
     gap: 12px;
   }
-  
+
   .info-value {
     max-width: 100px;
     font-size: 12px;
@@ -613,33 +616,33 @@
   .all-appointments-admin {
     padding: 10px;
   }
-  
+
   .appointment-info-grid {
     grid-template-columns: 1fr 1fr;
     gap: 8px;
   }
-  
+
   .appointment-card {
     height: 12vh;
     padding: 12px 16px;
   }
-  
+
   .client-name {
     font-size: 14px;
     max-width: 180px;
   }
-  
+
   .info-value {
     max-width: 90px;
     font-size: 11px;
   }
-  
+
   .all-appointments-filters {
     flex-direction: column;
     align-items: stretch;
     gap: 10px;
   }
-  
+
   .search-group {
     min-width: unset;
   }
@@ -650,29 +653,29 @@
     grid-template-columns: 1fr;
     gap: 6px;
   }
-  
+
   .appointment-card {
     height: 15vh;
     padding: 10px 12px;
   }
-  
+
   .client-name {
     font-size: 13px;
     max-width: 200px;
   }
-  
+
   .info-value {
     max-width: 200px;
     font-size: 12px;
   }
-  
+
   .appointment-card-header {
     flex-direction: column;
     align-items: flex-start;
     gap: 8px;
     margin-bottom: 6px;
   }
-  
+
   .view-details-btn {
     padding: 6px 12px;
     font-size: 10px;
@@ -714,7 +717,7 @@
 }
 
 .appointment-cards-container::-webkit-scrollbar-thumb {
-  background: linear-gradient(145deg, #1C4D5A 0%, #2A5A68 100%);
+  background: linear-gradient(145deg, #1c4d5a 0%, #2a5a68 100%);
   border-radius: 10px;
   border: 2px solid #f1f2f6;
 }
@@ -809,18 +812,17 @@
   background-color: #5a6268;
 }
 
-
 @media (max-width: 1400px) {
   .appointment-info-grid {
     grid-template-columns: repeat(4, 1fr);
     gap: 10px;
   }
-  
+
   .info-value {
     max-width: 110px;
     font-size: 12px;
   }
-  
+
   .appointment-card {
     height: auto;
     min-height: 180px;
@@ -832,17 +834,17 @@
     grid-template-columns: repeat(3, 1fr);
     gap: 12px;
   }
-  
+
   .info-value {
     max-width: 100px;
     font-size: 12px;
   }
-  
+
   .appointment-card {
     height: auto;
     min-height: 200px;
   }
-  
+
   .appointment-card-footer {
     margin-top: 10px;
     padding-top: 10px;
@@ -854,30 +856,30 @@
   .all-appointments-admin {
     padding: 12px;
   }
-  
+
   .appointment-info-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 10px;
   }
-  
+
   .appointment-card {
     height: auto;
     min-height: 220px;
     padding: 14px 16px;
   }
-  
+
   .appointment-actions {
     flex-wrap: wrap;
     gap: 8px;
     justify-content: space-between;
   }
-  
+
   .status-buttons {
     display: flex;
     gap: 6px;
     flex-wrap: wrap;
   }
-  
+
   .confirm-btn,
   .complete-btn,
   .cancel-btn {
@@ -886,7 +888,7 @@
     min-width: 70px;
     white-space: nowrap;
   }
-  
+
   .view-details-btn {
     padding: 8px 16px;
     font-size: 11px;
@@ -898,38 +900,38 @@
   .all-appointments-admin {
     padding: 10px;
   }
-  
+
   .appointment-info-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 8px;
   }
-  
+
   .appointment-card {
     height: auto;
     min-height: 240px;
     padding: 12px 16px;
   }
-  
+
   .client-name {
     font-size: 14px;
     max-width: 180px;
   }
-  
+
   .info-value {
     max-width: 140px;
     font-size: 11px;
   }
-  
+
   .all-appointments-filters {
     flex-direction: column;
     align-items: stretch;
     gap: 10px;
   }
-  
+
   .search-group {
     min-width: unset;
   }
-  
+
   /* Ensure appointment actions are always visible */
   .appointment-card-footer {
     margin-top: 15px;
@@ -937,19 +939,19 @@
     border-top: 1px solid rgba(28, 77, 90, 0.1);
     min-height: 50px;
   }
-  
+
   .appointment-actions {
     flex-direction: column;
     gap: 10px;
     align-items: stretch;
   }
-  
+
   .status-buttons {
     display: flex;
     justify-content: space-between;
     gap: 8px;
   }
-  
+
   .confirm-btn,
   .complete-btn,
   .cancel-btn {
@@ -959,7 +961,7 @@
     min-width: 60px;
     text-align: center;
   }
-  
+
   .view-details-btn {
     width: 100%;
     padding: 12px;
@@ -973,54 +975,54 @@
   .all-appointments-admin {
     padding: 8px;
   }
-  
+
   .appointment-info-grid {
     grid-template-columns: 1fr;
     gap: 6px;
   }
-  
+
   .appointment-card {
     height: auto;
     min-height: 280px;
     padding: 12px 14px;
   }
-  
+
   .client-name {
     font-size: 14px;
     max-width: 200px;
   }
-  
+
   .info-value {
     max-width: 100%;
     font-size: 12px;
   }
-  
+
   .appointment-card-header {
     flex-direction: column;
     align-items: flex-start;
     gap: 8px;
     margin-bottom: 10px;
   }
-  
+
   .appointment-card-footer {
     margin-top: 15px;
     padding-top: 15px;
     border-top: 2px solid rgba(28, 77, 90, 0.1);
     min-height: 80px;
   }
-  
+
   .appointment-actions {
     flex-direction: column;
     gap: 12px;
     align-items: stretch;
   }
-  
+
   .status-buttons {
     display: flex;
     flex-direction: column;
     gap: 8px;
   }
-  
+
   .confirm-btn,
   .complete-btn,
   .cancel-btn {
@@ -1029,7 +1031,7 @@
     font-size: 12px;
     text-align: center;
   }
-  
+
   .view-details-btn {
     width: 100%;
     padding: 12px;
@@ -1045,15 +1047,15 @@
     min-height: 300px;
     padding: 10px 12px;
   }
-  
+
   .appointment-card-footer {
     min-height: 90px;
   }
-  
+
   .status-buttons {
     gap: 10px;
   }
-  
+
   .confirm-btn,
   .complete-btn,
   .cancel-btn {
@@ -1061,7 +1063,7 @@
     font-size: 13px;
     font-weight: 600;
   }
-  
+
   .view-details-btn {
     padding: 14px 12px;
     font-size: 13px;
@@ -1073,21 +1075,21 @@
   .all-appointments-admin {
     padding: 5px;
   }
-  
+
   .appointment-card {
     min-height: 320px;
     padding: 8px 10px;
   }
-  
+
   .appointment-card-footer {
     min-height: 100px;
     padding-top: 15px;
   }
-  
+
   .status-buttons {
     gap: 8px;
   }
-  
+
   .confirm-btn,
   .complete-btn,
   .cancel-btn {
@@ -1095,7 +1097,7 @@
     padding: 15px 10px;
     font-size: 12px;
   }
-  
+
   .view-details-btn {
     padding: 15px 10px;
     font-size: 12px;
@@ -1107,18 +1109,18 @@
   .appointment-card {
     min-height: 200px;
   }
-  
+
   .appointment-actions {
     flex-direction: row;
     flex-wrap: wrap;
     gap: 8px;
   }
-  
+
   .status-buttons {
     flex-direction: row;
     gap: 6px;
   }
-  
+
   .confirm-btn,
   .complete-btn,
   .cancel-btn {
@@ -1127,7 +1129,7 @@
     padding: 8px 10px;
     font-size: 11px;
   }
-  
+
   .view-details-btn {
     width: auto;
     flex-grow: 1;
@@ -1146,7 +1148,7 @@
     padding: 12px 16px;
     font-size: 14px;
   }
-  
+
   .appointment-card-footer {
     min-height: 60px;
   }

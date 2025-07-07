@@ -1,7 +1,7 @@
 /* Base Layout */
 .admin-dashboard {
   min-height: 100vh;
-  width: 100vw; 
+  width: 100vw;
   background: linear-gradient(180deg, #fff 70%, #f9f6f3 100%);
   display: flex;
   flex-direction: column;
@@ -26,7 +26,7 @@
   cursor: pointer;
 }
 
-.AdminDahboardHeader  {
+.AdminDahboardHeader {
   color: #fff;
   font-size: 1.5rem;
   font-weight: 600;
@@ -34,7 +34,7 @@
   background-color: none !important;
   padding: 20px !important;
   text-align: center;
-} 
+}
 
 .admin-dashboard-search-bar {
   width: 260px;
@@ -43,8 +43,8 @@
   padding: 6px 16px;
   display: flex;
   align-items: center;
-   height: 40px !important;
-   margin-right: 20px;
+  height: 40px !important;
+  margin-right: 20px;
 }
 
 .admin-dashboard-search-bar input {
@@ -60,7 +60,7 @@
 /* Content Wrapper */
 .admin-dashboard-content-wrapper {
   width: 100%;
-  max-width: 1400px;  /* Increased to allow for more content */
+  max-width: 1400px; /* Increased to allow for more content */
   margin: 0 auto;
   padding: 24px 16px;
   display: flex;
@@ -82,18 +82,17 @@
 /* Main Content Area */
 .admin-dashboard-main {
   flex: 1;
-  max-width: calc(100% - 340px - 24px);  /* Account for sidebar width and gap */
+  max-width: calc(100% - 340px - 24px); /* Account for sidebar width and gap */
   display: flex;
   flex-direction: column;
   width: 100%;
-   align-items: center;
+  align-items: center;
 }
 
 /* Sidebar Area */
 .admin-dashboard-sidebar {
   width: 340px;
   min-width: 340px;
-
 }
 
 /* Charts Section - Two charts side by side */
@@ -109,7 +108,7 @@
   background: #f7f9fa;
   border-radius: 14px;
   padding: 20px 16px 12px 16px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   min-width: 0;
 }
 
@@ -119,28 +118,30 @@
 
 .admin-dashboard-chart-title {
   font-size: 1rem;
-  color: #1C4D5A;
+  color: #1c4d5a;
   font-weight: 600;
   display: flex;
   align-items: center;
   gap: 18px;
 }
 
-.admin-dashboard-walk-in-dot, .admin-dashboard-birth-dot {
+.admin-dashboard-walk-in-dot,
+.admin-dashboard-birth-dot {
   display: inline-block;
   width: 12px;
   height: 12px;
   border-radius: 50%;
-  background: #1C4D5A;
+  background: #1c4d5a;
   margin-right: 6px;
 }
 
-.admin-dashboard-appointment-dot, .admin-dashboard-marriage-dot {
+.admin-dashboard-appointment-dot,
+.admin-dashboard-marriage-dot {
   display: inline-block;
   width: 12px;
   height: 12px;
   border-radius: 50%;
-  background: #8DC3A7;
+  background: #8dc3a7;
   margin-left: 18px;
   margin-right: 6px;
 }
@@ -150,7 +151,7 @@
   background: #f7f9fa;
   border-radius: 14px;
   padding: 20px 16px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   margin-bottom: 24px;
   width: 100%;
 }
@@ -161,9 +162,9 @@
   border-radius: 14px;
   padding: 20px 16px;
   min-width: 260px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-  
-  color: #1C4D5A;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+
+  color: #1c4d5a;
   font-size: 1.1rem;
   display: flex;
   flex-direction: column;
@@ -181,25 +182,24 @@
 .admin-dashboard-overall-appointment,
 .admin-dashboard-overall-application,
 .admin-dashboard-walk-in-queue {
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1) !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
 }
 
-
 .admin-dashboard-walk-in-queue h2 {
-  color: #1C4D5A;
+  color: #1c4d5a;
   font-size: 1.1rem;
   font-weight: 600;
   margin-bottom: 16px;
 }
 
 /* Additional Stats Boxes */
-.overall-appointment-box, 
+.overall-appointment-box,
 .overall-application-box {
   background: #f7f9fa;
   border-radius: 14px;
   padding: 20px 16px;
   min-width: 260px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   margin-bottom: 24px;
   width: 100%;
 }
@@ -209,7 +209,7 @@
   background: #f7f9fa;
   border-radius: 14px;
   padding: 20px 16px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   margin-bottom: 24px;
   width: 100%;
 }
@@ -233,7 +233,7 @@
   text-align: center;
   flex: 1;
   margin: 0 8px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
 .stat-box:first-child {
@@ -269,8 +269,7 @@
   height: 20vh;
   align-items: center;
   justify-content: center;
-
-} 
+}
 /* Media query for large desktop screens */
 @media (min-width: 1601px) {
   .admin-dashboard-content-wrapper {
@@ -290,12 +289,12 @@
   .admin-dashboard-content-wrapper {
     max-width: 1100px;
   }
-  
+
   .admin-dashboard-sidebar {
     width: 300px;
     min-width: 300px;
   }
-  
+
   .admin-dashboard-main {
     max-width: calc(100% - 300px - 24px);
   }
@@ -306,18 +305,18 @@
   .admin-dashboard-container {
     flex-direction: column;
   }
-  
+
   .admin-dashboard-main,
   .admin-dashboard-sidebar {
     width: 100%;
     max-width: 100%;
     min-width: 0;
   }
-  
+
   .admin-dashboard-charts {
     grid-template-columns: 1fr;
   }
-  
+
   .admin-dashboard-sidebar {
     margin-top: 24px;
   }
@@ -328,19 +327,19 @@
   .admin-dashboard-top-nav {
     padding: 0 16px;
   }
-  
+
   .admin-dashboard-search-bar {
     width: 200px;
   }
-  
+
   .admin-dashboard-title {
     font-size: 1.4rem;
   }
-  
+
   .stats-container {
     flex-direction: column;
   }
-  
+
   .stat-box {
     margin: 8px 0;
   }

@@ -8,14 +8,14 @@ import config from '../../config/env.js';
 import axios from 'axios';
 
 // Format queue number to WK format - reusing from WalkInQueueAdmin
-const formatWKNumber = (queueNumber) => {
+const formatWKNumber = queueNumber => {
   if (typeof queueNumber === 'string' && queueNumber.startsWith('WK')) {
     return queueNumber;
   }
-  
+
   // Handle null or undefined
   if (!queueNumber) return 'WK000';
-  
+
   const numberPart = queueNumber?.includes('-') ? queueNumber.split('-')[1] : queueNumber;
   const num = parseInt(numberPart, 10) || 0;
   return `WK${String(num).padStart(3, '0')}`;
@@ -29,7 +29,7 @@ const AdminWalkInQueue = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedQueue, setSelectedQueue] = useState(null);
-  
+
   // Manual queue states
   const [showManualQueueModal, setShowManualQueueModal] = useState(false);
   const [isCreatingQueue, setIsCreatingQueue] = useState(false);
@@ -37,86 +37,90 @@ const AdminWalkInQueue = () => {
     firstName: '',
     lastName: '',
     reasonOfVisit: '',
-    phoneNumber: ''
+    phoneNumber: '',
   });
-  
+
   // States for pending count and reset
   const [pendingCount, setPendingCount] = useState(0);
   const [isResetting, setIsResetting] = useState(false);
-  
+
   const navigate = useNavigate();
 
   // Current queue is the first in the serving queues
-  const currentQueue = currentQueues.length > 0 ? 
-    formatWKNumber(currentQueues[0].queueNumber || currentQueues[0].id) : 'None';
-  
+  const currentQueue =
+    currentQueues.length > 0
+      ? formatWKNumber(currentQueues[0].queueNumber || currentQueues[0].id)
+      : 'None';
+
   // Next queue is the first in the pending queues
-  const nextQueue = pendingQueues.length > 0 ? 
-    formatWKNumber(pendingQueues[0].queueNumber || pendingQueues[0].id) : 'None';
-  
+  const nextQueue =
+    pendingQueues.length > 0
+      ? formatWKNumber(pendingQueues[0].queueNumber || pendingQueues[0].id)
+      : 'None';
+
   // Total queues count
   const totalQueues = pendingQueues.length + currentQueues.length;
 
   // Print queue ticket function - Direct POS Commands without driver
-  const printQueueTicket = async (queueData) => {
+  const printQueueTicket = async queueData => {
     try {
       console.log('Printing ticket for:', queueData);
-      
+
       // Create ESC/POS command sequence
       const createPOSCommands = () => {
         const ESC = '\x1B';
         const GS = '\x1D';
         const LF = '\x0A';
         const CR = '\x0D';
-        
+
         let commands = '';
-        
+
         // Initialize printer
         commands += ESC + '@'; // Initialize printer
         commands += ESC + 't' + '\x00'; // Select character code table (PC437)
-        
+
         // Set line spacing
         commands += ESC + '3' + '\x18'; // Set line spacing to 24 dots
-        
+
         // Header - Center aligned
         commands += ESC + 'a' + '\x01'; // Center align
         commands += ESC + '!' + '\x18'; // Double height + double width
         commands += 'BULAK SMART CONNECT' + LF;
-        
+
         commands += ESC + '!' + '\x00'; // Normal text
         commands += 'Civil Registrar Office' + LF;
-        
+
         // Separator line
         commands += '================================' + LF;
-        
+
         // Queue number - Large and centered
         commands += ESC + 'a' + '\x01'; // Ensure center align
         commands += ESC + '!' + '\x38'; // Triple height + double width
         commands += queueData.queueNumber + LF;
         commands += ESC + '!' + '\x00'; // Reset to normal
-        
+
         // Another separator
         commands += '================================' + LF;
-        
+
         // Details - Left aligned
         commands += ESC + 'a' + '\x00'; // Left align
         commands += `Name: ${queueData.firstName} ${queueData.lastName}` + LF;
         commands += `Service: ${queueData.reasonOfVisit}` + LF;
         commands += `Date: ${queueData.timestamp}` + LF;
         commands += `Time: ${new Date().toLocaleTimeString()}` + LF;
-        
+
         // Separator
         commands += '--------------------------------' + LF;
-        
+
         // Footer - Center aligned
         commands += ESC + 'a' + '\x01'; // Center align
         commands += 'Please wait for your number' + LF;
         commands += 'to be called' + LF + LF;
         commands += 'Thank you!' + LF + LF + LF;
-        
+
         // Cut paper (full cut)
         commands += GS + 'V' + '\x00';
-        
+
         return commands;
       };
 
@@ -124,34 +128,33 @@ const AdminWalkInQueue = () => {
       if ('serial' in navigator) {
         try {
           console.log('Attempting Web Serial API printing...');
-          
+
           // Request port without vendor filter for broader compatibility
           const port = await navigator.serial.requestPort();
-          
+
           // Open with common POS printer settings
-          await port.open({ 
+          await port.open({
             baudRate: 9600,
             dataBits: 8,
             stopBits: 1,
             parity: 'none',
-            flowControl: 'none'
+            flowControl: 'none',
           });
-          
+
           const writer = port.writable.getWriter();
           const commands = createPOSCommands();
-          
+
           // Convert string to Uint8Array for proper binary transmission
           const encoder = new TextEncoder();
           const data = encoder.encode(commands);
-          
+
           await writer.write(data);
           await writer.close();
           await port.close();
-          
+
           console.log('✅ Ticket printed successfully via Web Serial API');
           alert('✅ Ticket printed successfully!');
           return;
-          
         } catch (serialError) {
           console.warn('❌ Web Serial API failed:', serialError.message);
         }
@@ -160,9 +163,9 @@ const AdminWalkInQueue = () => {
       // Method 2: Try Raw Printing via Fetch API (if you have a local print server)
       try {
         console.log('Attempting raw print via local server...');
-        
+
         const commands = createPOSCommands();
-        
+
         // Try sending to a local print server (you'd need to set up a simple Node.js server)
         const response = await fetch(`${config.PRINT.SERVER_URL}/print`, {
           method: 'POST',
@@ -171,10 +174,10 @@ const AdminWalkInQueue = () => {
           },
           body: JSON.stringify({
             data: commands,
-            printerName: 'POS-58' // or your printer name
-          })
+            printerName: 'POS-58', // or your printer name
+          }),
         });
-        
+
         if (response.ok) {
           console.log('✅ Ticket printed via local print server');
           alert('✅ Ticket printed successfully!');
@@ -187,11 +190,11 @@ const AdminWalkInQueue = () => {
       // Method 3: Create downloadable POS file
       try {
         console.log('Creating downloadable POS file...');
-        
+
         const commands = createPOSCommands();
         const blob = new Blob([commands], { type: 'application/octet-stream' });
         const url = URL.createObjectURL(blob);
-        
+
         const a = document.createElement('a');
         a.href = url;
         a.download = `ticket-${queueData.queueNumber}.pos`;
@@ -199,16 +202,15 @@ const AdminWalkInQueue = () => {
         a.click();
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
-        
+
         alert('📁 POS file downloaded! Send this file directly to your printer.');
-        
       } catch (downloadError) {
         console.warn('❌ File download failed:', downloadError.message);
       }
 
       // Method 4: Fallback to enhanced browser print with POS-like formatting
       console.log('Using enhanced browser print fallback...');
-      
+
       const printWindow = window.open('', '_blank', 'width=400,height=700');
       printWindow.document.write(`
         <html>
@@ -365,10 +367,9 @@ const AdminWalkInQueue = () => {
         </html>
       `);
       printWindow.document.close();
-      
     } catch (error) {
       console.error('❌ All printing methods failed:', error);
-      
+
       // Final fallback - show ticket info
       const ticketText = `
 🎫 BULAK SMART CONNECT
@@ -384,8 +385,8 @@ const AdminWalkInQueue = () => {
    Please wait for your number to be called
    Thank you!
     `;
-    
-      alert('⚠️ Automatic printing failed. Here\'s your ticket info:\n' + ticketText);
+
+      alert("⚠️ Automatic printing failed. Here's your ticket info:\n" + ticketText);
     }
   };
 
@@ -395,10 +396,10 @@ const AdminWalkInQueue = () => {
       // Get queue details to find user email
       const queueDetails = await queueService.fetchQueueDetails(queueId);
       const userEmail = queueDetails?.details?.user?.email;
-      
+
       if (userEmail && queueData) {
         const queueNumber = formatWKNumber(queueData.queueNumber || queueData.id);
-        
+
         if (newStatus === 'serving') {
           // Send "now serving" notification
           await queueNotificationService.sendNowServingAlert(userEmail, queueNumber);
@@ -421,7 +422,7 @@ const AdminWalkInQueue = () => {
         middleInitial: '',
         reasonOfVisit: 'General Inquiry',
         address: 'N/A',
-        phoneNumber: 'N/A'
+        phoneNumber: 'N/A',
       };
 
       console.log('Creating manual queue with data:', queueData);
@@ -431,35 +432,34 @@ const AdminWalkInQueue = () => {
       console.log('Manual queue created:', response);
 
       const queueNumber = formatWKNumber(response.queue.queueNumber || response.queue.id);
-      
+
       // Print the ticket
       await printQueueTicket({
         queueNumber,
         firstName: queueData.firstName,
         lastName: queueData.lastName,
         reasonOfVisit: queueData.reasonOfVisit,
-        timestamp: new Date().toLocaleDateString()
+        timestamp: new Date().toLocaleDateString(),
       });
 
       // Refresh queue data
       await fetchQueueData();
-      
+
       alert(`Queue ${queueNumber} created successfully!`);
       setShowManualQueueModal(false);
       resetForm();
     } catch (error) {
       console.error('Error creating manual queue:', error);
-      console.error('Error response:', error.response?.data); 
-      console.error('Error status:', error.response?.status); 
-    
+      console.error('Error response:', error.response?.data);
+      console.error('Error status:', error.response?.status);
+
       if (error.response?.status === 401) {
         alert('Authentication failed. Please log in again.');
         navigate('/login');
       } else {
         // More detailed error message
-        const errorMessage = error.response?.data?.message || 
-                            error.response?.data?.error || 
-                            error.message;
+        const errorMessage =
+          error.response?.data?.message || error.response?.data?.error || error.message;
         alert(`Failed to create queue: ${errorMessage}`);
       }
     } finally {
@@ -473,7 +473,7 @@ const AdminWalkInQueue = () => {
       firstName: '',
       lastName: '',
       reasonOfVisit: '',
-      phoneNumber: ''
+      phoneNumber: '',
     });
   };
 
@@ -481,13 +481,13 @@ const AdminWalkInQueue = () => {
   const handleFormChange = (field, value) => {
     setManualQueueForm(prev => ({
       ...prev,
-      [field]: value
+      [field]: value,
     }));
   };
 
   // Hotkey handler for Ctrl+Q
   useEffect(() => {
-    const handleKeyDown = (event) => {
+    const handleKeyDown = event => {
       if (event.ctrlKey && event.key === 'q') {
         event.preventDefault();
         setShowManualQueueModal(true);
@@ -497,43 +497,44 @@ const AdminWalkInQueue = () => {
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, []);
-  
+
   // Update queue status
   const updateQueueStatus = async (queueId, newStatus) => {
     try {
       console.log(`Attempting to update queue ${queueId} to status: ${newStatus}`);
-      
+
       // Parse the queueId if it's not already a number
       const parsedQueueId = parseInt(queueId, 10) || queueId;
-      
+
       // Get queue data before updating for notification purposes
-      const queueToUpdate = pendingQueues.find(q => q.id === queueId || q.id === parsedQueueId) ||
-                            currentQueues.find(q => q.id === queueId || q.id === parsedQueueId);
-      
+      const queueToUpdate =
+        pendingQueues.find(q => q.id === queueId || q.id === parsedQueueId) ||
+        currentQueues.find(q => q.id === queueId || q.id === parsedQueueId);
+
       // Make API call to update status using queueService
       await queueService.updateQueueStatus(parsedQueueId, newStatus);
-      
+
       console.log(`Queue status updated successfully: ${queueId} → ${newStatus}`);
-      
+
       // Send notification if status changed to serving
       if (newStatus === 'serving' && queueToUpdate) {
         await notifyUserOnStatusChange(parsedQueueId, newStatus, queueToUpdate);
       }
-      
+
       // Update local state based on new status
       if (newStatus === 'serving' || newStatus === 'in-progress') {
         // Make sure we use consistent status naming when updating UI
         const mappedStatus = 'serving'; // NestJS backend uses 'serving'
-        
+
         // Move from pending to current
         const queueToMove = pendingQueues.find(q => q.id === queueId || q.id === parsedQueueId);
         if (queueToMove) {
           setPendingQueues(prev => prev.filter(q => q.id !== queueId && q.id !== parsedQueueId));
-          setCurrentQueues(prev => [...prev, {...queueToMove, status: mappedStatus}]);
-          
+          setCurrentQueues(prev => [...prev, { ...queueToMove, status: mappedStatus }]);
+
           // Set selected queue to show details
-          setSelectedQueue({...queueToMove, status: mappedStatus});
-          
+          setSelectedQueue({ ...queueToMove, status: mappedStatus });
+
           // Navigate to details view
           navigate(`/AdminWalkInDetails/${queueId}`);
         }
@@ -549,26 +550,28 @@ const AdminWalkInQueue = () => {
         const queueToMove = currentQueues.find(q => q.id === queueId || q.id === parsedQueueId);
         if (queueToMove) {
           setCurrentQueues(prev => prev.filter(q => q.id !== queueId && q.id !== parsedQueueId));
-          setPendingQueues(prev => [...prev, {...queueToMove, status: 'pending'}]);
+          setPendingQueues(prev => [...prev, { ...queueToMove, status: 'pending' }]);
         }
       }
-      
+
       // Refresh data after updating with a slight delay to ensure backend has processed the change
       setTimeout(() => fetchQueueData(), 500);
     } catch (error) {
       console.error('Failed to update queue status:', error);
       console.error('Error details:', error.response?.data || error.message);
-      alert(`Failed to update queue status. Error: ${error.response?.data?.message || error.message}`);
+      alert(
+        `Failed to update queue status. Error: ${error.response?.data?.message || error.message}`
+      );
     }
   };
-  
+
   // Function to fetch queue data - using queueService.fetchWalkInQueues
   const fetchQueueData = useCallback(async () => {
     setLoading(true);
     try {
       // Fetch all walk-in queues (includes both pending and serving)
       const walkInQueues = await queueService.fetchWalkInQueues();
-      
+
       // Separate into pending and current queues
       const formattedPendingQueues = walkInQueues
         .filter(queue => queue.status === 'pending')
@@ -579,9 +582,9 @@ const AdminWalkInQueue = () => {
           lastName: queue.lastName || '',
           reasonOfVisit: queue.reasonOfVisit || 'General Inquiry',
           status: 'pending',
-          timestamp: queue.createdAt || new Date().toISOString()
+          timestamp: queue.createdAt || new Date().toISOString(),
         }));
-      
+
       const formattedCurrentQueues = walkInQueues
         .filter(queue => queue.status === 'serving')
         .map(queue => ({
@@ -591,9 +594,9 @@ const AdminWalkInQueue = () => {
           lastName: queue.lastName || '',
           reasonOfVisit: queue.reasonOfVisit || 'General Inquiry',
           status: 'serving',
-          timestamp: queue.createdAt || new Date().toISOString()
+          timestamp: queue.createdAt || new Date().toISOString(),
         }));
-      
+
       setPendingQueues(formattedPendingQueues);
       setCurrentQueues(formattedCurrentQueues);
       setError(null);
@@ -629,7 +632,7 @@ const AdminWalkInQueue = () => {
       await fetchPendingCount(); // Update pending count
     } catch (error) {
       console.error('Error during manual reset:', error);
-      
+
       // ✅ IMPROVED: Better error handling
       if (error.message.includes('Server error during reset')) {
         // Reset might have worked despite the error
@@ -645,26 +648,26 @@ const AdminWalkInQueue = () => {
   };
 
   // View details of a specific queue
-  const viewQueueDetails = (queueId) => {
+  const viewQueueDetails = queueId => {
     navigate(`/AdminWalkInDetails/${queueId}`);
   };
-  
+
   // Get all queues combined for rendering
   const getAllQueues = () => {
     return [...currentQueues, ...pendingQueues];
   };
-  
+
   // Fetch data on component mount and refresh periodically
   useEffect(() => {
     fetchQueueData();
     fetchPendingCount(); // Fetch pending count on mount
-    
+
     // Auto-refresh every 30 seconds
     const intervalId = setInterval(() => {
       fetchQueueData();
       fetchPendingCount();
     }, 30000);
-    
+
     return () => clearInterval(intervalId);
   }, [fetchQueueData]);
 
@@ -684,7 +687,7 @@ const AdminWalkInQueue = () => {
           </span>
         </button>
         <h1 className="admin-walkin-queue-header-title">Walk - in</h1>
-        
+
         {/* Manual Queue Button */}
         <button
           className="manual-queue-btn"
@@ -693,7 +696,7 @@ const AdminWalkInQueue = () => {
         >
           + Manual Queue
         </button>
-        
+
         {/* Manual Reset Button - New Feature */}
         <button
           className="manual-reset-btn"
@@ -730,7 +733,8 @@ const AdminWalkInQueue = () => {
             <h2 className="admin-walkin-queue-summary-title">CURRENT QUEUE</h2>
             <div className="admin-walkin-queue-summary-number">{currentQueue}</div>
             <div className="admin-walkin-queue-summary-next">
-              Next on Queue <span className="admin-walkin-queue-summary-next-number">{nextQueue}</span>
+              Next on Queue{' '}
+              <span className="admin-walkin-queue-summary-next-number">{nextQueue}</span>
             </div>
           </div>
           <div className="admin-walkin-queue-summary-card gray">
@@ -742,7 +746,7 @@ const AdminWalkInQueue = () => {
         {/* Walk-In Queues List */}
         <div className="admin-walkin-queue-list-section">
           <h2 className="admin-walkin-queue-list-title">Walk - In Queues</h2>
-          
+
           <div className="queue-content">
             {loading ? (
               <div className="queue-loading">
@@ -760,61 +764,63 @@ const AdminWalkInQueue = () => {
               </div>
             ) : (
               <div className="queue-list">
-                {getAllQueues().slice(0, 5).map(queue => (
-                  <div 
-                    key={queue.id} 
-                    className={`queue-item ${queue.status === 'serving' ? 'active-queue' : ''}`}
-                  >
-                    <div className="queue-top">
-                      <div className="queue-numberwalk">{queue.queueNumber}</div>
-                      <div className={`queue-status ${queue.status}`}>
-                        {queue.status === 'serving' ? 'in-progress' : queue.status}
+                {getAllQueues()
+                  .slice(0, 5)
+                  .map(queue => (
+                    <div
+                      key={queue.id}
+                      className={`queue-item ${queue.status === 'serving' ? 'active-queue' : ''}`}
+                    >
+                      <div className="queue-top">
+                        <div className="queue-numberwalk">{queue.queueNumber}</div>
+                        <div className={`queue-status ${queue.status}`}>
+                          {queue.status === 'serving' ? 'in-progress' : queue.status}
+                        </div>
+                      </div>
+                      <div className="queue-details">
+                        <div className="queue-name">{`${queue.firstName} ${queue.lastName}`}</div>
+                        <div className="queue-reason">{queue.reasonOfVisit}</div>
+                      </div>
+                      <div className="queue-actions">
+                        {queue.status === 'pending' && (
+                          <button
+                            className="queue-action-btn start"
+                            onClick={e => {
+                              e.stopPropagation();
+                              updateQueueStatus(queue.id, 'serving');
+                            }}
+                            aria-label="Start serving this client"
+                          >
+                            Start
+                          </button>
+                        )}
+                        {queue.status === 'serving' && (
+                          <>
+                            <button
+                              className="queue-action-btn view"
+                              onClick={e => {
+                                e.stopPropagation();
+                                viewQueueDetails(queue.id);
+                              }}
+                              aria-label="View details of this client"
+                            >
+                              View Details
+                            </button>
+                            <button
+                              className="queue-action-btn complete"
+                              onClick={e => {
+                                e.stopPropagation();
+                                updateQueueStatus(queue.id, 'completed');
+                              }}
+                              aria-label="Mark this appointment as completed"
+                            >
+                              Complete
+                            </button>
+                          </>
+                        )}
                       </div>
                     </div>
-                    <div className="queue-details">
-                      <div className="queue-name">{`${queue.firstName} ${queue.lastName}`}</div>
-                      <div className="queue-reason">{queue.reasonOfVisit}</div>
-                    </div>
-                    <div className="queue-actions">
-                      {queue.status === 'pending' && (
-                        <button 
-                          className="queue-action-btn start"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            updateQueueStatus(queue.id, 'serving');
-                          }}
-                          aria-label="Start serving this client"
-                        >
-                          Start
-                        </button>
-                      )}
-                      {queue.status === 'serving' && (
-                        <>
-                          <button 
-                            className="queue-action-btn view"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              viewQueueDetails(queue.id);
-                            }}
-                            aria-label="View details of this client"
-                          >
-                            View Details
-                          </button>
-                          <button 
-                            className="queue-action-btn complete"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              updateQueueStatus(queue.id, 'completed');
-                            }}
-                            aria-label="Mark this appointment as completed"
-                          >
-                            Complete
-                          </button>
-                        </>
-                      )}
-                    </div>
-                  </div>
-                ))}
+                  ))}
               </div>
             )}
           </div>
@@ -824,20 +830,17 @@ const AdminWalkInQueue = () => {
       {/* Manual Queue Modal */}
       {showManualQueueModal && (
         <div className="modal-overlay" onClick={() => setShowManualQueueModal(false)}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+          <div className="modal-content" onClick={e => e.stopPropagation()}>
             <div className="modal-header">
               <h3>Create Manual Queue</h3>
-              <button 
-                className="modal-close"
-                onClick={() => setShowManualQueueModal(false)}
-              >
+              <button className="modal-close" onClick={() => setShowManualQueueModal(false)}>
                 ×
               </button>
             </div>
-            
+
             <div className="modal-body">
               <p>Create a queue for walk-in guest users and print the ticket.</p>
-              
+
               <div className="queue-options">
                 <button
                   className="quick-queue-btn"
@@ -846,9 +849,9 @@ const AdminWalkInQueue = () => {
                 >
                   {isCreatingQueue ? 'Creating...' : '🎫 Quick Queue (Default Guest)'}
                 </button>
-                
+
                 <div className="or-divider">or</div>
-                
+
                 <div className="custom-form">
                   <h4>Custom Queue Details</h4>
                   <div className="form-row">
@@ -857,7 +860,7 @@ const AdminWalkInQueue = () => {
                       <input
                         type="text"
                         value={manualQueueForm.firstName}
-                        onChange={(e) => handleFormChange('firstName', e.target.value)}
+                        onChange={e => handleFormChange('firstName', e.target.value)}
                         placeholder="Walk-in"
                       />
                     </div>
@@ -866,17 +869,17 @@ const AdminWalkInQueue = () => {
                       <input
                         type="text"
                         value={manualQueueForm.lastName}
-                        onChange={(e) => handleFormChange('lastName', e.target.value)}
+                        onChange={e => handleFormChange('lastName', e.target.value)}
                         placeholder="Guest"
                       />
                     </div>
                   </div>
-                  
+
                   <div className="form-group">
                     <label>Reason of Visit:</label>
                     <select
                       value={manualQueueForm.reasonOfVisit}
-                      onChange={(e) => handleFormChange('reasonOfVisit', e.target.value)}
+                      onChange={e => handleFormChange('reasonOfVisit', e.target.value)}
                     >
                       <option value="">Select reason...</option>
                       <option value="Birth Certificate">Birth Certificate</option>
@@ -887,38 +890,42 @@ const AdminWalkInQueue = () => {
                       <option value="Document Correction">Document Correction</option>
                     </select>
                   </div>
-                  
+
                   <div className="form-group">
                     <label>Phone Number (Optional):</label>
                     <input
                       type="tel"
                       value={manualQueueForm.phoneNumber}
-                      onChange={(e) => handleFormChange('phoneNumber', e.target.value)}
+                      onChange={e => handleFormChange('phoneNumber', e.target.value)}
                       placeholder="N/A"
                     />
                   </div>
-                  
+
                   <button
                     className="custom-queue-btn"
-                    onClick={() => createManualQueue({
-                      firstName: manualQueueForm.firstName || 'Walk-in',
-                      lastName: manualQueueForm.lastName || 'Guest',
-                      reasonOfVisit: manualQueueForm.reasonOfVisit || 'General Inquiry',
-                      phoneNumber: manualQueueForm.phoneNumber || 'N/A',
-                      address: 'N/A',
-                      middleInitial: ''
-                    })}
+                    onClick={() =>
+                      createManualQueue({
+                        firstName: manualQueueForm.firstName || 'Walk-in',
+                        lastName: manualQueueForm.lastName || 'Guest',
+                        reasonOfVisit: manualQueueForm.reasonOfVisit || 'General Inquiry',
+                        phoneNumber: manualQueueForm.phoneNumber || 'N/A',
+                        address: 'N/A',
+                        middleInitial: '',
+                      })
+                    }
                     disabled={isCreatingQueue}
                   >
                     {isCreatingQueue ? 'Creating...' : '🎫 Create Custom Queue'}
                   </button>
                 </div>
               </div>
-              
+
               <div className="modal-footer">
                 <small>
-                  <strong>Hotkey:</strong> Press Ctrl+Q to open this dialog<br/>
-                  <strong>Printer:</strong> XPrinter POS 58 thermal printer supported<br/>
+                  <strong>Hotkey:</strong> Press Ctrl+Q to open this dialog
+                  <br />
+                  <strong>Printer:</strong> XPrinter POS 58 thermal printer supported
+                  <br />
                   <strong>Security:</strong> Only authenticated admins can create manual queues
                 </small>
               </div>

@@ -11,16 +11,14 @@ import config from '../../config/env.js';
 import { useAuth } from '../../context/AuthContext';
 
 // Format queue number to WK format
-const formatWKNumber = (queueNumber) => {
+const formatWKNumber = queueNumber => {
   if (typeof queueNumber === 'string' && queueNumber.startsWith('WK')) {
     return queueNumber; // Already in right format
   }
-  
+
   // Extract number from backend format or use as is
-  const numberPart = queueNumber.includes('-') 
-    ? queueNumber.split('-')[1]
-    : queueNumber;
-  
+  const numberPart = queueNumber.includes('-') ? queueNumber.split('-')[1] : queueNumber;
+
   // Convert to number and format as WK format
   const num = parseInt(numberPart, 10) || 0;
   return `WK${String(num).padStart(3, '0')}`;
@@ -39,14 +37,14 @@ const getCurrentUserId = () => {
 
 const WalkInQueueContainer = () => {
   const { user } = useAuth(); // Get user from AuthContext
-  
-  const [queuePosition, setQueuePosition] = useState(null); 
+
+  const [queuePosition, setQueuePosition] = useState(null);
   const [currentQueue, setCurrentQueue] = useState([]);
   const [pendingQueues, setPendingQueues] = useState([]);
   const [userQueue, setUserQueue] = useState(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [loading, setLoading] = useState(true);
-  
+
   // Add notification tracking states
   const [notificationsSent, setNotificationsSent] = useState(new Set());
   const [lastNotifiedPosition, setLastNotifiedPosition] = useState(null);
@@ -59,10 +57,10 @@ const WalkInQueueContainer = () => {
         console.log(`✅ Found email from AuthContext: ${user.email}`);
         return user.email;
       }
-      
+
       // Fallback to localStorage
       const possibleKeys = ['user', 'currentUser', 'userData', 'authUser'];
-      
+
       for (const key of possibleKeys) {
         const userData = localStorage.getItem(key);
         if (userData) {
@@ -77,7 +75,7 @@ const WalkInQueueContainer = () => {
           }
         }
       }
-      
+
       console.log('❌ No email found in AuthContext or localStorage');
       return null;
     } catch (e) {
@@ -87,69 +85,77 @@ const WalkInQueueContainer = () => {
   };
 
   // Enhanced function to check position and send notifications
-  const checkPositionAndNotify = useCallback(async (position, queueData) => {
-    console.log('🔍 checkPositionAndNotify called with:', { position, queueData });
-    
-    const userEmail = getUserEmail();
-    console.log('📧 User email from localStorage:', userEmail);
-    
-    if (!userEmail || !queueData) {
-      console.log('❌ Skipping notification - Missing email or queue data:', { userEmail, queueData });
-      return;
-    }
+  const checkPositionAndNotify = useCallback(
+    async (position, queueData) => {
+      console.log('🔍 checkPositionAndNotify called with:', { position, queueData });
 
-    const queueNumber = queueData.queueNumber || queueData.id;
-    console.log('🎫 Processing queue number:', queueNumber, 'at position:', position);
+      const userEmail = getUserEmail();
+      console.log('📧 User email from localStorage:', userEmail);
 
-    try {
-      // Send notification when user reaches position 3 (and hasn't been notified yet)
-      if (position === 3 && !notificationsSent.has(`${queueNumber}_3`)) {
-        console.log('📧 Attempting to send position 3 notification for:', queueNumber);
-        const estimatedMinutes = (position - 1) * 5; // Assuming 5 minutes per person
-        
-        const result = await queueNotificationService.sendQueuePositionAlert(
+      if (!userEmail || !queueData) {
+        console.log('❌ Skipping notification - Missing email or queue data:', {
           userEmail,
-          queueNumber,
-          position,
-          `${estimatedMinutes} minutes`
-        );
-
-        if (result && result.success !== false) {
-          // Mark as notified
-          setNotificationsSent(prev => new Set([...prev, `${queueNumber}_3`]));
-          console.log('✅ Position 3 notification sent successfully for queue:', queueNumber);
-        } else {
-          console.log('❌ Position 3 notification failed for queue:', queueNumber, result);
-        }
-      } else if (position === 3) {
-        console.log('⚠️ Position 3 notification already sent for:', queueNumber);
+          queueData,
+        });
+        return;
       }
 
-      // Send notification when it's their turn (position 1 or "NOW SERVING")
-      if ((position === 1 || position === 'NOW SERVING') && !notificationsSent.has(`${queueNumber}_serving`)) {
-        console.log('📧 Attempting to send "now serving" notification for:', queueNumber);
-        
-        const result = await queueNotificationService.sendNowServingAlert(userEmail, queueNumber);
-        
-        if (result && result.success !== false) {
-          // Mark as notified for serving
-          setNotificationsSent(prev => new Set([...prev, `${queueNumber}_serving`]));
-          console.log('✅ "Now serving" notification sent successfully for queue:', queueNumber);
-        } else {
-          console.log('❌ "Now serving" notification failed for queue:', queueNumber, result);
+      const queueNumber = queueData.queueNumber || queueData.id;
+      console.log('🎫 Processing queue number:', queueNumber, 'at position:', position);
+
+      try {
+        // Send notification when user reaches position 3 (and hasn't been notified yet)
+        if (position === 3 && !notificationsSent.has(`${queueNumber}_3`)) {
+          console.log('📧 Attempting to send position 3 notification for:', queueNumber);
+          const estimatedMinutes = (position - 1) * 5; // Assuming 5 minutes per person
+
+          const result = await queueNotificationService.sendQueuePositionAlert(
+            userEmail,
+            queueNumber,
+            position,
+            `${estimatedMinutes} minutes`
+          );
+
+          if (result && result.success !== false) {
+            // Mark as notified
+            setNotificationsSent(prev => new Set([...prev, `${queueNumber}_3`]));
+            console.log('✅ Position 3 notification sent successfully for queue:', queueNumber);
+          } else {
+            console.log('❌ Position 3 notification failed for queue:', queueNumber, result);
+          }
+        } else if (position === 3) {
+          console.log('⚠️ Position 3 notification already sent for:', queueNumber);
         }
-      } else if (position === 1 || position === 'NOW SERVING') {
-        console.log('⚠️ "Now serving" notification already sent for:', queueNumber);
+
+        // Send notification when it's their turn (position 1 or "NOW SERVING")
+        if (
+          (position === 1 || position === 'NOW SERVING') &&
+          !notificationsSent.has(`${queueNumber}_serving`)
+        ) {
+          console.log('📧 Attempting to send "now serving" notification for:', queueNumber);
+
+          const result = await queueNotificationService.sendNowServingAlert(userEmail, queueNumber);
+
+          if (result && result.success !== false) {
+            // Mark as notified for serving
+            setNotificationsSent(prev => new Set([...prev, `${queueNumber}_serving`]));
+            console.log('✅ "Now serving" notification sent successfully for queue:', queueNumber);
+          } else {
+            console.log('❌ "Now serving" notification failed for queue:', queueNumber, result);
+          }
+        } else if (position === 1 || position === 'NOW SERVING') {
+          console.log('⚠️ "Now serving" notification already sent for:', queueNumber);
+        }
+
+        // Update last notified position
+        setLastNotifiedPosition(position);
+      } catch (error) {
+        console.error('❌ Error sending queue notification:', error);
+        // Don't break the app if notification fails
       }
-
-      // Update last notified position
-      setLastNotifiedPosition(position);
-
-    } catch (error) {
-      console.error('❌ Error sending queue notification:', error);
-      // Don't break the app if notification fails
-    }
-  }, [notificationsSent]);
+    },
+    [notificationsSent]
+  );
 
   // Add near the top of your component
   useEffect(() => {
@@ -158,17 +164,19 @@ const WalkInQueueContainer = () => {
       try {
         const storedUserQueue = localStorage.getItem('userQueue');
         if (!storedUserQueue) return;
-        
+
         const userQueueData = JSON.parse(storedUserQueue);
-        
+
         // Check if this queue still exists in the system
-        const queueId = userQueueData.dbId || 
-          (userQueueData.id?.startsWith('WK') ? userQueueData.id.replace('WK', '') : userQueueData.id);
-        
+        const queueId =
+          userQueueData.dbId ||
+          (userQueueData.id?.startsWith('WK')
+            ? userQueueData.id.replace('WK', '')
+            : userQueueData.id);
+
         if (queueId) {
-          const isValid = await queueService.checkQueueExists(queueId)
-            .catch(() => false);
-          
+          const isValid = await queueService.checkQueueExists(queueId).catch(() => false);
+
           if (!isValid) {
             console.log('User queue not found in system - clearing');
             localStorage.removeItem('userQueue');
@@ -179,81 +187,79 @@ const WalkInQueueContainer = () => {
         console.error('Error validating user queue:', err);
       }
     };
-    
+
     validateUserQueue();
   }, []);
 
   // Update your getAllUserQueues function
-const getAllUserQueues = () => {
-  try {
-    const userId = getCurrentUserId();
-    console.log('Getting ALL queues for user:', userId);
-    
-    // Try user-specific storage first
-    const userSpecificQueueKey = `userQueue_${userId}`;
-    const userSpecificQueuesKey = `userQueues_${userId}`;
-    
-    const storedUserQueue = localStorage.getItem(userSpecificQueueKey);
-    const storedUserQueues = localStorage.getItem(userSpecificQueuesKey);
-    
-    let userQueues = [];
-    
-    // Parse the stored queue(s) - PREFER MULTIPLE QUEUES
-    if (storedUserQueues) {
-      const parsedQueues = JSON.parse(storedUserQueues);
-      if (Array.isArray(parsedQueues)) {
-        userQueues = parsedQueues;
-      } else if (parsedQueues) {
-        userQueues = [parsedQueues];
-      }
-    } else if (storedUserQueue) {
-      const parsedQueue = JSON.parse(storedUserQueue);
-      if (parsedQueue) {
-        userQueues = [parsedQueue];
-      }
-    } else {
-      // Fallback to generic keys for backward compatibility
-      const genericQueue = localStorage.getItem('userQueue');
-      if (genericQueue) {
-        try {
-          const parsedQueue = JSON.parse(genericQueue);
-          // Check if this queue belongs to current user or doesn't have user info
-          if (!parsedQueue.userId || parsedQueue.userId === userId) {
-            userQueues = [parsedQueue];
+  const getAllUserQueues = () => {
+    try {
+      const userId = getCurrentUserId();
+      console.log('Getting ALL queues for user:', userId);
+
+      // Try user-specific storage first
+      const userSpecificQueueKey = `userQueue_${userId}`;
+      const userSpecificQueuesKey = `userQueues_${userId}`;
+
+      const storedUserQueue = localStorage.getItem(userSpecificQueueKey);
+      const storedUserQueues = localStorage.getItem(userSpecificQueuesKey);
+
+      let userQueues = [];
+
+      // Parse the stored queue(s) - PREFER MULTIPLE QUEUES
+      if (storedUserQueues) {
+        const parsedQueues = JSON.parse(storedUserQueues);
+        if (Array.isArray(parsedQueues)) {
+          userQueues = parsedQueues;
+        } else if (parsedQueues) {
+          userQueues = [parsedQueues];
+        }
+      } else if (storedUserQueue) {
+        const parsedQueue = JSON.parse(storedUserQueue);
+        if (parsedQueue) {
+          userQueues = [parsedQueue];
+        }
+      } else {
+        // Fallback to generic keys for backward compatibility
+        const genericQueue = localStorage.getItem('userQueue');
+        if (genericQueue) {
+          try {
+            const parsedQueue = JSON.parse(genericQueue);
+            // Check if this queue belongs to current user or doesn't have user info
+            if (!parsedQueue.userId || parsedQueue.userId === userId) {
+              userQueues = [parsedQueue];
+            }
+          } catch (e) {
+            console.error('Error parsing generic queue:', e);
           }
-        } catch (e) {
-          console.error('Error parsing generic queue:', e);
         }
       }
+
+      // Filter queues that belong to current user
+      userQueues = userQueues.filter(queue => !queue.userId || queue.userId === userId);
+
+      console.log('Found user queues:', userQueues);
+      return userQueues;
+    } catch (err) {
+      console.error('Error getting user queues:', err);
+      return [];
     }
-    
-    // Filter queues that belong to current user
-    userQueues = userQueues.filter(queue => 
-      !queue.userId || queue.userId === userId
-    );
-    
-    console.log('Found user queues:', userQueues);
-    return userQueues;
-  } catch (err) {
-    console.error('Error getting user queues:', err);
-    return [];
-  }
-};
+  };
 
   // Update your fetchQueueData function to clear localStorage when API returns empty
 
   const fetchQueueData = useCallback(async () => {
     try {
       setLoading(true);
-      
+
       // Get current user
       const currentUser = getCurrentUserId();
-      
+
       // Make API calls in parallel
       const promises = [
         queueService.fetchCurrentQueues().catch(err => {
           console.error('Error fetching current queues:', err);
-          return []; 
+          return [];
         }),
         queueService.fetchPendingQueues().catch(err => {
           console.error('Error fetching pending queues:', err);
@@ -262,13 +268,13 @@ const getAllUserQueues = () => {
         queueService.fetchUserQueues(currentUser).catch(err => {
           console.error('Error fetching user queues:', err);
           return [];
-        })
+        }),
       ];
-      
+
       // Get stored user queue for fallback
       const storedUserQueue = localStorage.getItem('userQueue');
       let localUserQueueData = null;
-      
+
       if (storedUserQueue) {
         try {
           localUserQueueData = JSON.parse(storedUserQueue);
@@ -278,22 +284,27 @@ const getAllUserQueues = () => {
       }
 
       // Wait for all requests to complete
-      const [currentQueuesResponse, pendingQueuesResponse, userQueuesResponse] = await Promise.all(promises);
-      
+      const [currentQueuesResponse, pendingQueuesResponse, userQueuesResponse] =
+        await Promise.all(promises);
+
       // Process user queues from backend FIRST, fallback to localStorage
-      if (userQueuesResponse && Array.isArray(userQueuesResponse) && userQueuesResponse.length > 0) {
+      if (
+        userQueuesResponse &&
+        Array.isArray(userQueuesResponse) &&
+        userQueuesResponse.length > 0
+      ) {
         console.log('Using user queues from backend:', userQueuesResponse);
-        
+
         // Filter out completed queues and clear them from localStorage
         const activeUserQueues = userQueuesResponse.filter(queue => {
           if (queue.status === 'completed') {
             console.log('Found completed queue, clearing from localStorage:', queue.id);
-            
+
             // Clear completed queue from localStorage
             const userId = getCurrentUserId();
             localStorage.removeItem('userQueue');
             localStorage.removeItem(`userQueue_${userId}`);
-            
+
             // Remove from user queues array
             try {
               const storedQueues = localStorage.getItem(`userQueues_${userId}`);
@@ -305,54 +316,53 @@ const getAllUserQueues = () => {
             } catch (e) {
               console.error('Error updating user queues:', e);
             }
-            
+
             return false; // Don't include completed queues
           }
           return queue.status === 'pending' || queue.status === 'serving';
         });
-        
+
         if (activeUserQueues.length > 0) {
           const validUserQueues = activeUserQueues.map(queue => ({
             id: formatWKNumber(queue.queueNumber || queue.id),
             dbId: queue.id,
             queueNumber: formatWKNumber(queue.queueNumber || queue.id),
             date: new Date(queue.createdAt).toLocaleDateString('en-US', {
-              month: '2-digit', 
-              day: '2-digit', 
-              year: '2-digit'
+              month: '2-digit',
+              day: '2-digit',
+              year: '2-digit',
             }),
             userData: {
               firstName: queue.firstName,
               lastName: queue.lastName,
-              reasonOfVisit: queue.reasonOfVisit
+              reasonOfVisit: queue.reasonOfVisit,
             },
             userId: currentUser,
             isUserQueue: true,
-            status: queue.status, 
-            isPrimaryQueue: true  
+            status: queue.status,
+            isPrimaryQueue: true,
           }));
-          
+
           console.log('Valid active user queues:', validUserQueues);
           setUserQueue(validUserQueues);
-          
+
           // Get position for user's active queue
           const pendingQueue = validUserQueues.find(q => q.status === 'pending');
           const servingQueue = validUserQueues.find(q => q.status === 'serving');
-          
+
           if (servingQueue) {
             console.log('🎯 User queue is being served');
             setQueuePosition('NOW SERVING');
-            
+
             // ✅ NOTIFICATION: Check and notify for "now serving"
             console.log('🔔 About to check notifications for serving queue:', servingQueue);
             await checkPositionAndNotify('NOW SERVING', servingQueue);
-            
           } else if (pendingQueue) {
             console.log('⏳ Found pending queue, getting position for:', pendingQueue.dbId);
             try {
               const positionData = await queueService.getQueuePosition(pendingQueue.dbId);
               console.log('📍 Position data received:', positionData);
-              
+
               if (positionData.status === 'serving') {
                 setQueuePosition('NOW SERVING');
                 console.log('🔔 About to check notifications for NOW SERVING');
@@ -380,7 +390,7 @@ const getAllUserQueues = () => {
       } else if (localUserQueueData) {
         // Fallback to localStorage - but also check if it's completed
         console.log('Using user queue from localStorage as fallback');
-        
+
         // Check if localStorage queue is completed by fetching its current status
         const userQueuesData = getAllUserQueues();
         if (userQueuesData.length > 0) {
@@ -389,7 +399,7 @@ const getAllUserQueues = () => {
             try {
               // Check current status of the queue
               const queueDetails = await queueService.getQueueDetails(firstQueue.dbId);
-              
+
               if (queueDetails.status === 'completed') {
                 console.log('localStorage queue is completed, clearing');
                 const userId = getCurrentUserId();
@@ -401,7 +411,7 @@ const getAllUserQueues = () => {
               } else {
                 // Queue is still active, proceed normally
                 setUserQueue(localUserQueueData);
-                
+
                 const positionData = await queueService.getQueuePosition(firstQueue.dbId);
                 if (queueDetails.status === 'serving') {
                   setQueuePosition('NOW SERVING');
@@ -426,14 +436,14 @@ const getAllUserQueues = () => {
         setUserQueue(null);
         setQueuePosition(null);
       }
-      
+
       // Process current queues - FIX: Use setCurrentQueue instead of setCurrentQueues
       if (currentQueuesResponse && Array.isArray(currentQueuesResponse)) {
         console.log('Raw current queues data:', currentQueuesResponse);
-        
+
         const formattedCurrentQueues = currentQueuesResponse.map(queue => {
           const details = Array.isArray(queue.details) ? queue.details[0] : queue.details;
-          
+
           return {
             id: formatWKNumber(queue.queueNumber || queue.id),
             dbId: queue.id,
@@ -445,11 +455,11 @@ const getAllUserQueues = () => {
             userData: {
               firstName: details?.firstName,
               lastName: details?.lastName,
-              reasonOfVisit: details?.reasonOfVisit
-            }
+              reasonOfVisit: details?.reasonOfVisit,
+            },
           };
         });
-        
+
         console.log('Setting current queues to:', formattedCurrentQueues);
         setCurrentQueue(formattedCurrentQueues); // FIXED: Use setCurrentQueue
       } else {
@@ -459,35 +469,35 @@ const getAllUserQueues = () => {
       // Process pending queues
       if (pendingQueuesResponse && Array.isArray(pendingQueuesResponse)) {
         console.log('All pending queues before filtering:', pendingQueuesResponse);
-        
+
         const userQueuesData = getAllUserQueues();
-        
+
         const filteredPendingQueues = pendingQueuesResponse.filter(queue => {
           const queueDbId = queue.id;
           const formattedQueueNumber = formatWKNumber(queue.queueNumber || queue.id);
-          
+
           // Check if this queue belongs to the current user
           const isUserQueue = userQueuesData.some(userQueue => {
             const userDbId = userQueue.dbId;
             const userFormattedNumber = userQueue.id || userQueue.queueNumber;
-            
+
             return userDbId === queueDbId || userFormattedNumber === formattedQueueNumber;
           });
-          
+
           return !isUserQueue;
         });
 
         const formattedPendingQueues = filteredPendingQueues.map(queue => {
           const details = Array.isArray(queue.details) ? queue.details[0] : queue.details;
-          
+
           return {
             id: formatWKNumber(queue.queueNumber || queue.id),
             dbId: queue.id,
             queueNumber: formatWKNumber(queue.queueNumber || queue.id),
             date: new Date(queue.createdAt).toLocaleDateString('en-US', {
-              month: '2-digit', 
-              day: '2-digit', 
-              year: '2-digit'
+              month: '2-digit',
+              day: '2-digit',
+              year: '2-digit',
             }),
             firstName: details?.firstName || 'N/A',
             lastName: details?.lastName || 'N/A',
@@ -495,8 +505,8 @@ const getAllUserQueues = () => {
             userData: {
               firstName: details?.firstName,
               lastName: details?.lastName,
-              reasonOfVisit: details?.reasonOfVisit
-            }
+              reasonOfVisit: details?.reasonOfVisit,
+            },
           };
         });
 
@@ -515,21 +525,21 @@ const getAllUserQueues = () => {
   // Add this function and call it periodically
   const syncWithOtherTabs = useCallback(() => {
     // Handle forced sync from any tab
-    const handleStorageChange = (e) => {
+    const handleStorageChange = e => {
       if (e.key === 'lastSyncTime' || e.key === 'forceSync') {
         console.log('Sync triggered from another tab:', e.key);
-        
+
         // Force a complete refresh of all data
         if (e.key === 'forceSync') {
           setUserQueue(null);
           setPendingQueues([]);
           setCurrentQueue([]);
         }
-        
+
         fetchQueueData();
       }
     };
-    
+
     window.addEventListener('storage', handleStorageChange);
     return () => window.removeEventListener('storage', handleStorageChange);
   }, [fetchQueueData]);
@@ -546,31 +556,31 @@ const getAllUserQueues = () => {
   useEffect(() => {
     // Only connect if not already connected
     let socket = null;
-    
+
     try {
       socket = io(config.WS_URL, {
         transports: ['websocket'],
         reconnectionAttempts: 3,
         timeout: 5000,
-        forceNew: false
+        forceNew: false,
       });
-      
+
       socket.on('connect', () => {
         console.log('Socket connected successfully');
-        
+
         // Join queue update events
         socket.emit('joinQueueList');
         console.log('Joined queue list updates');
-        
+
         if (userQueue?.dbId) {
           socket.emit('joinQueue', userQueue.dbId);
           console.log('Joined specific queue room:', userQueue.dbId);
         }
       });
 
-      socket.on('queueListUpdate', (data) => {
+      socket.on('queueListUpdate', data => {
         console.log('Queue list update event received:', data);
-        
+
         // Clear localStorage cache to force fresh data
         if (data && data.action === 'cleared') {
           console.log('Database was cleared - removing cached data');
@@ -579,49 +589,49 @@ const getAllUserQueues = () => {
           setCurrentQueue([]);
           setPendingQueues([]);
         }
-        
+
         // Always fetch fresh data
         fetchQueueData();
       });
 
-      socket.on('queueUpdate', (data) => {
+      socket.on('queueUpdate', data => {
         console.log('Queue update event received:', data);
-        
+
         // If user's queue was completed, clear it immediately
         if (data.status === 'completed') {
           setUserQueue(prev => {
             if (!prev) return null;
-            
+
             const userQueueArray = Array.isArray(prev) ? prev : [prev];
             const completedQueue = userQueueArray.find(q => q.dbId === data.queueId);
-            
+
             if (completedQueue) {
               console.log('User queue completed via socket, clearing localStorage');
               const userId = getCurrentUserId();
               localStorage.removeItem('userQueue');
               localStorage.removeItem(`userQueue_${userId}`);
               localStorage.removeItem(`userQueues_${userId}`);
-              
+
               setQueuePosition(null);
               return null;
             }
-            
+
             return prev;
           });
         }
-        
+
         // Refresh data for other updates
         fetchQueueData();
       });
 
-      socket.on('error', (error) => {
+      socket.on('error', error => {
         console.error('Socket error:', error);
       });
 
-      socket.on('disconnect', (reason) => {
+      socket.on('disconnect', reason => {
         console.log('Socket disconnected:', reason);
       });
-      
+
       // Clean up function
       return () => {
         if (socket) {
@@ -643,12 +653,12 @@ const getAllUserQueues = () => {
   // Use this in a useEffect
   useEffect(() => {
     const cleanup = syncWithOtherTabs();
-    
+
     // Periodically check for updates
     const intervalId = setInterval(() => {
       fetchQueueData();
     }, 30000); // Check every 30 seconds
-    
+
     return () => {
       cleanup();
       clearInterval(intervalId);
@@ -666,37 +676,40 @@ const getAllUserQueues = () => {
           <div className="QueuePositionContainerWalkIn">
             <div className="QueuePositionLabelWalkIn">QUEUE POSITION</div>
             <div className="QueuePositionNumberWalkIn">
-              {loading ? '...' : 
-                queuePosition === 'NOW SERVING' ? 'NOW SERVING' :
-                (queuePosition !== null && queuePosition > 0 ? queuePosition : '-')
-              }
+              {loading
+                ? '...'
+                : queuePosition === 'NOW SERVING'
+                  ? 'NOW SERVING'
+                  : queuePosition !== null && queuePosition > 0
+                    ? queuePosition
+                    : '-'}
             </div>
             <div className="QueuePositionMessageWalkIn">
-              {loading ? 'Loading...' : 
-                queuePosition === 'NOW SERVING' ? 'Please proceed to the counter' :
-                userQueue && Array.isArray(userQueue) && userQueue.length > 0 ? 
-                  (queuePosition !== null && queuePosition > 0 ? 
-                    `You are #${queuePosition} in line` : 
-                    `You have ${userQueue.length} queue${userQueue.length > 1 ? 's' : ''}`
-                  ) : 
-                  "You'll be notified when it's almost your turn"
-              }
+              {loading
+                ? 'Loading...'
+                : queuePosition === 'NOW SERVING'
+                  ? 'Please proceed to the counter'
+                  : userQueue && Array.isArray(userQueue) && userQueue.length > 0
+                    ? queuePosition !== null && queuePosition > 0
+                      ? `You are #${queuePosition} in line`
+                      : `You have ${userQueue.length} queue${userQueue.length > 1 ? 's' : ''}`
+                    : "You'll be notified when it's almost your turn"}
             </div>
             {/* Show user queue info if available */}
             {userQueue && (
-              <div style={{fontSize: '12px', color: '#24536a', marginTop: '5px', fontWeight: 'bold'}}>
-                {Array.isArray(userQueue) && userQueue.length > 1 ? 
-                  `${userQueue.length} Active Queues: ${userQueue.map(q => q.id).join(', ')}` :
-                  `Your Queue: ${Array.isArray(userQueue) ? userQueue[0]?.id : userQueue.id}`
-                }
+              <div
+                style={{ fontSize: '12px', color: '#24536a', marginTop: '5px', fontWeight: 'bold' }}
+              >
+                {Array.isArray(userQueue) && userQueue.length > 1
+                  ? `${userQueue.length} Active Queues: ${userQueue.map(q => q.id).join(', ')}`
+                  : `Your Queue: ${Array.isArray(userQueue) ? userQueue[0]?.id : userQueue.id}`}
               </div>
             )}
             {/* Debug info */}
-            <div style={{fontSize: '10px', color: '#999', marginTop: '5px'}}>
-              {userQueue ? 
-                `Queues: ${Array.isArray(userQueue) ? userQueue.length : 1} | Position: ${queuePosition}` : 
-                'No queue found'
-              }
+            <div style={{ fontSize: '10px', color: '#999', marginTop: '5px' }}>
+              {userQueue
+                ? `Queues: ${Array.isArray(userQueue) ? userQueue.length : 1} | Position: ${queuePosition}`
+                : 'No queue found'}
             </div>
           </div>
 
@@ -704,9 +717,13 @@ const getAllUserQueues = () => {
             <div className="CurrentQueueLabelWalkIn">CURRENT QUEUE</div>
             <div className="CurrentQueueListWalkIn">
               {loading ? (
-                <div style={{padding: '10px', color: '#666', textAlign: 'center'}}>Loading...</div>
+                <div style={{ padding: '10px', color: '#666', textAlign: 'center' }}>
+                  Loading...
+                </div>
               ) : currentQueue.length === 0 ? (
-                <div style={{padding: '10px', color: '#666', textAlign: 'center'}}>No queues currently being served</div>
+                <div style={{ padding: '10px', color: '#666', textAlign: 'center' }}>
+                  No queues currently being served
+                </div>
               ) : (
                 currentQueue.map((item, index) => (
                   <div key={index} className="CurrentQueueItemWalkIn">
@@ -729,7 +746,15 @@ const getAllUserQueues = () => {
           </button>
           <div className="QueueListWalkIn">
             {pendingQueues.length === 0 && !userQueue ? (
-              <div style={{padding: '15px', color: '#666', textAlign: 'center', background: '#f9f9f9', borderRadius: '8px'}}>
+              <div
+                style={{
+                  padding: '15px',
+                  color: '#666',
+                  textAlign: 'center',
+                  background: '#f9f9f9',
+                  borderRadius: '8px',
+                }}
+              >
                 No queues waiting
               </div>
             ) : (
@@ -737,9 +762,9 @@ const getAllUserQueues = () => {
             )}
           </div>
         </div>
-          <Box className="AnnouncementButtonContainer">
-          <FloatingAnnouncementFab/>
-          </Box>
+        <Box className="AnnouncementButtonContainer">
+          <FloatingAnnouncementFab />
+        </Box>
       </div>
     </div>
   );

@@ -42,9 +42,9 @@ export default function ForgotPassword({ open, handleClose }) {
   };
 
   // Handle email submission
-  const handleEmailSubmit = async (event) => {
+  const handleEmailSubmit = async event => {
     event.preventDefault();
-    
+
     if (!email || !/\S+@\S+\.\S+/.test(email)) {
       setError('Please enter a valid email address');
       return;
@@ -67,7 +67,7 @@ export default function ForgotPassword({ open, handleClose }) {
   // Handle OTP input changes
   const handleOtpChange = (index, value) => {
     if (value.length > 1) return;
-    
+
     const newOtp = [...otp];
     newOtp[index] = value;
     setOtp(newOtp);
@@ -93,9 +93,9 @@ export default function ForgotPassword({ open, handleClose }) {
   };
 
   // Handle password reset
-  const handlePasswordReset = async (event) => {
+  const handlePasswordReset = async event => {
     event.preventDefault();
-    
+
     if (newPassword !== confirmPassword) {
       setError('Passwords do not match');
       return;
@@ -154,11 +154,16 @@ export default function ForgotPassword({ open, handleClose }) {
   // Get dialog title based on step
   const getDialogTitle = () => {
     switch (step) {
-      case 'email': return 'Reset password';
-      case 'otp': return 'Enter verification code';
-      case 'password': return 'Set new password';
-      case 'success': return 'Password reset successful';
-      default: return 'Reset password';
+      case 'email':
+        return 'Reset password';
+      case 'otp':
+        return 'Enter verification code';
+      case 'password':
+        return 'Set new password';
+      case 'success':
+        return 'Password reset successful';
+      default:
+        return 'Reset password';
     }
   };
 
@@ -171,19 +176,23 @@ export default function ForgotPassword({ open, handleClose }) {
       fullWidth
       PaperProps={{
         component: 'form',
-        onSubmit: step === 'email' ? handleEmailSubmit : 
-                 step === 'password' ? handlePasswordReset : 
-                 (e) => e.preventDefault(),
+        onSubmit:
+          step === 'email'
+            ? handleEmailSubmit
+            : step === 'password'
+              ? handlePasswordReset
+              : e => e.preventDefault(),
       }}
     >
       <DialogTitle className="DialogTitle">{getDialogTitle()}</DialogTitle>
-      
+
       <DialogContent className="DialogContent">
         {/* Email Step */}
         {step === 'email' && (
           <>
             <DialogContentText className="DialogContentText">
-              Enter your account's email address, and we'll send you a verification code to reset your password.
+              Enter your account's email address, and we'll send you a verification code to reset
+              your password.
             </DialogContentText>
             <OutlinedInput
               autoFocus
@@ -195,7 +204,7 @@ export default function ForgotPassword({ open, handleClose }) {
               type="email"
               fullWidth
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={e => setEmail(e.target.value)}
               className="email-input"
               disabled={isLoading}
             />
@@ -208,26 +217,28 @@ export default function ForgotPassword({ open, handleClose }) {
             <DialogContentText className="DialogContentText">
               We've sent a 6-digit verification code to <strong>{email}</strong>
             </DialogContentText>
-            <Box sx={{ 
-              display: 'flex', 
-              justifyContent: 'center', 
-              gap: 1, 
-              my: 2 
-            }}>
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                gap: 1,
+                my: 2,
+              }}
+            >
               {otp.map((digit, index) => (
                 <TextField
                   key={index}
                   id={`forgot-otp-${index}`}
                   value={digit}
-                  onChange={(e) => handleOtpChange(index, e.target.value)}
-                  onKeyDown={(e) => handleOtpKeyDown(index, e)}
+                  onChange={e => handleOtpChange(index, e.target.value)}
+                  onKeyDown={e => handleOtpKeyDown(index, e)}
                   inputProps={{
                     maxLength: 1,
-                    style: { 
-                      textAlign: 'center', 
+                    style: {
+                      textAlign: 'center',
                       fontSize: '18px',
-                      fontWeight: 'bold'
-                    }
+                      fontWeight: 'bold',
+                    },
                   }}
                   sx={{ width: 50 }}
                   disabled={isLoading}
@@ -235,12 +246,7 @@ export default function ForgotPassword({ open, handleClose }) {
               ))}
             </Box>
             <Box sx={{ textAlign: 'center', mt: 1 }}>
-              <Button
-                variant="text"
-                onClick={handleResendOtp}
-                disabled={isLoading}
-                size="small"
-              >
+              <Button variant="text" onClick={handleResendOtp} disabled={isLoading} size="small">
                 Resend Code
               </Button>
             </Box>
@@ -260,7 +266,7 @@ export default function ForgotPassword({ open, handleClose }) {
               fullWidth
               variant="outlined"
               value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
+              onChange={e => setNewPassword(e.target.value)}
               disabled={isLoading}
               sx={{ mb: 2 }}
               helperText="Password must be at least 8 characters with uppercase, lowercase, numbers, and special characters"
@@ -272,7 +278,7 @@ export default function ForgotPassword({ open, handleClose }) {
               fullWidth
               variant="outlined"
               value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
+              onChange={e => setConfirmPassword(e.target.value)}
               disabled={isLoading}
             />
           </>
@@ -284,7 +290,8 @@ export default function ForgotPassword({ open, handleClose }) {
             <Box sx={{ textAlign: 'center', py: 2 }}>
               <Box sx={{ fontSize: '48px', mb: 2 }}>✅</Box>
               <DialogContentText className="DialogContentText">
-                Your password has been reset successfully! You can now log in with your new password.
+                Your password has been reset successfully! You can now log in with your new
+                password.
               </DialogContentText>
             </Box>
           </>
@@ -314,8 +321,8 @@ export default function ForgotPassword({ open, handleClose }) {
 
       <DialogActions className="DialogActions">
         {step === 'success' ? (
-          <Button 
-            onClick={handleDialogClose} 
+          <Button
+            onClick={handleDialogClose}
             className="ContinueButton"
             variant="contained"
             fullWidth
@@ -324,28 +331,24 @@ export default function ForgotPassword({ open, handleClose }) {
           </Button>
         ) : (
           <>
-            <Button 
-              onClick={handleDialogClose} 
-              className="CancelButton"
-              disabled={isLoading}
-            >
+            <Button onClick={handleDialogClose} className="CancelButton" disabled={isLoading}>
               Cancel
             </Button>
-            
+
             {step === 'email' && (
-              <Button 
-                variant="contained" 
-                className="ContinueButton" 
+              <Button
+                variant="contained"
+                className="ContinueButton"
                 type="submit"
                 disabled={isLoading || !email}
               >
                 {isLoading ? 'Sending...' : 'Send Code'}
               </Button>
             )}
-            
+
             {step === 'otp' && (
-              <Button 
-                variant="contained" 
+              <Button
+                variant="contained"
                 className="ContinueButton"
                 onClick={() => setStep('password')}
                 disabled={otp.some(digit => !digit)}
@@ -353,11 +356,11 @@ export default function ForgotPassword({ open, handleClose }) {
                 Continue
               </Button>
             )}
-            
+
             {step === 'password' && (
-              <Button 
-                variant="contained" 
-                className="ContinueButton" 
+              <Button
+                variant="contained"
+                className="ContinueButton"
                 type="submit"
                 disabled={isLoading || !newPassword || !confirmPassword}
               >

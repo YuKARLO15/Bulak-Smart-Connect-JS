@@ -19,7 +19,7 @@ const UserTable = ({ users, handleUpload, removeUser, loading, onRefresh }) => {
       alert('Only super administrators can modify users');
       return;
     }
-    
+
     navigate('/add-user', {
       state: {
         isModifying: true,
@@ -145,14 +145,14 @@ const UserTable = ({ users, handleUpload, removeUser, loading, onRefresh }) => {
                     {(user.roles || []).map((role, idx) => {
                       // Map role names to display labels
                       const roleLabels = {
-                        'super_admin': 'Admin',
-                        'admin': 'Manager', 
-                        'staff': 'Staff',
-                        'citizen': 'Citizen'
+                        super_admin: 'Admin',
+                        admin: 'Manager',
+                        staff: 'Staff',
+                        citizen: 'Citizen',
                       };
-                      
+
                       const displayRole = roleLabels[role] || role;
-                      
+
                       return (
                         <span key={idx} className={`role ${role.toLowerCase()}`}>
                           {displayRole}
@@ -209,15 +209,17 @@ const UserTable = ({ users, handleUpload, removeUser, loading, onRefresh }) => {
             <div className="user-detail-row">
               <span>Roles:</span>
               <span>
-                {(selectedUser.roles || []).map(role => {
-                  const roleLabels = {
-                    'super_admin': 'Admin',
-                    'admin': 'Manager',
-                    'staff': 'Staff',
-                    'citizen': 'Citizen'
-                  };
-                  return roleLabels[role] || role;
-                }).join(', ')}
+                {(selectedUser.roles || [])
+                  .map(role => {
+                    const roleLabels = {
+                      super_admin: 'Admin',
+                      admin: 'Manager',
+                      staff: 'Staff',
+                      citizen: 'Citizen',
+                    };
+                    return roleLabels[role] || role;
+                  })
+                  .join(', ')}
               </span>
             </div>
 

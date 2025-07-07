@@ -1,6 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, Typography, Box, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
+import {
+  Button,
+  Typography,
+  Box,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+} from '@mui/material';
 import './MarriageLicenseSummary.css';
 import EditIcon from '@mui/icons-material/Edit';
 import CheckIcon from '@mui/icons-material/Check';
@@ -18,11 +27,11 @@ const MarriageLicenseSummary = () => {
 
   useEffect(() => {
     try {
-      console.log("=== Marriage License Summary - Loading Data ===");
-      
+      console.log('=== Marriage License Summary - Loading Data ===');
+
       const currentApplicationId = localStorage.getItem('currentApplicationId');
       console.log('currentApplicationId from localStorage:', currentApplicationId);
-      
+
       if (currentApplicationId) {
         setApplicationId(currentApplicationId);
         console.log('Set applicationId from currentApplicationId:', currentApplicationId);
@@ -30,14 +39,14 @@ const MarriageLicenseSummary = () => {
 
       const savedCertificateData = localStorage.getItem('marriageFormData');
       console.log('marriageFormData from localStorage:', savedCertificateData);
-      
+
       if (savedCertificateData) {
         const parsedData = JSON.parse(savedCertificateData);
         console.log('Parsed marriage form data:', parsedData);
-        
+
         const possibleId = parsedData.applicationId || parsedData.id || parsedData.appId;
         console.log('Possible ID from form data:', possibleId);
-        
+
         if (possibleId && !currentApplicationId) {
           setApplicationId(possibleId);
           console.log('Set applicationId from form data:', possibleId);
@@ -48,20 +57,20 @@ const MarriageLicenseSummary = () => {
 
       const applications = JSON.parse(localStorage.getItem('applications') || '[]');
       console.log('All applications:', applications);
-      
-      const marriageApps = applications.filter(app => 
-        app.type === 'Marriage License' || 
-        app.type === 'Marriage Certificate' ||
-        app.applicationType === 'MARRIAGE_LICENSE'
+
+      const marriageApps = applications.filter(
+        app =>
+          app.type === 'Marriage License' ||
+          app.type === 'Marriage Certificate' ||
+          app.applicationType === 'MARRIAGE_LICENSE'
       );
       console.log('Marriage applications found:', marriageApps);
-      
+
       if (marriageApps.length > 0 && !currentApplicationId) {
         const latestMarriageApp = marriageApps[0];
         console.log('Using latest marriage app ID:', latestMarriageApp.id);
         setApplicationId(latestMarriageApp.id);
       }
-      
     } catch (err) {
       console.error('Error loading form data:', err);
     } finally {
@@ -78,85 +87,88 @@ const MarriageLicenseSummary = () => {
   };
 
   const confirmDeleteApplication = async () => {
-  try {
-    console.log("=== Attempting to delete marriage application ===");
-    console.log("applicationId state:", applicationId);
-    console.log("formData:", formData);
-    
-    let idToDelete = applicationId || formData.applicationId || formData.id || formData.appId;
-    
-    if (!idToDelete) {
-      const applications = JSON.parse(localStorage.getItem('applications') || '[]');
-      const marriageApps = applications.filter(app => 
-        app.type === 'Marriage License' || 
-        app.type === 'Marriage Certificate' ||
-        app.applicationType === 'MARRIAGE_LICENSE'
-      );
-      
-      if (marriageApps.length > 0) {
-        idToDelete = marriageApps[0].id;
-        console.log("Found ID from applications array:", idToDelete);
-      }
-    }
-    
-    console.log("Final ID to delete:", idToDelete);
-    
-    if (!idToDelete) {
-      console.error("No application ID found to delete");
-      alert("Cannot find application ID to delete. Please try refreshing the page.");
-      setDeleteDialogOpen(false);
-      return;
-    }
-    
-    // Try to delete from database first - don't catch the error here
     try {
-      await documentApplicationService.deleteApplication(idToDelete);
-      console.log("Marriage application deleted from database:", idToDelete);
-    } catch (dbError) {
-      console.error("Error deleting from database:", dbError);
-      alert("Failed to delete application from database. Please try again or contact support.");
-      setDeleteDialogOpen(false);
-      return; // Stop execution if database deletion fails
-    }
-    
-    // Only proceed with localStorage deletion if database deletion was successful
-    const existingApplications = JSON.parse(localStorage.getItem('applications') || '[]');
-    console.log("Current applications count:", existingApplications.length);
-    
-    const updatedApplications = existingApplications.filter(app => app.id !== idToDelete);
-    console.log("Updated applications count:", updatedApplications.length);
-    
-    localStorage.setItem('applications', JSON.stringify(updatedApplications));
+      console.log('=== Attempting to delete marriage application ===');
+      console.log('applicationId state:', applicationId);
+      console.log('formData:', formData);
 
-    if (updatedApplications.length > 0) {
-      const nextApp = updatedApplications[0];
-      localStorage.setItem('currentApplicationId', nextApp.id);
-      
-      if (nextApp.type === 'Marriage License' || nextApp.type === 'Marriage Certificate') {
-        localStorage.setItem('marriageFormData', JSON.stringify(nextApp.formData));
+      let idToDelete = applicationId || formData.applicationId || formData.id || formData.appId;
+
+      if (!idToDelete) {
+        const applications = JSON.parse(localStorage.getItem('applications') || '[]');
+        const marriageApps = applications.filter(
+          app =>
+            app.type === 'Marriage License' ||
+            app.type === 'Marriage Certificate' ||
+            app.applicationType === 'MARRIAGE_LICENSE'
+        );
+
+        if (marriageApps.length > 0) {
+          idToDelete = marriageApps[0].id;
+          console.log('Found ID from applications array:', idToDelete);
+        }
+      }
+
+      console.log('Final ID to delete:', idToDelete);
+
+      if (!idToDelete) {
+        console.error('No application ID found to delete');
+        alert('Cannot find application ID to delete. Please try refreshing the page.');
+        setDeleteDialogOpen(false);
+        return;
+      }
+
+      // Try to delete from database first - don't catch the error here
+      try {
+        await documentApplicationService.deleteApplication(idToDelete);
+        console.log('Marriage application deleted from database:', idToDelete);
+      } catch (dbError) {
+        console.error('Error deleting from database:', dbError);
+        alert('Failed to delete application from database. Please try again or contact support.');
+        setDeleteDialogOpen(false);
+        return; // Stop execution if database deletion fails
+      }
+
+      // Only proceed with localStorage deletion if database deletion was successful
+      const existingApplications = JSON.parse(localStorage.getItem('applications') || '[]');
+      console.log('Current applications count:', existingApplications.length);
+
+      const updatedApplications = existingApplications.filter(app => app.id !== idToDelete);
+      console.log('Updated applications count:', updatedApplications.length);
+
+      localStorage.setItem('applications', JSON.stringify(updatedApplications));
+
+      if (updatedApplications.length > 0) {
+        const nextApp = updatedApplications[0];
+        localStorage.setItem('currentApplicationId', nextApp.id);
+
+        if (nextApp.type === 'Marriage License' || nextApp.type === 'Marriage Certificate') {
+          localStorage.setItem('marriageFormData', JSON.stringify(nextApp.formData));
+        } else {
+          localStorage.removeItem('marriageFormData');
+        }
       } else {
+        localStorage.removeItem('currentApplicationId');
         localStorage.removeItem('marriageFormData');
       }
-    } else {
-      localStorage.removeItem('currentApplicationId');
-      localStorage.removeItem('marriageFormData');
-    }
 
-    console.log('Marriage application deleted successfully from both database and localStorage:', idToDelete);
-    setDeleteDialogOpen(false);
-    
-    const customEvent = new Event('customStorageUpdate');
-    window.dispatchEvent(customEvent);
-    
-    alert('Application deleted successfully!');
-    navigate('/ApplicationForm');
-    
-  } catch (err) {
-    console.error('Error deleting marriage application:', err);
-    alert('Error deleting application: ' + err.message);
-    setDeleteDialogOpen(false);
-  }
-};
+      console.log(
+        'Marriage application deleted successfully from both database and localStorage:',
+        idToDelete
+      );
+      setDeleteDialogOpen(false);
+
+      const customEvent = new Event('customStorageUpdate');
+      window.dispatchEvent(customEvent);
+
+      alert('Application deleted successfully!');
+      navigate('/ApplicationForm');
+    } catch (err) {
+      console.error('Error deleting marriage application:', err);
+      alert('Error deleting application: ' + err.message);
+      setDeleteDialogOpen(false);
+    }
+  };
 
   const handleModify = () => {
     try {
@@ -252,7 +264,7 @@ const MarriageLicenseSummary = () => {
             <br />
             (Revised January 2001)
           </div>
-        
+
           <div className="HeaderCenterMLSummary">
             <div className="RepublicTextMLSummary">Republic of the Philippines</div>
             <div className="RegistrarTextMLSummary">OFFICE OF THE CIVIL REGISTRAR GENERAL</div>
@@ -860,7 +872,6 @@ const MarriageLicenseSummary = () => {
         </table>
       </div>
       <div className="ActionButtonContainerMLSummary">
-        
         <Button
           variant="contained"
           color="error"
@@ -892,7 +903,7 @@ const MarriageLicenseSummary = () => {
           Done
         </Button>
       </div>
-      
+
       <Dialog
         open={deleteDialogOpen}
         onClose={cancelDeleteApplication}
@@ -902,7 +913,8 @@ const MarriageLicenseSummary = () => {
         <DialogTitle id="alert-dialog-title">{'Cancel Marriage License Application?'}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Are you sure you want to cancel this marriage license application? This action cannot be undone.
+            Are you sure you want to cancel this marriage license application? This action cannot be
+            undone.
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -914,7 +926,6 @@ const MarriageLicenseSummary = () => {
           </Button>
         </DialogActions>
       </Dialog>
-      
     </div>
   );
 };

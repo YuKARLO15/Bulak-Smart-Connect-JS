@@ -15,13 +15,13 @@ const ChildIdentifyingForm = forwardRef(({ formData, handleChange }, ref) => {
   };
 
   // Handle number input change with validation
-  const handleNumberInputChange = (e) => {
+  const handleNumberInputChange = e => {
     if (!/^\d*$/.test(e.target.value)) {
       return;
     }
 
     const { name } = e.target;
-    
+
     // Clear error for this field when user starts typing
     if (errors[name]) {
       setErrors(prev => {
@@ -30,7 +30,7 @@ const ChildIdentifyingForm = forwardRef(({ formData, handleChange }, ref) => {
         return newErrors;
       });
     }
-    
+
     handleChange(e);
   };
 
@@ -154,9 +154,9 @@ const ChildIdentifyingForm = forwardRef(({ formData, handleChange }, ref) => {
   };
 
   // Handle input change and clear errors
-  const handleInputChange = (e) => {
+  const handleInputChange = e => {
     const { name, value } = e.target;
-    
+
     // Clear error for this field when user starts typing
     if (errors[name]) {
       setErrors(prev => {
@@ -165,27 +165,27 @@ const ChildIdentifyingForm = forwardRef(({ formData, handleChange }, ref) => {
         return newErrors;
       });
     }
-    
+
     handleChange(e);
   };
 
   // Handle blur event for validation
-  const handleBlur = (e) => {
+  const handleBlur = e => {
     const { name, value } = e.target;
     const error = validateField(name, value);
-    
+
     if (error) {
       setErrors(prev => ({
         ...prev,
-        [name]: error
+        [name]: error,
       }));
     }
   };
 
   // Handle radio button change (immediate validation)
-  const handleRadioChange = (e) => {
+  const handleRadioChange = e => {
     const { name } = e.target;
-    
+
     // Clear error for radio buttons immediately when selected
     if (errors[name]) {
       setErrors(prev => {
@@ -194,7 +194,7 @@ const ChildIdentifyingForm = forwardRef(({ formData, handleChange }, ref) => {
         return newErrors;
       });
     }
-    
+
     handleChange(e);
   };
 
@@ -204,21 +204,23 @@ const ChildIdentifyingForm = forwardRef(({ formData, handleChange }, ref) => {
     // New function to validate all fields at once (for Next button)
     validateAllFields: () => {
       const isValid = validateForm();
-      
+
       // If validation fails, scroll to first error
       if (!isValid) {
         // Find first error element and scroll to it
         setTimeout(() => {
-          const firstErrorElement = document.querySelector('.FormInputChild.error, .SelectInputChild.error, .SmallInputChild.error');
+          const firstErrorElement = document.querySelector(
+            '.FormInputChild.error, .SelectInputChild.error, .SmallInputChild.error'
+          );
           if (firstErrorElement) {
             firstErrorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
             firstErrorElement.focus();
           }
         }, 100);
       }
-      
+
       return isValid;
-    }
+    },
   }));
 
   return (
@@ -260,9 +262,7 @@ const ChildIdentifyingForm = forwardRef(({ formData, handleChange }, ref) => {
             </div>
 
             <div className="FormGroupChild">
-              <label className="FormLabelChild">
-                Middle Name (Gitnang Pangalan)
-              </label>
+              <label className="FormLabelChild">Middle Name (Gitnang Pangalan)</label>
               <input
                 type="text"
                 name="middleName"
@@ -556,7 +556,9 @@ const ChildIdentifyingForm = forwardRef(({ formData, handleChange }, ref) => {
                     Triples, etc.
                   </label>
                 </div>
-                {errors.typeOfBirth && <div className="ErrorMessageChild">{errors.typeOfBirth}</div>}
+                {errors.typeOfBirth && (
+                  <div className="ErrorMessageChild">{errors.typeOfBirth}</div>
+                )}
               </div>
             </div>
             <div className="FormGroupChild" style={{ flex: 1 }}>
@@ -624,7 +626,9 @@ const ChildIdentifyingForm = forwardRef(({ formData, handleChange }, ref) => {
                   placeholder="Enter number only"
                   required
                 />
-                {errors.birthOrder && <span className="ErrorMessageChild">{errors.birthOrder}</span>}
+                {errors.birthOrder && (
+                  <span className="ErrorMessageChild">{errors.birthOrder}</span>
+                )}
               </div>
               <div className="BirthOrderNoteChild">
                 LIVE BIRTH AND FETAL DEATHS (INCLUDING THIS DELIVERY)

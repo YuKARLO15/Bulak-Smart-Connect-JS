@@ -74,7 +74,6 @@
   padding-right: 5vw;
 }
 
-
 .LogoLanding img {
   height: 50px;
 }
@@ -220,7 +219,7 @@
 
 @media (max-width: 1200px) {
   .HeroLanding {
-      margin-left: 40px;
+    margin-left: 40px;
   }
   .HeroTitleLanding {
     font-size: 3rem !important;
@@ -288,7 +287,6 @@
 
 @media (max-width: 768px) {
   .HeroLanding {
-    
     padding: 30px 0;
   }
   .HeroTitleLanding {
@@ -341,13 +339,12 @@
 }
 
 @media (max-width: 600px) {
-  .HeroLanding{
+  .HeroLanding {
     text-align: center;
     margin-left: 0;
-
   }
   .HeroTitleLanding {
-      text-align: center;
+    text-align: center;
     font-size: 1.8rem !important;
   }
   .HeroDescriptionLanding {

@@ -17,7 +17,7 @@ const api = axios.create({
 const getCurrentUserId = () => {
   const currentUser = localStorage.getItem('currentUser');
   if (!currentUser) return null;
-  
+
   try {
     const userData = JSON.parse(currentUser);
     return userData?.id || userData?._id || null;
@@ -56,7 +56,7 @@ export const authService = {
     localStorage.removeItem('token');
 
     const userId = getCurrentUserId();
-  
+
     // Clear user specific data but leave generic data for backward compatibility
     localStorage.removeItem(`userQueue_${userId}`);
     localStorage.removeItem(`userQueues_${userId}`);
@@ -68,16 +68,16 @@ export const authService = {
   getProfile: async () => {
     return api.get('/auth/profile');
   },
-  
-  updateProfile: async (userData) => {
+
+  updateProfile: async userData => {
     const response = await api.post('/auth/update-profile', userData);
     return response.data;
   },
-  
+
   adminUpdateUser: async (userId, userData) => {
     const response = await api.post(`/auth/admin/update-user/${userId}`, userData);
     return response.data;
-  }
+  },
 };
 
 export default api;

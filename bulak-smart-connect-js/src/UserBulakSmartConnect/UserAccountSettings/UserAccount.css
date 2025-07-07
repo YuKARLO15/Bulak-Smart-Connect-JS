@@ -7,8 +7,6 @@
   display: flex;
   flex-direction: column;
   padding: 0;
-
-
 }
 
 .AccountUAcc .sidebar-open {
@@ -17,21 +15,20 @@
 .AccountUAcc {
   align-items: center;
   justify-content: center;
-    transition: margin-left 0.3s ease;
-    width: 100vw;
+  transition: margin-left 0.3s ease;
+  width: 100vw;
 }
 
 .AccountHeaderUAcc {
   background-color: #184a5b;
   color: #fff;
-  padding: 10px ;
+  padding: 10px;
   margin-bottom: 30px;
   display: flex;
-flex-direction: column; 
-width: 100vw;
-justify-content: center;
+  flex-direction: column;
+  width: 100vw;
+  justify-content: center;
   align-items: center;
-
 }
 
 .AccountHeaderUAcc h1 {
@@ -39,7 +36,6 @@ justify-content: center;
   margin-bottom: 0;
   color: #fff;
   border-bottom: none;
-
 }
 
 /* Tab Navigation */
@@ -170,7 +166,7 @@ justify-content: center;
     grid-template-columns: 1fr 1fr;
     gap: 25px;
   }
-  
+
   .FormGroupUAcc:nth-child(5),
   .ActionsUAcc {
     grid-column: span 2;
@@ -191,11 +187,11 @@ justify-content: center;
     max-width: 90vw;
     gap: 15px;
   }
-  
+
   .AccountFormUAcc {
     grid-template-columns: 1fr;
   }
-  
+
   .FormGroupUAcc:nth-child(5),
   .ActionsUAcc {
     grid-column: span 1;
@@ -222,7 +218,9 @@ justify-content: center;
   font-size: 14px;
   background-color: white !important;
   color: #1c4d5a !important;
-  transition: border-color 0.3s ease, background-color 0.3s ease;
+  transition:
+    border-color 0.3s ease,
+    background-color 0.3s ease;
   box-sizing: border-box;
 }
 
@@ -305,7 +303,9 @@ justify-content: center;
   font-size: 14px;
   background-color: white !important;
   color: #1c4d5a !important;
-  transition: border-color 0.3s ease, background-color 0.3s ease;
+  transition:
+    border-color 0.3s ease,
+    background-color 0.3s ease;
   box-sizing: border-box;
 }
 
@@ -349,7 +349,9 @@ justify-content: center;
   border-radius: 4px 0 0 4px;
   font-size: 14px;
   background-color: white !important;
-  transition: border-color 0.3s ease, background-color 0.3s ease;
+  transition:
+    border-color 0.3s ease,
+    background-color 0.3s ease;
   box-sizing: border-box;
 }
 
@@ -375,7 +377,6 @@ justify-content: center;
   color: #1c4d5a !important;
   border-color: #1c4d5a !important;
 }
- 
 
 .EditButtonUAcc,
 .CancelButtonUAcc {
@@ -505,7 +506,7 @@ justify-content: center;
     margin-right: 5px;
     justify-content: center;
   }
-  
+
   .PasswordFormUAcc .SaveButtonUAcc {
     width: 100%;
     max-width: 300px;
@@ -571,7 +572,9 @@ justify-content: center;
   background-color: white !important;
   color: #1c4d5a !important;
   font-size: 14px;
-  transition: border-color 0.3s ease, background-color 0.3s ease;
+  transition:
+    border-color 0.3s ease,
+    background-color 0.3s ease;
   box-sizing: border-box;
 }
 
@@ -774,9 +777,9 @@ justify-content: center;
   text-align: center;
   cursor: not-allowed;
   box-sizing: border-box;
-   border: 1px solid #1c4d5a;
-   border-radius: 6px;
-   margin-right: 3px;
+  border: 1px solid #1c4d5a;
+  border-radius: 6px;
+  margin-right: 3px;
 }
 
 .PhoneNumberInputUAcc {
@@ -865,13 +868,13 @@ justify-content: center;
     margin: 0 5px;
     min-width: 200px;
   }
-  
+
   .CountryCodeUAcc {
     width: 45px;
     font-size: 12px;
     padding: 8px 6px;
   }
-  
+
   .PhoneEditButtonUAcc,
   .PhoneCancelButtonUAcc {
     width: 50px;

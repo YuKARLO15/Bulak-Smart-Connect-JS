@@ -15,7 +15,7 @@
   background-color: #fff !important;
   cursor: pointer;
   margin-right: 10px !important;
-  appearance: none; 
+  appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
   position: relative;
@@ -42,7 +42,6 @@
   font-size: 14px;
   font-weight: bold;
 }
-
 
 .ReceiveUpdateText {
   display: flex;

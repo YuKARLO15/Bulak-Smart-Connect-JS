@@ -38,7 +38,7 @@ const AdminAnnouncement = () => {
     try {
       setLoading(true);
       const data = await announcementService.getAllAnnouncements();
-      
+
       // Transform backend data to match your existing format
       const transformedData = data.map(announcement => ({
         id: announcement.id,
@@ -47,7 +47,7 @@ const AdminAnnouncement = () => {
         date: announcement.createdAt, // Use createdAt from backend as date
         image: announcement.image || '',
       }));
-      
+
       // Only update if we got data from backend
       if (transformedData.length > 0) {
         setAnnouncements(transformedData);
@@ -61,11 +61,11 @@ const AdminAnnouncement = () => {
     }
   };
 
-  const addAnnouncement = async (newAnnouncement) => {
+  const addAnnouncement = async newAnnouncement => {
     try {
       // Send to backend first
       const createdAnnouncement = await announcementService.createAnnouncement(newAnnouncement);
-      
+
       // Transform to match your existing format
       const transformedAnnouncement = {
         id: createdAnnouncement.id,
@@ -74,7 +74,7 @@ const AdminAnnouncement = () => {
         date: createdAnnouncement.createdAt,
         image: createdAnnouncement.image || '',
       };
-      
+
       // Update state (keep your existing logic)
       setAnnouncements([transformedAnnouncement, ...announcements]);
     } catch (error) {
@@ -94,7 +94,7 @@ const AdminAnnouncement = () => {
     setIsModalOpen(true);
   };
 
-  const saveEditedAnnouncement = async (editedAnnouncement) => {
+  const saveEditedAnnouncement = async editedAnnouncement => {
     try {
       // Send update to backend
       const updatedAnnouncement = await announcementService.updateAnnouncement(
@@ -102,10 +102,10 @@ const AdminAnnouncement = () => {
         {
           title: editedAnnouncement.title,
           description: editedAnnouncement.description,
-          image: editedAnnouncement.image
+          image: editedAnnouncement.image,
         }
       );
-      
+
       // Transform and update state (keep your existing logic)
       const transformedAnnouncement = {
         id: updatedAnnouncement.id,
@@ -114,7 +114,7 @@ const AdminAnnouncement = () => {
         date: updatedAnnouncement.updatedAt,
         image: updatedAnnouncement.image || '',
       };
-      
+
       setAnnouncements(prev =>
         prev.map(a => (a.id === transformedAnnouncement.id ? transformedAnnouncement : a))
       );
@@ -125,17 +125,17 @@ const AdminAnnouncement = () => {
         prev.map(a => (a.id === editedAnnouncement.id ? editedAnnouncement : a))
       );
     }
-    
+
     setIsModalOpen(false);
     setSelectedAnnouncement(null);
   };
 
   // DELETE handler to remove an announcement from state
-  const handleDelete = async (id) => {
+  const handleDelete = async id => {
     try {
       // Send delete to backend
       await announcementService.deleteAnnouncement(id);
-      
+
       // Update state (keep your existing logic)
       setAnnouncements(prev => prev.filter(a => a.id !== id));
     } catch (error) {
@@ -143,25 +143,22 @@ const AdminAnnouncement = () => {
       // Fallback to your original logic if API fails
       setAnnouncements(prev => prev.filter(a => a.id !== id));
     }
-    
+
     setIsModalOpen(false);
     setSelectedAnnouncement(null);
   };
 
   return (
     <div className="announcement-container">
-      <h2 className='label-announcement'>Admin Announcements
+      <h2 className="label-announcement">
+        Admin Announcements
         <NavBar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
       </h2>
 
-      
-      
       {loading && (
-        <div style={{ textAlign: 'center', padding: '20px' }}>
-          Loading announcements...
-        </div>
+        <div style={{ textAlign: 'center', padding: '20px' }}>Loading announcements...</div>
       )}
-      
+
       <div className="announcement-main">
         <AnnouncementFeed announcements={announcements} onEdit={handleEditClick} />
         <AnnouncementForm addAnnouncement={addAnnouncement} />
@@ -172,7 +169,7 @@ const AdminAnnouncement = () => {
         onClose={() => setIsModalOpen(false)}
         announcementData={selectedAnnouncement}
         onSave={saveEditedAnnouncement}
-        onDelete={handleDelete} 
+        onDelete={handleDelete}
       />
     </div>
   );

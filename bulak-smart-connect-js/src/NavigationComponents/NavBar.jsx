@@ -7,12 +7,12 @@ import { useAuth } from '../context/AuthContext';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import DirectionsWalkOutlinedIcon from '@mui/icons-material/DirectionsWalkOutlined';
 import DescriptionIcon from '@mui/icons-material/Description';
-import InstallPrompt from '../components/InstallPrompt'; 
+import InstallPrompt from '../components/InstallPrompt';
 
 const NavBar = () => {
   const { isAuthenticated, logout } = useAuth();
   const [anchorEl, setAnchorEl] = useState(null);
-  const [openInstallPrompt, setOpenInstallPrompt] = useState(false); 
+  const [openInstallPrompt, setOpenInstallPrompt] = useState(false);
   const navigate = useNavigate();
 
   const handleServicesClick = event => {
@@ -36,9 +36,9 @@ const NavBar = () => {
         </RouterLink>
         <div className="NavButtons">
           <RouterLink to="/">
-            <Button className='HomeButtonNav'>Home</Button>
+            <Button className="HomeButtonNav">Home</Button>
           </RouterLink>
-        
+
           <Button onClick={() => setOpenInstallPrompt(true)}>Install</Button>
 
           {isAuthenticated ? (
@@ -50,11 +50,11 @@ const NavBar = () => {
                   style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}
                   onClick={handleServicesClose}
                 >
-                  <MenuItem className='ServiceItem'>
-                    <ListItemIcon className='ServiceIcon'>
+                  <MenuItem className="ServiceItem">
+                    <ListItemIcon className="ServiceIcon">
                       <DescriptionIcon fontSize="small" />
                     </ListItemIcon>
-                    <ListItemText className='ServiceIcon' primary="Document Application" />
+                    <ListItemText className="ServiceIcon" primary="Document Application" />
                   </MenuItem>
                 </RouterLink>
                 <RouterLink
@@ -62,11 +62,11 @@ const NavBar = () => {
                   style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}
                   onClick={handleServicesClose}
                 >
-                  <MenuItem className='ServiceItem'>
-                    <ListItemIcon className='ServiceIcon'>
+                  <MenuItem className="ServiceItem">
+                    <ListItemIcon className="ServiceIcon">
                       <CalendarTodayIcon fontSize="small" />
                     </ListItemIcon>
-                    <ListItemText className='ServiceIcon' primary="Appointment Booking" />
+                    <ListItemText className="ServiceIcon" primary="Appointment Booking" />
                   </MenuItem>
                 </RouterLink>
                 <RouterLink
@@ -74,11 +74,11 @@ const NavBar = () => {
                   style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}
                   onClick={handleServicesClose}
                 >
-                  <MenuItem className='ServiceItem'>
-                    <ListItemIcon className='ServiceIcon'>
+                  <MenuItem className="ServiceItem">
+                    <ListItemIcon className="ServiceIcon">
                       <DirectionsWalkOutlinedIcon fontSize="small" />
-                    </ListItemIcon >
-                    <ListItemText className='ServiceIcon' primary="Smart Walk-In Queue" />
+                    </ListItemIcon>
+                    <ListItemText className="ServiceIcon" primary="Smart Walk-In Queue" />
                   </MenuItem>
                 </RouterLink>
               </Menu>
@@ -96,11 +96,8 @@ const NavBar = () => {
           )}
         </div>
       </div>
-    
-      <InstallPrompt
-        open={openInstallPrompt}
-        onClose={() => setOpenInstallPrompt(false)}
-      />
+
+      <InstallPrompt open={openInstallPrompt} onClose={() => setOpenInstallPrompt(false)} />
     </>
   );
 };

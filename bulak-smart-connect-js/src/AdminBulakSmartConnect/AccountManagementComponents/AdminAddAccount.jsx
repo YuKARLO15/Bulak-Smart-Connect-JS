@@ -10,7 +10,7 @@ const AdminAddUser = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { adminUpdateUser } = useAuth();
-  
+
   const isModifying = location.state?.isModifying || false;
   const userToEdit = location.state?.userData || null;
   const userIndex = location.state?.userIndex;
@@ -38,7 +38,7 @@ const AdminAddUser = () => {
     { id: 1, name: 'super_admin', displayName: 'Admin' },
     { id: 2, name: 'admin', displayName: 'Manager' },
     { id: 3, name: 'staff', displayName: 'Staff' },
-    { id: 4, name: 'citizen', displayName: 'Citizen' }
+    { id: 4, name: 'citizen', displayName: 'Citizen' },
   ];
 
   // Populate form data if editing an existing user
@@ -82,11 +82,11 @@ const AdminAddUser = () => {
   const handleSubmit = async e => {
     e.preventDefault();
     setSubmitting(true);
-    
+
     try {
       let validationErrors = {};
 
-      // Basic validation 
+      // Basic validation
       const requiredFields = ['email', 'firstName', 'lastName', 'role', 'username', 'contact'];
       if (!isModifying) {
         requiredFields.push('password', 'confirmPassword');
@@ -99,11 +99,11 @@ const AdminAddUser = () => {
       });
 
       // Password validation only if adding or if passwords were provided
-      if (!isModifying || (formData.password || formData.confirmPassword)) {
+      if (!isModifying || formData.password || formData.confirmPassword) {
         if (formData.password !== formData.confirmPassword) {
           validationErrors.confirmPassword = 'Passwords do not match';
         }
-        
+
         if (formData.password) {
           if (formData.password.length < 8) {
             validationErrors.password = 'Password must be at least 8 characters long';
@@ -145,7 +145,7 @@ const AdminAddUser = () => {
 
       if (Object.keys(validationErrors).length === 0) {
         let success = false;
-        
+
         // Prepare user data
         const userData = {
           email: formData.email,
@@ -184,12 +184,12 @@ const AdminAddUser = () => {
                 roleIds: [roleId],
                 defaultRoleId: roleId,
               };
-              
+
               // Only include password if provided
               if (formData.password && formData.password.trim()) {
                 backendData.password = formData.password;
               }
-              
+
               // Use userService instead of adminUpdateUser from context
               const response = await userService.adminUpdateUser(userId, backendData);
               console.log('User updated via backend:', response);
@@ -199,7 +199,7 @@ const AdminAddUser = () => {
             }
           } catch (backendError) {
             console.warn('Backend update failed, trying localStorage:', backendError);
-            
+
             // Fallback to localStorage
             if (userIndex !== undefined) {
               const result = updateUser(userIndex, userData);
@@ -220,13 +220,13 @@ const AdminAddUser = () => {
               roleIds: [roleId],
               defaultRoleId: roleId,
             };
-            
+
             await userService.createUser(backendData);
             console.log('User created via backend');
             success = true;
           } catch (backendError) {
             console.warn('Backend creation failed, trying localStorage:', backendError);
-            
+
             // Fallback to localStorage
             const result = addUser(userData);
             if (result.success) {
@@ -244,7 +244,7 @@ const AdminAddUser = () => {
         }
       }
     } catch (error) {
-      console.error("Error submitting form:", error);
+      console.error('Error submitting form:', error);
       alert('An error occurred. Please try again.');
     } finally {
       setSubmitting(false);
@@ -254,14 +254,10 @@ const AdminAddUser = () => {
   return (
     <div>
       <NavBar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
-      
-      <h2 className='modifying-user'>{isModifying ? 'Modify User' : 'Add User'}</h2>
+
+      <h2 className="modifying-user">{isModifying ? 'Modify User' : 'Add User'}</h2>
       <div className="admin-add-user">
-        <form 
-          className="user-form" 
-          onSubmit={handleSubmit} 
-          noValidate
-        >
+        <form className="user-form" onSubmit={handleSubmit} noValidate>
           <div className="form-grid">
             {/* Basic Information Fields */}
             {[
@@ -337,12 +333,17 @@ const AdminAddUser = () => {
             <div className="form-group">
               <label>
                 Password {!isModifying && <span className="required">*</span>}
-                {isModifying && <span style={{fontSize: '12px', color: '#666'}}> (leave blank to keep current)</span>}
+                {isModifying && (
+                  <span style={{ fontSize: '12px', color: '#666' }}>
+                    {' '}
+                    (leave blank to keep current)
+                  </span>
+                )}
               </label>
               <input
                 type="password"
                 name="password"
-                placeholder={isModifying ? "Enter new password" : "Enter password"}
+                placeholder={isModifying ? 'Enter new password' : 'Enter password'}
                 value={formData.password}
                 onChange={handleChange}
                 className={errors.password ? 'error-input' : ''}
@@ -351,9 +352,7 @@ const AdminAddUser = () => {
             </div>
 
             <div className="form-group">
-              <label>
-                Confirm Password {!isModifying && <span className="required">*</span>}
-              </label>
+              <label>Confirm Password {!isModifying && <span className="required">*</span>}</label>
               <input
                 type="password"
                 name="confirmPassword"
@@ -367,18 +366,18 @@ const AdminAddUser = () => {
           </div>
 
           <div className="form-actions">
-            <button 
-              type="submit" 
-              className="submit-btn"
-              disabled={submitting}
-            >
-              {submitting 
-                ? (isModifying ? 'Updating User...' : 'Adding User...') 
-                : (isModifying ? 'Update User' : 'Add User')}
+            <button type="submit" className="submit-btn" disabled={submitting}>
+              {submitting
+                ? isModifying
+                  ? 'Updating User...'
+                  : 'Adding User...'
+                : isModifying
+                  ? 'Update User'
+                  : 'Add User'}
             </button>
-            
-            <button 
-              type="button" 
+
+            <button
+              type="button"
               className="cancel-btn"
               onClick={() => navigate('/admin-user-management')}
             >

@@ -17,8 +17,8 @@ const ApplicationForm = () => {
       <Steps />
       <RecentApplicationsComponent />
       <Box className="AnnouncementButtonContainer">
-          <FloatingAnnouncementFab/>
-          </Box>
+        <FloatingAnnouncementFab />
+      </Box>
     </div>
   );
 };

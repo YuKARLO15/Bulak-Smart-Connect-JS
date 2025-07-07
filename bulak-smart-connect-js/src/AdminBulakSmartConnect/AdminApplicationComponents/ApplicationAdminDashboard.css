@@ -10,11 +10,11 @@
   align-items: center;
   transition: margin-left 0.3s ease;
   background-color: #f5f8fa;
-  overflow-x: hidden; 
+  overflow-x: hidden;
 }
 
 .ApplicationDashContainer.sidebar-open {
-  margin-left: 280px; 
+  margin-left: 280px;
   width: calc(100% - 280px);
 }
 
@@ -156,8 +156,6 @@
   border-radius: 10px;
 }
 
-
-
 /* Filled circle with NO background, NO border, just color */
 .ApplicationDashCircleFilled {
   display: inline-block;
@@ -246,7 +244,6 @@
   border-radius: 50%;
 }
 
-
 .ApplicationDashChartBody {
   position: relative;
   height: 160px;
@@ -313,10 +310,9 @@
   border-bottom: 1px solid #f0f0f0;
   width: 100% !important;
   box-sizing: border-box;
-  
 }
-.ApplicationDashRowTitle{
-    font-weight: 600 !important;
+.ApplicationDashRowTitle {
+  font-weight: 600 !important;
 }
 
 .ApplicationDashTableTitle {
@@ -389,7 +385,7 @@
 }
 
 .ApplicationDashTableRow {
-  width: 100% !important; 
+  width: 100% !important;
   box-sizing: border-box;
   display: flex;
   flex-wrap: nowrap;
@@ -411,20 +407,19 @@
   font-size: 0.98em;
   letter-spacing: 0.01em;
   margin: 4px 0;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.03);
-  transition: background 0.2s,color 0.2s;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
+  transition:
+    background 0.2s,
+    color 0.2s;
   border: none;
 }
 .ApplicationDashApplicationStatusPill.Approved {
-  
   color: #219a2c;
 }
 .ApplicationDashApplicationStatusPill.Pending {
-
   color: #e69500;
 }
 .ApplicationDashApplicationStatusPill.Denied {
-
   color: #d32f2f;
 }
 
@@ -474,7 +469,7 @@
     flex-direction: column;
     width: 92%;
   }
-  
+
   .ApplicationDashTableSection {
     width: 92%;
   }
@@ -485,16 +480,16 @@
   .ApplicationDashTableSection {
     width: 95%;
   }
-  
+
   .ApplicationDashContainer.sidebar-open {
     margin-left: 0;
     width: 100%;
   }
-  
+
   .ApplicationDashHeader {
     padding: 1rem;
   }
-  
+
   .ApplicationDashTitle {
     margin-left: 1rem !important;
     font-size: 1.25rem !important;

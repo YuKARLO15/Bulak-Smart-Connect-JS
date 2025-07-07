@@ -27,13 +27,13 @@ export const queueService = {
       throw error;
     }
   },
-  
+
   fetchPendingQueues: async () => {
     const response = await axios.get(`${config.API_BASE_URL}/queue/pending`);
     return response.data;
   },
-  
-  getQueuePosition: async (queueId) => {
+
+  getQueuePosition: async queueId => {
     try {
       console.log(`Making request to: ${config.API_BASE_URL}/queue/${queueId}/position`);
       const response = await axios.get(`${config.API_BASE_URL}/queue/${queueId}/position`);
@@ -44,15 +44,15 @@ export const queueService = {
       throw error;
     }
   },
-  
-  createQueue: async (queueData) => {
+
+  createQueue: async queueData => {
     try {
       console.log('Creating queue with data:', queueData);
-      
+
       // Debug token
       const token = localStorage.getItem('token');
       console.log('Token being used:', token ? 'Valid token present' : 'No token');
-      
+
       const response = await api.post('/queue', queueData);
       console.log('Queue creation response:', response.data);
       return response.data;
@@ -62,7 +62,7 @@ export const queueService = {
     }
   },
 
-  checkQueueExists: async (queueId) => {
+  checkQueueExists: async queueId => {
     try {
       const response = await axios.get(`${config.API_BASE_URL}/queue/${queueId}/exists`);
       return response.data.exists;
@@ -72,7 +72,7 @@ export const queueService = {
     }
   },
 
-  fetchQueueDetails: async (queueId) => {
+  fetchQueueDetails: async queueId => {
     try {
       console.log(`Making request to: ${config.API_BASE_URL}/queue/${queueId}/details`);
       const response = await axios.get(`${config.API_BASE_URL}/queue/${queueId}/details`);
@@ -111,7 +111,7 @@ export const queueService = {
   },
 
   // Bulk fetch details for multiple queue IDs
-  fetchDetailsForMultipleQueues: async (queueIds) => {
+  fetchDetailsForMultipleQueues: async queueIds => {
     try {
       console.log(`Making request to: ${config.API_BASE_URL}/queue/bulk-details`);
       const response = await axios.post(`${config.API_BASE_URL}/queue/bulk-details`, { queueIds });
@@ -126,7 +126,7 @@ export const queueService = {
   updateQueueStatus: async (queueId, status) => {
     try {
       console.log(`Updating queue ${queueId} status to ${status}`);
-      
+
       // Map frontend status values to backend expected values
       let backendStatus;
       switch (status) {
@@ -142,11 +142,13 @@ export const queueService = {
         default:
           backendStatus = status;
       }
-      
+
       console.log(`Mapped status: ${status} -> ${backendStatus}`);
       console.log(`Making request to: ${config.API_BASE_URL}/queue/${queueId}/status`);
 
-      const response = await axios.patch(`${config.API_BASE_URL}/queue/${queueId}/status`, { status: backendStatus });
+      const response = await axios.patch(`${config.API_BASE_URL}/queue/${queueId}/status`, {
+        status: backendStatus,
+      });
       console.log('Update status response:', response.data);
       return response.data;
     } catch (error) {
@@ -157,7 +159,7 @@ export const queueService = {
   },
 
   // New method to fetch user queues from backend
-  fetchUserQueues: async (userId) => {
+  fetchUserQueues: async userId => {
     try {
       console.log(`Making request to: ${config.API_BASE_URL}/queues/user/${userId}`);
       const response = await axios.get(`${config.API_BASE_URL}/queues/user/${userId}`);
@@ -170,7 +172,7 @@ export const queueService = {
   },
 
   // Add method to get queue details including status
-  getQueueDetails: async (queueId) => {
+  getQueueDetails: async queueId => {
     try {
       console.log(`Making request to: ${config.API_BASE_URL}/queues/${queueId}`);
       const response = await axios.get(`${config.API_BASE_URL}/queues/${queueId}`);
@@ -186,7 +188,7 @@ export const queueService = {
   createManualQueue: async (guestData = {}) => {
     try {
       console.log('Service: Creating manual queue with data:', guestData);
-      
+
       const payload = {
         firstName: guestData.firstName || 'Walk-in',
         lastName: guestData.lastName || 'Guest',
@@ -196,16 +198,16 @@ export const queueService = {
         phoneNumber: guestData.phoneNumber || 'N/A',
         appointmentType: guestData.reasonOfVisit || 'General Inquiry',
       };
-      
+
       console.log('Service: Sending payload:', payload);
-      
+
       const response = await axios.post(`${config.API_BASE_URL}/queue/manual`, payload, {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
-          'Content-Type': 'application/json'
-        }
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json',
+        },
       });
-      
+
       console.log('Service: Manual queue created:', response.data);
       return response.data;
     } catch (error) {
@@ -216,9 +218,9 @@ export const queueService = {
   },
 
   // Listen for daily reset notifications
-  onDailyReset: (callback) => {
+  onDailyReset: callback => {
     if (window.socket) {
-      window.socket.on('dailyQueueReset', (data) => {
+      window.socket.on('dailyQueueReset', data => {
         console.log('📅 Daily queue reset notification:', data);
         callback(data);
       });
@@ -229,13 +231,17 @@ export const queueService = {
   triggerManualReset: async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.post(`${config.API_BASE_URL}/queue/admin/daily-reset`, {}, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const response = await axios.post(
+        `${config.API_BASE_URL}/queue/admin/daily-reset`,
+        {},
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       return response.data;
     } catch (error) {
       console.error('Error triggering manual reset:', error);
-      
+
       if (error.response?.status === 401) {
         throw new Error('Authentication failed. Please log in again.');
       } else if (error.response?.status === 403) {
@@ -253,7 +259,7 @@ export const queueService = {
     try {
       const token = localStorage.getItem('token');
       const response = await axios.get(`${config.API_BASE_URL}/queue/admin/pending-count`, {
-        headers: { Authorization: `Bearer ${token}` }
+        headers: { Authorization: `Bearer ${token}` },
       });
       return response.data;
     } catch (error) {

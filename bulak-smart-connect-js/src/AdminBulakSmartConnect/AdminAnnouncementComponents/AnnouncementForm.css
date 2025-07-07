@@ -13,7 +13,7 @@ form.announcementform {
   margin-right: 2vw;
 }
 
-  /* form {
+/* form {
       display: flex;
       flex-direction: column;
       gap: 16px;
@@ -35,7 +35,6 @@ form.announcementform textarea {
   font-family: inherit;
   background-color: #f9fafb;
   transition: border-color 0.2s ease;
-
 }
 
 form.announcementform input:focus,

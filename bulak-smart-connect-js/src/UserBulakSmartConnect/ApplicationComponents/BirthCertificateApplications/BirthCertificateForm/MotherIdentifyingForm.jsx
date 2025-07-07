@@ -15,13 +15,13 @@ const MotherInformationBirthForm = forwardRef(({ formData, handleChange }, ref) 
   };
 
   // Handle number input change with validation
-  const handleNumberInputChange = (e) => {
+  const handleNumberInputChange = e => {
     if (!/^\d*$/.test(e.target.value)) {
       return;
     }
 
     const { name } = e.target;
-    
+
     // Clear error for this field when user starts typing
     if (errors[name]) {
       setErrors(prev => {
@@ -30,7 +30,7 @@ const MotherInformationBirthForm = forwardRef(({ formData, handleChange }, ref) 
         return newErrors;
       });
     }
-    
+
     handleChange(e);
   };
 
@@ -166,9 +166,9 @@ const MotherInformationBirthForm = forwardRef(({ formData, handleChange }, ref) 
   };
 
   // Handle input change and clear errors
-  const handleInputChange = (e) => {
+  const handleInputChange = e => {
     const { name, value } = e.target;
-    
+
     // Clear error for this field when user starts typing
     if (errors[name]) {
       setErrors(prev => {
@@ -177,19 +177,19 @@ const MotherInformationBirthForm = forwardRef(({ formData, handleChange }, ref) 
         return newErrors;
       });
     }
-    
+
     handleChange(e);
   };
 
   // Handle blur event for validation
-  const handleBlur = (e) => {
+  const handleBlur = e => {
     const { name, value } = e.target;
     const error = validateField(name, value);
-    
+
     if (error) {
       setErrors(prev => ({
         ...prev,
-        [name]: error
+        [name]: error,
       }));
     }
   };
@@ -200,21 +200,23 @@ const MotherInformationBirthForm = forwardRef(({ formData, handleChange }, ref) 
     // New function to validate all fields at once (for Next button)
     validateAllFields: () => {
       const isValid = validateForm();
-      
+
       // If validation fails, scroll to first error
       if (!isValid) {
         // Find first error element and scroll to it
         setTimeout(() => {
-          const firstErrorElement = document.querySelector('.FormInputMother.error, .SelectInputMother.error');
+          const firstErrorElement = document.querySelector(
+            '.FormInputMother.error, .SelectInputMother.error'
+          );
           if (firstErrorElement) {
             firstErrorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
             firstErrorElement.focus();
           }
         }, 100);
       }
-      
+
       return isValid;
-    }
+    },
   }));
   return (
     <div className="BirthFormContainerMother">
@@ -237,7 +239,9 @@ const MotherInformationBirthForm = forwardRef(({ formData, handleChange }, ref) 
                 className={`FormInputMother ${errors.motherFirstName ? 'error' : ''}`}
                 required
               />
-              {errors.motherFirstName && <span className="ErrorMessageMother">{errors.motherFirstName}</span>}
+              {errors.motherFirstName && (
+                <span className="ErrorMessageMother">{errors.motherFirstName}</span>
+              )}
             </div>
 
             <div className="FormGroupMother">
@@ -262,7 +266,9 @@ const MotherInformationBirthForm = forwardRef(({ formData, handleChange }, ref) 
                 className={`FormInputMother ${errors.motherLastName ? 'error' : ''}`}
                 required
               />
-              {errors.motherLastName && <span className="ErrorMessageMother">{errors.motherLastName}</span>}
+              {errors.motherLastName && (
+                <span className="ErrorMessageMother">{errors.motherLastName}</span>
+              )}
             </div>
           </div>
 
@@ -314,11 +320,15 @@ const MotherInformationBirthForm = forwardRef(({ formData, handleChange }, ref) 
                 className={`FormInputMother ${errors.motherCitizenship ? 'error' : ''}`}
                 required
               />
-              {errors.motherCitizenship && <span className="ErrorMessageMother">{errors.motherCitizenship}</span>}
+              {errors.motherCitizenship && (
+                <span className="ErrorMessageMother">{errors.motherCitizenship}</span>
+              )}
             </div>
 
             <div className="FormGroupMother" style={{ flex: 1 }}>
-              <div className="SectionTitleHalfMother">9. RELIGION/ RELIGIOUS SECT {requiredField}</div>
+              <div className="SectionTitleHalfMother">
+                9. RELIGION/ RELIGIOUS SECT {requiredField}
+              </div>
               <input
                 type="text"
                 name="motherReligion"
@@ -328,7 +338,9 @@ const MotherInformationBirthForm = forwardRef(({ formData, handleChange }, ref) 
                 className={`FormInputMother ${errors.motherReligion ? 'error' : ''}`}
                 required
               />
-              {errors.motherReligion && <span className="ErrorMessageMother">{errors.motherReligion}</span>}
+              {errors.motherReligion && (
+                <span className="ErrorMessageMother">{errors.motherReligion}</span>
+              )}
             </div>
           </div>
         </div>
@@ -350,7 +362,9 @@ const MotherInformationBirthForm = forwardRef(({ formData, handleChange }, ref) 
                 placeholder="Enter number only"
                 required
               />
-              {errors.motherTotalChildren && <span className="ErrorMessageMother">{errors.motherTotalChildren}</span>}
+              {errors.motherTotalChildren && (
+                <span className="ErrorMessageMother">{errors.motherTotalChildren}</span>
+              )}
             </div>
 
             <div className="FormGroupMother" style={{ flex: 1 }}>
@@ -367,7 +381,9 @@ const MotherInformationBirthForm = forwardRef(({ formData, handleChange }, ref) 
                 placeholder="Enter number only"
                 required
               />
-              {errors.motherLivingChildren && <span className="ErrorMessageMother">{errors.motherLivingChildren}</span>}
+              {errors.motherLivingChildren && (
+                <span className="ErrorMessageMother">{errors.motherLivingChildren}</span>
+              )}
             </div>
 
             <div className="FormGroupMother" style={{ flex: 1 }}>
@@ -383,7 +399,9 @@ const MotherInformationBirthForm = forwardRef(({ formData, handleChange }, ref) 
                 className={`FormInputMother ${errors.motherDeceasedChildren ? 'error' : ''}`}
                 placeholder="Enter number only"
               />
-              {errors.motherDeceasedChildren && <span className="ErrorMessageMother">{errors.motherDeceasedChildren}</span>}
+              {errors.motherDeceasedChildren && (
+                <span className="ErrorMessageMother">{errors.motherDeceasedChildren}</span>
+              )}
             </div>
           </div>
         </div>
@@ -402,11 +420,15 @@ const MotherInformationBirthForm = forwardRef(({ formData, handleChange }, ref) 
                 className={`FormInputMother ${errors.motherOccupation ? 'error' : ''}`}
                 required
               />
-              {errors.motherOccupation && <span className="ErrorMessageMother">{errors.motherOccupation}</span>}
+              {errors.motherOccupation && (
+                <span className="ErrorMessageMother">{errors.motherOccupation}</span>
+              )}
             </div>
 
             <div className="FormGroupMother" style={{ flex: 1 }}>
-              <div className="SectionTitleHalfMother">12. AGE at the time of this birth: {requiredField}</div>
+              <div className="SectionTitleHalfMother">
+                12. AGE at the time of this birth: {requiredField}
+              </div>
               <input
                 type="text"
                 name="motherAge"
@@ -438,7 +460,9 @@ const MotherInformationBirthForm = forwardRef(({ formData, handleChange }, ref) 
                 className={`FormInputMother ${errors.motherStreet ? 'error' : ''}`}
                 required
               />
-              {errors.motherStreet && <span className="ErrorMessageMother">{errors.motherStreet}</span>}
+              {errors.motherStreet && (
+                <span className="ErrorMessageMother">{errors.motherStreet}</span>
+              )}
             </div>
           </div>
 
@@ -454,7 +478,9 @@ const MotherInformationBirthForm = forwardRef(({ formData, handleChange }, ref) 
                 className={`FormInputMother ${errors.motherBarangay ? 'error' : ''}`}
                 required
               />
-              {errors.motherBarangay && <span className="ErrorMessageMother">{errors.motherBarangay}</span>}
+              {errors.motherBarangay && (
+                <span className="ErrorMessageMother">{errors.motherBarangay}</span>
+              )}
             </div>
 
             <div className="FormGroupMother">
@@ -484,7 +510,9 @@ const MotherInformationBirthForm = forwardRef(({ formData, handleChange }, ref) 
                 className={`FormInputMother ${errors.motherProvince ? 'error' : ''}`}
                 required
               />
-              {errors.motherProvince && <span className="ErrorMessageMother">{errors.motherProvince}</span>}
+              {errors.motherProvince && (
+                <span className="ErrorMessageMother">{errors.motherProvince}</span>
+              )}
             </div>
 
             <div className="FormGroupMother">
@@ -498,7 +526,9 @@ const MotherInformationBirthForm = forwardRef(({ formData, handleChange }, ref) 
                 className={`FormInputMother ${errors.motherCountry ? 'error' : ''}`}
                 required
               />
-              {errors.motherCountry && <span className="ErrorMessageMother">{errors.motherCountry}</span>}
+              {errors.motherCountry && (
+                <span className="ErrorMessageMother">{errors.motherCountry}</span>
+              )}
             </div>
           </div>
         </div>

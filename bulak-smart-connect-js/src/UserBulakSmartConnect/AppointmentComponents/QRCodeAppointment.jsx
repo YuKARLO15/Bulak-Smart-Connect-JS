@@ -4,92 +4,87 @@ import NavBar from '../../NavigationComponents/NavSide';
 import { Box, Typography } from '@mui/material';
 import './QrCodeAppointment.css';
 
-
 const QRCodeAppointment = () => {
   const { id } = useParams();
   const location = useLocation();
   const { appointment, source } = location.state || {};
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const navigate = useNavigate();
-  
-const steps = [
-  { label: 'Book Appointment' },
-  { label: 'Save/Screenshot Summary' },
-  { label: 'Visit Registrar Office' }
-];
+
+  const steps = [
+    { label: 'Book Appointment' },
+    { label: 'Save/Screenshot Summary' },
+    { label: 'Visit Registrar Office' },
+  ];
 
   const handleViewRequirements = () => {
     // Convert the appointment type to lowercase and check
     const type = appointment.type.toLowerCase();
-    
+
     if (type?.includes('birth') || type?.includes('birth certificate')) {
       navigate('/RequirementBirthList');
-    } 
-    else if (type?.includes('marriage') || type?.includes('marriage certificate')) {
+    } else if (type?.includes('marriage') || type?.includes('marriage certificate')) {
       navigate('/RequirementMarriageList');
-    }
-    else {
+    } else {
       // For other types, we could navigate to a general requirements page or show a message
-      navigate('/RequirementBirthList'); 
+      navigate('/RequirementBirthList');
     }
   };
 
-
-
-  if (!appointment) return (
-    <div className="ErrorContainerAppointment">
-      <NavBar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
-      <div className="MessageContainerAppointment">
-        <h2>No appointment found.</h2>
-        <p>Please check your appointment details and try again.</p>
+  if (!appointment)
+    return (
+      <div className="ErrorContainerAppointment">
+        <NavBar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
+        <div className="MessageContainerAppointment">
+          <h2>No appointment found.</h2>
+          <p>Please check your appointment details and try again.</p>
+        </div>
       </div>
-    </div>
-  );
- const getButtonText = () => {
+    );
+  const getButtonText = () => {
     // If source is 'appointmentForm', return 'Back' otherwise return 'Complete'
     return source === 'appointmentDashboard' ? 'Back' : 'Complete';
   };
 
-  if (!appointment) return (
-    <div className="ErrorContainerAppointment">
-      <NavBar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
-      <div className="MessageContainerAppointment">
-        <h2>No appointment found.</h2>
-        <p>Please check your appointment details and try again.</p>
+  if (!appointment)
+    return (
+      <div className="ErrorContainerAppointment">
+        <NavBar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
+        <div className="MessageContainerAppointment">
+          <h2>No appointment found.</h2>
+          <p>Please check your appointment details and try again.</p>
+        </div>
       </div>
-    </div>
-  );
+    );
 
-  const formatDate = (dateString) => {
+  const formatDate = dateString => {
     const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
     return new Date(dateString).toLocaleDateString(undefined, options);
   };
 
-    const Stepper = () => (
-      <div className="StepperContainerAppointForm">
-        {steps.map((step, idx) => (
-          <React.Fragment key={idx}>
-            <div className={`StepAppointForm${idx === 1 ? ' ActiveAppointForm' : ''}`}>
-              <div className="StepCircleAppointForm">{idx + 1}</div>
-              <div className="StepLabelAppointForm">{step.label}</div>
-            </div>
-            {idx !== steps.length - 1 && <div className="StepLineAppointForm" />}
-          </React.Fragment>
-        ))}
-      </div>
-    );
+  const Stepper = () => (
+    <div className="StepperContainerAppointForm">
+      {steps.map((step, idx) => (
+        <React.Fragment key={idx}>
+          <div className={`StepAppointForm${idx === 1 ? ' ActiveAppointForm' : ''}`}>
+            <div className="StepCircleAppointForm">{idx + 1}</div>
+            <div className="StepLabelAppointForm">{step.label}</div>
+          </div>
+          {idx !== steps.length - 1 && <div className="StepLineAppointForm" />}
+        </React.Fragment>
+      ))}
+    </div>
+  );
 
   return (
     <div className={`QrCodeContainerAppointment ${isSidebarOpen ? 'sidebar-open' : ''}`}>
-      
       <NavBar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
-       <Typography variant="h4" className="TitleNavAppointmenSummary">
+      <Typography variant="h4" className="TitleNavAppointmenSummary">
         {' '}
         APPOINTMENT{' '}
       </Typography>
- <Stepper />
+      <Stepper />
       <div className="QueueInfoAppointment">
-        
         <h2>
           Your appointment has been scheduled at{' '}
           <span className="HighlightAppointment">Civil Registrar Office</span>!
@@ -120,10 +115,7 @@ const steps = [
             </p>
           </div>
         </div>
-   <a
-          onClick={handleViewRequirements} 
-          className="RequirementsLinkAppointment"
-        >
+        <a onClick={handleViewRequirements} className="RequirementsLinkAppointment">
           View Document Requirements
         </a>
         <div className="NoteContainerAppointment">
@@ -133,19 +125,12 @@ const steps = [
               All clients are required to arrive at least 15 minutes before their scheduled
               appointment time.
             </li>
-            <li>
-              Late arrivals will need to reschedule.
-            </li>
-            <li>
-              Please bring all required documents on the day of your appointment.
-            </li>
+            <li>Late arrivals will need to reschedule.</li>
+            <li>Please bring all required documents on the day of your appointment.</li>
           </ul>
         </div>
 
-        <button 
-         onClick={() => navigate('/AppointmentForm')}
-          className="CompleteAppointment"
-        >
+        <button onClick={() => navigate('/AppointmentForm')} className="CompleteAppointment">
           {getButtonText()}
         </button>
       </div>

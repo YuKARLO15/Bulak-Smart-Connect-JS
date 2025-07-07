@@ -7,34 +7,36 @@ const apiClient = axios.create({
   withCredentials: true,
   timeout: config.API_TIMEOUT,
   headers: {
-    'Accept': 'application/json'
-  }
+    Accept: 'application/json',
+  },
 });
 
 // Add request interceptor to include auth token in all requests
 apiClient.interceptors.request.use(
-  (config) => {
+  config => {
     const token = localStorage.getItem('token');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
   },
-  (error) => {
+  error => {
     return Promise.reject(error);
   }
 );
 
 // Add response interceptor to check if the response is actually JSON
 apiClient.interceptors.response.use(
-  (response) => {
+  response => {
     const contentType = response.headers['content-type'];
     if (contentType && contentType.includes('text/html')) {
-      return Promise.reject(new Error('Received HTML instead of JSON. You might need to log in again.'));
+      return Promise.reject(
+        new Error('Received HTML instead of JSON. You might need to log in again.')
+      );
     }
     return response;
   },
-  (error) => {
+  error => {
     return Promise.reject(error);
   }
 );
@@ -64,7 +66,7 @@ export const documentApplicationNotificationService = {
       console.log('📧 Sending application confirmation notification...', {
         email: userEmail,
         applicationId,
-        details: applicationDetails
+        details: applicationDetails,
       });
 
       const response = await apiClient.post('/auth/notifications/application-confirmation', {
@@ -74,7 +76,7 @@ export const documentApplicationNotificationService = {
         applicationSubtype: applicationDetails.subtype,
         applicantName: applicationDetails.applicantName,
         submissionDate: applicationDetails.submissionDate,
-        status: applicationDetails.status || 'Pending'
+        status: applicationDetails.status || 'Pending',
       });
 
       console.log('✅ Application confirmation notification sent successfully');
@@ -109,7 +111,7 @@ export const documentApplicationNotificationService = {
         email: userEmail,
         applicationId,
         newStatus,
-        details: applicationDetails
+        details: applicationDetails,
       });
 
       const response = await apiClient.post('/auth/notifications/application-status-update', {
@@ -118,15 +120,20 @@ export const documentApplicationNotificationService = {
         newStatus: newStatus,
         applicationType: applicationDetails?.type || applicationDetails?.applicationType,
         applicationSubtype: applicationDetails?.subtype || applicationDetails?.applicationSubtype,
-        applicantName: applicationDetails?.applicantName || `${applicationDetails?.firstName || ''} ${applicationDetails?.lastName || ''}`.trim(),
-        previousStatus: applicationDetails?.status
+        applicantName:
+          applicationDetails?.applicantName ||
+          `${applicationDetails?.firstName || ''} ${applicationDetails?.lastName || ''}`.trim(),
+        previousStatus: applicationDetails?.status,
       });
 
       console.log('✅ Status update notification sent successfully');
       return { success: true, data: response.data };
     } catch (error) {
       console.error('❌ Failed to send status update notification:', error);
-      return { success: false, error: error.message || 'Failed to send status update notification' };
+      return {
+        success: false,
+        error: error.message || 'Failed to send status update notification',
+      };
     }
   },
 
@@ -149,7 +156,7 @@ export const documentApplicationNotificationService = {
         email: userEmail,
         applicationId,
         reason,
-        details: applicationDetails
+        details: applicationDetails,
       });
 
       const response = await apiClient.post('/auth/notifications/application-rejection', {
@@ -157,8 +164,10 @@ export const documentApplicationNotificationService = {
         applicationId: applicationId,
         applicationType: applicationDetails?.type || applicationDetails?.applicationType,
         applicationSubtype: applicationDetails?.subtype || applicationDetails?.applicationSubtype,
-        applicantName: applicationDetails?.applicantName || `${applicationDetails?.firstName || ''} ${applicationDetails?.lastName || ''}`.trim(),
-        rejectionReason: reason
+        applicantName:
+          applicationDetails?.applicantName ||
+          `${applicationDetails?.firstName || ''} ${applicationDetails?.lastName || ''}`.trim(),
+        rejectionReason: reason,
       });
 
       console.log('✅ Rejection notification sent successfully');
@@ -187,7 +196,7 @@ export const documentApplicationNotificationService = {
       console.log('📧 Sending approval notification...', {
         email: userEmail,
         applicationId,
-        details: applicationDetails
+        details: applicationDetails,
       });
 
       const response = await apiClient.post('/auth/notifications/application-approval', {
@@ -195,7 +204,9 @@ export const documentApplicationNotificationService = {
         applicationId: applicationId,
         applicationType: applicationDetails?.type || applicationDetails?.applicationType,
         applicationSubtype: applicationDetails?.subtype || applicationDetails?.applicationSubtype,
-        applicantName: applicationDetails?.applicantName || `${applicationDetails?.firstName || ''} ${applicationDetails?.lastName || ''}`.trim()
+        applicantName:
+          applicationDetails?.applicantName ||
+          `${applicationDetails?.firstName || ''} ${applicationDetails?.lastName || ''}`.trim(),
       });
 
       console.log('✅ Approval notification sent successfully');
@@ -204,5 +215,5 @@ export const documentApplicationNotificationService = {
       console.error('❌ Failed to send approval notification:', error);
       return { success: false, error: error.message || 'Failed to send approval notification' };
     }
-  }
+  },
 };

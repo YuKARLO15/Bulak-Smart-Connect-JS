@@ -16,7 +16,9 @@ export const announcementService = {
   // Get recent announcements
   async getRecentAnnouncements(limit = 5) {
     try {
-      const response = await axios.get(`${config.API_BASE_URL}/announcements/recent?limit=${limit}`);
+      const response = await axios.get(
+        `${config.API_BASE_URL}/announcements/recent?limit=${limit}`
+      );
       return response.data;
     } catch (error) {
       console.error('Error fetching recent announcements:', error);
@@ -49,7 +51,10 @@ export const announcementService = {
   // Update announcement
   async updateAnnouncement(id, announcementData) {
     try {
-      const response = await axios.patch(`${config.API_BASE_URL}/announcements/${id}`, announcementData);
+      const response = await axios.patch(
+        `${config.API_BASE_URL}/announcements/${id}`,
+        announcementData
+      );
       return response.data;
     } catch (error) {
       console.error('Error updating announcement:', error);
@@ -66,5 +71,5 @@ export const announcementService = {
       console.error('Error deleting announcement:', error);
       throw error;
     }
-  }
+  },
 };

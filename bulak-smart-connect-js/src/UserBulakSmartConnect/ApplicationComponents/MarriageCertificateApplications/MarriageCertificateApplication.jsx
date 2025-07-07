@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Box, Button, Typography, Alert, CircularProgress, Snackbar,Tooltip } from '@mui/material';
+import { Box, Button, Typography, Alert, CircularProgress, Snackbar, Tooltip } from '@mui/material';
 import FileUpload from '../FileUpload';
 import NavBar from '../../../NavigationComponents/NavSide';
 import './MarriageCertificateApplication.css';
@@ -33,7 +33,7 @@ const GovernmentIdTooltip = ({ children }) => {
     'TIN ID',
     'PhilHealth ID',
     'Pag-IBIG Loyalty Card Plus',
-    'Indigenous Peoples (IP) ID or certification'
+    'Indigenous Peoples (IP) ID or certification',
   ];
 
   return (
@@ -56,29 +56,40 @@ const GovernmentIdTooltip = ({ children }) => {
         '& .MuiTooltip-tooltip': {
           maxWidth: 300,
           backgroundColor: 'rgba(0, 0, 0, 0.9)',
-        }
+        },
       }}
     >
-      <span style={{ 
-        textDecoration: 'underline', 
-        cursor: 'pointer',
-        color: '#1976d2',
-        fontWeight: 'bold'
-      }}>
+      <span
+        style={{
+          textDecoration: 'underline',
+          cursor: 'pointer',
+          color: '#1976d2',
+          fontWeight: 'bold',
+        }}
+      >
         {children}
       </span>
     </Tooltip>
   );
 };
 
-
 const documentDescriptions = {
   'Marriage License': '- Official marriage license issued by the local civil registrar',
-  'Valid ID of Bride': (  <> <GovernmentIdTooltip> Government-issued ID </GovernmentIdTooltip>of the bride </> ),
-  'Valid ID of Groom':(  <> <GovernmentIdTooltip> Government-issued ID </GovernmentIdTooltip>of the groom </> ),
-  'Certificate of Marriage from the Officiant': '- Marriage certificate signed by the wedding officiant (priest, pastor, judge, etc.)',
+  'Valid ID of Bride': (
+    <>
+      {' '}
+      <GovernmentIdTooltip> Government-issued ID </GovernmentIdTooltip>of the bride{' '}
+    </>
+  ),
+  'Valid ID of Groom': (
+    <>
+      {' '}
+      <GovernmentIdTooltip> Government-issued ID </GovernmentIdTooltip>of the groom{' '}
+    </>
+  ),
+  'Certificate of Marriage from the Officiant':
+    '- Marriage certificate signed by the wedding officiant (priest, pastor, judge, etc.)',
 };
-
 
 const dataURLtoFile = (dataurl, filename, mimeType) => {
   if (dataurl instanceof File) return dataurl;
@@ -281,46 +292,46 @@ const MarriageCertificateApplication = () => {
 
   const handleFileUpload = async (label, isUploaded, fileDataObj) => {
     console.log(`File upload for "${label}":`, { isUploaded, fileDataObj });
-    
+
     // Create application if needed before uploading files
     if (!backendApplicationCreated && isUploaded) {
       setIsLoading(true);
       const createdApp = await createBackendApplication();
       setIsLoading(false);
-      
+
       if (!createdApp) {
-        showNotification("Failed to register application. Cannot upload files.", "error");
+        showNotification('Failed to register application. Cannot upload files.', 'error');
         return;
       }
     }
-    
+
     // Update the uploadedFiles state
     setUploadedFiles(prevState => {
       const newState = { ...prevState, [label]: isUploaded };
-      console.log("Updated uploadedFiles:", newState);
+      console.log('Updated uploadedFiles:', newState);
       return newState;
     });
-  
+
     if (isUploaded && fileDataObj) {
       setFileData(prevState => ({
         ...prevState,
         [label]: fileDataObj,
       }));
-  
+
       // Upload to backend
       try {
         const currentAppId = applicationId || localStorage.getItem('currentApplicationId');
         if (!currentAppId) {
-          showNotification("Application ID is missing. Cannot upload file.", "error");
+          showNotification('Application ID is missing. Cannot upload file.', 'error');
           setUploadedFiles(prevState => ({ ...prevState, [label]: false }));
           return;
         }
-        
-        console.log("Application ID:", currentAppId);
-        
+
+        console.log('Application ID:', currentAppId);
+
         // Ensure we handle both single files and multiple files correctly
         let filesToUpload = [];
-        
+
         if (Array.isArray(fileDataObj)) {
           // Multiple files - already an array
           filesToUpload = fileDataObj;
@@ -328,85 +339,94 @@ const MarriageCertificateApplication = () => {
           // Single file - convert to array
           filesToUpload = [fileDataObj];
         } else {
-          console.error("Invalid file data format:", fileDataObj);
-          showNotification("Invalid file data format", "error");
+          console.error('Invalid file data format:', fileDataObj);
+          showNotification('Invalid file data format', 'error');
           setUploadedFiles(prevState => ({ ...prevState, [label]: false }));
           return;
         }
-        
+
         console.log(`Processing ${filesToUpload.length} file(s) for "${label}":`, filesToUpload);
-        
+
         for (const [index, fileData] of filesToUpload.entries()) {
           if (!fileData || !fileData.data || !fileData.name) {
             console.error(`Invalid file data at index ${index}:`, fileData);
             continue;
           }
-          
+
           console.log(`Uploading file ${index + 1}/${filesToUpload.length}:`, {
             name: fileData.name,
             type: fileData.type,
-            size: fileData.data?.length || 0
+            size: fileData.data?.length || 0,
           });
-          
+
           try {
             const file = dataURLtoFile(fileData.data, fileData.name, fileData.type);
             const uploadLabel = filesToUpload.length > 1 ? `${label} - File ${index + 1}` : label;
-            
-            const response = await documentApplicationService.uploadFile(currentAppId, file, uploadLabel);
+
+            const response = await documentApplicationService.uploadFile(
+              currentAppId,
+              file,
+              uploadLabel
+            );
             console.log(`Upload response for ${fileData.name}:`, response);
           } catch (fileError) {
             console.error(`Failed to upload file ${fileData.name}:`, fileError);
             throw fileError;
           }
         }
-        
+
         const fileCount = filesToUpload.length;
-        const successMessage = fileCount > 1 
-          ? `${fileCount} files uploaded successfully for "${label}"!`
-          : `"${label}" uploaded successfully!`;
-        
-        showNotification(successMessage, "success");
-        
+        const successMessage =
+          fileCount > 1
+            ? `${fileCount} files uploaded successfully for "${label}"!`
+            : `"${label}" uploaded successfully!`;
+
+        showNotification(successMessage, 'success');
       } catch (error) {
         console.error(`Failed to upload "${label}":`, error);
-        
+
         if (error.response) {
-          console.error("Server response:", error.response.status, error.response.data);
-          
+          console.error('Server response:', error.response.status, error.response.data);
+
           if (error.response.status === 404) {
-            showNotification("Application not found. Creating new application...", "info");
+            showNotification('Application not found. Creating new application...', 'info');
             const createdApp = await createBackendApplication();
             if (createdApp) {
               try {
                 const filesToUpload = Array.isArray(fileDataObj) ? fileDataObj : [fileDataObj];
-                
+
                 for (const [index, fileData] of filesToUpload.entries()) {
                   if (!fileData || !fileData.data || !fileData.name) continue;
-                  
+
                   const file = dataURLtoFile(fileData.data, fileData.name, fileData.type);
-                  const uploadLabel = filesToUpload.length > 1 ? `${label} - File ${index + 1}` : label;
-                  
+                  const uploadLabel =
+                    filesToUpload.length > 1 ? `${label} - File ${index + 1}` : label;
+
                   await documentApplicationService.uploadFile(createdApp.id, file, uploadLabel);
                 }
-                
+
                 const fileCount = filesToUpload.length;
-                const successMessage = fileCount > 1 
-                  ? `${fileCount} files uploaded successfully for "${label}"!`
-                  : `"${label}" uploaded successfully!`;
-                
-                showNotification(successMessage, "success");
+                const successMessage =
+                  fileCount > 1
+                    ? `${fileCount} files uploaded successfully for "${label}"!`
+                    : `"${label}" uploaded successfully!`;
+
+                showNotification(successMessage, 'success');
                 return;
               } catch (retryError) {
-                console.error("Retry upload failed:", retryError);
+                console.error('Retry upload failed:', retryError);
               }
             }
           }
-          
-          showNotification(`Failed to upload "${label}": ${error.response.data?.message || error.message}`, "error");
+
+          showNotification(
+            `Failed to upload "${label}": ${error.response.data?.message || error.message}`,
+            'error'
+          );
         } else {
-          showNotification(`Failed to upload "${label}": ${error.message}`, "error");
+          showNotification(`Failed to upload "${label}": ${error.message}`, 'error');
         }
-        
+
         // Reset upload state on error
         setUploadedFiles(prevState => ({
           ...prevState,
@@ -507,36 +527,48 @@ const MarriageCertificateApplication = () => {
       if (userEmail) {
         try {
           console.log('📧 Sending application confirmation notification to:', userEmail);
-          const husbandName = completeFormData.husbandFirstName && completeFormData.husbandLastName 
-            ? `${completeFormData.husbandFirstName} ${completeFormData.husbandLastName}` 
-            : 'Husband';
-          const wifeName = completeFormData.wifeFirstName && completeFormData.wifeLastName 
-            ? `${completeFormData.wifeFirstName} ${completeFormData.wifeLastName}` 
-            : 'Wife';
+          const husbandName =
+            completeFormData.husbandFirstName && completeFormData.husbandLastName
+              ? `${completeFormData.husbandFirstName} ${completeFormData.husbandLastName}`
+              : 'Husband';
+          const wifeName =
+            completeFormData.wifeFirstName && completeFormData.wifeLastName
+              ? `${completeFormData.wifeFirstName} ${completeFormData.wifeLastName}`
+              : 'Wife';
           const applicantName = `${husbandName} & ${wifeName}`;
 
-          const notificationResult = await documentApplicationNotificationService.sendApplicationConfirmation(
-            userEmail,
-            effectiveAppId,
-            {
-              type: 'Marriage Certificate',
-              subtype: 'Marriage Certificate Application',
-              applicantName: applicantName,
-              submissionDate: new Date().toLocaleDateString(),
-              status: 'Pending'
-            }
-          );
+          const notificationResult =
+            await documentApplicationNotificationService.sendApplicationConfirmation(
+              userEmail,
+              effectiveAppId,
+              {
+                type: 'Marriage Certificate',
+                subtype: 'Marriage Certificate Application',
+                applicantName: applicantName,
+                submissionDate: new Date().toLocaleDateString(),
+                status: 'Pending',
+              }
+            );
 
           if (notificationResult.success) {
             console.log('✅ Confirmation notification sent successfully');
-            showNotification('Application submitted successfully! A confirmation email has been sent to you.', 'success');
+            showNotification(
+              'Application submitted successfully! A confirmation email has been sent to you.',
+              'success'
+            );
           } else {
             console.log('⚠️ Confirmation notification failed:', notificationResult.error);
-            showNotification('Application submitted successfully! However, we could not send the confirmation email.', 'warning');
+            showNotification(
+              'Application submitted successfully! However, we could not send the confirmation email.',
+              'warning'
+            );
           }
         } catch (notificationError) {
           console.error('❌ Error sending confirmation notification:', notificationError);
-          showNotification('Application submitted successfully! However, we could not send the confirmation email.', 'warning');
+          showNotification(
+            'Application submitted successfully! However, we could not send the confirmation email.',
+            'warning'
+          );
         }
       } else {
         console.log('⚠️ No email available for notifications');
@@ -560,96 +592,98 @@ const MarriageCertificateApplication = () => {
     }
   };
 
- const handleBack = () => {
-  const modifyApplicationState = {
-    applicationId: applicationId,
-    isEditing: true,
-    editingApplicationId: applicationId,
-    
-    formData: {
-      ...formData,
-      uploadedFiles: uploadedFiles,
-      fileData: fileData,
-      lastModified: new Date().toISOString()
-    },
-    
-    uploadedFiles: uploadedFiles,
-    fileData: fileData,
-    
-    modifyMode: true,
-    preserveData: true,
-    backFromMarriageCertificate: true,
-    applicationType: 'Marriage Certificate Application'
-  };
+  const handleBack = () => {
+    const modifyApplicationState = {
+      applicationId: applicationId,
+      isEditing: true,
+      editingApplicationId: applicationId,
 
-  try {
-    const originalFormData = JSON.parse(localStorage.getItem('marriageFormData') || '{}');
-    
-    const updatedFormData = {
-      ...originalFormData,
-      marriageCertificate: {
+      formData: {
+        ...formData,
         uploadedFiles: uploadedFiles,
         fileData: fileData,
-        lastModified: new Date().toISOString()
-      }
-    };
-    
-    localStorage.setItem('marriageFormData', JSON.stringify(updatedFormData));
-    
-    localStorage.setItem('isEditingMarriageForm', 'true');
-    localStorage.setItem('currentEditingApplicationId', applicationId);
-    localStorage.setItem('currentApplicationId', applicationId);
-    localStorage.setItem('marriageApplicationId', applicationId);
-    
-    localStorage.setItem('modifyingApplication', JSON.stringify({
-      id: applicationId,
-      type: 'Marriage Certificate',
-      subtype: 'Marriage Certificate Application',
-      uploadedFiles: uploadedFiles,
-      timestamp: new Date().toISOString()
-    }));
+        lastModified: new Date().toISOString(),
+      },
 
-    const applications = JSON.parse(localStorage.getItem('applications') || '[]');
-    const appIndex = applications.findIndex(app => app.id === applicationId);
-    
-    if (appIndex >= 0) {
-      applications[appIndex] = {
-        ...applications[appIndex],
-        formData: updatedFormData,
+      uploadedFiles: uploadedFiles,
+      fileData: fileData,
+
+      modifyMode: true,
+      preserveData: true,
+      backFromMarriageCertificate: true,
+      applicationType: 'Marriage Certificate Application',
+    };
+
+    try {
+      const originalFormData = JSON.parse(localStorage.getItem('marriageFormData') || '{}');
+
+      const updatedFormData = {
+        ...originalFormData,
         marriageCertificate: {
           uploadedFiles: uploadedFiles,
-          fileData: fileData
+          fileData: fileData,
+          lastModified: new Date().toISOString(),
         },
-        status: applications[appIndex].status || 'In Progress',
-        lastModified: new Date().toISOString(),
-        isBeingModified: true
       };
-      
-      localStorage.setItem('applications', JSON.stringify(applications));
+
+      localStorage.setItem('marriageFormData', JSON.stringify(updatedFormData));
+
+      localStorage.setItem('isEditingMarriageForm', 'true');
+      localStorage.setItem('currentEditingApplicationId', applicationId);
+      localStorage.setItem('currentApplicationId', applicationId);
+      localStorage.setItem('marriageApplicationId', applicationId);
+
+      localStorage.setItem(
+        'modifyingApplication',
+        JSON.stringify({
+          id: applicationId,
+          type: 'Marriage Certificate',
+          subtype: 'Marriage Certificate Application',
+          uploadedFiles: uploadedFiles,
+          timestamp: new Date().toISOString(),
+        })
+      );
+
+      const applications = JSON.parse(localStorage.getItem('applications') || '[]');
+      const appIndex = applications.findIndex(app => app.id === applicationId);
+
+      if (appIndex >= 0) {
+        applications[appIndex] = {
+          ...applications[appIndex],
+          formData: updatedFormData,
+          marriageCertificate: {
+            uploadedFiles: uploadedFiles,
+            fileData: fileData,
+          },
+          status: applications[appIndex].status || 'In Progress',
+          lastModified: new Date().toISOString(),
+          isBeingModified: true,
+        };
+
+        localStorage.setItem('applications', JSON.stringify(applications));
+      }
+
+      navigate('/MarriageForm', {
+        state: {
+          ...modifyApplicationState,
+          preserveOriginalData: true,
+        },
+        replace: false,
+      });
+    } catch (error) {
+      console.error('Error saving modify state:', error);
+      showNotification('Error saving current state. Some data may be lost.', 'warning');
+
+      navigate('/MarriageForm', {
+        state: {
+          applicationId: applicationId,
+          isEditing: true,
+          editingApplicationId: applicationId,
+          formData: formData,
+        },
+      });
     }
-    
-    navigate('/MarriageForm', { 
-      state: {
-        ...modifyApplicationState,
-        preserveOriginalData: true
-      },
-      replace: false
-    });
-    
-  } catch (error) {
-    console.error('Error saving modify state:', error);
-    showNotification('Error saving current state. Some data may be lost.', 'warning');
-    
-    navigate('/MarriageForm', { 
-      state: { 
-        applicationId: applicationId,
-        isEditing: true,
-        editingApplicationId: applicationId,
-        formData: formData
-      } 
-    });
-  }
-};
+  };
   const navigateToNextStep = (nextStep, currentFormData) => {
     const existingData = JSON.parse(localStorage.getItem('marriageFormData') || '{}');
     const mergedData = {

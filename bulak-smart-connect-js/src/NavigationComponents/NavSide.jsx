@@ -3,7 +3,6 @@ import './NavSide.css';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
-
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
 import DashboardIcon from '@mui/icons-material/Dashboard';
@@ -26,35 +25,34 @@ const NavBar = ({ isSidebarOpen, setIsSidebarOpen }) => {
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
-  
+
   const getRoute = (regularRoute, adminRoute) => {
-    return (hasRole('staff') || hasRole('admin') || hasRole('super_admin')) ? adminRoute : regularRoute;
+    return hasRole('staff') || hasRole('admin') || hasRole('super_admin')
+      ? adminRoute
+      : regularRoute;
   };
 
   // Check if the current path matches the link
-  const isActive = (path) => {
+  const isActive = path => {
     return location.pathname === path;
   };
 
   // Function to get display role name
   const getDisplayRole = () => {
     const roleLabels = {
-      'super_admin': 'Admin',
-      'admin': 'Manager',
-      'staff': 'Staff',
-      'citizen': 'Citizen'
+      super_admin: 'Admin',
+      admin: 'Manager',
+      staff: 'Staff',
+      citizen: 'Citizen',
     };
-    
+
     const userRole = user?.roles?.[0] || user?.defaultRole || 'citizen';
     return roleLabels[userRole] || userRole;
   };
 
   return (
     <>
-      <button
-        className={`SidebarToggleBtn ${isSidebarOpen ? 'open' : ''}`}
-        onClick={toggleSidebar}
-      >
+      <button className={`SidebarToggleBtn ${isSidebarOpen ? 'open' : ''}`} onClick={toggleSidebar}>
         {isSidebarOpen ? <CloseIcon /> : <MenuIcon />}
       </button>
 
@@ -65,7 +63,7 @@ const NavBar = ({ isSidebarOpen, setIsSidebarOpen }) => {
             <div className="NavUserEmail">{user?.email || 'user@email.com'}</div>
             <div className="NavUserRole">{getDisplayRole()}</div>
           </div>
-    
+
           <div className="NavigationButtons">
             {/* Dashboard */}
             {/* <Link 
@@ -74,34 +72,38 @@ const NavBar = ({ isSidebarOpen, setIsSidebarOpen }) => {
             >
               <DashboardIcon /> Dashboard
             </Link> */}
-            
+
             {/* Home */}
-            <Link 
-              to={getRoute('/Home', '/AdminHome')} 
+            <Link
+              to={getRoute('/Home', '/AdminHome')}
               className={isActive(getRoute('/Home', '/AdminHome')) ? 'active' : ''}
             >
               <HomeIcon /> Home
             </Link>
-            
+
             {/* Appointments */}
-            <Link 
-              to={getRoute('/AppointmentForm', '/AdminAppointmentDashboard')} 
-              className={isActive(getRoute('/AppointmentForm', '/AdminAppointmentDashboard')) ? 'active' : ''}
+            <Link
+              to={getRoute('/AppointmentForm', '/AdminAppointmentDashboard')}
+              className={
+                isActive(getRoute('/AppointmentForm', '/AdminAppointmentDashboard')) ? 'active' : ''
+              }
             >
               <EventNoteIcon /> Appointments
             </Link>
-            
+
             {/* Document Applications */}
-            <Link 
-              to={getRoute('/ApplicationForm', '/ApplicationAdmin')} 
-              className={isActive(getRoute('/ApplicationForm', '/ApplicationAdmin')) ? 'active' : ''}
+            <Link
+              to={getRoute('/ApplicationForm', '/ApplicationAdmin')}
+              className={
+                isActive(getRoute('/ApplicationForm', '/ApplicationAdmin')) ? 'active' : ''
+              }
             >
               <DescriptionIcon /> Document Application
             </Link>
-            
+
             {/* Smart Walk-In */}
-            <Link 
-              to={getRoute('/WalkInQueue', '/AdminWalkInQueue')} 
+            <Link
+              to={getRoute('/WalkInQueue', '/AdminWalkInQueue')}
               className={isActive(getRoute('/WalkInQueue', '/AdminWalkInQueue')) ? 'active' : ''}
             >
               <DirectionsWalkIcon /> Smart Walk-In
@@ -109,8 +111,8 @@ const NavBar = ({ isSidebarOpen, setIsSidebarOpen }) => {
 
             {/* Staff+ links */}
             {(hasRole('staff') || hasRole('admin') || hasRole('super_admin')) && (
-              <Link 
-                to="/applicationAdmin" 
+              <Link
+                to="/applicationAdmin"
                 className={isActive('/applicationAdmin') ? 'active' : ''}
               >
                 <AdminPanelSettingsIcon /> Application Admin
@@ -120,9 +122,9 @@ const NavBar = ({ isSidebarOpen, setIsSidebarOpen }) => {
             {/* Admin+ links */}
             {(hasRole('admin') || hasRole('super_admin')) && (
               <>
-               {/* Admin Announcements */}
-                <Link 
-                  to="/AdminAnnouncement" 
+                {/* Admin Announcements */}
+                <Link
+                  to="/AdminAnnouncement"
                   className={isActive('/AdminAnnouncement') ? 'active' : ''}
                 >
                   <CampaignIcon /> Announcements
@@ -134,13 +136,13 @@ const NavBar = ({ isSidebarOpen, setIsSidebarOpen }) => {
             {hasRole('super_admin') && (
               <>
                 {/* User Management - Super Admin Only */}
-                <Link 
-                  to="/AdminAccountManagement" 
+                <Link
+                  to="/AdminAccountManagement"
                   className={isActive('/AdminAccountManagement') ? 'active' : ''}
                 >
                   <ManageAccountsIcon /> User Management
                 </Link>
-{/*                 
+                {/*                 
                 <Link 
                   to="/system-settings" 
                   className={isActive('/system-settings') ? 'active' : ''}
@@ -151,13 +153,13 @@ const NavBar = ({ isSidebarOpen, setIsSidebarOpen }) => {
             )}
 
             {/* Account */}
-            <Link 
-              to={getRoute('/UserAccount', '/AdminAccount')} 
+            <Link
+              to={getRoute('/UserAccount', '/AdminAccount')}
               className={isActive(getRoute('/account', '/AdminAccount')) ? 'active' : ''}
             >
               <AccountCircleIcon /> Account
             </Link>
-            
+
             {/* Settings */}
             {/* <Link 
               to="/settings" 
@@ -166,7 +168,7 @@ const NavBar = ({ isSidebarOpen, setIsSidebarOpen }) => {
               <SettingsIcon /> Settings
             </Link> */}
           </div>
-          
+
           <div className="Logout">
             <Link to="/" onClick={logout}>
               <LogoutIcon /> Log Out

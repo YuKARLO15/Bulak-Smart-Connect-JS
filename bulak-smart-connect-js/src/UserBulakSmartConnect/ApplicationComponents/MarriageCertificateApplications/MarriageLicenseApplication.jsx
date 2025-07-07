@@ -13,7 +13,7 @@ import {
   CircularProgress,
   Snackbar,
   Container,
-  Tooltip
+  Tooltip,
 } from '@mui/material';
 import NavBar from '../../../NavigationComponents/NavSide';
 import FileUpload from '../FileUpload';
@@ -27,14 +27,9 @@ const mandatoryDocumentsHusband = [
   'Cenomar (PSA) (Groom)',
 ];
 
-const mandatoryDocumentsWife = [
-  'Birth / Baptismal Certificate (Bride)',
-  'Cenomar (PSA) (Bride)',
-];
+const mandatoryDocumentsWife = ['Birth / Baptismal Certificate (Bride)', 'Cenomar (PSA) (Bride)'];
 
-const sharedMandatoryDocuments = [
-  'Seminar Certificate (CSDW)'
-];
+const sharedMandatoryDocuments = ['Seminar Certificate (CSDW)'];
 
 const GovernmentIdTooltip = ({ children }) => {
   const acceptedIds = [
@@ -54,7 +49,7 @@ const GovernmentIdTooltip = ({ children }) => {
     'TIN ID',
     'PhilHealth ID',
     'Pag-IBIG Loyalty Card Plus',
-    'Indigenous Peoples (IP) ID or certification'
+    'Indigenous Peoples (IP) ID or certification',
   ];
 
   return (
@@ -77,15 +72,17 @@ const GovernmentIdTooltip = ({ children }) => {
         '& .MuiTooltip-tooltip': {
           maxWidth: 300,
           backgroundColor: 'rgba(0, 0, 0, 0.9)',
-        }
+        },
       }}
     >
-      <span style={{ 
-        textDecoration: 'underline', 
-        cursor: 'pointer',
-        color: '#1976d2',
-        fontWeight: 'bold'
-      }}>
+      <span
+        style={{
+          textDecoration: 'underline',
+          cursor: 'pointer',
+          color: '#1976d2',
+          fontWeight: 'bold',
+        }}
+      >
         {children}
       </span>
     </Tooltip>
@@ -93,34 +90,40 @@ const GovernmentIdTooltip = ({ children }) => {
 };
 
 const documentDescriptions = {
-  'Birth / Baptismal Certificate (Husband)': '- Official birth certificate or baptismal certificate of the groom',
+  'Birth / Baptismal Certificate (Husband)':
+    '- Official birth certificate or baptismal certificate of the groom',
   'Cenomar (PSA) (Husband)': '- Certificate of No Marriage (CENOMAR) from PSA for the groom',
-  'Birth / Baptismal Certificate (Wife)': '- Official birth certificate or baptismal certificate of the bride',
+  'Birth / Baptismal Certificate (Wife)':
+    '- Official birth certificate or baptismal certificate of the bride',
   'Cenomar (PSA) (Wife)': '- Certificate of No Marriage (CENOMAR) from PSA for the bride',
-  'Seminar Certificate (CSDW)': '- Certificate of attendance from the Canonical and Secular Dimensions of the Wedding seminar',
-  'Legal Capacity from their embassy (Manila)': '- Legal capacity to contract marriage certificate issued by the foreign national\'s embassy in Manila',
-  'Decree of Divorce from court (if applicable)': '- Court decree of divorce from the foreign national\'s country (if previously married) ( Upload multiple files if applicable)',
-  'Registered Death Certificate of Previous Spouse': '- Official death certificate of the deceased spouse registered with the civil registry ( Upload multiple files if applicable)',
-  'CEMAR / CENOMAR from NSO (PSA)': '- Certificate of Marriage (CEMAR) or Certificate of No Marriage (CENOMAR) from PSA ',
-  'Decree of Annulment from Court with FINALITY': '- Final court decree of annulment with certificate of finality ( Upload multiple files if applicable)',
+  'Seminar Certificate (CSDW)':
+    '- Certificate of attendance from the Canonical and Secular Dimensions of the Wedding seminar',
+  'Legal Capacity from their embassy (Manila)':
+    "- Legal capacity to contract marriage certificate issued by the foreign national's embassy in Manila",
+  'Decree of Divorce from court (if applicable)':
+    "- Court decree of divorce from the foreign national's country (if previously married) ( Upload multiple files if applicable)",
+  'Registered Death Certificate of Previous Spouse':
+    '- Official death certificate of the deceased spouse registered with the civil registry ( Upload multiple files if applicable)',
+  'CEMAR / CENOMAR from NSO (PSA)':
+    '- Certificate of Marriage (CEMAR) or Certificate of No Marriage (CENOMAR) from PSA ',
+  'Decree of Annulment from Court with FINALITY':
+    '- Final court decree of annulment with certificate of finality ( Upload multiple files if applicable)',
 };
 
 const MarriageLicenseApplication = () => {
-const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-const [foreignNational, setForeignNational] = useState(false);
-const [widowWidower, setWidowWidower] = useState(false);
-const [annulled, setAnnulled] = useState(false);
-const [uploadedFiles, setUploadedFiles] = useState({});
-const [fileData, setFileData] = useState({});
-const [isSubmitted, setIsSubmitted] = useState(false);
-const [formData, setFormData] = useState({});
-const [isLoading, setIsLoading] = useState(false);
-const [applicationId, setApplicationId] = useState(null);
-const [backendApplicationCreated, setBackendApplicationCreated] = useState(false);
-const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'info' });
-const { user } = useAuth();
-
-
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [foreignNational, setForeignNational] = useState(false);
+  const [widowWidower, setWidowWidower] = useState(false);
+  const [annulled, setAnnulled] = useState(false);
+  const [uploadedFiles, setUploadedFiles] = useState({});
+  const [fileData, setFileData] = useState({});
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [formData, setFormData] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
+  const [applicationId, setApplicationId] = useState(null);
+  const [backendApplicationCreated, setBackendApplicationCreated] = useState(false);
+  const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'info' });
+  const { user } = useAuth();
 
   // New checkbox states for individual applicants
   const [foreignNationalGroom, setForeignNationalGroom] = useState(false);
@@ -272,7 +275,7 @@ const { user } = useAuth();
 
               if (backendApp.formData) {
                 setFormData(backendApp.formData);
-                
+
                 // Restore checkbox states from backend data
                 if (backendApp.formData.foreignNationalGroom !== undefined) {
                   setForeignNationalGroom(backendApp.formData.foreignNationalGroom);
@@ -365,156 +368,165 @@ const { user } = useAuth();
       throw new Error('Invalid file format');
     }
   }
-  
-const handleFileUpload = async (label, isUploaded, fileDataObj) => {
-  console.log(`File upload for "${label}":`, { isUploaded, fileDataObj });
-  
-  // Create application if needed before uploading files
-  if (!backendApplicationCreated && isUploaded) {
-    setIsLoading(true);
-    const createdApp = await createBackendApplication();
-    setIsLoading(false);
-    
-    if (!createdApp) {
-      showNotification("Failed to register application. Cannot upload files.", "error");
-      return;
-    }
-  }
-  
-  // Update the uploadedFiles state
-  setUploadedFiles(prevState => {
-    const newState = { ...prevState, [label]: isUploaded };
-    console.log("Updated uploadedFiles:", newState);
-    return newState;
-  });
 
-  if (isUploaded && fileDataObj) {
-    setFileData(prevState => ({
-      ...prevState,
-      [label]: fileDataObj,
-    }));
+  const handleFileUpload = async (label, isUploaded, fileDataObj) => {
+    console.log(`File upload for "${label}":`, { isUploaded, fileDataObj });
 
-    // Upload to backend
-    try {
-      const currentAppId = applicationId || localStorage.getItem('currentApplicationId');
-      if (!currentAppId) {
-        showNotification("Application ID is missing. Cannot upload file.", "error");
-        setUploadedFiles(prevState => ({ ...prevState, [label]: false }));
+    // Create application if needed before uploading files
+    if (!backendApplicationCreated && isUploaded) {
+      setIsLoading(true);
+      const createdApp = await createBackendApplication();
+      setIsLoading(false);
+
+      if (!createdApp) {
+        showNotification('Failed to register application. Cannot upload files.', 'error');
         return;
       }
-      
-      console.log("Application ID:", currentAppId);
-      
-      // Ensure we handle both single files and multiple files correctly
-      let filesToUpload = [];
-      
-      if (Array.isArray(fileDataObj)) {
-        // Multiple files - already an array
-        filesToUpload = fileDataObj;
-      } else if (fileDataObj && typeof fileDataObj === 'object') {
-        // Single file - convert to array
-        filesToUpload = [fileDataObj];
-      } else {
-        console.error("Invalid file data format:", fileDataObj);
-        showNotification("Invalid file data format", "error");
-        setUploadedFiles(prevState => ({ ...prevState, [label]: false }));
-        return;
-      }
-      
-      console.log(`Processing ${filesToUpload.length} file(s) for "${label}":`, filesToUpload);
-      
-      for (const [index, fileData] of filesToUpload.entries()) {
-        if (!fileData || !fileData.data || !fileData.name) {
-          console.error(`Invalid file data at index ${index}:`, fileData);
-          continue;
-        }
-        
-        console.log(`Uploading file ${index + 1}/${filesToUpload.length}:`, {
-          name: fileData.name,
-          type: fileData.type,
-          size: fileData.data?.length || 0
-        });
-        
-        try {
-          const file = dataURLtoFile(fileData.data, fileData.name, fileData.type);
-          const uploadLabel = filesToUpload.length > 1 ? `${label} - File ${index + 1}` : label;
-          
-          const response = await documentApplicationService.uploadFile(currentAppId, file, uploadLabel);
-          console.log(`Upload response for ${fileData.name}:`, response);
-        } catch (fileError) {
-          console.error(`Failed to upload file ${fileData.name}:`, fileError);
-          throw fileError;
-        }
-      }
-      
-      const fileCount = filesToUpload.length;
-      const successMessage = fileCount > 1 
-        ? `${fileCount} files uploaded successfully for "${label}"!`
-        : `"${label}" uploaded successfully!`;
-      
-      showNotification(successMessage, "success");
-      
-    } catch (error) {
-      console.error(`Failed to upload "${label}":`, error);
-      
-      if (error.response) {
-        console.error("Server response:", error.response.status, error.response.data);
-        
-        if (error.response.status === 404) {
-          showNotification("Application not found. Creating new application...", "info");
-          const createdApp = await createBackendApplication();
-          if (createdApp) {
-            try {
-              const filesToUpload = Array.isArray(fileDataObj) ? fileDataObj : [fileDataObj];
-              
-              for (const [index, fileData] of filesToUpload.entries()) {
-                if (!fileData || !fileData.data || !fileData.name) continue;
-                
-                const file = dataURLtoFile(fileData.data, fileData.name, fileData.type);
-                const uploadLabel = filesToUpload.length > 1 ? `${label} - File ${index + 1}` : label;
-                
-                await documentApplicationService.uploadFile(createdApp.id, file, uploadLabel);
-              }
-              
-              const fileCount = filesToUpload.length;
-              const successMessage = fileCount > 1 
-                ? `${fileCount} files uploaded successfully for "${label}"!`
-                : `"${label}" uploaded successfully!`;
-              
-              showNotification(successMessage, "success");
-              return;
-            } catch (retryError) {
-              console.error("Retry upload failed:", retryError);
-            }
-          }
-        }
-        
-        showNotification(`Failed to upload "${label}": ${error.response.data?.message || error.message}`, "error");
-      } else {
-        showNotification(`Failed to upload "${label}": ${error.message}`, "error");
-      }
-      
-      // Reset upload state on error
-      setUploadedFiles(prevState => ({
-        ...prevState,
-        [label]: false,
-      }));
     }
-  } else {
-    // Remove file data when upload is cancelled
-    setFileData(prevState => {
-      const newState = { ...prevState };
-      delete newState[label];
+
+    // Update the uploadedFiles state
+    setUploadedFiles(prevState => {
+      const newState = { ...prevState, [label]: isUploaded };
+      console.log('Updated uploadedFiles:', newState);
       return newState;
     });
-  }
-};
+
+    if (isUploaded && fileDataObj) {
+      setFileData(prevState => ({
+        ...prevState,
+        [label]: fileDataObj,
+      }));
+
+      // Upload to backend
+      try {
+        const currentAppId = applicationId || localStorage.getItem('currentApplicationId');
+        if (!currentAppId) {
+          showNotification('Application ID is missing. Cannot upload file.', 'error');
+          setUploadedFiles(prevState => ({ ...prevState, [label]: false }));
+          return;
+        }
+
+        console.log('Application ID:', currentAppId);
+
+        // Ensure we handle both single files and multiple files correctly
+        let filesToUpload = [];
+
+        if (Array.isArray(fileDataObj)) {
+          // Multiple files - already an array
+          filesToUpload = fileDataObj;
+        } else if (fileDataObj && typeof fileDataObj === 'object') {
+          // Single file - convert to array
+          filesToUpload = [fileDataObj];
+        } else {
+          console.error('Invalid file data format:', fileDataObj);
+          showNotification('Invalid file data format', 'error');
+          setUploadedFiles(prevState => ({ ...prevState, [label]: false }));
+          return;
+        }
+
+        console.log(`Processing ${filesToUpload.length} file(s) for "${label}":`, filesToUpload);
+
+        for (const [index, fileData] of filesToUpload.entries()) {
+          if (!fileData || !fileData.data || !fileData.name) {
+            console.error(`Invalid file data at index ${index}:`, fileData);
+            continue;
+          }
+
+          console.log(`Uploading file ${index + 1}/${filesToUpload.length}:`, {
+            name: fileData.name,
+            type: fileData.type,
+            size: fileData.data?.length || 0,
+          });
+
+          try {
+            const file = dataURLtoFile(fileData.data, fileData.name, fileData.type);
+            const uploadLabel = filesToUpload.length > 1 ? `${label} - File ${index + 1}` : label;
+
+            const response = await documentApplicationService.uploadFile(
+              currentAppId,
+              file,
+              uploadLabel
+            );
+            console.log(`Upload response for ${fileData.name}:`, response);
+          } catch (fileError) {
+            console.error(`Failed to upload file ${fileData.name}:`, fileError);
+            throw fileError;
+          }
+        }
+
+        const fileCount = filesToUpload.length;
+        const successMessage =
+          fileCount > 1
+            ? `${fileCount} files uploaded successfully for "${label}"!`
+            : `"${label}" uploaded successfully!`;
+
+        showNotification(successMessage, 'success');
+      } catch (error) {
+        console.error(`Failed to upload "${label}":`, error);
+
+        if (error.response) {
+          console.error('Server response:', error.response.status, error.response.data);
+
+          if (error.response.status === 404) {
+            showNotification('Application not found. Creating new application...', 'info');
+            const createdApp = await createBackendApplication();
+            if (createdApp) {
+              try {
+                const filesToUpload = Array.isArray(fileDataObj) ? fileDataObj : [fileDataObj];
+
+                for (const [index, fileData] of filesToUpload.entries()) {
+                  if (!fileData || !fileData.data || !fileData.name) continue;
+
+                  const file = dataURLtoFile(fileData.data, fileData.name, fileData.type);
+                  const uploadLabel =
+                    filesToUpload.length > 1 ? `${label} - File ${index + 1}` : label;
+
+                  await documentApplicationService.uploadFile(createdApp.id, file, uploadLabel);
+                }
+
+                const fileCount = filesToUpload.length;
+                const successMessage =
+                  fileCount > 1
+                    ? `${fileCount} files uploaded successfully for "${label}"!`
+                    : `"${label}" uploaded successfully!`;
+
+                showNotification(successMessage, 'success');
+                return;
+              } catch (retryError) {
+                console.error('Retry upload failed:', retryError);
+              }
+            }
+          }
+
+          showNotification(
+            `Failed to upload "${label}": ${error.response.data?.message || error.message}`,
+            'error'
+          );
+        } else {
+          showNotification(`Failed to upload "${label}": ${error.message}`, 'error');
+        }
+
+        // Reset upload state on error
+        setUploadedFiles(prevState => ({
+          ...prevState,
+          [label]: false,
+        }));
+      }
+    } else {
+      // Remove file data when upload is cancelled
+      setFileData(prevState => {
+        const newState = { ...prevState };
+        delete newState[label];
+        return newState;
+      });
+    }
+  };
   const isMandatoryComplete = [
     ...mandatoryDocumentsHusband,
     ...mandatoryDocumentsWife,
     ...sharedMandatoryDocuments,
   ].every(doc => uploadedFiles[doc]);
-  
+
   // Updated form completion logic for checkboxes
   const isFormComplete =
     isMandatoryComplete &&
@@ -592,36 +604,48 @@ const handleFileUpload = async (label, isUploaded, fileDataObj) => {
       if (userEmail) {
         try {
           console.log('📧 Sending application confirmation notification to:', userEmail);
-          const groomName = completeFormData.groomFirstName && completeFormData.groomLastName 
-            ? `${completeFormData.groomFirstName} ${completeFormData.groomLastName}` 
-            : 'Groom';
-          const brideName = completeFormData.brideFirstName && completeFormData.brideLastName 
-            ? `${completeFormData.brideFirstName} ${completeFormData.brideLastName}` 
-            : 'Bride';
+          const groomName =
+            completeFormData.groomFirstName && completeFormData.groomLastName
+              ? `${completeFormData.groomFirstName} ${completeFormData.groomLastName}`
+              : 'Groom';
+          const brideName =
+            completeFormData.brideFirstName && completeFormData.brideLastName
+              ? `${completeFormData.brideFirstName} ${completeFormData.brideLastName}`
+              : 'Bride';
           const applicantName = `${groomName} & ${brideName}`;
 
-          const notificationResult = await documentApplicationNotificationService.sendApplicationConfirmation(
-            userEmail,
-            effectiveAppId,
-            {
-              type: 'Marriage License',
-              subtype: 'Marriage License Application',
-              applicantName: applicantName,
-              submissionDate: new Date().toLocaleDateString(),
-              status: 'Pending'
-            }
-          );
+          const notificationResult =
+            await documentApplicationNotificationService.sendApplicationConfirmation(
+              userEmail,
+              effectiveAppId,
+              {
+                type: 'Marriage License',
+                subtype: 'Marriage License Application',
+                applicantName: applicantName,
+                submissionDate: new Date().toLocaleDateString(),
+                status: 'Pending',
+              }
+            );
 
           if (notificationResult.success) {
             console.log('✅ Confirmation notification sent successfully');
-            showNotification('Application submitted successfully! A confirmation email has been sent to you.', 'success');
+            showNotification(
+              'Application submitted successfully! A confirmation email has been sent to you.',
+              'success'
+            );
           } else {
             console.log('⚠️ Confirmation notification failed:', notificationResult.error);
-            showNotification('Application submitted successfully! However, we could not send the confirmation email.', 'warning');
+            showNotification(
+              'Application submitted successfully! However, we could not send the confirmation email.',
+              'warning'
+            );
           }
         } catch (notificationError) {
           console.error('❌ Error sending confirmation notification:', notificationError);
-          showNotification('Application submitted successfully! However, we could not send the confirmation email.', 'warning');
+          showNotification(
+            'Application submitted successfully! However, we could not send the confirmation email.',
+            'warning'
+          );
         }
       } else {
         console.log('⚠️ No email available for notifications');
@@ -650,48 +674,50 @@ const handleFileUpload = async (label, isUploaded, fileDataObj) => {
       <Typography variant="h5" className="TitleMarriageLicense">
         MARRIAGE CERTIFICATE APPLICATION
       </Typography>
-    
 
       <Box className="MandatoryDocumentsMarriageLicense">
-      {applicationId && (
-        <Typography variant="body2" className="ApplicationIdMarriageLicense">
-          Application ID: {applicationId}
+        {applicationId && (
+          <Typography variant="body2" className="ApplicationIdMarriageLicense">
+            Application ID: {applicationId}
+          </Typography>
+        )}
+        <Typography variant="body1" className="SectionTitleMarriageLicense">
+          {' '}
+          Select if applicable{' '}
         </Typography>
-      )}
-<Typography variant="body1" className="SectionTitleMarriageLicense"> Select if applicable </Typography>
 
-      <Box className="ApplicantTypeSectionMarriageLicense">
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={foreignNational}
-              onChange={() => setForeignNational(!foreignNational)}
-              disabled={isLoading}
-            />
-          }
-          label="Foreign National"
-        />
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={widowWidower}
-              onChange={() => setWidowWidower(!widowWidower)}
-              disabled={isLoading}
-            />
-          }
-          label="Widow / Widower"
-        />
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={annulled}
-              onChange={() => setAnnulled(!annulled)}
-              disabled={isLoading}
-            />
-          }
-          label="Annulled"
-        />
-      </Box>
+        <Box className="ApplicantTypeSectionMarriageLicense">
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={foreignNational}
+                onChange={() => setForeignNational(!foreignNational)}
+                disabled={isLoading}
+              />
+            }
+            label="Foreign National"
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={widowWidower}
+                onChange={() => setWidowWidower(!widowWidower)}
+                disabled={isLoading}
+              />
+            }
+            label="Widow / Widower"
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={annulled}
+                onChange={() => setAnnulled(!annulled)}
+                disabled={isLoading}
+              />
+            }
+            label="Annulled"
+          />
+        </Box>
         <Typography variant="body1" className="SectionTitleMarriageLicense">
           Mandatory Documents:
         </Typography>
@@ -703,7 +729,7 @@ const handleFileUpload = async (label, isUploaded, fileDataObj) => {
             </Typography>
           </Box>
         )}
-        
+
         <Typography variant="h6" sx={{ mt: 2, mb: 1, color: '#184a5b' }}>
           Groom's Documents:
         </Typography>
@@ -742,9 +768,7 @@ const handleFileUpload = async (label, isUploaded, fileDataObj) => {
             key={`shared-${index}`}
             label={doc}
             description={documentDescriptions[doc]}
-          onUpload={(isUploaded, fileDataObj) =>
-        handleFileUpload(doc, isUploaded, fileDataObj)
-      }
+            onUpload={(isUploaded, fileDataObj) => handleFileUpload(doc, isUploaded, fileDataObj)}
             required={true}
             disabled={isLoading}
             multiple={true}
@@ -764,7 +788,7 @@ const handleFileUpload = async (label, isUploaded, fileDataObj) => {
               control={
                 <Checkbox
                   checked={foreignNationalGroom}
-                  onChange={(e) => setForeignNationalGroom(e.target.checked)}
+                  onChange={e => setForeignNationalGroom(e.target.checked)}
                   disabled={isLoading}
                 />
               }
@@ -774,7 +798,7 @@ const handleFileUpload = async (label, isUploaded, fileDataObj) => {
               control={
                 <Checkbox
                   checked={foreignNationalBride}
-                  onChange={(e) => setForeignNationalBride(e.target.checked)}
+                  onChange={e => setForeignNationalBride(e.target.checked)}
                   disabled={isLoading}
                 />
               }
@@ -826,7 +850,7 @@ const handleFileUpload = async (label, isUploaded, fileDataObj) => {
               control={
                 <Checkbox
                   checked={widowWidowerGroom}
-                  onChange={(e) => setWidowWidowerGroom(e.target.checked)}
+                  onChange={e => setWidowWidowerGroom(e.target.checked)}
                   disabled={isLoading}
                 />
               }
@@ -836,7 +860,7 @@ const handleFileUpload = async (label, isUploaded, fileDataObj) => {
               control={
                 <Checkbox
                   checked={widowWidowerBride}
-                  onChange={(e) => setWidowWidowerBride(e.target.checked)}
+                  onChange={e => setWidowWidowerBride(e.target.checked)}
                   disabled={isLoading}
                 />
               }
@@ -863,11 +887,7 @@ const handleFileUpload = async (label, isUploaded, fileDataObj) => {
             label="CEMAR / CENOMAR from NSO (PSA)"
             description={documentDescriptions['CEMAR / CENOMAR from NSO (PSA)']}
             onUpload={(isUploaded, fileDataObj) =>
-              handleFileUpload(
-                'CEMAR / CENOMAR from NSO (PSA)',
-                isUploaded,
-                fileDataObj
-              )
+              handleFileUpload('CEMAR / CENOMAR from NSO (PSA)', isUploaded, fileDataObj)
             }
             required={true}
             disabled={isLoading}
@@ -888,7 +908,7 @@ const handleFileUpload = async (label, isUploaded, fileDataObj) => {
               control={
                 <Checkbox
                   checked={annulledGroom}
-                  onChange={(e) => setAnnulledGroom(e.target.checked)}
+                  onChange={e => setAnnulledGroom(e.target.checked)}
                   disabled={isLoading}
                 />
               }
@@ -898,7 +918,7 @@ const handleFileUpload = async (label, isUploaded, fileDataObj) => {
               control={
                 <Checkbox
                   checked={annulledBride}
-                  onChange={(e) => setAnnulledBride(e.target.checked)}
+                  onChange={e => setAnnulledBride(e.target.checked)}
                   disabled={isLoading}
                 />
               }
@@ -925,11 +945,7 @@ const handleFileUpload = async (label, isUploaded, fileDataObj) => {
             label="CEMAR / CENOMAR from NSO (PSA)"
             description={documentDescriptions['CEMAR / CENOMAR from NSO (PSA)']}
             onUpload={(isUploaded, fileDataObj) =>
-              handleFileUpload(
-                'CEMAR / CENOMAR from NSO (PSA)',
-                isUploaded,
-                fileDataObj
-              )
+              handleFileUpload('CEMAR / CENOMAR from NSO (PSA)', isUploaded, fileDataObj)
             }
             required={true}
             disabled={isLoading}
@@ -966,7 +982,7 @@ const handleFileUpload = async (label, isUploaded, fileDataObj) => {
                 annulledBride: annulledBride,
                 uploadedFiles: uploadedFiles,
                 fileData: fileData,
-                lastModified: new Date().toISOString()
+                lastModified: new Date().toISOString(),
               },
               uploadedFiles: uploadedFiles,
               fileData: fileData,
@@ -982,14 +998,14 @@ const handleFileUpload = async (label, isUploaded, fileDataObj) => {
               modifyMode: true,
               preserveData: true,
               backFromMarriageLicense: true,
-              applicationType: 'Marriage License Application'
+              applicationType: 'Marriage License Application',
             };
 
             try {
               const originalFormData = JSON.parse(localStorage.getItem('marriageFormData') || '{}');
-              
+
               const updatedFormData = {
-                ...originalFormData, 
+                ...originalFormData,
                 marriageLicense: {
                   foreignNational: foreignNational,
                   foreignNationalGroom: foreignNationalGroom,
@@ -1002,30 +1018,33 @@ const handleFileUpload = async (label, isUploaded, fileDataObj) => {
                   annulledBride: annulledBride,
                   uploadedFiles: uploadedFiles,
                   fileData: fileData,
-                  lastModified: new Date().toISOString()
-                }
+                  lastModified: new Date().toISOString(),
+                },
               };
-              
+
               localStorage.setItem('marriageFormData', JSON.stringify(updatedFormData));
               localStorage.setItem('isEditingMarriageForm', 'true');
               localStorage.setItem('currentEditingApplicationId', applicationId);
               localStorage.setItem('currentApplicationId', applicationId);
               localStorage.setItem('marriageApplicationId', applicationId);
-              
-              localStorage.setItem('modifyingApplication', JSON.stringify({
-                id: applicationId,
-                type: 'Marriage License',
-                subtype: 'Marriage License Application',
-                foreignNational: foreignNational,
-                widowWidower: widowWidower,
-                annulled: annulled,
-                uploadedFiles: uploadedFiles,
-                timestamp: new Date().toISOString()
-              }));
+
+              localStorage.setItem(
+                'modifyingApplication',
+                JSON.stringify({
+                  id: applicationId,
+                  type: 'Marriage License',
+                  subtype: 'Marriage License Application',
+                  foreignNational: foreignNational,
+                  widowWidower: widowWidower,
+                  annulled: annulled,
+                  uploadedFiles: uploadedFiles,
+                  timestamp: new Date().toISOString(),
+                })
+              );
 
               const applications = JSON.parse(localStorage.getItem('applications') || '[]');
               const appIndex = applications.findIndex(app => app.id === applicationId);
-              
+
               if (appIndex >= 0) {
                 applications[appIndex] = {
                   ...applications[appIndex],
@@ -1040,37 +1059,36 @@ const handleFileUpload = async (label, isUploaded, fileDataObj) => {
                     annulled: annulled,
                     annulledGroom: annulledGroom,
                     annulledBride: annulledBride,
-                    uploadedFiles: uploadedFiles
+                    uploadedFiles: uploadedFiles,
                   },
                   status: applications[appIndex].status || 'In Progress',
                   lastModified: new Date().toISOString(),
-                  isBeingModified: true
+                  isBeingModified: true,
                 };
-                
+
                 localStorage.setItem('applications', JSON.stringify(applications));
               }
 
               console.log('Navigating back with modify state:', modifyApplicationState);
-              
-              navigate('/MarriageForm', { 
+
+              navigate('/MarriageForm', {
                 state: {
                   ...modifyApplicationState,
-                  preserveOriginalData: true 
+                  preserveOriginalData: true,
                 },
-                replace: false
+                replace: false,
               });
-              
             } catch (error) {
               console.error('Error saving modify state:', error);
               showNotification('Error saving current state. Some data may be lost.', 'warning');
-              
-              navigate('/MarriageForm', { 
-                state: { 
+
+              navigate('/MarriageForm', {
+                state: {
                   applicationId: applicationId,
                   isEditing: true,
                   editingApplicationId: applicationId,
-                  formData: formData
-                } 
+                  formData: formData,
+                },
               });
             }
           }}
@@ -1083,14 +1101,14 @@ const handleFileUpload = async (label, isUploaded, fileDataObj) => {
         <Button
           variant="contained"
           disabled={!isFormComplete || isLoading || isSubmitted}
-          sx={{  minWidth: '120px' }}
+          sx={{ minWidth: '120px' }}
           onClick={handleSubmit}
           className="SubmitButtonMarriageLicense"
         >
           {isLoading ? <CircularProgress size={24} color="inherit" /> : 'Submit'}
         </Button>
       </Container>
-      
+
       <Snackbar
         open={snackbar.open}
         autoHideDuration={6000}

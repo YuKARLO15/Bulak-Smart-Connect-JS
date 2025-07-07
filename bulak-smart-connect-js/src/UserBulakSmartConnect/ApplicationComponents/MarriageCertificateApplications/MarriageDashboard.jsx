@@ -35,58 +35,56 @@ const MarriageDashboard = () => {
   };
 
   const handleNext = () => {
-    
-  if (!selectedOption) {
-    alert('Please select an application type before proceeding.');
-    return;
-  }
+    if (!selectedOption) {
+      alert('Please select an application type before proceeding.');
+      return;
+    }
 
-  localStorage.setItem('selectedMarriageOption', selectedOption);
-  
-  localStorage.removeItem('currentApplicationId');
-  localStorage.removeItem('marriageApplicationId');
-  localStorage.removeItem('marriageFormData');
-  localStorage.removeItem('isEditingMarriageForm');
-  localStorage.removeItem('currentEditingApplicationId');
-  localStorage.removeItem('editingMarriageType');
-  
-  localStorage.setItem('isCreatingNewMarriageApplication', 'true');
+    localStorage.setItem('selectedMarriageOption', selectedOption);
 
-  
-  navigate('/MarriageForm');
-};
+    localStorage.removeItem('currentApplicationId');
+    localStorage.removeItem('marriageApplicationId');
+    localStorage.removeItem('marriageFormData');
+    localStorage.removeItem('isEditingMarriageForm');
+    localStorage.removeItem('currentEditingApplicationId');
+    localStorage.removeItem('editingMarriageType');
+
+    localStorage.setItem('isCreatingNewMarriageApplication', 'true');
+
+    navigate('/MarriageForm');
+  };
 
   return (
     <Box className={`ContainerMDashboard ${isSidebarOpen ? 'sidebar-openMDashboard' : ''}`}>
       <NavBar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
-      
+
       {/* <Typography variant="h4" className="TitleMDashboard">
         Marriage Application
       </Typography> */}
 
-       <Typography variant="h4" className="FormTitle">
+      <Typography variant="h4" className="FormTitle">
         <Box className="FormTitleContent">
           <Button
             variant="outlined"
             className="back-button-home"
             onClick={() => navigate('/ApplicationForm')}
-             startIcon={<ArrowBackIcon />}
+            startIcon={<ArrowBackIcon />}
           >
             Back
           </Button>
           <span className="FormTitleText">Marriage Certificate Application</span>
         </Box>
       </Typography>
-      
+
       <Paper className="PaperMDashboard" elevation={3}>
         <Box className="SectionMDashboard">
           <Typography variant="h6" className="SectionTitleMDashboard">
             Applying for:
           </Typography>
-          
+
           <RadioGroup
             value={selectedOption}
-            onChange={(e) => setSelectedOption(e.target.value)}
+            onChange={e => setSelectedOption(e.target.value)}
             className="RadioGroupMDashboard"
           >
             <FormControlLabel
@@ -95,7 +93,7 @@ const MarriageDashboard = () => {
               label="Application for Marriage License"
               className="RadioMDashboard"
             />
-            
+
             <FormControlLabel
               value="Marriage Certificate"
               control={<Radio />}
@@ -109,7 +107,7 @@ const MarriageDashboard = () => {
           <Typography variant="h6" className="SectionTitleMDashboard">
             Data Privacy Notice
           </Typography>
-          
+
           <Box sx={{ mb: 2 }} className="dataPrivacyNoticeMDashboard">
             <Typography variant="body2" sx={{ mb: 1 }} className="dataPrivacyNoticeMDashboard">
               Please <strong>click</strong> and <strong>read </strong> our{' '}
@@ -143,10 +141,10 @@ const MarriageDashboard = () => {
               </Typography>
             )}
           </Box>
-          
+
           <FormControlLabel
             control={
-              <Radio 
+              <Radio
                 checked={agreedPrivacy}
                 onChange={() => setAgreedPrivacy(!agreedPrivacy)}
                 disabled={!hasVisitedPrivacyPolicy}
@@ -168,7 +166,7 @@ const MarriageDashboard = () => {
           <Button
             variant="contained"
             onClick={handleNext}
-            disabled={!selectedOption || !agreedPrivacy }
+            disabled={!selectedOption || !agreedPrivacy}
             className="NextButtonMDashboard"
           >
             Next

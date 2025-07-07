@@ -10,7 +10,7 @@
 }
 
 .LogIn::before {
-  content: "";
+  content: '';
   position: fixed;
   top: 0;
   left: 0;
@@ -24,7 +24,7 @@
 }
 
 .LogIn::after {
-  content: "";
+  content: '';
   position: fixed;
   top: 0;
   left: 0;
@@ -43,7 +43,7 @@
     height: auto;
     min-height: 100vh;
   }
-  
+
   .LogIn::before {
     background-attachment: scroll;
   }
@@ -56,7 +56,7 @@
     padding: 20px;
     margin-top: 3vh;
   }
-  
+
   .LogIn::before {
     background-attachment: scroll;
   }
@@ -115,7 +115,7 @@
     margin-top: 2vh;
     padding: 10px;
   }
-  
+
   .LogIn::before {
     background-attachment: scroll;
   }

@@ -40,7 +40,6 @@ input[name='email'] {
   font-size: smaller;
 }
 
-
 /* Adjust width of the contact input group */
 .form-group.contactinformation .textbox div {
   display: flex;

@@ -24,12 +24,8 @@
   flex-direction: column;
 }
 
-
-
-
 .ApplicationsListTitleAdminAppForm {
- 
-  font-weight:600 !important;
+  font-weight: 600 !important;
   color: #184a5b !important;
   margin-bottom: 24px !important;
 }
@@ -37,8 +33,8 @@
 .ApplicationsListAdminAppForm {
   overflow-y: auto;
   flex-grow: 1;
-   height: 150vh;
-    direction: rtl; 
+  height: 150vh;
+  direction: rtl;
 }
 /* Additional wrapper for content to fix text direction */
 .ApplicationsListAdminAppForm > * {
@@ -64,25 +60,19 @@
   background: #1a5b70; /* Slightly lighter on hover */
 }
 
-
-
 .FilterContainerAdminAppForm {
   margin-bottom: 20px;
   padding-bottom: 16px;
   border-bottom: 1px solid #e0e0e0;
- 
 }
 
-.FilterTitleApplication{
-font-weight: 600 !important;
-color: #184a5b !important;
-
-
-
+.FilterTitleApplication {
+  font-weight: 600 !important;
+  color: #184a5b !important;
 }
 
 .ApplicationListItemAdminAppForm {
-   padding: 16px;
+  padding: 16px;
   margin-bottom: 12px;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -108,16 +98,15 @@ color: #184a5b !important;
   color: #333;
 }
 .ApplicationMetAdminAppForm {
-    display: flex;
+  display: flex;
   justify-content: space-between;
-  margin-bottom: 8px
+  margin-bottom: 8px;
 }
-.ApplicationDetailsAdminAppForm{
-    display: flex;
+.ApplicationDetailsAdminAppForm {
+  display: flex;
   justify-content: space-between;
   align-items: center;
   margin-top: 4px;
-  
 }
 .ApplicationIdAdminAppForm {
   color: #666;
@@ -212,7 +201,6 @@ color: #184a5b !important;
   text-transform: none !important;
   transition: all 0.3s ease !important;
   box-shadow: 0 2px 8px rgba(24, 74, 91, 0.3) !important;
-
 }
 
 .StatusUpdateButtonAdminAppForm:hover {
@@ -246,7 +234,6 @@ color: #184a5b !important;
 .StatusInputLabelAdminAppForm.Mui-focused {
   color: #184a5b !important;
 }
-
 
 .StatusMenuItemPendingAdminAppForm {
   color: #f57c00 !important;
@@ -290,15 +277,14 @@ color: #184a5b !important;
   padding: 16px;
   border-radius: 8px;
   box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.05);
-
 }
-.ApplicationDetailsPaperAdminAppForm{
+.ApplicationDetailsPaperAdminAppForm {
   height: auto !important;
 }
-.StatusSectionAdminAppForm{
+.StatusSectionAdminAppForm {
   margin-top: 20px;
   padding: 20px;
-  border-top:#184a5b 1px solid; ;
+  border-top: #184a5b 1px solid;
   box-shadow: 5px 3px rgba(1, 0, 0, 0);
 }
 .SectionTitleAdminAppForm {
@@ -443,17 +429,16 @@ color: #184a5b !important;
 }
 
 .SummaryValueAppAdminPreview {
-color: #184a5b !important;
+  color: #184a5b !important;
   margin-bottom: 8px !important;
 }
-.SummaryTitleAppAdminPreview{
+.SummaryTitleAppAdminPreview {
   font-weight: 600 !important;
   color: #184a5b !important;
   margin-bottom: 4px;
-
 }
 .SummaryGridAppAdminPreview {
-display: flex;
+  display: flex;
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
@@ -461,7 +446,6 @@ display: flex;
 }
 .SummaryGridItemAppAdminPreview {
   border-right: #184a5b 1px solid;
-  
 }
 .SummaryButtonAppAdminPreview {
   display: flex;

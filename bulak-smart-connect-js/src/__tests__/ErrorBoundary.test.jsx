@@ -57,7 +57,7 @@ describe('ErrorBoundary', () => {
   // Suppress error logging for clean test output
   const originalError = console.error;
   const originalWarn = console.warn;
-  
+
   beforeAll(() => {
     // Completely silence console.error and console.warn for error boundary tests
     console.error = vi.fn();

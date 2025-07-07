@@ -95,7 +95,7 @@
 }
 
 .FormHeaderMcAffidavit {
-  background: #184a5b ;
+  background: #184a5b;
   padding: 15px;
   text-align: center;
   font-weight: bold;
@@ -268,22 +268,22 @@
   .AdminPreviewContainerMcAffidavit {
     padding: 10px;
   }
-  
+
   .WitnessRowMcAffidavit {
     grid-template-columns: 1fr;
     gap: 10px;
   }
-  
+
   .SignatureBlockMcAffidavit {
     width: 90%;
     margin: 20px 5px;
   }
-  
+
   .AdminInfoRowMcAffidavit {
     flex-direction: column;
     align-items: flex-start;
   }
-  
+
   .AdminInfoLabelMcAffidavit {
     min-width: auto;
   }
@@ -294,12 +294,12 @@
   .AdminInfoHeaderMcAffidavit {
     display: none;
   }
-  
+
   .AdminPreviewContainerMcAffidavit {
     margin: 0;
     padding: 0;
   }
-  
+
   .MarriageFormContainerMcAffidavit {
     page-break-inside: avoid;
     margin: 10px 0;

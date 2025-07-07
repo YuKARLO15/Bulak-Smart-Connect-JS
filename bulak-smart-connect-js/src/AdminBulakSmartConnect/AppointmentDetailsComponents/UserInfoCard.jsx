@@ -3,19 +3,28 @@ import './UserInfoCard.css';
 
 const UserInfoCard = ({ data, onBack, onNext, onStatusUpdate }) => {
   const [updating, setUpdating] = useState(false);
-  const [cancelDialog, setCancelDialog] = useState({ show: false, appointmentId: null, appointmentName: '' });
+  const [cancelDialog, setCancelDialog] = useState({
+    show: false,
+    appointmentId: null,
+    appointmentName: '',
+  });
 
-  const getStatusColor = (status) => {
+  const getStatusColor = status => {
     switch (status?.toLowerCase()) {
-      case 'pending': return '#f39c12';
-      case 'confirmed': return '#3498db';
-      case 'completed': return '#27ae60';
-      case 'cancelled': return '#e74c3c';
-      default: return '#95a5a6';
+      case 'pending':
+        return '#f39c12';
+      case 'confirmed':
+        return '#3498db';
+      case 'completed':
+        return '#27ae60';
+      case 'cancelled':
+        return '#e74c3c';
+      default:
+        return '#95a5a6';
     }
   };
 
-  const handleStatusUpdate = async (newStatus) => {
+  const handleStatusUpdate = async newStatus => {
     setUpdating(true);
     try {
       await onStatusUpdate(newStatus);
@@ -25,11 +34,13 @@ const UserInfoCard = ({ data, onBack, onNext, onStatusUpdate }) => {
   };
 
   const handleCancelAppointment = () => {
-    const clientName = `${data.firstName || ''} ${data.middleInitial || ''} ${data.lastName || ''}`.trim() || 'Anonymous User';
+    const clientName =
+      `${data.firstName || ''} ${data.middleInitial || ''} ${data.lastName || ''}`.trim() ||
+      'Anonymous User';
     setCancelDialog({
       show: true,
       appointmentId: data.applicationNumber,
-      appointmentName: clientName
+      appointmentName: clientName,
     });
   };
 
@@ -47,47 +58,35 @@ const UserInfoCard = ({ data, onBack, onNext, onStatusUpdate }) => {
   };
 
   const getStatusActions = () => {
-    if (!data?.status) return (
-      <div className="status-actions">
-        <button 
-          className="btn-back"
-          onClick={onBack}
-          disabled={updating}
-        >
-         <span className="back-icon">←</span> Back
-        </button>
-      </div>
-    );
+    if (!data?.status)
+      return (
+        <div className="status-actions">
+          <button className="btn-back" onClick={onBack} disabled={updating}>
+            <span className="back-icon">←</span> Back
+          </button>
+        </div>
+      );
 
     const status = data.status.toLowerCase();
-    
+
     if (status === 'pending' || status === 'confirmed') {
       const actionText = status === 'pending' ? 'Confirm' : 'Complete';
       const actionStatus = status === 'pending' ? 'confirmed' : 'completed';
       const buttonClass = status === 'pending' ? 'btn-confirm' : 'btn-complete';
-      
+
       return (
         <div className="status-actions">
-          <button 
-            className="btn-back"
-            onClick={onBack}
-            disabled={updating}
-            
-          >
+          <button className="btn-back" onClick={onBack} disabled={updating}>
             Back
           </button>
-          <button 
+          <button
             className={buttonClass}
             onClick={() => handleStatusUpdate(actionStatus)}
             disabled={updating}
           >
             {updating ? 'Updating...' : actionText}
           </button>
-          <button 
-            className="btn-cancel"
-            onClick={handleCancelAppointment}
-            disabled={updating}
-          >
+          <button className="btn-cancel" onClick={handleCancelAppointment} disabled={updating}>
             {updating ? 'Updating...' : 'Cancel'}
           </button>
         </div>
@@ -96,18 +95,10 @@ const UserInfoCard = ({ data, onBack, onNext, onStatusUpdate }) => {
       // Show navigation buttons when completed
       return (
         <div className="status-actions">
-          <button 
-            className="btn-back"
-            onClick={onBack}
-            disabled={updating}
-          >
+          <button className="btn-back" onClick={onBack} disabled={updating}>
             Back
           </button>
-          <button 
-            className="btn-next"
-            onClick={onNext}
-            disabled={updating}
-          >
+          <button className="btn-next" onClick={onNext} disabled={updating}>
             Next
           </button>
         </div>
@@ -115,11 +106,7 @@ const UserInfoCard = ({ data, onBack, onNext, onStatusUpdate }) => {
     } else {
       return (
         <div className="status-actions">
-          <button 
-            className="btn-back"
-            onClick={onBack}
-            disabled={updating}
-          >
+          <button className="btn-back" onClick={onBack} disabled={updating}>
             Back
           </button>
         </div>
@@ -137,21 +124,19 @@ const UserInfoCard = ({ data, onBack, onNext, onStatusUpdate }) => {
             </div>
             <div className="cancel-dialog-body-ApptAdmin">
               <p>You are about to cancel appointment ID: </p>
-              <p><strong>{cancelDialog.appointmentId}</strong></p>
-              <p>Client: <strong>{cancelDialog.appointmentName}</strong></p>
+              <p>
+                <strong>{cancelDialog.appointmentId}</strong>
+              </p>
+              <p>
+                Client: <strong>{cancelDialog.appointmentName}</strong>
+              </p>
               <p>Are you sure you want to proceed?</p>
             </div>
             <div className="cancel-dialog-footer-ApptAdmin">
-              <button 
-                className="proceed-btn-ApptAdmin" 
-                onClick={confirmCancelAppointment}
-              >
+              <button className="proceed-btn-ApptAdmin" onClick={confirmCancelAppointment}>
                 Proceed
               </button>
-              <button 
-                className="discard-btn-ApptAdmin" 
-                onClick={discardCancelAppointment}
-              >
+              <button className="discard-btn-ApptAdmin" onClick={discardCancelAppointment}>
                 Discard
               </button>
             </div>
@@ -164,10 +149,7 @@ const UserInfoCard = ({ data, onBack, onNext, onStatusUpdate }) => {
           Application Number: <span className="app-number">{data.applicationNumber}</span>
         </h2>
         {data.status && (
-          <div 
-            className="status-badge"
-            style={{ backgroundColor: getStatusColor(data.status) }}
-          >
+          <div className="status-badge" style={{ backgroundColor: getStatusColor(data.status) }}>
             {data.status.toUpperCase()}
           </div>
         )}
@@ -203,7 +185,6 @@ const UserInfoCard = ({ data, onBack, onNext, onStatusUpdate }) => {
       </div>
 
       {getStatusActions()}
-      
     </div>
   );
 };

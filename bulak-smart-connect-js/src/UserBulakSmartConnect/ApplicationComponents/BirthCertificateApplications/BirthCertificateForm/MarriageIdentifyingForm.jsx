@@ -22,15 +22,25 @@ const MarriageInformationBirthForm = forwardRef(({ formData, handleChange }, ref
   const currentYear = new Date().getFullYear();
   const years = Array.from({ length: 100 }, (_, i) => currentYear - i);
   const months = [
-    'January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December',
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
   ];
   const days = Array.from({ length: 31 }, (_, i) => i + 1);
 
   // Handle input change with validation
-  const handleInputChange = (e) => {
+  const handleInputChange = e => {
     const { name, value } = e.target;
-    
+
     // Clear error for this field when user starts typing
     if (errors[name]) {
       setErrors(prev => {
@@ -39,14 +49,14 @@ const MarriageInformationBirthForm = forwardRef(({ formData, handleChange }, ref
         return newErrors;
       });
     }
-    
+
     handleChange(e);
   };
 
   // Handle select change with validation
-  const handleSelectChange = (e) => {
+  const handleSelectChange = e => {
     const { name, value } = e.target;
-    
+
     // Clear error for this field when user selects
     if (errors[name]) {
       setErrors(prev => {
@@ -55,14 +65,14 @@ const MarriageInformationBirthForm = forwardRef(({ formData, handleChange }, ref
         return newErrors;
       });
     }
-    
+
     handleChange(e);
   };
 
   // Handle radio change and clear errors when switching to non-marital
-  const handleParentsMarriageChange = (e) => {
+  const handleParentsMarriageChange = e => {
     const { value } = e.target;
-    
+
     // Clear the ParentsMarriage error when user makes a selection
     if (errors.ParentsMarriage) {
       setErrors(prev => {
@@ -71,7 +81,7 @@ const MarriageInformationBirthForm = forwardRef(({ formData, handleChange }, ref
         return newErrors;
       });
     }
-    
+
     // Clear all marriage-related errors when switching to non-marital
     if (value === 'non-marital') {
       setErrors(prev => {
@@ -86,7 +96,7 @@ const MarriageInformationBirthForm = forwardRef(({ formData, handleChange }, ref
         return newErrors;
       });
     }
-    
+
     handleChange(e);
   };
 
@@ -110,7 +120,7 @@ const MarriageInformationBirthForm = forwardRef(({ formData, handleChange }, ref
       if (!formData?.marriageYear) {
         newErrors.marriageYear = 'This field is required';
       }
-      
+
       // Place validation
       if (!formData?.marriageCity?.trim()) {
         newErrors.marriageCity = 'This field is required';
@@ -133,13 +143,15 @@ const MarriageInformationBirthForm = forwardRef(({ formData, handleChange }, ref
     // New function to validate all fields at once (for Next button)
     validateAllFields: () => {
       const isValid = validateForm();
-      
+
       // If validation fails, scroll to first error
       if (!isValid) {
         // Find first error element and scroll to it
         setTimeout(() => {
           // Check for radio button error first, then other errors
-          const firstErrorElement = document.querySelector('.MarriageChildStatusFormControl.Mui-error, .Mui-error');
+          const firstErrorElement = document.querySelector(
+            '.MarriageChildStatusFormControl.Mui-error, .Mui-error'
+          );
           if (firstErrorElement) {
             firstErrorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
             // Focus on the first radio button if that's the error
@@ -150,9 +162,9 @@ const MarriageInformationBirthForm = forwardRef(({ formData, handleChange }, ref
           }
         }, 100);
       }
-      
+
       return isValid;
-    }
+    },
   }));
 
   useEffect(() => {
@@ -166,28 +178,28 @@ const MarriageInformationBirthForm = forwardRef(({ formData, handleChange }, ref
         <Typography className="MarriageFormTitle">
           Child's Status <span style={{ color: 'red' }}>*</span>
         </Typography>
-        <FormControl 
-          component="fieldset" 
+        <FormControl
+          component="fieldset"
           className="MarriageChildStatusFormControl"
           error={!!errors.ParentsMarriage}
         >
           <RadioGroup
             row
             name="ParentsMarriage"
-            value={formData.ParentsMarriage || ""}
+            value={formData.ParentsMarriage || ''}
             onChange={handleParentsMarriageChange}
           >
             <FormControlLabel value="marital" control={<Radio />} label="Marital Child" />
             <FormControlLabel value="non-marital" control={<Radio />} label="Non-Marital Child" />
           </RadioGroup>
           {errors.ParentsMarriage && (
-            <Typography 
-              variant="caption" 
-              sx={{ 
-                color: '#d32f2f', 
-                fontSize: '0.75rem', 
+            <Typography
+              variant="caption"
+              sx={{
+                color: '#d32f2f',
+                fontSize: '0.75rem',
                 marginTop: '3px',
-                display: 'block'
+                display: 'block',
               }}
             >
               {errors.ParentsMarriage}
@@ -227,7 +239,15 @@ const MarriageInformationBirthForm = forwardRef(({ formData, handleChange }, ref
                     ))}
                   </Select>
                   {errors.marriageMonth && (
-                    <Typography variant="caption" sx={{ color: '#d32f2f', fontSize: '0.75rem', marginTop: '3px', marginLeft: '14px' }}>
+                    <Typography
+                      variant="caption"
+                      sx={{
+                        color: '#d32f2f',
+                        fontSize: '0.75rem',
+                        marginTop: '3px',
+                        marginLeft: '14px',
+                      }}
+                    >
                       {errors.marriageMonth}
                     </Typography>
                   )}
@@ -253,7 +273,15 @@ const MarriageInformationBirthForm = forwardRef(({ formData, handleChange }, ref
                     ))}
                   </Select>
                   {errors.marriageDay && (
-                    <Typography variant="caption" sx={{ color: '#d32f2f', fontSize: '0.75rem', marginTop: '3px', marginLeft: '14px' }}>
+                    <Typography
+                      variant="caption"
+                      sx={{
+                        color: '#d32f2f',
+                        fontSize: '0.75rem',
+                        marginTop: '3px',
+                        marginLeft: '14px',
+                      }}
+                    >
                       {errors.marriageDay}
                     </Typography>
                   )}
@@ -279,7 +307,15 @@ const MarriageInformationBirthForm = forwardRef(({ formData, handleChange }, ref
                     ))}
                   </Select>
                   {errors.marriageYear && (
-                    <Typography variant="caption" sx={{ color: '#d32f2f', fontSize: '0.75rem', marginTop: '3px', marginLeft: '14px' }}>
+                    <Typography
+                      variant="caption"
+                      sx={{
+                        color: '#d32f2f',
+                        fontSize: '0.75rem',
+                        marginTop: '3px',
+                        marginLeft: '14px',
+                      }}
+                    >
                       {errors.marriageYear}
                     </Typography>
                   )}

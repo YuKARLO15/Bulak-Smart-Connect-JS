@@ -10,26 +10,35 @@ const HusbandForm = ({ formData, handleChange, errors, isMarriageLicense = false
   // Function to calculate age based on birth date
   const calculateAge = (day, month, year) => {
     if (!day || !month || !year) return '';
-    
+
     const today = new Date();
     const birthDate = new Date(year, getMonthNumber(month) - 1, day);
-    
+
     let age = today.getFullYear() - birthDate.getFullYear();
     const monthDiff = today.getMonth() - birthDate.getMonth();
-    
+
     if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
       age--;
     }
-    
+
     return age.toString();
   };
 
   // Helper function to convert month name to number
-  const getMonthNumber = (monthName) => {
+  const getMonthNumber = monthName => {
     const months = {
-      'January': 1, 'February': 2, 'March': 3, 'April': 4,
-      'May': 5, 'June': 6, 'July': 7, 'August': 8,
-      'September': 9, 'October': 10, 'November': 11, 'December': 12
+      January: 1,
+      February: 2,
+      March: 3,
+      April: 4,
+      May: 5,
+      June: 6,
+      July: 7,
+      August: 8,
+      September: 9,
+      October: 10,
+      November: 11,
+      December: 12,
     };
     return months[monthName] || 0;
   };
@@ -37,22 +46,28 @@ const HusbandForm = ({ formData, handleChange, errors, isMarriageLicense = false
   // Auto-calculate age when birth date changes
   useEffect(() => {
     const { husbandBirthDay, husbandBirthMonth, husbandBirthYear } = formData;
-    
+
     if (husbandBirthDay && husbandBirthMonth && husbandBirthYear) {
       const calculatedAge = calculateAge(husbandBirthDay, husbandBirthMonth, husbandBirthYear);
-      
+
       // Only update if the calculated age is different from current age
       if (calculatedAge !== formData.husbandAge) {
         handleChange({
           target: {
             name: 'husbandAge',
-            value: calculatedAge
-          }
+            value: calculatedAge,
+          },
         });
       }
     }
-  }, [formData.husbandBirthDay, formData.husbandBirthMonth, formData.husbandBirthYear, formData.husbandAge, handleChange]);
-  
+  }, [
+    formData.husbandBirthDay,
+    formData.husbandBirthMonth,
+    formData.husbandBirthYear,
+    formData.husbandAge,
+    handleChange,
+  ]);
+
   return (
     <section className="husband-section section">
       <h3 className="husband-heading">I. HUSBAND</h3>
@@ -61,7 +76,9 @@ const HusbandForm = ({ formData, handleChange, errors, isMarriageLicense = false
       <h4 className="husband-subheading">Personal Information</h4>
 
       {/* Full Name */}
-      <label className="husband-label" style={{fontWeight: 'bold'}}>1. FULL NAME <span style={{color: 'red'}}>*</span></label>
+      <label className="husband-label" style={{ fontWeight: 'bold' }}>
+        1. FULL NAME <span style={{ color: 'red' }}>*</span>
+      </label>
       <div className="husband-input-group input-group husband-name">
         <div className="husband-input-container input-container ">
           <input
@@ -118,7 +135,9 @@ const HusbandForm = ({ formData, handleChange, errors, isMarriageLicense = false
       </div>
 
       {/* Birth Date */}
-      <label className="husband-label" style={{fontWeight: 'bold'}}>2a. BIRTH DATE (Kaarawan) <span style={{color: 'red'}}>*</span></label>
+      <label className="husband-label" style={{ fontWeight: 'bold' }}>
+        2a. BIRTH DATE (Kaarawan) <span style={{ color: 'red' }}>*</span>
+      </label>
       <div className="husband-input-group input-group">
         <div className="husband-input-container input-container">
           <select
@@ -193,7 +212,9 @@ const HusbandForm = ({ formData, handleChange, errors, isMarriageLicense = false
       </div>
 
       {/* Age */}
-      <label className="husband-label" style={{fontWeight: 'bold'}}>2b. AGE <span style={{color: 'red'}}>*</span></label>
+      <label className="husband-label" style={{ fontWeight: 'bold' }}>
+        2b. AGE <span style={{ color: 'red' }}>*</span>
+      </label>
       <div className="husband-input-group input-group">
         <div className="husband-input-container input-container">
           <input
@@ -213,7 +234,9 @@ const HusbandForm = ({ formData, handleChange, errors, isMarriageLicense = false
       </div>
 
       {/* Place of Birth */}
-      <label className="husband-label" style={{fontWeight: 'bold'}}>3. PLACE OF BIRTH (Lugar ng Kapanganakan) <span style={{color: 'red'}}>*</span></label>
+      <label className="husband-label" style={{ fontWeight: 'bold' }}>
+        3. PLACE OF BIRTH (Lugar ng Kapanganakan) <span style={{ color: 'red' }}>*</span>
+      </label>
       <div className="husband-input-group input-group">
         <div className="husband-input-container input-container">
           <input
@@ -257,7 +280,9 @@ const HusbandForm = ({ formData, handleChange, errors, isMarriageLicense = false
       </div>
 
       {/* Sex */}
-      <label className="husband-label" style={{fontWeight: 'bold'}}>4a. SEX (Kasarian) <span style={{color: 'red'}}>*</span></label>
+      <label className="husband-label" style={{ fontWeight: 'bold' }}>
+        4a. SEX (Kasarian) <span style={{ color: 'red' }}>*</span>
+      </label>
       <div className="husband-radio-group radio-group">
         <div className="husband-radio-container input-radio-container">
           <input
@@ -285,7 +310,9 @@ const HusbandForm = ({ formData, handleChange, errors, isMarriageLicense = false
       </div>
 
       {/* Citizenship */}
-      <label className="husband-label" style={{fontWeight: 'bold'}}>4b. CITIZENSHIP <span style={{color: 'red'}}>*</span></label>
+      <label className="husband-label" style={{ fontWeight: 'bold' }}>
+        4b. CITIZENSHIP <span style={{ color: 'red' }}>*</span>
+      </label>
       <div className="husband-input-group input-group">
         <div className="husband-input-container input-container">
           <input
@@ -303,7 +330,9 @@ const HusbandForm = ({ formData, handleChange, errors, isMarriageLicense = false
       </div>
 
       {/* Residence */}
-      <label className="husband-label" style={{fontWeight: 'bold'}}>5. RESIDENCE <span style={{color: 'red'}}>*</span></label>
+      <label className="husband-label" style={{ fontWeight: 'bold' }}>
+        5. RESIDENCE <span style={{ color: 'red' }}>*</span>
+      </label>
       <div className="husband-input-group input-group">
         <div className="husband-input-container input-container">
           <input
@@ -373,7 +402,9 @@ const HusbandForm = ({ formData, handleChange, errors, isMarriageLicense = false
       </div>
 
       {/* Religion */}
-      <label className="husband-label" style={{fontWeight: 'bold'}}>6. RELIGION/RELIGIOUS SECT <span style={{color: 'red'}}>*</span></label>
+      <label className="husband-label" style={{ fontWeight: 'bold' }}>
+        6. RELIGION/RELIGIOUS SECT <span style={{ color: 'red' }}>*</span>
+      </label>
       <div className="husband-input-group input-group">
         <div className="husband-input-container input-container">
           <input
@@ -391,7 +422,9 @@ const HusbandForm = ({ formData, handleChange, errors, isMarriageLicense = false
       </div>
 
       {/* civil Status */}
-      <label className="husband-label" style={{fontWeight: 'bold'}}>7. CIVIL STATUS <span style={{color: 'red'}}>*</span></label>
+      <label className="husband-label" style={{ fontWeight: 'bold' }}>
+        7. CIVIL STATUS <span style={{ color: 'red' }}>*</span>
+      </label>
       <div className="husband-input-group input-group">
         <div className="husband-input-container input-container">
           <input
@@ -412,7 +445,7 @@ const HusbandForm = ({ formData, handleChange, errors, isMarriageLicense = false
       {isLicenseApplication && (
         <>
           <h4 className="husband-subheading">Previous Marriage Information</h4>
-          
+
           {/* Checkbox for previous marriage */}
           <div className="husband-checkbox-group">
             <label className="husband-checkbox-label">
@@ -429,7 +462,9 @@ const HusbandForm = ({ formData, handleChange, errors, isMarriageLicense = false
           {/* Show dissolution fields only if checkbox is checked */}
           {formData.hasPreviousMarriage && (
             <>
-              <label className="husband-label">15. HOW WAS PREVIOUS MARRIAGE DISSOLVED? <span style={{color: 'red'}}>*</span></label>
+              <label className="husband-label">
+                15. HOW WAS PREVIOUS MARRIAGE DISSOLVED? <span style={{ color: 'red' }}>*</span>
+              </label>
               <div className="husband-input-group input-group">
                 <div className="husband-input-container input-container">
                   <select
@@ -438,7 +473,9 @@ const HusbandForm = ({ formData, handleChange, errors, isMarriageLicense = false
                     value={formData.husbandPreviousMarriageStatus || ''}
                     onChange={handleChange}
                   >
-                    <option value="" disabled>Select</option>
+                    <option value="" disabled>
+                      Select
+                    </option>
                     <option value="Death">Death</option>
                     <option value="Annulment">Annulment</option>
                     <option value="Divorce">Divorce</option>
@@ -452,7 +489,9 @@ const HusbandForm = ({ formData, handleChange, errors, isMarriageLicense = false
                 </div>
               </div>
 
-              <label className="husband-label">16. PLACE WHERE DISSOLVED <span style={{color: 'red'}}>*</span></label>
+              <label className="husband-label">
+                16. PLACE WHERE DISSOLVED <span style={{ color: 'red' }}>*</span>
+              </label>
               <div className="husband-input-group input-group">
                 <div className="husband-input-container input-container">
                   <input
@@ -501,7 +540,9 @@ const HusbandForm = ({ formData, handleChange, errors, isMarriageLicense = false
                 </div>
               </div>
 
-              <label className="husband-label">17. DATE WHEN DISSOLVED <span style={{color: 'red'}}>*</span></label>
+              <label className="husband-label">
+                17. DATE WHEN DISSOLVED <span style={{ color: 'red' }}>*</span>
+              </label>
               <div className="husband-input-group input-group">
                 <div className="husband-input-container input-container">
                   <select
@@ -589,7 +630,9 @@ const HusbandForm = ({ formData, handleChange, errors, isMarriageLicense = false
       <h4 className="husband-subheading">Father's Information</h4>
 
       {/* Father's Name */}
-      <label className="husband-label" style={{fontWeight: 'bold'}}>8. NAME OF FATHER (Buong Pangalan ng Ama) <span style={{color: 'red'}}>*</span></label>
+      <label className="husband-label" style={{ fontWeight: 'bold' }}>
+        8. NAME OF FATHER (Buong Pangalan ng Ama) <span style={{ color: 'red' }}>*</span>
+      </label>
       <div className="husband-input-group input-group">
         <div className="husband-input-container input-container">
           <input
@@ -633,7 +676,9 @@ const HusbandForm = ({ formData, handleChange, errors, isMarriageLicense = false
       </div>
 
       {/* Father's Citizenship */}
-      <label className="husband-label" style={{fontWeight: 'bold'}}>9. CITIZENSHIP OF FATHER <span style={{color: 'red'}}>*</span></label>
+      <label className="husband-label" style={{ fontWeight: 'bold' }}>
+        9. CITIZENSHIP OF FATHER <span style={{ color: 'red' }}>*</span>
+      </label>
       <div className="husband-input-group input-group">
         <div className="husband-input-container input-container">
           <input
@@ -651,7 +696,9 @@ const HusbandForm = ({ formData, handleChange, errors, isMarriageLicense = false
       </div>
       {isLicenseApplication && (
         <>
-          <label className="husband-label" style={{fontWeight: 'bold'}}>9b. FATHER'S RESIDENCE <span style={{color: 'red'}}>*</span></label>
+          <label className="husband-label" style={{ fontWeight: 'bold' }}>
+            9b. FATHER'S RESIDENCE <span style={{ color: 'red' }}>*</span>
+          </label>
           <div className="husband-input-group input-group">
             <div className="husband-input-container input-container">
               <textarea
@@ -674,8 +721,9 @@ const HusbandForm = ({ formData, handleChange, errors, isMarriageLicense = false
       <h4 className="husband-subheading">Mother's Information</h4>
 
       {/* Mother's Maiden Name */}
-      <label className="husband-label" style={{fontWeight: 'bold'}}>
-        10. MOTHER'S MAIDEN NAME (Pangalan ng Ina sa Pagkadalaga) <span style={{color: 'red'}}>*</span>
+      <label className="husband-label" style={{ fontWeight: 'bold' }}>
+        10. MOTHER'S MAIDEN NAME (Pangalan ng Ina sa Pagkadalaga){' '}
+        <span style={{ color: 'red' }}>*</span>
       </label>
       <div className="husband-input-group input-group">
         <div className="husband-input-container input-container">
@@ -720,7 +768,9 @@ const HusbandForm = ({ formData, handleChange, errors, isMarriageLicense = false
       </div>
 
       {/* Mother's Citizenship */}
-      <label className="husband-label" style={{fontWeight: 'bold'}}>11. CITIZENSHIP OF MOTHER <span style={{color: 'red'}}>*</span></label>
+      <label className="husband-label" style={{ fontWeight: 'bold' }}>
+        11. CITIZENSHIP OF MOTHER <span style={{ color: 'red' }}>*</span>
+      </label>
       <div className="husband-input-group input-group">
         <div className="husband-input-container input-container">
           <input
@@ -738,7 +788,9 @@ const HusbandForm = ({ formData, handleChange, errors, isMarriageLicense = false
       </div>
       {isLicenseApplication && (
         <>
-          <label className="husband-label" style={{fontWeight: 'bold'}}>11b. MOTHER'S RESIDENCE <span style={{color: 'red'}}>*</span></label>
+          <label className="husband-label" style={{ fontWeight: 'bold' }}>
+            11b. MOTHER'S RESIDENCE <span style={{ color: 'red' }}>*</span>
+          </label>
           <div className="husband-input-group input-group">
             <div className="husband-input-container input-container">
               <textarea
@@ -761,8 +813,8 @@ const HusbandForm = ({ formData, handleChange, errors, isMarriageLicense = false
       <h4 className="husband-subheading">Person Who Gave Consent or Advice</h4>
 
       {/* Name of Person/Wali Who Gave Consent or Advice */}
-      <label className="husband-label" style={{fontWeight: 'bold'}}>
-        12. NAME OF PERSON WHO GAVE CONSENT OR ADVICE <span style={{color: 'red'}}>*</span>
+      <label className="husband-label" style={{ fontWeight: 'bold' }}>
+        12. NAME OF PERSON WHO GAVE CONSENT OR ADVICE <span style={{ color: 'red' }}>*</span>
       </label>
       <div className="husband-input-group input-group">
         <div className="husband-input-container input-container">
@@ -807,7 +859,9 @@ const HusbandForm = ({ formData, handleChange, errors, isMarriageLicense = false
       </div>
 
       {/* Relationship */}
-      <label className="husband-label" style={{fontWeight: 'bold'}}>13. RELATIONSHIP <span style={{color: 'red'}}>*</span></label>
+      <label className="husband-label" style={{ fontWeight: 'bold' }}>
+        13. RELATIONSHIP <span style={{ color: 'red' }}>*</span>
+      </label>
       <div className="husband-input-group input-group">
         <div className="husband-input-container input-container">
           <input
@@ -825,7 +879,9 @@ const HusbandForm = ({ formData, handleChange, errors, isMarriageLicense = false
       </div>
       {isLicenseApplication && (
         <>
-          <label className="husband-label" style={{fontWeight: 'bold'}}>13a. CITIZENSHIP</label>
+          <label className="husband-label" style={{ fontWeight: 'bold' }}>
+            13a. CITIZENSHIP
+          </label>
           <div className="husband-input-group input-group">
             <div className="husband-input-container input-container">
               <input
@@ -845,7 +901,9 @@ const HusbandForm = ({ formData, handleChange, errors, isMarriageLicense = false
       )}
 
       {/* Residence */}
-      <label className="husband-label" style={{fontWeight: 'bold'}}>14. RESIDENCE <span style={{color: 'red'}}>*</span></label>
+      <label className="husband-label" style={{ fontWeight: 'bold' }}>
+        14. RESIDENCE <span style={{ color: 'red' }}>*</span>
+      </label>
       <div className="husband-input-group input-group">
         <div className="husband-input-container input-container">
           <input

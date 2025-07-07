@@ -57,7 +57,7 @@
   text-align: start;
   margin-top: 10px !important;
 }
-    
+
 #email {
   color: #ffffff;
 }
@@ -131,20 +131,20 @@
     max-height: none;
     margin: 10px;
   }
-  
+
   .LogInTitle {
     font-size: 1.8rem !important;
     margin-bottom: 12px;
   }
-  
+
   .LogInForm {
     gap: 12px;
   }
-  
+
   .TextField {
     font-size: 14px;
   }
-  
+
   .LoginButton {
     padding: 12px;
     font-size: 16px;
@@ -158,16 +158,16 @@
     max-height: none;
     margin: 10px;
   }
-  
+
   .LogInTitle {
     font-size: 2rem !important;
     margin-bottom: 14px;
   }
-  
+
   .LogInForm {
     gap: 14px;
   }
-  
+
   .LoginButton {
     padding: 14px;
   }
@@ -180,11 +180,11 @@
     padding: 40px;
     margin: 10px;
   }
-  
+
   .LogInTitle {
     font-size: 2.2rem !important;
   }
-  
+
   .LogInForm {
     gap: 15px;
   }
@@ -195,7 +195,7 @@
     width: 420px;
     padding: 50px;
   }
-  
+
   .LogInTitle {
     font-size: 2.4rem !important;
   }
@@ -206,7 +206,7 @@
     width: 450px;
     padding: 60px;
   }
-  
+
   .LogInTitle {
     font-size: 2.5rem !important;
   }
@@ -217,11 +217,11 @@
     width: 480px;
     padding: 75px;
   }
-  
+
   .LogInTitle {
     font-size: 2.6rem !important;
   }
-  
+
   .LogInForm {
     gap: 18px;
   }
@@ -235,7 +235,7 @@
     max-height: none;
     margin: 10px;
   }
-  
+
   .LogInTitle {
     font-size: 1.9rem !important;
   }
@@ -249,16 +249,16 @@
     max-width: calc(450px - 20px);
     margin: 10px;
   }
-  
+
   .LogInTitle {
     font-size: 1.8rem !important;
     margin-bottom: 10px;
   }
-  
+
   .LogInForm {
     gap: 10px;
   }
-  
+
   .LoginButton {
     padding: 10px;
   }
@@ -268,11 +268,11 @@
   .LogInCardContainer {
     border-radius: 12px;
   }
-  
+
   .TextField {
     border-radius: 12px;
   }
-  
+
   .LoginButton {
     border-radius: 10px;
   }

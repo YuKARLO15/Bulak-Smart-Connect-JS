@@ -5,12 +5,8 @@ import './AnnouncementFeed.css';
 const AnnouncementFeed = ({ announcements, onEdit }) => {
   return (
     <div className="announcement-feed">
-      {announcements.map((announcement) => (
-        <AnnouncementPost
-          key={announcement.id}
-          announcement={announcement}
-          onEdit={onEdit}
-        />
+      {announcements.map(announcement => (
+        <AnnouncementPost key={announcement.id} announcement={announcement} onEdit={onEdit} />
       ))}
     </div>
   );

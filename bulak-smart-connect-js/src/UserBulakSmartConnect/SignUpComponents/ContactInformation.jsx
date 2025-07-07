@@ -12,18 +12,13 @@ const ContactInformationSection = ({ formData, handleInputChange, errors }) => (
           Contact Number <span className="asterisk"> *</span>
         </label>
         <div style={{ display: 'flex', gap: '8px' }}>
-          <input
-            type="text"
-            value="+63"
-            disabled
-            style={{ width: '60px' }}
-          />
+          <input type="text" value="+63" disabled style={{ width: '60px' }} />
           <input
             type="text"
             name="contact"
             placeholder="10-digit mobile number"
             value={formData.contact}
-            onChange={(event) => {
+            onChange={event => {
               const { name, value } = event.target;
               const formattedValue = value.replace(/\D/g, '').slice(0, 10); // Only digits, max 10 digits
               handleInputChange({ target: { name, value: formattedValue } });

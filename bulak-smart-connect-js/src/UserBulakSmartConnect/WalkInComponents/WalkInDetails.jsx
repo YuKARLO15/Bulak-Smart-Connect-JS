@@ -16,9 +16,9 @@ const WalkInQueueDetail = () => {
   }, []);
 
   // Function to determine requirements link based on reason of visit
-  const getRequirementsLink = (reasonOfVisit) => {
+  const getRequirementsLink = reasonOfVisit => {
     const reason = reasonOfVisit?.toLowerCase();
-    
+
     if (reason?.includes('birth')) {
       return '/RequirementBirthList';
     } else if (reason?.includes('marriage')) {
@@ -30,9 +30,9 @@ const WalkInQueueDetail = () => {
   };
 
   // Function to render requirements section
-    const renderRequirementsSection = (reasonOfVisit) => {
+  const renderRequirementsSection = reasonOfVisit => {
     const requirementsLink = getRequirementsLink(reasonOfVisit);
-    
+
     if (requirementsLink) {
       return (
         <div className="requirements-link">

@@ -84,7 +84,7 @@
   background: #fff;
   border-radius: 9px;
   border: 1.5px solid #b6c6d2;
-  box-shadow: 0px 2px 10px rgba(24,74,91,0.04);
+  box-shadow: 0px 2px 10px rgba(24, 74, 91, 0.04);
   padding: 36px 32px 32px 32px;
   display: flex;
   flex-direction: column;
@@ -92,7 +92,7 @@
 }
 
 .BackButtonClerical {
-  border: solid 1px #184a5b !important; 
+  border: solid 1px #184a5b !important;
   margin-right: 1vw !important;
   color: #184a5b !important;
   font-weight: bold;
@@ -103,24 +103,23 @@
 
 .BackButtonClerical:hover {
   background-color: #184a5b !important;
-  color: #f5f5f5 !important; 
+  color: #f5f5f5 !important;
 }
 
-
 .SubmitButtonClerical {
-  background-color: #184a5b !important; 
+  background-color: #184a5b !important;
   color: white !important;
   font-weight: bold;
   padding: 8px 24px;
   border-radius: 8px;
   transition: background-color 0.3s ease;
-  border: none !important; 
+  border: none !important;
 }
 .SubmitButtonClerical:disabled {
-  background-color: #b6c6d2 !important; 
+  background-color: #b6c6d2 !important;
   color: #f5f5f5 !important;
 }
 .SubmitButtonClerical:hover {
-  background-color: #678c98 !important; 
+  background-color: #678c98 !important;
   color: #f5f5f5 !important;
 }

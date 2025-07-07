@@ -11,7 +11,7 @@ import {
   Paper,
   Snackbar,
   CircularProgress,
-  Tooltip
+  Tooltip,
 } from '@mui/material';
 import FileUpload from '../FileUpload';
 import './CorrectionChildSex.css';
@@ -39,9 +39,7 @@ const supportingDocuments = [
   'Others - Passport, Insurance Documents, Members Data Record',
 ];
 
-const addiotionalDocuments = [
-  'Certification from Dr. Reginell Nuñez or Dr. Jeanette Dela Cruz',
-];
+const addiotionalDocuments = ['Certification from Dr. Reginell Nuñez or Dr. Jeanette Dela Cruz'];
 
 const GovernmentIdTooltip = ({ children }) => {
   const acceptedIds = [
@@ -61,7 +59,7 @@ const GovernmentIdTooltip = ({ children }) => {
     'TIN ID',
     'PhilHealth ID',
     'Pag-IBIG Loyalty Card Plus',
-    'Indigenous Peoples (IP) ID or certification'
+    'Indigenous Peoples (IP) ID or certification',
   ];
 
   return (
@@ -84,15 +82,17 @@ const GovernmentIdTooltip = ({ children }) => {
         '& .MuiTooltip-tooltip': {
           maxWidth: 300,
           backgroundColor: 'rgba(0, 0, 0, 0.9)',
-        }
+        },
       }}
     >
-      <span style={{ 
-        textDecoration: 'underline', 
-        cursor: 'pointer',
-        color: '#1976d2',
-        fontWeight: 'bold'
-      }}>
+      <span
+        style={{
+          textDecoration: 'underline',
+          cursor: 'pointer',
+          color: '#1976d2',
+          fontWeight: 'bold',
+        }}
+      >
         {children}
       </span>
     </Tooltip>
@@ -103,24 +103,39 @@ const documentDescriptions = {
   // Mandatory Documents
   'NBI Clearance': '- National Bureau of Investigation clearance certificate (recent)',
   'PNP Clearance': '- Philippine National Police clearance certificate (recent)',
-  'Employer Clearance OR business records or affidavit of unemployment': '- Employment clearance stating no pending cases, business registration documents, or notarized affidavit of unemployment with no pending cases',
-  'Earliest church record/s or certificate of no church record/s available and affidavit': '- Earliest baptismal certificate or church records, OR certificate stating no church records available with corresponding notarized affidavit',
-  'Eariest school record (form 137A) OR certificate of no school record/s available AND affidavit': '- Earliest school record (Form 137A), OR certificate stating no school records available with corresponding notarized affidavit',
-  'Medical record/s OR affidavit of no medical record/s available': '- Medical records from birth or early childhood, OR notarized affidavit stating no medical records are available',
-  
+  'Employer Clearance OR business records or affidavit of unemployment':
+    '- Employment clearance stating no pending cases, business registration documents, or notarized affidavit of unemployment with no pending cases',
+  'Earliest church record/s or certificate of no church record/s available and affidavit':
+    '- Earliest baptismal certificate or church records, OR certificate stating no church records available with corresponding notarized affidavit',
+  'Eariest school record (form 137A) OR certificate of no school record/s available AND affidavit':
+    '- Earliest school record (Form 137A), OR certificate stating no school records available with corresponding notarized affidavit',
+  'Medical record/s OR affidavit of no medical record/s available':
+    '- Medical records from birth or early childhood, OR notarized affidavit stating no medical records are available',
+
   // Supporting Documents
-  'Other school records-transcript, dimploma, certificates': '- School transcripts, diplomas, certificates, or other educational documents with the correct details',
-  'Birth and/or Church Certificates of Child/Children (If apllicable)': '- Birth certificates or baptismal certificates of your children ',
+  'Other school records-transcript, dimploma, certificates':
+    '- School transcripts, diplomas, certificates, or other educational documents with the correct details',
+  'Birth and/or Church Certificates of Child/Children (If apllicable)':
+    '- Birth certificates or baptismal certificates of your children ',
   'Voters Record': '- Voter registration record or voter ID with the correct details',
-  'Employment Records': '- Employment certificates, payslips, or service records with the correct details',
-  'Identification Cards - National ID, Drivers License, Seniors ID, etc.':( <> - <GovernmentIdTooltip> Government-issued identification cards</GovernmentIdTooltip> with the correct details </>),
-  'Others - Passport, Insurance Documents, Members Data Record': '- Philippine passport, insurance policies, or membership records with the correct details',
-  
+  'Employment Records':
+    '- Employment certificates, payslips, or service records with the correct details',
+  'Identification Cards - National ID, Drivers License, Seniors ID, etc.': (
+    <>
+      {' '}
+      - <GovernmentIdTooltip> Government-issued identification cards</GovernmentIdTooltip> with the
+      correct details{' '}
+    </>
+  ),
+  'Others - Passport, Insurance Documents, Members Data Record':
+    '- Philippine passport, insurance policies, or membership records with the correct details',
+
   // Additional Documents
-  'Certification from Dr. Reginell Nuñez or Dr. Jeanette Dela Cruz': '- Medical certification from Dr. Reginell Nuñez or Dr. Jeanette Dela Cruz confirming the document owner\'s biological sex and stating no sex change operation was performed',
-  
+  'Certification from Dr. Reginell Nuñez or Dr. Jeanette Dela Cruz':
+    "- Medical certification from Dr. Reginell Nuñez or Dr. Jeanette Dela Cruz confirming the document owner's biological sex and stating no sex change operation was performed",
+
   // Conditional Document
-  'Marriage Certificate': '- Official marriage certificate (required if married)'
+  'Marriage Certificate': '- Official marriage certificate (required if married)',
 };
 
 const SexDobCorrection = () => {
@@ -368,125 +383,133 @@ const SexDobCorrection = () => {
     }));
   };
 
- const handleFileUpload = async (label, isUploaded, fileDataObj) => {
-     // Create application if needed before uploading files
-     if (!backendApplicationCreated && isUploaded) {
-       setIsLoading(true);
-       const createdApp = await createBackendApplication();
-       setIsLoading(false);
-       
-       if (!createdApp) {
-         showNotification("Failed to register application. Cannot upload files.", "error");
-         return;
-       }
-     }
-     
-     // Update the uploadedFiles state
-     setUploadedFiles(prevState => {
-       const newState = { ...prevState, [label]: isUploaded };
-       console.log("Updated uploadedFiles:", newState);
-       return newState;
-     });
- 
-     if (isUploaded && fileDataObj) {
-       setFileData(prevState => ({
-         ...prevState,
-         [label]: fileDataObj,
-       }));
- 
-       // === Upload to backend ===
-       try {
-         const currentAppId = applicationId || localStorage.getItem('currentApplicationId');
-         if (!currentAppId) {
-           showNotification("Application ID is missing. Cannot upload file.", "error");
-           return;
-         }
-         
-         console.log("Application ID:", currentAppId);
-         
-         // Handle multiple files (array) or single file (object)
-         const filesToUpload = Array.isArray(fileDataObj) ? fileDataObj : [fileDataObj];
-         
-         for (const [index, fileData] of filesToUpload.entries()) {
-           console.log(`Uploading file ${index + 1}:`, fileData.name);
-           
-           const file = dataURLtoFile(fileData.data, fileData.name, fileData.type);
-           
-           // For multiple files, append index to label
-           const uploadLabel = filesToUpload.length > 1 ? `${label} - File ${index + 1}` : label;
-           
-           const response = await documentApplicationService.uploadFile(currentAppId, file, uploadLabel);
-           console.log(`Upload response for ${fileData.name}:`, response);
-         }
-         
-         const fileCount = filesToUpload.length;
-         const successMessage = fileCount > 1 
-           ? `${fileCount} files uploaded successfully for "${label}"!`
-           : `"${label}" uploaded successfully!`;
-         
-         showNotification(successMessage, "success");
-         
-       } catch (error) {
-         console.error(`Failed to upload "${label}":`, error);
-         
-         // Show detailed error information
-         if (error.response) {
-           console.error("Server response:", error.response.status, error.response.data);
-           
-           // If error is 404 (application not found), try to create it and retry upload
-           if (error.response.status === 404) {
-             showNotification("Application not found. Creating new application...", "info");
-             const createdApp = await createBackendApplication();
-             if (createdApp) {
-               // Retry upload for all files
-               try {
-                 const filesToUpload = Array.isArray(fileDataObj) ? fileDataObj : [fileDataObj];
-                 
-                 for (const [index, fileData] of filesToUpload.entries()) {
-                   const file = dataURLtoFile(fileData.data, fileData.name, fileData.type);
-                   const uploadLabel = filesToUpload.length > 1 ? `${label} - File ${index + 1}` : label;
-                   
-                   const retryResponse = await documentApplicationService.uploadFile(
-                     createdApp.id, 
-                     file, 
-                     uploadLabel
-                   );
-                   console.log(`Retry upload response for ${fileData.name}:`, retryResponse);
-                 }
-                 
-                 const fileCount = filesToUpload.length;
-                 const successMessage = fileCount > 1 
-                   ? `${fileCount} files uploaded successfully for "${label}"!`
-                   : `"${label}" uploaded successfully!`;
-                 
-                 showNotification(successMessage, "success");
-                 return;
-               } catch (retryError) {
-                 console.error("Retry upload failed:", retryError);
-               }
-             }
-           }
-           
-           showNotification(`Failed to upload "${label}": ${error.response.data?.message || error.message}`, "error");
-         } else {
-           showNotification(`Failed to upload "${label}": ${error.message}`, "error");
-         }
-         
-         // Revert the upload state on error
-         setUploadedFiles(prevState => ({
-           ...prevState,
-           [label]: false,
-         }));
-       }
-     } else {
-       setFileData(prevState => {
-         const newState = { ...prevState };
-         delete newState[label];
-         return newState;
-       });
-     }
-   };
- 
+  const handleFileUpload = async (label, isUploaded, fileDataObj) => {
+    // Create application if needed before uploading files
+    if (!backendApplicationCreated && isUploaded) {
+      setIsLoading(true);
+      const createdApp = await createBackendApplication();
+      setIsLoading(false);
+
+      if (!createdApp) {
+        showNotification('Failed to register application. Cannot upload files.', 'error');
+        return;
+      }
+    }
+
+    // Update the uploadedFiles state
+    setUploadedFiles(prevState => {
+      const newState = { ...prevState, [label]: isUploaded };
+      console.log('Updated uploadedFiles:', newState);
+      return newState;
+    });
+
+    if (isUploaded && fileDataObj) {
+      setFileData(prevState => ({
+        ...prevState,
+        [label]: fileDataObj,
+      }));
+
+      // === Upload to backend ===
+      try {
+        const currentAppId = applicationId || localStorage.getItem('currentApplicationId');
+        if (!currentAppId) {
+          showNotification('Application ID is missing. Cannot upload file.', 'error');
+          return;
+        }
+
+        console.log('Application ID:', currentAppId);
+
+        // Handle multiple files (array) or single file (object)
+        const filesToUpload = Array.isArray(fileDataObj) ? fileDataObj : [fileDataObj];
+
+        for (const [index, fileData] of filesToUpload.entries()) {
+          console.log(`Uploading file ${index + 1}:`, fileData.name);
+
+          const file = dataURLtoFile(fileData.data, fileData.name, fileData.type);
+
+          // For multiple files, append index to label
+          const uploadLabel = filesToUpload.length > 1 ? `${label} - File ${index + 1}` : label;
+
+          const response = await documentApplicationService.uploadFile(
+            currentAppId,
+            file,
+            uploadLabel
+          );
+          console.log(`Upload response for ${fileData.name}:`, response);
+        }
+
+        const fileCount = filesToUpload.length;
+        const successMessage =
+          fileCount > 1
+            ? `${fileCount} files uploaded successfully for "${label}"!`
+            : `"${label}" uploaded successfully!`;
+
+        showNotification(successMessage, 'success');
+      } catch (error) {
+        console.error(`Failed to upload "${label}":`, error);
+
+        // Show detailed error information
+        if (error.response) {
+          console.error('Server response:', error.response.status, error.response.data);
+
+          // If error is 404 (application not found), try to create it and retry upload
+          if (error.response.status === 404) {
+            showNotification('Application not found. Creating new application...', 'info');
+            const createdApp = await createBackendApplication();
+            if (createdApp) {
+              // Retry upload for all files
+              try {
+                const filesToUpload = Array.isArray(fileDataObj) ? fileDataObj : [fileDataObj];
+
+                for (const [index, fileData] of filesToUpload.entries()) {
+                  const file = dataURLtoFile(fileData.data, fileData.name, fileData.type);
+                  const uploadLabel =
+                    filesToUpload.length > 1 ? `${label} - File ${index + 1}` : label;
+
+                  const retryResponse = await documentApplicationService.uploadFile(
+                    createdApp.id,
+                    file,
+                    uploadLabel
+                  );
+                  console.log(`Retry upload response for ${fileData.name}:`, retryResponse);
+                }
+
+                const fileCount = filesToUpload.length;
+                const successMessage =
+                  fileCount > 1
+                    ? `${fileCount} files uploaded successfully for "${label}"!`
+                    : `"${label}" uploaded successfully!`;
+
+                showNotification(successMessage, 'success');
+                return;
+              } catch (retryError) {
+                console.error('Retry upload failed:', retryError);
+              }
+            }
+          }
+
+          showNotification(
+            `Failed to upload "${label}": ${error.response.data?.message || error.message}`,
+            'error'
+          );
+        } else {
+          showNotification(`Failed to upload "${label}": ${error.message}`, 'error');
+        }
+
+        // Revert the upload state on error
+        setUploadedFiles(prevState => ({
+          ...prevState,
+          [label]: false,
+        }));
+      }
+    } else {
+      setFileData(prevState => {
+        const newState = { ...prevState };
+        delete newState[label];
+        return newState;
+      });
+    }
+  };
 
   const isMandatoryComplete = () => {
     const allMandatoryDocsUploaded = mandatoryDocuments.every(doc => {
@@ -661,28 +684,38 @@ const SexDobCorrection = () => {
       if (userEmail) {
         try {
           console.log('📧 Sending application confirmation notification to:', userEmail);
-          const notificationResult = await documentApplicationNotificationService.sendApplicationConfirmation(
-            userEmail,
-            currentAppId,
-            {
-              type: 'Birth Certificate',
-              subtype: 'Correction - Sex/Date of Birth',
-              applicantName: `${formData.firstName || ''} ${formData.lastName || ''}`.trim(),
-              submissionDate: new Date().toLocaleDateString(),
-              status: 'Pending'
-            }
-          );
+          const notificationResult =
+            await documentApplicationNotificationService.sendApplicationConfirmation(
+              userEmail,
+              currentAppId,
+              {
+                type: 'Birth Certificate',
+                subtype: 'Correction - Sex/Date of Birth',
+                applicantName: `${formData.firstName || ''} ${formData.lastName || ''}`.trim(),
+                submissionDate: new Date().toLocaleDateString(),
+                status: 'Pending',
+              }
+            );
 
           if (notificationResult.success) {
             console.log('✅ Confirmation notification sent successfully');
-            showNotification('Application submitted successfully! A confirmation email has been sent to you.', 'success');
+            showNotification(
+              'Application submitted successfully! A confirmation email has been sent to you.',
+              'success'
+            );
           } else {
             console.log('⚠️ Confirmation notification failed:', notificationResult.error);
-            showNotification('Application submitted successfully! However, we could not send the confirmation email.', 'warning');
+            showNotification(
+              'Application submitted successfully! However, we could not send the confirmation email.',
+              'warning'
+            );
           }
         } catch (notificationError) {
           console.error('❌ Error sending confirmation notification:', notificationError);
-          showNotification('Application submitted successfully! However, we could not send the confirmation email.', 'warning');
+          showNotification(
+            'Application submitted successfully! However, we could not send the confirmation email.',
+            'warning'
+          );
         }
       } else {
         console.log('⚠️ No email available for notifications');
@@ -755,7 +788,7 @@ const SexDobCorrection = () => {
               <FileUpload
                 key={index}
                 label={doc}
-                 description={documentDescriptions[doc]}
+                description={documentDescriptions[doc]}
                 onUpload={(isUploaded, fileDataObj) =>
                   handleFileUpload(doc, isUploaded, fileDataObj)
                 }
@@ -819,13 +852,13 @@ const SexDobCorrection = () => {
               <FileUpload
                 key={index}
                 label={doc}
-                 description={documentDescriptions[doc]}
+                description={documentDescriptions[doc]}
                 onUpload={(isUploaded, fileDataObj) =>
                   handleFileUpload(doc, isUploaded, fileDataObj)
                 }
                 required={selectedOptions.Sex}
                 disabled={isLoading}
-                 multiple={true}
+                multiple={true}
               />
             ))}
           </Box>

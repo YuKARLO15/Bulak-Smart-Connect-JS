@@ -13,7 +13,7 @@ const OfflineIndicator = () => {
       setShowOnlineAlert(true);
       setTimeout(() => setShowOnlineAlert(false), 3000);
     };
-    
+
     const handleOffline = () => {
       setIsOnline(false);
       setShowOfflineAlert(true);
@@ -38,33 +38,25 @@ const OfflineIndicator = () => {
       <Snackbar
         open={showOfflineAlert && !isOnline}
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-        sx={{ 
+        sx={{
           top: 20,
-          zIndex: 9999 
+          zIndex: 9999,
         }}
       >
-        <Alert 
-          severity="warning" 
-          icon={<WifiOffIcon />}
-          sx={{ width: '100%' }}
-        >
+        <Alert severity="warning" icon={<WifiOffIcon />} sx={{ width: '100%' }}>
           You're offline. Some features may not be available.
         </Alert>
       </Snackbar>
-      
+
       <Snackbar
         open={showOnlineAlert}
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-        sx={{ 
+        sx={{
           top: 20,
-          zIndex: 9999 
+          zIndex: 9999,
         }}
       >
-        <Alert 
-          severity="success" 
-          icon={<WifiIcon />}
-          sx={{ width: '100%' }}
-        >
+        <Alert severity="success" icon={<WifiIcon />} sx={{ width: '100%' }}>
           You're back online!
         </Alert>
       </Snackbar>

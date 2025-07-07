@@ -42,13 +42,12 @@ const AppointmentDashboard = () => {
     }
   };
 
-  const handleRequirementClick = (type) => {
+  const handleRequirementClick = type => {
     if (type === 'birth') {
       navigate('/RequirementBirthList');
     } else if (type === 'marriage') {
       navigate('/RequirementMarriageList');
-    }
-    else if (type === 'death') {
+    } else if (type === 'death') {
       navigate('/RequirementDeathCertificateList');
     }
   };
@@ -62,60 +61,57 @@ const AppointmentDashboard = () => {
         />
       ) : (
         <>
-     
-     
-         <Box className="ContentAppointment">
-              <Box className="LeftSectionAppointment">
-                     <Box className="HeaderAppointment">
-            <Box className="HeaderContentAppointment">
-              <Typography variant="h4" className="TitleAppointment">
-                SKIP LONG WAITING LINES
-              </Typography>
-           
+          <Box className="ContentAppointment">
+            <Box className="LeftSectionAppointment">
+              <Box className="HeaderAppointment">
+                <Box className="HeaderContentAppointment">
+                  <Typography variant="h4" className="TitleAppointment">
+                    SKIP LONG WAITING LINES
+                  </Typography>
+                </Box>
+
+                <Button
+                  variant="contained"
+                  className="ButtonAppointment"
+                  onClick={handleBookAppointment}
+                >
+                  BOOK AN APPOINTMENT !
+                </Button>
+              </Box>
+              <Box className="RecentAppointmentsDesktop">
+                <RecentAppointments />
+              </Box>
             </Box>
-           
-              <Button
-                variant="contained"
-                className="ButtonAppointment"
-                onClick={handleBookAppointment}
-              >
-                BOOK AN APPOINTMENT !
-              </Button>
-            
-          </Box>
-             <Box className="RecentAppointmentsDesktop">
-              <RecentAppointments />
-            </Box>
-            </Box>
-            
+
             <Box className="RightSectionContentAppointment">
               <Card className="ContentAppointmentrequirements">
                 <Typography variant="h6" className="SectionTitleAppointmentRequirements">
-                  Documents Requirements 
+                  Documents Requirements
                 </Typography>
                 <Typography variant="body2" className="SectionDescriptionAppointment">
-                  <strong>Important! </strong> Please review and prepare all required documents before scheduling your appointment.
+                  <strong>Important! </strong> Please review and prepare all required documents
+                  before scheduling your appointment.
                 </Typography>
-              
+
                 <Box className="RequirementsList">
-                  <Typography 
-                    variant="body2" 
+                  <Typography
+                    variant="body2"
                     className="RequirementItem"
                     onClick={() => handleRequirementClick('birth')}
                     style={{ cursor: 'pointer' }}
                   >
-                  View Birth Certificate Requirements
+                    View Birth Certificate Requirements
                   </Typography>
-                  <Typography 
-                    variant="body2" 
+                  <Typography
+                    variant="body2"
                     className="RequirementItem"
                     onClick={() => handleRequirementClick('marriage')}
                     style={{ cursor: 'pointer' }}
                   >
                     View Marriage License Requirements
-                    </Typography>
-                        <Typography 
-                    variant="body2" 
+                  </Typography>
+                  <Typography
+                    variant="body2"
                     className="RequirementItem"
                     onClick={() => handleRequirementClick('death')}
                     style={{ cursor: 'pointer' }}
@@ -124,7 +120,7 @@ const AppointmentDashboard = () => {
                   </Typography>
                 </Box>
               </Card>
-              
+
               <Card className="AvailableSlotsAppointment">
                 <CardContent>
                   <Typography variant="h6" className="SectionTitleAppointment">
@@ -142,14 +138,13 @@ const AppointmentDashboard = () => {
                   </Typography>
                 </CardContent>
               </Card>
-              </Box>
-              
             </Box>
-            
-            <Box className="RecentAppointmentsMobile">
-          <RecentAppointments />
-        </Box>
-          
+          </Box>
+
+          <Box className="RecentAppointmentsMobile">
+            <RecentAppointments />
+          </Box>
+
           <Box className="AnnouncementButtonContainer">
             <FloatingAnnouncementButton />
           </Box>

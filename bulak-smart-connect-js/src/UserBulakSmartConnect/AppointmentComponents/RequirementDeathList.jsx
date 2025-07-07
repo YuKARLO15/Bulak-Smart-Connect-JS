@@ -95,7 +95,6 @@ const RequirementDeathList = () => {
                 </ListItemIcon>
                 <ListItemText primary="Affidavit of Delayed Registration (if registering after 30 days)" />
               </ListItem>
-              
             </List>
           </Box>
         </Box>
@@ -131,7 +130,7 @@ const RequirementDeathList = () => {
                 </ListItemIcon>
                 <ListItemText primary="Only immediate family members or authorized representatives can request copies" />
               </ListItem>
-             
+
               <ListItem>
                 <ListItemIcon>
                   <CheckCircleOutlineIcon fontSize="small" />

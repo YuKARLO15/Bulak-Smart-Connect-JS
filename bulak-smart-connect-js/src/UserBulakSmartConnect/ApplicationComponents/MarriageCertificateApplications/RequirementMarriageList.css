@@ -43,7 +43,7 @@
   padding: 30px;
 }
 
-.marriage-requirement-section2{
+.marriage-requirement-section2 {
   margin-left: 5vw !important;
 }
 
@@ -55,7 +55,7 @@
   font-size: 16px !important;
 }
 
-.marriage-requirement-section-title1{
+.marriage-requirement-section-title1 {
   background-color: #184a5b;
   padding: 10px;
   color: #f5f5f5;
@@ -63,8 +63,8 @@
   text-align: center;
   margin-bottom: 15px !important;
 }
-.marriage-requirement-section-title3{
-    padding: 10px;
+.marriage-requirement-section-title3 {
+  padding: 10px;
   color: #184a5b;
   font-weight: 600 !important;
   text-align: left;
@@ -106,8 +106,6 @@
 /* Fixed nested list styling */
 .marriage-requirement-nested-list {
   padding-left: 40px !important;
-
-
 }
 
 .marriage-requirement-nested-list .MuiListItem-root {

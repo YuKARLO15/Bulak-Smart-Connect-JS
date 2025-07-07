@@ -30,7 +30,7 @@ export default function LogInCard({ onLogin }) {
   const [passwordErrorMessage, setPasswordErrorMessage] = useState('');
   const [error, setError] = useState('');
   const [open, setOpen] = useState(false);
-  const [loginType, setLoginType] = useState('email');  // Add login type state
+  const [loginType, setLoginType] = useState('email'); // Add login type state
   const [showPassword, setShowPassword] = useState(false); // Show password state
   const [rememberMe, setRememberMe] = useState(false); // Remember me state
   const navigate = useNavigate();
@@ -42,7 +42,7 @@ export default function LogInCard({ onLogin }) {
     const savedPassword = localStorage.getItem('rememberedPassword');
     const savedLoginType = localStorage.getItem('rememberedLoginType');
     const wasRemembered = localStorage.getItem('rememberMe') === 'true';
-    
+
     if (wasRemembered && savedEmail && savedPassword) {
       setEmail(savedEmail);
       setPassword(savedPassword);
@@ -54,9 +54,9 @@ export default function LogInCard({ onLogin }) {
   // Show message from password change redirect
   useEffect(() => {
     if (location.state?.message) {
-      setMessage({ 
-        text: location.state.message, 
-        type: location.state.type || 'success' 
+      setMessage({
+        text: location.state.message,
+        type: location.state.type || 'success',
       });
       // Clear the state so message doesn't persist on refresh
       window.history.replaceState({}, document.title);
@@ -66,7 +66,7 @@ export default function LogInCard({ onLogin }) {
   const toggleLoginType = () => {
     const newType = loginType === 'email' ? 'username' : 'email';
     setLoginType(newType);
-    
+
     // Clear validation errors when switching
     setEmailError(false);
     setEmailErrorMessage('');
@@ -74,10 +74,10 @@ export default function LogInCard({ onLogin }) {
   };
 
   // Get input label based on login type
-  const getInputLabel = () => loginType === 'email' ? 'Email' : 'Username';
+  const getInputLabel = () => (loginType === 'email' ? 'Email' : 'Username');
 
   // Get placeholder text based on login type
-  const getPlaceholder = () => loginType === 'email' ? 'your@email.com' : 'username';
+  const getPlaceholder = () => (loginType === 'email' ? 'your@email.com' : 'username');
 
   const handleClickOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -86,20 +86,20 @@ export default function LogInCard({ onLogin }) {
     setShowPassword(!showPassword);
   };
 
-  const handleRememberMeChange = (event) => {
+  const handleRememberMeChange = event => {
     setRememberMe(event.target.checked);
   };
 
   const handleSubmit = async event => {
     event.preventDefault();
-    
+
     if (validateInputs()) {
       try {
         console.log(`Sending login request with ${loginType}:`, { [loginType]: email, password });
 
         // Old Method to use the API service from api.js, now using the AuthContext
         //console.log('Sending login request with:', { email, password });
-  
+
         //Old Logic to use the API service from api.js, now using the AuthContext
         //const data = await authService.login(email, password);
         //console.log('Login successful:', data);
@@ -131,14 +131,17 @@ export default function LogInCard({ onLogin }) {
             localStorage.removeItem('rememberMe');
           }
 
-          if (user && (user.roles?.includes('staff') || 
-              user.roles?.includes('admin') || 
-              user.roles?.includes('super_admin'))) {
+          if (
+            user &&
+            (user.roles?.includes('staff') ||
+              user.roles?.includes('admin') ||
+              user.roles?.includes('super_admin'))
+          ) {
             console.log('User has admin role - navigating to AdminHome');
-            navigate("/AdminHome");
+            navigate('/AdminHome');
           } else {
             console.log('User is a regular user - navigating to Home');
-            navigate("/Home");
+            navigate('/Home');
           }
         } else {
           setError('Login failed. Please check your credentials.');
@@ -151,7 +154,7 @@ export default function LogInCard({ onLogin }) {
           console.log('Error data:', error.response.data);
           setError(error.response.data.message || 'Invalid credentials');
         } else {
-          setError("An error occurred during login. Please try again.");
+          setError('An error occurred during login. Please try again.');
         }
       }
     }
@@ -257,22 +260,22 @@ export default function LogInCard({ onLogin }) {
               ),
             }}
           />
-           <Link
-              component="button"
-              type="button"
-              onClick={handleClickOpen}
-              variant="body2"
-              className="ForgotPassword"
-            >
-              Forgot your password?
-            </Link>
+          <Link
+            component="button"
+            type="button"
+            onClick={handleClickOpen}
+            variant="body2"
+            className="ForgotPassword"
+          >
+            Forgot your password?
+          </Link>
         </FormControl>
         <FormControlLabel
           control={
-            <Checkbox 
+            <Checkbox
               checked={rememberMe}
               onChange={handleRememberMeChange}
-              value="remember" 
+              value="remember"
               sx={{ color: '#184a5b' }}
             />
           }

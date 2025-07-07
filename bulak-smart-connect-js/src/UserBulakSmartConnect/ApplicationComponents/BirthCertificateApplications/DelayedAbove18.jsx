@@ -1,6 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Box, Button, Checkbox, FormControlLabel, Typography, Alert, Paper, Snackbar, CircularProgress,  Tooltip } from '@mui/material';
+import {
+  Box,
+  Button,
+  Checkbox,
+  FormControlLabel,
+  Typography,
+  Alert,
+  Paper,
+  Snackbar,
+  CircularProgress,
+  Tooltip,
+} from '@mui/material';
 import FileUpload from '../FileUpload';
 import './DelayedAbove18.css';
 import NavBar from '../../../NavigationComponents/NavSide';
@@ -8,7 +19,6 @@ import { documentApplicationService } from '../../../services/documentApplicatio
 import { documentApplicationNotificationService } from '../../../services/documentApplicationNotificationService';
 import { localStorageManager } from '../../../services/localStorageManager';
 import { useAuth } from '../../../context/AuthContext';
-
 
 const maritalDocuments = [
   'Negative Certification from PSA',
@@ -25,10 +35,7 @@ const maritalDocuments = [
 
 const nonMaritalDocuments = maritalDocuments
   .filter(doc => doc !== 'Certificate of Marriage of Parents')
-  .concat([
-
-  ]);
-
+  .concat([]);
 
 const GovernmentIdTooltip = ({ children }) => {
   const acceptedIds = [
@@ -48,7 +55,7 @@ const GovernmentIdTooltip = ({ children }) => {
     'TIN ID',
     'PhilHealth ID',
     'Pag-IBIG Loyalty Card Plus',
-    'Indigenous Peoples (IP) ID or certification'
+    'Indigenous Peoples (IP) ID or certification',
   ];
 
   return (
@@ -71,40 +78,51 @@ const GovernmentIdTooltip = ({ children }) => {
         '& .MuiTooltip-tooltip': {
           maxWidth: 300,
           backgroundColor: 'rgba(0, 0, 0, 0.9)',
-        }
+        },
       }}
     >
-      <span style={{ 
-        textDecoration: 'underline', 
-        cursor: 'pointer',
-        color: '#1976d2',
-        fontWeight: 'bold'
-      }}>
+      <span
+        style={{
+          textDecoration: 'underline',
+          cursor: 'pointer',
+          color: '#1976d2',
+          fontWeight: 'bold',
+        }}
+      >
         {children}
       </span>
     </Tooltip>
   );
 };
-  const documentDescriptions = {
+const documentDescriptions = {
   'Negative Certification from PSA': '- Certificate showing no birth record exists in PSA database',
-   'Affidavit of Disinterested Person 1 (Not Related) with ID': (
+  'Affidavit of Disinterested Person 1 (Not Related) with ID': (
     <>
-      - Sworn statement from non-relative witness and witness <GovernmentIdTooltip>government issued ID</GovernmentIdTooltip>
+      - Sworn statement from non-relative witness and witness{' '}
+      <GovernmentIdTooltip>government issued ID</GovernmentIdTooltip>
     </>
   ),
   'Affidavit of Disinterested Persons 2 (Not Related) with ID': (
     <>
-      - Sworn statement from second non-relative witness and  witness <GovernmentIdTooltip>government issued ID</GovernmentIdTooltip>
+      - Sworn statement from second non-relative witness and witness{' '}
+      <GovernmentIdTooltip>government issued ID</GovernmentIdTooltip>
     </>
-  ),  'Certificate of Marriage, if married': '- Official marriage certificate if applicant is married',
-  'National ID , ePhil ID or PhilSys transaction slip': '- A valid National ID, ePhilID, or PhilSys transaction slip is required for this application. If you do not have any of these, please stay updated on the San Ildefonso National ID booth schedules, check other PhilSys registration centers, and secure your ID or transaction slip before proceeding.',
+  ),
+  'Certificate of Marriage, if married': '- Official marriage certificate if applicant is married',
+  'National ID , ePhil ID or PhilSys transaction slip':
+    '- A valid National ID, ePhilID, or PhilSys transaction slip is required for this application. If you do not have any of these, please stay updated on the San Ildefonso National ID booth schedules, check other PhilSys registration centers, and secure your ID or transaction slip before proceeding.',
   'Barangay Certification of Residency': '- Certificate of residency from local barangay',
-  'Unedited front-facing photo 2x2, white background': '- Recent passport-style photo with white background',
-  'Documentary evidences of parents': '- Birth certificates, marriage certificate, or death certificates of parents',
-  'Certificate of Marriage of Parents': '- Official marriage certificate of applicant\'s parents',
-  'Affidavit of the document owner registrant stating why the document owner cannot appear personally': '- Notarized affidavit explaining absence (affidavit can be obtained from a notary public, lawyer\'s office, or barangay hall), and death certificate if deceased',
-  'Personal Appearance of the Father or Affidavit of Admission of Paternity executed before a Notary Public': '- Father\'s personal appearance or notarized affidavit acknowledging paternity',
-  'Any (2) Documentary Evidences': '- Hospital records, baptismal certificate, school records or Philhealth records',
+  'Unedited front-facing photo 2x2, white background':
+    '- Recent passport-style photo with white background',
+  'Documentary evidences of parents':
+    '- Birth certificates, marriage certificate, or death certificates of parents',
+  'Certificate of Marriage of Parents': "- Official marriage certificate of applicant's parents",
+  'Affidavit of the document owner registrant stating why the document owner cannot appear personally':
+    "- Notarized affidavit explaining absence (affidavit can be obtained from a notary public, lawyer's office, or barangay hall), and death certificate if deceased",
+  'Personal Appearance of the Father or Affidavit of Admission of Paternity executed before a Notary Public':
+    "- Father's personal appearance or notarized affidavit acknowledging paternity",
+  'Any (2) Documentary Evidences':
+    '- Hospital records, baptismal certificate, school records or Philhealth records',
 };
 
 const Above18Registration = () => {
@@ -117,25 +135,24 @@ const Above18Registration = () => {
   const [isInitializing, setIsInitializing] = useState(true);
   const [formData, setFormData] = useState({});
   const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'info' });
-  const [applicationId, setApplicationId] = useState(null); 
+  const [applicationId, setApplicationId] = useState(null);
   const [backendApplicationCreated, setBackendApplicationCreated] = useState(false);
-  const [uploadedDocumentsCount, setUploadedDocumentsCount] = useState(0); 
+  const [uploadedDocumentsCount, setUploadedDocumentsCount] = useState(0);
   const navigate = useNavigate();
   const location = useLocation();
   const [documentOwnerNotPresent, setDocumentOwnerNotPresent] = useState(false);
-const[documentFatherNotPresent, setDocumentFatherNotPresent] = useState(false);
+  const [documentFatherNotPresent, setDocumentFatherNotPresent] = useState(false);
   const { user } = useAuth();
 
-  
-  const isEditing = location.state?.isEditing || 
-                    localStorage.getItem('isEditingBirthApplication') === 'true';
+  const isEditing =
+    location.state?.isEditing || localStorage.getItem('isEditingBirthApplication') === 'true';
 
   // Show snackbar notification
   const showNotification = (message, severity = 'info') => {
     setSnackbar({
       open: true,
       message,
-      severity
+      severity,
     });
   };
 
@@ -147,18 +164,18 @@ const[documentFatherNotPresent, setDocumentFatherNotPresent] = useState(false);
   // Create application in backend
   const createBackendApplication = async () => {
     try {
-      console.log("Creating application in backend...");
-      
+      console.log('Creating application in backend...');
+
       // Get current application ID from localStorage or create a new one
       const currentId = localStorage.getItem('currentApplicationId');
       let appId = currentId;
-      
+
       if (!appId) {
         appId = 'BC-' + Date.now().toString().slice(-6);
-        console.log("Generated new application ID:", appId);
+        console.log('Generated new application ID:', appId);
         localStorage.setItem('currentApplicationId', appId);
       }
-      
+
       setApplicationId(appId);
 
       // Prepare data for backend
@@ -166,28 +183,31 @@ const[documentFatherNotPresent, setDocumentFatherNotPresent] = useState(false);
         applicationType: 'Birth Certificate',
         applicationSubtype: 'Delayed Registration - Above 18',
         applicantName: `${formData.firstName || ''} ${formData.lastName || ''}`,
-        applicantDetails: JSON.stringify({...formData, documentStatus: status}),
+        applicantDetails: JSON.stringify({ ...formData, documentStatus: status }),
         formData: formData,
-        status: 'PENDING'
+        status: 'PENDING',
       };
 
-      console.log("Creating application with data:", backendApplicationData);
-      
+      console.log('Creating application with data:', backendApplicationData);
+
       // Call API to create application
       const response = await documentApplicationService.createApplication(backendApplicationData);
-      console.log("Backend created application:", response);
-      
+      console.log('Backend created application:', response);
+
       // Store the backend ID
       if (response && response.id) {
         localStorage.setItem('currentApplicationId', response.id);
         setApplicationId(response.id);
         setBackendApplicationCreated(true);
       }
-      
+
       return response;
     } catch (error) {
-      console.error("Failed to create application in backend:", error);
-      showNotification(`Failed to register application: ${error.message}. Please try again.`, "error");
+      console.error('Failed to create application in backend:', error);
+      showNotification(
+        `Failed to register application: ${error.message}. Please try again.`,
+        'error'
+      );
       return null;
     }
   };
@@ -203,40 +223,40 @@ const[documentFatherNotPresent, setDocumentFatherNotPresent] = useState(false);
     const maritalStatus = localStorage.getItem('maritalStatus');
     if (maritalStatus) {
       setStatus(maritalStatus);
-      console.log("Status loaded from localStorage:", maritalStatus);
+      console.log('Status loaded from localStorage:', maritalStatus);
     }
-    
+
     const loadData = async () => {
       try {
         setIsInitializing(true);
-        
+
         // Load application data
         if (isEditing) {
-          console.log("Loading data for editing...");
+          console.log('Loading data for editing...');
           const editingId = localStorage.getItem('editingApplicationId');
-          console.log("Editing application ID:", editingId);
-          
+          console.log('Editing application ID:', editingId);
+
           if (editingId) {
             setApplicationId(editingId);
-            
+
             // Check if this application exists in backend
             try {
               const backendApp = await documentApplicationService.getApplication(editingId);
               if (backendApp) {
                 setBackendApplicationCreated(true);
-                console.log("Application exists in backend:", backendApp);
+                console.log('Application exists in backend:', backendApp);
               }
             } catch (error) {
-              console.warn("Application may not exist in backend:", error);
+              console.warn('Application may not exist in backend:', error);
             }
           }
-          
+
           // Get applications from localStorage
           const applications = JSON.parse(localStorage.getItem('applications') || '[]');
           const applicationToEdit = applications.find(app => app.id === editingId);
-          
+
           if (applicationToEdit) {
-            console.log("Found application to edit:", applicationToEdit);
+            console.log('Found application to edit:', applicationToEdit);
             if (applicationToEdit.documentStatus) {
               setStatus(applicationToEdit.documentStatus);
             }
@@ -258,7 +278,7 @@ const[documentFatherNotPresent, setDocumentFatherNotPresent] = useState(false);
               if (parsedData.uploadedFiles) {
                 setUploadedFiles(parsedData.uploadedFiles || {});
               }
-              console.log("Loaded form data from birthCertificateApplication");
+              console.log('Loaded form data from birthCertificateApplication');
             }
           }
         } else {
@@ -266,23 +286,23 @@ const[documentFatherNotPresent, setDocumentFatherNotPresent] = useState(false);
           const currentId = localStorage.getItem('currentApplicationId');
           if (currentId) {
             setApplicationId(currentId);
-            
+
             // Check if this application exists in backend
             try {
               const backendApp = await documentApplicationService.getApplication(currentId);
               if (backendApp) {
                 setBackendApplicationCreated(true);
-                console.log("Application exists in backend:", backendApp);
+                console.log('Application exists in backend:', backendApp);
               }
             } catch (error) {
-              console.warn("Application may not exist in backend:", error);
-              
+              console.warn('Application may not exist in backend:', error);
+
               // If we have form data but no backend application, automatically create it
               const currentApplicationData = localStorage.getItem('birthCertificateApplication');
               if (currentApplicationData) {
                 const parsedData = JSON.parse(currentApplicationData);
                 setFormData(parsedData);
-                
+
                 // Auto-create backend application if we have status
                 if (parsedData.documentStatus) {
                   setStatus(parsedData.documentStatus);
@@ -291,7 +311,7 @@ const[documentFatherNotPresent, setDocumentFatherNotPresent] = useState(false);
               }
             }
           }
-          
+
           const currentApplicationData = localStorage.getItem('birthCertificateApplication');
           if (currentApplicationData) {
             const parsedData = JSON.parse(currentApplicationData);
@@ -304,26 +324,26 @@ const[documentFatherNotPresent, setDocumentFatherNotPresent] = useState(false);
             }
           }
         }
-        
+
         // Check storage usage
         const usage = localStorageManager.getCurrentUsage();
         console.log(`📊 Current storage usage: ${usage.percentage.toFixed(1)}%`);
-        
+
         if (usage.isNearFull) {
           console.warn('⚠️ localStorage is getting full, performing cleanup...');
           await localStorageManager.performCleanup(0.2);
         }
       } catch (error) {
-        console.error("Error during initialization:", error);
-        showNotification("Error loading application data", "error");
+        console.error('Error during initialization:', error);
+        showNotification('Error loading application data', 'error');
       } finally {
         setIsInitializing(false);
       }
     };
-    
+
     loadData();
   }, [isEditing]);
-  
+
   // Function to convert data URL to File object
   function dataURLtoFile(dataurl, filename, type) {
     try {
@@ -341,23 +361,23 @@ const[documentFatherNotPresent, setDocumentFatherNotPresent] = useState(false);
     }
   }
 
-   const handleFileUpload = async (label, isUploaded, fileDataObj) => {
+  const handleFileUpload = async (label, isUploaded, fileDataObj) => {
     // Create application if needed before uploading files
     if (!backendApplicationCreated && isUploaded) {
       setIsLoading(true);
       const createdApp = await createBackendApplication();
       setIsLoading(false);
-      
+
       if (!createdApp) {
-        showNotification("Failed to register application. Cannot upload files.", "error");
+        showNotification('Failed to register application. Cannot upload files.', 'error');
         return;
       }
     }
-    
+
     // Update the uploadedFiles state
     setUploadedFiles(prevState => {
       const newState = { ...prevState, [label]: isUploaded };
-      console.log("Updated uploadedFiles:", newState);
+      console.log('Updated uploadedFiles:', newState);
       return newState;
     });
 
@@ -371,80 +391,89 @@ const[documentFatherNotPresent, setDocumentFatherNotPresent] = useState(false);
       try {
         const currentAppId = applicationId || localStorage.getItem('currentApplicationId');
         if (!currentAppId) {
-          showNotification("Application ID is missing. Cannot upload file.", "error");
+          showNotification('Application ID is missing. Cannot upload file.', 'error');
           return;
         }
-        
-        console.log("Application ID:", currentAppId);
-        
+
+        console.log('Application ID:', currentAppId);
+
         // Handle multiple files (array) or single file (object)
         const filesToUpload = Array.isArray(fileDataObj) ? fileDataObj : [fileDataObj];
-        
+
         for (const [index, fileData] of filesToUpload.entries()) {
           console.log(`Uploading file ${index + 1}:`, fileData.name);
-          
+
           const file = dataURLtoFile(fileData.data, fileData.name, fileData.type);
-          
+
           // For multiple files, append index to label
           const uploadLabel = filesToUpload.length > 1 ? `${label} - File ${index + 1}` : label;
-          
-          const response = await documentApplicationService.uploadFile(currentAppId, file, uploadLabel);
+
+          const response = await documentApplicationService.uploadFile(
+            currentAppId,
+            file,
+            uploadLabel
+          );
           console.log(`Upload response for ${fileData.name}:`, response);
         }
-        
+
         const fileCount = filesToUpload.length;
-        const successMessage = fileCount > 1 
-          ? `${fileCount} files uploaded successfully for "${label}"!`
-          : `"${label}" uploaded successfully!`;
-        
-        showNotification(successMessage, "success");
-        
+        const successMessage =
+          fileCount > 1
+            ? `${fileCount} files uploaded successfully for "${label}"!`
+            : `"${label}" uploaded successfully!`;
+
+        showNotification(successMessage, 'success');
       } catch (error) {
         console.error(`Failed to upload "${label}":`, error);
-        
+
         // Show detailed error information
         if (error.response) {
-          console.error("Server response:", error.response.status, error.response.data);
-          
+          console.error('Server response:', error.response.status, error.response.data);
+
           // If error is 404 (application not found), try to create it and retry upload
           if (error.response.status === 404) {
-            showNotification("Application not found. Creating new application...", "info");
+            showNotification('Application not found. Creating new application...', 'info');
             const createdApp = await createBackendApplication();
             if (createdApp) {
               // Retry upload for all files
               try {
                 const filesToUpload = Array.isArray(fileDataObj) ? fileDataObj : [fileDataObj];
-                
+
                 for (const [index, fileData] of filesToUpload.entries()) {
                   const file = dataURLtoFile(fileData.data, fileData.name, fileData.type);
-                  const uploadLabel = filesToUpload.length > 1 ? `${label} - File ${index + 1}` : label;
-                  
+                  const uploadLabel =
+                    filesToUpload.length > 1 ? `${label} - File ${index + 1}` : label;
+
                   const retryResponse = await documentApplicationService.uploadFile(
-                    createdApp.id, 
-                    file, 
+                    createdApp.id,
+                    file,
                     uploadLabel
                   );
                   console.log(`Retry upload response for ${fileData.name}:`, retryResponse);
                 }
-                
+
                 const fileCount = filesToUpload.length;
-                const successMessage = fileCount > 1 
-                  ? `${fileCount} files uploaded successfully for "${label}"!`
-                  : `"${label}" uploaded successfully!`;
-                
-                showNotification(successMessage, "success");
+                const successMessage =
+                  fileCount > 1
+                    ? `${fileCount} files uploaded successfully for "${label}"!`
+                    : `"${label}" uploaded successfully!`;
+
+                showNotification(successMessage, 'success');
                 return;
               } catch (retryError) {
-                console.error("Retry upload failed:", retryError);
+                console.error('Retry upload failed:', retryError);
               }
             }
           }
-          
-          showNotification(`Failed to upload "${label}": ${error.response.data?.message || error.message}`, "error");
+
+          showNotification(
+            `Failed to upload "${label}": ${error.response.data?.message || error.message}`,
+            'error'
+          );
         } else {
-          showNotification(`Failed to upload "${label}": ${error.message}`, "error");
+          showNotification(`Failed to upload "${label}": ${error.message}`, 'error');
         }
-        
+
         // Revert the upload state on error
         setUploadedFiles(prevState => ({
           ...prevState,
@@ -462,46 +491,40 @@ const[documentFatherNotPresent, setDocumentFatherNotPresent] = useState(false);
 
   const isMandatoryComplete = () => {
     if (!status) {
-      console.log("No status selected");
+      console.log('No status selected');
       return false;
     }
 
-   
     const requiredDocs = status === 'marital' ? maritalDocuments : nonMaritalDocuments;
-    
 
-    console.log("Current uploadedFiles state:", uploadedFiles);
-    console.log("Required docs:", requiredDocs);
-    
-       const filteredRequiredDocs = requiredDocs.filter(doc => 
-    doc !== 'Certificate of Marriage, if applicant is married'
-  );
-   const allRequiredDocsUploaded = filteredRequiredDocs.every(doc => {
-    const isUploaded = uploadedFiles[doc] === true;
-    if (!isUploaded) {
-      console.log(`Missing document: ${doc}`);
-    }
-    return isUploaded;
-  });
+    console.log('Current uploadedFiles state:', uploadedFiles);
+    console.log('Required docs:', requiredDocs);
 
+    const filteredRequiredDocs = requiredDocs.filter(
+      doc => doc !== 'Certificate of Marriage, if applicant is married'
+    );
+    const allRequiredDocsUploaded = filteredRequiredDocs.every(doc => {
+      const isUploaded = uploadedFiles[doc] === true;
+      if (!isUploaded) {
+        console.log(`Missing document: ${doc}`);
+      }
+      return isUploaded;
+    });
 
-
-  
- 
-    return allRequiredDocsUploaded ;
+    return allRequiredDocsUploaded;
   };
 
-  const mapStatusForBackend = (frontendStatus) => {
+  const mapStatusForBackend = frontendStatus => {
     const statusMap = {
-      'Submitted': 'Pending',
-      'SUBMITTED': 'Pending',
-      'Pending': 'Pending',
-      'Approved': 'Approved',
-      'Rejected': 'Rejected',
-      'Declined': 'Rejected',
-      'Ready for Pickup': 'Ready for Pickup'
+      Submitted: 'Pending',
+      SUBMITTED: 'Pending',
+      Pending: 'Pending',
+      Approved: 'Approved',
+      Rejected: 'Rejected',
+      Declined: 'Rejected',
+      'Ready for Pickup': 'Ready for Pickup',
     };
-    
+
     return statusMap[frontendStatus] || 'Pending';
   };
 
@@ -510,12 +533,12 @@ const[documentFatherNotPresent, setDocumentFatherNotPresent] = useState(false);
     try {
       setIsLoading(true);
       setIsSubmitted(true);
-      
+
       // Get the application ID
       const currentAppId = applicationId || localStorage.getItem('currentApplicationId');
       if (!currentAppId) {
-        console.error("No application ID found");
-        showNotification("Application ID is missing. Cannot proceed.", "error");
+        console.error('No application ID found');
+        showNotification('Application ID is missing. Cannot proceed.', 'error');
         setIsLoading(false);
         setIsSubmitted(false);
         return;
@@ -535,16 +558,22 @@ const[documentFatherNotPresent, setDocumentFatherNotPresent] = useState(false);
         documentStatus: status, // marital or non-marital status
         applicantName: `${formData.firstName || ''} ${formData.lastName || ''}`,
         applicationType: 'Birth Certificate',
-        applicationSubtype: 'Delayed Registration - Above 18'
+        applicationSubtype: 'Delayed Registration - Above 18',
       };
-      
+
       // Update the backend application
       try {
-        const response = await documentApplicationService.updateApplication(currentAppId, backendData);
+        const response = await documentApplicationService.updateApplication(
+          currentAppId,
+          backendData
+        );
         console.log('Application status updated in backend:', response);
       } catch (error) {
         console.error('Failed to update backend status:', error);
-        showNotification("Warning: Failed to update backend status. Continuing with local update.", "warning");
+        showNotification(
+          'Warning: Failed to update backend status. Continuing with local update.',
+          'warning'
+        );
         // Continue with local update even if backend fails
       }
 
@@ -554,7 +583,7 @@ const[documentFatherNotPresent, setDocumentFatherNotPresent] = useState(false);
         uploadedFiles: fileData,
         documentStatus: status,
         status: 'Pending',
-        submittedAt: new Date().toISOString()
+        submittedAt: new Date().toISOString(),
       };
 
       // Get current applications
@@ -567,19 +596,19 @@ const[documentFatherNotPresent, setDocumentFatherNotPresent] = useState(false);
           ...applications[appIndex],
           formData: {
             ...applications[appIndex].formData,
-            ...updatedFormData
+            ...updatedFormData,
           },
           uploadedFiles: fileData,
           documentStatus: status,
           status: 'Pending',
-          lastUpdated: new Date().toISOString()
+          lastUpdated: new Date().toISOString(),
         };
       } else {
         // If not found, add as new application
         applications.push({
           id: currentAppId,
           type: 'Birth Certificate',
-          applicationType: 'Delayed Registration',  
+          applicationType: 'Delayed Registration',
           applicationSubtype: 'Delayed Registration - Above 18',
           date: new Date().toLocaleDateString(),
           status: 'Pending',
@@ -587,80 +616,94 @@ const[documentFatherNotPresent, setDocumentFatherNotPresent] = useState(false);
           formData: updatedFormData,
           uploadedFiles: fileData,
           documentStatus: status,
-          lastUpdated: new Date().toISOString()
+          lastUpdated: new Date().toISOString(),
         });
       }
 
       // Use safe storage methods
       const applicationsStored = await localStorageManager.safeSetItem(
-        'applications', 
+        'applications',
         JSON.stringify(applications)
       );
-      
+
       const formDataStored = await localStorageManager.safeSetItem(
-        'birthCertificateApplication', 
+        'birthCertificateApplication',
         JSON.stringify(updatedFormData)
       );
 
       if (!applicationsStored || !formDataStored) {
-        showNotification('Application submitted successfully! Note: Some data may not be saved locally due to storage limitations.', 'warning');
+        showNotification(
+          'Application submitted successfully! Note: Some data may not be saved locally due to storage limitations.',
+          'warning'
+        );
       } else {
         showNotification('Application submitted successfully!', 'success');
       }
 
       // Dispatch storage events
       window.dispatchEvent(new Event('storage'));
-      window.dispatchEvent(new CustomEvent('customStorageUpdate', {
-        detail: {
-          id: currentAppId,
-          action: 'updated',
-          type: 'Birth Certificate',
-          subtype: 'Delayed Registration - Above 18'
-        }
-      }));
+      window.dispatchEvent(
+        new CustomEvent('customStorageUpdate', {
+          detail: {
+            id: currentAppId,
+            action: 'updated',
+            type: 'Birth Certificate',
+            subtype: 'Delayed Registration - Above 18',
+          },
+        })
+      );
 
       console.log('Application submitted successfully');
-      
+
       // 📧 SEND CONFIRMATION NOTIFICATION (ENHANCED)
       const userEmail = user?.email;
       if (userEmail) {
         try {
           console.log('📧 Sending application confirmation notification to:', userEmail);
-          const notificationResult = await documentApplicationNotificationService.sendApplicationConfirmation(
-            userEmail,
-            currentAppId,
-            {
-              type: 'Birth Certificate',
-              subtype: 'Delayed Registration - Above 18',
-              applicantName: `${formData.firstName || ''} ${formData.lastName || ''}`.trim(),
-              submissionDate: new Date().toLocaleDateString(),
-              status: 'Pending'
-            }
-          );
+          const notificationResult =
+            await documentApplicationNotificationService.sendApplicationConfirmation(
+              userEmail,
+              currentAppId,
+              {
+                type: 'Birth Certificate',
+                subtype: 'Delayed Registration - Above 18',
+                applicantName: `${formData.firstName || ''} ${formData.lastName || ''}`.trim(),
+                submissionDate: new Date().toLocaleDateString(),
+                status: 'Pending',
+              }
+            );
 
           if (notificationResult.success) {
             console.log('✅ Confirmation notification sent successfully');
-            showNotification('Application submitted successfully! A confirmation email has been sent to you.', 'success');
+            showNotification(
+              'Application submitted successfully! A confirmation email has been sent to you.',
+              'success'
+            );
           } else {
             console.log('⚠️ Confirmation notification failed:', notificationResult.error);
-            showNotification('Application submitted successfully! However, we could not send the confirmation email.', 'warning');
+            showNotification(
+              'Application submitted successfully! However, we could not send the confirmation email.',
+              'warning'
+            );
           }
         } catch (notificationError) {
           console.error('❌ Error sending confirmation notification:', notificationError);
-          showNotification('Application submitted successfully! However, we could not send the confirmation email.', 'warning');
+          showNotification(
+            'Application submitted successfully! However, we could not send the confirmation email.',
+            'warning'
+          );
         }
       } else {
         console.log('⚠️ No email available for notifications');
       }
-      
+
       // Navigate to summary page after a short delay
       setTimeout(() => {
         navigate('/BirthApplicationSummary');
       }, 2000);
-
     } catch (error) {
       console.error('Error submitting application:', error);
-      showNotification(`Error submitting application: ${error.message}`, "error");
+      showNotification(`Error submitting application: ${error.message}`, 'error');
       setIsLoading(false);
       setIsSubmitted(false);
     }
@@ -672,9 +715,8 @@ const[documentFatherNotPresent, setDocumentFatherNotPresent] = useState(false);
   return (
     <div className={`DelayedAbove18Container ${isSidebarOpen ? 'sidebar-open' : ''}`}>
       <Typography variant="h5" className="TitleDelayedAbove18">
-       Application for Delayed Registration Above 18
+        Application for Delayed Registration Above 18
       </Typography>
-    
 
       {isInitializing ? (
         <Box sx={{ display: 'flex', justifyContent: 'center', my: 4 }}>
@@ -682,8 +724,6 @@ const[documentFatherNotPresent, setDocumentFatherNotPresent] = useState(false);
         </Box>
       ) : (
         <Paper elevation={3} className="DocumentsPaperDelayedAbove18">
- 
-
           {status && (
             <Box>
               <Typography variant="body1" className="SectionTitleDelayedAbove18">
@@ -697,43 +737,51 @@ const[documentFatherNotPresent, setDocumentFatherNotPresent] = useState(false);
                   </Typography>
                 </Box>
               )}
-                   {(status === 'marital' ? maritalDocuments : nonMaritalDocuments).map((doc, index) => (
-                   <FileUpload 
-      label={doc}
-      description={documentDescriptions[doc]}
-      onUpload={(isUploaded, fileDataObj) => 
-        handleFileUpload(doc, isUploaded, fileDataObj)
-      } 
-      required={true}
+              {(status === 'marital' ? maritalDocuments : nonMaritalDocuments).map((doc, index) => (
+                <FileUpload
+                  label={doc}
+                  description={documentDescriptions[doc]}
+                  onUpload={(isUploaded, fileDataObj) =>
+                    handleFileUpload(doc, isUploaded, fileDataObj)
+                  }
+                  required={true}
                   disabled={isLoading}
                   multiple={true}
-    />
+                />
               ))}
 
-                       {/* Checkbox 1: Document owner cannot appear personally - ALWAYS VISIBLE */}
+              {/* Checkbox 1: Document owner cannot appear personally - ALWAYS VISIBLE */}
               <Box sx={{ mt: 2, mb: 2 }}>
                 <FormControlLabel
                   control={
                     <Checkbox
                       checked={documentOwnerNotPresent}
-                      onChange={(e) => setDocumentOwnerNotPresent(e.target.checked)}
+                      onChange={e => setDocumentOwnerNotPresent(e.target.checked)}
                       color="primary"
                     />
                   }
                   label="Document owner cannot appear personally"
-                  />
-                      {documentOwnerNotPresent && (
-                <FileUpload 
-                  label="Affidavit of the document owner registrant stating why the document owner cannot appear personally"
-                  description={documentDescriptions['Affidavit of the document owner registrant stating why the document owner cannot appear personally']}
-                  onUpload={(isUploaded, fileDataObj) => 
-                    handleFileUpload('Affidavit of the document owner registrant stating why the document owner cannot appear personally', isUploaded, fileDataObj)
-                  } 
-                  required={false}
-                  disabled={isLoading}
-                  multiple={true}
                 />
-              )}
+                {documentOwnerNotPresent && (
+                  <FileUpload
+                    label="Affidavit of the document owner registrant stating why the document owner cannot appear personally"
+                    description={
+                      documentDescriptions[
+                        'Affidavit of the document owner registrant stating why the document owner cannot appear personally'
+                      ]
+                    }
+                    onUpload={(isUploaded, fileDataObj) =>
+                      handleFileUpload(
+                        'Affidavit of the document owner registrant stating why the document owner cannot appear personally',
+                        isUploaded,
+                        fileDataObj
+                      )
+                    }
+                    required={false}
+                    disabled={isLoading}
+                    multiple={true}
+                  />
+                )}
               </Box>
 
               {/* Checkbox 2: Father cannot appear personally - ONLY VISIBLE FOR NON-MARITAL */}
@@ -743,7 +791,7 @@ const[documentFatherNotPresent, setDocumentFatherNotPresent] = useState(false);
                     control={
                       <Checkbox
                         checked={documentFatherNotPresent}
-                        onChange={(e) => setDocumentFatherNotPresent(e.target.checked)}
+                        onChange={e => setDocumentFatherNotPresent(e.target.checked)}
                         color="primary"
                       />
                     }
@@ -753,26 +801,28 @@ const[documentFatherNotPresent, setDocumentFatherNotPresent] = useState(false);
               )}
 
               {/* Show affidavit upload if document owner checkbox is checked */}
-          
 
               {/* Show father affidavit upload if father checkbox is checked */}
               {documentFatherNotPresent && (
-                <FileUpload 
+                <FileUpload
                   label="Personal Appearance of the Father or Affidavit of Admission of Paternity executed before a Notary Public"
-                  description={documentDescriptions['Personal Appearance of the Father or Affidavit of Admission of Paternity executed before a Notary Public']}
-                  onUpload={(isUploaded, fileDataObj) => 
-                    handleFileUpload('Personal Appearance of the Father or Affidavit of Admission of Paternity executed before a Notary Public', isUploaded, fileDataObj)
-                  } 
+                  description={
+                    documentDescriptions[
+                      'Personal Appearance of the Father or Affidavit of Admission of Paternity executed before a Notary Public'
+                    ]
+                  }
+                  onUpload={(isUploaded, fileDataObj) =>
+                    handleFileUpload(
+                      'Personal Appearance of the Father or Affidavit of Admission of Paternity executed before a Notary Public',
+                      isUploaded,
+                      fileDataObj
+                    )
+                  }
                   required={false}
                   disabled={isLoading}
                   multiple={true}
                 />
               )}
-                
-
-          
-              
-    
             </Box>
           )}
 
@@ -793,111 +843,105 @@ const[documentFatherNotPresent, setDocumentFatherNotPresent] = useState(false);
 
           {status && (
             <Box className="ButtonContainerDelayedAbove18">
-               <Button
-    variant="outlined"
-    color="primary"
-    onClick={() => {
-      
-      const modifyApplicationState = {
-      
-        applicationId: applicationId,
-        isEditing: true,
-        editingApplicationId: applicationId,
-        
+              <Button
+                variant="outlined"
+                color="primary"
+                onClick={() => {
+                  const modifyApplicationState = {
+                    applicationId: applicationId,
+                    isEditing: true,
+                    editingApplicationId: applicationId,
 
-        formData: {
-          ...formData,
-          documentStatus: status,
-          uploadedFiles: uploadedFiles,
-          fileData: fileData,
-          lastModified: new Date().toISOString()
-        },
-        
-  
-        uploadedFiles: uploadedFiles,
-        fileData: fileData,
-   
-        documentStatus: status,
-        maritalStatus: status,
-        
- 
-        modifyMode: true,
-        preserveData: true,
-        backFromDelayedRegistration: true,
-        applicationType: 'Delayed Registration - Above 18'
-      };
+                    formData: {
+                      ...formData,
+                      documentStatus: status,
+                      uploadedFiles: uploadedFiles,
+                      fileData: fileData,
+                      lastModified: new Date().toISOString(),
+                    },
 
+                    uploadedFiles: uploadedFiles,
+                    fileData: fileData,
 
-      try {
+                    documentStatus: status,
+                    maritalStatus: status,
 
-        localStorage.setItem('birthCertificateApplication', JSON.stringify(modifyApplicationState.formData));
-        
+                    modifyMode: true,
+                    preserveData: true,
+                    backFromDelayedRegistration: true,
+                    applicationType: 'Delayed Registration - Above 18',
+                  };
 
-        localStorage.setItem('isEditingBirthApplication', 'true');
-        localStorage.setItem('editingApplicationId', applicationId);
-        localStorage.setItem('currentApplicationId', applicationId);
-        
+                  try {
+                    localStorage.setItem(
+                      'birthCertificateApplication',
+                      JSON.stringify(modifyApplicationState.formData)
+                    );
 
-        localStorage.setItem('maritalStatus', status);
-        
-     
-        localStorage.setItem('modifyingApplication', JSON.stringify({
-          id: applicationId,
-          type: 'Birth Certificate - Delayed Registration',
-          subtype: 'Above 18',
-          documentStatus: status,
-          uploadedFiles: uploadedFiles,
-          timestamp: new Date().toISOString()
-        }));
+                    localStorage.setItem('isEditingBirthApplication', 'true');
+                    localStorage.setItem('editingApplicationId', applicationId);
+                    localStorage.setItem('currentApplicationId', applicationId);
 
-      
-        const applications = JSON.parse(localStorage.getItem('applications') || '[]');
-        const appIndex = applications.findIndex(app => app.id === applicationId);
-        
-        if (appIndex >= 0) {
-      
-          applications[appIndex] = {
-            ...applications[appIndex],
-            formData: modifyApplicationState.formData,
-            uploadedFiles: uploadedFiles,
-            documentStatus: status,
-            status: applications[appIndex].status || 'In Progress',
-            lastModified: new Date().toISOString(),
-            isBeingModified: true
-          };
-          
-          localStorage.setItem('applications', JSON.stringify(applications));
-        }
+                    localStorage.setItem('maritalStatus', status);
 
-        console.log('Navigating back with modify state:', modifyApplicationState);
-        
+                    localStorage.setItem(
+                      'modifyingApplication',
+                      JSON.stringify({
+                        id: applicationId,
+                        type: 'Birth Certificate - Delayed Registration',
+                        subtype: 'Above 18',
+                        documentStatus: status,
+                        uploadedFiles: uploadedFiles,
+                        timestamp: new Date().toISOString(),
+                      })
+                    );
 
-        navigate('/BirthCertificateForm', { 
-          state: modifyApplicationState,
-          replace: false 
-        });
-        
-      } catch (error) {
-        console.error('Error saving modify state:', error);
-        showNotification('Error saving current state. Some data may be lost.', 'warning');
-        
+                    const applications = JSON.parse(localStorage.getItem('applications') || '[]');
+                    const appIndex = applications.findIndex(app => app.id === applicationId);
 
-        navigate('/BirthCertificateForm', { 
-          state: { 
-            applicationId: applicationId,
-            isEditing: true,
-            editingApplicationId: applicationId,
-            formData: formData,
-            documentStatus: status
-          } 
-        });
-      }
-    }}
-    className="BackButtonDelayedAbove18"
-    disabled={isLoading}
-  >
-    Back
-  </Button>
+                    if (appIndex >= 0) {
+                      applications[appIndex] = {
+                        ...applications[appIndex],
+                        formData: modifyApplicationState.formData,
+                        uploadedFiles: uploadedFiles,
+                        documentStatus: status,
+                        status: applications[appIndex].status || 'In Progress',
+                        lastModified: new Date().toISOString(),
+                        isBeingModified: true,
+                      };
+
+                      localStorage.setItem('applications', JSON.stringify(applications));
+                    }
+
+                    console.log('Navigating back with modify state:', modifyApplicationState);
+
+                    navigate('/BirthCertificateForm', {
+                      state: modifyApplicationState,
+                      replace: false,
+                    });
+                  } catch (error) {
+                    console.error('Error saving modify state:', error);
+                    showNotification(
+                      'Error saving current state. Some data may be lost.',
+                      'warning'
+                    );
+
+                    navigate('/BirthCertificateForm', {
+                      state: {
+                        applicationId: applicationId,
+                        isEditing: true,
+                        editingApplicationId: applicationId,
+                        formData: formData,
+                        documentStatus: status,
+                      },
+                    });
+                  }
+                }}
+                className="BackButtonDelayedAbove18"
+                disabled={isLoading}
+              >
+                Back
+              </Button>
               <Button
                 variant="contained"
                 color="primary"
@@ -905,7 +949,7 @@ const[documentFatherNotPresent, setDocumentFatherNotPresent] = useState(false);
                 onClick={handleSubmit}
                 className="SubmitButtonDelayedAbove18"
               >
-                {isLoading ? "Submitting..." : "Submit Application"}
+                {isLoading ? 'Submitting...' : 'Submit Application'}
               </Button>
             </Box>
           )}
@@ -919,11 +963,7 @@ const[documentFatherNotPresent, setDocumentFatherNotPresent] = useState(false);
         onClose={handleCloseSnackbar}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
       >
-        <Alert 
-          onClose={handleCloseSnackbar} 
-          severity={snackbar.severity}
-          variant="filled"
-        >
+        <Alert onClose={handleCloseSnackbar} severity={snackbar.severity} variant="filled">
           {snackbar.message}
         </Alert>
       </Snackbar>

@@ -62,7 +62,9 @@ label:not([data-required])::after {
   font-size: 14px;
   background-color: white !important;
   color: #1c4d5a !important;
-  transition: border-color 0.3s ease, background-color 0.3s ease;
+  transition:
+    border-color 0.3s ease,
+    background-color 0.3s ease;
 }
 
 .input-container input[type='text']:focus {
@@ -91,7 +93,9 @@ label:not([data-required])::after {
   font-size: 14px;
   background-color: white !important;
   color: #1c4d5a !important;
-  transition: border-color 0.3s ease, background-color 0.3s ease;
+  transition:
+    border-color 0.3s ease,
+    background-color 0.3s ease;
   cursor: pointer;
 }
 

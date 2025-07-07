@@ -1,5 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Typography, Button, Paper, Alert, Tooltip, CircularProgress, Snackbar } from '@mui/material';
+import {
+  Box,
+  Typography,
+  Button,
+  Paper,
+  Alert,
+  Tooltip,
+  CircularProgress,
+  Snackbar,
+} from '@mui/material';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
 import FileUpload from '../FileUpload';
@@ -27,7 +36,7 @@ const GovernmentIdTooltip = ({ children }) => {
     'TIN ID',
     'PhilHealth ID',
     'Pag-IBIG Loyalty Card Plus',
-    'Indigenous Peoples (IP) ID or certification'
+    'Indigenous Peoples (IP) ID or certification',
   ];
 
   return (
@@ -50,15 +59,17 @@ const GovernmentIdTooltip = ({ children }) => {
         '& .MuiTooltip-tooltip': {
           maxWidth: 300,
           backgroundColor: 'rgba(0, 0, 0, 0.9)',
-        }
+        },
       }}
     >
-      <span style={{ 
-        textDecoration: 'underline', 
-        cursor: 'pointer',
-        color: '#1976d2',
-        fontWeight: 'bold'
-      }}>
+      <span
+        style={{
+          textDecoration: 'underline',
+          cursor: 'pointer',
+          color: '#1976d2',
+          fontWeight: 'bold',
+        }}
+      >
         {children}
       </span>
     </Tooltip>
@@ -66,8 +77,15 @@ const GovernmentIdTooltip = ({ children }) => {
 };
 
 const documentDescriptions = {
-  'Valid ID': (<> - Any valid <GovernmentIdTooltip> government-issued identification card</GovernmentIdTooltip> </>),
-  'Authorization Letter (if applicable)': '- Notarized authorization letter with the signature of the document owner, plus a copy of both the requestor\'s'
+  'Valid ID': (
+    <>
+      {' '}
+      - Any valid{' '}
+      <GovernmentIdTooltip> government-issued identification card</GovernmentIdTooltip>{' '}
+    </>
+  ),
+  'Authorization Letter (if applicable)':
+    "- Notarized authorization letter with the signature of the document owner, plus a copy of both the requestor's",
 };
 
 const CTCBirthCertificate = () => {
@@ -81,13 +99,13 @@ const CTCBirthCertificate = () => {
   const [applicationId, setApplicationId] = useState(null);
   const [backendApplicationCreated, setBackendApplicationCreated] = useState(false);
   const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'info' });
-  
+
   const navigate = useNavigate();
   const location = useLocation();
   const { user } = useAuth();
 
-  const isEditing = location.state?.isEditing || 
-                    localStorage.getItem('isEditingBirthApplication') === 'true';
+  const isEditing =
+    location.state?.isEditing || localStorage.getItem('isEditingBirthApplication') === 'true';
 
   const showNotification = (message, severity = 'info') => {
     setSnackbar({ open: true, message, severity });
@@ -95,24 +113,24 @@ const CTCBirthCertificate = () => {
 
   const handleCloseSnackbar = () => setSnackbar(prev => ({ ...prev, open: false }));
 
-  const isFormComplete = 
-    uploadedFiles['Valid ID'] === true && 
-    (formData?.purpose !== 'On behalf of someone' || 
-     uploadedFiles['Authorization Letter (if applicable)'] === true);
+  const isFormComplete =
+    uploadedFiles['Valid ID'] === true &&
+    (formData?.purpose !== 'On behalf of someone' ||
+      uploadedFiles['Authorization Letter (if applicable)'] === true);
 
   const createBackendApplication = async () => {
     try {
-      console.log("Creating application in backend...");
-      
+      console.log('Creating application in backend...');
+
       const currentId = localStorage.getItem('currentApplicationId');
       let appId = currentId;
-      
+
       if (!appId) {
         appId = 'BC-' + Date.now().toString().slice(-6);
-        console.log("Generated new application ID:", appId);
+        console.log('Generated new application ID:', appId);
         localStorage.setItem('currentApplicationId', appId);
       }
-      
+
       setApplicationId(appId);
 
       const backendApplicationData = {
@@ -121,24 +139,27 @@ const CTCBirthCertificate = () => {
         applicantName: `${formData.firstName || ''} ${formData.lastName || ''}`,
         applicantDetails: JSON.stringify({ ...formData }),
         formData: formData,
-        status: 'PENDING'
+        status: 'PENDING',
       };
 
-      console.log("Creating application with data:", backendApplicationData);
-      
+      console.log('Creating application with data:', backendApplicationData);
+
       const response = await documentApplicationService.createApplication(backendApplicationData);
-      console.log("Backend created application:", response);
-      
+      console.log('Backend created application:', response);
+
       if (response && response.id) {
         localStorage.setItem('currentApplicationId', response.id);
         setApplicationId(response.id);
         setBackendApplicationCreated(true);
       }
-      
+
       return response;
     } catch (error) {
-      console.error("Failed to create application in backend:", error);
-      showNotification(`Failed to register application: ${error.message}. Please try again.`, "error");
+      console.error('Failed to create application in backend:', error);
+      showNotification(
+        `Failed to register application: ${error.message}. Please try again.`,
+        'error'
+      );
       return null;
     }
   };
@@ -147,31 +168,31 @@ const CTCBirthCertificate = () => {
     const loadData = async () => {
       try {
         setIsInitializing(true);
-        
+
         if (isEditing) {
-          console.log("Loading data for editing...");
+          console.log('Loading data for editing...');
           const editingId = localStorage.getItem('editingApplicationId');
-          console.log("Editing application ID:", editingId);
-          
+          console.log('Editing application ID:', editingId);
+
           if (editingId) {
             setApplicationId(editingId);
-            
+
             try {
               const backendApp = await documentApplicationService.getApplication(editingId);
               if (backendApp) {
                 setBackendApplicationCreated(true);
-                console.log("Application exists in backend:", backendApp);
+                console.log('Application exists in backend:', backendApp);
               }
             } catch (error) {
-              console.warn("Application may not exist in backend:", error);
+              console.warn('Application may not exist in backend:', error);
             }
           }
-          
+
           const applications = JSON.parse(localStorage.getItem('applications') || '[]');
           const applicationToEdit = applications.find(app => app.id === editingId);
-          
+
           if (applicationToEdit) {
-            console.log("Found application to edit:", applicationToEdit);
+            console.log('Found application to edit:', applicationToEdit);
             if (applicationToEdit.uploadedFiles) {
               setUploadedFiles(applicationToEdit.uploadedFiles || {});
             }
@@ -186,23 +207,23 @@ const CTCBirthCertificate = () => {
               if (parsedData.uploadedFiles) {
                 setUploadedFiles(parsedData.uploadedFiles || {});
               }
-              console.log("Loaded form data from birthCertificateApplication");
+              console.log('Loaded form data from birthCertificateApplication');
             }
           }
         } else {
           const currentId = localStorage.getItem('currentApplicationId');
           if (currentId) {
             setApplicationId(currentId);
-            
+
             try {
               const backendApp = await documentApplicationService.getApplication(currentId);
               if (backendApp) {
                 setBackendApplicationCreated(true);
-                console.log("Application exists in backend:", backendApp);
+                console.log('Application exists in backend:', backendApp);
               }
             } catch (error) {
-              console.warn("Application may not exist in backend:", error);
-              
+              console.warn('Application may not exist in backend:', error);
+
               const currentApplicationData = localStorage.getItem('birthCertificateApplication');
               if (currentApplicationData) {
                 const parsedData = JSON.parse(currentApplicationData);
@@ -211,7 +232,7 @@ const CTCBirthCertificate = () => {
               }
             }
           }
-          
+
           const currentApplicationData = localStorage.getItem('birthCertificateApplication');
           if (currentApplicationData) {
             const parsedData = JSON.parse(currentApplicationData);
@@ -221,22 +242,22 @@ const CTCBirthCertificate = () => {
             }
           }
         }
-        
+
         const usage = localStorageManager.getCurrentUsage();
         console.log(`📊 Current storage usage: ${usage.percentage.toFixed(1)}%`);
-        
+
         if (usage.isNearFull) {
           console.warn('⚠️ localStorage is getting full, performing cleanup...');
           await localStorageManager.performCleanup(0.2);
         }
       } catch (error) {
-        console.error("Error during initialization:", error);
-        showNotification("Error loading application data", "error");
+        console.error('Error during initialization:', error);
+        showNotification('Error loading application data', 'error');
       } finally {
         setIsInitializing(false);
       }
     };
-    
+
     loadData();
   }, [isEditing]);
 
@@ -261,9 +282,9 @@ const CTCBirthCertificate = () => {
       setIsLoading(true);
       const createdApp = await createBackendApplication();
       setIsLoading(false);
-      
+
       if (!createdApp) {
-        showNotification("Failed to register application. Cannot upload files.", "error");
+        showNotification('Failed to register application. Cannot upload files.', 'error');
         return;
       }
     }
@@ -282,53 +303,55 @@ const CTCBirthCertificate = () => {
       try {
         const currentAppId = applicationId || localStorage.getItem('currentApplicationId');
         if (!currentAppId) {
-          showNotification("Application ID is missing. Cannot upload file.", "error");
+          showNotification('Application ID is missing. Cannot upload file.', 'error');
           return;
         }
-        
-        console.log("Application ID:", currentAppId);
-        console.log("Uploading file:", fileDataObj.name);
-        
+
+        console.log('Application ID:', currentAppId);
+        console.log('Uploading file:', fileDataObj.name);
+
         const file = dataURLtoFile(fileDataObj.data, fileDataObj.name, fileDataObj.type);
-        
+
         const uploadUrl = `/document-applications/${currentAppId}/files`;
-        console.log("Uploading to URL:", uploadUrl);
-        
+        console.log('Uploading to URL:', uploadUrl);
+
         const response = await documentApplicationService.uploadFile(currentAppId, file, label);
-        console.log("Upload response:", response);
-        
-        showNotification(`"${label}" uploaded successfully!`, "success");
-        
+        console.log('Upload response:', response);
+
+        showNotification(`"${label}" uploaded successfully!`, 'success');
       } catch (error) {
         console.error(`Failed to upload "${label}":`, error);
-        
+
         if (error.response) {
-          console.error("Server response:", error.response.status, error.response.data);
-          
+          console.error('Server response:', error.response.status, error.response.data);
+
           if (error.response.status === 404) {
-            showNotification("Application not found. Creating new application...", "info");
+            showNotification('Application not found. Creating new application...', 'info');
             const createdApp = await createBackendApplication();
             if (createdApp) {
               try {
                 const retryResponse = await documentApplicationService.uploadFile(
-                  createdApp.id, 
-                  dataURLtoFile(fileDataObj.data, fileDataObj.name, fileDataObj.type), 
+                  createdApp.id,
+                  dataURLtoFile(fileDataObj.data, fileDataObj.name, fileDataObj.type),
                   label
                 );
-                console.log("Retry upload response:", retryResponse);
-                showNotification(`"${label}" uploaded successfully!`, "success");
+                console.log('Retry upload response:', retryResponse);
+                showNotification(`"${label}" uploaded successfully!`, 'success');
                 return;
               } catch (retryError) {
-                console.error("Retry upload failed:", retryError);
+                console.error('Retry upload failed:', retryError);
               }
             }
           }
-          
-          showNotification(`Failed to upload "${label}": ${error.response.data?.message || error.message}`, "error");
+
+          showNotification(
+            `Failed to upload "${label}": ${error.response.data?.message || error.message}`,
+            'error'
+          );
         } else {
-          showNotification(`Failed to upload "${label}": ${error.message}`, "error");
+          showNotification(`Failed to upload "${label}": ${error.message}`, 'error');
         }
-        
+
         setUploadedFiles(prevState => ({
           ...prevState,
           [label]: false,
@@ -352,11 +375,11 @@ const CTCBirthCertificate = () => {
     try {
       setIsLoading(true);
       setIsSubmitted(true);
-      
+
       const currentAppId = applicationId || localStorage.getItem('currentApplicationId');
       if (!currentAppId) {
-        console.error("No application ID found");
-        showNotification("Application ID is missing. Cannot proceed.", "error");
+        console.error('No application ID found');
+        showNotification('Application ID is missing. Cannot proceed.', 'error');
         setIsLoading(false);
         setIsSubmitted(false);
         return;
@@ -371,19 +394,22 @@ const CTCBirthCertificate = () => {
       try {
         await documentApplicationService.updateApplication(currentAppId, {
           status: 'SUBMITTED',
-          statusMessage: 'Application submitted with all required documents'
+          statusMessage: 'Application submitted with all required documents',
         });
         console.log('Application status updated in backend');
       } catch (error) {
         console.error('Failed to update backend status:', error);
-        showNotification("Warning: Failed to update backend status. Continuing with local update.", "warning");
+        showNotification(
+          'Warning: Failed to update backend status. Continuing with local update.',
+          'warning'
+        );
       }
 
       const updatedFormData = {
         ...formData,
         uploadedFiles: fileData,
         status: 'Submitted',
-        submittedAt: new Date().toISOString()
+        submittedAt: new Date().toISOString(),
       };
 
       const applications = JSON.parse(localStorage.getItem('applications') || '[]');
@@ -394,39 +420,42 @@ const CTCBirthCertificate = () => {
           ...applications[appIndex],
           formData: {
             ...applications[appIndex].formData,
-            ...updatedFormData
+            ...updatedFormData,
           },
           uploadedFiles: fileData,
           status: 'Submitted',
-          lastUpdated: new Date().toISOString()
+          lastUpdated: new Date().toISOString(),
         };
       } else {
         applications.push({
           id: currentAppId,
           type: 'Birth Certificate',
-          applicationType: 'Copy Request',  
+          applicationType: 'Copy Request',
           applicationSubtype: 'Copy of Birth Certificate',
           date: new Date().toLocaleDateString(),
           status: 'Submitted',
           message: `Birth Certificate copy request for ${formData.firstName || ''} ${formData.lastName || ''}`,
           formData: updatedFormData,
           uploadedFiles: fileData,
-          lastUpdated: new Date().toISOString()
+          lastUpdated: new Date().toISOString(),
         });
       }
 
       const applicationsStored = await localStorageManager.safeSetItem(
-        'applications', 
+        'applications',
         JSON.stringify(applications)
       );
-      
+
       const formDataStored = await localStorageManager.safeSetItem(
-        'birthCertificateApplication', 
+        'birthCertificateApplication',
         JSON.stringify(updatedFormData)
       );
 
       if (!applicationsStored || !formDataStored) {
-        showNotification('Application submitted successfully! Note: Some data may not be saved locally due to storage limitations.', 'warning');
+        showNotification(
+          'Application submitted successfully! Note: Some data may not be saved locally due to storage limitations.',
+          'warning'
+        );
       } else {
         showNotification('Application submitted successfully!', 'success');
       }
@@ -436,52 +465,66 @@ const CTCBirthCertificate = () => {
       if (userEmail) {
         try {
           console.log('📧 Sending application confirmation notification to:', userEmail);
-          const notificationResult = await documentApplicationNotificationService.sendApplicationConfirmation(
-            userEmail,
-            currentAppId,
-            {
-              type: 'Birth Certificate',
-              subtype: 'Certified True Copy',
-              applicantName: `${formData.firstName || ''} ${formData.lastName || ''}`.trim(),
-              submissionDate: new Date().toLocaleDateString(),
-              status: 'Pending'
-            }
-          );
+          const notificationResult =
+            await documentApplicationNotificationService.sendApplicationConfirmation(
+              userEmail,
+              currentAppId,
+              {
+                type: 'Birth Certificate',
+                subtype: 'Certified True Copy',
+                applicantName: `${formData.firstName || ''} ${formData.lastName || ''}`.trim(),
+                submissionDate: new Date().toLocaleDateString(),
+                status: 'Pending',
+              }
+            );
 
           if (notificationResult.success) {
             console.log('✅ Confirmation notification sent successfully');
-            showNotification('Application submitted successfully! A confirmation email has been sent to you.', 'success');
+            showNotification(
+              'Application submitted successfully! A confirmation email has been sent to you.',
+              'success'
+            );
           } else {
             console.log('⚠️ Confirmation notification failed:', notificationResult.error);
-            showNotification('Application submitted successfully! However, we could not send the confirmation email.', 'warning');
+            showNotification(
+              'Application submitted successfully! However, we could not send the confirmation email.',
+              'warning'
+            );
           }
         } catch (notificationError) {
           console.error('❌ Error sending confirmation notification:', notificationError);
-          showNotification('Application submitted successfully! However, we could not send the confirmation email.', 'warning');
+          showNotification(
+            'Application submitted successfully! However, we could not send the confirmation email.',
+            'warning'
+          );
         }
       } else {
         console.log('⚠️ No email available for notifications');
-        showNotification('Application submitted successfully! No confirmation email will be sent as no email was found.', 'success');
+        showNotification(
+          'Application submitted successfully! No confirmation email will be sent as no email was found.',
+          'success'
+        );
       }
 
       window.dispatchEvent(new Event('storage'));
-      window.dispatchEvent(new CustomEvent('customStorageUpdate', {
-        detail: {
-          id: currentAppId,
-          action: 'updated',
-          type: 'Birth Certificate'
-        }
-      }));
+      window.dispatchEvent(
+        new CustomEvent('customStorageUpdate', {
+          detail: {
+            id: currentAppId,
+            action: 'updated',
+            type: 'Birth Certificate',
+          },
+        })
+      );
 
       console.log('Application submitted successfully');
-      
+
       setTimeout(() => {
         navigate('/BirthApplicationSummary');
       }, 2000);
-
     } catch (error) {
       console.error('Error submitting application:', error);
-      showNotification(`Error submitting application: ${error.message}`, "error");
+      showNotification(`Error submitting application: ${error.message}`, 'error');
       setIsLoading(false);
       setIsSubmitted(false);
     }
@@ -490,39 +533,45 @@ const CTCBirthCertificate = () => {
   const handleBack = () => {
     const modifyApplicationState = {
       applicationId: applicationId,
-      isEditing: true, 
+      isEditing: true,
       editingApplicationId: applicationId,
       formData: {
         ...formData,
         uploadedFiles: uploadedFiles,
         fileData: fileData,
-        lastModified: new Date().toISOString()
+        lastModified: new Date().toISOString(),
       },
       uploadedFiles: uploadedFiles,
       fileData: fileData,
       modifyMode: true,
       preserveData: true,
       backFromCTCBirth: true,
-      applicationType: 'Birth Certificate'
+      applicationType: 'Birth Certificate',
     };
 
     try {
-      localStorage.setItem('birthCertificateApplication', JSON.stringify(modifyApplicationState.formData));
+      localStorage.setItem(
+        'birthCertificateApplication',
+        JSON.stringify(modifyApplicationState.formData)
+      );
       localStorage.setItem('isEditingBirthApplication', 'true');
       localStorage.setItem('editingApplicationId', applicationId);
       localStorage.setItem('currentApplicationId', applicationId);
-      
-      localStorage.setItem('modifyingApplication', JSON.stringify({
-        id: applicationId,
-        type: 'Birth Certificate',
-        subtype: 'Copy of Birth Certificate',
-        uploadedFiles: uploadedFiles,
-        timestamp: new Date().toISOString()
-      }));
+
+      localStorage.setItem(
+        'modifyingApplication',
+        JSON.stringify({
+          id: applicationId,
+          type: 'Birth Certificate',
+          subtype: 'Copy of Birth Certificate',
+          uploadedFiles: uploadedFiles,
+          timestamp: new Date().toISOString(),
+        })
+      );
 
       const applications = JSON.parse(localStorage.getItem('applications') || '[]');
       const appIndex = applications.findIndex(app => app.id === applicationId);
-      
+
       if (appIndex >= 0) {
         applications[appIndex] = {
           ...applications[appIndex],
@@ -530,30 +579,29 @@ const CTCBirthCertificate = () => {
           uploadedFiles: uploadedFiles,
           status: applications[appIndex].status || 'In Progress',
           lastModified: new Date().toISOString(),
-          isBeingModified: true
+          isBeingModified: true,
         };
-        
+
         localStorage.setItem('applications', JSON.stringify(applications));
       }
 
       console.log('Navigating back with modify state:', modifyApplicationState);
-       
-      navigate('/RequestACopyBirthCertificate', { 
+
+      navigate('/RequestACopyBirthCertificate', {
         state: modifyApplicationState,
-        replace: false 
+        replace: false,
       });
-      
     } catch (error) {
       console.error('Error saving modify state:', error);
       showNotification('Error saving current state. Some data may be lost.', 'warning');
 
-      navigate('/RequestACopyBirthCertificate', { 
-        state: { 
+      navigate('/RequestACopyBirthCertificate', {
+        state: {
           applicationId: applicationId,
           isEditing: true,
           editingApplicationId: applicationId,
-          formData: formData
-        } 
+          formData: formData,
+        },
       });
     }
   };
@@ -571,7 +619,7 @@ const CTCBirthCertificate = () => {
   return (
     <Box className={`MainContainerCTCBirth ${isSidebarOpen ? 'SidebarOpenCTCBirth' : ''}`}>
       <NavBar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
-    
+
       <Typography variant="h4" className="TitleCTCBirth">
         Upload Required Documents
       </Typography>
@@ -598,13 +646,13 @@ const CTCBirthCertificate = () => {
           <FileUpload
             label="Valid ID"
             description={documentDescriptions['Valid ID']}
-            onUpload={(isUploaded, fileDataObj) => 
+            onUpload={(isUploaded, fileDataObj) =>
               handleFileUpload('Valid ID', isUploaded, fileDataObj)
             }
             required={true}
             disabled={isLoading}
           />
-         
+
           <Typography variant="h6" className="RequirementsHeaderCTCBirth">
             Additional Documents
           </Typography>
@@ -612,14 +660,13 @@ const CTCBirthCertificate = () => {
           <FileUpload
             label="Authorization Letter (if applicable)"
             description={documentDescriptions['Authorization Letter (if applicable)']}
-            onUpload={(isUploaded, fileDataObj) => 
+            onUpload={(isUploaded, fileDataObj) =>
               handleFileUpload('Authorization Letter (if applicable)', isUploaded, fileDataObj)
             }
             required={false}
             disabled={isLoading}
           />
         </Box>
-
 
         {isLoading && (
           <Box sx={{ display: 'flex', alignItems: 'center', my: 2 }}>
@@ -653,7 +700,7 @@ const CTCBirthCertificate = () => {
             className="SubmitButtonCTCBirth"
             disabled={!isFormComplete || isSubmitted || isLoading}
           >
-            {isLoading ? "Submitting..." : "Submit Application"}
+            {isLoading ? 'Submitting...' : 'Submit Application'}
           </Button>
         </Box>
       </Paper>

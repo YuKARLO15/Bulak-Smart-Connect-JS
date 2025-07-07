@@ -100,24 +100,23 @@
   transition: all 0.2s ease;
 }
 
-.modal-actions button[type="submit"] {
+.modal-actions button[type='submit'] {
   background-color: #1c4d5a;
   color: white;
 }
 
-.modal-actions button[type="submit"]:hover {
+.modal-actions button[type='submit']:hover {
   background-color: #38626d;
 }
 
-.modal-actions button[type="button"] {
+.modal-actions button[type='button'] {
   background-color: #f3f4f6;
   color: #4b5563;
 }
 
-.modal-actions button[type="button"]:hover {
+.modal-actions button[type='button']:hover {
   background-color: #e5e7eb;
 }
-
 
 .modal .delete-button {
   background-color: #bb3222 !important; /* force red */
@@ -134,16 +133,14 @@
   background-color: #95473f !important; /* darker red on hover */
 }
 
-
 /* Add responsive adjustments */
 @media (max-width: 640px) {
   .modal {
     width: 95%;
     padding: 20px;
   }
-  
+
   .modal-actions {
     flex-direction: column;
   }
 }
-

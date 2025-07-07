@@ -30,7 +30,7 @@ class AppointmentNotificationService {
       console.log('📧 Sending appointment confirmation notification...', {
         email: userEmail,
         appointmentNumber,
-        details: appointmentDetails
+        details: appointmentDetails,
       });
 
       const payload = {
@@ -38,27 +38,31 @@ class AppointmentNotificationService {
         appointmentNumber,
         type: 'confirmation',
         appointmentDetails: {
-          type: appointmentDetails.type || appointmentDetails.reasonOfVisit || 'Civil Registry Service',
+          type:
+            appointmentDetails.type || appointmentDetails.reasonOfVisit || 'Civil Registry Service',
           date: appointmentDetails.date || appointmentDetails.appointmentDate,
           time: appointmentDetails.time || appointmentDetails.appointmentTime,
           firstName: appointmentDetails.firstName || 'N/A',
           lastName: appointmentDetails.lastName || 'N/A',
-          phoneNumber: appointmentDetails.phoneNumber || ''
-        }
+          phoneNumber: appointmentDetails.phoneNumber || '',
+        },
       };
 
       console.log('📧 Sending payload:', payload);
 
-      const response = await axios.post(`${this.baseURL}/auth/notifications/appointment-confirmation`, payload);
+      const response = await axios.post(
+        `${this.baseURL}/auth/notifications/appointment-confirmation`,
+        payload
+      );
 
       console.log('✅ Appointment confirmation notification sent:', response.data);
       return { success: true, data: response.data };
     } catch (error) {
       console.error('❌ Failed to send appointment confirmation:', error);
       console.error('❌ Error details:', error.response?.data || error.message);
-      return { 
-        success: false, 
-        error: error.response?.data?.message || error.message 
+      return {
+        success: false,
+        error: error.response?.data?.message || error.message,
       };
     }
   }
@@ -77,7 +81,7 @@ class AppointmentNotificationService {
         email: userEmail,
         appointmentNumber,
         newStatus,
-        details: appointmentDetails
+        details: appointmentDetails,
       });
 
       const payload = {
@@ -86,24 +90,28 @@ class AppointmentNotificationService {
         type: 'status_update',
         status: newStatus,
         appointmentDetails: {
-          type: appointmentDetails.reasonOfVisit || appointmentDetails.type || 'Civil Registry Service',
+          type:
+            appointmentDetails.reasonOfVisit || appointmentDetails.type || 'Civil Registry Service',
           date: appointmentDetails.appointmentDate || appointmentDetails.date,
           time: appointmentDetails.appointmentTime || appointmentDetails.time,
           firstName: appointmentDetails.firstName || 'N/A',
           lastName: appointmentDetails.lastName || 'N/A',
-          phoneNumber: appointmentDetails.phoneNumber || ''
-        }
+          phoneNumber: appointmentDetails.phoneNumber || '',
+        },
       };
 
-      const response = await axios.post(`${this.baseURL}/auth/notifications/appointment-status-update`, payload);
+      const response = await axios.post(
+        `${this.baseURL}/auth/notifications/appointment-status-update`,
+        payload
+      );
 
       console.log('✅ Appointment status update notification sent:', response.data);
       return { success: true, data: response.data };
     } catch (error) {
       console.error('❌ Failed to send appointment status update:', error);
-      return { 
-        success: false, 
-        error: error.response?.data?.message || error.message 
+      return {
+        success: false,
+        error: error.response?.data?.message || error.message,
       };
     }
   }
@@ -111,7 +119,12 @@ class AppointmentNotificationService {
   /**
    * Send appointment cancellation notification
    */
-  async sendCancellationNotification(userEmail, appointmentNumber, appointmentDetails, reason = '') {
+  async sendCancellationNotification(
+    userEmail,
+    appointmentNumber,
+    appointmentDetails,
+    reason = ''
+  ) {
     try {
       if (!userEmail) {
         console.log('⚠️ No email provided for cancellation notification');
@@ -122,7 +135,7 @@ class AppointmentNotificationService {
         email: userEmail,
         appointmentNumber,
         reason,
-        details: appointmentDetails
+        details: appointmentDetails,
       });
 
       const payload = {
@@ -131,24 +144,28 @@ class AppointmentNotificationService {
         type: 'cancellation',
         reason: reason || 'Cancelled by administrator',
         appointmentDetails: {
-          type: appointmentDetails.reasonOfVisit || appointmentDetails.type || 'Civil Registry Service',
+          type:
+            appointmentDetails.reasonOfVisit || appointmentDetails.type || 'Civil Registry Service',
           date: appointmentDetails.appointmentDate || appointmentDetails.date,
           time: appointmentDetails.appointmentTime || appointmentDetails.time,
           firstName: appointmentDetails.firstName || 'N/A',
           lastName: appointmentDetails.lastName || 'N/A',
-          phoneNumber: appointmentDetails.phoneNumber || ''
-        }
+          phoneNumber: appointmentDetails.phoneNumber || '',
+        },
       };
 
-      const response = await axios.post(`${this.baseURL}/auth/notifications/appointment-cancellation`, payload);
+      const response = await axios.post(
+        `${this.baseURL}/auth/notifications/appointment-cancellation`,
+        payload
+      );
 
       console.log('✅ Appointment cancellation notification sent:', response.data);
       return { success: true, data: response.data };
     } catch (error) {
       console.error('❌ Failed to send appointment cancellation:', error);
-      return { 
-        success: false, 
-        error: error.response?.data?.message || error.message 
+      return {
+        success: false,
+        error: error.response?.data?.message || error.message,
       };
     }
   }

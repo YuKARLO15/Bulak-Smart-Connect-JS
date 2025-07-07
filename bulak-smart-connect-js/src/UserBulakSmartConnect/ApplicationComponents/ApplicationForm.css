@@ -13,7 +13,6 @@
   margin-left: 250px;
 }
 @media (min-width: 1200px) {
-
   .ApplicationFormContainer.sidebar-open {
     margin-left: 280px;
   }
@@ -21,8 +20,6 @@
 
 /* Tablet Styles (768px - 1199px) */
 @media (max-width: 1199px) {
- 
-  
   .ApplicationFormContainer.sidebar-open {
     margin-left: 220px;
   }
@@ -31,10 +28,9 @@
 /* Large Mobile Styles (481px - 767px) */
 @media (max-width: 767px) {
   .ApplicationFormContainer {
-  
     margin-left: 0 !important;
   }
-  
+
   .ApplicationFormContainer.sidebar-open {
     margin-left: 0 !important;
   }
@@ -44,9 +40,9 @@
 @media (max-width: 480px) {
   .ApplicationFormContainer {
     margin-left: 0 !important;
-     align-items: start !important;
+    align-items: start !important;
   }
-  
+
   .ApplicationFormContainer.sidebar-open {
     margin-left: 0 !important;
   }
@@ -55,11 +51,10 @@
 /* Extra Small Mobile Styles (max 375px) */
 @media (max-width: 375px) {
   .ApplicationFormContainer {
-
     margin-left: 0 !important;
     align-items: start !important;
   }
-  
+
   .ApplicationFormContainer.sidebar-open {
     margin-left: 0 !important;
   }
@@ -68,10 +63,9 @@
 /* Very Small Mobile Styles (max 319px) */
 @media (max-width: 319px) {
   .ApplicationFormContainer {
-
     margin-left: 0 !important;
   }
-  
+
   .ApplicationFormContainer.sidebar-open {
     margin-left: 0 !important;
   }
@@ -79,8 +73,6 @@
 
 /* Very Large Screens (1440px+) */
 @media (min-width: 1440px) {
-
-  
   .ApplicationFormContainer.sidebar-open {
     margin-left: 300px;
   }
@@ -92,7 +84,7 @@
     padding: 8px 15px;
     margin-left: 0 !important;
   }
-  
+
   .ApplicationFormContainer.sidebar-open {
     margin-left: 0 !important;
   }

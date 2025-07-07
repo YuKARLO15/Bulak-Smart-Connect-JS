@@ -32,7 +32,7 @@ const RequirementBirthList = () => {
           >
             Back
           </Button>
-          <Typography variant="h5" >Requirements for Application of Birth Certificate</Typography>
+          <Typography variant="h5">Requirements for Application of Birth Certificate</Typography>
         </Box>
 
         {/* Regular Birth Certificate */}

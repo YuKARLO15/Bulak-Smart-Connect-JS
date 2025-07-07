@@ -9,11 +9,14 @@ const OTPTest = () => {
   const [results, setResults] = useState([]);
 
   const addResult = (message, type = 'info') => {
-    setResults(prev => [...prev, { 
-      message, 
-      type, 
-      time: new Date().toLocaleTimeString() 
-    }]);
+    setResults(prev => [
+      ...prev,
+      {
+        message,
+        type,
+        time: new Date().toLocaleTimeString(),
+      },
+    ]);
   };
 
   const testSendOTP = async () => {
@@ -52,13 +55,13 @@ const OTPTest = () => {
   return (
     <div style={{ padding: '20px', maxWidth: '600px', margin: '0 auto' }}>
       <h2>🧪 OTP System Test Panel</h2>
-      
+
       <div style={{ marginBottom: '20px', display: 'grid', gap: '10px' }}>
         <label>Email:</label>
         <input
           type="email"
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={e => setEmail(e.target.value)}
           style={{ padding: '8px', border: '1px solid #ddd', borderRadius: '4px' }}
           placeholder="Enter test email"
         />
@@ -66,7 +69,7 @@ const OTPTest = () => {
         <label>Purpose:</label>
         <select
           value={purpose}
-          onChange={(e) => setPurpose(e.target.value)}
+          onChange={e => setPurpose(e.target.value)}
           style={{ padding: '8px', border: '1px solid #ddd', borderRadius: '4px' }}
         >
           <option value="verification">Email Verification</option>
@@ -75,7 +78,7 @@ const OTPTest = () => {
       </div>
 
       <div style={{ marginBottom: '20px', display: 'grid', gap: '10px' }}>
-        <button 
+        <button
           onClick={testSendOTP}
           style={{
             padding: '10px',
@@ -83,13 +86,13 @@ const OTPTest = () => {
             color: 'white',
             border: 'none',
             borderRadius: '4px',
-            cursor: 'pointer'
+            cursor: 'pointer',
           }}
         >
           📧 Send OTP & Test Verification
         </button>
-        
-        <button 
+
+        <button
           onClick={testForgotPassword}
           style={{
             padding: '10px',
@@ -97,7 +100,7 @@ const OTPTest = () => {
             color: 'white',
             border: 'none',
             borderRadius: '4px',
-            cursor: 'pointer'
+            cursor: 'pointer',
           }}
         >
           🔒 Test Forgot Password
@@ -107,27 +110,29 @@ const OTPTest = () => {
       <div>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <h3>Test Results:</h3>
-          <button 
+          <button
             onClick={clearResults}
             style={{
               padding: '5px 10px',
               background: '#ccc',
               border: 'none',
               borderRadius: '4px',
-              cursor: 'pointer'
+              cursor: 'pointer',
             }}
           >
             Clear
           </button>
         </div>
-        
-        <div style={{ 
-          background: '#f5f5f5', 
-          padding: '10px', 
-          borderRadius: '5px',
-          maxHeight: '300px',
-          overflowY: 'auto'
-        }}>
+
+        <div
+          style={{
+            background: '#f5f5f5',
+            padding: '10px',
+            borderRadius: '5px',
+            maxHeight: '300px',
+            overflowY: 'auto',
+          }}
+        >
           {results.map((result, index) => (
             <div
               key={index}
@@ -135,15 +140,20 @@ const OTPTest = () => {
                 padding: '8px',
                 margin: '5px 0',
                 borderLeft: `3px solid ${
-                  result.type === 'success' ? '#27ae60' :
-                  result.type === 'error' ? '#e74c3c' :
-                  result.type === 'warning' ? '#f39c12' : '#3498db'
+                  result.type === 'success'
+                    ? '#27ae60'
+                    : result.type === 'error'
+                      ? '#e74c3c'
+                      : result.type === 'warning'
+                        ? '#f39c12'
+                        : '#3498db'
                 }`,
                 background: 'white',
-                borderRadius: '4px'
+                borderRadius: '4px',
               }}
             >
-              <small style={{ color: '#666' }}>{result.time}</small><br />
+              <small style={{ color: '#666' }}>{result.time}</small>
+              <br />
               {result.message}
             </div>
           ))}

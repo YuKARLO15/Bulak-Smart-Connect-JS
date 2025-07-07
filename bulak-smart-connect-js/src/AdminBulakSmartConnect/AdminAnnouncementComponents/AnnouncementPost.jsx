@@ -2,10 +2,10 @@ import React from 'react';
 import './AnnouncementPost.css';
 
 const AnnouncementPost = ({ announcement, onEdit }) => {
-  const formatDateTime = (dateString) => {
+  const formatDateTime = dateString => {
     const date = new Date(dateString);
     const options = {
-      timeZone: 'Asia/Manila',       // ✅ Philippine timezone
+      timeZone: 'Asia/Manila', // ✅ Philippine timezone
       year: 'numeric',
       month: 'long',
       day: 'numeric',
