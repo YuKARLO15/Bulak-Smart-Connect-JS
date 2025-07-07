@@ -713,14 +713,11 @@ const CorrectionClericalError = () => {
 
   return (
     <div className={`ClericalErrorContainer ${isSidebarOpen ? 'sidebar-open' : ''}`}>
-      <NavBar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
+     
       <Typography variant="h5" className="TitleClerical">
-        BIRTH CERTIFICATE APPLICATION
-      </Typography>
-      <Typography variant="subtitle1" className="SubtitleClerical">
         Application for Correction of Clerical Errors
       </Typography>
-
+   
       {isInitializing ? (
         <Box sx={{ display: 'flex', justifyContent: 'center', my: 4 }}>
           <CircularProgress />
