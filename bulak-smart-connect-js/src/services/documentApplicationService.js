@@ -63,28 +63,46 @@ export const documentApplicationService = {
     }
   },
 
-  // Get all applications with multiple fallbacks
+  // Get all applications with user data (admin only) - ENHANCED FOR NOTIFICATIONS
   getAllApplications: async () => {
     try {
-      console.log('Trying to fetch all applications for admin...');
+      console.log('📧 Fetching all applications with user data for notifications...');
       
-      // First, try to get data from backend
+      // First, try to get data from backend with user relationships
       try {
-        // Basic endpoint for all applications - might work with proper auth
-        const response = await apiClient.get('/document-applications');
+        // Always include user data for admin operations
+        const response = await apiClient.get('/document-applications?includeUser=true');
         
         // Verify the response is an array
         if (Array.isArray(response.data)) {
-          console.log(`Fetched ${response.data.length} applications from API`);
+          console.log(`📧 Fetched ${response.data.length} applications with user data from API`);
+          
+          // Log email availability for debugging
+          response.data.forEach(application => {
+            const email = application.user?.email || application.email;
+            console.log(`📧 Application ${application.id}: Email = ${email || 'NOT FOUND'}`);
+          });
+          
           return response.data;
         } else {
           console.warn('API response is not an array:', response.data);
           throw new Error('Invalid API response format');
         }
       } catch (apiError) {
-        console.warn('API call failed:', apiError.message);
+        console.warn('Enhanced API call failed:', apiError.message);
         
-        // Fallback to localStorage
+        // Fallback to regular API call
+        try {
+          const response = await apiClient.get('/document-applications');
+          if (Array.isArray(response.data)) {
+            console.log(`Fetched ${response.data.length} applications from regular API`);
+            return response.data;
+          }
+        } catch (regularApiError) {
+          console.warn('Regular API call also failed:', regularApiError.message);
+        }
+        
+        // Final fallback to localStorage
         console.log('Falling back to localStorage...');
         const localApps = JSON.parse(localStorage.getItem('applications') || '[]');
         
@@ -105,7 +123,14 @@ export const documentApplicationService = {
   // Get a specific application by ID
   getApplication: async (applicationId) => {
     try {
-      const response = await apiClient.get(`/document-applications/${applicationId}`);
+      console.log(`📧 Fetching application ${applicationId} with user data for notifications...`);
+      // Always include user data for admin operations
+      const response = await apiClient.get(`/document-applications/${applicationId}?includeUser=true`);
+      console.log('📧 Application with user data fetched:', response.data);
+      
+      const email = response.data.user?.email || response.data.email;
+      console.log(`📧 Application ${applicationId}: Email = ${email || 'NOT FOUND'}`);
+      
       return response.data;
     } catch (error) {
       console.error(`Error getting application ${applicationId}:`, error);

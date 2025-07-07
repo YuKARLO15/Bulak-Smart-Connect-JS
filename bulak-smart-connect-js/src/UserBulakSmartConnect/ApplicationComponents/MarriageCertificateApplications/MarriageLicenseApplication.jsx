@@ -19,6 +19,8 @@ import NavBar from '../../../NavigationComponents/NavSide';
 import FileUpload from '../FileUpload';
 import './MarriageLicenseApplication.css';
 import { documentApplicationService } from '../../../services/documentApplicationService';
+import { documentApplicationNotificationService } from '../../../services/documentApplicationNotificationService';
+import { useAuth } from '../../../context/AuthContext';
 
 const mandatoryDocumentsHusband = [
   'Birth / Baptismal Certificate (Groom)',
@@ -116,6 +118,7 @@ const [isLoading, setIsLoading] = useState(false);
 const [applicationId, setApplicationId] = useState(null);
 const [backendApplicationCreated, setBackendApplicationCreated] = useState(false);
 const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'info' });
+const { user } = useAuth();
 
 
 
@@ -583,6 +586,46 @@ const handleFileUpload = async (label, isUploaded, fileDataObj) => {
       localStorage.setItem('marriageApplicationId', effectiveAppId);
 
       showNotification('Application submitted successfully!', 'success');
+
+      // 📧 SEND CONFIRMATION NOTIFICATION (ENHANCED)
+      const userEmail = user?.email;
+      if (userEmail) {
+        try {
+          console.log('📧 Sending application confirmation notification to:', userEmail);
+          const groomName = completeFormData.groomFirstName && completeFormData.groomLastName 
+            ? `${completeFormData.groomFirstName} ${completeFormData.groomLastName}` 
+            : 'Groom';
+          const brideName = completeFormData.brideFirstName && completeFormData.brideLastName 
+            ? `${completeFormData.brideFirstName} ${completeFormData.brideLastName}` 
+            : 'Bride';
+          const applicantName = `${groomName} & ${brideName}`;
+
+          const notificationResult = await documentApplicationNotificationService.sendApplicationConfirmation(
+            userEmail,
+            effectiveAppId,
+            {
+              type: 'Marriage License',
+              subtype: 'Marriage License Application',
+              applicantName: applicantName,
+              submissionDate: new Date().toLocaleDateString(),
+              status: 'Pending'
+            }
+          );
+
+          if (notificationResult.success) {
+            console.log('✅ Confirmation notification sent successfully');
+            showNotification('Application submitted successfully! A confirmation email has been sent to you.', 'success');
+          } else {
+            console.log('⚠️ Confirmation notification failed:', notificationResult.error);
+            showNotification('Application submitted successfully! However, we could not send the confirmation email.', 'warning');
+          }
+        } catch (notificationError) {
+          console.error('❌ Error sending confirmation notification:', notificationError);
+          showNotification('Application submitted successfully! However, we could not send the confirmation email.', 'warning');
+        }
+      } else {
+        console.log('⚠️ No email available for notifications');
+      }
 
       setTimeout(() => {
         navigate('/MarriageLicenseSummary', {
