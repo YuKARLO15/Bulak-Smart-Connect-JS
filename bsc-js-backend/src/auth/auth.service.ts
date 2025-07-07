@@ -3,6 +3,7 @@ import {
   UnauthorizedException,
   ConflictException,
   BadRequestException,
+  Logger,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -16,12 +17,20 @@ import { UpdateUserDto, AdminUpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class AuthService {
+  private readonly logger = new Logger(AuthService.name);
+
   constructor(
     @InjectRepository(User)
     private usersRepository: Repository<User>,
     private jwtService: JwtService,
     private rolesService: RolesService,
   ) {}
+
+  private readonly failedAttempts = new Map<string, {
+    attempts: number;
+    lastAttempt: Date;
+    lockedUntil?: Date
+  }>();
 
   async validateUser(loginDto: LoginDto): Promise<any> {
     const user = await this.usersRepository.findOne({
@@ -38,7 +47,65 @@ export class AuthService {
     return null;
   }
 
+  async getAccountLockout(identifier: string) {
+    const key = identifier.toLowerCase();
+    return this.failedAttempts.get(key) || null;
+  }
+
+  async recordFailedLoginAttempt(identifier: string) {
+    const key = identifier.toLowerCase();
+    const current = this.failedAttempts.get(key) || {
+      attempts: 0,
+      lastAttempt: new Date(),
+    };
+
+    current.attempts++;
+    current.lastAttempt = new Date();
+
+    // Lock account after 5 attempts for 15 minutes
+    if (current.attempts >= 5) {
+      current.lockedUntil = new Date(Date.now() + 15 * 60 * 1000);
+      this.logger.warn(
+        `Account locked for ${identifier} after ${current.attempts} failed attempts`,
+      );
+    }
+
+    this.failedAttempts.set(key, current);
+
+    return {
+      attempts: current.attempts,
+      isLocked: current.attempts >= 5,
+      lockedUntil: current.lockedUntil,
+      timeRemaining: current.lockedUntil
+        ? Math.ceil(
+            (current.lockedUntil.getTime() - Date.now()) / 1000,
+          )
+        : 0,
+    };
+  }
+
+  async clearAccountLockout(identifier: string) {
+    const key = identifier.toLowerCase();
+    this.failedAttempts.delete(key);
+    this.logger.log(`Account lockout cleared for ${identifier}`);
+    return { success: true };
+  }
+
   async login(loginDto: LoginDto) {
+    const identifier = loginDto.emailOrUsername.toLowerCase();
+
+    // Check if account is locked
+    const lockoutData = await this.getAccountLockout(identifier);
+    if (lockoutData?.lockedUntil && lockoutData.lockedUntil > new Date()) {
+      const timeRemaining = Math.ceil(
+        (lockoutData.lockedUntil.getTime() - Date.now()) / 1000,
+      );
+      const minutesRemaining = Math.ceil(timeRemaining / 60);
+      throw new UnauthorizedException(
+        `Account locked due to multiple failed attempts. Try again in ${minutesRemaining} minutes or use "Forgot Password".`,
+      );
+    }
+
     console.log('Login attempt with:', loginDto);
 
     try {

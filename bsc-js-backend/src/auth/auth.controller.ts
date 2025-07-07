@@ -1266,4 +1266,57 @@ export class AuthController {
       );
     }
   }
+
+  @Post('check-lockout')
+  @ApiOperation({ summary: 'Check if account is locked' })
+  async checkAccountLockout(@Body() { identifier }: { identifier: string }) {
+    try {
+      const lockoutData = await this.authService.getAccountLockout(identifier);
+
+      if (lockoutData?.lockedUntil && lockoutData.lockedUntil > new Date()) {
+        const timeRemaining = Math.ceil(
+          (lockoutData.lockedUntil.getTime() - Date.now()) / 1000,
+        );
+        return {
+          isLocked: true,
+          timeRemaining,
+          attemptsUsed: lockoutData.attempts,
+          lockedUntil: lockoutData.lockedUntil,
+        };
+      }
+
+      return {
+        isLocked: false,
+        attempts: lockoutData?.attempts || 0,
+      };
+    } catch (error) {
+      this.logger.error('Error checking account lockout:', error);
+      return {
+        isLocked: false,
+        attempts: 0,
+      };
+    }
+  }
+
+  @Post('record-failed-attempt')
+  @ApiOperation({ summary: 'Record failed login attempt' })
+  async recordFailedAttempt(@Body() { identifier }: { identifier: string }) {
+    try {
+      return await this.authService.recordFailedLoginAttempt(identifier);
+    } catch (error) {
+      this.logger.error('Error recording failed attempt:', error);
+      throw new BadRequestException('Failed to record login attempt');
+    }
+  }
+
+  @Post('clear-lockout')
+  @ApiOperation({ summary: 'Clear account lockout on successful login' })
+  async clearAccountLockout(@Body() { identifier }: { identifier: string }) {
+    try {
+      return await this.authService.clearAccountLockout(identifier);
+    } catch (error) {
+      this.logger.error('Error clearing account lockout:', error);
+      throw new BadRequestException('Failed to clear account lockout');
+    }
+  }
 }
