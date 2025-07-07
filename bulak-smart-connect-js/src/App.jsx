@@ -151,6 +151,7 @@ function App() {
         </Route>
        
 
+ {/* User routes - Any authenticated user */}
 <Route element={<PrivateRoute />}>
   <Route element={<UserLayout />}>
     <Route path="/Home" element={<LandingPage />} />
