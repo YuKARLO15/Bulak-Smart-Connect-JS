@@ -15,6 +15,12 @@ import { RegisterDto } from './dto/register.dto';
 import { RolesService } from '../roles/roles.service';
 import { UpdateUserDto, AdminUpdateUserDto } from './dto/update-user.dto';
 
+interface LockoutData {
+  attempts: number;
+  lastAttempt: Date;
+  lockedUntil?: Date;
+}
+
 @Injectable()
 export class AuthService {
   private readonly logger = new Logger(AuthService.name);
@@ -26,11 +32,7 @@ export class AuthService {
     private rolesService: RolesService,
   ) {}
 
-  private readonly failedAttempts = new Map<string, {
-    attempts: number;
-    lastAttempt: Date;
-    lockedUntil?: Date
-  }>();
+  private readonly failedAttempts = new Map<string, LockoutData>();
 
   async validateUser(loginDto: LoginDto): Promise<any> {
     const user = await this.usersRepository.findOne({
