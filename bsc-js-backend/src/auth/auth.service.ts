@@ -64,9 +64,9 @@ export class AuthService {
     current.attempts++;
     current.lastAttempt = new Date();
 
-    // Lock account after 5 attempts for 15 minutes
+    // Lock account after 5 attempts for 3 minutes (was 15 minutes)
     if (current.attempts >= 5) {
-      current.lockedUntil = new Date(Date.now() + 15 * 60 * 1000);
+      current.lockedUntil = new Date(Date.now() + 3 * 60 * 1000); // 3 minutes
       this.logger.warn(
         `Account locked for ${identifier} after ${current.attempts} failed attempts`,
       );
