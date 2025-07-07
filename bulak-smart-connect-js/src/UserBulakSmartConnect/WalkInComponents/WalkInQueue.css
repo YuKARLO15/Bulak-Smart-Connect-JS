@@ -3,9 +3,12 @@
   flex-direction: column;
   width: 100vw;
   color: #333;
-  transition: margin-left ease;
+  transition: margin-left 0.3s ease;
   margin-left: 0;
+  background-color: #f8f9fa;
+  min-height: 100vh;
 }
+
 .QueueContainerWalkIn.sidebar-open {
   margin-left: 250px;
 }
@@ -16,236 +19,276 @@
   display: flex;
   flex-direction: column;
   margin-left: 10vw;
+  padding: 20px 0;
 }
+
 .HeaderWalkIn {
-  background-color: #184a5b;
+  background: linear-gradient(135deg, #184a5b 0%, #24536a 100%);
   width: 100vw;
   margin-bottom: 8vh !important;
+  box-shadow: 0 4px 12px rgba(24, 74, 91, 0.15);
 }
+
 .HeaderWalkIn h1 {
-  font-size: 22px;
+  font-size: 24px;
   color: white;
-  padding: 20px;
-  margin-left: 10vw;
+  padding: 25px 20px;
+
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-align: center;
 }
 
 .QueuePositionContainerWalkIn {
   display: flex;
   flex-direction: column;
-  background-color: #f0f0f0;
-  border-radius: 8px;
-  margin-bottom: 20px;
-  padding: 15px;
-  width: 30vw;
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  border-radius: 16px;
+  margin-bottom: 25px;
+  padding: 25px;
+  width: 32vw;
+  box-shadow: 0 8px 24px rgba(24, 74, 91, 0.1);
+  border: 1px solid #e9ecef;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.QueuePositionContainerWalkIn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(24, 74, 91, 0.15);
 }
 
 .QueuePositionLabelWalkIn {
-  font-size: 14px;
-  font-weight: bold;
-  color: #24536a;
-  margin-bottom: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #184a5b;
+  margin-bottom: 15px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
+
 .HeadWalkIn {
   display: flex;
   flex-direction: row;
-  gap: 10px;
+  gap: 20px;
   justify-content: center;
+  margin-bottom: 30px;
 }
 
 .QueuePositionNumberWalkIn {
-  font-size: 36px;
-  font-weight: bold;
-  color: #24536a;
-  margin: 10px 0;
+  font-size: 48px;
+  font-weight: 700;
+  color: #184a5b;
+  margin: 15px 0;
+  text-align: center;
 }
 
 .QueuePositionMessageWalkIn {
-  font-size: 12px;
-  color: #666;
+  font-size: 14px;
+  color: #6c757d;
+  text-align: center;
+  font-style: italic;
 }
 
 .CurrentQueueContainerWalkIn {
-  background-color: #f0f0f0;
-  border-radius: 8px;
-  padding: 15px;
-  margin-bottom: 20px;
-  width: 30vw;
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  border-radius: 16px;
+  padding: 25px;
+  margin-bottom: 25px;
+  width: 32vw;
+  box-shadow: 0 8px 24px rgba(24, 74, 91, 0.1);
+  border: 1px solid #e9ecef;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.CurrentQueueContainerWalkIn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(24, 74, 91, 0.15);
 }
 
 .CurrentQueueLabelWalkIn {
-  font-size: 14px;
-  font-weight: bold;
-  color: #24536a;
-  margin-bottom: 15px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #184a5b;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .CurrentQueueListWalkIn {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
 }
 
 .CurrentQueueItemWalkIn {
   display: flex;
   justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.CurrentQueueItemWalkIn:last-child {
+  border-bottom: none;
 }
 
 .QueueIdWalkIn {
-  color: #24536a;
-  font-weight: bold;
+  color: #184a5b;
+  font-weight: 600;
+  font-size: 16px;
 }
 
 .CounterNumberWalkIn {
-  color: #24536a;
+  color: #6c757d;
+  font-weight: 500;
 }
 
 .FooterWalkIn {
-  margin-top: 20px;
+  margin-top: 30px;
 }
 
 .FooterTitleWalkIn {
-  font-size: 18px;
-  color: #24536a;
-  margin-bottom: 15px;
+  font-size: 20px;
+  color: #184a5b;
+  margin-bottom: 20px;
+  font-weight: 600;
 }
 
 .GetQueueButtonWalkIn {
-  background-color: #24536a;
+  background: linear-gradient(135deg, #184a5b 0%, #24536a 100%);
   color: white;
   border: none;
-  padding: 10px 15px;
-  border-radius: 4px;
-  font-weight: bold;
+  padding: 14px 28px;
+  border-radius: 12px;
+  font-weight: 600;
   cursor: pointer;
   float: right;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(24, 74, 91, 0.2);
+}
+
+.GetQueueButtonWalkIn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(24, 74, 91, 0.3);
+  background: linear-gradient(135deg, #24536a 0%, #184a5b 100%);
 }
 
 .QueueListWalkIn {
   clear: both;
-  margin-top: 50px;
+  margin-top: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 .QueueItemWalkIn {
-  background-color: #f5f5f5;
-  border-radius: 8px;
-  padding: 15px;
-  margin-bottom: 10px;
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 12px;
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  transition: all 0.3s ease;
+  border: 1px solid #e9ecef;
+  box-shadow: 0 4px 12px rgba(24, 74, 91, 0.08);
+}
+
+.QueueItemWalkIn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(24, 74, 91, 0.12);
 }
 
 .QueueStatusWalkIn {
   display: flex;
   flex-direction: column;
+  text-align: center;
 }
 
 .StatusLabelWalkIn {
   font-size: 12px;
-  font-weight: bold;
-  color: #666;
+  font-weight: 600;
+  color: #6c757d;
   text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
 }
 
 .QueueDateWalkIn {
-  font-size: 12px;
-  color: #666;
-  margin-top: 5px;
+  font-size: 13px;
+  color: #6c757d;
+  margin-top: 6px;
 }
 
 .QueueIdContainerWalkIn {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
 .QueueListIdWalkIn {
-  font-size: 16px;
-  font-weight: bold;
-  color: #24536a;
+  font-size: 18px;
+  font-weight: 700;
+  color: #184a5b;
 }
 
 .UserQueueWalkIn {
-  background-color: #f0f5f7;
+  background: linear-gradient(135deg, #e8f4f8 0%, #f0f8fb 100%);
+  border: 2px solid #184a5b;
+  position: relative;
+  overflow: hidden;
 }
 
-.HeaderWalkIn {
-  margin-bottom: 20px;
-}
-
-.QueuePositionLabelWalkIn {
-  font-size: 14px;
-  font-weight: bold;
-  color: #24536a;
-  margin-bottom: 10px;
-}
-
-.QueuePositionNumberWalkIn {
-  font-size: 36px;
-  font-weight: bold;
-  color: #24536a;
-  margin: 10px 0;
-}
-
-.QueuePositionMessageWalkIn {
-  font-size: 12px;
-  color: #666;
-}
-
-.CurrentQueueContainerWalkIn {
-  background-color: #f0f0f0;
-  border-radius: 8px;
-  padding: 15px;
-  margin-bottom: 20px;
-}
-
-.CurrentQueueLabelWalkIn {
-  font-size: 14px;
-  font-weight: bold;
-  color: #24536a;
-  margin-bottom: 15px;
-}
-
-.CurrentQueueListWalkIn {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.CurrentQueueItemWalkIn {
-  display: flex;
-  justify-content: space-between;
-}
-
-.FooterWalkIn {
-  margin-top: 20px;
-}
-
-.FooterTitleWalkIn {
-  font-size: 18px;
-  color: #24536a;
-  margin-bottom: 15px;
-}
-
-.GetQueueButtonWalkIn {
-  background-color: #24536a;
-  color: white;
-  border: none;
-  padding: 10px 15px;
-  border-radius: 4px;
-  font-weight: bold;
-  cursor: pointer;
-  float: right;
-  margin-bottom: 15px;
+.UserQueueWalkIn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #184a5b 0%, #24536a 100%);
 }
 
 .PendingWalkIn {
-  background-color: #f5f5f5;
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  border: 1px solid #e9ecef;
 }
 
 .InProgressWalkIn {
-  background-color: #e0f7fa;
+  background: linear-gradient(135deg, #e0f7fa 0%, #f0fbfc 100%);
+  border: 2px solid #4caf50;
 }
 
+/* View Details Button Styling */
+.queue-actions {
+  margin-top: 12px;
+  text-align: center;
+}
+
+.view-details-btn {
+  display: inline-block;
+  padding: 10px 20px;
+  background: linear-gradient(135deg, #184a5b 0%, #24536a 100%);
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(24, 74, 91, 0.2);
+}
+
+.view-details-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(24, 74, 91, 0.3);
+  background: linear-gradient(135deg, #24536a 0%, #184a5b 100%);
+  text-decoration: none;
+  color: white;
+}
+
+/* Status Badge Animations */
 @keyframes pulse {
   0% {
     opacity: 1;
@@ -261,6 +304,18 @@
   }
 }
 
+@keyframes glow {
+  0% {
+    box-shadow: 0 0 5px rgba(255, 107, 53, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(255, 107, 53, 0.8);
+  }
+  100% {
+    box-shadow: 0 0 5px rgba(255, 107, 53, 0.5);
+  }
+}
+
 .QueuePositionNumberWalkIn {
   animation: none;
 }
@@ -268,5 +323,39 @@
 .QueuePositionNumberWalkIn:has-text('NOW SERVING') {
   animation: pulse 1.5s infinite;
   color: #ff6b35;
-  font-weight: bold;
+  font-weight: 700;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .WalkInDashboard {
+    width: 95vw;
+    margin-left: 2.5vw;
+  }
+  
+  .HeaderWalkIn h1 {
+    margin-left: 2.5vw;
+    font-size: 20px;
+  }
+  
+  .QueuePositionContainerWalkIn,
+  .CurrentQueueContainerWalkIn {
+    width: 90vw;
+  }
+  
+  .HeadWalkIn {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .QueueItemWalkIn {
+    flex-direction: column;
+    gap: 12px;
+    text-align: center;
+  }
+  
+  .GetQueueButtonWalkIn {
+    float: none;
+    width: 100%;
+  }
 }
