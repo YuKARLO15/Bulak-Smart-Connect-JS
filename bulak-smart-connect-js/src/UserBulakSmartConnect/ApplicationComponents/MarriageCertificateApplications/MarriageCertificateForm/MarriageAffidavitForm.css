@@ -216,8 +216,6 @@
   width: 45%;
   margin: 1rem 0;
 }
-
-/* For mobile responsiveness */
 @media (max-width: 768px) {
   .affidavit-certificate-form {
     padding: 1rem;
@@ -241,3 +239,94 @@
   }
 }
 
+/* For larger screens - maintain current appearance */
+@media (min-width: 1024px) {
+  .affidavit-form-container {
+    width: 80vw;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .affidavit-form1-container {
+    width: 77vw;
+    max-width: 1170px;
+    margin: 0 auto;
+    padding-left: 25px;
+  }
+
+  .affidavit-certificate-form {
+    width: 80vw !important;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .affidavit-officer-section,
+  .affidavit-delayed-section {
+    width: 75vw;
+    max-width: 1100px;
+    margin: 0 auto 2.5rem auto;
+  }
+
+  .affidavit-witnesses-section {
+    width: 90%;
+    max-width: 1000px;
+  }
+}
+
+/* For very large screens - prevent excessive stretching */
+@media (min-width: 1440px) {
+  .affidavit-form-container {
+    width: 70vw;
+    max-width: 1400px;
+  }
+
+  .affidavit-form1-container {
+    width: 67vw;
+    max-width: 1370px;
+  }
+
+  .affidavit-certificate-form {
+    width: 70vw !important;
+    max-width: 1400px;
+  }
+
+  .affidavit-officer-section,
+  .affidavit-delayed-section {
+    width: 65vw;
+    max-width: 1300px;
+  }
+
+  .affidavit-witnesses-section {
+    width: 85%;
+    max-width: 1200px;
+  }
+}
+
+/* For ultra-wide screens */
+@media (min-width: 1920px) {
+  .affidavit-form-container {
+    width: 60vw;
+    max-width: 1600px;
+  }
+
+  .affidavit-form1-container {
+    width: 57vw;
+    max-width: 1570px;
+  }
+
+  .affidavit-certificate-form {
+    width: 60vw !important;
+    max-width: 1600px;
+  }
+
+  .affidavit-officer-section,
+  .affidavit-delayed-section {
+    width: 55vw;
+    max-width: 1500px;
+  }
+
+  .affidavit-witnesses-section {
+    width: 80%;
+    max-width: 1400px;
+  }
+}
