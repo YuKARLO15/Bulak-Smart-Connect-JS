@@ -11,7 +11,7 @@ import OfflineIndicator from './components/OfflineIndicator';
 import OTPTest from './components/OTPTest';
 import FloatingAnnouncementButton from './LandingPageComponents/FloatingAnnouncement';
 import { Box, Button, Container, Grid, Typography, Card, CardContent } from '@mui/material';
-
+import UserLayout from './UserBulakSmartConnect/NotificationComponent/UserNotification';
 //-----------SERVICES --------------//
 //import { localStorageManager } from './services/localStorageManager';
 
@@ -149,52 +149,44 @@ function App() {
           {/* Admin Account */}
           <Route path="/AdminAccount" element={<AdminAccount />} />
         </Route>
+       
 
-        {/* User routes - Any authenticated user */}
-        <Route element={<PrivateRoute />}>
-          <Route path="/Home" element={<LandingPage />} />
-          <Route path="/UserDashboard" element={<UserDashboard />} />
-          <Route path="/AppointmentForm" element={<AppoionmentForm />} />
-          <Route path="/ApplicationForm" element={<ApplicationForm />} />
-          <Route path="/QR" element={<QRCodePage />} />
-          <Route path="/ClericalErrorApplication" element={<ClericalErrorApplication />} />
-          <Route path="/BirthCertificateDashboard" element={<BirthCertificateDashboard />} />
-          <Route path="/FirstNameCorrection" element={<FirstNameCorrection />} />
-          <Route path="/MarriageLicenseApplication" element={<MarriageLicenseApplication />} />
-          <Route path="/Above18Registration" element={<Above18Registration />} />
-          <Route path="/Below18Registration" element={<Below18Registration />} />
-          <Route path="/SexDobCorrection" element={<SexDobCorrection />} />
-          <Route path="/DelayedOutOfTownRegistration" element={<DelayedOutOfTownRegistration />} />
-          <Route
-            path="/DelayedOneParentForeignerRegistration"
-            element={<DelayedOneParentForeignerRegistration />}
-          />
-          <Route path="/MarriageDashboard" element={<MarriageDashboard />} />
-          <Route
-            path="/MarriageCertificateApplication"
-            element={<MarriageCertificateApplication />}
-          />
-          <Route path="/MarriageLicenseSummary" element={<MarriageLicenseSummary />} />
-
-          <Route path="/QrCodeAppointment/:id" element={<QRCodeAppointment />} />
-          <Route path="/BirthCertificateForm" element={<BirthCertificateForm />} />
-          <Route path="/BirthApplicationSummary" element={<BirthApplicationSummary />} />
-          <Route path="/MarriageForm" element={<MarriageCertificateForm />} />
-          <Route path="/WalkInQueue" element={<WalkInQueueContainer />} />
-          <Route path="/WalkInForm" element={<WalkInForm />} />
-          <Route path="/WalkInDetails" element={<WalkInQueueDetail />} />
-          <Route path="/CTCBirthCertificate" element={<CTCBirthCertificate />} />
-          <Route path="/RequestACopyBirthCertificate" element={<CopyBirthCertificate />} />
-          <Route path="/RequirementBirthList" element={<RequirementBirthList />} />
-          <Route path="/MarriageSummaryForm" element={<MarriageSummaryForm />} />
-          <Route path="/RequirementMarriageList" element={<RequirementMarriageList />} />
-          <Route path="/UserAccount" element={<UserAccount />} />
-          <Route path="/RequirementDeathCertificateList" element={<RequirementDeathList />} /> 
-
-          {/* User Privacy Policy */}
-        
+<Route element={<PrivateRoute />}>
+  <Route element={<UserLayout />}>
+    <Route path="/Home" element={<LandingPage />} />
+    <Route path="/UserDashboard" element={<UserDashboard />} />
+    <Route path="/AppointmentForm" element={<AppoionmentForm />} />
+    <Route path="/ApplicationForm" element={<ApplicationForm />} />
+    <Route path="/QR" element={<QRCodePage />} />
+    <Route path="/ClericalErrorApplication" element={<ClericalErrorApplication />} />
+    <Route path="/BirthCertificateDashboard" element={<BirthCertificateDashboard />} />
+    <Route path="/FirstNameCorrection" element={<FirstNameCorrection />} />
+    <Route path="/MarriageLicenseApplication" element={<MarriageLicenseApplication />} />
+    <Route path="/Above18Registration" element={<Above18Registration />} />
+    <Route path="/Below18Registration" element={<Below18Registration />} />
+    <Route path="/SexDobCorrection" element={<SexDobCorrection />} />
+    <Route path="/DelayedOutOfTownRegistration" element={<DelayedOutOfTownRegistration />} />
+    <Route path="/DelayedOneParentForeignerRegistration" element={<DelayedOneParentForeignerRegistration />} />
+    <Route path="/MarriageDashboard" element={<MarriageDashboard />} />
+    <Route path="/MarriageCertificateApplication" element={<MarriageCertificateApplication />} />
+    <Route path="/MarriageLicenseSummary" element={<MarriageLicenseSummary />} />
+    <Route path="/QrCodeAppointment/:id" element={<QRCodeAppointment />} />
+    <Route path="/BirthCertificateForm" element={<BirthCertificateForm />} />
+    <Route path="/BirthApplicationSummary" element={<BirthApplicationSummary />} />
+    <Route path="/MarriageForm" element={<MarriageCertificateForm />} />
+    <Route path="/WalkInQueue" element={<WalkInQueueContainer />} />
+    <Route path="/WalkInForm" element={<WalkInForm />} />
+    <Route path="/WalkInDetails" element={<WalkInQueueDetail />} />
+    <Route path="/CTCBirthCertificate" element={<CTCBirthCertificate />} />
+    <Route path="/RequestACopyBirthCertificate" element={<CopyBirthCertificate />} />
+    <Route path="/RequirementBirthList" element={<RequirementBirthList />} />
+    <Route path="/MarriageSummaryForm" element={<MarriageSummaryForm />} />
+    <Route path="/RequirementMarriageList" element={<RequirementMarriageList />} />
+    <Route path="/UserAccount" element={<UserAccount />} />
+    <Route path="/RequirementDeathCertificateList" element={<RequirementDeathList />} />
+  </Route>
         </Route>
-      </Routes>
+        </Routes>
      <Box className="AnnouncementButtonContainer">
           <FloatingAnnouncementButton />
           </Box>
