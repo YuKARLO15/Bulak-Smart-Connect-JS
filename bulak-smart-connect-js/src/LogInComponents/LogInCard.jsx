@@ -247,20 +247,17 @@ export default function LogInCard({ onLogin }) {
   const handleLoginFailure = async errorMessage => {
     // 🔧 AUTO CLEAR PASSWORD ON FAILED LOGIN
     setPassword('');
-
-    // Also clear from localStorage if remembered
     localStorage.removeItem('rememberedPassword');
 
-    // Backend will handle attempt tracking, but we check the result
     try {
       const attemptResult = await authLockoutService.recordFailedAttempt(email);
-
+      
       setLoginAttempts(attemptResult.attempts);
 
       if (attemptResult.isLocked) {
         setIsAccountLocked(true);
         setLockoutTimeRemaining(attemptResult.timeRemaining);
-        setError(`🔒 Account locked due to multiple failed attempts. Try again in 15 minutes or use "Forgot Password" to reset your account.`);
+        setError(`🔒 Account locked due to multiple failed attempts. Try again in ${Math.floor(attemptResult.timeRemaining / 60)} minutes or use "Forgot Password" to reset your account.`);
 
         // Start countdown timer
         const timer = setInterval(() => {
@@ -297,25 +294,13 @@ export default function LogInCard({ onLogin }) {
       setError(errorMessage);
     }
 
-    // 🔧 AUTO FOCUS PASSWORD FIELD AFTER CLEARING
+    // Auto focus and shake animation
     setTimeout(() => {
       const passwordInput = document.getElementById('password');
       if (passwordInput) {
         passwordInput.focus();
-      }
-    }, 100);
-
-    // SHAKE ANIMATION FOR PASSWORD FIELD
-    setTimeout(() => {
-      const passwordInput = document.getElementById('password');
-      if (passwordInput) {
         passwordInput.classList.add('error-shake');
-        passwordInput.focus();
-
-        // Remove shake class after animation
-        setTimeout(() => {
-          passwordInput.classList.remove('error-shake');
-        }, 500);
+        setTimeout(() => passwordInput.classList.remove('error-shake'), 500);
       }
     }, 100);
   };
