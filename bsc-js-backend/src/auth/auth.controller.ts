@@ -813,14 +813,24 @@ export class AuthController {
   @Post('send-queue-notification')
   async sendQueueNotification(@Body() notificationDto: QueueNotificationDto) {
     try {
-      const { email, queueNumber, type, position, estimatedTime, status, message } = notificationDto;
+      const {
+        email,
+        queueNumber,
+        type,
+        position,
+        estimatedTime,
+        status,
+        message,
+      } = notificationDto;
 
       if (type === 'position_alert') {
         // Fix: Ensure position is defined for position alerts
         if (position === undefined) {
-          throw new BadRequestException('Position is required for position alerts');
+          throw new BadRequestException(
+            'Position is required for position alerts',
+          );
         }
-        
+
         await this.emailService.sendQueuePositionAlert(
           email,
           queueNumber,
@@ -892,15 +902,15 @@ export class AuthController {
     },
   })
   @Post('notifications/appointment-confirmation')
-  async sendAppointmentConfirmation(
-    @Body() notificationDto: any,
-  ) {
+  async sendAppointmentConfirmation(@Body() notificationDto: any) {
     try {
       const { email, appointmentNumber, appointmentDetails } = notificationDto;
 
       // Validate required fields
       if (!email || !appointmentNumber || !appointmentDetails) {
-        throw new BadRequestException('Missing required fields: email, appointmentNumber, or appointmentDetails');
+        throw new BadRequestException(
+          'Missing required fields: email, appointmentNumber, or appointmentDetails',
+        );
       }
 
       await this.emailService.sendAppointmentConfirmation(
@@ -958,15 +968,16 @@ export class AuthController {
     },
   })
   @Post('notifications/appointment-status-update')
-  async sendAppointmentStatusUpdate(
-    @Body() notificationDto: any,
-  ) {
+  async sendAppointmentStatusUpdate(@Body() notificationDto: any) {
     try {
-      const { email, appointmentNumber, status, appointmentDetails } = notificationDto;
+      const { email, appointmentNumber, status, appointmentDetails } =
+        notificationDto;
 
       // Validate required fields
       if (!email || !appointmentNumber || !status || !appointmentDetails) {
-        throw new BadRequestException('Missing required fields: email, appointmentNumber, status, or appointmentDetails');
+        throw new BadRequestException(
+          'Missing required fields: email, appointmentNumber, status, or appointmentDetails',
+        );
       }
 
       await this.emailService.sendAppointmentStatusUpdate(
@@ -1025,15 +1036,16 @@ export class AuthController {
     },
   })
   @Post('notifications/appointment-cancellation')
-  async sendAppointmentCancellation(
-    @Body() notificationDto: any,
-  ) {
+  async sendAppointmentCancellation(@Body() notificationDto: any) {
     try {
-      const { email, appointmentNumber, appointmentDetails, reason } = notificationDto;
+      const { email, appointmentNumber, appointmentDetails, reason } =
+        notificationDto;
 
       // Validate required fields
       if (!email || !appointmentNumber || !appointmentDetails) {
-        throw new BadRequestException('Missing required fields: email, appointmentNumber, or appointmentDetails');
+        throw new BadRequestException(
+          'Missing required fields: email, appointmentNumber, or appointmentDetails',
+        );
       }
 
       await this.emailService.sendAppointmentCancellation(
@@ -1084,7 +1096,8 @@ export class AuthController {
   @Post('notifications/application-confirmation')
   @ApiOperation({ summary: 'Send application confirmation notification' })
   async sendApplicationConfirmation(
-    @Body() dto: {
+    @Body()
+    dto: {
       email: string;
       applicationId: string;
       applicationType: string;
@@ -1092,11 +1105,13 @@ export class AuthController {
       applicantName: string;
       submissionDate: string;
       status: string;
-    }
+    },
   ) {
     try {
-      this.logger.log(`Sending application confirmation notification to: ${dto.email}`);
-      
+      this.logger.log(
+        `Sending application confirmation notification to: ${dto.email}`,
+      );
+
       // Use your existing email service to send application confirmation
       await this.emailService.sendDocumentApplicationConfirmation(
         dto.email,
@@ -1105,23 +1120,29 @@ export class AuthController {
         dto.applicationSubtype,
         dto.applicantName,
         dto.submissionDate,
-        dto.status
+        dto.status,
       );
-      
+
       return {
         success: true,
-        message: 'Application confirmation notification sent successfully'
+        message: 'Application confirmation notification sent successfully',
       };
     } catch (error) {
-      this.logger.error('Error sending application confirmation notification:', error);
-      throw new BadRequestException('Failed to send application confirmation notification');
+      this.logger.error(
+        'Error sending application confirmation notification:',
+        error,
+      );
+      throw new BadRequestException(
+        'Failed to send application confirmation notification',
+      );
     }
   }
 
   @Post('notifications/application-status-update')
   @ApiOperation({ summary: 'Send application status update notification' })
   async sendApplicationStatusUpdate(
-    @Body() dto: {
+    @Body()
+    dto: {
       email: string;
       applicationId: string;
       newStatus: string;
@@ -1129,11 +1150,13 @@ export class AuthController {
       applicationSubtype?: string;
       applicantName: string;
       previousStatus?: string;
-    }
+    },
   ) {
     try {
-      this.logger.log(`Sending application status update notification to: ${dto.email}`);
-      
+      this.logger.log(
+        `Sending application status update notification to: ${dto.email}`,
+      );
+
       // Use your existing email service
       await this.emailService.sendDocumentApplicationStatusUpdate(
         dto.email,
@@ -1142,67 +1165,83 @@ export class AuthController {
         dto.applicationType,
         dto.applicationSubtype,
         dto.applicantName,
-        dto.previousStatus
+        dto.previousStatus,
       );
-  
+
       return {
         success: true,
-        message: 'Application status update notification sent successfully'
+        message: 'Application status update notification sent successfully',
       };
     } catch (error) {
-      this.logger.error('Error sending application status update notification:', error);
-      throw new BadRequestException('Failed to send application status update notification');
+      this.logger.error(
+        'Error sending application status update notification:',
+        error,
+      );
+      throw new BadRequestException(
+        'Failed to send application status update notification',
+      );
     }
   }
 
   @Post('notifications/application-approval')
   @ApiOperation({ summary: 'Send application approval notification' })
   async sendApplicationApproval(
-    @Body() dto: {
+    @Body()
+    dto: {
       email: string;
       applicationId: string;
       applicationType: string;
       applicationSubtype?: string;
       applicantName: string;
-    }
+    },
   ) {
     try {
-      this.logger.log(`Sending application approval notification to: ${dto.email}`);
-      
+      this.logger.log(
+        `Sending application approval notification to: ${dto.email}`,
+      );
+
       // Use your existing email service
       await this.emailService.sendDocumentApplicationApproval(
         dto.email,
         dto.applicationId,
         dto.applicationType,
         dto.applicationSubtype,
-        dto.applicantName
+        dto.applicantName,
       );
-  
+
       return {
         success: true,
-        message: 'Application approval notification sent successfully'
+        message: 'Application approval notification sent successfully',
       };
     } catch (error) {
-      this.logger.error('Error sending application approval notification:', error);
-      throw new BadRequestException('Failed to send application approval notification');
+      this.logger.error(
+        'Error sending application approval notification:',
+        error,
+      );
+      throw new BadRequestException(
+        'Failed to send application approval notification',
+      );
     }
   }
 
   @Post('notifications/application-rejection')
   @ApiOperation({ summary: 'Send application rejection notification' })
   async sendApplicationRejection(
-    @Body() dto: {
+    @Body()
+    dto: {
       email: string;
       applicationId: string;
       applicationType: string;
       applicationSubtype?: string;
       applicantName: string;
       rejectionReason: string;
-    }
+    },
   ) {
     try {
-      this.logger.log(`Sending application rejection notification to: ${dto.email}`);
-      
+      this.logger.log(
+        `Sending application rejection notification to: ${dto.email}`,
+      );
+
       // Use your existing email service
       await this.emailService.sendDocumentApplicationRejection(
         dto.email,
@@ -1210,16 +1249,21 @@ export class AuthController {
         dto.applicationType,
         dto.applicationSubtype,
         dto.applicantName,
-        dto.rejectionReason
+        dto.rejectionReason,
       );
-  
+
       return {
         success: true,
-        message: 'Application rejection notification sent successfully'
+        message: 'Application rejection notification sent successfully',
       };
     } catch (error) {
-      this.logger.error('Error sending application rejection notification:', error);
-      throw new BadRequestException('Failed to send application rejection notification');
+      this.logger.error(
+        'Error sending application rejection notification:',
+        error,
+      );
+      throw new BadRequestException(
+        'Failed to send application rejection notification',
+      );
     }
   }
 }

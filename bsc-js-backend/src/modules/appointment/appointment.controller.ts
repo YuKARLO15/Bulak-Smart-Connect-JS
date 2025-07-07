@@ -120,7 +120,10 @@ export class AppointmentController {
 
   @Get(':id')
   @ApiOperation({ summary: 'Get appointment by ID' })
-  async findOne(@Param('id') id: string, @Query('includeUser') includeUser?: string) {
+  async findOne(
+    @Param('id') id: string,
+    @Query('includeUser') includeUser?: string,
+  ) {
     this.logger.log(`Fetching appointment ${id}`);
 
     const relations = includeUser === 'false' ? [] : ['user'];

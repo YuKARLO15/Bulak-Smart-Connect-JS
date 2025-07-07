@@ -160,7 +160,7 @@ export class EmailService {
     estimatedTime: string,
   ): Promise<any> {
     const subject = `🔔 Bulak LGU Smart Connect - You're Almost Up! (Position #${position})`;
-    
+
     const html = `
       <!DOCTYPE html>
       <html>
@@ -226,7 +226,7 @@ export class EmailService {
     message: string,
   ): Promise<any> {
     const subject = `🎯 Bulak LGU Smart Connect - Please Proceed to Counter!`;
-    
+
     const html = `
       <!DOCTYPE html>
       <html>
@@ -291,7 +291,7 @@ export class EmailService {
     appointmentDetails: any,
   ): Promise<void> {
     const subject = 'Appointment Confirmed - Bulak LGU Smart Connect';
-    
+
     const html = `
       <!DOCTYPE html>
       <html>
@@ -342,12 +342,16 @@ export class EmailService {
                 <span class="label">Time:</span>
                 <span class="value">${appointmentDetails.time || appointmentDetails.appointmentTime || 'TBD'}</span>
               </div>
-              ${appointmentDetails.phoneNumber ? `
+              ${
+                appointmentDetails.phoneNumber
+                  ? `
               <div class="detail-row">
                 <span class="label">Contact:</span>
                 <span class="value">${appointmentDetails.phoneNumber}</span>
               </div>
-              ` : ''}
+              `
+                  : ''
+              }
             </div>
             
             <div class="important-note">
@@ -393,24 +397,24 @@ export class EmailService {
     appointmentDetails: any,
   ): Promise<void> {
     const statusColors = {
-      'confirmed': '#28a745',
-      'completed': '#007bff',
-      'cancelled': '#dc3545',
-      'pending': '#ffc107'
+      confirmed: '#28a745',
+      completed: '#007bff',
+      cancelled: '#dc3545',
+      pending: '#ffc107',
     };
 
     const statusEmojis = {
-      'confirmed': '✅',
-      'completed': '🎉',
-      'cancelled': '❌',
-      'pending': '⏳'
+      confirmed: '✅',
+      completed: '🎉',
+      cancelled: '❌',
+      pending: '⏳',
     };
 
     const color = statusColors[newStatus] || '#6c757d';
     const emoji = statusEmojis[newStatus] || '📋';
-    
+
     const subject = `Appointment ${newStatus.charAt(0).toUpperCase() + newStatus.slice(1)} - ${appointmentNumber}`;
-    
+
     const html = `
       <!DOCTYPE html>
       <html>
@@ -465,7 +469,9 @@ export class EmailService {
               </div>
             </div>
             
-            ${newStatus === 'confirmed' ? `
+            ${
+              newStatus === 'confirmed'
+                ? `
             <div style="background-color: #d4edda; border: 1px solid #c3e6cb; padding: 15px; border-radius: 8px; margin: 20px 0;">
               <p><strong>Your appointment is confirmed!</strong> Please remember to:</p>
               <ul>
@@ -474,20 +480,30 @@ export class EmailService {
                 <li>Keep this confirmation for your records</li>
               </ul>
             </div>
-            ` : ''}
+            `
+                : ''
+            }
             
-            ${newStatus === 'completed' ? `
+            ${
+              newStatus === 'completed'
+                ? `
             <div style="background-color: #d1ecf1; border: 1px solid #bee5eb; padding: 15px; border-radius: 8px; margin: 20px 0;">
               <p><strong>Your appointment has been completed!</strong> Thank you for visiting our office.</p>
             </div>
-            ` : ''}
+            `
+                : ''
+            }
             
-            ${newStatus === 'cancelled' ? `
+            ${
+              newStatus === 'cancelled'
+                ? `
             <div style="background-color: #f8d7da; border: 1px solid #f5c6cb; padding: 15px; border-radius: 8px; margin: 20px 0;">
               <p><strong>Your appointment has been cancelled.</strong></p>
               <p>If you need to reschedule, please contact our office or book a new appointment.</p>
             </div>
-            ` : ''}
+            `
+                : ''
+            }
             
             <p>Thank you for using Bulak LGU Smart Connect!</p>
           </div>
@@ -509,7 +525,9 @@ export class EmailService {
       html,
     });
 
-    console.log(`✅ Appointment status update email sent to ${email} - Status: ${newStatus}`);
+    console.log(
+      `✅ Appointment status update email sent to ${email} - Status: ${newStatus}`,
+    );
   }
 
   /**
@@ -522,7 +540,7 @@ export class EmailService {
     reason?: string,
   ): Promise<void> {
     const subject = `Appointment Cancelled - ${appointmentNumber}`;
-    
+
     const html = `
       <!DOCTYPE html>
       <html>
@@ -573,12 +591,16 @@ export class EmailService {
                 <span class="label">Scheduled Time:</span>
                 <span class="value">${appointmentDetails.time || appointmentDetails.appointmentTime || 'TBD'}</span>
               </div>
-              ${reason ? `
+              ${
+                reason
+                  ? `
               <div class="detail-row">
                 <span class="label">Reason:</span>
                 <span class="value">${reason}</span>
               </div>
-              ` : ''}
+              `
+                  : ''
+              }
             </div>
             
             <div class="rebook-section">
@@ -619,7 +641,7 @@ export class EmailService {
     appointmentDetails: any,
   ): Promise<void> {
     const subject = `Reminder: Appointment Tomorrow - ${appointmentNumber}`;
-    
+
     const html = `
       <!DOCTYPE html>
       <html>
@@ -724,10 +746,10 @@ export class EmailService {
     applicationSubtype?: string,
     applicantName?: string,
     submissionDate?: string,
-    status: string = 'Pending'
+    status: string = 'Pending',
   ): Promise<void> {
     const subject = `Application Submitted - ${applicationId}`;
-    
+
     const html = `
       <!DOCTYPE html>
       <html>
@@ -770,12 +792,16 @@ export class EmailService {
                 <span class="label">Document Type:</span>
                 <span class="value">${applicationType}</span>
               </div>
-              ${applicationSubtype ? `
+              ${
+                applicationSubtype
+                  ? `
               <div class="detail-row">
                 <span class="label">Service Type:</span>
                 <span class="value">${applicationSubtype}</span>
               </div>
-              ` : ''}
+              `
+                  : ''
+              }
               <div class="detail-row">
                 <span class="label">Submission Date:</span>
                 <span class="value">${submissionDate || new Date().toLocaleDateString()}</span>
@@ -829,31 +855,31 @@ export class EmailService {
     applicationType: string,
     applicationSubtype?: string,
     applicantName?: string,
-    previousStatus?: string
+    previousStatus?: string,
   ): Promise<void> {
     const statusColors = {
-      'pending': '#ffc107',
-      'approved': '#28a745',
-      'declined': '#dc3545',
-      'rejected': '#dc3545',
+      pending: '#ffc107',
+      approved: '#28a745',
+      declined: '#dc3545',
+      rejected: '#dc3545',
       'ready for pickup': '#007bff',
-      'completed': '#17a2b8'
+      completed: '#17a2b8',
     };
 
     const statusEmojis = {
-      'pending': '⏳',
-      'approved': '✅',
-      'declined': '❌',
-      'rejected': '❌',
+      pending: '⏳',
+      approved: '✅',
+      declined: '❌',
+      rejected: '❌',
       'ready for pickup': '📦',
-      'completed': '🎉'
+      completed: '🎉',
     };
 
     const color = statusColors[newStatus.toLowerCase()] || '#6c757d';
     const emoji = statusEmojis[newStatus.toLowerCase()] || '📋';
-    
+
     const subject = `Application ${newStatus.charAt(0).toUpperCase() + newStatus.slice(1)} - ${applicationId}`;
-    
+
     const html = `
       <!DOCTYPE html>
       <html>
@@ -898,34 +924,51 @@ export class EmailService {
                 <span class="label">Document Type:</span>
                 <span class="value">${applicationType}</span>
               </div>
-              ${applicationSubtype ? `
+              ${
+                applicationSubtype
+                  ? `
               <div class="detail-row">
                 <span class="label">Service Type:</span>
                 <span class="value">${applicationSubtype}</span>
               </div>
-              ` : ''}
+              `
+                  : ''
+              }
             </div>
             
-            ${newStatus.toLowerCase() === 'approved' ? `
+            ${
+              newStatus.toLowerCase() === 'approved'
+                ? `
             <div style="background-color: #d4edda; border: 1px solid #c3e6cb; padding: 15px; border-radius: 8px; margin: 20px 0;">
               <p><strong>Great news! Your application has been approved!</strong></p>
               <p>Your document will be processed and prepared for release.</p>
             </div>
-            ` : ''}
+            `
+                : ''
+            }
             
-            ${newStatus.toLowerCase() === 'ready for pickup' ? `
+            ${
+              newStatus.toLowerCase() === 'ready for pickup'
+                ? `
             <div style="background-color: #d1ecf1; border: 1px solid #bee5eb; padding: 15px; border-radius: 8px; margin: 20px 0;">
               <p><strong>Your document is ready for pickup!</strong></p>
               <p>Please visit our office during business hours to collect your document. Bring a valid ID and this email confirmation.</p>
             </div>
-            ` : ''}
+            `
+                : ''
+            }
             
-            ${(newStatus.toLowerCase() === 'declined' || newStatus.toLowerCase() === 'rejected') ? `
+            ${
+              newStatus.toLowerCase() === 'declined' ||
+              newStatus.toLowerCase() === 'rejected'
+                ? `
             <div style="background-color: #f8d7da; border: 1px solid #f5c6cb; padding: 15px; border-radius: 8px; margin: 20px 0;">
               <p><strong>Your application has been declined.</strong></p>
               <p>Please contact our office for more information or to resubmit with the required corrections.</p>
             </div>
-            ` : ''}
+            `
+                : ''
+            }
             
             <p>Thank you for using Bulak LGU Smart Connect!</p>
           </div>
@@ -947,7 +990,9 @@ export class EmailService {
       html,
     });
 
-    console.log(`✅ Document application status update email sent to ${email} - Status: ${newStatus}`);
+    console.log(
+      `✅ Document application status update email sent to ${email} - Status: ${newStatus}`,
+    );
   }
 
   /**
@@ -958,7 +1003,7 @@ export class EmailService {
     applicationId: string,
     applicationType: string,
     applicationSubtype?: string,
-    applicantName?: string
+    applicantName?: string,
   ): Promise<void> {
     return this.sendDocumentApplicationStatusUpdate(
       email,
@@ -966,7 +1011,7 @@ export class EmailService {
       'approved',
       applicationType,
       applicationSubtype,
-      applicantName
+      applicantName,
     );
   }
 
@@ -979,10 +1024,10 @@ export class EmailService {
     applicationType: string,
     applicationSubtype?: string,
     applicantName?: string,
-    rejectionReason?: string
+    rejectionReason?: string,
   ): Promise<void> {
     const subject = `Application Declined - ${applicationId}`;
-    
+
     const html = `
       <!DOCTYPE html>
       <html>
@@ -1025,18 +1070,26 @@ export class EmailService {
                 <span class="label">Document Type:</span>
                 <span class="value">${applicationType}</span>
               </div>
-              ${applicationSubtype ? `
+              ${
+                applicationSubtype
+                  ? `
               <div class="detail-row">
                 <span class="label">Service Type:</span>
                 <span class="value">${applicationSubtype}</span>
               </div>
-              ` : ''}
-              ${rejectionReason ? `
+              `
+                  : ''
+              }
+              ${
+                rejectionReason
+                  ? `
               <div class="detail-row">
                 <span class="label">Reason:</span>
                 <span class="value">${rejectionReason}</span>
               </div>
-              ` : ''}
+              `
+                  : ''
+              }
             </div>
             
             <div class="resubmit-section">

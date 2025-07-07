@@ -329,8 +329,9 @@ export class AuthService {
 
       try {
         // 🔥 CRITICAL FIX: Remove role-related fields before updating User entity
-        const { roleIds, defaultRoleId, ...userUpdateFields } = updateUserDto as any;
-        
+        const { roleIds, defaultRoleId, ...userUpdateFields } =
+          updateUserDto as any;
+
         // Update user with only valid User entity fields
         await this.usersRepository.update(userId, userUpdateFields);
 
