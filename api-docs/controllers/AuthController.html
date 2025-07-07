@@ -161,6 +161,18 @@
                             <li>
                                     <span class="modifier"></span>
                                     <span class="modifier"></span>
+                                    <span class="modifier">Async</span>
+                                <a href="#checkAccountLockout" >checkAccountLockout</a>
+                            </li>
+                            <li>
+                                    <span class="modifier"></span>
+                                    <span class="modifier"></span>
+                                    <span class="modifier">Async</span>
+                                <a href="#clearAccountLockout" >clearAccountLockout</a>
+                            </li>
+                            <li>
+                                    <span class="modifier"></span>
+                                    <span class="modifier"></span>
                                     <span class="modifier"></span>
                                     <span class="modifier"></span>
                                     <span class="modifier">Async</span>
@@ -183,6 +195,12 @@
                                     <span class="modifier"></span>
                                     <span class="modifier">Async</span>
                                 <a href="#login" >login</a>
+                            </li>
+                            <li>
+                                    <span class="modifier"></span>
+                                    <span class="modifier"></span>
+                                    <span class="modifier">Async</span>
+                                <a href="#recordFailedAttempt" >recordFailedAttempt</a>
                             </li>
                             <li>
                                     <span class="modifier"></span>
@@ -444,6 +462,160 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
+                    <a name="checkAccountLockout"></a>
+                    <span class="name">
+                            <span class="modifier"></span>
+                            <span class="modifier"></span>
+                            <span class="modifier">Async</span>
+                        <span ><b>checkAccountLockout</b></span>
+                        <a href="#checkAccountLockout"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>checkAccountLockout(undefined: literal type)</code>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <b>Decorators : </b>
+                    <br />
+                    <code>@Post(&#x27;check-lockout&#x27;)<br />@ApiOperation({summary: &#x27;Check if account is locked&#x27;})<br /></code>
+                </td>
+            </tr>
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="1272"
+                                    class="link-to-prism">src/auth/auth.controller.ts:1272</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                        <code>literal type</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="clearAccountLockout"></a>
+                    <span class="name">
+                            <span class="modifier"></span>
+                            <span class="modifier"></span>
+                            <span class="modifier">Async</span>
+                        <span ><b>clearAccountLockout</b></span>
+                        <a href="#clearAccountLockout"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>clearAccountLockout(undefined: literal type)</code>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <b>Decorators : </b>
+                    <br />
+                    <code>@Post(&#x27;clear-lockout&#x27;)<br />@ApiOperation({summary: &#x27;Clear account lockout on successful login&#x27;})<br /></code>
+                </td>
+            </tr>
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="1314"
+                                    class="link-to-prism">src/auth/auth.controller.ts:1314</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                        <code>literal type</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
                     <a name="forgotPassword"></a>
                     <span class="name">
                             <span class="modifier"></span>
@@ -674,6 +846,83 @@
                                                 <td>loginDto</td>
                                             <td>
                                                             <code><a href="../classes/LoginDto.html" target="_self" >LoginDto</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="recordFailedAttempt"></a>
+                    <span class="name">
+                            <span class="modifier"></span>
+                            <span class="modifier"></span>
+                            <span class="modifier">Async</span>
+                        <span ><b>recordFailedAttempt</b></span>
+                        <a href="#recordFailedAttempt"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>recordFailedAttempt(undefined: literal type)</code>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <b>Decorators : </b>
+                    <br />
+                    <code>@Post(&#x27;record-failed-attempt&#x27;)<br />@ApiOperation({summary: &#x27;Record failed login attempt&#x27;})<br /></code>
+                </td>
+            </tr>
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="1303"
+                                    class="link-to-prism">src/auth/auth.controller.ts:1303</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                        <code>literal type</code>
                                             </td>
 
                                             <td>
@@ -3331,6 +3580,59 @@ export class AuthController {
       throw new BadRequestException(
         &#x27;Failed to send application rejection notification&#x27;,
       );
+    }
+  }
+
+  @Post(&#x27;check-lockout&#x27;)
+  @ApiOperation({ summary: &#x27;Check if account is locked&#x27; })
+  async checkAccountLockout(@Body() { identifier }: { identifier: string }) {
+    try {
+      const lockoutData &#x3D; await this.authService.getAccountLockout(identifier);
+
+      if (lockoutData?.lockedUntil &amp;&amp; lockoutData.lockedUntil &gt; new Date()) {
+        const timeRemaining &#x3D; Math.ceil(
+          (lockoutData.lockedUntil.getTime() - Date.now()) / 1000,
+        );
+        return {
+          isLocked: true,
+          timeRemaining,
+          attemptsUsed: lockoutData.attempts,
+          lockedUntil: lockoutData.lockedUntil,
+        };
+      }
+
+      return {
+        isLocked: false,
+        attempts: lockoutData?.attempts || 0,
+      };
+    } catch (error) {
+      this.logger.error(&#x27;Error checking account lockout:&#x27;, error);
+      return {
+        isLocked: false,
+        attempts: 0,
+      };
+    }
+  }
+
+  @Post(&#x27;record-failed-attempt&#x27;)
+  @ApiOperation({ summary: &#x27;Record failed login attempt&#x27; })
+  async recordFailedAttempt(@Body() { identifier }: { identifier: string }) {
+    try {
+      return await this.authService.recordFailedLoginAttempt(identifier);
+    } catch (error) {
+      this.logger.error(&#x27;Error recording failed attempt:&#x27;, error);
+      throw new BadRequestException(&#x27;Failed to record login attempt&#x27;);
+    }
+  }
+
+  @Post(&#x27;clear-lockout&#x27;)
+  @ApiOperation({ summary: &#x27;Clear account lockout on successful login&#x27; })
+  async clearAccountLockout(@Body() { identifier }: { identifier: string }) {
+    try {
+      return await this.authService.clearAccountLockout(identifier);
+    } catch (error) {
+      this.logger.error(&#x27;Error clearing account lockout:&#x27;, error);
+      throw new BadRequestException(&#x27;Failed to clear account lockout&#x27;);
     }
   }
 }
