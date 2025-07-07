@@ -522,6 +522,9 @@ customElements.define('compodoc-menu', class extends HTMLElement {
                                 <a href="interfaces/JwtPayload.html" data-type="entity-link" >JwtPayload</a>
                             </li>
                             <li class="link">
+                                <a href="interfaces/LockoutData.html" data-type="entity-link" >LockoutData</a>
+                            </li>
+                            <li class="link">
                                 <a href="interfaces/QueueDetails.html" data-type="entity-link" >QueueDetails</a>
                             </li>
                             <li class="link">

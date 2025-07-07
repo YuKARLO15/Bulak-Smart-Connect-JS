@@ -1,0 +1,1073 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>bsc-js-backend documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="../" class="navbar-brand">bsc-js-backend documentation</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="d-none d-md-block menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content interface">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Interfaces</li>
+  <li class="breadcrumb-item"
+  >
+  LockoutData</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" 
+                class="nav-link"
+                class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" 
+                class="nav-link"
+                
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info">
+        <p class="comment">
+            <h3>File</h3>
+        </p>
+        <p class="comment">
+            <code>src/auth/auth.service.ts</code>
+        </p>
+
+
+
+
+        <section data-compodoc="block-index">
+            <h3 id="index">Index</h3>
+            <table class="table table-sm table-bordered index-table">
+                <tbody>
+                    <tr>
+                        <td class="col-md-4">
+                            <h6><b>Properties</b></h6>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <ul class="index-list">
+                                <li>
+                                        <a href="#attempts" 
+>
+                                            attempts
+                                        </a>
+                                </li>
+                                <li>
+                                        <a href="#lastAttempt" 
+>
+                                            lastAttempt
+                                        </a>
+                                </li>
+                                <li>
+                                            <span class="modifier">Optional</span>
+                                        <a href="#lockedUntil" 
+>
+                                            lockedUntil
+                                        </a>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+
+
+            <section data-compodoc="block-properties">
+                <h3 id="inputs">Properties</h3>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <a name="attempts"></a>
+                                        <span class="name "><b>attempts</b>
+                                            <a href="#attempts">
+                                                <span class="icon ion-ios-link"></span>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>attempts:         <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+
+                                        </td>
+                                    </tr>
+
+
+
+
+
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <a name="lastAttempt"></a>
+                                        <span class="name "><b>lastAttempt</b>
+                                            <a href="#lastAttempt">
+                                                <span class="icon ion-ios-link"></span>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>lastAttempt:         <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date" target="_blank" >Date</a></code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date" target="_blank" >Date</a></code>
+
+                                        </td>
+                                    </tr>
+
+
+
+
+
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <a name="lockedUntil"></a>
+                                        <span class="name "><b>lockedUntil</b>
+                                            <a href="#lockedUntil">
+                                                <span class="icon ion-ios-link"></span>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>lockedUntil:         <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date" target="_blank" >Date</a></code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date" target="_blank" >Date</a></code>
+
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Optional</i>
+                                        </td>
+                                    </tr>
+
+
+
+
+                        </tbody>
+                    </table>
+            </section>
+    </div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import {
+  Injectable,
+  UnauthorizedException,
+  ConflictException,
+  BadRequestException,
+  Logger,
+} from &#x27;@nestjs/common&#x27;;
+import { JwtService } from &#x27;@nestjs/jwt&#x27;;
+import { InjectRepository } from &#x27;@nestjs/typeorm&#x27;;
+import { Repository } from &#x27;typeorm&#x27;;
+import { User } from &#x27;../users/entities/user.entity&#x27;;
+import * as bcrypt from &#x27;bcrypt&#x27;;
+import { LoginDto } from &#x27;./dto/login.dto&#x27;;
+import { RegisterDto } from &#x27;./dto/register.dto&#x27;;
+import { RolesService } from &#x27;../roles/roles.service&#x27;;
+import { UpdateUserDto, AdminUpdateUserDto } from &#x27;./dto/update-user.dto&#x27;;
+
+interface LockoutData {
+  attempts: number;
+  lastAttempt: Date;
+  lockedUntil?: Date;
+}
+
+@Injectable()
+export class AuthService {
+  private readonly logger &#x3D; new Logger(AuthService.name);
+
+  constructor(
+    @InjectRepository(User)
+    private usersRepository: Repository&lt;User&gt;,
+    private jwtService: JwtService,
+    private rolesService: RolesService,
+  ) {}
+
+  private readonly failedAttempts &#x3D; new Map&lt;string, LockoutData&gt;();
+
+  async validateUser(loginDto: LoginDto): Promise&lt;any&gt; {
+    const user &#x3D; await this.usersRepository.findOne({
+      where: [
+        { email: loginDto.emailOrUsername },
+        { username: loginDto.emailOrUsername },
+      ],
+    });
+    if (user &amp;&amp; (await bcrypt.compare(loginDto.password, user.password))) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { password: __password, ...result } &#x3D; user;
+      return result;
+    }
+    return null;
+  }
+
+  async getAccountLockout(identifier: string) {
+    const key &#x3D; identifier.toLowerCase();
+    return this.failedAttempts.get(key) || null;
+  }
+
+  async recordFailedLoginAttempt(identifier: string) {
+    const key &#x3D; identifier.toLowerCase();
+    const current &#x3D; this.failedAttempts.get(key) || {
+      attempts: 0,
+      lastAttempt: new Date(),
+    };
+
+    current.attempts++;
+    current.lastAttempt &#x3D; new Date();
+
+    // Lock account after 5 attempts for 15 minutes
+    if (current.attempts &gt;&#x3D; 5) {
+      current.lockedUntil &#x3D; new Date(Date.now() + 15 * 60 * 1000);
+      this.logger.warn(
+        &#x60;Account locked for ${identifier} after ${current.attempts} failed attempts&#x60;,
+      );
+    }
+
+    this.failedAttempts.set(key, current);
+
+    return {
+      attempts: current.attempts,
+      isLocked: current.attempts &gt;&#x3D; 5,
+      lockedUntil: current.lockedUntil,
+      timeRemaining: current.lockedUntil
+        ? Math.ceil(
+            (current.lockedUntil.getTime() - Date.now()) / 1000,
+          )
+        : 0,
+    };
+  }
+
+  async clearAccountLockout(identifier: string) {
+    const key &#x3D; identifier.toLowerCase();
+    this.failedAttempts.delete(key);
+    this.logger.log(&#x60;Account lockout cleared for ${identifier}&#x60;);
+    return { success: true };
+  }
+
+  async login(loginDto: LoginDto) {
+    const identifier &#x3D; loginDto.emailOrUsername.toLowerCase();
+
+    // Check if account is locked
+    const lockoutData &#x3D; await this.getAccountLockout(identifier);
+    if (lockoutData?.lockedUntil &amp;&amp; lockoutData.lockedUntil &gt; new Date()) {
+      const timeRemaining &#x3D; Math.ceil(
+        (lockoutData.lockedUntil.getTime() - Date.now()) / 1000,
+      );
+      const minutesRemaining &#x3D; Math.ceil(timeRemaining / 60);
+      throw new UnauthorizedException(
+        &#x60;Account locked due to multiple failed attempts. Try again in ${minutesRemaining} minutes or use &quot;Forgot Password&quot;.&#x60;,
+      );
+    }
+
+    console.log(&#x27;Login attempt with:&#x27;, loginDto);
+
+    try {
+      const user &#x3D; await this.usersRepository.findOne({
+        where: [
+          { email: loginDto.emailOrUsername },
+          { username: loginDto.emailOrUsername },
+        ],
+        relations: [&#x27;defaultRole&#x27;],
+      });
+
+      console.log(&#x27;User found:&#x27;, user ? &#x27;Yes&#x27; : &#x27;No&#x27;);
+
+      if (!user) {
+        throw new UnauthorizedException(&#x27;Invalid email or password&#x27;);
+      }
+
+      // Debug password check
+      console.log(&#x27;Stored password hash:&#x27;, user.password);
+      console.log(&#x27;Comparing with:&#x27;, loginDto.password);
+
+      const isPasswordValid &#x3D; await bcrypt.compare(
+        loginDto.password,
+        user.password,
+      );
+      console.log(&#x27;Password valid:&#x27;, isPasswordValid);
+
+      if (!isPasswordValid) {
+        throw new UnauthorizedException(&#x27;Invalid email or password&#x27;);
+      }
+
+      // Get user roles
+      const roles &#x3D; await this.rolesService.getUserRoles(user.id);
+      const roleNames &#x3D; roles.map((role) &#x3D;&gt; role.name);
+
+      const payload &#x3D; {
+        sub: user.id,
+        email: user.email,
+        roles: roleNames,
+      };
+
+      const token &#x3D; this.jwtService.sign(payload);
+      console.log(&#x27;Generated token:&#x27;, token ? &#x27;Success&#x27; : &#x27;Failed&#x27;);
+
+      // Remove password from response
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { password: __password, ...userWithoutPassword } &#x3D; user;
+
+      return {
+        access_token: token,
+        user: {
+          ...userWithoutPassword,
+          roles: roleNames,
+          defaultRole: user.defaultRole?.name || &#x27;citizen&#x27;,
+        },
+      };
+    } catch (error) {
+      console.error(&#x27;Login error:&#x27;, error);
+      throw error;
+    }
+  }
+
+  async register(registerDto: RegisterDto) {
+    const {
+      email,
+      username,
+      password,
+      firstName,
+      middleName,
+      lastName,
+      nameExtension,
+      contactNumber,
+    } &#x3D; registerDto;
+
+    // Generate full name
+    const name &#x3D; &#x60;${firstName} ${middleName ? middleName + &#x27; &#x27; : &#x27;&#x27;}${lastName}${nameExtension ? &#x27; &#x27; + nameExtension : &#x27;&#x27;}&#x60;;
+
+    // Validate email format
+    if (!this.isValidEmail(email)) {
+      throw new BadRequestException(&#x27;Invalid email format&#x27;);
+    }
+
+    // Check if user exists by email
+    const existingUserByEmail &#x3D; await this.usersRepository.findOne({
+      where: { email },
+    });
+    if (existingUserByEmail) {
+      throw new ConflictException(&#x27;Email already exists&#x27;);
+    }
+
+    // Check if username is taken
+    if (username) {
+      const existingUserByUsername &#x3D; await this.usersRepository.findOne({
+        where: { username },
+      });
+      if (existingUserByUsername) {
+        throw new ConflictException(&#x27;Username already exists&#x27;);
+      }
+    }
+
+    // Validate password strength
+    const passwordValidation &#x3D; this.validatePasswordStrength(password);
+    if (!passwordValidation.isValid) {
+      throw new BadRequestException(passwordValidation.message);
+    }
+
+    // Hash password
+    const salt &#x3D; await bcrypt.genSalt();
+    const hashedPassword &#x3D; await bcrypt.hash(password, salt);
+
+    try {
+      // Create new user with all fields
+      const user &#x3D; this.usersRepository.create({
+        email,
+        username,
+        password: hashedPassword,
+        firstName,
+        middleName,
+        lastName,
+        nameExtension,
+        contactNumber,
+        name,
+      });
+
+      await this.usersRepository.save(user);
+
+      // Add citizen role to the user
+      try {
+        const citizenRole &#x3D; await this.rolesService.findByName(&#x27;citizen&#x27;);
+        await this.rolesService.assignRolesToUser(user.id, [citizenRole.id]);
+
+        // Set default role
+        user.defaultRoleId &#x3D; citizenRole.id;
+        await this.usersRepository.save(user);
+      } catch (error) {
+        console.error(&#x27;Error assigning citizen role:&#x27;, error);
+        // Rollback: Delete the user to maintain a consistent state
+        await this.usersRepository.delete(user.id);
+        throw new ConflictException(
+          &#x27;Failed to assign citizen role. Registration rolled back.&#x27;,
+        );
+      }
+
+      // Generate JWT token
+      const payload &#x3D; { sub: user.id, email: user.email, roles: [&#x27;citizen&#x27;] };
+
+      // Remove password from response
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { password: __password, ...userWithoutPassword } &#x3D; user;
+
+      return {
+        access_token: this.jwtService.sign(payload),
+        user: {
+          ...userWithoutPassword,
+          roles: [&#x27;citizen&#x27;],
+          defaultRole: &#x27;citizen&#x27;,
+        },
+      };
+    } catch (error) {
+      console.error(&#x27;Registration error:&#x27;, error);
+      throw error;
+    }
+  }
+
+  private isValidEmail(email: string): boolean {
+    const emailRegex &#x3D; /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  }
+
+  async getProfile(userId: number) {
+    // Validation for userId
+    if (!userId || isNaN(userId)) {
+      throw new UnauthorizedException(&#x27;Invalid user ID&#x27;);
+    }
+
+    const user &#x3D; await this.usersRepository.findOne({
+      where: { id: userId },
+      relations: [&#x27;defaultRole&#x27;],
+    });
+    if (!user) {
+      throw new UnauthorizedException(&#x27;User not found&#x27;);
+    }
+
+    // Get user roles
+    const roles &#x3D; await this.rolesService.getUserRoles(userId);
+    const roleNames &#x3D; roles.map((role) &#x3D;&gt; role.name);
+
+    // Remove password from response
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password: __password, ...result } &#x3D; user;
+    return {
+      ...result,
+      roles: roleNames,
+      defaultRole: user.defaultRole?.name || &#x27;citizen&#x27;,
+    };
+  }
+
+  async updateUserInfo(userId: number, updateUserDto: UpdateUserDto) {
+    try {
+      // First get the existing user
+      const user &#x3D; await this.usersRepository.findOne({
+        where: { id: userId },
+      });
+
+      if (!user) {
+        throw new UnauthorizedException(&#x27;User not found&#x27;);
+      }
+
+      // Check if email is being updated and not already taken
+      if (updateUserDto.email &amp;&amp; updateUserDto.email !&#x3D;&#x3D; user.email) {
+        // Validate email format
+        if (!this.isValidEmail(updateUserDto.email)) {
+          throw new BadRequestException(&#x27;Invalid email format&#x27;);
+        }
+
+        const existingUserByEmail &#x3D; await this.usersRepository.findOne({
+          where: { email: updateUserDto.email },
+        });
+
+        if (existingUserByEmail &amp;&amp; existingUserByEmail.id !&#x3D;&#x3D; userId) {
+          throw new ConflictException(&#x27;Email already exists&#x27;);
+        }
+      }
+
+      // Check if username is being updated and not already taken
+      if (updateUserDto.username &amp;&amp; updateUserDto.username !&#x3D;&#x3D; user.username) {
+        const existingUserByUsername &#x3D; await this.usersRepository.findOne({
+          where: { username: updateUserDto.username },
+        });
+
+        if (existingUserByUsername &amp;&amp; existingUserByUsername.id !&#x3D;&#x3D; userId) {
+          throw new ConflictException(&#x27;Username already exists&#x27;);
+        }
+      }
+
+      // Handle password change if provided
+      if (updateUserDto.password) {
+        // Validate password strength
+        const passwordValidation &#x3D; this.validatePasswordStrength(
+          updateUserDto.password,
+        );
+        if (!passwordValidation.isValid) {
+          throw new BadRequestException(passwordValidation.message);
+        }
+
+        // Hash new password
+        const salt &#x3D; await bcrypt.genSalt();
+        const hashedPassword &#x3D; await bcrypt.hash(updateUserDto.password, salt);
+        updateUserDto.password &#x3D; hashedPassword;
+      } else {
+        // Remove password from DTO if not being updated
+        delete updateUserDto.password;
+      }
+
+      // Update name if name parts are changed
+      let shouldUpdateName &#x3D; false;
+      const nameComponents &#x3D; {
+        firstName: updateUserDto.firstName || user.firstName,
+        middleName:
+          updateUserDto.middleName !&#x3D;&#x3D; undefined
+            ? updateUserDto.middleName
+            : user.middleName,
+        lastName: updateUserDto.lastName || user.lastName,
+        nameExtension:
+          updateUserDto.nameExtension !&#x3D;&#x3D; undefined
+            ? updateUserDto.nameExtension
+            : user.nameExtension,
+      };
+
+      if (
+        updateUserDto.firstName ||
+        updateUserDto.middleName !&#x3D;&#x3D; undefined ||
+        updateUserDto.lastName ||
+        updateUserDto.nameExtension !&#x3D;&#x3D; undefined
+      ) {
+        shouldUpdateName &#x3D; true;
+      }
+
+      // Generate full name if any name component changed
+      if (shouldUpdateName) {
+        const fullName &#x3D; &#x60;${nameComponents.firstName} ${
+          nameComponents.middleName ? nameComponents.middleName + &#x27; &#x27; : &#x27;&#x27;
+        }${nameComponents.lastName}${
+          nameComponents.nameExtension ? &#x27; &#x27; + nameComponents.nameExtension : &#x27;&#x27;
+        }&#x60;;
+        updateUserDto[&#x27;name&#x27;] &#x3D; fullName;
+      }
+
+      try {
+        // 🔥 CRITICAL FIX: Remove role-related fields before updating User entity
+        const { roleIds, defaultRoleId, ...userUpdateFields } &#x3D;
+          updateUserDto as any;
+
+        // Update user with only valid User entity fields
+        await this.usersRepository.update(userId, userUpdateFields);
+
+        // Get updated user with relations
+        const updatedUser &#x3D; await this.usersRepository.findOne({
+          where: { id: userId },
+          relations: [&#x27;defaultRole&#x27;],
+        });
+
+        if (!updatedUser) {
+          throw new BadRequestException(&#x27;Failed to retrieve updated user&#x27;);
+        }
+
+        // Get user roles
+        const roles &#x3D; await this.rolesService.getUserRoles(userId);
+        const roleNames &#x3D; roles.map((role) &#x3D;&gt; role.name);
+
+        // Remove password from response
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { password: __password, ...result } &#x3D; updatedUser;
+
+        return {
+          ...result,
+          roles: roleNames,
+          defaultRole: updatedUser.defaultRole?.name || &#x27;citizen&#x27;,
+        };
+      } catch (error: unknown) {
+        console.error(&#x27;User update database error:&#x27;, error);
+        if (
+          typeof error &#x3D;&#x3D;&#x3D; &#x27;object&#x27; &amp;&amp;
+          error !&#x3D;&#x3D; null &amp;&amp;
+          &#x27;code&#x27; in error &amp;&amp;
+          error.code &#x3D;&#x3D;&#x3D; &#x27;ER_DUP_ENTRY&#x27;
+        ) {
+          throw new ConflictException(&#x27;Email or username already exists&#x27;);
+        }
+        throw new BadRequestException(
+          &#x27;Failed to update user information in database&#x27;,
+        );
+      }
+    } catch (error) {
+      console.error(&#x27;User update error:&#x27;, error);
+      // Re-throw specific errors
+      if (
+        error instanceof UnauthorizedException ||
+        error instanceof BadRequestException ||
+        error instanceof ConflictException
+      ) {
+        throw error;
+      }
+      // For any other unexpected error
+      throw new BadRequestException(&#x27;Failed to update user information&#x27;);
+    }
+  }
+  async adminUpdateUser(
+    adminId: number,
+    targetUserId: number,
+    updateUserDto: AdminUpdateUserDto,
+  ) {
+    console.log(
+      &#x60;Admin ${adminId} attempting to update user ${targetUserId}&#x60;,
+      updateUserDto,
+    );
+
+    try {
+      // Verify the admin has proper permissions
+      const admin &#x3D; await this.usersRepository.findOne({
+        where: { id: adminId },
+      });
+
+      if (!admin) {
+        throw new UnauthorizedException(&#x27;Admin not found&#x27;);
+      }
+
+      // Get admin roles
+      const adminRoles &#x3D; await this.rolesService.getUserRoles(adminId);
+      const adminRoleNames &#x3D; adminRoles.map((role) &#x3D;&gt; role.name);
+
+      // Check if the user has admin or super_admin role
+      const isAuthorized &#x3D; adminRoleNames.some(
+        (role) &#x3D;&gt; role &#x3D;&#x3D;&#x3D; &#x27;admin&#x27; || role &#x3D;&#x3D;&#x3D; &#x27;super_admin&#x27;,
+      );
+
+      if (!isAuthorized) {
+        throw new UnauthorizedException(&#x27;Insufficient permissions&#x27;);
+      }
+
+      // Check if target user exists
+      const targetUser &#x3D; await this.usersRepository.findOne({
+        where: { id: targetUserId },
+      });
+
+      if (!targetUser) {
+        throw new BadRequestException(&#x60;User with ID ${targetUserId} not found&#x60;);
+      }
+
+      // First perform the basic user update
+      // We&#x27;ll catch any errors here to handle them appropriately
+      try {
+        await this.updateUserInfo(targetUserId, updateUserDto);
+      } catch (err) {
+        console.error(&#x27;Error during basic user update:&#x27;, err);
+        throw err; // Re-throw to be caught by outer try-catch
+      }
+
+      // Handle role updates if provided
+      if (updateUserDto.roleIds &amp;&amp; updateUserDto.roleIds.length &gt; 0) {
+        try {
+          // Verify all roles exist before assigning
+          for (const roleId of updateUserDto.roleIds) {
+            try {
+              await this.rolesService.findOne(roleId);
+              // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            } catch (_) {
+              throw new BadRequestException(&#x60;Role with ID ${roleId} not found&#x60;);
+            }
+          }
+
+          // Assign roles
+          await this.rolesService.assignRolesToUser(
+            targetUserId,
+            updateUserDto.roleIds,
+          );
+          console.log(
+            &#x60;Assigned roles ${updateUserDto.roleIds.join(&#x27;, &#x27;)} to user ${targetUserId}&#x60;,
+          );
+        } catch (error) {
+          console.error(&#x27;Error assigning roles:&#x27;, error);
+          throw new BadRequestException(
+            error instanceof Error ? error.message : &#x27;Failed to assign roles&#x27;,
+          );
+        }
+      }
+
+      // Update default role if provided
+      if (updateUserDto.defaultRoleId) {
+        try {
+          // Verify the role exists
+          try {
+            await this.rolesService.findOne(updateUserDto.defaultRoleId);
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          } catch (_) {
+            throw new BadRequestException(
+              &#x60;Default role with ID ${updateUserDto.defaultRoleId} not found&#x60;,
+            );
+          }
+
+          // Verify user has this role assigned or will have it assigned
+          const userRoles &#x3D; await this.rolesService.getUserRoles(targetUserId);
+          const hasRoleAssigned &#x3D; userRoles.some(
+            (role) &#x3D;&gt; role.id &#x3D;&#x3D;&#x3D; updateUserDto.defaultRoleId,
+          );
+
+          const willBeAssigned &#x3D;
+            updateUserDto.roleIds &amp;&amp;
+            updateUserDto.roleIds.includes(updateUserDto.defaultRoleId);
+
+          if (!hasRoleAssigned &amp;&amp; !willBeAssigned) {
+            throw new BadRequestException(
+              &#x27;Cannot set default role to a role the user does not have&#x27;,
+            );
+          }
+
+          // Update the default role
+          await this.usersRepository.update(targetUserId, {
+            defaultRoleId: updateUserDto.defaultRoleId,
+          });
+          console.log(
+            &#x60;Updated default role to ${updateUserDto.defaultRoleId} for user ${targetUserId}&#x60;,
+          );
+        } catch (error) {
+          console.error(&#x27;Error updating default role:&#x27;, error);
+          throw new BadRequestException(
+            error instanceof Error
+              ? error.message
+              : &#x27;Failed to update default role&#x27;,
+          );
+        }
+      }
+
+      // Return the fully updated user
+      try {
+        const updatedUser &#x3D; await this.getProfile(targetUserId);
+        return updatedUser;
+      } catch (error) {
+        console.error(&#x27;Error retrieving updated user profile:&#x27;, error);
+        throw new BadRequestException(
+          &#x27;User was updated but profile could not be retrieved&#x27;,
+        );
+      }
+    } catch (error) {
+      console.error(&#x27;Admin update user error:&#x27;, error);
+
+      // Re-throw specific exceptions
+      if (
+        error instanceof UnauthorizedException ||
+        error instanceof BadRequestException ||
+        error instanceof ConflictException
+      ) {
+        throw error;
+      }
+
+      // For any other errors
+      throw new BadRequestException(
+        &#x27;Failed to update user: Unexpected error occurred&#x27;,
+      );
+    }
+  }
+
+  // Add this method to find user by email
+  async findUserByEmail(email: string): Promise&lt;User | null&gt; {
+    try {
+      const user &#x3D; await this.usersRepository.findOne({
+        where: { email },
+        relations: [&#x27;defaultRole&#x27;],
+      });
+      return user;
+    } catch (error) {
+      console.error(&#x27;Error finding user by email:&#x27;, error);
+      return null;
+    }
+  }
+
+  // Add this method to update password
+  async updatePassword(email: string, newPassword: string): Promise&lt;void&gt; {
+    try {
+      // Validate password strength
+      const passwordValidation &#x3D; this.validatePasswordStrength(newPassword);
+      if (!passwordValidation.isValid) {
+        throw new BadRequestException(passwordValidation.message);
+      }
+
+      // Find user by email
+      const user &#x3D; await this.findUserByEmail(email);
+      if (!user) {
+        throw new BadRequestException(&#x27;User not found&#x27;);
+      }
+
+      // Hash new password
+      const salt &#x3D; await bcrypt.genSalt();
+      const hashedPassword &#x3D; await bcrypt.hash(newPassword, salt);
+
+      // Update password in database
+      await this.usersRepository.update(
+        { id: user.id },
+        { password: hashedPassword },
+      );
+
+      console.log(&#x60;Password updated successfully for user: ${email}&#x60;);
+    } catch (error) {
+      console.error(&#x27;Error updating password:&#x27;, error);
+      throw error;
+    }
+  }
+
+  private validatePasswordStrength(password: string): {
+    isValid: boolean;
+    message?: string;
+  } {
+    if (!password) {
+      return { isValid: false, message: &#x27;Password is required&#x27; };
+    }
+
+    if (password.length &lt; 8) {
+      return {
+        isValid: false,
+        message: &#x27;Password must be at least 8 characters long&#x27;,
+      };
+    }
+
+    const hasUpperCase &#x3D; /[A-Z]/.test(password);
+    const hasLowerCase &#x3D; /[a-z]/.test(password);
+    const hasNumbers &#x3D; /\d/.test(password);
+    const hasSpecialChars &#x3D; /[!@#$%^&amp;*(),.?&quot;:{}|&lt;&gt;]/.test(password);
+
+    if (!hasUpperCase) {
+      return {
+        isValid: false,
+        message: &#x27;Password must contain at least one uppercase letter&#x27;,
+      };
+    }
+
+    if (!hasLowerCase) {
+      return {
+        isValid: false,
+        message: &#x27;Password must contain at least one lowercase letter&#x27;,
+      };
+    }
+
+    if (!hasNumbers) {
+      return {
+        isValid: false,
+        message: &#x27;Password must contain at least one number&#x27;,
+      };
+    }
+
+    if (!hasSpecialChars) {
+      return {
+        isValid: false,
+        message:
+          &#x27;Password must contain at least one special character (!@#$%^&amp;*(),.?&quot;:{}|&lt;&gt;)&#x27;,
+      };
+    }
+
+    return { isValid: true };
+  }
+}
+</code></pre>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'interface';
+            var COMPODOC_CURRENT_PAGE_URL = 'LockoutData.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>
