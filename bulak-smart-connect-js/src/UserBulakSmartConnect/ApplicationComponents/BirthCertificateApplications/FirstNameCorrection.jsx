@@ -682,14 +682,10 @@ const FirstNameCorrection = () => {
 
   return (
     <div className={`FirstNameContainer ${isSidebarOpen ? 'sidebar-open' : ''}`}>
-      <NavBar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
+    
       <Typography variant="h5" className="TitleFirstName">
-        BIRTH CERTIFICATE APPLICATION
+            Application for Correction of Child's First Name
       </Typography>
-      <Typography className="SubtitleFirstName">
-        Application for Correction of Child's First Name
-      </Typography>
-
       {isInitializing ? (
         <Box sx={{ display: 'flex', justifyContent: 'center', my: 4 }}>
           <CircularProgress />
@@ -704,7 +700,10 @@ const FirstNameCorrection = () => {
               </Typography>
             </Box>
           )}
-
+  <Typography variant="body2" sx={{color: 'warning.main', background: '#fffbe6', p: 1.5, borderRadius: 1, border: '1px solid #ffe082' }}>
+    <strong>Note:</strong> Uploading your documents here is for initial screening only. You are still required to visit the Municipal Civil Registrar for an interview to begin the correction process. Please make sure you bring all original and complete documents to your interview.
+              </Typography>
+              
           <Box>
             <Typography variant="body1" className="SectionTitleFirstName">
               Mandatory Documents:
@@ -881,7 +880,7 @@ const FirstNameCorrection = () => {
             <Button
               variant="contained"
               // color="error"
-              disabled={!forceEnableSubmit || isLoading || isSubmitted}
+              disabled={!isMandatoryComplete()|| isLoading || isSubmitted}
               onClick={handleSubmit}
               className="SubmitButtonFirstName"
             >

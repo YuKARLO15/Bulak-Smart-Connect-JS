@@ -693,8 +693,6 @@ const Below18Registration = () => {
       } else {
         console.log('⚠️ No email available for notifications');
       }
-
-      // Navigate to summary page after a short delay
       setTimeout(() => {
         navigate('/BirthApplicationSummary');
       }, 2000);
@@ -706,8 +704,6 @@ const Below18Registration = () => {
     }
   };
 
-  // Force enable submit button if marital status is selected and at least one file is uploaded
-  const forceEnableSubmit = maritalStatus && uploadedDocumentsCount > 0;
 
   return (
     <div className={`FormContainerBelow18 ${isSidebarOpen ? 'SidebarOpenBelow18' : ''}`}>

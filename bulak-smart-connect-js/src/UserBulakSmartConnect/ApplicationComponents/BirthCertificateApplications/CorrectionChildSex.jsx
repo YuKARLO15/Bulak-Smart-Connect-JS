@@ -511,36 +511,13 @@ const SexDobCorrection = () => {
     }
   };
 
-  const isMandatoryComplete = () => {
-    const allMandatoryDocsUploaded = mandatoryDocuments.every(doc => {
-      const isUploaded = uploadedFiles[doc] === true;
-      if (!isUploaded) {
-        console.log(`Missing document: ${doc}`);
-      }
-      return isUploaded;
-    });
+ const isMandatoryComplete = () => {
+  const allMandatoryDocsUploaded = mandatoryDocuments.every(doc => uploadedFiles[doc] === true);
+  const isMarriageCertComplete = !isMarried || uploadedFiles['Marriage Certificate'] === true;
+  const isAnyOptionSelected = Object.values(selectedOptions).some(val => val);
 
-    const isMarriageCertComplete = !isMarried || uploadedFiles['Marriage Certificate'] === true;
-
-    if (isMarried && !isMarriageCertComplete) {
-      console.log('Missing Marriage Certificate');
-    }
-
-    const isAnyOptionSelected = Object.values(selectedOptions).some(val => val);
-    if (!isAnyOptionSelected) {
-      console.log('No correction options selected');
-    }
-
-    if (allMandatoryDocsUploaded && isMarriageCertComplete && isAnyOptionSelected) {
-      console.log(
-        'All documents uploaded and at least one option selected. Button should be enabled.'
-      );
-      return true;
-    } else {
-      console.log('Missing documents or no options selected. Button should be disabled.');
-      return false;
-    }
-  };
+  return allMandatoryDocsUploaded && isMarriageCertComplete && isAnyOptionSelected;
+};
 
   const isAnyOptionSelected = Object.values(selectedOptions).some(val => val);
   const forceEnableSubmit = uploadedDocumentsCount > 0 && isAnyOptionSelected;
@@ -736,13 +713,10 @@ const SexDobCorrection = () => {
 
   return (
     <div className={`CorrectionContainer ${isSidebarOpen ? 'sidebar-open' : ''}`}>
-      <NavBar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
       <Typography variant="h5" className="TitleCorrection">
-        BIRTH CERTIFICATE APPLICATION
+         Application for Correction of Child's Sex / Date of Birth-Day & Month
       </Typography>
-      <Typography className="SubTitleCorrection">
-        Application for Correction of Child's Sex / Date of Birth-Day & Month
-      </Typography>
+   
 
       {isInitializing ? (
         <Box sx={{ display: 'flex', justifyContent: 'center', my: 4 }}>
@@ -758,7 +732,10 @@ const SexDobCorrection = () => {
               </Typography>
             </Box>
           )}
-
+  <Typography variant="body2" sx={{color: 'warning.main', background: '#fffbe6', p: 1.5, borderRadius: 1, border: '1px solid #ffe082' }}>
+    <strong>Note:</strong> Uploading your documents here is for initial screening only. You are still required to visit the Municipal Civil Registrar for an interview to begin the correction process. Please make sure you bring all original and complete documents to your interview.
+              </Typography>
+              
           <Box sx={{ marginBottom: 3 }}>
             <Typography variant="body1">Select the correction:</Typography>
             <Grid container spacing={2}>
@@ -983,7 +960,7 @@ const SexDobCorrection = () => {
             <Button
               variant="contained"
               color="primary"
-              disabled={!forceEnableSubmit || isLoading || isSubmitted}
+              disabled={!isMandatoryComplete() || isLoading || isSubmitted}
               onClick={handleSubmit}
               className="SubmitButtonCorrection"
             >

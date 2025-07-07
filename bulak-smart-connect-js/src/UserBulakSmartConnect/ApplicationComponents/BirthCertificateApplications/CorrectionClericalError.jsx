@@ -713,14 +713,11 @@ const CorrectionClericalError = () => {
 
   return (
     <div className={`ClericalErrorContainer ${isSidebarOpen ? 'sidebar-open' : ''}`}>
-      <NavBar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
+     
       <Typography variant="h5" className="TitleClerical">
-        BIRTH CERTIFICATE APPLICATION
-      </Typography>
-      <Typography variant="subtitle1" className="SubtitleClerical">
         Application for Correction of Clerical Errors
       </Typography>
-
+   
       {isInitializing ? (
         <Box sx={{ display: 'flex', justifyContent: 'center', my: 4 }}>
           <CircularProgress />
@@ -734,7 +731,14 @@ const CorrectionClericalError = () => {
                 Creating application record... Please wait.
               </Typography>
             </Box>
-          )}
+            )}
+            <Box >
+
+  <Typography variant="body2" sx={{color: 'warning.main', background: '#fffbe6', p: 1.5, borderRadius: 1, border: '1px solid #ffe082' }}>
+    <strong>Note:</strong> Uploading your documents here is for initial screening only. You are still required to visit the Municipal Civil Registrar for an interview to begin the correction process. Please make sure you bring all original and complete documents to your interview.
+              </Typography>
+              
+              </Box>
 
           <Box sx={{ marginBottom: 3 }}>
             <Typography className="SectionTitleClerical" variant="body1">
@@ -812,7 +816,8 @@ const CorrectionClericalError = () => {
           <Box className="ImpotantNotesClerical">
             <Typography variant="h6" className="ImportantNote">
               IMPORTANT NOTES:
-            </Typography>
+              </Typography>
+
             <Typography variant="body2">PAYMENT:</Typography>
             <Typography variant="body2">1. Filing Fee - PHP 1000.00</Typography>
             <Typography variant="body2">2. MISC, EXPENSES - P600</Typography>

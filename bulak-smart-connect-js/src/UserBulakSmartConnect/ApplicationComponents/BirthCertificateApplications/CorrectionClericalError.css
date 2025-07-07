@@ -5,15 +5,17 @@
   color: #1c4d5ad2 !important;
 }
 
+
 .ClericalErrorContainer {
   max-width: 100vw;
   width: 100vw;
-  height: auto;
-  min-width: 100vh;
+  min-height: 100vh;
   align-items: center;
   display: flex;
   flex-direction: column;
   margin: 0 !important;
+  padding: 0 2vw;
+  box-sizing: border-box;
 }
 * {
   margin: 0;
@@ -26,9 +28,10 @@
   text-align: center;
   margin-bottom: 10px;
   color: white;
-  padding: 20px !important;
-  width: 120vw;
+  padding: 3vw 1vw !important;
+  width: 100vw;
   margin-top: 0 !important;
+  font-size: 2.2vw;
 }
 
 .SubtitleClerical {
@@ -50,11 +53,13 @@
 
 .ImpotantNotesClerical {
   margin-top: 20px;
-  padding: 15px;
-  width: 45vw;
+  padding: 2vw 2vw 2vw 2vw;
+  width: 100%;
+  max-width: 600px;
   background-color: #f9f9f9;
   border-left: 5px solid #184a5b;
   color: #184a5b;
+  box-sizing: border-box;
 }
 
 .ImportantNote {
@@ -62,8 +67,7 @@
   margin-bottom: 10px;
   color: white !important;
   background-color: #184a5b !important;
-  padding: 5px;
-  padding-left: 15px;
+  padding: 5px 15px;
 }
 
 .ClericalErrorContainer {
@@ -119,7 +123,138 @@
   background-color: #b6c6d2 !important;
   color: #f5f5f5 !important;
 }
+.ButtonContainerClerical{
+ display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-top: 20px;
+}
 .SubmitButtonClerical:hover {
   background-color: #678c98 !important;
   color: #f5f5f5 !important;
+}
+@media (max-width: 900px) {
+  .DocumentsPaperClerical {
+    max-width: 98vw;
+    padding: 4vw 2vw;
+  }
+  .ImpotantNotesClerical {
+    max-width: 95vw;
+    padding: 3vw 2vw;
+  }
+  .TitleClerical {
+    font-size: 3vw;
+  }
+  .SectionTitleClerical {
+    font-size: 2vw;
+  }
+}
+
+@media (max-width: 600px) {
+  .ClericalErrorContainer {
+    padding: 0 1vw;
+  }
+  .DocumentsPaperClerical {
+    max-width: 100vw;
+    padding: 6vw 2vw;
+    gap: 18px;
+  }
+  .ImpotantNotesClerical {
+    max-width: 100vw;
+    padding: 4vw 2vw;
+    font-size: 0.95rem;
+  }
+  .TitleClerical {
+    font-size: 5vw;
+    padding: 6vw 2vw !important;
+  }
+  .SubtitleClerical {
+    font-size: 3.5vw !important;
+  }
+  .SectionTitleClerical {
+    font-size: 3vw;
+  }
+  .ButtonContainerClerical {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+  .BackButtonClerical,
+  .SubmitButtonClerical {
+    width: 100%;
+    font-size: 1.1rem;
+    margin-right: 0 !important;
+  }
+}
+
+
+/* Extra Small Devices (max-width: 375px) */
+@media (max-width: 375px) {
+  .TitleClerical {
+    font-size: 7vw;
+    width: 100vw;
+  }
+  .SubtitleClerical {
+    font-size: 4vw !important;
+  }
+  .SectionTitleClerical {
+    font-size: 4vw;
+  }
+  .ImpotantNotesClerical {
+    font-size: 0.9rem;
+    padding: 5vw 2vw;
+    width: 98vw;
+  }
+  .DocumentsPaperClerical {
+    padding: 8vw 2vw;
+    gap: 12px;
+  }
+}
+
+/* Very Large Screens (min-width: 1440px) */
+@media (min-width: 1440px) {
+  .TitleClerical {
+    font-size: 2rem;
+    padding: 18px 48px !important;
+    width: 100vw;
+  }
+  .SubtitleClerical {
+    font-size: 1.5rem !important;
+  }
+  .SectionTitleClerical {
+    font-size: 1.2rem;
+  }
+  .ImpotantNotesClerical {
+    font-size: 1.1rem;
+    width: 60vw;
+    padding: 24px 32px;
+  }
+  .DocumentsPaperClerical {
+    max-width: 1100px;
+    padding: 48px 48px 40px 48px;
+    gap: 36px;
+  }
+}
+
+/* Landscape Mobile Orientation */
+@media (max-height: 500px) and (orientation: landscape) {
+  .TitleClerical {
+    font-size: 4vw;
+    padding: 3vw 1vw !important;
+  }
+  .SubtitleClerical {
+    font-size: 2vw !important;
+  }
+  .SectionTitleClerical {
+    font-size: 2vw;
+  }
+  .ImpotantNotesClerical {
+    font-size: 0.8rem;
+    padding: 2vw 1vw;
+  }
+  .DocumentsPaperClerical {
+    padding: 3vw 1vw;
+    gap: 10px;
+  }
 }

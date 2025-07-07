@@ -477,39 +477,12 @@ const DelayedOutOfTownRegistration = () => {
   };
 
   const isMandatoryComplete = () => {
-    const currentDocuments = status === 'marital' ? maritalDocuments : nonMaritalDocuments;
-
-    const allMandatoryDocsUploaded = baseRequiredDocuments.every(doc => {
-      const isUploaded = uploadedFiles[doc] === true;
-      if (!isUploaded) {
-        console.log(`Missing document: ${doc}`);
-      }
-      return isUploaded;
-    });
-
-    // Check if at least two parent documents are uploaded
-    const parentDocsUploaded =
-      Object.keys(uploadedFiles).filter(
-        key => key.startsWith('Parent Document') && uploadedFiles[key]
-      ).length >= 2;
-
-    if (!parentDocsUploaded) {
-      console.log('Need at least 2 parent documents');
+    const incomplete = baseRequiredDocuments.filter(doc => uploadedFiles[doc] !== true);
+    if (incomplete.length > 0) {
+      console.log('Missing uploads for:', incomplete);
     }
-
-    // Check if at least two documentary evidence are uploaded
-    const evidenceUploaded =
-      Object.keys(uploadedFiles).filter(
-        key => key.startsWith('Documentary Evidence') && uploadedFiles[key]
-      ).length >= 2;
-
-    if (!evidenceUploaded) {
-      console.log('Need at least 2 documentary evidence documents');
-    }
-
-    return allMandatoryDocsUploaded && parentDocsUploaded && evidenceUploaded;
+    return incomplete.length === 0;
   };
-
   const mapStatusForBackend = frontendStatus => {
     const statusMap = {
       Submitted: 'Pending',
@@ -687,9 +660,6 @@ const DelayedOutOfTownRegistration = () => {
       setIsSubmitted(false);
     }
   };
-
-  // Force enable submit button if at least one file is uploaded
-  const forceEnableSubmit = uploadedDocumentsCount > 0;
 
   return (
     <div className={`DelayedOutOfTownContainer ${isSidebarOpen ? 'sidebar-open' : ''}`}>
