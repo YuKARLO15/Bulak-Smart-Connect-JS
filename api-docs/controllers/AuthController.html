@@ -910,8 +910,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="1160"
-                                    class="link-to-prism">src/auth/auth.controller.ts:1160</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="1188"
+                                    class="link-to-prism">src/auth/auth.controller.ts:1188</a></div>
                         </td>
                     </tr>
 
@@ -988,8 +988,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="1086"
-                                    class="link-to-prism">src/auth/auth.controller.ts:1086</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="1098"
+                                    class="link-to-prism">src/auth/auth.controller.ts:1098</a></div>
                         </td>
                     </tr>
 
@@ -1160,8 +1160,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="1193"
-                                    class="link-to-prism">src/auth/auth.controller.ts:1193</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="1229"
+                                    class="link-to-prism">src/auth/auth.controller.ts:1229</a></div>
                         </td>
                     </tr>
 
@@ -1238,8 +1238,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="1123"
-                                    class="link-to-prism">src/auth/auth.controller.ts:1123</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="1143"
+                                    class="link-to-prism">src/auth/auth.controller.ts:1143</a></div>
                         </td>
                     </tr>
 
@@ -1317,8 +1317,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="1028"
-                                    class="link-to-prism">src/auth/auth.controller.ts:1028</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="1039"
+                                    class="link-to-prism">src/auth/auth.controller.ts:1039</a></div>
                         </td>
                     </tr>
 
@@ -1396,8 +1396,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="895"
-                                    class="link-to-prism">src/auth/auth.controller.ts:895</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="905"
+                                    class="link-to-prism">src/auth/auth.controller.ts:905</a></div>
                         </td>
                     </tr>
 
@@ -1475,8 +1475,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="1062"
-                                    class="link-to-prism">src/auth/auth.controller.ts:1062</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="1074"
+                                    class="link-to-prism">src/auth/auth.controller.ts:1074</a></div>
                         </td>
                     </tr>
 
@@ -1554,8 +1554,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="961"
-                                    class="link-to-prism">src/auth/auth.controller.ts:961</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="971"
+                                    class="link-to-prism">src/auth/auth.controller.ts:971</a></div>
                         </td>
                     </tr>
 
@@ -2880,14 +2880,24 @@ export class AuthController {
   @Post(&#x27;send-queue-notification&#x27;)
   async sendQueueNotification(@Body() notificationDto: QueueNotificationDto) {
     try {
-      const { email, queueNumber, type, position, estimatedTime, status, message } &#x3D; notificationDto;
+      const {
+        email,
+        queueNumber,
+        type,
+        position,
+        estimatedTime,
+        status,
+        message,
+      } &#x3D; notificationDto;
 
       if (type &#x3D;&#x3D;&#x3D; &#x27;position_alert&#x27;) {
         // Fix: Ensure position is defined for position alerts
         if (position &#x3D;&#x3D;&#x3D; undefined) {
-          throw new BadRequestException(&#x27;Position is required for position alerts&#x27;);
+          throw new BadRequestException(
+            &#x27;Position is required for position alerts&#x27;,
+          );
         }
-        
+
         await this.emailService.sendQueuePositionAlert(
           email,
           queueNumber,
@@ -2959,15 +2969,15 @@ export class AuthController {
     },
   })
   @Post(&#x27;notifications/appointment-confirmation&#x27;)
-  async sendAppointmentConfirmation(
-    @Body() notificationDto: any,
-  ) {
+  async sendAppointmentConfirmation(@Body() notificationDto: any) {
     try {
       const { email, appointmentNumber, appointmentDetails } &#x3D; notificationDto;
 
       // Validate required fields
       if (!email || !appointmentNumber || !appointmentDetails) {
-        throw new BadRequestException(&#x27;Missing required fields: email, appointmentNumber, or appointmentDetails&#x27;);
+        throw new BadRequestException(
+          &#x27;Missing required fields: email, appointmentNumber, or appointmentDetails&#x27;,
+        );
       }
 
       await this.emailService.sendAppointmentConfirmation(
@@ -3025,15 +3035,16 @@ export class AuthController {
     },
   })
   @Post(&#x27;notifications/appointment-status-update&#x27;)
-  async sendAppointmentStatusUpdate(
-    @Body() notificationDto: any,
-  ) {
+  async sendAppointmentStatusUpdate(@Body() notificationDto: any) {
     try {
-      const { email, appointmentNumber, status, appointmentDetails } &#x3D; notificationDto;
+      const { email, appointmentNumber, status, appointmentDetails } &#x3D;
+        notificationDto;
 
       // Validate required fields
       if (!email || !appointmentNumber || !status || !appointmentDetails) {
-        throw new BadRequestException(&#x27;Missing required fields: email, appointmentNumber, status, or appointmentDetails&#x27;);
+        throw new BadRequestException(
+          &#x27;Missing required fields: email, appointmentNumber, status, or appointmentDetails&#x27;,
+        );
       }
 
       await this.emailService.sendAppointmentStatusUpdate(
@@ -3092,15 +3103,16 @@ export class AuthController {
     },
   })
   @Post(&#x27;notifications/appointment-cancellation&#x27;)
-  async sendAppointmentCancellation(
-    @Body() notificationDto: any,
-  ) {
+  async sendAppointmentCancellation(@Body() notificationDto: any) {
     try {
-      const { email, appointmentNumber, appointmentDetails, reason } &#x3D; notificationDto;
+      const { email, appointmentNumber, appointmentDetails, reason } &#x3D;
+        notificationDto;
 
       // Validate required fields
       if (!email || !appointmentNumber || !appointmentDetails) {
-        throw new BadRequestException(&#x27;Missing required fields: email, appointmentNumber, or appointmentDetails&#x27;);
+        throw new BadRequestException(
+          &#x27;Missing required fields: email, appointmentNumber, or appointmentDetails&#x27;,
+        );
       }
 
       await this.emailService.sendAppointmentCancellation(
@@ -3151,7 +3163,8 @@ export class AuthController {
   @Post(&#x27;notifications/application-confirmation&#x27;)
   @ApiOperation({ summary: &#x27;Send application confirmation notification&#x27; })
   async sendApplicationConfirmation(
-    @Body() dto: {
+    @Body()
+    dto: {
       email: string;
       applicationId: string;
       applicationType: string;
@@ -3159,11 +3172,13 @@ export class AuthController {
       applicantName: string;
       submissionDate: string;
       status: string;
-    }
+    },
   ) {
     try {
-      this.logger.log(&#x60;Sending application confirmation notification to: ${dto.email}&#x60;);
-      
+      this.logger.log(
+        &#x60;Sending application confirmation notification to: ${dto.email}&#x60;,
+      );
+
       // Use your existing email service to send application confirmation
       await this.emailService.sendDocumentApplicationConfirmation(
         dto.email,
@@ -3172,23 +3187,29 @@ export class AuthController {
         dto.applicationSubtype,
         dto.applicantName,
         dto.submissionDate,
-        dto.status
+        dto.status,
       );
-      
+
       return {
         success: true,
-        message: &#x27;Application confirmation notification sent successfully&#x27;
+        message: &#x27;Application confirmation notification sent successfully&#x27;,
       };
     } catch (error) {
-      this.logger.error(&#x27;Error sending application confirmation notification:&#x27;, error);
-      throw new BadRequestException(&#x27;Failed to send application confirmation notification&#x27;);
+      this.logger.error(
+        &#x27;Error sending application confirmation notification:&#x27;,
+        error,
+      );
+      throw new BadRequestException(
+        &#x27;Failed to send application confirmation notification&#x27;,
+      );
     }
   }
 
   @Post(&#x27;notifications/application-status-update&#x27;)
   @ApiOperation({ summary: &#x27;Send application status update notification&#x27; })
   async sendApplicationStatusUpdate(
-    @Body() dto: {
+    @Body()
+    dto: {
       email: string;
       applicationId: string;
       newStatus: string;
@@ -3196,11 +3217,13 @@ export class AuthController {
       applicationSubtype?: string;
       applicantName: string;
       previousStatus?: string;
-    }
+    },
   ) {
     try {
-      this.logger.log(&#x60;Sending application status update notification to: ${dto.email}&#x60;);
-      
+      this.logger.log(
+        &#x60;Sending application status update notification to: ${dto.email}&#x60;,
+      );
+
       // Use your existing email service
       await this.emailService.sendDocumentApplicationStatusUpdate(
         dto.email,
@@ -3209,67 +3232,83 @@ export class AuthController {
         dto.applicationType,
         dto.applicationSubtype,
         dto.applicantName,
-        dto.previousStatus
+        dto.previousStatus,
       );
-  
+
       return {
         success: true,
-        message: &#x27;Application status update notification sent successfully&#x27;
+        message: &#x27;Application status update notification sent successfully&#x27;,
       };
     } catch (error) {
-      this.logger.error(&#x27;Error sending application status update notification:&#x27;, error);
-      throw new BadRequestException(&#x27;Failed to send application status update notification&#x27;);
+      this.logger.error(
+        &#x27;Error sending application status update notification:&#x27;,
+        error,
+      );
+      throw new BadRequestException(
+        &#x27;Failed to send application status update notification&#x27;,
+      );
     }
   }
 
   @Post(&#x27;notifications/application-approval&#x27;)
   @ApiOperation({ summary: &#x27;Send application approval notification&#x27; })
   async sendApplicationApproval(
-    @Body() dto: {
+    @Body()
+    dto: {
       email: string;
       applicationId: string;
       applicationType: string;
       applicationSubtype?: string;
       applicantName: string;
-    }
+    },
   ) {
     try {
-      this.logger.log(&#x60;Sending application approval notification to: ${dto.email}&#x60;);
-      
+      this.logger.log(
+        &#x60;Sending application approval notification to: ${dto.email}&#x60;,
+      );
+
       // Use your existing email service
       await this.emailService.sendDocumentApplicationApproval(
         dto.email,
         dto.applicationId,
         dto.applicationType,
         dto.applicationSubtype,
-        dto.applicantName
+        dto.applicantName,
       );
-  
+
       return {
         success: true,
-        message: &#x27;Application approval notification sent successfully&#x27;
+        message: &#x27;Application approval notification sent successfully&#x27;,
       };
     } catch (error) {
-      this.logger.error(&#x27;Error sending application approval notification:&#x27;, error);
-      throw new BadRequestException(&#x27;Failed to send application approval notification&#x27;);
+      this.logger.error(
+        &#x27;Error sending application approval notification:&#x27;,
+        error,
+      );
+      throw new BadRequestException(
+        &#x27;Failed to send application approval notification&#x27;,
+      );
     }
   }
 
   @Post(&#x27;notifications/application-rejection&#x27;)
   @ApiOperation({ summary: &#x27;Send application rejection notification&#x27; })
   async sendApplicationRejection(
-    @Body() dto: {
+    @Body()
+    dto: {
       email: string;
       applicationId: string;
       applicationType: string;
       applicationSubtype?: string;
       applicantName: string;
       rejectionReason: string;
-    }
+    },
   ) {
     try {
-      this.logger.log(&#x60;Sending application rejection notification to: ${dto.email}&#x60;);
-      
+      this.logger.log(
+        &#x60;Sending application rejection notification to: ${dto.email}&#x60;,
+      );
+
       // Use your existing email service
       await this.emailService.sendDocumentApplicationRejection(
         dto.email,
@@ -3277,16 +3316,21 @@ export class AuthController {
         dto.applicationType,
         dto.applicationSubtype,
         dto.applicantName,
-        dto.rejectionReason
+        dto.rejectionReason,
       );
-  
+
       return {
         success: true,
-        message: &#x27;Application rejection notification sent successfully&#x27;
+        message: &#x27;Application rejection notification sent successfully&#x27;,
       };
     } catch (error) {
-      this.logger.error(&#x27;Error sending application rejection notification:&#x27;, error);
-      throw new BadRequestException(&#x27;Failed to send application rejection notification&#x27;);
+      this.logger.error(
+        &#x27;Error sending application rejection notification:&#x27;,
+        error,
+      );
+      throw new BadRequestException(
+        &#x27;Failed to send application rejection notification&#x27;,
+      );
     }
   }
 }

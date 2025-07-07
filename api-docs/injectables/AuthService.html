@@ -287,8 +287,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="388"
-                                    class="link-to-prism">src/auth/auth.service.ts:388</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="389"
+                                    class="link-to-prism">src/auth/auth.service.ts:389</a></div>
                         </td>
                     </tr>
 
@@ -380,8 +380,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="544"
-                                    class="link-to-prism">src/auth/auth.service.ts:544</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="545"
+                                    class="link-to-prism">src/auth/auth.service.ts:545</a></div>
                         </td>
                     </tr>
 
@@ -725,8 +725,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="558"
-                                    class="link-to-prism">src/auth/auth.service.ts:558</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="559"
+                                    class="link-to-prism">src/auth/auth.service.ts:559</a></div>
                         </td>
                     </tr>
 
@@ -887,8 +887,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="589"
-                                    class="link-to-prism">src/auth/auth.service.ts:589</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="590"
+                                    class="link-to-prism">src/auth/auth.service.ts:590</a></div>
                         </td>
                     </tr>
 
@@ -1340,8 +1340,9 @@ export class AuthService {
 
       try {
         // 🔥 CRITICAL FIX: Remove role-related fields before updating User entity
-        const { roleIds, defaultRoleId, ...userUpdateFields } &#x3D; updateUserDto as any;
-        
+        const { roleIds, defaultRoleId, ...userUpdateFields } &#x3D;
+          updateUserDto as any;
+
         // Update user with only valid User entity fields
         await this.usersRepository.update(userId, userUpdateFields);
 

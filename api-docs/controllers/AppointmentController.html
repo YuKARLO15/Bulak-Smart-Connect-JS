@@ -436,8 +436,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="132"
-                                    class="link-to-prism">src/modules/appointment/appointment.controller.ts:132</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="135"
+                                    class="link-to-prism">src/modules/appointment/appointment.controller.ts:135</a></div>
                         </td>
                     </tr>
 
@@ -979,8 +979,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="185"
-                                    class="link-to-prism">src/modules/appointment/appointment.controller.ts:185</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="188"
+                                    class="link-to-prism">src/modules/appointment/appointment.controller.ts:188</a></div>
                         </td>
                     </tr>
 
@@ -1069,8 +1069,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="139"
-                                    class="link-to-prism">src/modules/appointment/appointment.controller.ts:139</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="142"
+                                    class="link-to-prism">src/modules/appointment/appointment.controller.ts:142</a></div>
                         </td>
                     </tr>
 
@@ -1172,8 +1172,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="166"
-                                    class="link-to-prism">src/modules/appointment/appointment.controller.ts:166</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="169"
+                                    class="link-to-prism">src/modules/appointment/appointment.controller.ts:169</a></div>
                         </td>
                     </tr>
 
@@ -1357,7 +1357,10 @@ export class AppointmentController {
 
   @Get(&#x27;:id&#x27;)
   @ApiOperation({ summary: &#x27;Get appointment by ID&#x27; })
-  async findOne(@Param(&#x27;id&#x27;) id: string, @Query(&#x27;includeUser&#x27;) includeUser?: string) {
+  async findOne(
+    @Param(&#x27;id&#x27;) id: string,
+    @Query(&#x27;includeUser&#x27;) includeUser?: string,
+  ) {
     this.logger.log(&#x60;Fetching appointment ${id}&#x60;);
 
     const relations &#x3D; includeUser &#x3D;&#x3D;&#x3D; &#x27;false&#x27; ? [] : [&#x27;user&#x27;];

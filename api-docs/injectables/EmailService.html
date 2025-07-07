@@ -391,8 +391,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="518"
-                                    class="link-to-prism">src/services/email.service.ts:518</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="536"
+                                    class="link-to-prism">src/services/email.service.ts:536</a></div>
                         </td>
                     </tr>
 
@@ -593,8 +593,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="616"
-                                    class="link-to-prism">src/services/email.service.ts:616</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="638"
+                                    class="link-to-prism">src/services/email.service.ts:638</a></div>
                         </td>
                     </tr>
 
@@ -688,8 +688,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="389"
-                                    class="link-to-prism">src/services/email.service.ts:389</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="393"
+                                    class="link-to-prism">src/services/email.service.ts:393</a></div>
                         </td>
                     </tr>
 
@@ -795,8 +795,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="956"
-                                    class="link-to-prism">src/services/email.service.ts:956</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="1001"
+                                    class="link-to-prism">src/services/email.service.ts:1001</a></div>
                         </td>
                     </tr>
 
@@ -914,8 +914,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="720"
-                                    class="link-to-prism">src/services/email.service.ts:720</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="742"
+                                    class="link-to-prism">src/services/email.service.ts:742</a></div>
                         </td>
                     </tr>
 
@@ -1073,8 +1073,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="976"
-                                    class="link-to-prism">src/services/email.service.ts:976</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="1021"
+                                    class="link-to-prism">src/services/email.service.ts:1021</a></div>
                         </td>
                     </tr>
 
@@ -1204,8 +1204,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="825"
-                                    class="link-to-prism">src/services/email.service.ts:825</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="851"
+                                    class="link-to-prism">src/services/email.service.ts:851</a></div>
                         </td>
                     </tr>
 
@@ -1837,7 +1837,7 @@ export class EmailService {
     estimatedTime: string,
   ): Promise&lt;any&gt; {
     const subject &#x3D; &#x60;🔔 Bulak LGU Smart Connect - You&#x27;re Almost Up! (Position #${position})&#x60;;
-    
+
     const html &#x3D; &#x60;
       &lt;!DOCTYPE html&gt;
       &lt;html&gt;
@@ -1903,7 +1903,7 @@ export class EmailService {
     message: string,
   ): Promise&lt;any&gt; {
     const subject &#x3D; &#x60;🎯 Bulak LGU Smart Connect - Please Proceed to Counter!&#x60;;
-    
+
     const html &#x3D; &#x60;
       &lt;!DOCTYPE html&gt;
       &lt;html&gt;
@@ -1968,7 +1968,7 @@ export class EmailService {
     appointmentDetails: any,
   ): Promise&lt;void&gt; {
     const subject &#x3D; &#x27;Appointment Confirmed - Bulak LGU Smart Connect&#x27;;
-    
+
     const html &#x3D; &#x60;
       &lt;!DOCTYPE html&gt;
       &lt;html&gt;
@@ -2019,12 +2019,16 @@ export class EmailService {
                 &lt;span class&#x3D;&quot;label&quot;&gt;Time:&lt;/span&gt;
                 &lt;span class&#x3D;&quot;value&quot;&gt;${appointmentDetails.time || appointmentDetails.appointmentTime || &#x27;TBD&#x27;}&lt;/span&gt;
               &lt;/div&gt;
-              ${appointmentDetails.phoneNumber ? &#x60;
+              ${
+                appointmentDetails.phoneNumber
+                  ? &#x60;
               &lt;div class&#x3D;&quot;detail-row&quot;&gt;
                 &lt;span class&#x3D;&quot;label&quot;&gt;Contact:&lt;/span&gt;
                 &lt;span class&#x3D;&quot;value&quot;&gt;${appointmentDetails.phoneNumber}&lt;/span&gt;
               &lt;/div&gt;
-              &#x60; : &#x27;&#x27;}
+              &#x60;
+                  : &#x27;&#x27;
+              }
             &lt;/div&gt;
             
             &lt;div class&#x3D;&quot;important-note&quot;&gt;
@@ -2070,24 +2074,24 @@ export class EmailService {
     appointmentDetails: any,
   ): Promise&lt;void&gt; {
     const statusColors &#x3D; {
-      &#x27;confirmed&#x27;: &#x27;#28a745&#x27;,
-      &#x27;completed&#x27;: &#x27;#007bff&#x27;,
-      &#x27;cancelled&#x27;: &#x27;#dc3545&#x27;,
-      &#x27;pending&#x27;: &#x27;#ffc107&#x27;
+      confirmed: &#x27;#28a745&#x27;,
+      completed: &#x27;#007bff&#x27;,
+      cancelled: &#x27;#dc3545&#x27;,
+      pending: &#x27;#ffc107&#x27;,
     };
 
     const statusEmojis &#x3D; {
-      &#x27;confirmed&#x27;: &#x27;✅&#x27;,
-      &#x27;completed&#x27;: &#x27;🎉&#x27;,
-      &#x27;cancelled&#x27;: &#x27;❌&#x27;,
-      &#x27;pending&#x27;: &#x27;⏳&#x27;
+      confirmed: &#x27;✅&#x27;,
+      completed: &#x27;🎉&#x27;,
+      cancelled: &#x27;❌&#x27;,
+      pending: &#x27;⏳&#x27;,
     };
 
     const color &#x3D; statusColors[newStatus] || &#x27;#6c757d&#x27;;
     const emoji &#x3D; statusEmojis[newStatus] || &#x27;📋&#x27;;
-    
+
     const subject &#x3D; &#x60;Appointment ${newStatus.charAt(0).toUpperCase() + newStatus.slice(1)} - ${appointmentNumber}&#x60;;
-    
+
     const html &#x3D; &#x60;
       &lt;!DOCTYPE html&gt;
       &lt;html&gt;
@@ -2142,7 +2146,9 @@ export class EmailService {
               &lt;/div&gt;
             &lt;/div&gt;
             
-            ${newStatus &#x3D;&#x3D;&#x3D; &#x27;confirmed&#x27; ? &#x60;
+            ${
+              newStatus &#x3D;&#x3D;&#x3D; &#x27;confirmed&#x27;
+                ? &#x60;
             &lt;div style&#x3D;&quot;background-color: #d4edda; border: 1px solid #c3e6cb; padding: 15px; border-radius: 8px; margin: 20px 0;&quot;&gt;
               &lt;p&gt;&lt;strong&gt;Your appointment is confirmed!&lt;/strong&gt; Please remember to:&lt;/p&gt;
               &lt;ul&gt;
@@ -2151,20 +2157,30 @@ export class EmailService {
                 &lt;li&gt;Keep this confirmation for your records&lt;/li&gt;
               &lt;/ul&gt;
             &lt;/div&gt;
-            &#x60; : &#x27;&#x27;}
+            &#x60;
+                : &#x27;&#x27;
+            }
             
-            ${newStatus &#x3D;&#x3D;&#x3D; &#x27;completed&#x27; ? &#x60;
+            ${
+              newStatus &#x3D;&#x3D;&#x3D; &#x27;completed&#x27;
+                ? &#x60;
             &lt;div style&#x3D;&quot;background-color: #d1ecf1; border: 1px solid #bee5eb; padding: 15px; border-radius: 8px; margin: 20px 0;&quot;&gt;
               &lt;p&gt;&lt;strong&gt;Your appointment has been completed!&lt;/strong&gt; Thank you for visiting our office.&lt;/p&gt;
             &lt;/div&gt;
-            &#x60; : &#x27;&#x27;}
+            &#x60;
+                : &#x27;&#x27;
+            }
             
-            ${newStatus &#x3D;&#x3D;&#x3D; &#x27;cancelled&#x27; ? &#x60;
+            ${
+              newStatus &#x3D;&#x3D;&#x3D; &#x27;cancelled&#x27;
+                ? &#x60;
             &lt;div style&#x3D;&quot;background-color: #f8d7da; border: 1px solid #f5c6cb; padding: 15px; border-radius: 8px; margin: 20px 0;&quot;&gt;
               &lt;p&gt;&lt;strong&gt;Your appointment has been cancelled.&lt;/strong&gt;&lt;/p&gt;
               &lt;p&gt;If you need to reschedule, please contact our office or book a new appointment.&lt;/p&gt;
             &lt;/div&gt;
-            &#x60; : &#x27;&#x27;}
+            &#x60;
+                : &#x27;&#x27;
+            }
             
             &lt;p&gt;Thank you for using Bulak LGU Smart Connect!&lt;/p&gt;
           &lt;/div&gt;
@@ -2186,7 +2202,9 @@ export class EmailService {
       html,
     });
 
-    console.log(&#x60;✅ Appointment status update email sent to ${email} - Status: ${newStatus}&#x60;);
+    console.log(
+      &#x60;✅ Appointment status update email sent to ${email} - Status: ${newStatus}&#x60;,
+    );
   }
 
   /**
@@ -2199,7 +2217,7 @@ export class EmailService {
     reason?: string,
   ): Promise&lt;void&gt; {
     const subject &#x3D; &#x60;Appointment Cancelled - ${appointmentNumber}&#x60;;
-    
+
     const html &#x3D; &#x60;
       &lt;!DOCTYPE html&gt;
       &lt;html&gt;
@@ -2250,12 +2268,16 @@ export class EmailService {
                 &lt;span class&#x3D;&quot;label&quot;&gt;Scheduled Time:&lt;/span&gt;
                 &lt;span class&#x3D;&quot;value&quot;&gt;${appointmentDetails.time || appointmentDetails.appointmentTime || &#x27;TBD&#x27;}&lt;/span&gt;
               &lt;/div&gt;
-              ${reason ? &#x60;
+              ${
+                reason
+                  ? &#x60;
               &lt;div class&#x3D;&quot;detail-row&quot;&gt;
                 &lt;span class&#x3D;&quot;label&quot;&gt;Reason:&lt;/span&gt;
                 &lt;span class&#x3D;&quot;value&quot;&gt;${reason}&lt;/span&gt;
               &lt;/div&gt;
-              &#x60; : &#x27;&#x27;}
+              &#x60;
+                  : &#x27;&#x27;
+              }
             &lt;/div&gt;
             
             &lt;div class&#x3D;&quot;rebook-section&quot;&gt;
@@ -2296,7 +2318,7 @@ export class EmailService {
     appointmentDetails: any,
   ): Promise&lt;void&gt; {
     const subject &#x3D; &#x60;Reminder: Appointment Tomorrow - ${appointmentNumber}&#x60;;
-    
+
     const html &#x3D; &#x60;
       &lt;!DOCTYPE html&gt;
       &lt;html&gt;
@@ -2401,10 +2423,10 @@ export class EmailService {
     applicationSubtype?: string,
     applicantName?: string,
     submissionDate?: string,
-    status: string &#x3D; &#x27;Pending&#x27;
+    status: string &#x3D; &#x27;Pending&#x27;,
   ): Promise&lt;void&gt; {
     const subject &#x3D; &#x60;Application Submitted - ${applicationId}&#x60;;
-    
+
     const html &#x3D; &#x60;
       &lt;!DOCTYPE html&gt;
       &lt;html&gt;
@@ -2447,12 +2469,16 @@ export class EmailService {
                 &lt;span class&#x3D;&quot;label&quot;&gt;Document Type:&lt;/span&gt;
                 &lt;span class&#x3D;&quot;value&quot;&gt;${applicationType}&lt;/span&gt;
               &lt;/div&gt;
-              ${applicationSubtype ? &#x60;
+              ${
+                applicationSubtype
+                  ? &#x60;
               &lt;div class&#x3D;&quot;detail-row&quot;&gt;
                 &lt;span class&#x3D;&quot;label&quot;&gt;Service Type:&lt;/span&gt;
                 &lt;span class&#x3D;&quot;value&quot;&gt;${applicationSubtype}&lt;/span&gt;
               &lt;/div&gt;
-              &#x60; : &#x27;&#x27;}
+              &#x60;
+                  : &#x27;&#x27;
+              }
               &lt;div class&#x3D;&quot;detail-row&quot;&gt;
                 &lt;span class&#x3D;&quot;label&quot;&gt;Submission Date:&lt;/span&gt;
                 &lt;span class&#x3D;&quot;value&quot;&gt;${submissionDate || new Date().toLocaleDateString()}&lt;/span&gt;
@@ -2506,31 +2532,31 @@ export class EmailService {
     applicationType: string,
     applicationSubtype?: string,
     applicantName?: string,
-    previousStatus?: string
+    previousStatus?: string,
   ): Promise&lt;void&gt; {
     const statusColors &#x3D; {
-      &#x27;pending&#x27;: &#x27;#ffc107&#x27;,
-      &#x27;approved&#x27;: &#x27;#28a745&#x27;,
-      &#x27;declined&#x27;: &#x27;#dc3545&#x27;,
-      &#x27;rejected&#x27;: &#x27;#dc3545&#x27;,
+      pending: &#x27;#ffc107&#x27;,
+      approved: &#x27;#28a745&#x27;,
+      declined: &#x27;#dc3545&#x27;,
+      rejected: &#x27;#dc3545&#x27;,
       &#x27;ready for pickup&#x27;: &#x27;#007bff&#x27;,
-      &#x27;completed&#x27;: &#x27;#17a2b8&#x27;
+      completed: &#x27;#17a2b8&#x27;,
     };
 
     const statusEmojis &#x3D; {
-      &#x27;pending&#x27;: &#x27;⏳&#x27;,
-      &#x27;approved&#x27;: &#x27;✅&#x27;,
-      &#x27;declined&#x27;: &#x27;❌&#x27;,
-      &#x27;rejected&#x27;: &#x27;❌&#x27;,
+      pending: &#x27;⏳&#x27;,
+      approved: &#x27;✅&#x27;,
+      declined: &#x27;❌&#x27;,
+      rejected: &#x27;❌&#x27;,
       &#x27;ready for pickup&#x27;: &#x27;📦&#x27;,
-      &#x27;completed&#x27;: &#x27;🎉&#x27;
+      completed: &#x27;🎉&#x27;,
     };
 
     const color &#x3D; statusColors[newStatus.toLowerCase()] || &#x27;#6c757d&#x27;;
     const emoji &#x3D; statusEmojis[newStatus.toLowerCase()] || &#x27;📋&#x27;;
-    
+
     const subject &#x3D; &#x60;Application ${newStatus.charAt(0).toUpperCase() + newStatus.slice(1)} - ${applicationId}&#x60;;
-    
+
     const html &#x3D; &#x60;
       &lt;!DOCTYPE html&gt;
       &lt;html&gt;
@@ -2575,34 +2601,51 @@ export class EmailService {
                 &lt;span class&#x3D;&quot;label&quot;&gt;Document Type:&lt;/span&gt;
                 &lt;span class&#x3D;&quot;value&quot;&gt;${applicationType}&lt;/span&gt;
               &lt;/div&gt;
-              ${applicationSubtype ? &#x60;
+              ${
+                applicationSubtype
+                  ? &#x60;
               &lt;div class&#x3D;&quot;detail-row&quot;&gt;
                 &lt;span class&#x3D;&quot;label&quot;&gt;Service Type:&lt;/span&gt;
                 &lt;span class&#x3D;&quot;value&quot;&gt;${applicationSubtype}&lt;/span&gt;
               &lt;/div&gt;
-              &#x60; : &#x27;&#x27;}
+              &#x60;
+                  : &#x27;&#x27;
+              }
             &lt;/div&gt;
             
-            ${newStatus.toLowerCase() &#x3D;&#x3D;&#x3D; &#x27;approved&#x27; ? &#x60;
+            ${
+              newStatus.toLowerCase() &#x3D;&#x3D;&#x3D; &#x27;approved&#x27;
+                ? &#x60;
             &lt;div style&#x3D;&quot;background-color: #d4edda; border: 1px solid #c3e6cb; padding: 15px; border-radius: 8px; margin: 20px 0;&quot;&gt;
               &lt;p&gt;&lt;strong&gt;Great news! Your application has been approved!&lt;/strong&gt;&lt;/p&gt;
               &lt;p&gt;Your document will be processed and prepared for release.&lt;/p&gt;
             &lt;/div&gt;
-            &#x60; : &#x27;&#x27;}
+            &#x60;
+                : &#x27;&#x27;
+            }
             
-            ${newStatus.toLowerCase() &#x3D;&#x3D;&#x3D; &#x27;ready for pickup&#x27; ? &#x60;
+            ${
+              newStatus.toLowerCase() &#x3D;&#x3D;&#x3D; &#x27;ready for pickup&#x27;
+                ? &#x60;
             &lt;div style&#x3D;&quot;background-color: #d1ecf1; border: 1px solid #bee5eb; padding: 15px; border-radius: 8px; margin: 20px 0;&quot;&gt;
               &lt;p&gt;&lt;strong&gt;Your document is ready for pickup!&lt;/strong&gt;&lt;/p&gt;
               &lt;p&gt;Please visit our office during business hours to collect your document. Bring a valid ID and this email confirmation.&lt;/p&gt;
             &lt;/div&gt;
-            &#x60; : &#x27;&#x27;}
+            &#x60;
+                : &#x27;&#x27;
+            }
             
-            ${(newStatus.toLowerCase() &#x3D;&#x3D;&#x3D; &#x27;declined&#x27; || newStatus.toLowerCase() &#x3D;&#x3D;&#x3D; &#x27;rejected&#x27;) ? &#x60;
+            ${
+              newStatus.toLowerCase() &#x3D;&#x3D;&#x3D; &#x27;declined&#x27; ||
+              newStatus.toLowerCase() &#x3D;&#x3D;&#x3D; &#x27;rejected&#x27;
+                ? &#x60;
             &lt;div style&#x3D;&quot;background-color: #f8d7da; border: 1px solid #f5c6cb; padding: 15px; border-radius: 8px; margin: 20px 0;&quot;&gt;
               &lt;p&gt;&lt;strong&gt;Your application has been declined.&lt;/strong&gt;&lt;/p&gt;
               &lt;p&gt;Please contact our office for more information or to resubmit with the required corrections.&lt;/p&gt;
             &lt;/div&gt;
-            &#x60; : &#x27;&#x27;}
+            &#x60;
+                : &#x27;&#x27;
+            }
             
             &lt;p&gt;Thank you for using Bulak LGU Smart Connect!&lt;/p&gt;
           &lt;/div&gt;
@@ -2624,7 +2667,9 @@ export class EmailService {
       html,
     });
 
-    console.log(&#x60;✅ Document application status update email sent to ${email} - Status: ${newStatus}&#x60;);
+    console.log(
+      &#x60;✅ Document application status update email sent to ${email} - Status: ${newStatus}&#x60;,
+    );
   }
 
   /**
@@ -2635,7 +2680,7 @@ export class EmailService {
     applicationId: string,
     applicationType: string,
     applicationSubtype?: string,
-    applicantName?: string
+    applicantName?: string,
   ): Promise&lt;void&gt; {
     return this.sendDocumentApplicationStatusUpdate(
       email,
@@ -2643,7 +2688,7 @@ export class EmailService {
       &#x27;approved&#x27;,
       applicationType,
       applicationSubtype,
-      applicantName
+      applicantName,
     );
   }
 
@@ -2656,10 +2701,10 @@ export class EmailService {
     applicationType: string,
     applicationSubtype?: string,
     applicantName?: string,
-    rejectionReason?: string
+    rejectionReason?: string,
   ): Promise&lt;void&gt; {
     const subject &#x3D; &#x60;Application Declined - ${applicationId}&#x60;;
-    
+
     const html &#x3D; &#x60;
       &lt;!DOCTYPE html&gt;
       &lt;html&gt;
@@ -2702,18 +2747,26 @@ export class EmailService {
                 &lt;span class&#x3D;&quot;label&quot;&gt;Document Type:&lt;/span&gt;
                 &lt;span class&#x3D;&quot;value&quot;&gt;${applicationType}&lt;/span&gt;
               &lt;/div&gt;
-              ${applicationSubtype ? &#x60;
+              ${
+                applicationSubtype
+                  ? &#x60;
               &lt;div class&#x3D;&quot;detail-row&quot;&gt;
                 &lt;span class&#x3D;&quot;label&quot;&gt;Service Type:&lt;/span&gt;
                 &lt;span class&#x3D;&quot;value&quot;&gt;${applicationSubtype}&lt;/span&gt;
               &lt;/div&gt;
-              &#x60; : &#x27;&#x27;}
-              ${rejectionReason ? &#x60;
+              &#x60;
+                  : &#x27;&#x27;
+              }
+              ${
+                rejectionReason
+                  ? &#x60;
               &lt;div class&#x3D;&quot;detail-row&quot;&gt;
                 &lt;span class&#x3D;&quot;label&quot;&gt;Reason:&lt;/span&gt;
                 &lt;span class&#x3D;&quot;value&quot;&gt;${rejectionReason}&lt;/span&gt;
               &lt;/div&gt;
-              &#x60; : &#x27;&#x27;}
+              &#x60;
+                  : &#x27;&#x27;
+              }
             &lt;/div&gt;
             
             &lt;div class&#x3D;&quot;resubmit-section&quot;&gt;
