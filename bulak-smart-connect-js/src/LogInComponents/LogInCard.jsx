@@ -84,8 +84,17 @@ export default function LogInCard({ onLogin }) {
     }
   }, [email]);
 
+  // Add timer ref to store timer ID
+  const [timerRef, setTimerRef] = useState(null);
+
   const checkLockoutStatus = async () => {
     if (!email || !email.trim()) return;
+
+    // Clear any existing timer first
+    if (timerRef) {
+      clearInterval(timerRef);
+      setTimerRef(null);
+    }
 
     try {
       const lockoutData = await authLockoutService.checkAccountLockout(email);
@@ -95,21 +104,22 @@ export default function LogInCard({ onLogin }) {
         setLockoutTimeRemaining(lockoutData.timeRemaining);
         setLoginAttempts(lockoutData.attemptsUsed);
 
-        // Start countdown timer
+        // Start countdown timer and store reference
         const timer = setInterval(() => {
           setLockoutTimeRemaining(prev => {
             if (prev <= 1) {
               setIsAccountLocked(false);
               setLoginAttempts(0);
               clearInterval(timer);
+              setTimerRef(null); // Clear the ref
               return 0;
             }
             return prev - 1;
           });
         }, 1000);
 
-        // Cleanup timer on component unmount
-        return () => clearInterval(timer);
+        // Store timer reference for cleanup
+        setTimerRef(timer);
       } else {
         setIsAccountLocked(false);
         setLoginAttempts(lockoutData.attempts);
@@ -118,6 +128,15 @@ export default function LogInCard({ onLogin }) {
       console.error('Error checking lockout status:', error);
     }
   };
+
+  // Add cleanup effect for component unmount
+  useEffect(() => {
+    return () => {
+      if (timerRef) {
+        clearInterval(timerRef);
+      }
+    };
+  }, [timerRef]);
 
   const toggleLoginType = () => {
     const newType = loginType === 'email' ? 'username' : 'email';
