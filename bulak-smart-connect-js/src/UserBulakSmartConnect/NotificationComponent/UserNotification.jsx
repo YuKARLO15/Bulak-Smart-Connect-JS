@@ -6,7 +6,7 @@ import documentApplicationService from '../../services/documentApplicationServic
 import { useAuth } from '../../context/AuthContext';
 
 const UserNotificationContent = () => {
-  const [notifQueue, setNotifQueue] = useState([]); // Queue of apps to notify
+  const [notifQueue, setNotifQueue] = useState([]);
   const [currentNotif, setCurrentNotif] = useState(null);
   const [showBookAppointment, setShowBookAppointment] = useState(false);
   const prevStatusesRef = useRef({});
@@ -19,23 +19,25 @@ const UserNotificationContent = () => {
         if (apps && apps.length > 0 && user?.id) {
           const userApps = apps.filter(app => app.userId === user.id);
           const changedApps = [];
-          for (const app of userApps) {
-            const prevStatus = prevStatusesRef.current[app.id];
-            // Only notify if status changed, is not pending, and previous status exists
-            if (
-              app.status &&
-              app.status.toLowerCase() !== 'pending' &&
-              prevStatus !== undefined && // Only notify if we have a previous status
-              app.status !== prevStatus
-            ) {
-              changedApps.push(app);
-            }
-          }
-          // Queue all changed apps
+for (const app of userApps) {
+  const prevStatus = prevStatusesRef.current[app.id];
+
+  if (
+    app.status &&
+    app.status.toLowerCase() !== 'pending' &&
+    (
+      prevStatus === undefined || 
+      app.status !== prevStatus   
+    )
+  ) {
+    changedApps.push(app);
+  }
+}
+      
           if (changedApps.length > 0) {
             setNotifQueue(prev => [...prev, ...changedApps]);
           }
-          // Always update all statuses after checking
+         
           prevStatusesRef.current = Object.fromEntries(userApps.map(app => [app.id, app.status]));
         }
       } catch (error) {
@@ -46,7 +48,7 @@ const UserNotificationContent = () => {
     return () => clearInterval(interval);
   }, [user?.id]);
 
-  // Show next notification in queue
+
   useEffect(() => {
     if (!currentNotif && notifQueue.length > 0) {
       const next = notifQueue[0];
