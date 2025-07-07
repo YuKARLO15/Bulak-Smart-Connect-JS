@@ -39,6 +39,7 @@ export default function LogInCard({ onLogin }) {
   const [isAccountLocked, setIsAccountLocked] = useState(false);
   const [lockoutEndTime, setLockoutEndTime] = useState(null);
   const [lockoutTimeRemaining, setLockoutTimeRemaining] = useState(0);
+  const [message, setMessage] = useState({ text: '', type: '' });
   const navigate = useNavigate();
   const { login, hasRole, isStaff } = useAuth(); // New AuthContext to handle login and roles
 
