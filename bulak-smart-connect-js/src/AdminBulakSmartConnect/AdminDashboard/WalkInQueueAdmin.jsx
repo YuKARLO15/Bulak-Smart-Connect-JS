@@ -204,11 +204,11 @@ const WalkInQueueAdmin = () => {
     console.log('WalkInQueueAdmin: Initial data fetch');
     fetchQueueData();
 
-    // Refresh queue data every 30 seconds
+    // Refresh queue data every 5 seconds
     const intervalId = setInterval(() => {
       console.log('WalkInQueueAdmin: Auto-refreshing queue data');
       fetchQueueData();
-    }, 30000);
+    }, 5000); // 5000 (5 seconds)
 
     // Clean up on component unmount
     return () => {
