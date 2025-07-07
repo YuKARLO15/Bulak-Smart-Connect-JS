@@ -348,7 +348,7 @@ const AdminDashboard = () => {
       fetchApplicationData();
       fetchAppointmentStats();
       generateMonthlyAnalyticsFromDB().then(setWalkInData);
-    }, 300000);
+    }, 30000); // 30 seconds
 
     return () => clearInterval(intervalId);
   }, [fetchApplicationData]);

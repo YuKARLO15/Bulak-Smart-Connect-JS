@@ -657,7 +657,7 @@ const WalkInQueueContainer = () => {
     // Periodically check for updates
     const intervalId = setInterval(() => {
       fetchQueueData();
-    }, 30000); // Check every 30 seconds
+    }, 5000); // Check every 5 seconds
 
     return () => {
       cleanup();

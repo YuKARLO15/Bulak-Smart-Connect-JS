@@ -662,11 +662,11 @@ const AdminWalkInQueue = () => {
     fetchQueueData();
     fetchPendingCount(); // Fetch pending count on mount
 
-    // Auto-refresh every 30 seconds
+    // Auto-refresh every 5 seconds
     const intervalId = setInterval(() => {
       fetchQueueData();
       fetchPendingCount();
-    }, 30000);
+    }, 5000);
 
     return () => clearInterval(intervalId);
   }, [fetchQueueData]);
