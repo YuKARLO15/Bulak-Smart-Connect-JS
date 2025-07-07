@@ -880,7 +880,7 @@ const FirstNameCorrection = () => {
             <Button
               variant="contained"
               // color="error"
-              disabled={!forceEnableSubmit || isLoading || isSubmitted}
+              disabled={!isMandatoryComplete()|| isLoading || isSubmitted}
               onClick={handleSubmit}
               className="SubmitButtonFirstName"
             >
