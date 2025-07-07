@@ -33,6 +33,8 @@ export default function LogInCard({ onLogin }) {
   const [loginType, setLoginType] = useState('email'); // Add login type state
   const [showPassword, setShowPassword] = useState(false); // Show password state
   const [rememberMe, setRememberMe] = useState(false); // Remember me state
+  const [isLoginAttempting, setIsLoginAttempting] = useState(false);
+  const [loginAttempts, setLoginAttempts] = useState(0);
   const navigate = useNavigate();
   const { login, hasRole, isStaff } = useAuth(); // New AuthContext to handle login and roles
 
@@ -95,6 +97,7 @@ export default function LogInCard({ onLogin }) {
 
     if (validateInputs()) {
       try {
+        setIsLoginAttempting(true);
         console.log(`Sending login request with ${loginType}:`, { [loginType]: email, password });
 
         // Old Method to use the API service from api.js, now using the AuthContext
@@ -115,8 +118,11 @@ export default function LogInCard({ onLogin }) {
         const { success, user } = await login(email, password, loginType);
 
         console.log('Login successful:', success);
-        //Auth Success Step
+
         if (success) {
+          // Reset login attempts on successful login
+          setLoginAttempts(0);
+
           // Handle "Remember Me" functionality
           if (rememberMe) {
             localStorage.setItem('rememberedEmail', email);
@@ -144,20 +150,75 @@ export default function LogInCard({ onLogin }) {
             navigate('/Home');
           }
         } else {
-          setError('Login failed. Please check your credentials.');
+          handleLoginFailure('Login failed. Please check your credentials.');
         }
       } catch (error) {
         console.error('Login error:', error);
 
+        let errorMessage = 'An error occurred during login. Please try again.';
+
         if (error.response) {
           console.log('Error status:', error.response.status);
           console.log('Error data:', error.response.data);
-          setError(error.response.data.message || 'Invalid credentials');
-        } else {
-          setError('An error occurred during login. Please try again.');
+
+          // Check for specific error types
+          if (error.response.status === 401) {
+            errorMessage = 'Invalid credentials. Please check your email/username and password.';
+          } else if (error.response.status === 404) {
+            errorMessage = 'Account not found. Please check your email/username.';
+          } else if (error.response.status === 403) {
+            errorMessage = 'Account is disabled. Please contact support.';
+          } else {
+            errorMessage = error.response.data.message || 'Login failed. Please try again.';
+          }
         }
+
+        handleLoginFailure(errorMessage);
+      } finally {
+        setIsLoginAttempting(false);
       }
     }
+  };
+
+  const handleLoginFailure = errorMessage => {
+    // Increment login attempts
+    setLoginAttempts(prev => prev + 1);
+
+    // 🔧 AUTO CLEAR PASSWORD ON FAILED LOGIN
+    setPassword('');
+
+    // Also clear from localStorage if remembered
+    localStorage.removeItem('rememberedPassword');
+
+    // Set error message
+    setError(errorMessage);
+
+    // 🔧 AUTO FOCUS PASSWORD FIELD AFTER CLEARING
+    setTimeout(() => {
+      const passwordInput = document.getElementById('password');
+      if (passwordInput) {
+        passwordInput.focus();
+      }
+    }, 100);
+
+    // 🔧 SHOW ADDITIONAL HELP AFTER MULTIPLE FAILED ATTEMPTS
+    if (loginAttempts >= 2) {
+      setError(errorMessage + ' Having trouble? Try using the "Forgot Password" option below.');
+    }
+
+    // SHAKE ANIMATION FOR PASSWORD FIELD
+    setTimeout(() => {
+      const passwordInput = document.getElementById('password');
+      if (passwordInput) {
+        passwordInput.classList.add('error-shake');
+        passwordInput.focus();
+
+        // Remove shake class after animation
+        setTimeout(() => {
+          passwordInput.classList.remove('error-shake');
+        }, 500);
+      }
+    }, 100);
   };
 
   const validateInputs = () => {
@@ -283,8 +344,14 @@ export default function LogInCard({ onLogin }) {
           className="RememberMe"
         />
         <ForgotPassword open={open} handleClose={handleClose} />
-        <Button type="submit" fullWidth variant="contained" className="LoginButton">
-          Log In
+        <Button
+          type="submit"
+          fullWidth
+          variant="contained"
+          className="LoginButton"
+          disabled={isLoginAttempting}
+        >
+          {isLoginAttempting ? 'Logging in...' : 'Log In'}
         </Button>
         {error && <Typography color="error">{error}</Typography>}
       </Box>
