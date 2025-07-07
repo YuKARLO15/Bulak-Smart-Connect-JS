@@ -14,16 +14,16 @@ const AdminWalkInDetails = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  
+
   // Format queue number to WK format
-  const formatWKNumber = (queueNumber) => {
+  const formatWKNumber = queueNumber => {
     if (typeof queueNumber === 'string' && queueNumber.startsWith('WK')) {
       return queueNumber;
     }
-    
+
     // Handle null or undefined
     if (!queueNumber) return 'WK000';
-    
+
     const numberPart = queueNumber?.includes('-') ? queueNumber.split('-')[1] : queueNumber;
     const num = parseInt(numberPart, 10) || 0;
     return `WK${String(num).padStart(3, '0')}`;
@@ -36,7 +36,7 @@ const AdminWalkInDetails = () => {
         setLoading(false);
         return;
       }
-      
+
       try {
         setLoading(true);
         const details = await queueService.fetchQueueDetails(id);
@@ -50,10 +50,10 @@ const AdminWalkInDetails = () => {
         setLoading(false);
       }
     };
-    
+
     fetchQueueDetails();
   }, [id]);
-    // Handle queue completion
+  // Handle queue completion
   const handleCompleteQueue = async () => {
     try {
       // Use queueService for consistency
@@ -69,28 +69,32 @@ const AdminWalkInDetails = () => {
 
   if (loading) {
     return (
-      <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh'}}>
+      <div
+        style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}
+      >
         <div className="loading-spinner"></div>
-        <p style={{marginLeft: '12px'}}>Loading queue details...</p>
+        <p style={{ marginLeft: '12px' }}>Loading queue details...</p>
       </div>
     );
   }
-  
+
   if (error) {
     return (
-      <div style={{
-        display: 'flex', 
-        justifyContent: 'center', 
-        alignItems: 'center', 
-        height: '100vh',
-        flexDirection: 'column',
-        color: '#721c24',
-        background: '#f8d7da',
-        padding: '20px',
-        borderRadius: '8px'
-      }}>
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '100vh',
+          flexDirection: 'column',
+          color: '#721c24',
+          background: '#f8d7da',
+          padding: '20px',
+          borderRadius: '8px',
+        }}
+      >
         <p>{error}</p>
-        <button 
+        <button
           onClick={() => navigate(-1)}
           style={{
             marginTop: '16px',
@@ -99,7 +103,7 @@ const AdminWalkInDetails = () => {
             border: 'none',
             padding: '8px 16px',
             borderRadius: '4px',
-            cursor: 'pointer'
+            cursor: 'pointer',
           }}
         >
           Go Back
@@ -107,12 +111,12 @@ const AdminWalkInDetails = () => {
       </div>
     );
   }
-  
+
   // Extract queue data from the response
   const queue = queueDetails?.queue || {};
   const details = queueDetails?.details || {};
   const user = details.user || {};
-  
+
   const walkinNumber = formatWKNumber(queue.queueNumber || queue.id);
   const firstName = details.firstName || user.firstName || queue.firstName || '';
   const lastName = details.lastName || user.lastName || queue.lastName || '';
@@ -124,10 +128,9 @@ const AdminWalkInDetails = () => {
     <div>
       {/* Add NavBar component */}
       <NavBar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
-      
+
       {/* Header Bar */}
       <div className="admin-walkin-details-header-bar">
-        
         <h1 className="admin-walkin-details-header-title">Walk-in Details</h1>
       </div>
 
@@ -169,10 +172,7 @@ const AdminWalkInDetails = () => {
             <button className="admin-walkin-details-cancel-btn" onClick={() => navigate(-1)}>
               Cancel
             </button>
-            <button
-              className="admin-walkin-details-complete-btn"
-              onClick={handleCompleteQueue}
-            >
+            <button className="admin-walkin-details-complete-btn" onClick={handleCompleteQueue}>
               Complete
             </button>
           </div>

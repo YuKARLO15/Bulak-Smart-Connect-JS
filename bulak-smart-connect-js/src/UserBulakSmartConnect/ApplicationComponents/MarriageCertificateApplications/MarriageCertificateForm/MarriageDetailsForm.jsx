@@ -5,13 +5,23 @@ import './MarriageDetailsForm.css';
 const MarriageDetailsForm = ({ formData, handleChange, errors }) => {
   // Create arrays for dropdown options
   const months = [
-    'January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December'
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
   ];
-  
+
   // Days 1-31
   const days = Array.from({ length: 31 }, (_, i) => i + 1);
-  
+
   // Years (current year down to 100 years ago)
   const currentYear = new Date().getFullYear();
   const years = Array.from({ length: 100 }, (_, i) => currentYear - i);
@@ -26,7 +36,9 @@ const MarriageDetailsForm = ({ formData, handleChange, errors }) => {
       <h3>III. MARRIAGE DETAILS</h3>
 
       {/* Place of Marriage */}
-      <label>15. PLACE OF MARRIAGE <span style={{color: 'red'}}>*</span></label>
+      <label>
+        15. PLACE OF MARRIAGE <span style={{ color: 'red' }}>*</span>
+      </label>
       <div className="input-group">
         <div className="input-container">
           <input
@@ -87,7 +99,9 @@ const MarriageDetailsForm = ({ formData, handleChange, errors }) => {
       </div>
 
       {/* Date of Marriage - CONVERTED TO DROPDOWNS */}
-      <label>16. DATE OF MARRIAGE <span style={{color: 'red'}}>*</span></label>
+      <label>
+        16. DATE OF MARRIAGE <span style={{ color: 'red' }}>*</span>
+      </label>
       <div className="input-group">
         <div className="input-container">
           <select
@@ -140,7 +154,9 @@ const MarriageDetailsForm = ({ formData, handleChange, errors }) => {
       </div>
 
       {/* Time of Marriage */}
-      <label>17. TIME OF MARRIAGE<span style={{color: 'red'}}>*</span></label>
+      <label>
+        17. TIME OF MARRIAGE<span style={{ color: 'red' }}>*</span>
+      </label>
       <div className="input-group">
         <div className="input-container">
           <select

@@ -92,7 +92,9 @@
   gap: 10px;
 }
 
-.verify-btn, .resend-btn, .cancel-btn {
+.verify-btn,
+.resend-btn,
+.cancel-btn {
   padding: 12px 20px;
   border: none;
   border-radius: 6px;

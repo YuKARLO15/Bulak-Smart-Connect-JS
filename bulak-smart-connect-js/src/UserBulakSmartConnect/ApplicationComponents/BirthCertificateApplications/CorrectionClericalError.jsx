@@ -1,6 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Box, Button, Checkbox, FormControlLabel, Grid, Typography, Alert, Paper, Snackbar, CircularProgress, Tooltip } from '@mui/material';
+import {
+  Box,
+  Button,
+  Checkbox,
+  FormControlLabel,
+  Grid,
+  Typography,
+  Alert,
+  Paper,
+  Snackbar,
+  CircularProgress,
+  Tooltip,
+} from '@mui/material';
 import FileUpload from '../FileUpload';
 import NavBar from '../../../NavigationComponents/NavSide';
 import './CorrectionClericalError.css';
@@ -22,10 +34,7 @@ const fileCategories = [
 ];
 
 // Add mandatory and supporting document categories
-const mandatoryDocuments = [
-  'PSA copy of wrong document',
-  'MCR copy of wrong document'
-];
+const mandatoryDocuments = ['PSA copy of wrong document', 'MCR copy of wrong document'];
 
 const supportingDocuments = [
   'Church record document owner & relatives',
@@ -55,7 +64,7 @@ const GovernmentIdTooltip = ({ children }) => {
     'TIN ID',
     'PhilHealth ID',
     'Pag-IBIG Loyalty Card Plus',
-    'Indigenous Peoples (IP) ID or certification'
+    'Indigenous Peoples (IP) ID or certification',
   ];
 
   return (
@@ -78,34 +87,47 @@ const GovernmentIdTooltip = ({ children }) => {
         '& .MuiTooltip-tooltip': {
           maxWidth: 300,
           backgroundColor: 'rgba(0, 0, 0, 0.9)',
-        }
+        },
       }}
     >
-      <span style={{ 
-        textDecoration: 'underline', 
-        cursor: 'pointer',
-        color: '#1976d2',
-        fontWeight: 'bold'
-      }}>
+      <span
+        style={{
+          textDecoration: 'underline',
+          cursor: 'pointer',
+          color: '#1976d2',
+          fontWeight: 'bold',
+        }}
+      >
         {children}
       </span>
     </Tooltip>
   );
 };
 const documentDescriptions = {
-  'PSA copy of wrong document': '- Official PSA certified true copy of the birth certificate containing the clerical error',
-  'MCR copy of wrong document': '- Municipal Civil Registry Office certified true copy of the birth certificate containing the clerical error',
-  'Church record document owner & relatives': '- Baptismal certificate or other church records of the document owner showing the correct details',
-  'School record document owner & relatives': '- Official school records, transcripts, or enrollment documents of the document owner with the correct details',
-  'Marriage certificate document owner (if married) & relatives': '- Official marriage certificate of the document owner (if applicable) and relatives displaying the correct details',
-  'Birth certificate document owner & relatives': '- Birth certificates of the document owner showing the correct details',
-  'Comelec record document owner & relatives': '- Voter registration records or voter ID of the document owner with the correct details',
-  'Identification cards':
-    (<> <GovernmentIdTooltip>  Government-issued identification cards </GovernmentIdTooltip> showing the correct details </> ) ,
-  'Others': '- Additional supporting documents such as insurance records, employment certificates, or other official documents with the correct details'
+  'PSA copy of wrong document':
+    '- Official PSA certified true copy of the birth certificate containing the clerical error',
+  'MCR copy of wrong document':
+    '- Municipal Civil Registry Office certified true copy of the birth certificate containing the clerical error',
+  'Church record document owner & relatives':
+    '- Baptismal certificate or other church records of the document owner showing the correct details',
+  'School record document owner & relatives':
+    '- Official school records, transcripts, or enrollment documents of the document owner with the correct details',
+  'Marriage certificate document owner (if married) & relatives':
+    '- Official marriage certificate of the document owner (if applicable) and relatives displaying the correct details',
+  'Birth certificate document owner & relatives':
+    '- Birth certificates of the document owner showing the correct details',
+  'Comelec record document owner & relatives':
+    '- Voter registration records or voter ID of the document owner with the correct details',
+  'Identification cards': (
+    <>
+      {' '}
+      <GovernmentIdTooltip> Government-issued identification cards </GovernmentIdTooltip> showing
+      the correct details{' '}
+    </>
+  ),
+  Others:
+    '- Additional supporting documents such as insurance records, employment certificates, or other official documents with the correct details',
 };
-
-
 
 const CorrectionClericalError = () => {
   const navigate = useNavigate();
@@ -127,9 +149,9 @@ const CorrectionClericalError = () => {
   const [applicationId, setApplicationId] = useState(null);
   const [backendApplicationCreated, setBackendApplicationCreated] = useState(false);
   const [uploadedDocumentsCount, setUploadedDocumentsCount] = useState(0);
-  
-  const isEditing = location.state?.isEditing || 
-                    localStorage.getItem('isEditingBirthApplication') === 'true';
+
+  const isEditing =
+    location.state?.isEditing || localStorage.getItem('isEditingBirthApplication') === 'true';
 
   const { user } = useAuth(); // Get authenticated user for email
 
@@ -138,7 +160,7 @@ const CorrectionClericalError = () => {
     setSnackbar({
       open: true,
       message,
-      severity
+      severity,
     });
   };
 
@@ -150,18 +172,18 @@ const CorrectionClericalError = () => {
   // Create application in backend
   const createBackendApplication = async () => {
     try {
-      console.log("Creating application in backend...");
-      
+      console.log('Creating application in backend...');
+
       // Get current application ID from localStorage or create a new one
       const currentId = localStorage.getItem('currentApplicationId');
       let appId = currentId;
-      
+
       if (!appId) {
         appId = 'BC-' + Date.now().toString().slice(-6);
-        console.log("Generated new application ID:", appId);
+        console.log('Generated new application ID:', appId);
         localStorage.setItem('currentApplicationId', appId);
       }
-      
+
       setApplicationId(appId);
 
       // Prepare data for backend
@@ -169,28 +191,31 @@ const CorrectionClericalError = () => {
         applicationType: 'Birth Certificate',
         applicationSubtype: 'Correction - Clerical Errors',
         applicantName: `${formData.firstName || ''} ${formData.lastName || ''}`,
-        applicantDetails: JSON.stringify({...formData, correctionOptions: selectedOptions}),
-        formData: {...formData, correctionOptions: selectedOptions},
-        status: 'PENDING'
+        applicantDetails: JSON.stringify({ ...formData, correctionOptions: selectedOptions }),
+        formData: { ...formData, correctionOptions: selectedOptions },
+        status: 'PENDING',
       };
 
-      console.log("Creating application with data:", backendApplicationData);
-      
+      console.log('Creating application with data:', backendApplicationData);
+
       // Call API to create application
       const response = await documentApplicationService.createApplication(backendApplicationData);
-      console.log("Backend created application:", response);
-      
+      console.log('Backend created application:', response);
+
       // Store the backend ID
       if (response && response.id) {
         localStorage.setItem('currentApplicationId', response.id);
         setApplicationId(response.id);
         setBackendApplicationCreated(true);
       }
-      
+
       return response;
     } catch (error) {
-      console.error("Failed to create application in backend:", error);
-      showNotification(`Failed to register application: ${error.message}. Please try again.`, "error");
+      console.error('Failed to create application in backend:', error);
+      showNotification(
+        `Failed to register application: ${error.message}. Please try again.`,
+        'error'
+      );
       return null;
     }
   };
@@ -207,34 +232,34 @@ const CorrectionClericalError = () => {
     const loadData = async () => {
       try {
         setIsInitializing(true);
-        
+
         // Load application data
         if (isEditing) {
-          console.log("Loading data for editing...");
+          console.log('Loading data for editing...');
           const editingId = localStorage.getItem('editingApplicationId');
-          console.log("Editing application ID:", editingId);
-          
+          console.log('Editing application ID:', editingId);
+
           if (editingId) {
             setApplicationId(editingId);
-            
+
             // Check if this application exists in backend
             try {
               const backendApp = await documentApplicationService.getApplication(editingId);
               if (backendApp) {
                 setBackendApplicationCreated(true);
-                console.log("Application exists in backend:", backendApp);
+                console.log('Application exists in backend:', backendApp);
               }
             } catch (error) {
-              console.warn("Application may not exist in backend:", error);
+              console.warn('Application may not exist in backend:', error);
             }
           }
-          
+
           // Get applications from localStorage
           const applications = JSON.parse(localStorage.getItem('applications') || '[]');
           const applicationToEdit = applications.find(app => app.id === editingId);
-          
+
           if (applicationToEdit) {
-            console.log("Found application to edit:", applicationToEdit);
+            console.log('Found application to edit:', applicationToEdit);
             if (applicationToEdit.formData && applicationToEdit.formData.correctionOptions) {
               setSelectedOptions(applicationToEdit.formData.correctionOptions);
             }
@@ -256,7 +281,7 @@ const CorrectionClericalError = () => {
               if (parsedData.uploadedFiles) {
                 setUploadedFiles(parsedData.uploadedFiles || {});
               }
-              console.log("Loaded form data from birthCertificateApplication");
+              console.log('Loaded form data from birthCertificateApplication');
             }
           }
         } else {
@@ -264,29 +289,29 @@ const CorrectionClericalError = () => {
           const currentId = localStorage.getItem('currentApplicationId');
           if (currentId) {
             setApplicationId(currentId);
-            
+
             // Check if this application exists in backend
             try {
               const backendApp = await documentApplicationService.getApplication(currentId);
               if (backendApp) {
                 setBackendApplicationCreated(true);
-                console.log("Application exists in backend:", backendApp);
+                console.log('Application exists in backend:', backendApp);
               }
             } catch (error) {
-              console.warn("Application may not exist in backend:", error);
-              
+              console.warn('Application may not exist in backend:', error);
+
               // If we have form data but no backend application, automatically create it
               const currentApplicationData = localStorage.getItem('birthCertificateApplication');
               if (currentApplicationData) {
                 const parsedData = JSON.parse(currentApplicationData);
                 setFormData(parsedData);
-                
+
                 // Auto-create backend application if needed
                 await createBackendApplication();
               }
             }
           }
-          
+
           const currentApplicationData = localStorage.getItem('birthCertificateApplication');
           if (currentApplicationData) {
             const parsedData = JSON.parse(currentApplicationData);
@@ -299,23 +324,23 @@ const CorrectionClericalError = () => {
             }
           }
         }
-        
+
         // Check storage usage
         const usage = localStorageManager.getCurrentUsage();
         console.log(`📊 Current storage usage: ${usage.percentage.toFixed(1)}%`);
-        
+
         if (usage.isNearFull) {
           console.warn('⚠️ localStorage is getting full, performing cleanup...');
           await localStorageManager.performCleanup(0.2);
         }
       } catch (error) {
-        console.error("Error during initialization:", error);
-        showNotification("Error loading application data", "error");
+        console.error('Error during initialization:', error);
+        showNotification('Error loading application data', 'error');
       } finally {
         setIsInitializing(false);
       }
     };
-    
+
     loadData();
   }, [isEditing]);
 
@@ -342,155 +367,161 @@ const CorrectionClericalError = () => {
       ...prev,
       [name]: checked,
     }));
-    
+
     // Update formData with selected options
     setFormData(prev => ({
       ...prev,
       correctionOptions: {
-        ...prev.correctionOptions || {},
-        [name]: checked
-      }
+        ...(prev.correctionOptions || {}),
+        [name]: checked,
+      },
     }));
   };
 
   const handleFileUpload = async (label, isUploaded, fileDataObj) => {
-      // Create application if needed before uploading files
-      if (!backendApplicationCreated && isUploaded) {
-        setIsLoading(true);
-        const createdApp = await createBackendApplication();
-        setIsLoading(false);
-        
-        if (!createdApp) {
-          showNotification("Failed to register application. Cannot upload files.", "error");
+    // Create application if needed before uploading files
+    if (!backendApplicationCreated && isUploaded) {
+      setIsLoading(true);
+      const createdApp = await createBackendApplication();
+      setIsLoading(false);
+
+      if (!createdApp) {
+        showNotification('Failed to register application. Cannot upload files.', 'error');
+        return;
+      }
+    }
+
+    // Update the uploadedFiles state
+    setUploadedFiles(prevState => {
+      const newState = { ...prevState, [label]: isUploaded };
+      console.log('Updated uploadedFiles:', newState);
+      return newState;
+    });
+
+    if (isUploaded && fileDataObj) {
+      setFileData(prevState => ({
+        ...prevState,
+        [label]: fileDataObj,
+      }));
+
+      // === Upload to backend ===
+      try {
+        const currentAppId = applicationId || localStorage.getItem('currentApplicationId');
+        if (!currentAppId) {
+          showNotification('Application ID is missing. Cannot upload file.', 'error');
           return;
         }
-      }
-      
-      // Update the uploadedFiles state
-      setUploadedFiles(prevState => {
-        const newState = { ...prevState, [label]: isUploaded };
-        console.log("Updated uploadedFiles:", newState);
-        return newState;
-      });
-  
-      if (isUploaded && fileDataObj) {
-        setFileData(prevState => ({
-          ...prevState,
-          [label]: fileDataObj,
-        }));
-  
-        // === Upload to backend ===
-        try {
-          const currentAppId = applicationId || localStorage.getItem('currentApplicationId');
-          if (!currentAppId) {
-            showNotification("Application ID is missing. Cannot upload file.", "error");
-            return;
-          }
-          
-          console.log("Application ID:", currentAppId);
-          
-          // Handle multiple files (array) or single file (object)
-          const filesToUpload = Array.isArray(fileDataObj) ? fileDataObj : [fileDataObj];
-          
-          for (const [index, fileData] of filesToUpload.entries()) {
-            console.log(`Uploading file ${index + 1}:`, fileData.name);
-            
-            const file = dataURLtoFile(fileData.data, fileData.name, fileData.type);
-            
-            // For multiple files, append index to label
-            const uploadLabel = filesToUpload.length > 1 ? `${label} - File ${index + 1}` : label;
-            
-            const response = await documentApplicationService.uploadFile(currentAppId, file, uploadLabel);
-            console.log(`Upload response for ${fileData.name}:`, response);
-          }
-          
-          const fileCount = filesToUpload.length;
-          const successMessage = fileCount > 1 
+
+        console.log('Application ID:', currentAppId);
+
+        // Handle multiple files (array) or single file (object)
+        const filesToUpload = Array.isArray(fileDataObj) ? fileDataObj : [fileDataObj];
+
+        for (const [index, fileData] of filesToUpload.entries()) {
+          console.log(`Uploading file ${index + 1}:`, fileData.name);
+
+          const file = dataURLtoFile(fileData.data, fileData.name, fileData.type);
+
+          // For multiple files, append index to label
+          const uploadLabel = filesToUpload.length > 1 ? `${label} - File ${index + 1}` : label;
+
+          const response = await documentApplicationService.uploadFile(
+            currentAppId,
+            file,
+            uploadLabel
+          );
+          console.log(`Upload response for ${fileData.name}:`, response);
+        }
+
+        const fileCount = filesToUpload.length;
+        const successMessage =
+          fileCount > 1
             ? `${fileCount} files uploaded successfully for "${label}"!`
             : `"${label}" uploaded successfully!`;
-          
-          showNotification(successMessage, "success");
-          
-        } catch (error) {
-          console.error(`Failed to upload "${label}":`, error);
-          
-          // Show detailed error information
-          if (error.response) {
-            console.error("Server response:", error.response.status, error.response.data);
-            
-            // If error is 404 (application not found), try to create it and retry upload
-            if (error.response.status === 404) {
-              showNotification("Application not found. Creating new application...", "info");
-              const createdApp = await createBackendApplication();
-              if (createdApp) {
-                // Retry upload for all files
-                try {
-                  const filesToUpload = Array.isArray(fileDataObj) ? fileDataObj : [fileDataObj];
-                  
-                  for (const [index, fileData] of filesToUpload.entries()) {
-                    const file = dataURLtoFile(fileData.data, fileData.name, fileData.type);
-                    const uploadLabel = filesToUpload.length > 1 ? `${label} - File ${index + 1}` : label;
-                    
-                    const retryResponse = await documentApplicationService.uploadFile(
-                      createdApp.id, 
-                      file, 
-                      uploadLabel
-                    );
-                    console.log(`Retry upload response for ${fileData.name}:`, retryResponse);
-                  }
-                  
-                  const fileCount = filesToUpload.length;
-                  const successMessage = fileCount > 1 
+
+        showNotification(successMessage, 'success');
+      } catch (error) {
+        console.error(`Failed to upload "${label}":`, error);
+
+        // Show detailed error information
+        if (error.response) {
+          console.error('Server response:', error.response.status, error.response.data);
+
+          // If error is 404 (application not found), try to create it and retry upload
+          if (error.response.status === 404) {
+            showNotification('Application not found. Creating new application...', 'info');
+            const createdApp = await createBackendApplication();
+            if (createdApp) {
+              // Retry upload for all files
+              try {
+                const filesToUpload = Array.isArray(fileDataObj) ? fileDataObj : [fileDataObj];
+
+                for (const [index, fileData] of filesToUpload.entries()) {
+                  const file = dataURLtoFile(fileData.data, fileData.name, fileData.type);
+                  const uploadLabel =
+                    filesToUpload.length > 1 ? `${label} - File ${index + 1}` : label;
+
+                  const retryResponse = await documentApplicationService.uploadFile(
+                    createdApp.id,
+                    file,
+                    uploadLabel
+                  );
+                  console.log(`Retry upload response for ${fileData.name}:`, retryResponse);
+                }
+
+                const fileCount = filesToUpload.length;
+                const successMessage =
+                  fileCount > 1
                     ? `${fileCount} files uploaded successfully for "${label}"!`
                     : `"${label}" uploaded successfully!`;
-                  
-                  showNotification(successMessage, "success");
-                  return;
-                } catch (retryError) {
-                  console.error("Retry upload failed:", retryError);
-                }
+
+                showNotification(successMessage, 'success');
+                return;
+              } catch (retryError) {
+                console.error('Retry upload failed:', retryError);
               }
             }
-            
-            showNotification(`Failed to upload "${label}": ${error.response.data?.message || error.message}`, "error");
-          } else {
-            showNotification(`Failed to upload "${label}": ${error.message}`, "error");
           }
-          
-          // Revert the upload state on error
-          setUploadedFiles(prevState => ({
-            ...prevState,
-            [label]: false,
-          }));
-        }
-      } else {
-        setFileData(prevState => {
-          const newState = { ...prevState };
-          delete newState[label];
-          return newState;
-        });
-      }
-    };
-  
 
- const isAnyOptionSelected = Object.values(selectedOptions).some(val => val);
-  
+          showNotification(
+            `Failed to upload "${label}": ${error.response.data?.message || error.message}`,
+            'error'
+          );
+        } else {
+          showNotification(`Failed to upload "${label}": ${error.message}`, 'error');
+        }
+
+        // Revert the upload state on error
+        setUploadedFiles(prevState => ({
+          ...prevState,
+          [label]: false,
+        }));
+      }
+    } else {
+      setFileData(prevState => {
+        const newState = { ...prevState };
+        delete newState[label];
+        return newState;
+      });
+    }
+  };
+
+  const isAnyOptionSelected = Object.values(selectedOptions).some(val => val);
 
   const areMandatoryDocumentsUploaded = mandatoryDocuments.every(doc => uploadedFiles[doc]);
-    const canSubmit = isAnyOptionSelected && areMandatoryDocumentsUploaded;
+  const canSubmit = isAnyOptionSelected && areMandatoryDocumentsUploaded;
 
-
-  const mapStatusForBackend = (frontendStatus) => {
+  const mapStatusForBackend = frontendStatus => {
     const statusMap = {
-      'Submitted': 'Pending',
-      'SUBMITTED': 'Pending',
-      'Pending': 'Pending',
-      'Approved': 'Approved',
-      'Rejected': 'Rejected',
-      'Declined': 'Rejected',
-      'Ready for Pickup': 'Ready for Pickup'
+      Submitted: 'Pending',
+      SUBMITTED: 'Pending',
+      Pending: 'Pending',
+      Approved: 'Approved',
+      Rejected: 'Rejected',
+      Declined: 'Rejected',
+      'Ready for Pickup': 'Ready for Pickup',
     };
-    
+
     return statusMap[frontendStatus] || 'Pending';
   };
 
@@ -498,12 +529,12 @@ const CorrectionClericalError = () => {
     try {
       setIsLoading(true);
       setIsSubmitted(true);
-      
+
       // Get the application ID
       const currentAppId = applicationId || localStorage.getItem('currentApplicationId');
       if (!currentAppId) {
-        console.error("No application ID found");
-        showNotification("Application ID is missing. Cannot proceed.", "error");
+        console.error('No application ID found');
+        showNotification('Application ID is missing. Cannot proceed.', 'error');
         setIsLoading(false);
         setIsSubmitted(false);
         return;
@@ -523,16 +554,22 @@ const CorrectionClericalError = () => {
         applicantName: `${formData.firstName || ''} ${formData.lastName || ''}`,
         applicationType: 'Birth Certificate',
         applicationSubtype: 'Correction - Clerical Errors',
-        correctionOptions: selectedOptions
+        correctionOptions: selectedOptions,
       };
-      
+
       // Update the backend application
       try {
-        const response = await documentApplicationService.updateApplication(currentAppId, backendData);
+        const response = await documentApplicationService.updateApplication(
+          currentAppId,
+          backendData
+        );
         console.log('Application status updated in backend:', response);
       } catch (error) {
         console.error('Failed to update backend status:', error);
-        showNotification("Warning: Failed to update backend status. Continuing with local update.", "warning");
+        showNotification(
+          'Warning: Failed to update backend status. Continuing with local update.',
+          'warning'
+        );
         // Continue with local update even if backend fails
       }
 
@@ -542,7 +579,7 @@ const CorrectionClericalError = () => {
         uploadedFiles: fileData,
         correctionOptions: selectedOptions,
         status: 'Pending',
-        submittedAt: new Date().toISOString()
+        submittedAt: new Date().toISOString(),
       };
 
       // Get current applications
@@ -555,19 +592,19 @@ const CorrectionClericalError = () => {
           ...applications[appIndex],
           formData: {
             ...applications[appIndex].formData,
-            ...updatedFormData
+            ...updatedFormData,
           },
           uploadedFiles: fileData,
           correctionOptions: selectedOptions,
           status: 'Pending',
-          lastUpdated: new Date().toISOString()
+          lastUpdated: new Date().toISOString(),
         };
       } else {
         // If not found, add as new application
         applications.push({
           id: currentAppId,
           type: 'Birth Certificate',
-          applicationType: 'Correction',  
+          applicationType: 'Correction',
           applicationSubtype: 'Correction - Clerical Errors',
           date: new Date().toLocaleDateString(),
           status: 'Pending',
@@ -575,40 +612,45 @@ const CorrectionClericalError = () => {
           formData: updatedFormData,
           uploadedFiles: fileData,
           correctionOptions: selectedOptions,
-          lastUpdated: new Date().toISOString()
+          lastUpdated: new Date().toISOString(),
         });
       }
 
       // Use safe storage methods
       const applicationsStored = await localStorageManager.safeSetItem(
-        'applications', 
+        'applications',
         JSON.stringify(applications)
       );
-      
+
       const formDataStored = await localStorageManager.safeSetItem(
-        'birthCertificateApplication', 
+        'birthCertificateApplication',
         JSON.stringify(updatedFormData)
       );
 
       if (!applicationsStored || !formDataStored) {
-        showNotification('Application submitted successfully! Note: Some data may not be saved locally due to storage limitations.', 'warning');
+        showNotification(
+          'Application submitted successfully! Note: Some data may not be saved locally due to storage limitations.',
+          'warning'
+        );
       } else {
         showNotification('Application submitted successfully!', 'success');
       }
 
       // Dispatch storage events
       window.dispatchEvent(new Event('storage'));
-      window.dispatchEvent(new CustomEvent('customStorageUpdate', {
-        detail: {
-          id: currentAppId,
-          action: 'updated',
-          type: 'Birth Certificate',
-          subtype: 'Correction - Clerical Errors'
-        }
-      }));
+      window.dispatchEvent(
+        new CustomEvent('customStorageUpdate', {
+          detail: {
+            id: currentAppId,
+            action: 'updated',
+            type: 'Birth Certificate',
+            subtype: 'Correction - Clerical Errors',
+          },
+        })
+      );
 
       console.log('Application submitted successfully');
-      
+
       // Navigate to summary page after a short delay
       setTimeout(() => {
         navigate('/BirthApplicationSummary');
@@ -619,37 +661,49 @@ const CorrectionClericalError = () => {
       if (userEmail) {
         try {
           console.log('📧 Sending application confirmation notification to:', userEmail);
-          const notificationResult = await documentApplicationNotificationService.sendApplicationConfirmation(
-            userEmail,
-            currentAppId,
-            {
-              type: 'Birth Certificate',
-              subtype: 'Correction - Clerical Errors',
-              applicantName: `${formData.firstName || ''} ${formData.lastName || ''}`.trim(),
-              submissionDate: new Date().toLocaleDateString(),
-              status: 'Pending'
-            }
-          );
+          const notificationResult =
+            await documentApplicationNotificationService.sendApplicationConfirmation(
+              userEmail,
+              currentAppId,
+              {
+                type: 'Birth Certificate',
+                subtype: 'Correction - Clerical Errors',
+                applicantName: `${formData.firstName || ''} ${formData.lastName || ''}`.trim(),
+                submissionDate: new Date().toLocaleDateString(),
+                status: 'Pending',
+              }
+            );
 
           if (notificationResult.success) {
             console.log('✅ Confirmation notification sent successfully');
-            showNotification('Application submitted successfully! A confirmation email has been sent to you.', 'success');
+            showNotification(
+              'Application submitted successfully! A confirmation email has been sent to you.',
+              'success'
+            );
           } else {
             console.log('⚠️ Confirmation notification failed:', notificationResult.error);
-            showNotification('Application submitted successfully! However, we could not send the confirmation email.', 'warning');
+            showNotification(
+              'Application submitted successfully! However, we could not send the confirmation email.',
+              'warning'
+            );
           }
         } catch (notificationError) {
           console.error('❌ Error sending confirmation notification:', notificationError);
-          showNotification('Application submitted successfully! However, we could not send the confirmation email.', 'warning');
+          showNotification(
+            'Application submitted successfully! However, we could not send the confirmation email.',
+            'warning'
+          );
         }
       } else {
         console.log('⚠️ No email available for notifications');
-        showNotification('Application submitted successfully! No confirmation email will be sent as no email was found.', 'success');
+        showNotification(
+          'Application submitted successfully! No confirmation email will be sent as no email was found.',
+          'success'
+        );
       }
-
     } catch (error) {
       console.error('Error submitting application:', error);
-      showNotification(`Error submitting application: ${error.message}`, "error");
+      showNotification(`Error submitting application: ${error.message}`, 'error');
       setIsLoading(false);
       setIsSubmitted(false);
     } finally {
@@ -705,8 +759,12 @@ const CorrectionClericalError = () => {
             </Grid>
           </Box>
 
-             <Box sx={{ marginBottom: 3 }}>
-            <Typography className="SectionTitleClerical" variant="h6" sx={{ mb: 2, fontWeight: 'bold' }}>
+          <Box sx={{ marginBottom: 3 }}>
+            <Typography
+              className="SectionTitleClerical"
+              variant="h6"
+              sx={{ mb: 2, fontWeight: 'bold' }}
+            >
               Mandatory Documents:
             </Typography>
             {mandatoryDocuments.map((category, index) => (
@@ -714,7 +772,7 @@ const CorrectionClericalError = () => {
                 key={`mandatory-${index}`}
                 label={category}
                 description={documentDescriptions[category]}
-                onUpload={(isUploaded, fileDataObj) => 
+                onUpload={(isUploaded, fileDataObj) =>
                   handleFileUpload(category, isUploaded, fileDataObj)
                 }
                 required={true}
@@ -722,11 +780,18 @@ const CorrectionClericalError = () => {
                 multiple={true}
               />
             ))}
-            
-            <Typography className="SectionTitleClerical" variant="h6" sx={{ mt: 4, mb: 2, fontWeight: 'bold' }}>
+
+            <Typography
+              className="SectionTitleClerical"
+              variant="h6"
+              sx={{ mt: 4, mb: 2, fontWeight: 'bold' }}
+            >
               Supporting Documents (Optional):
             </Typography>
-            <Typography variant="body2" sx={{ mb: 2, color: 'text.secondary', fontStyle: 'italic' }}>
+            <Typography
+              variant="body2"
+              sx={{ mb: 2, color: 'text.secondary', fontStyle: 'italic' }}
+            >
               Upload any of the following supporting documents to strengthen your application:
             </Typography>
             {supportingDocuments.map((category, index) => (
@@ -734,7 +799,7 @@ const CorrectionClericalError = () => {
                 key={`supporting-${index}`}
                 label={category}
                 description={documentDescriptions[category]}
-                onUpload={(isUploaded, fileDataObj) => 
+                onUpload={(isUploaded, fileDataObj) =>
                   handleFileUpload(category, isUploaded, fileDataObj)
                 }
                 required={false}
@@ -743,7 +808,6 @@ const CorrectionClericalError = () => {
               />
             ))}
           </Box>
-
 
           <Box className="ImpotantNotesClerical">
             <Typography variant="h6" className="ImportantNote">
@@ -767,115 +831,106 @@ const CorrectionClericalError = () => {
           )}
 
           <Box className="ButtonContainerClerical">
- <Button
-    variant="outlined"
-    color="primary"
-    onClick={() => {
- 
-      const modifyApplicationState = {
-       
-        applicationId: applicationId,
-        isEditing: true, 
-        editingApplicationId: applicationId,
-        
-    
-        formData: {
-          ...formData,
-          correctionOptions: selectedOptions,
-          uploadedFiles: uploadedFiles,
-          fileData: fileData,
-          lastModified: new Date().toISOString()
-        },
-        
-       
-        uploadedFiles: uploadedFiles,
-        fileData: fileData,
-        
+            <Button
+              variant="outlined"
+              color="primary"
+              onClick={() => {
+                const modifyApplicationState = {
+                  applicationId: applicationId,
+                  isEditing: true,
+                  editingApplicationId: applicationId,
 
-        correctionOptions: selectedOptions,
-        
-  
-        modifyMode: true,
-        preserveData: true,
-        backFromCorrection: true,
-        correctionType: 'Clerical Errors'
-      };
+                  formData: {
+                    ...formData,
+                    correctionOptions: selectedOptions,
+                    uploadedFiles: uploadedFiles,
+                    fileData: fileData,
+                    lastModified: new Date().toISOString(),
+                  },
 
- 
-      try {
-       
-        localStorage.setItem('birthCertificateApplication', JSON.stringify(modifyApplicationState.formData));
-        
-   
-        localStorage.setItem('isEditingBirthApplication', 'true');
-        localStorage.setItem('editingApplicationId', applicationId);
-        localStorage.setItem('currentApplicationId', applicationId);
-        
-   
-        localStorage.setItem('modifyingApplication', JSON.stringify({
-          id: applicationId,
-          type: 'Birth Certificate - Correction',
-          correctionType: 'Clerical Errors',
-          correctionOptions: selectedOptions,
-          uploadedFiles: uploadedFiles,
-          timestamp: new Date().toISOString()
-        }));
+                  uploadedFiles: uploadedFiles,
+                  fileData: fileData,
 
-  
-        const applications = JSON.parse(localStorage.getItem('applications') || '[]');
-        const appIndex = applications.findIndex(app => app.id === applicationId);
-        
-        if (appIndex >= 0) {
- 
-          applications[appIndex] = {
-            ...applications[appIndex],
-            formData: modifyApplicationState.formData,
-            uploadedFiles: uploadedFiles,
-            correctionOptions: selectedOptions,
-            status: applications[appIndex].status || 'In Progress',
-            lastModified: new Date().toISOString(),
-            isBeingModified: true
-          };
-          
-          localStorage.setItem('applications', JSON.stringify(applications));
-        }
+                  correctionOptions: selectedOptions,
 
-        console.log('Navigating back with modify state:', modifyApplicationState);
-        
-   
-        navigate('/RequestACopyBirthCertificate', { 
-          state: modifyApplicationState,
-          replace: false 
-        });
-        
-      } catch (error) {
-        console.error('Error saving modify state:', error);
-        showNotification('Error saving current state: ' + error.message, 'warning');
-        
-        
-        navigate('/RequestACopyBirthCertificate', { 
-          state: { 
-            applicationId: applicationId,
-            isEditing: true,
-            editingApplicationId: applicationId,
-            formData: formData
-          } 
-        });
-      }
-    }}
-    className="BackButtonClerical"
-    disabled={isLoading}
-  >
-    Back
-  </Button>
+                  modifyMode: true,
+                  preserveData: true,
+                  backFromCorrection: true,
+                  correctionType: 'Clerical Errors',
+                };
+
+                try {
+                  localStorage.setItem(
+                    'birthCertificateApplication',
+                    JSON.stringify(modifyApplicationState.formData)
+                  );
+
+                  localStorage.setItem('isEditingBirthApplication', 'true');
+                  localStorage.setItem('editingApplicationId', applicationId);
+                  localStorage.setItem('currentApplicationId', applicationId);
+
+                  localStorage.setItem(
+                    'modifyingApplication',
+                    JSON.stringify({
+                      id: applicationId,
+                      type: 'Birth Certificate - Correction',
+                      correctionType: 'Clerical Errors',
+                      correctionOptions: selectedOptions,
+                      uploadedFiles: uploadedFiles,
+                      timestamp: new Date().toISOString(),
+                    })
+                  );
+
+                  const applications = JSON.parse(localStorage.getItem('applications') || '[]');
+                  const appIndex = applications.findIndex(app => app.id === applicationId);
+
+                  if (appIndex >= 0) {
+                    applications[appIndex] = {
+                      ...applications[appIndex],
+                      formData: modifyApplicationState.formData,
+                      uploadedFiles: uploadedFiles,
+                      correctionOptions: selectedOptions,
+                      status: applications[appIndex].status || 'In Progress',
+                      lastModified: new Date().toISOString(),
+                      isBeingModified: true,
+                    };
+
+                    localStorage.setItem('applications', JSON.stringify(applications));
+                  }
+
+                  console.log('Navigating back with modify state:', modifyApplicationState);
+
+                  navigate('/RequestACopyBirthCertificate', {
+                    state: modifyApplicationState,
+                    replace: false,
+                  });
+                } catch (error) {
+                  console.error('Error saving modify state:', error);
+                  showNotification('Error saving current state: ' + error.message, 'warning');
+
+                  navigate('/RequestACopyBirthCertificate', {
+                    state: {
+                      applicationId: applicationId,
+                      isEditing: true,
+                      editingApplicationId: applicationId,
+                      formData: formData,
+                    },
+                  });
+                }
+              }}
+              className="BackButtonClerical"
+              disabled={isLoading}
+            >
+              Back
+            </Button>
             <Button
               variant="contained"
               color="primary"
-              disabled={!canSubmit|| isLoading || isSubmitted}
+              disabled={!canSubmit || isLoading || isSubmitted}
               onClick={handleSubmit}
               className="SubmitButtonClerical"
             >
-              {isLoading ? "Submitting..." : "Submit Application"}
+              {isLoading ? 'Submitting...' : 'Submit Application'}
             </Button>
           </Box>
         </Paper>
@@ -888,11 +943,7 @@ const CorrectionClericalError = () => {
         onClose={handleCloseSnackbar}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
       >
-        <Alert 
-          onClose={handleCloseSnackbar} 
-          severity={snackbar.severity}
-          variant="filled"
-        >
+        <Alert onClose={handleCloseSnackbar} severity={snackbar.severity} variant="filled">
           {snackbar.message}
         </Alert>
       </Snackbar>

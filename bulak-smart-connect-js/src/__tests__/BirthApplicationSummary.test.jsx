@@ -18,7 +18,7 @@ const MockBirthApplicationSummary = ({ mockData = null, shouldTimeout = false })
 
       // Always call localStorage.getItem to simulate real behavior
       const storedData = window.localStorage.getItem('applications');
-      
+
       if (mockData) {
         setData(mockData);
         setLoading(false);
@@ -79,12 +79,8 @@ vi.mock('../context/AuthContext', () => ({
   }),
 }));
 
-const renderWithRouter = (component) => {
-  return render(
-    <BrowserRouter>
-      {component}
-    </BrowserRouter>
-  );
+const renderWithRouter = component => {
+  return render(<BrowserRouter>{component}</BrowserRouter>);
 };
 
 describe('BirthApplicationSummary', () => {
@@ -99,14 +95,14 @@ describe('BirthApplicationSummary', () => {
         fullName: 'John Doe',
         dateOfBirth: '1990-01-01',
         placeOfBirth: 'Bulak',
-        certificateType: 'birth'
+        certificateType: 'birth',
       },
       status: 'pending',
-      submittedAt: new Date().toISOString()
+      submittedAt: new Date().toISOString(),
     };
 
     renderWithRouter(<MockBirthApplicationSummary mockData={mockAppData} />);
-    
+
     await waitFor(() => {
       expect(screen.getByText(/birth certificate application summary/i)).toBeInTheDocument();
     });
@@ -114,19 +110,19 @@ describe('BirthApplicationSummary', () => {
 
   it('loads application data from localStorage', async () => {
     renderWithRouter(<MockBirthApplicationSummary mockData={{ id: 'test-123' }} />);
-    
+
     // Wait for the component to finish loading and call localStorage
     await waitFor(() => {
       expect(screen.getByText(/birth certificate application summary/i)).toBeInTheDocument();
     });
-    
+
     // localStorage.getItem should have been called during the effect
     expect(mockLocalStorage.getItem).toHaveBeenCalledWith('applications');
   });
 
   it('handles missing application data gracefully', async () => {
     renderWithRouter(<MockBirthApplicationSummary mockData={null} />);
-    
+
     await waitFor(() => {
       expect(screen.getByText(/no application id found/i)).toBeInTheDocument();
     });
@@ -134,7 +130,7 @@ describe('BirthApplicationSummary', () => {
 
   it('displays loading state initially', () => {
     renderWithRouter(<MockBirthApplicationSummary shouldTimeout={true} />);
-    
+
     expect(screen.getByText(/loading/i)).toBeInTheDocument();
   });
 });

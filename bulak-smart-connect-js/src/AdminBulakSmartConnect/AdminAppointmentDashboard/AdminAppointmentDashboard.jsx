@@ -29,40 +29,43 @@ const AdminAppointmentDashboard = () => {
       const appointments = await appointmentService.fetchAllAppointments();
       console.log('Dashboard appointments:', appointments);
       setAppointmentsData(appointments);
-      
+
       // Generate chart data
       const chart = generateChartData(appointments);
       setChartData(chart);
-      
+
       // Calculate current queue
       const queue = calculateCurrentQueue(appointments);
       setCurrentQueue(queue);
-      
     } catch (error) {
       console.error('Error fetching dashboard data:', error);
     }
   };
 
-  const generateChartData = (appointments) => {
+  const generateChartData = appointments => {
     // Group appointments by date for the last 7 days
     const last7Days = [];
     const today = new Date();
-    
+
     for (let i = 6; i >= 0; i--) {
       const date = new Date(today);
       date.setDate(date.getDate() - i);
       const dateString = date.toISOString().split('T')[0];
-      
+
       const dayAppointments = appointments.filter(app => {
         const appDate = app.appointmentDate || app.date;
         if (!appDate) return false;
         const appDateString = new Date(appDate).toISOString().split('T')[0];
         return appDateString === dateString;
       });
-      
+
       // For now, categorize by service type - you can adjust this logic
-      const certificateServices = ['Birth Certificate', 'Marriage Certificate', 'Death Certificate'];
-      
+      const certificateServices = [
+        'Birth Certificate',
+        'Marriage Certificate',
+        'Death Certificate',
+      ];
+
       last7Days.push({
         name: date.toLocaleDateString('en-US', { weekday: 'short' }),
         walkIn: dayAppointments.filter(app => {
@@ -71,14 +74,14 @@ const AdminAppointmentDashboard = () => {
         }).length,
         appointment: dayAppointments.filter(app => {
           return app.isGuest === false; // scheduled appointments
-        }).length
+        }).length,
       });
     }
-    
+
     return last7Days;
   };
 
-  const calculateCurrentQueue = (appointments) => {
+  const calculateCurrentQueue = appointments => {
     const today = new Date().toISOString().split('T')[0];
     const todayAppointments = appointments.filter(app => {
       const appDate = app.appointmentDate || app.date;
@@ -86,10 +89,10 @@ const AdminAppointmentDashboard = () => {
       const appDateString = new Date(appDate).toISOString().split('T')[0];
       return appDateString === today && (app.status === 'confirmed' || app.status === 'pending');
     });
-    
+
     return {
       current: todayAppointments.length > 0 ? 1 : 0,
-      next: todayAppointments.length > 1 ? 2 : 0
+      next: todayAppointments.length > 1 ? 2 : 0,
     };
   };
 
@@ -130,9 +133,12 @@ const AdminAppointmentDashboard = () => {
         const appDateString = new Date(appDate).toISOString().split('T')[0];
         return appDateString === dateString;
       });
-      
+
       days.push(
-        <div key={`day-${i}`} className={`admin-appointment-dashboard-calendar-day ${dayAppointments.length > 0 ? 'has-appointments' : ''}`}>
+        <div
+          key={`day-${i}`}
+          className={`admin-appointment-dashboard-calendar-day ${dayAppointments.length > 0 ? 'has-appointments' : ''}`}
+        >
           {i}
           {dayAppointments.length > 0 && (
             <div className="appointment-indicator">{dayAppointments.length}</div>
@@ -161,13 +167,12 @@ const AdminAppointmentDashboard = () => {
   ];
   const monthName = monthNames[currentMonth.getMonth()];
   const year = currentMonth.getFullYear();
-  
+
   return (
     <div className="admin-appointment-dashboard">
       <NavBar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
       {/* Top Navigation Bar */}
       <div className="admin-appointment-dashboard-header">
-   
         <h1 className="admin-appointment-dashboard-title">APPOINTMENT</h1>
       </div>
 
@@ -176,15 +181,18 @@ const AdminAppointmentDashboard = () => {
           {/* Current Queue Card */}
           <div className="admin-appointment-dashboard-current-queue-card">
             <h2 className="admin-appointment-dashboard-card-title">CURRENT QUEUE</h2>
-            <div className="admin-appointment-dashboard-current-queue-number">{currentQueue.current}</div>
+            <div className="admin-appointment-dashboard-current-queue-number">
+              {currentQueue.current}
+            </div>
             <div className="admin-appointment-dashboard-next-queue">
               Next on Queue
-              <div className="admin-appointment-dashboard-next-queue-number">{currentQueue.next}</div>
+              <div className="admin-appointment-dashboard-next-queue-number">
+                {currentQueue.next}
+              </div>
             </div>
           </div>
 
-
-           {/* <div className="admin-appointment-dashboard-available-slots-card">
+          {/* <div className="admin-appointment-dashboard-available-slots-card">
             <h2 className="admin-appointment-dashboard-card-title">AVAILABLE SLOTS</h2>
             <div className="admin-appointment-dashboard-calendar-container">
               <div className="admin-appointment-dashboard-calendar-header">
@@ -242,9 +250,7 @@ const AdminAppointmentDashboard = () => {
         <div className="admin-appointment-dashboard-booked-appointments-section">
           <div className="admin-appointment-dashboard-section-header">
             <h2 className="admin-appointment-dashboard-section-title">Booked Appointments</h2>
-            <div className="admin-appointment-dashboard-filter-control">
-         
-            </div>
+            <div className="admin-appointment-dashboard-filter-control"></div>
           </div>
 
           <div className="admin-appointment-dashboard-appointments-list">

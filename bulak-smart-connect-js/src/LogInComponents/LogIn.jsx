@@ -5,16 +5,19 @@ import LogInContent from './LogInContent';
 import LogInCard from './LogInCard';
 import NavBar from '../NavigationComponents/NavBar';
 import { useAuth } from '../context/AuthContext'; // Import useAuth
-import HeroBg from '../LandingPageComponents/LandingPageAssets/HeroBg.JPEG'; 
+import HeroBg from '../LandingPageComponents/LandingPageAssets/HeroBg.JPEG';
 
 function LogIn() {
   const { isAuthenticated, user } = useAuth(); // Use the login function from AuthContext
 
   // Redirect based on role if already authenticated
   if (isAuthenticated) {
-    if (user && (user.roles?.includes('staff') || 
-        user.roles?.includes('admin') || 
-        user.roles?.includes('super_admin'))) {
+    if (
+      user &&
+      (user.roles?.includes('staff') ||
+        user.roles?.includes('admin') ||
+        user.roles?.includes('super_admin'))
+    ) {
       return <Navigate to="/AdminHome" />;
     } else {
       return <Navigate to="/Home" />;

@@ -55,8 +55,8 @@
 }
 
 /* Textarea styling for addresses */
-.husband-input[name="husbandFatherAddress"],
-.husband-input[name="husbandMotherAddress"] {
+.husband-input[name='husbandFatherAddress'],
+.husband-input[name='husbandMotherAddress'] {
   width: 100%;
   padding: 8px;
   border-radius: 6px;
@@ -69,8 +69,8 @@
   min-height: 60px;
 }
 
-.husband-input[name="husbandFatherAddress"]:focus,
-.husband-input[name="husbandMotherAddress"]:focus {
+.husband-input[name='husbandFatherAddress']:focus,
+.husband-input[name='husbandMotherAddress']:focus {
   outline: none;
   border: 2px solid #24677a !important;
   color: #1c4d5a !important;
@@ -203,7 +203,7 @@
   content: '';
 }
 
-.husband-checkbox-label input[type="checkbox"] {
+.husband-checkbox-label input[type='checkbox'] {
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -217,12 +217,12 @@
   transition: all 0.2s ease;
 }
 
-.husband-checkbox-label input[type="checkbox"]:checked {
+.husband-checkbox-label input[type='checkbox']:checked {
   background-color: #1c4d5a;
   border-color: #1c4d5a;
 }
 
-.husband-checkbox-label input[type="checkbox"]:checked::after {
+.husband-checkbox-label input[type='checkbox']:checked::after {
   content: '✓';
   position: absolute;
   top: 50%;
@@ -233,7 +233,7 @@
   font-weight: bold;
 }
 
-.husband-checkbox-label input[type="checkbox"]:hover {
+.husband-checkbox-label input[type='checkbox']:hover {
   border-color: #1c4d5a;
 }
 
@@ -252,7 +252,7 @@
     min-width: 100%;
     flex-basis: 100%;
   }
-  
+
   .husband-radio-group {
     flex-direction: column;
     gap: 1rem !important;
@@ -267,4 +267,3 @@
     gap: 0.5rem;
   }
 }
-

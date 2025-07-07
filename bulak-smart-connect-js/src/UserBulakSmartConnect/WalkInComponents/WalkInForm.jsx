@@ -7,11 +7,11 @@ import { useAuth } from '../../context/AuthContext'; // Auth context import
 import { use } from 'react'; // Importing use from react for potential future use
 
 // Helper function to format backend queue numbers to WK format
-const formatWKNumber = (queueNumber) => {
+const formatWKNumber = queueNumber => {
   if (typeof queueNumber === 'string' && queueNumber.startsWith('WK')) {
     return queueNumber;
   }
-  
+
   const numberPart = queueNumber?.includes('-') ? queueNumber.split('-')[1] : queueNumber;
   const num = parseInt(numberPart, 10) || 0;
   return `WK${String(num).padStart(3, '0')}`;
@@ -21,10 +21,10 @@ const WalkInForm = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-  lastName:  '',
-    firstName:  '',
+    lastName: '',
+    firstName: '',
     middleInitial: '',
-    address:  '',
+    address: '',
     phoneNumber: '',
     reasonOfVisit: '',
   });
@@ -45,7 +45,7 @@ const WalkInForm = () => {
       firstName: user.firstName || '',
       middleInitial: user.middleName || '',
       address: user.address || '',
-      phoneNumber: user.contactNumber|| '',
+      phoneNumber: user.contactNumber || '',
     };
 
     setRegisteredUserData(mockRegisteredUser);
@@ -94,77 +94,77 @@ const WalkInForm = () => {
     }
 
     setAppointmentType(isOwner ? 'self' : 'other');
-    
+
     // Add console log to verify the state
     console.log('Dialog response - isAccountOwner:', isOwner, 'will be guest:', !isOwner);
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async e => {
     e.preventDefault();
-    
+
     try {
       console.log('=== FRONTEND QUEUE CREATION DEBUG ===');
       console.log('User object:', user);
       console.log('isAccountOwner state:', isAccountOwner);
-      
+
       const actualUserId = user?.id || null;
-      
+
       // FIXED: Send boolean instead of number
       // When user clicks "Yes, use my details" -> isAccountOwner = true -> isGuest = false
       // When user clicks "No, enter new details" -> isAccountOwner = false -> isGuest = true
       const isGuestValue = !isAccountOwner; // Direct boolean conversion
-      
+
       console.log('Final values:');
       console.log('- actualUserId:', actualUserId);
       console.log('- isAccountOwner:', isAccountOwner);
       console.log('- isGuestValue (boolean):', isGuestValue);
-      
+
       const requestPayload = {
-        userId: actualUserId, 
-        isGuest: isGuestValue,  // Send as boolean
-        
+        userId: actualUserId,
+        isGuest: isGuestValue, // Send as boolean
+
         firstName: formData.firstName,
         lastName: formData.lastName,
         middleInitial: formData.middleInitial || '',
         address: formData.address || '',
         phoneNumber: formData.phoneNumber || '',
         reasonOfVisit: formData.reasonOfVisit,
-        appointmentType: formData.reasonOfVisit
+        appointmentType: formData.reasonOfVisit,
       };
-      
+
       console.log('Request payload being sent:', requestPayload);
-      
+
       const response = await queueService.createQueue(requestPayload);
-      
+
       console.log('Queue creation response:', response);
-      
+
       // Format the queue number to WK format for display
       const queueNumber = formatWKNumber(response.queue.queueNumber);
-      
+
       const newQueue = {
         id: queueNumber,
         dbId: response.queue.id,
         queueNumber: queueNumber,
         date: new Date().toLocaleDateString('en-US', {
-          month: '2-digit', 
-          day: '2-digit', 
-          year: '2-digit'
+          month: '2-digit',
+          day: '2-digit',
+          year: '2-digit',
         }),
         userData: formData,
         appointmentType: formData.reasonOfVisit,
         isUserQueue: true,
         userId: actualUserId,
-        isGuest: isGuestValue
+        isGuest: isGuestValue,
       };
 
       // Store in localStorage
       localStorage.setItem(`userQueue_${actualUserId}`, JSON.stringify(newQueue));
-      
+
       try {
         const storedQueues = localStorage.getItem(`userQueues_${actualUserId}`);
         let userQueues = storedQueues ? JSON.parse(storedQueues) : [];
         if (!Array.isArray(userQueues)) userQueues = [];
-        
+
         userQueues.push(newQueue);
         localStorage.setItem(`userQueues_${actualUserId}`, JSON.stringify(userQueues));
         localStorage.setItem('userQueue', JSON.stringify(newQueue));
@@ -172,7 +172,7 @@ const WalkInForm = () => {
         console.error('Error updating user queues:', e);
         localStorage.setItem(`userQueues_${actualUserId}`, JSON.stringify([newQueue]));
       }
-      
+
       window.location.href = '/WalkInDetails';
     } catch (error) {
       console.error('Error creating queue:', error);

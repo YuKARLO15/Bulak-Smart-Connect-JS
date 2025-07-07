@@ -76,8 +76,12 @@
 }
 
 /* Focus styles for error inputs */
-.MarriageFormDateField .MuiOutlinedInput-root.Mui-error.Mui-focused .MuiOutlinedInput-notchedOutline,
-.MarriageFormPlaceField .MuiOutlinedInput-root.Mui-error.Mui-focused .MuiOutlinedInput-notchedOutline {
+.MarriageFormDateField
+  .MuiOutlinedInput-root.Mui-error.Mui-focused
+  .MuiOutlinedInput-notchedOutline,
+.MarriageFormPlaceField
+  .MuiOutlinedInput-root.Mui-error.Mui-focused
+  .MuiOutlinedInput-notchedOutline {
   border-color: #d32f2f;
   box-shadow: 0 0 0 0.2rem rgba(211, 47, 47, 0.25);
 }

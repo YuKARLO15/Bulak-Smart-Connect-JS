@@ -16,10 +16,9 @@ const AppoionmentForm = () => {
       </Typography>
       <AppointmentDashboard />
 
-
-       <Box className="AnnouncementButtonContainer">
-          <FloatingAnnouncementButton />
-          </Box>
+      <Box className="AnnouncementButtonContainer">
+        <FloatingAnnouncementButton />
+      </Box>
     </div>
   );
 };

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import DatePickerInputAppointForm from './DataPickerAppointmentForm';
-import { appointmentService } from '../../services/appointmentService'; 
+import { appointmentService } from '../../services/appointmentService';
 import { appointmentNotificationService } from '../../services/appointmentNotificationService';
 import axios from 'axios';
 import config from '../../config/env.js';
@@ -14,7 +14,7 @@ import { saveRecentAppointments } from './RecentAppointmentData';
 const steps = [
   { label: 'Book Appointment' },
   { label: 'Save/Screenshot Summary' },
-  { label: 'Visit Registrar Office' }
+  { label: 'Visit Registrar Office' },
 ];
 
 const AppointmentContainer = ({ onBack, preselectedDate }) => {
@@ -25,7 +25,7 @@ const AppointmentContainer = ({ onBack, preselectedDate }) => {
   const [fetchingUserData, setFetchingUserData] = useState(false);
   const [bookedSlots, setBookedSlots] = useState([]);
   const [isLoadingSlots, setIsLoadingSlots] = useState(false);
-  
+
   const allTimeSlots = [
     '8:00 AM - 8:30 AM',
     '8:30 AM - 9:00 AM',
@@ -44,9 +44,9 @@ const AppointmentContainer = ({ onBack, preselectedDate }) => {
     '3:00 PM - 3:30 PM',
     '3:30 PM - 4:00 PM',
     '4:00 PM - 4:30 PM',
-    '4:30 PM - 5:00 PM'
+    '4:30 PM - 5:00 PM',
   ];
-  
+
   const [userData, setUserData] = useState({
     lastName: '',
     firstName: '',
@@ -80,14 +80,14 @@ const AppointmentContainer = ({ onBack, preselectedDate }) => {
       if (user && user.email) {
         return user.email;
       }
-      
+
       // Fallback to localStorage
       const userData = localStorage.getItem('user');
       if (userData) {
         const parsedUser = JSON.parse(userData);
         return parsedUser.email || null;
       }
-      
+
       return null;
     } catch (error) {
       console.error('Error getting user email:', error);
@@ -102,7 +102,7 @@ const AppointmentContainer = ({ onBack, preselectedDate }) => {
         const token = localStorage.getItem('token');
         if (!token) return;
         const response = await axios.get(`${config.API_BASE_URL}/auth/profile`, {
-          headers: { Authorization: `Bearer ${token}` }
+          headers: { Authorization: `Bearer ${token}` },
         });
         if (response.data) {
           const user = response.data;
@@ -115,7 +115,7 @@ const AppointmentContainer = ({ onBack, preselectedDate }) => {
           });
         }
       } catch (error) {
-        console.error("Error fetching user data:", error);
+        console.error('Error fetching user data:', error);
       } finally {
         setFetchingUserData(false);
       }
@@ -131,48 +131,41 @@ const AppointmentContainer = ({ onBack, preselectedDate }) => {
     }
   }, [selectedDate]);
 
- const fetchAvailableTimeSlots = async () => {
-  if (!selectedDate) return;
-  
-  setLoadingSlots(true);
-  try {
+  const fetchAvailableTimeSlots = async () => {
+    if (!selectedDate) return;
 
-    const formattedDate = selectedDate instanceof Date
-      ? `${selectedDate.getFullYear()}-${String(selectedDate.getMonth() + 1).padStart(2, '0')}-${String(selectedDate.getDate()).padStart(2, '0')}`
-      : selectedDate;
-    
-    console.log("Fetching available slots for date:", formattedDate);
-    
- 
-    const response = await appointmentService.fetchAvailableSlots(formattedDate);
-    
-    console.log("API Response:", response);
-    
- 
-    if (Array.isArray(response)) {
-      setAvailableSlots(response);
-      console.log("Available slots from API:", response);
-    } 
+    setLoadingSlots(true);
+    try {
+      const formattedDate =
+        selectedDate instanceof Date
+          ? `${selectedDate.getFullYear()}-${String(selectedDate.getMonth() + 1).padStart(2, '0')}-${String(selectedDate.getDate()).padStart(2, '0')}`
+          : selectedDate;
 
-    else if (response && response.availableSlots && Array.isArray(response.availableSlots)) {
-      setAvailableSlots(response.availableSlots);
-      console.log("Available slots from API:", response.availableSlots);
-    } 
-  
-    else {
-      console.warn("Invalid available slots data from API:", response);
-  
+      console.log('Fetching available slots for date:', formattedDate);
+
+      const response = await appointmentService.fetchAvailableSlots(formattedDate);
+
+      console.log('API Response:', response);
+
+      if (Array.isArray(response)) {
+        setAvailableSlots(response);
+        console.log('Available slots from API:', response);
+      } else if (response && response.availableSlots && Array.isArray(response.availableSlots)) {
+        setAvailableSlots(response.availableSlots);
+        console.log('Available slots from API:', response.availableSlots);
+      } else {
+        console.warn('Invalid available slots data from API:', response);
+
+        setAvailableSlots([...allTimeSlots]);
+      }
+    } catch (error) {
+      console.error('Error fetching available slots:', error);
+
       setAvailableSlots([...allTimeSlots]);
+    } finally {
+      setLoadingSlots(false);
     }
-  } catch (error) {
-    console.error("Error fetching available slots:", error);
-    
-   
-    setAvailableSlots([...allTimeSlots]);
-  } finally {
-    setLoadingSlots(false);
-  }
-};
+  };
   const handleDialogChoice = forSelf => {
     setIsForSelf(forSelf);
     setShowDialog(false);
@@ -215,7 +208,6 @@ const AppointmentContainer = ({ onBack, preselectedDate }) => {
     let newErrors = {};
     Object.keys(formData).forEach(key => {
       if (!formData[key] && key !== 'middleInitial') {
-        
         if (key === 'date' && !selectedDate) {
           newErrors[key] = 'Please select a date.';
         } else if (key !== 'date') {
@@ -229,10 +221,12 @@ const AppointmentContainer = ({ onBack, preselectedDate }) => {
       return;
     }
 
-    
     if (!availableSlots.includes(formData.time)) {
-      setErrors(prev => ({ ...prev, time: 'This time slot is no longer available. Please select another time.' }));
-      
+      setErrors(prev => ({
+        ...prev,
+        time: 'This time slot is no longer available. Please select another time.',
+      }));
+
       fetchAvailableTimeSlots();
       return;
     }
@@ -245,7 +239,7 @@ const AppointmentContainer = ({ onBack, preselectedDate }) => {
           console.log('📧 Using email from auth context:', user.email);
           return user.email;
         }
-        
+
         // Fallback to localStorage
         const userData = localStorage.getItem('user');
         if (userData) {
@@ -255,13 +249,13 @@ const AppointmentContainer = ({ onBack, preselectedDate }) => {
             return parsedUser.email;
           }
         }
-        
+
         // Check if user is in formData (for guests)
         const token = localStorage.getItem('token');
         if (token) {
           console.log('📧 Token found, but no email in user data');
         }
-        
+
         return null;
       } catch (error) {
         console.error('Error getting user email for notification:', error);
@@ -285,9 +279,12 @@ const AppointmentContainer = ({ onBack, preselectedDate }) => {
         address: formData.address,
         phoneNumber: formData.phoneNumber,
         reasonOfVisit: formData.reason,
-        appointmentDate: selectedDate.getFullYear() + '-' + 
-                         String(selectedDate.getMonth() + 1).padStart(2, '0') + '-' + 
-                         String(selectedDate.getDate()).padStart(2, '0'),
+        appointmentDate:
+          selectedDate.getFullYear() +
+          '-' +
+          String(selectedDate.getMonth() + 1).padStart(2, '0') +
+          '-' +
+          String(selectedDate.getDate()).padStart(2, '0'),
         appointmentTime: formData.time,
         isGuest: !isForSelf,
         // Don't add email to appointment data - keep it separate for notifications
@@ -315,7 +312,7 @@ const AppointmentContainer = ({ onBack, preselectedDate }) => {
         dbId: result.id,
         createdAt: result.createdAt,
         updatedAt: result.updatedAt,
-        email: userEmail // Keep email for local reference
+        email: userEmail, // Keep email for local reference
       };
 
       saveRecentAppointments(newAppointment);
@@ -330,40 +327,49 @@ const AppointmentContainer = ({ onBack, preselectedDate }) => {
             date: newAppointment.appointmentDate,
             time: newAppointment.appointmentTime,
             firstName: newAppointment.firstName,
-            lastName: newAppointment.lastName
+            lastName: newAppointment.lastName,
           });
 
-          const notificationResult = await appointmentNotificationService.sendAppointmentConfirmation(
-            userEmail,
-            newAppointment.appointmentNumber || newAppointment.id,
-            {
-              type: newAppointment.reasonOfVisit,
-              date: newAppointment.appointmentDate,
-              time: newAppointment.appointmentTime,
-              firstName: newAppointment.firstName,
-              lastName: newAppointment.lastName,
-              phoneNumber: newAppointment.phoneNumber
-            }
-          );
+          const notificationResult =
+            await appointmentNotificationService.sendAppointmentConfirmation(
+              userEmail,
+              newAppointment.appointmentNumber || newAppointment.id,
+              {
+                type: newAppointment.reasonOfVisit,
+                date: newAppointment.appointmentDate,
+                time: newAppointment.appointmentTime,
+                firstName: newAppointment.firstName,
+                lastName: newAppointment.lastName,
+                phoneNumber: newAppointment.phoneNumber,
+              }
+            );
 
           if (notificationResult.success) {
             console.log('✅ Confirmation notification sent successfully');
-            alert('Your appointment has been confirmed! A confirmation email has been sent to you.');
+            alert(
+              'Your appointment has been confirmed! A confirmation email has been sent to you.'
+            );
           } else {
             console.log('⚠️ Confirmation notification failed:', notificationResult.error);
-            alert('Your appointment has been confirmed! However, we could not send the confirmation email.');
+            alert(
+              'Your appointment has been confirmed! However, we could not send the confirmation email.'
+            );
           }
         } catch (notificationError) {
           console.error('❌ Error sending confirmation notification:', notificationError);
-          alert('Your appointment has been confirmed! However, we could not send the confirmation email.');
+          alert(
+            'Your appointment has been confirmed! However, we could not send the confirmation email.'
+          );
         }
       } else {
         console.log('⚠️ No email available for notifications');
-        alert('Your appointment has been confirmed! No confirmation email will be sent as no email was found.');
+        alert(
+          'Your appointment has been confirmed! No confirmation email will be sent as no email was found.'
+        );
       }
 
-      navigate(`/QRCodeAppointment/${newAppointment.appointmentNumber || newAppointment.id}`, { 
-        state: { appointment: newAppointment } 
+      navigate(`/QRCodeAppointment/${newAppointment.appointmentNumber || newAppointment.id}`, {
+        state: { appointment: newAppointment },
       });
 
       setFormData({
@@ -376,7 +382,6 @@ const AppointmentContainer = ({ onBack, preselectedDate }) => {
         date: '',
         time: '',
       });
-
     } catch (error) {
       let errorMessage = 'Failed to create appointment. Please try again.';
       if (error.response?.data?.message) errorMessage = error.response.data.message;
@@ -391,14 +396,14 @@ const AppointmentContainer = ({ onBack, preselectedDate }) => {
     <div className="DialogBoxAppointForm">
       {onBack && (
         <button className="DialogBackButtonAppointForm" onClick={onBack} aria-label="Go back">
-          <span aria-hidden="true">&times;</span> <p className='DialoagBackp'> Close</p>
+          <span aria-hidden="true">&times;</span> <p className="DialoagBackp"> Close</p>
         </button>
       )}
       <h3 className="DialogTextAppointForm">Appointment for:</h3>
-      
+
       <div className="DialogButtonsAppointForm">
-        <button 
-          className={`DialogButtonAppointForm SelfButtonAppointForm${isForSelf === true ? ' SelectedAppointForm' : ''}`} 
+        <button
+          className={`DialogButtonAppointForm SelfButtonAppointForm${isForSelf === true ? ' SelectedAppointForm' : ''}`}
           onClick={() => handleDialogChoice(true)}
           disabled={fetchingUserData}
         >
@@ -413,7 +418,7 @@ const AppointmentContainer = ({ onBack, preselectedDate }) => {
       </div>
     </div>
   );
-  
+
   const Stepper = () => (
     <div className="StepperContainerAppointForm">
       {steps.map((step, idx) => (
@@ -430,9 +435,7 @@ const AppointmentContainer = ({ onBack, preselectedDate }) => {
 
   return (
     <div className="AppointmentFormsContainerAppointForm ProStyledAppointForm">
-      {showDialog && (
-        <div className="DialogOverlayAppointForm">{dialogPrompt}</div>
-      )}
+      {showDialog && <div className="DialogOverlayAppointForm">{dialogPrompt}</div>}
 
       {!showDialog && (
         <div className="AppointmentFContainerAppointForm">
@@ -444,7 +447,7 @@ const AppointmentContainer = ({ onBack, preselectedDate }) => {
           <Stepper />
 
           <h2 className="AppointmentTitleAppointForm">Booking Appointment</h2>
-      
+
           <div className="AppointmentLayoutAppointForm">
             <div className="AppointmentFormSectionAppointForm">
               <div className="FormGroupAppointForm RowGroupAppointForm">
@@ -457,7 +460,9 @@ const AppointmentContainer = ({ onBack, preselectedDate }) => {
                     onChange={handleChange}
                     autoComplete="family-name"
                   />
-                  {errors.lastName && <span className="ErrorTextAppointForm">{errors.lastName}</span>}
+                  {errors.lastName && (
+                    <span className="ErrorTextAppointForm">{errors.lastName}</span>
+                  )}
                 </div>
                 <div className="InputWrapperAppointForm">
                   <label>First Name</label>
@@ -468,7 +473,9 @@ const AppointmentContainer = ({ onBack, preselectedDate }) => {
                     onChange={handleChange}
                     autoComplete="given-name"
                   />
-                  {errors.firstName && <span className="ErrorTextAppointForm">{errors.firstName}</span>}
+                  {errors.firstName && (
+                    <span className="ErrorTextAppointForm">{errors.firstName}</span>
+                  )}
                 </div>
                 <div className="InputWrapperAppointForm SmallInputAppointForm">
                   <label>Middle Initial</label>
@@ -485,12 +492,12 @@ const AppointmentContainer = ({ onBack, preselectedDate }) => {
               <div className="FormGroupAppointForm RowGroupAppointForm">
                 <div className="InputWrapperAppointForm LargeInputAppointForm">
                   <label>Address</label>
-                  <input 
-                    type="text" 
-                    name="address" 
-                    value={formData.address} 
-                    onChange={handleChange} 
-                    autoComplete="street-address" 
+                  <input
+                    type="text"
+                    name="address"
+                    value={formData.address}
+                    onChange={handleChange}
+                    autoComplete="street-address"
                   />
                   {errors.address && <span className="ErrorTextAppointForm">{errors.address}</span>}
                 </div>
@@ -505,7 +512,9 @@ const AppointmentContainer = ({ onBack, preselectedDate }) => {
                     placeholder="e.g. 09123456789"
                     autoComplete="tel"
                   />
-                  {errors.phoneNumber && <span className="ErrorTextAppointForm">{errors.phoneNumber}</span>}
+                  {errors.phoneNumber && (
+                    <span className="ErrorTextAppointForm">{errors.phoneNumber}</span>
+                  )}
                 </div>
               </div>
               <div className="FormGroupAppointForm SlotGroupAppointForm">
@@ -514,16 +523,22 @@ const AppointmentContainer = ({ onBack, preselectedDate }) => {
                   <select name="reason" value={formData.reason} onChange={handleChange}>
                     <option value="">Select a Reason</option>
                     <optgroup label="Birth Certificate">
-                      <option value="Birth Certificate - Regular/Copy">Regular/Copy for Birth Certificate</option>
-                      <option value="Birth Certificate - Delayed Registration">Delayed Registration</option>
-                      <option value="Birth Certificate - Correction">Correction for Birth Certificate</option>
+                      <option value="Birth Certificate - Regular/Copy">
+                        Regular/Copy for Birth Certificate
+                      </option>
+                      <option value="Birth Certificate - Delayed Registration">
+                        Delayed Registration
+                      </option>
+                      <option value="Birth Certificate - Correction">
+                        Correction for Birth Certificate
+                      </option>
                     </optgroup>
-                    
+
                     <optgroup label="Marriage">
                       <option value="Marriage - License">Marriage License</option>
                       <option value="Marriage - Certificate">Marriage Certificate</option>
                     </optgroup>
-                    
+
                     <option value="Death Certificate">Death Certificate</option>
                     <option value="Others">Others</option>
                   </select>
@@ -538,8 +553,8 @@ const AppointmentContainer = ({ onBack, preselectedDate }) => {
                       setSelectedDate(date);
                       setFormData({
                         ...formData,
-                        date: date ? date.toLocaleDateString() : "",
-                        time: "" 
+                        date: date ? date.toLocaleDateString() : '',
+                        time: '',
                       });
                       if (errors.date) setErrors({ ...errors, date: null });
                     }}
@@ -549,50 +564,54 @@ const AppointmentContainer = ({ onBack, preselectedDate }) => {
                 </div>
               </div>
               <div className="FormGroupAppointForm RowGroupAppointForm">
-               <div className="InputWrapperAppointForm AppointTimeAppointForm">
-  <label className="AppointTimeSelectedAppointForm">Select Time</label>
-  <select 
-    name="time" 
-    value={formData.time} 
-    onChange={handleChange}
-    disabled={!selectedDate || loadingSlots}
-    className="time-select"
-  >
-    <option value="">
-      {loadingSlots 
-        ? 'Loading available times...' 
-        : !selectedDate 
-          ? 'Select a date first'
-          : availableSlots.length === 0 
-            ? 'No available slots for this date' 
-            : 'Select a Time Slot'
-      }
-    </option>
+                <div className="InputWrapperAppointForm AppointTimeAppointForm">
+                  <label className="AppointTimeSelectedAppointForm">Select Time</label>
+                  <select
+                    name="time"
+                    value={formData.time}
+                    onChange={handleChange}
+                    disabled={!selectedDate || loadingSlots}
+                    className="time-select"
+                  >
+                    <option value="">
+                      {loadingSlots
+                        ? 'Loading available times...'
+                        : !selectedDate
+                          ? 'Select a date first'
+                          : availableSlots.length === 0
+                            ? 'No available slots for this date'
+                            : 'Select a Time Slot'}
+                    </option>
 
-   
-    {availableSlots.length > 0 ? (
-      availableSlots.map((slot, index) => {
-        console.log("Rendering slot:", slot);
-        return (
-          <option key={index} value={slot}>
-            {slot}
-          </option>
-        );
-      })
-    ) : (
-      <option disabled value="">No available slots</option>
-    )}
-  </select>
-  {errors.time && <span className="ErrorTextAppointForm">{errors.time}</span>}
-  {loadingSlots && <span className="InfoTextAppointForm">Fetching real-time availability...</span>}
-  {availableSlots.length === 0 && selectedDate && !loadingSlots && (
-    <span className="InfoTextAppointForm">No available slots for this date. Please select another date.</span>
-  )}
-</div>
+                    {availableSlots.length > 0 ? (
+                      availableSlots.map((slot, index) => {
+                        console.log('Rendering slot:', slot);
+                        return (
+                          <option key={index} value={slot}>
+                            {slot}
+                          </option>
+                        );
+                      })
+                    ) : (
+                      <option disabled value="">
+                        No available slots
+                      </option>
+                    )}
+                  </select>
+                  {errors.time && <span className="ErrorTextAppointForm">{errors.time}</span>}
+                  {loadingSlots && (
+                    <span className="InfoTextAppointForm">Fetching real-time availability...</span>
+                  )}
+                  {availableSlots.length === 0 && selectedDate && !loadingSlots && (
+                    <span className="InfoTextAppointForm">
+                      No available slots for this date. Please select another date.
+                    </span>
+                  )}
+                </div>
               </div>
               <div className="ConfirmContainerAppointForm">
-                <button 
-                  className="ConfirmButtonAppointForm" 
+                <button
+                  className="ConfirmButtonAppointForm"
                   onClick={handleSubmit}
                   disabled={isSubmitting || loadingSlots || !selectedDate || !formData.time}
                 >
@@ -600,16 +619,20 @@ const AppointmentContainer = ({ onBack, preselectedDate }) => {
                 </button>
               </div>
             </div>
-     
+
             <div className="AppointmentSummaryPanelAppointForm">
               <h4 className="SummaryTitleAppointForm">How to Book Your Appointment</h4>
               <ol className="SummaryStepsAppointForm">
                 <li>Book appointment by filling in your details on this page.</li>
                 <li>Screenshot or save your appointment summary after confirmation.</li>
-                <li>Go to the Municipal Civil Registrar's Office on your chosen date and time. Please bring your appointment summary and required documents.</li>
+                <li>
+                  Go to the Municipal Civil Registrar's Office on your chosen date and time. Please
+                  bring your appointment summary and required documents.
+                </li>
               </ol>
               <div className="SummaryNoteAppointForm">
-                <strong>Note:</strong> If you do not arrive within 15 minutes of your scheduled time, your appointment may be rescheduled.
+                <strong>Note:</strong> If you do not arrive within 15 minutes of your scheduled
+                time, your appointment may be rescheduled.
               </div>
             </div>
           </div>

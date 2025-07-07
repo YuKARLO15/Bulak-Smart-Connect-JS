@@ -9,12 +9,12 @@ const AnnouncementForm = ({ addAnnouncement }) => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleChange = (e) => {
+  const handleChange = e => {
     const { name, value } = e.target;
-    setAnnouncement((prev) => ({ ...prev, [name]: value }));
+    setAnnouncement(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async e => {
     e.preventDefault();
     setIsSubmitting(true);
 

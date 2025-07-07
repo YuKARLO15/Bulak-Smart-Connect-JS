@@ -45,14 +45,14 @@ describe('Accessibility tests', () => {
         <TestComponent />
       </BrowserRouter>
     );
-    
+
     const results = await axe(container);
-    
+
     // Log results for debugging instead of writing to file
     if (results.violations.length > 0) {
       console.log('Accessibility violations found:', JSON.stringify(results.violations, null, 2));
     }
-    
+
     expect(results).toHaveNoViolations();
   });
 });

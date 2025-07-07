@@ -11,7 +11,7 @@ export const usePWA = () => {
     const isInWebAppiOS = window.navigator.standalone === true;
     setIsInstalled(isStandalone || isInWebAppiOS);
 
-    const handleBeforeInstallPrompt = (e) => {
+    const handleBeforeInstallPrompt = e => {
       e.preventDefault();
       setDeferredPrompt(e);
       setShowInstallPrompt(true);
@@ -38,14 +38,14 @@ export const usePWA = () => {
 
     deferredPrompt.prompt();
     const { outcome } = await deferredPrompt.userChoice;
-    
+
     if (outcome === 'accepted') {
       console.log('User accepted the install prompt');
     }
-    
+
     setDeferredPrompt(null);
     setShowInstallPrompt(false);
-    
+
     return outcome === 'accepted';
   };
 
@@ -53,6 +53,6 @@ export const usePWA = () => {
     showInstallPrompt: showInstallPrompt && !isInstalled,
     installPWA,
     isInstallable: !!deferredPrompt,
-    isInstalled
+    isInstalled,
   };
 };

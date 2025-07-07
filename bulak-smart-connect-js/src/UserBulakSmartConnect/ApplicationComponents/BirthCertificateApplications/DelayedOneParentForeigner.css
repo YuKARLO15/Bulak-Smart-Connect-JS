@@ -22,14 +22,14 @@
   width: calc(100vw - 250px);
 }
 .DocumentsPaperDelayedOneParentForeigner {
-    width: 100%;
+  width: 100%;
   max-width: 900px;
   margin: 0 auto;
   margin-top: 16px;
   background: #fff;
   border-radius: 9px;
   border: 1.5px solid #b6c6d2;
-  box-shadow: 0px 2px 10px rgba(24,74,91,0.04);
+  box-shadow: 0px 2px 10px rgba(24, 74, 91, 0.04);
   padding: 36px 32px 32px 32px;
   display: flex;
   flex-direction: column;
@@ -115,8 +115,6 @@
   padding: 5px;
 }
 
-
-
 .SubmitButton:hover:not(:disabled) {
   background-color: #13647d !important;
 }
@@ -132,11 +130,10 @@
   width: 100%;
   max-width: 800px;
 }
-.BackButtonOneParentForeigner{
-    border-color: #184a5b !important;
+.BackButtonOneParentForeigner {
+  border-color: #184a5b !important;
   color: #184a5b !important;
   font-weight: 500 !important;
-  
 }
 .SubmitButtonOneParentForeigner {
   background-color: #184a5b !important;
@@ -152,7 +149,7 @@
   border: none !important;
 }
 .ButtonContainerDelayedOneParentForeigner {
-    display: flex;
+  display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 12px;
@@ -164,16 +161,12 @@
 @media (max-width: 768px) {
   .TitleDelayedOneParentForeigner {
     font-size: 0.8rem !important;
-
   }
-
 }
 
-@media  (max-width: 425px) {
-
- .TitleDelayedOneParentForeigner {
+@media (max-width: 425px) {
+  .TitleDelayedOneParentForeigner {
     font-size: 0.8rem !important;
     width: 100%;
   }
-
 }

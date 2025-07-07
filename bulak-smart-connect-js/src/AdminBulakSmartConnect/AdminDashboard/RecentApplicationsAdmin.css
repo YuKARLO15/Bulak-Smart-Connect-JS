@@ -1,15 +1,13 @@
-
 .RecentAppsAdminCard {
   width: 100%;
   border-radius: 8px;
   overflow: hidden;
-
 }
 
 .ApplicationStatsMainContainer {
-display: flex;
-flex-direction: row;
-width: 65vw !important;
+  display: flex;
+  flex-direction: row;
+  width: 65vw !important;
 }
 
 .StatAppointmentTypeContainer {
@@ -17,18 +15,17 @@ width: 65vw !important;
   flex-direction: column !important;
   width: 100vw !important;
 }
-.StatsBirthContainer, .StatsMarriageContainer {
-margin-bottom: 20px !important;
- border: 1px solid #e0e0e0;
- width: 100% !important;
- 
+.StatsBirthContainer,
+.StatsMarriageContainer {
+  margin-bottom: 20px !important;
+  border: 1px solid #e0e0e0;
+  width: 100% !important;
 }
 .OverAllStatContainer {
   height: 20vh;
   align-items: center;
   justify-content: center;
-margin-top: 20vh !important;
-
+  margin-top: 20vh !important;
 }
 .RecentAppsAdminTitle {
   font-size: 1rem !important;
@@ -37,7 +34,7 @@ margin-top: 20vh !important;
   margin-bottom: 8px !important;
 }
 
-.RecentAppsAdminLoading, 
+.RecentAppsAdminLoading,
 .RecentAppsAdminError {
   display: flex;
   flex-direction: column;
@@ -47,8 +44,8 @@ margin-top: 20vh !important;
   min-height: 150px;
 }
 .css-5c1adp-MuiContainer-root {
-padding-left: 0% !important;
-padding-right: 1% !important;
+  padding-left: 0% !important;
+  padding-right: 1% !important;
 }
 
 .ApplicationStatsTitle {
@@ -56,19 +53,20 @@ padding-right: 1% !important;
   font-weight: 600 !important;
   color: #184a5b !important;
   margin-bottom: 8px !important;
-    margin-left: 20px !important;
+  margin-left: 20px !important;
 }
 
-.StatCard, .TotalStatCard {
+.StatCard,
+.TotalStatCard {
   padding: 16px;
-border-radius: 10px !important;
+  border-radius: 10px !important;
   height: 100%;
 }
 
-.TotalStatCard{
+.TotalStatCard {
   background-color: rgba(55, 87, 101, 0.09) !important;
   display: flex;
-  flex-direction: column; 
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   margin-top: 150px;
@@ -78,7 +76,7 @@ border-radius: 10px !important;
   font-weight: 600 !important;
   margin-bottom: 20px !important;
 }
-.ApplicationStatImage  {
+.ApplicationStatImage {
   width: 8vw;
 }
 
@@ -86,7 +84,6 @@ border-radius: 10px !important;
   color: #184a5b;
   font-weight: 600 !important;
   margin-bottom: 20px !important;
-
 }
 
 .StatNumbers {
@@ -94,7 +91,6 @@ border-radius: 10px !important;
   flex-wrap: wrap;
   gap: 16px;
   margin-bottom: 5px;
-
 }
 
 .StatItem {
@@ -113,24 +109,20 @@ border-radius: 10px !important;
   align-items: center;
 }
 .ApplicationStatsViewAllButton {
-
-   color: #184a5b !important;
+  color: #184a5b !important;
   border: 1px solid #8aacb5 !important;
   text-transform: none !important;
   font-size: 0.7rem !important;
   padding: 2px 8px !important;
   min-width: 10vw !important;
   font-weight: 600 !important;
-
 }
 .ApplicationStatsViewAllButton:hover {
   text-decoration: underline !important;
-background-color:  rgba(24, 74, 91, 0.05) !important;
-
+  background-color: rgba(24, 74, 91, 0.05) !important;
 }
 .TotalStatCard {
   text-align: center;
   padding: 16px;
   background-color: rgba(24, 74, 91, 0.05);
-
 }

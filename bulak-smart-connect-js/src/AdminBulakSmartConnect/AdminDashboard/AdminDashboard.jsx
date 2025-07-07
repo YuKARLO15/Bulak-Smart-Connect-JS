@@ -15,26 +15,26 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
-  Legend
+  Legend,
 } from 'recharts';
 import {
-  Box, 
-  Card, 
-  CardContent, 
-  Typography, 
-  Button, 
+  Box,
+  Card,
+  CardContent,
+  Typography,
+  Button,
   CircularProgress,
   Grid,
   Paper,
   Container,
-  Alert
+  Alert,
 } from '@mui/material';
 import NavBar from '../../NavigationComponents/NavSide';
 import RecentApplicationsAdmin from './RecentApplicationsAdmin';
 import RecentAppointmentsAdmin from './RecentAppointmentsAdmin';
 import WalkInQueueAdmin from './WalkInQueueAdmin';
 import { getRecentAppointments } from '../../UserBulakSmartConnect/AppointmentComponents/RecentAppointmentData';
-import ApplicationPieChart from '../AdminApplicationComponents/ApplicationPieChart'; 
+import ApplicationPieChart from '../AdminApplicationComponents/ApplicationPieChart';
 
 const formatWKNumber = queueNumber => {
   if (typeof queueNumber === 'string' && queueNumber.startsWith('WK')) {
@@ -66,7 +66,7 @@ const AdminDashboard = () => {
 
   const handleSearch = e => {
     setSearchTerm(e.target.value);
-  }; 
+  };
 
   const [statistics, setStatistics] = useState({
     overall: 0,
@@ -74,27 +74,27 @@ const AdminDashboard = () => {
     marriage: 0,
     pending: 0,
     approved: 0,
-    declined: 0
+    declined: 0,
   });
-  
+
   const [appointmentStats, setAppointmentStats] = useState({
-    overall: 0
+    overall: 0,
   });
 
   const getLastSixMonths = () => {
     const months = [];
     const currentDate = new Date();
-    
+
     for (let i = 5; i >= 0; i--) {
       const date = new Date(currentDate);
       date.setMonth(currentDate.getMonth() - i);
       months.push({
         month: date.getMonth() + 1,
         year: date.getFullYear(),
-        name: date.toLocaleString('default', { month: 'short' })
+        name: date.toLocaleString('default', { month: 'short' }),
       });
     }
-    
+
     return months;
   };
 
@@ -110,31 +110,36 @@ const AdminDashboard = () => {
 
         try {
           const walkInQueues = await queueService.fetchWalkInQueues();
-          
+
           if (Array.isArray(walkInQueues)) {
             walkInCount = walkInQueues.filter(queue => {
               if (!queue.createdAt) return false;
               const queueDate = new Date(queue.createdAt);
-              return queueDate.getMonth() + 1 === monthData.month && 
-                     queueDate.getFullYear() === monthData.year;
+              return (
+                queueDate.getMonth() + 1 === monthData.month &&
+                queueDate.getFullYear() === monthData.year
+              );
             }).length;
           }
 
           try {
             const appointments = await appointmentService.fetchAllAppointments();
-            
+
             if (Array.isArray(appointments)) {
               appointmentCount = appointments.filter(appointment => {
                 if (!appointment.createdAt && !appointment.appointmentDate) return false;
-                const appointmentDate = new Date(appointment.createdAt || appointment.appointmentDate);
-                return appointmentDate.getMonth() + 1 === monthData.month && 
-                       appointmentDate.getFullYear() === monthData.year;
+                const appointmentDate = new Date(
+                  appointment.createdAt || appointment.appointmentDate
+                );
+                return (
+                  appointmentDate.getMonth() + 1 === monthData.month &&
+                  appointmentDate.getFullYear() === monthData.year
+                );
               }).length;
             }
           } catch (appointmentError) {
             console.warn(`Could not fetch appointments for ${monthData.name}:`, appointmentError);
           }
-
         } catch (queueError) {
           console.warn(`Could not fetch queues for ${monthData.name}:`, queueError);
         }
@@ -142,27 +147,26 @@ const AdminDashboard = () => {
         monthlyData.push({
           name: monthData.name,
           value: walkInCount,
-          appointments: appointmentCount
+          appointments: appointmentCount,
         });
       }
 
       console.log('Generated monthly analytics from database:', monthlyData);
       return monthlyData;
-      
     } catch (error) {
       console.error('Error generating monthly analytics from database:', error);
-      
+
       return getLastSixMonths().map(month => ({
         name: month.name,
         value: Math.floor(Math.random() * 20) + 5,
-        appointments: Math.floor(Math.random() * 30) + 10
+        appointments: Math.floor(Math.random() * 30) + 10,
       }));
     } finally {
       setChartLoading(false);
     }
   };
 
-  const standardizeApplicationData = (apps) => {
+  const standardizeApplicationData = apps => {
     if (!Array.isArray(apps)) return [];
     return apps.map(app => ({
       id: app.id || app._id || 'unknown-id',
@@ -171,12 +175,13 @@ const AdminDashboard = () => {
       date: formatDate(app.createdAt || app.date || new Date()),
       status: app.status || 'Pending',
       message: app.statusMessage || app.message || '',
-      applicantName: app.applicantName || `${app.firstName || ''} ${app.lastName || ''}`.trim() || 'Unknown',
-      originalData: app
+      applicantName:
+        app.applicantName || `${app.firstName || ''} ${app.lastName || ''}`.trim() || 'Unknown',
+      originalData: app,
     }));
   };
 
-  const formatDate = (dateInput) => {
+  const formatDate = dateInput => {
     if (!dateInput) return 'N/A';
     try {
       const date = new Date(dateInput);
@@ -190,24 +195,24 @@ const AdminDashboard = () => {
     try {
       setLoading(true);
       console.log('Fetching applications for dashboard statistics...');
-      
+
       const response = await documentApplicationService.getAllApplications();
       console.log('API response:', response);
-      
+
       if (Array.isArray(response)) {
         const standardizedData = standardizeApplicationData(response);
         setApplications(standardizedData);
         setDataSource('api');
-        
+
         const stats = {
           overall: standardizedData.length,
           birthCertificate: 0,
           marriage: 0,
           pending: 0,
           approved: 0,
-          declined: 0
+          declined: 0,
         };
-        
+
         standardizedData.forEach(app => {
           const appType = (app.type || '').toLowerCase();
           if (appType.includes('birth') || appType.includes('certificate')) {
@@ -215,61 +220,70 @@ const AdminDashboard = () => {
           } else if (appType.includes('marriage') || appType.includes('wed')) {
             stats.marriage++;
           }
-          
+
           const status = (app.status || '').toLowerCase();
           if (status.includes('pending') || status.includes('submitted') || status === '') {
             stats.pending++;
           } else if (status.includes('approved') || status.includes('accept')) {
             stats.approved++;
-          } else if (status.includes('declined') || status.includes('denied') || status.includes('reject')) {
+          } else if (
+            status.includes('declined') ||
+            status.includes('denied') ||
+            status.includes('reject')
+          ) {
             stats.declined++;
           }
         });
-        
+
         console.log('Calculated application statistics:', stats);
         setStatistics(stats);
-        
+
         return standardizedData;
       } else {
         throw new Error('Invalid response format: Not an array');
       }
     } catch (err) {
-      console.error("Error fetching application data:", err);
+      console.error('Error fetching application data:', err);
       setError('Error loading application data: ' + err.message);
-      
+
       try {
         console.log('Falling back to localStorage for applications...');
         const localData = JSON.parse(localStorage.getItem('applications') || '[]');
         const standardizedData = standardizeApplicationData(localData);
         setApplications(standardizedData);
         setDataSource('localStorage');
-        
+
         setStatistics({
           overall: standardizedData.length,
-          birthCertificate: standardizedData.filter(app => 
-            (app.type || '').toLowerCase().includes('birth') || 
-            (app.type || '').toLowerCase().includes('certificate')
+          birthCertificate: standardizedData.filter(
+            app =>
+              (app.type || '').toLowerCase().includes('birth') ||
+              (app.type || '').toLowerCase().includes('certificate')
           ).length,
-          marriage: standardizedData.filter(app => 
-            (app.type || '').toLowerCase().includes('marriage') || 
-            (app.type || '').toLowerCase().includes('wed')
+          marriage: standardizedData.filter(
+            app =>
+              (app.type || '').toLowerCase().includes('marriage') ||
+              (app.type || '').toLowerCase().includes('wed')
           ).length,
-          pending: standardizedData.filter(app => 
-            (app.status || '').toLowerCase().includes('pending') || 
-            (app.status || '').toLowerCase().includes('submitted') || 
-            (app.status || '') === ''
+          pending: standardizedData.filter(
+            app =>
+              (app.status || '').toLowerCase().includes('pending') ||
+              (app.status || '').toLowerCase().includes('submitted') ||
+              (app.status || '') === ''
           ).length,
-          approved: standardizedData.filter(app => 
-            (app.status || '').toLowerCase().includes('approved') || 
-            (app.status || '').toLowerCase().includes('accept')
+          approved: standardizedData.filter(
+            app =>
+              (app.status || '').toLowerCase().includes('approved') ||
+              (app.status || '').toLowerCase().includes('accept')
           ).length,
-          declined: standardizedData.filter(app => 
-            (app.status || '').toLowerCase().includes('declined') || 
-            (app.status || '').toLowerCase().includes('denied') || 
-            (app.status || '').toLowerCase().includes('reject')
-          ).length
+          declined: standardizedData.filter(
+            app =>
+              (app.status || '').toLowerCase().includes('declined') ||
+              (app.status || '').toLowerCase().includes('denied') ||
+              (app.status || '').toLowerCase().includes('reject')
+          ).length,
         });
-        
+
         return standardizedData;
       } catch (localErr) {
         console.error('Failed to load from localStorage:', localErr);
@@ -284,13 +298,13 @@ const AdminDashboard = () => {
     try {
       const appointments = await appointmentService.fetchAllAppointments();
       setAppointmentStats({
-        overall: Array.isArray(appointments) ? appointments.length : 0
+        overall: Array.isArray(appointments) ? appointments.length : 0,
       });
     } catch (error) {
       console.error('Error fetching appointment stats:', error);
       const fetchedAppointments = getRecentAppointments();
       setAppointmentStats({
-        overall: fetchedAppointments.length
+        overall: fetchedAppointments.length,
       });
     }
   };
@@ -299,28 +313,27 @@ const AdminDashboard = () => {
     const fetchData = async () => {
       try {
         await fetchApplicationData();
-        
+
         await fetchAppointmentStats();
-        
+
         const monthlyAnalytics = await generateMonthlyAnalyticsFromDB();
         setWalkInData(monthlyAnalytics);
-        
+
         try {
           let walkIns;
-          
+
           if (typeof queueService.fetchWalkInQueues === 'function') {
             walkIns = await queueService.fetchWalkInQueues();
           } else if (typeof queueService.getQueue === 'function') {
             walkIns = await queueService.getQueue();
           }
-          
+
           if (walkIns && walkIns.length > 0) {
             setWalkInQueue(walkIns);
           }
         } catch (queueErr) {
           console.warn('Could not fetch queue data:', queueErr);
         }
-        
       } catch (err) {
         setError('Error loading data: ' + err.message);
       } finally {
@@ -328,22 +341,22 @@ const AdminDashboard = () => {
         setQueueLoading(false);
       }
     };
-    
+
     fetchData();
-    
+
     const intervalId = setInterval(() => {
       fetchApplicationData();
       fetchAppointmentStats();
       generateMonthlyAnalyticsFromDB().then(setWalkInData);
     }, 300000);
-    
+
     return () => clearInterval(intervalId);
   }, [fetchApplicationData]);
 
   const handleRefresh = async () => {
     setLoading(true);
     setChartLoading(true);
-    
+
     try {
       await fetchApplicationData();
       await fetchAppointmentStats();
@@ -365,14 +378,18 @@ const AdminDashboard = () => {
         <h1 className="AdminDahboardHeader">Dashboard</h1>
         <div className="admin-dashboard-search-bar">
           <input type="text" placeholder="Search" value={searchTerm} onChange={handleSearch} />
-          <Button 
-            variant="contained" 
+          <Button
+            variant="contained"
             onClick={handleRefresh}
             size="small"
             disabled={loading || chartLoading}
             sx={{ ml: 1, bgcolor: '#184a5b', '&:hover': { bgcolor: '#0f323d' } }}
           >
-            {(loading || chartLoading) ? <CircularProgress size={24} sx={{ color: '#fff' }} /> : 'Refresh'}
+            {loading || chartLoading ? (
+              <CircularProgress size={24} sx={{ color: '#fff' }} />
+            ) : (
+              'Refresh'
+            )}
           </Button>
         </div>
       </div>
@@ -442,8 +459,8 @@ const AdminDashboard = () => {
               <h2>Walk - In Queue</h2>
               <WalkInQueueAdmin />
             </div>
-            
-            <Container className='OverAllStatAppointContainer'>
+
+            <Container className="OverAllStatAppointContainer">
               <Paper className="TotalStatCard" elevation={1}>
                 <Typography variant="subtitle1" className="AllStatCardTitle">
                   Overall Appointments
@@ -453,8 +470,8 @@ const AdminDashboard = () => {
                 </Typography>
               </Paper>
             </Container>
-              
-            <Container className='OverAllStatContainer'>
+
+            <Container className="OverAllStatContainer">
               <Paper className="TotalStatCard" elevation={1}>
                 <Typography variant="subtitle1" className="AllStatCardTitle">
                   Overall Applications

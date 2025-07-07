@@ -38,13 +38,13 @@ const BirthApplicationSummary = () => {
   const [statusMessage, setStatusMessage] = useState('');
   const [updateTrigger, setUpdateTrigger] = useState(0);
 
-const uiTitleMap = {
-  'Request a Copy of Birth Certificate': 'Copy of Birth Certificate Request',
-  'Correction - Clerical Errors': 'Correction of Clerical Error',
-  'Correction - Sex/Date of Birth': "Correction of Child's Sex / Date of Birth",
-  'Correction - First Name': 'Correction of First Name'
-};
-  const getStatusColor = (status) => {
+  const uiTitleMap = {
+    'Request a Copy of Birth Certificate': 'Copy of Birth Certificate Request',
+    'Correction - Clerical Errors': 'Correction of Clerical Error',
+    'Correction - Sex/Date of Birth': "Correction of Child's Sex / Date of Birth",
+    'Correction - First Name': 'Correction of First Name',
+  };
+  const getStatusColor = status => {
     switch (status?.toLowerCase()) {
       case 'approved':
         return 'green';
@@ -53,9 +53,9 @@ const uiTitleMap = {
       case 'pending':
         return '#ff9800';
       case 'processing':
-        return '#2196f3'
+        return '#2196f3';
       case 'submitted':
-        return '#2196f3'; 
+        return '#2196f3';
       case 'declined':
       case 'decline':
       case 'rejected':
@@ -69,87 +69,85 @@ const uiTitleMap = {
     }
   };
 
-  
-
- const loadApplicationData = async () => {
-  try {
-    setLoading(true);
-    const currentId = localStorage.getItem('currentApplicationId');
-    if (!currentId) {
-      setError('No application ID found. Please select or create an application.');
-      setLoading(false);
-      return;
-    }
-    setApplicationId(currentId);
-    let application = null;
-
+  const loadApplicationData = async () => {
     try {
-      application = await documentApplicationService.getApplication(currentId);
-    } catch (backendErr) {
-      // If backend fails, fallback to local storage
-      const applications = JSON.parse(localStorage.getItem('applications') || '[]');
-      application = applications.find(app => app.id === currentId);
-    }
+      setLoading(true);
+      const currentId = localStorage.getItem('currentApplicationId');
+      if (!currentId) {
+        setError('No application ID found. Please select or create an application.');
+        setLoading(false);
+        return;
+      }
+      setApplicationId(currentId);
+      let application = null;
 
-    if (application && application.formData) {
-      const formDataCopy = JSON.parse(JSON.stringify(application.formData));
-      setApplicationStatus(application.status || 'Pending');
-      setStatusMessage(application.statusMessage || '');
-      const applicationSubtype = application.applicationSubtype;
-      setApplicationTitle(uiTitleMap[applicationSubtype] || 'Birth Certificate Application');
-      // Robust check for copy/correction
-      const appSubtype = (applicationSubtype || '').trim().toLowerCase();
-      setIsCopyRequest(
-        appSubtype === 'request a copy of birth certificate' ||
-        appSubtype.startsWith('correction')
-      );
-      setFormData(formDataCopy);
-      setUpdateTrigger(prev => prev + 1);
-    } else {
-      setError("Application not found.");
+      try {
+        application = await documentApplicationService.getApplication(currentId);
+      } catch (backendErr) {
+        // If backend fails, fallback to local storage
+        const applications = JSON.parse(localStorage.getItem('applications') || '[]');
+        application = applications.find(app => app.id === currentId);
+      }
+
+      if (application && application.formData) {
+        const formDataCopy = JSON.parse(JSON.stringify(application.formData));
+        setApplicationStatus(application.status || 'Pending');
+        setStatusMessage(application.statusMessage || '');
+        const applicationSubtype = application.applicationSubtype;
+        setApplicationTitle(uiTitleMap[applicationSubtype] || 'Birth Certificate Application');
+        // Robust check for copy/correction
+        const appSubtype = (applicationSubtype || '').trim().toLowerCase();
+        setIsCopyRequest(
+          appSubtype === 'request a copy of birth certificate' ||
+            appSubtype.startsWith('correction')
+        );
+        setFormData(formDataCopy);
+        setUpdateTrigger(prev => prev + 1);
+      } else {
+        setError('Application not found.');
+      }
+    } catch (err) {
+      setError('Error loading application data: ' + err.message);
+    } finally {
+      setLoading(false);
     }
-  } catch (err) {
-    setError('Error loading application data: ' + err.message);
-  } finally {
-    setLoading(false);
-  }
-};
+  };
 
   // Enhanced event listener
   useEffect(() => {
     // Initial data load
-    console.log("Running loadApplicationData initial effect");
+    console.log('Running loadApplicationData initial effect');
     loadApplicationData();
-    
+
     // Set up event listener for storage changes
-    const handleStorageChange = (event) => {
-      console.log("Storage changed detected:", event?.key || "custom event");
-      
+    const handleStorageChange = event => {
+      console.log('Storage changed detected:', event?.key || 'custom event');
+
       // Get most current application ID
       const currentId = localStorage.getItem('currentApplicationId');
-      
+
       // If ID changed, update it first
       if (currentId && currentId !== applicationId) {
-        console.log("Application ID changed to:", currentId);
+        console.log('Application ID changed to:', currentId);
         setApplicationId(currentId);
       }
-      
+
       // Then reload data (but only if we have an ID)
       if (currentId) {
         loadApplicationData();
       }
     };
-    
+
     // Listen for browser storage events
     window.addEventListener('storage', handleStorageChange);
-    
+
     // Also listen for custom storage event (for same-window updates)
     const customStorageHandler = () => {
-      console.log("Custom storage event triggered");
+      console.log('Custom storage event triggered');
       handleStorageChange();
     };
     window.addEventListener('customStorageUpdate', customStorageHandler);
-    
+
     // Clean up event listeners when component unmounts
     return () => {
       window.removeEventListener('storage', handleStorageChange);
@@ -157,7 +155,6 @@ const uiTitleMap = {
     };
   }, []); // Remove applicationId and updateTrigger from dependencies to prevent infinite loop
 
-  
   // Navigation handler
   const handleBackToApplications = () => {
     navigate('/ApplicationForm');
@@ -185,109 +182,108 @@ const uiTitleMap = {
   };
 
   // Confirm delete application
- const confirmDeleteApplication = async () => {
-  try {
-    console.log("Deleting application ID:", applicationId);
-    
-    // Verify we have an ID
-    if (!applicationId) {
-      console.error("No application ID to delete");
-      setDeleteDialogOpen(false);
-      return;
-    }
-    
-    // Delete from database first
+  const confirmDeleteApplication = async () => {
     try {
-      await documentApplicationService.deleteApplication(applicationId);
-      console.log("Application deleted from database:", applicationId);
-    } catch (dbError) {
-      console.error("Error deleting from database:", dbError);
-      // Continue with local deletion even if database deletion fails
-      // You might want to show a warning here
-    }
-    
-    // Get existing applications from localStorage
-    const existingApplications = JSON.parse(localStorage.getItem('applications') || '[]');
-    console.log("Current applications count:", existingApplications.length);
-    
-    // Filter out this application
-    const updatedApplications = existingApplications.filter(app => app.id !== applicationId);
-    console.log("Updated applications count:", updatedApplications.length);
-    
-    // Save updated list to localStorage
-    localStorage.setItem('applications', JSON.stringify(updatedApplications));
+      console.log('Deleting application ID:', applicationId);
 
-    // Update current application if needed
-    if (updatedApplications.length > 0) {
-      const nextApp = updatedApplications[0];
-      localStorage.setItem('currentApplicationId', nextApp.id);
-      
-      // Only update birthCertificateApplication if the next app is a birth certificate
-      if (nextApp.type === 'Birth Certificate' || nextApp.type === 'Copy of Birth Certificate') {
-        localStorage.setItem('birthCertificateApplication', JSON.stringify(nextApp.formData));
+      // Verify we have an ID
+      if (!applicationId) {
+        console.error('No application ID to delete');
+        setDeleteDialogOpen(false);
+        return;
+      }
+
+      // Delete from database first
+      try {
+        await documentApplicationService.deleteApplication(applicationId);
+        console.log('Application deleted from database:', applicationId);
+      } catch (dbError) {
+        console.error('Error deleting from database:', dbError);
+        // Continue with local deletion even if database deletion fails
+        // You might want to show a warning here
+      }
+
+      // Get existing applications from localStorage
+      const existingApplications = JSON.parse(localStorage.getItem('applications') || '[]');
+      console.log('Current applications count:', existingApplications.length);
+
+      // Filter out this application
+      const updatedApplications = existingApplications.filter(app => app.id !== applicationId);
+      console.log('Updated applications count:', updatedApplications.length);
+
+      // Save updated list to localStorage
+      localStorage.setItem('applications', JSON.stringify(updatedApplications));
+
+      // Update current application if needed
+      if (updatedApplications.length > 0) {
+        const nextApp = updatedApplications[0];
+        localStorage.setItem('currentApplicationId', nextApp.id);
+
+        // Only update birthCertificateApplication if the next app is a birth certificate
+        if (nextApp.type === 'Birth Certificate' || nextApp.type === 'Copy of Birth Certificate') {
+          localStorage.setItem('birthCertificateApplication', JSON.stringify(nextApp.formData));
+        } else {
+          localStorage.removeItem('birthCertificateApplication');
+        }
       } else {
+        // No applications left
+        localStorage.removeItem('currentApplicationId');
         localStorage.removeItem('birthCertificateApplication');
       }
-    } else {
-      // No applications left
-      localStorage.removeItem('currentApplicationId');
-      localStorage.removeItem('birthCertificateApplication');
-    }
 
-    console.log('Application deleted:', applicationId);
-    setDeleteDialogOpen(false);
-    
-    // Dispatch a storage event to notify other components
-    const customEvent = new Event('customStorageUpdate');
-    window.dispatchEvent(customEvent);
-    
-    // Navigate back to applications
-    navigate('/ApplicationForm');
-  } catch (err) {
-    console.error('Error deleting application:', err);
-    setError('Error deleting application: ' + err.message);
-    setDeleteDialogOpen(false);
-  }
-};
- const handleSubmit = () => {
+      console.log('Application deleted:', applicationId);
+      setDeleteDialogOpen(false);
+
+      // Dispatch a storage event to notify other components
+      const customEvent = new Event('customStorageUpdate');
+      window.dispatchEvent(customEvent);
+
+      // Navigate back to applications
+      navigate('/ApplicationForm');
+    } catch (err) {
+      console.error('Error deleting application:', err);
+      setError('Error deleting application: ' + err.message);
+      setDeleteDialogOpen(false);
+    }
+  };
+  const handleSubmit = () => {
     navigate('/ApplicationForm');
   };
   // Handle Edit Application
   const handleEditApplication = () => {
-    console.log("Edit button clicked for application ID:", applicationId);
-    
+    console.log('Edit button clicked for application ID:', applicationId);
+
     try {
       // Basic validation
       if (!applicationId) {
-        console.error("Missing application ID");
+        console.error('Missing application ID');
         alert('Application ID is missing. Cannot edit this application.');
         return;
       }
-      
+
       // Get fresh data from localStorage to ensure we have the latest version
       const applications = JSON.parse(localStorage.getItem('applications') || '[]');
       const application = applications.find(app => app.id === applicationId);
-      
+
       if (!application || !application.formData) {
-        console.error("Application not found in storage");
+        console.error('Application not found in storage');
         alert('Application data is missing. Cannot edit this application.');
         return;
       }
-      
+
       // Set all required localStorage flags for editing mode
       localStorage.setItem('isEditingBirthApplication', 'true');
       localStorage.setItem('editingApplicationId', applicationId);
       localStorage.setItem('currentApplicationStatus', applicationStatus || 'Pending');
-      
+
       // Create a deep copy of the formData to avoid reference issues
       const formDataToEdit = JSON.parse(JSON.stringify(application.formData));
       localStorage.setItem('birthCertificateApplication', JSON.stringify(formDataToEdit));
-      
+
       // Log to verify data was properly saved
-      console.log("Edit mode activated for:", applicationId);
-      console.log("Form data saved for editing:", formDataToEdit);
-      
-   
+      console.log('Edit mode activated for:', applicationId);
+      console.log('Form data saved for editing:', formDataToEdit);
+
       if (isCopyRequest) {
         window.location.href = '/RequestACopyBirthCertificate';
       } else {
@@ -298,31 +294,31 @@ const uiTitleMap = {
       alert('There was a problem setting up edit mode. Please try again.');
     }
   };
-  const renderUploadedFile = (fileData) => {
+  const renderUploadedFile = fileData => {
     if (!fileData) return null;
-    
+
     if (fileData.type.startsWith('image/')) {
       return (
         <Box sx={{ mt: 1, mb: 2 }}>
           <Typography variant="body2">
-            {fileData.name} ({Math.round(fileData.size/1024)} KB)
+            {fileData.name} ({Math.round(fileData.size / 1024)} KB)
           </Typography>
-          <img 
-            src={fileData.data} 
-            alt="Uploaded file" 
-            style={{ 
-              maxWidth: '300px', 
-              maxHeight: '200px', 
+          <img
+            src={fileData.data}
+            alt="Uploaded file"
+            style={{
+              maxWidth: '300px',
+              maxHeight: '200px',
               marginTop: '8px',
-              border: '1px solid #ccc'
-            }} 
+              border: '1px solid #ccc',
+            }}
           />
         </Box>
       );
     } else {
       return (
         <Typography variant="body2">
-          {fileData.name} ({Math.round(fileData.size/1024)} KB)
+          {fileData.name} ({Math.round(fileData.size / 1024)} KB)
         </Typography>
       );
     }
@@ -340,7 +336,6 @@ const uiTitleMap = {
               Application ID: {applicationId}
             </Typography>
           </Box>
-
 
           <Divider className="DividerSummaryBirth" />
 
@@ -363,71 +358,71 @@ const uiTitleMap = {
   const renderCopyBirthSummary = () => {
     return (
       <Box className="MainContainerSummaryBirth">
-        
-             <div className="ApplicationDetails">
-{(applicationStatus !== 'Pending' || statusMessage) && (
-    <Box className="StatusSection" sx={{ marginTop: '15px', marginBottom: '15px' }}>
-      <Typography 
-        className="ApplicationStatus"
-        sx={{ 
-          fontWeight: 'bold',
-          color: getStatusColor(applicationStatus)
-        }}
-      >
-        Status: {applicationStatus}
-      </Typography>
-      
-      {statusMessage && (
-        <Typography 
-          className="ApplicationStatusMessage"
-          sx={{ 
-            fontSize: '0.9rem',
-            marginTop: '8px', 
-            padding: '8px',
-            backgroundColor: '#f5f5f5',
-            borderLeft: '3px solid #1c4d5a'
-          }}
-        >
-          Message from Administrator: {statusMessage}
-        </Typography>
-      )}
+        <div className="ApplicationDetails">
+          {(applicationStatus !== 'Pending' || statusMessage) && (
+            <Box className="StatusSection" sx={{ marginTop: '15px', marginBottom: '15px' }}>
+              <Typography
+                className="ApplicationStatus"
+                sx={{
+                  fontWeight: 'bold',
+                  color: getStatusColor(applicationStatus),
+                }}
+              >
+                Status: {applicationStatus}
+              </Typography>
 
-      {/* Appointment link for approved applications */}
-      {(applicationStatus?.toLowerCase() === 'ready for pickup' || applicationStatus?.toLowerCase() === 'ready for pickup') && (
-        <Box sx={{ marginTop: '20px', borderTop: '1px solid #ccc', paddingTop: '10px' }}>
-          <Typography 
-            variant="body2"
-            sx={{ 
-              fontSize: '0.9rem',
-              marginBottom: '8px',
-              color: '#1c4d5a'
-            }}
-          >
-            You may book an appointment to pick up your document for faster transaction.
-          </Typography>
-          <Button
-            variant="contained"
-            color="primary"
-            size="small"
-            onClick={() => navigate('/AppointmentForm')}
-            sx={{
-              backgroundColor: '#f5f5f5',
-              color: '#1c4d5a',
-              fontWeight: '600 !important',
-              border: '1px solid #1c4d5a',
-              '&:hover': {
-                backgroundColor: '#0f3a47',
-                color: '#f5f5f5'
-              }
-            }}
-          >
-            Book Appointment
-          </Button>
-        </Box>
-      )}
-    </Box>
-  )}
-</div>
+              {statusMessage && (
+                <Typography
+                  className="ApplicationStatusMessage"
+                  sx={{
+                    fontSize: '0.9rem',
+                    marginTop: '8px',
+                    padding: '8px',
+                    backgroundColor: '#f5f5f5',
+                    borderLeft: '3px solid #1c4d5a',
+                  }}
+                >
+                  Message from Administrator: {statusMessage}
+                </Typography>
+              )}
+
+              {/* Appointment link for approved applications */}
+              {(applicationStatus?.toLowerCase() === 'ready for pickup' ||
+                applicationStatus?.toLowerCase() === 'ready for pickup') && (
+                <Box sx={{ marginTop: '20px', borderTop: '1px solid #ccc', paddingTop: '10px' }}>
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      fontSize: '0.9rem',
+                      marginBottom: '8px',
+                      color: '#1c4d5a',
+                    }}
+                  >
+                    You may book an appointment to pick up your document for faster transaction.
+                  </Typography>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    size="small"
+                    onClick={() => navigate('/AppointmentForm')}
+                    sx={{
+                      backgroundColor: '#f5f5f5',
+                      color: '#1c4d5a',
+                      fontWeight: '600 !important',
+                      border: '1px solid #1c4d5a',
+                      '&:hover': {
+                        backgroundColor: '#0f3a47',
+                        color: '#f5f5f5',
+                      },
+                    }}
+                  >
+                    Book Appointment
+                  </Button>
+                </Box>
+              )}
+            </Box>
+          )}
+        </div>
         <Paper elevation={3} className="SummaryPaperSummaryBirth">
           <Box className="HeaderSummaryBirth">
             <Typography variant="h4" className="TitleSummaryBirth">
@@ -437,7 +432,6 @@ const uiTitleMap = {
               Application ID: {applicationId} | Status: {applicationStatus}
             </Typography>
           </Box>
-     
 
           <Divider className="DividerSummaryBirth" />
 
@@ -460,7 +454,7 @@ const uiTitleMap = {
 
               <Grid item xs={12} md={4}>
                 <Typography variant="subtitle2" className="FieldLabelSummaryBirth">
-                   <strong>Date of Birth: </strong>
+                  <strong>Date of Birth: </strong>
                 </Typography>
                 <Typography variant="body1" className="FieldValueSummaryBirth">
                   {formData?.birthMonth
@@ -491,7 +485,7 @@ const uiTitleMap = {
 
           <Box className="ContentSectionSummaryBirth">
             <Typography variant="h6" className="SectionTitleSummaryBirth">
-              Parents Information 
+              Parents Information
             </Typography>
 
             <Grid container spacing={2} className="InfoGridSummaryBirth">
@@ -508,7 +502,7 @@ const uiTitleMap = {
 
               <Grid item xs={12} md={6}>
                 <Typography variant="subtitle2" className="FieldLabelSummaryBirth">
-                   <strong>Father's Name:</strong>
+                  <strong>Father's Name:</strong>
                 </Typography>
                 <Typography variant="body1" className="FieldValueSummaryBirth">
                   {formData?.fatherFirstName
@@ -529,7 +523,7 @@ const uiTitleMap = {
             <Grid container spacing={2} className="InfoGridSummaryBirth">
               <Grid item xs={12} md={6}>
                 <Typography variant="subtitle2" className="FieldLabelSummaryBirth">
-                   <strong>Purpose of Request:</strong>
+                  <strong>Purpose of Request:</strong>
                 </Typography>
                 <Typography variant="body1" className="FieldValueSummaryBirth">
                   {formData?.purpose || 'N/A'}
@@ -538,8 +532,6 @@ const uiTitleMap = {
                     `: ${formData.otherPurpose}`}
                 </Typography>
               </Grid>
-
-           
             </Grid>
           </Box>
 
@@ -638,55 +630,55 @@ const uiTitleMap = {
   return isCopyRequest ? (
     renderCopyBirthSummary()
   ) : (
-      <Box className="MainContainerSummaryBirth">
-<div className="ApplicationDetails">
-  {/* Application Status Section - Only show when status is updated or has a message */}
-  {(applicationStatus !== 'Pending' || statusMessage) && (
-    <Box className="StatusSection" sx={{ marginTop: '15px', marginBottom: '15px' }}>
-      <Typography 
-        className="ApplicationStatus"
-        sx={{ 
-          fontWeight: 'bold',
-          color: getStatusColor(applicationStatus)
-        }}
-      >
-        Status: {applicationStatus}
-      </Typography>
-      
-      {statusMessage && (
-        <Typography 
-          className="ApplicationStatusMessage"
-          sx={{ 
-            fontSize: '0.9rem',
-            marginTop: '8px', 
-            padding: '8px',
-            backgroundColor: '#f5f5f5',
-            borderLeft: '3px solid #1c4d5a'
-          }}
-        >
-          Message from Administrator: {statusMessage}
-        </Typography>
-      )}
-    </Box>
-  )}
-</div>
+    <Box className="MainContainerSummaryBirth">
+      <div className="ApplicationDetails">
+        {/* Application Status Section - Only show when status is updated or has a message */}
+        {(applicationStatus !== 'Pending' || statusMessage) && (
+          <Box className="StatusSection" sx={{ marginTop: '15px', marginBottom: '15px' }}>
+            <Typography
+              className="ApplicationStatus"
+              sx={{
+                fontWeight: 'bold',
+                color: getStatusColor(applicationStatus),
+              }}
+            >
+              Status: {applicationStatus}
+            </Typography>
+
+            {statusMessage && (
+              <Typography
+                className="ApplicationStatusMessage"
+                sx={{
+                  fontSize: '0.9rem',
+                  marginTop: '8px',
+                  padding: '8px',
+                  backgroundColor: '#f5f5f5',
+                  borderLeft: '3px solid #1c4d5a',
+                }}
+              >
+                Message from Administrator: {statusMessage}
+              </Typography>
+            )}
+          </Box>
+        )}
+      </div>
       <Paper elevation={3} className="SummaryPaperSummaryBirth">
         <Box className="certificateHeaderContainer">
           <Typography variant="body2" className="headerInfoText">
             (Revised January 2007)
           </Typography>
           <Typography variant="body1" className="headerInfoText">
-              Republic of the Philippines
-            </Typography>
-            <Button
-      variant="text"
-      color="primary"
-      onClick={toggleAffidavitPage}
-      endIcon={<ArrowRightAltIcon />}
-      className="affidavitLinkBirth"
-    >
-      View Affidavit Forms
-    </Button>
+            Republic of the Philippines
+          </Typography>
+          <Button
+            variant="text"
+            color="primary"
+            onClick={toggleAffidavitPage}
+            endIcon={<ArrowRightAltIcon />}
+            className="affidavitLinkBirth"
+          >
+            View Affidavit Forms
+          </Button>
           <Typography variant="body1" className="headerInfoText">
             OFFICE OF THE CIVIL REGISTRAR GENERAL
           </Typography>
@@ -884,23 +876,23 @@ const uiTitleMap = {
                 <Typography variant="body1">{formData?.motherDeceasedChildren || 'N/A'}</Typography>
               </Grid>
               <Grid item xs={3} className="fieldGroupNoBorder">
-  <Typography variant="body2" className="fieldLabel">
-    11. OCCUPATION
-  </Typography>
-  <Typography variant="body1">{formData?.motherOccupation || 'N/A'}</Typography>
-</Grid>
-</Grid>
+                <Typography variant="body2" className="fieldLabel">
+                  11. OCCUPATION
+                </Typography>
+                <Typography variant="body1">{formData?.motherOccupation || 'N/A'}</Typography>
+              </Grid>
+            </Grid>
 
-<Grid container>
-  <Grid item xs={12} className="fieldGroup">
-    <Typography variant="body2" className="fieldLabel">
-      12. AGE AT THE TIME OF THIS BIRTH
-    </Typography>
-    <Typography variant="body1">
-      {formData?.motherAge ? `${formData.motherAge} years` : 'N/A'}
-    </Typography>
-  </Grid>
-</Grid>
+            <Grid container>
+              <Grid item xs={12} className="fieldGroup">
+                <Typography variant="body2" className="fieldLabel">
+                  12. AGE AT THE TIME OF THIS BIRTH
+                </Typography>
+                <Typography variant="body1">
+                  {formData?.motherAge ? `${formData.motherAge} years` : 'N/A'}
+                </Typography>
+              </Grid>
+            </Grid>
             <Grid container>
               <Grid item xs={12} className="fieldContainer">
                 <Typography variant="body2" className="fieldLabel">
@@ -958,21 +950,20 @@ const uiTitleMap = {
                 <Typography variant="body1">{formData?.fatherReligion || 'N/A'}</Typography>
               </Grid>
               <Grid item xs={2} className="fieldGroup">
-  <Typography variant="body2" className="fieldLabel">
-    17. OCCUPATION
-  </Typography>
-  <Typography variant="body1">{formData?.fatherOccupation || 'N/A'}</Typography>
-</Grid>
-  <Grid item xs={3} className="fieldGroup">
-    <Typography variant="body2" className="fieldLabel">
-      18. AGE AT THE TIME OF THIS BIRTH
-    </Typography>
-    <Typography variant="body1">
-      {formData?.fatherAge ? `${formData.fatherAge} years` : 'N/A'}
-    </Typography>
-  </Grid>
-
-                </Grid>
+                <Typography variant="body2" className="fieldLabel">
+                  17. OCCUPATION
+                </Typography>
+                <Typography variant="body1">{formData?.fatherOccupation || 'N/A'}</Typography>
+              </Grid>
+              <Grid item xs={3} className="fieldGroup">
+                <Typography variant="body2" className="fieldLabel">
+                  18. AGE AT THE TIME OF THIS BIRTH
+                </Typography>
+                <Typography variant="body1">
+                  {formData?.fatherAge ? `${formData.fatherAge} years` : 'N/A'}
+                </Typography>
+              </Grid>
+            </Grid>
 
             <Grid container>
               <Grid item xs={12} className="fieldContainer">
@@ -1022,43 +1013,40 @@ const uiTitleMap = {
               {`${formData?.marriageCity || 'N/A'}, ${formData?.marriageProvince || 'N/A'}`}
             </Typography>
           </Grid>
-          </Grid>
-          
-
+        </Grid>
       </Paper>
-   <div className="ActionButtonContainerBirth">
-  <Button
-    variant="contained"
-    color="error"
-    startIcon={<CancelIcon />}
-    onClick={handleDeleteApplication}
-    className="ActionButtonBirth cancelButton"
-    aria-label="Cancel Application"
-  >
-    Cancel
-  </Button>
+      <div className="ActionButtonContainerBirth">
+        <Button
+          variant="contained"
+          color="error"
+          startIcon={<CancelIcon />}
+          onClick={handleDeleteApplication}
+          className="ActionButtonBirth cancelButton"
+          aria-label="Cancel Application"
+        >
+          Cancel
+        </Button>
 
-  
-  <Button
-    variant="contained" 
-    startIcon={<EditIcon />}
-    onClick={handleEditApplication}
-    className="ActionButtonBirth modifyButton"
-    aria-label="Edit Application"
-  >
-    Edit
-  </Button>
-  
-  <Button
-    variant="contained"
-    startIcon={<CheckCircleIcon />}
-            className="ActionButtonBirth doneButton"
-            onClick={handleSubmit}
-    aria-label="Done"
-  >
-    Done
-  </Button>
-</div>
+        <Button
+          variant="contained"
+          startIcon={<EditIcon />}
+          onClick={handleEditApplication}
+          className="ActionButtonBirth modifyButton"
+          aria-label="Edit Application"
+        >
+          Edit
+        </Button>
+
+        <Button
+          variant="contained"
+          startIcon={<CheckCircleIcon />}
+          className="ActionButtonBirth doneButton"
+          onClick={handleSubmit}
+          aria-label="Done"
+        >
+          Done
+        </Button>
+      </div>
       <Dialog
         open={deleteDialogOpen}
         onClose={cancelDeleteApplication}

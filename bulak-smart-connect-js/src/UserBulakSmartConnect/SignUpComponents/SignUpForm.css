@@ -27,10 +27,7 @@ body {
   justify-content: center;
   align-items: center;
   text-align: center;
-
-
 }
-
 
 form {
   max-width: 95vw;
@@ -47,7 +44,7 @@ form {
 
 .signup-label {
   margin-top: 5vh;
-    margin-top: 18vh;
+  margin-top: 18vh;
   font-size: 2rem;
   text-align: center;
   color: #1c4d5a; /* same color used in h2 general styling */
@@ -124,7 +121,6 @@ h2 {
 .form-control {
   flex-grow: 1;
 }
-
 
 #username-container,
 #password-container {

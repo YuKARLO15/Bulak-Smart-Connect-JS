@@ -19,12 +19,11 @@
   width: 100%;
   max-width: 600px;
   margin-bottom: 10px;
-  background: #1C4D5A;
+  background: #1c4d5a;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   padding: 24px 32px;
 }
-
 
 .queue-label {
   color: #fff;
@@ -55,7 +54,7 @@
 
 .queue-value {
   background: #f5f9fa;
-  color: #1C4D5A;
+  color: #1c4d5a;
   font-size: 3.5rem;
   font-weight: 800;
   border-radius: 12px;
@@ -81,7 +80,7 @@
 .in-queue-title {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #1C4D5A;
+  color: #1c4d5a;
   margin-bottom: 20px;
   text-align: left;
 }
@@ -98,19 +97,19 @@
 .in-queue-item {
   flex: 0 0 auto;
   background: #fcf8f6;
-  color: #1C4D5A;
+  color: #1c4d5a;
   font-size: 1.3rem;
   font-weight: 600;
   padding: 16px 24px;
   border-radius: 12px;
-  border: 1px solid #1C4D5A;
+  border: 1px solid #1c4d5a;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
   text-align: center;
   transition: all 0.3s ease;
 }
 
 .in-queue-item:hover {
-  background: #1C4D5A;
+  background: #1c4d5a;
   color: white;
   transform: scale(1.05);
 }

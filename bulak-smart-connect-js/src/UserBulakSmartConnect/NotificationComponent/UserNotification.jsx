@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Outlet } from 'react-router-dom';
 import { NotificationProvider } from '../../services/notificationContext.jsx';
-import CustomStatusNotification from './CustomStatusNotification'; 
+import CustomStatusNotification from './CustomStatusNotification';
 import documentApplicationService from '../../services/documentApplicationService';
 import { useAuth } from '../../context/AuthContext';
 
@@ -19,25 +19,22 @@ const UserNotificationContent = () => {
         if (apps && apps.length > 0 && user?.id) {
           const userApps = apps.filter(app => app.userId === user.id);
           const changedApps = [];
-for (const app of userApps) {
-  const prevStatus = prevStatusesRef.current[app.id];
+          for (const app of userApps) {
+            const prevStatus = prevStatusesRef.current[app.id];
 
-  if (
-    app.status &&
-    app.status.toLowerCase() !== 'pending' &&
-    (
-      prevStatus === undefined || 
-      app.status !== prevStatus   
-    )
-  ) {
-    changedApps.push(app);
-  }
-}
-      
+            if (
+              app.status &&
+              app.status.toLowerCase() !== 'pending' &&
+              (prevStatus === undefined || app.status !== prevStatus)
+            ) {
+              changedApps.push(app);
+            }
+          }
+
           if (changedApps.length > 0) {
             setNotifQueue(prev => [...prev, ...changedApps]);
           }
-         
+
           prevStatusesRef.current = Object.fromEntries(userApps.map(app => [app.id, app.status]));
         }
       } catch (error) {
@@ -47,7 +44,6 @@ for (const app of userApps) {
 
     return () => clearInterval(interval);
   }, [user?.id]);
-
 
   useEffect(() => {
     if (!currentNotif && notifQueue.length > 0) {
@@ -62,11 +58,11 @@ for (const app of userApps) {
     <>
       {currentNotif && (
         <CustomStatusNotification
-                  status={currentNotif.status}
-                    id={currentNotif.id}
+          status={currentNotif.status}
+          id={currentNotif.id}
           statusMessage={currentNotif.statusMessage}
           showBookAppointment={showBookAppointment}
-          onBookAppointment={() => window.location.href = '/AppointmentForm'}
+          onBookAppointment={() => (window.location.href = '/AppointmentForm')}
           onClose={() => setCurrentNotif(null)}
         />
       )}

@@ -7,7 +7,7 @@ export const useNotification = () => useContext(NotificationContext);
 export const NotificationProvider = ({ children }) => {
   const [notif, setNotif] = useState(null);
 
-  const showNotification = useCallback((message) => {
+  const showNotification = useCallback(message => {
     setNotif(message);
     setTimeout(() => setNotif(null), 5000);
   }, []);

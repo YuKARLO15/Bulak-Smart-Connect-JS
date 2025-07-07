@@ -3,13 +3,11 @@ import './TermsAndCondition.css';
 
 const PrivacyPolicy = () => {
   const [isTagalog, setIsTagalog] = useState(false);
-   const visitedPrivacyPolicy = true;
- const urlParams = new URLSearchParams(window.location.search);
-    const redirectTo = urlParams.get('redirect') || '/BirthCertificateDashboard';
+  const visitedPrivacyPolicy = true;
+  const urlParams = new URLSearchParams(window.location.search);
+  const redirectTo = urlParams.get('redirect') || '/BirthCertificateDashboard';
 
   useEffect(() => {
-   
-    
     if (window.opener) {
       window.opener.postMessage('visited-privacy-policy', '*');
     }
@@ -750,20 +748,18 @@ const PrivacyPolicy = () => {
 
         {/* Proceed Button */}
         <div className="proceed-button-container">
-            <button
-          className="proceed-button"
-          onClick={() => {
-            if (window.opener) {
-              window.opener.postMessage('visited-terms-and-conditions', '*');
-              window.close();
-            } else {
-              window.location.href = redirectTo;
-            }
-          }}
-        >
-            {isTagalog
-              ? 'Sumasangayon at Magpatuloy'
-              : 'I Agree and Proceed'}
+          <button
+            className="proceed-button"
+            onClick={() => {
+              if (window.opener) {
+                window.opener.postMessage('visited-terms-and-conditions', '*');
+                window.close();
+              } else {
+                window.location.href = redirectTo;
+              }
+            }}
+          >
+            {isTagalog ? 'Sumasangayon at Magpatuloy' : 'I Agree and Proceed'}
           </button>
         </div>
       </div>

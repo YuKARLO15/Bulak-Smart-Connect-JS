@@ -109,9 +109,8 @@
   color: #1c4d5a;
   font-weight: bold;
   margin-top: 20px !important;
- 
 }
-.dataPrivacyNoticeLink{
+.dataPrivacyNoticeLink {
   color: #1c4d5a !important;
   font-weight: bold !important;
 }
@@ -119,7 +118,6 @@
   margin-left: 20px;
 }
 
-.Privacy-TagalogNotice{
-    color: rgb(72, 71, 71);
-
+.Privacy-TagalogNotice {
+  color: rgb(72, 71, 71);
 }

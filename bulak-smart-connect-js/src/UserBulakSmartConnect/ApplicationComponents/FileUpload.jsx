@@ -8,12 +8,12 @@ const FileUpload = ({ label, description, onUpload, multiple = false }) => {
   const [error, setError] = useState('');
   const fileInputRef = useRef(null);
 
-  const convertToBase64 = (file) => {
+  const convertToBase64 = file => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onload = () => resolve(reader.result);
-      reader.onerror = (error) => reject(error);
+      reader.onerror = error => reject(error);
     });
   };
 
@@ -23,7 +23,7 @@ const FileUpload = ({ label, description, onUpload, multiple = false }) => {
     }
   };
 
-  const handleFileChange = async (event) => {
+  const handleFileChange = async event => {
     const files = Array.from(event.target.files);
     if (files.length === 0) return;
 
@@ -51,12 +51,12 @@ const FileUpload = ({ label, description, onUpload, multiple = false }) => {
         try {
           // Convert file to base64
           const base64File = await convertToBase64(file);
-          
+
           processedFiles.push({
             name: file.name,
             type: file.type,
             size: file.size,
-            data: base64File
+            data: base64File,
           });
         } catch (err) {
           errors.push(`${file.name}: Error processing file`);
@@ -76,9 +76,8 @@ const FileUpload = ({ label, description, onUpload, multiple = false }) => {
         setUploadedFiles(processedFiles);
         onUpload(processedFiles.length > 0, processedFiles[0] || null);
       }
-      
+
       setIsLoading(false);
-      
     } catch (err) {
       console.error('Error uploading files:', err);
       setError('Error uploading files. Please try again.');
@@ -88,10 +87,10 @@ const FileUpload = ({ label, description, onUpload, multiple = false }) => {
     event.target.value = '';
   };
 
-  const handleRemoveFile = (indexToRemove) => {
+  const handleRemoveFile = indexToRemove => {
     const updatedFiles = uploadedFiles.filter((_, index) => index !== indexToRemove);
     setUploadedFiles(updatedFiles);
-    
+
     if (multiple) {
       onUpload(updatedFiles.length > 0, updatedFiles);
     } else {
@@ -109,24 +108,24 @@ const FileUpload = ({ label, description, onUpload, multiple = false }) => {
       <Typography variant="subtitle2" className="file-label">
         {label} <span className="sample-text"></span>
       </Typography>
-      
+
       {/* Add description below the title */}
       {description && (
-        <Typography 
-          variant="body2" 
-          sx={{ 
-            fontSize: '0.875rem', 
-            fontStyle: 'italic', 
+        <Typography
+          variant="body2"
+          sx={{
+            fontSize: '0.875rem',
+            fontStyle: 'italic',
             marginBottom: '8px',
             marginTop: '4px',
             color: '#666',
-            paddingLeft: '4px'
+            paddingLeft: '4px',
           }}
         >
           {description}
         </Typography>
       )}
-      
+
       <Box className="file-upload-box" onClick={openFileExplorer}>
         {error && (
           <Typography variant="body2" className="error-message" style={{ color: 'red' }}>
@@ -134,52 +133,58 @@ const FileUpload = ({ label, description, onUpload, multiple = false }) => {
           </Typography>
         )}
         <Typography variant="body2" className="file-uploaddesc">
-          {isLoading 
-            ? 'Uploading...' 
-            : uploadedFiles.length > 0 
+          {isLoading
+            ? 'Uploading...'
+            : uploadedFiles.length > 0
               ? `${uploadedFiles.length} file(s) uploaded`
-              : multiple 
+              : multiple
                 ? 'Click to upload files'
-                : ' Click to upload'
-          }
+                : ' Click to upload'}
         </Typography>
-        
+
         {/* Instructions for multiple file selection */}
         {multiple && uploadedFiles.length === 0 && (
-          <Typography variant="caption" style={{ 
-            color: '#666', 
-            fontSize: '11px', 
-            marginTop: '5px',
-            display: 'block'
-          }}>
+          <Typography
+            variant="caption"
+            style={{
+              color: '#666',
+              fontSize: '11px',
+              marginTop: '5px',
+              display: 'block',
+            }}
+          >
             Hold Ctrl (Cmd on Mac) to select multiple files at once
           </Typography>
         )}
-        
+
         {/* Display uploaded files */}
         {uploadedFiles.length > 0 && (
           <Box className="uploaded-files-list" style={{ marginTop: '10px' }}>
             {uploadedFiles.map((file, index) => (
-              <Box key={index} className="uploaded-file" style={{ 
-                display: 'flex', 
-                justifyContent: 'space-between', 
-                alignItems: 'center',
-                padding: '5px',
-                border: '1px solid #ddd',
-                borderRadius: '4px',
-                marginBottom: '5px'
-              }}>
+              <Box
+                key={index}
+                className="uploaded-file"
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  padding: '5px',
+                  border: '1px solid #ddd',
+                  borderRadius: '4px',
+                  marginBottom: '5px',
+                }}
+              >
                 <Typography variant="body2">{file.name}</Typography>
-                <button 
-                  onClick={(e) => {
+                <button
+                  onClick={e => {
                     e.stopPropagation();
                     handleRemoveFile(index);
                   }}
-                  style={{ 
-                    background: 'none', 
-                    border: 'none', 
+                  style={{
+                    background: 'none',
+                    border: 'none',
                     cursor: 'pointer',
-                    color: '#f44336'
+                    color: '#f44336',
                   }}
                 >
                   ✕
@@ -187,19 +192,19 @@ const FileUpload = ({ label, description, onUpload, multiple = false }) => {
               </Box>
             ))}
             {multiple && uploadedFiles.length > 1 && (
-              <button 
-                onClick={(e) => {
+              <button
+                onClick={e => {
                   e.stopPropagation();
                   handleRemoveAllFiles();
                 }}
-                style={{ 
+                style={{
                   marginTop: '5px',
                   padding: '5px 10px',
                   backgroundColor: '#f44336',
                   color: 'white',
                   border: 'none',
                   borderRadius: '4px',
-                  cursor: 'pointer'
+                  cursor: 'pointer',
                 }}
               >
                 Remove All Files

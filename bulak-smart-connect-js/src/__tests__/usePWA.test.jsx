@@ -11,23 +11,24 @@ const usePWA = () => {
 
   React.useEffect(() => {
     // Simulate PWA detection logic
-    const isStandalone = window.matchMedia('(display-mode: standalone)').matches 
-      || window.navigator.standalone === true;
-    
+    const isStandalone =
+      window.matchMedia('(display-mode: standalone)').matches ||
+      window.navigator.standalone === true;
+
     setIsInstalled(isStandalone);
   }, []);
 
   return {
     isInstalled,
     deferredPrompt,
-    showInstallPrompt
+    showInstallPrompt,
   };
 };
 
 // Mock window.matchMedia - ensure it returns false by default
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
-  value: vi.fn((query) => ({
+  value: vi.fn(query => ({
     matches: false, // Always return false initially
     media: query,
     onchange: null,
@@ -50,10 +51,10 @@ describe('usePWA', () => {
     vi.clearAllMocks();
     window.addEventListener = vi.fn();
     window.removeEventListener = vi.fn();
-    
+
     // Reset mocks to default state
     window.navigator.standalone = false;
-    window.matchMedia = vi.fn((query) => ({
+    window.matchMedia = vi.fn(query => ({
       matches: false,
       media: query,
       onchange: null,
@@ -76,7 +77,7 @@ describe('usePWA', () => {
   it('detects standalone mode', () => {
     // Set up standalone mode BEFORE rendering the hook
     window.navigator.standalone = true;
-    window.matchMedia = vi.fn((query) => ({ 
+    window.matchMedia = vi.fn(query => ({
       matches: query === '(display-mode: standalone)',
       media: query,
       onchange: null,
@@ -86,7 +87,7 @@ describe('usePWA', () => {
       removeEventListener: vi.fn(),
       dispatchEvent: vi.fn(),
     }));
-    
+
     const { result } = renderHook(() => usePWA());
 
     expect(result.current.isInstalled).toBe(true);
@@ -94,7 +95,7 @@ describe('usePWA', () => {
 
   it('handles install prompt event', () => {
     const { result } = renderHook(() => usePWA());
-    
+
     // Test that the hook doesn't crash
     expect(result.current.deferredPrompt).toBe(null);
   });

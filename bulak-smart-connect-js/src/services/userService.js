@@ -7,17 +7,18 @@ const apiClient = axios.create({
   withCredentials: true,
   timeout: config.API_TIMEOUT,
   headers: {
-    'Accept': 'application/json',
-    'Content-Type': 'application/json'
-  }
+    Accept: 'application/json',
+    'Content-Type': 'application/json',
+  },
 });
 
 // Add request interceptor to include auth token in all requests
 apiClient.interceptors.request.use(
-  (requestConfig) => {
+  requestConfig => {
     // Try both with and without prefix to handle inconsistencies
-    let token = localStorage.getItem('token') || localStorage.getItem(`${config.STORAGE_PREFIX}token`);
-    
+    let token =
+      localStorage.getItem('token') || localStorage.getItem(`${config.STORAGE_PREFIX}token`);
+
     if (token) {
       requestConfig.headers.Authorization = `Bearer ${token}`;
       console.log('🎫 Sending request with token:', token.substring(0, 20) + '...');
@@ -27,28 +28,30 @@ apiClient.interceptors.request.use(
     }
     return requestConfig;
   },
-  (error) => {
+  error => {
     return Promise.reject(error);
   }
 );
 
 // Add response interceptor to handle errors
 apiClient.interceptors.response.use(
-  (response) => {
+  response => {
     const contentType = response.headers['content-type'];
     if (contentType && contentType.includes('text/html')) {
-      return Promise.reject(new Error('Received HTML instead of JSON. You might need to log in again.'));
+      return Promise.reject(
+        new Error('Received HTML instead of JSON. You might need to log in again.')
+      );
     }
     return response;
   },
-  (error) => {
+  error => {
     // Log detailed error information for 403 errors
     if (error.response?.status === 403) {
       console.error('🚫 403 Forbidden Error Details:');
       console.error('URL:', error.config?.url);
       console.error('Headers:', error.config?.headers);
       console.error('Response:', error.response?.data);
-      
+
       // Check if user data exists
       const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
       console.error('Current User:', currentUser);
@@ -63,47 +66,46 @@ const userService = {
   getAllUsers: async (params = {}) => {
     try {
       console.log('🔍 Trying to fetch all users for admin...');
-      
+
       // Verify user has proper role before making request
       const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
       const token = localStorage.getItem('token');
-      
+
       console.log('👤 Current user roles:', currentUser.roles);
       console.log('🎫 Token exists:', !!token);
-      
+
       if (!token) {
         throw new Error('No authentication token found');
       }
-      
+
       // Check if user has super_admin role
       const isSuperAdmin = currentUser.roles && currentUser.roles.includes('super_admin');
-      
+
       if (!isSuperAdmin) {
         throw new Error('Access denied. Only super administrators can view user management.');
       }
-      
+
       const queryParams = new URLSearchParams({
         page: params.page || 1,
         limit: params.limit || 50,
         ...(params.search && { search: params.search }),
         // Add filter to exclude citizens
-        excludeRoles: 'citizen'
+        excludeRoles: 'citizen',
       });
-      
+
       const response = await apiClient.get(`/users?${queryParams}`);
-      
+
       console.log('✅ Users fetched successfully:', response.data);
       return response.data;
-      
     } catch (error) {
       console.error('❌ Error fetching users:', error);
-      
+
       // Enhanced error handling for 403/401
       if (error.response?.status === 403 || error.response?.status === 401) {
         console.error('🚫 Access denied - insufficient permissions');
         throw new Error('Access denied. Only super administrators can manage users.');
       }
-      
+
       throw error;
     }
   },
@@ -121,20 +123,20 @@ const userService = {
   },
 
   // Get user by ID
-  getUserById: async (userId) => {
+  getUserById: async userId => {
     try {
       const response = await apiClient.get(`/users/${userId}`);
       return response.data;
     } catch (error) {
       console.error(`Error getting user ${userId}:`, error);
-      
+
       // Fallback to localStorage
       const localUsers = JSON.parse(localStorage.getItem('users') || '[]');
       const user = localUsers.find(u => u.id === userId);
       if (user) {
         return user;
       }
-      
+
       throw error;
     }
   },
@@ -143,7 +145,7 @@ const userService = {
   updateUser: async (userId, userData) => {
     try {
       const response = await apiClient.patch(`/users/${userId}`, userData);
-      
+
       // Also update localStorage
       try {
         const localUsers = JSON.parse(localStorage.getItem('users') || '[]');
@@ -155,11 +157,11 @@ const userService = {
       } catch (localErr) {
         console.warn('Failed to update localStorage:', localErr);
       }
-      
+
       return response.data;
     } catch (error) {
       console.error(`Error updating user ${userId}:`, error);
-      
+
       // Update localStorage even if API fails
       try {
         const localUsers = JSON.parse(localStorage.getItem('users') || '[]');
@@ -172,7 +174,7 @@ const userService = {
       } catch (localErr) {
         console.warn('Failed to update localStorage:', localErr);
       }
-      
+
       throw error;
     }
   },
@@ -181,7 +183,7 @@ const userService = {
   updateUserStatus: async (userId, isActive) => {
     try {
       const response = await apiClient.patch(`/users/${userId}/status`, { isActive });
-      
+
       // Also update localStorage
       try {
         const localUsers = JSON.parse(localStorage.getItem('users') || '[]');
@@ -194,11 +196,11 @@ const userService = {
       } catch (localErr) {
         console.warn('Failed to update localStorage:', localErr);
       }
-      
+
       return response.data;
     } catch (error) {
       console.error(`Error updating user status ${userId}:`, error);
-      
+
       // Update localStorage even if API fails
       try {
         const localUsers = JSON.parse(localStorage.getItem('users') || '[]');
@@ -212,16 +214,16 @@ const userService = {
       } catch (localErr) {
         console.warn('Failed to update localStorage:', localErr);
       }
-      
+
       throw error;
     }
   },
 
   // Delete user
-  deleteUser: async (userId) => {
+  deleteUser: async userId => {
     try {
       const response = await apiClient.delete(`/users/${userId}`);
-      
+
       // Also delete from localStorage
       try {
         const localUsers = JSON.parse(localStorage.getItem('users') || '[]');
@@ -230,7 +232,7 @@ const userService = {
       } catch (localErr) {
         console.warn('Failed to update localStorage:', localErr);
       }
-      
+
       return response.data;
     } catch (error) {
       console.error(`Error deleting user ${userId}:`, error);
@@ -245,7 +247,7 @@ const userService = {
       return response.data;
     } catch (error) {
       console.error('Error getting user stats:', error);
-      
+
       // Fallback to localStorage-based stats
       try {
         const localUsers = JSON.parse(localStorage.getItem('users') || '[]');
@@ -254,7 +256,7 @@ const userService = {
           activeUsers: localUsers.filter(u => u.isActive !== false).length,
           inactiveUsers: localUsers.filter(u => u.isActive === false).length,
           usersByRole: [],
-          recentUsers: localUsers.slice(-5) // Last 5 users
+          recentUsers: localUsers.slice(-5), // Last 5 users
         };
         return stats;
       } catch (localErr) {
@@ -265,14 +267,14 @@ const userService = {
   },
 
   // Register new user (admin creates user)
-  createUser: async (userData) => {
+  createUser: async userData => {
     try {
       console.log('🔧 Creating user with userService:', userData);
-      
+
       // Check if this is an admin-created user (has roleIds)
       if (userData.roleIds && userData.roleIds.length > 0) {
         console.log('🔑 Using admin user creation endpoint');
-        
+
         // Use admin endpoint for user creation with role assignment
         const response = await apiClient.post('/users/admin-create', {
           email: userData.email,
@@ -285,11 +287,11 @@ const userService = {
           name: userData.name, // Include the generated full name
           password: userData.password,
           roleIds: userData.roleIds,
-          defaultRoleId: userData.defaultRoleId
+          defaultRoleId: userData.defaultRoleId,
         });
-        
+
         console.log('✅ Admin user creation successful:', response.data);
-        
+
         // Update localStorage with the new user
         try {
           const localUsers = JSON.parse(localStorage.getItem('users') || '[]');
@@ -305,18 +307,18 @@ const userService = {
             firstName: userData.firstName,
             lastName: userData.lastName,
             middleName: userData.middleName,
-            nameExtension: userData.nameExtension
+            nameExtension: userData.nameExtension,
           };
           localUsers.push(newUser);
           localStorage.setItem('users', JSON.stringify(localUsers));
         } catch (localErr) {
           console.warn('Failed to update localStorage:', localErr);
         }
-        
+
         return response.data;
       } else {
         console.log('👥 Using regular citizen registration endpoint');
-        
+
         // Use regular registration endpoint for citizen users
         const response = await apiClient.post('/auth/register', {
           email: userData.email,
@@ -327,9 +329,9 @@ const userService = {
           nameExtension: userData.nameExtension,
           contactNumber: userData.contactNumber,
           name: userData.name,
-          password: userData.password
+          password: userData.password,
         });
-        
+
         console.log('✅ Regular user creation successful:', response.data);
         return response.data;
       }
@@ -343,15 +345,15 @@ const userService = {
   adminUpdateUser: async (userId, userData) => {
     try {
       console.log('🔧 Admin updating user:', userId, userData);
-      
+
       // Verify current user has super_admin role
       const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
       if (!currentUser.roles || !currentUser.roles.includes('super_admin')) {
         throw new Error('Only super administrators can update users');
       }
-      
+
       const response = await apiClient.post(`/auth/admin/update-user/${userId}`, userData);
-      
+
       // Update localStorage on success
       try {
         const localUsers = JSON.parse(localStorage.getItem('users') || '[]');
@@ -363,18 +365,19 @@ const userService = {
       } catch (localErr) {
         console.warn('Failed to update localStorage:', localErr);
       }
-      
+
       return response.data;
     } catch (error) {
       console.error(`❌ Error admin updating user ${userId}:`, error);
-      
+
       // Enhanced error logging
       if (error.response?.status === 401) {
         console.error('🚫 Authentication failed - checking token...');
-        const token = localStorage.getItem('token') || localStorage.getItem(`${config.STORAGE_PREFIX}token`);
+        const token =
+          localStorage.getItem('token') || localStorage.getItem(`${config.STORAGE_PREFIX}token`);
         console.error('Token exists:', !!token);
         console.error('Token length:', token?.length);
-        
+
         // Check if token is expired
         if (token) {
           try {
@@ -388,7 +391,7 @@ const userService = {
       } else if (error.response?.status === 403) {
         console.error('🚫 Insufficient permissions');
       }
-      
+
       // Fallback to localStorage update
       try {
         const localUsers = JSON.parse(localStorage.getItem('users') || '[]');
@@ -402,41 +405,42 @@ const userService = {
       } catch (localErr) {
         console.warn('Failed to update localStorage:', localErr);
       }
-      
+
       throw error;
     }
   },
 
   // Search users
-  searchUsers: async (query) => {
+  searchUsers: async query => {
     try {
       const response = await apiClient.get(`/users?search=${encodeURIComponent(query)}`);
       return response.data;
     } catch (error) {
       console.error('Error searching users:', error);
-      
+
       // Fallback to localStorage search
       try {
         const localUsers = JSON.parse(localStorage.getItem('users') || '[]');
-        const filteredUsers = localUsers.filter(user => 
-          user.name?.toLowerCase().includes(query.toLowerCase()) ||
-          user.email?.toLowerCase().includes(query.toLowerCase()) ||
-          user.username?.toLowerCase().includes(query.toLowerCase())
+        const filteredUsers = localUsers.filter(
+          user =>
+            user.name?.toLowerCase().includes(query.toLowerCase()) ||
+            user.email?.toLowerCase().includes(query.toLowerCase()) ||
+            user.username?.toLowerCase().includes(query.toLowerCase())
         );
-        
+
         return {
           users: filteredUsers,
           total: filteredUsers.length,
           page: 1,
           limit: filteredUsers.length,
-          totalPages: 1
+          totalPages: 1,
         };
       } catch (localErr) {
         console.warn('Failed to search localStorage:', localErr);
         throw error;
       }
     }
-  }
+  },
 };
 
 export default userService;

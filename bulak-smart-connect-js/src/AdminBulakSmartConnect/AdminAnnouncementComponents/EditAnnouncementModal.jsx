@@ -5,7 +5,7 @@ const EditAnnouncementModal = ({ isOpen, onClose, announcementData, onSave, onDe
   const [editedAnnouncement, setEditedAnnouncement] = useState({
     title: '',
     description: '',
-    image: ''
+    image: '',
   });
 
   useEffect(() => {
@@ -14,16 +14,16 @@ const EditAnnouncementModal = ({ isOpen, onClose, announcementData, onSave, onDe
         id: announcementData.id || '',
         title: announcementData.title || '',
         description: announcementData.description || '',
-        image: announcementData.image || ''
+        image: announcementData.image || '',
       });
     }
   }, [isOpen, announcementData]);
 
-  const handleChange = (e) => {
+  const handleChange = e => {
     const { name, value } = e.target;
     setEditedAnnouncement(prev => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
@@ -33,7 +33,7 @@ const EditAnnouncementModal = ({ isOpen, onClose, announcementData, onSave, onDe
     return phTime.toISOString();
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = e => {
     e.preventDefault();
     const updatedWithDate = {
       ...editedAnnouncement,
@@ -72,8 +72,12 @@ const EditAnnouncementModal = ({ isOpen, onClose, announcementData, onSave, onDe
           />
           <div className="modal-actions">
             <button type="submit">Save Changes</button>
-             <button type="button" onClick={handleDelete} className="delete-button">Delete</button>
-            <button type="button" onClick={onClose}>Cancel</button>
+            <button type="button" onClick={handleDelete} className="delete-button">
+              Delete
+            </button>
+            <button type="button" onClick={onClose}>
+              Cancel
+            </button>
           </div>
         </form>
       </div>

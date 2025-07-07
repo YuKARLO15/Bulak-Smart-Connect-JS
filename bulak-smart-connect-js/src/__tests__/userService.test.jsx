@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 // Create a mock userService
 const userService = {
-  getUserById: async (id) => {
+  getUserById: async id => {
     const users = JSON.parse(localStorage.getItem('users') || '[]');
     const user = users.find(u => u.id === id);
     if (!user) {
@@ -10,10 +10,10 @@ const userService = {
     }
     return user;
   },
-  
+
   testAuth: async () => {
     return { success: true, message: 'Authentication successful' };
-  }
+  },
 };
 
 // Mock localStorage
@@ -38,7 +38,7 @@ describe('userService', () => {
       mockLocalStorage.getItem.mockReturnValue(JSON.stringify([mockUser]));
 
       const result = await userService.getUserById('123');
-      
+
       expect(result).toEqual(mockUser);
     });
 
@@ -52,7 +52,7 @@ describe('userService', () => {
   describe('testAuth', () => {
     it('returns success for valid authentication', async () => {
       const result = await userService.testAuth();
-      
+
       expect(result).toHaveProperty('success', true);
       expect(result).toHaveProperty('message');
     });

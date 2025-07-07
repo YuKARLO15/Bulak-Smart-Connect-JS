@@ -103,10 +103,8 @@ body {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background-color: #ffffff; 
+  background-color: #ffffff;
 }
-
-
 
 .dialog-overlay-signupdataprivacy {
   position: fixed;
@@ -149,7 +147,8 @@ body {
   margin-top: 25px;
 }
 
-.confirm-btn-signupdataprivacy, .cancel-btn-signupdataprivacy {
+.confirm-btn-signupdataprivacy,
+.cancel-btn-signupdataprivacy {
   padding: 10px 20px;
   border: none;
   border-radius: 5px;

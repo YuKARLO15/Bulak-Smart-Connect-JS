@@ -5,14 +5,14 @@ import axios from 'axios';
 import './WalkInQueueAdmin.css';
 
 // Format queue number to WK format
-const formatWKNumber = (queueNumber) => {
+const formatWKNumber = queueNumber => {
   if (typeof queueNumber === 'string' && queueNumber.startsWith('WK')) {
     return queueNumber;
   }
-  
+
   // Handle null or undefined
   if (!queueNumber) return 'WK000';
-  
+
   const numberPart = queueNumber?.includes('-') ? queueNumber.split('-')[1] : queueNumber;
   const num = parseInt(numberPart, 10) || 0;
   return `WK${String(num).padStart(3, '0')}`;
@@ -24,134 +24,140 @@ const WalkInQueueAdmin = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-// Update the fetchQueueData function
-const fetchQueueData = useCallback(async () => {
-  setLoading(true);
-  try {
-    // Try to fetch queues with details directly (if those endpoints exist)
-    let pendingData, currentData;
-    
+  // Update the fetchQueueData function
+  const fetchQueueData = useCallback(async () => {
+    setLoading(true);
     try {
-      // First attempt: Try to fetch queues with details included
-      [pendingData, currentData] = await Promise.all([
-        queueService.fetchPendingQueuesWithDetails(),
-        queueService.fetchCurrentQueuesWithDetails()
-      ]);
-    } catch (e) {
-      console.log('Detailed endpoints not available, falling back to basic endpoints');
-      // Fallback: Fetch basic queue data without details
-      [pendingData, currentData] = await Promise.all([
-        queueService.fetchPendingQueues(),
-        queueService.fetchCurrentQueues()
-      ]);
-      
-      // Get queue IDs
-      const pendingIds = pendingData.map(q => q.id);
-      const currentIds = currentData.map(q => q.id);
-      const allIds = [...pendingIds, ...currentIds];
-      
-      if (allIds.length > 0) {
-        // Fetch details for all queues in a single request
-        try {
-          const detailsMap = await queueService.fetchDetailsForMultipleQueues(allIds);
-          
-          // Attach details to queue objects
-          pendingData = pendingData.map(queue => ({
-            ...queue,
-            userData: detailsMap[queue.id] || {}
-          }));
-          
-          currentData = currentData.map(queue => ({
-            ...queue,
-            userData: detailsMap[queue.id] || {}
-          }));
-        } catch (error) {
-          console.error('Failed to fetch queue details in bulk:', error);
-          
-          // Fallback to individual requests if bulk fetch fails
-          console.log('Attempting to fetch details individually');
-          
-          // Fetch details for each pending queue
-          const pendingDetailsPromises = pendingData.map(queue => 
-            queueService.fetchQueueDetails(queue.id)
-              .then(details => ({ ...queue, userData: details }))
-              .catch(() => queue) // Keep original queue if details fetch fails
-          );
-          
-          // Fetch details for each current queue
-          const currentDetailsPromises = currentData.map(queue => 
-            queueService.fetchQueueDetails(queue.id)
-              .then(details => ({ ...queue, userData: details }))
-              .catch(() => queue) // Keep original queue if details fetch fails
-          );
-          
-          // Wait for all details to be fetched
-          pendingData = await Promise.all(pendingDetailsPromises);
-          currentData = await Promise.all(currentDetailsPromises);
+      // Try to fetch queues with details directly (if those endpoints exist)
+      let pendingData, currentData;
+
+      try {
+        // First attempt: Try to fetch queues with details included
+        [pendingData, currentData] = await Promise.all([
+          queueService.fetchPendingQueuesWithDetails(),
+          queueService.fetchCurrentQueuesWithDetails(),
+        ]);
+      } catch (e) {
+        console.log('Detailed endpoints not available, falling back to basic endpoints');
+        // Fallback: Fetch basic queue data without details
+        [pendingData, currentData] = await Promise.all([
+          queueService.fetchPendingQueues(),
+          queueService.fetchCurrentQueues(),
+        ]);
+
+        // Get queue IDs
+        const pendingIds = pendingData.map(q => q.id);
+        const currentIds = currentData.map(q => q.id);
+        const allIds = [...pendingIds, ...currentIds];
+
+        if (allIds.length > 0) {
+          // Fetch details for all queues in a single request
+          try {
+            const detailsMap = await queueService.fetchDetailsForMultipleQueues(allIds);
+
+            // Attach details to queue objects
+            pendingData = pendingData.map(queue => ({
+              ...queue,
+              userData: detailsMap[queue.id] || {},
+            }));
+
+            currentData = currentData.map(queue => ({
+              ...queue,
+              userData: detailsMap[queue.id] || {},
+            }));
+          } catch (error) {
+            console.error('Failed to fetch queue details in bulk:', error);
+
+            // Fallback to individual requests if bulk fetch fails
+            console.log('Attempting to fetch details individually');
+
+            // Fetch details for each pending queue
+            const pendingDetailsPromises = pendingData.map(
+              queue =>
+                queueService
+                  .fetchQueueDetails(queue.id)
+                  .then(details => ({ ...queue, userData: details }))
+                  .catch(() => queue) // Keep original queue if details fetch fails
+            );
+
+            // Fetch details for each current queue
+            const currentDetailsPromises = currentData.map(
+              queue =>
+                queueService
+                  .fetchQueueDetails(queue.id)
+                  .then(details => ({ ...queue, userData: details }))
+                  .catch(() => queue) // Keep original queue if details fetch fails
+            );
+
+            // Wait for all details to be fetched
+            pendingData = await Promise.all(pendingDetailsPromises);
+            currentData = await Promise.all(currentDetailsPromises);
+          }
         }
       }
+
+      // Process and format pending queues with details
+      const formattedPendingQueues = pendingData.map(queue => {
+        console.log('Queue with details:', queue);
+
+        // Extract userData from wherever it exists
+        const userData = queue.userData || queue.details || queue.user || {};
+
+        return {
+          id: queue.id || queue._id,
+          queueNumber: formatWKNumber(queue.queueNumber || queue.id),
+          firstName: userData.firstName || 'Guest',
+          lastName: userData.lastName || '',
+          reasonOfVisit:
+            userData.reasonOfVisit || userData.reason || userData.service || 'General Inquiry',
+          status: queue.status || 'pending',
+          timestamp: queue.createdAt || queue.date || new Date().toISOString(),
+        };
+      });
+
+      // Process and format current queues with details
+      const formattedCurrentQueues = currentData.map(queue => {
+        // Extract userData from wherever it exists
+        const userData = queue.userData || queue.details || queue.user || {};
+
+        return {
+          id: queue.id || queue._id,
+          queueNumber: formatWKNumber(queue.queueNumber || queue.id),
+          firstName: userData.firstName || 'Guest',
+          lastName: userData.lastName || '',
+          reasonOfVisit:
+            userData.reasonOfVisit || userData.reason || userData.service || 'General Inquiry',
+          status: 'in-progress',
+          timestamp: queue.createdAt || queue.date || new Date().toISOString(),
+        };
+      });
+
+      setPendingQueues(formattedPendingQueues);
+      setCurrentQueues(formattedCurrentQueues);
+      setError(null);
+    } catch (err) {
+      console.error('Error fetching queue data:', err);
+      setError('Could not load queue data. Please ensure the server is running.');
+      setPendingQueues([]);
+      setCurrentQueues([]);
+    } finally {
+      setLoading(false);
     }
-    
-    // Process and format pending queues with details
-    const formattedPendingQueues = pendingData.map(queue => {
-      console.log('Queue with details:', queue);
-      
-      // Extract userData from wherever it exists
-      const userData = queue.userData || queue.details || queue.user || {};
-      
-      return {
-        id: queue.id || queue._id,
-        queueNumber: formatWKNumber(queue.queueNumber || queue.id),
-        firstName: userData.firstName || 'Guest',
-        lastName: userData.lastName || '',
-        reasonOfVisit: userData.reasonOfVisit || userData.reason || userData.service || 'General Inquiry',
-        status: queue.status || 'pending',
-        timestamp: queue.createdAt || queue.date || new Date().toISOString()
-      };
-    });
-    
-    // Process and format current queues with details
-    const formattedCurrentQueues = currentData.map(queue => {
-      // Extract userData from wherever it exists
-      const userData = queue.userData || queue.details || queue.user || {};
-      
-      return {
-        id: queue.id || queue._id,
-        queueNumber: formatWKNumber(queue.queueNumber || queue.id),
-        firstName: userData.firstName || 'Guest',
-        lastName: userData.lastName || '',
-        reasonOfVisit: userData.reasonOfVisit || userData.reason || userData.service || 'General Inquiry',
-        status: 'in-progress',
-        timestamp: queue.createdAt || queue.date || new Date().toISOString()
-      };
-    });
-    
-    setPendingQueues(formattedPendingQueues);
-    setCurrentQueues(formattedCurrentQueues);
-    setError(null);
-  } catch (err) {
-    console.error('Error fetching queue data:', err);
-    setError('Could not load queue data. Please ensure the server is running.');
-    setPendingQueues([]);
-    setCurrentQueues([]);
-  } finally {
-    setLoading(false);
-  }
-}, []);  // Update queue status using the queueService
+  }, []); // Update queue status using the queueService
   const updateQueueStatus = async (queueId, newStatus) => {
     try {
       console.log(`Attempting to update queue ${queueId} to status: ${newStatus}`);
-      
+
       // Parse the queueId if it's not already a number
       const parsedQueueId = parseInt(queueId, 10) || queueId;
-      
+
       // First update local state optimistically to provide immediate feedback
       if (newStatus === 'in-progress') {
         // Move from pending to current
         const queueToMove = pendingQueues.find(q => q.id === queueId || q.id === parsedQueueId);
         if (queueToMove) {
           setPendingQueues(prev => prev.filter(q => q.id !== queueId && q.id !== parsedQueueId));
-          setCurrentQueues(prev => [...prev, {...queueToMove, status: 'in-progress'}]);
+          setCurrentQueues(prev => [...prev, { ...queueToMove, status: 'in-progress' }]);
         }
       } else if (newStatus === 'completed') {
         // Remove from current
@@ -161,23 +167,23 @@ const fetchQueueData = useCallback(async () => {
         const queueToMove = currentQueues.find(q => q.id === queueId || q.id === parsedQueueId);
         if (queueToMove) {
           setCurrentQueues(prev => prev.filter(q => q.id !== queueId && q.id !== parsedQueueId));
-          setPendingQueues(prev => [...prev, {...queueToMove, status: 'pending'}]);
+          setPendingQueues(prev => [...prev, { ...queueToMove, status: 'pending' }]);
         }
       }
-      
+
       // Make API call to update status using queueService
       await queueService.updateQueueStatus(parsedQueueId, newStatus);
       console.log(`Queue status updated successfully: ${queueId} → ${newStatus}`);
-      
+
       // Refresh data after updating to ensure our UI is in sync with the server
       setTimeout(() => fetchQueueData(), 500);
     } catch (error) {
       console.error('Failed to update queue status:', error);
       console.error('Error details:', error.response?.data || error.message);
-      
+
       // Show friendlier error message
       alert('Failed to update queue status. Please try again.');
-      
+
       // Refresh data to revert UI to server state
       fetchQueueData();
     }
@@ -197,13 +203,13 @@ const fetchQueueData = useCallback(async () => {
   useEffect(() => {
     console.log('WalkInQueueAdmin: Initial data fetch');
     fetchQueueData();
-    
+
     // Refresh queue data every 30 seconds
     const intervalId = setInterval(() => {
       console.log('WalkInQueueAdmin: Auto-refreshing queue data');
       fetchQueueData();
     }, 30000);
-    
+
     // Clean up on component unmount
     return () => {
       console.log('WalkInQueueAdmin: Cleanup - clearing interval');
@@ -230,14 +236,12 @@ const fetchQueueData = useCallback(async () => {
           </div>
         </div>
       )}
-      
 
-        <div className="queue-footer">
-          <Link to="/AdminWalkInQueue" className="view-all-btn">
-            View All Queues
-          </Link>
-        </div> 
-   
+      <div className="queue-footer">
+        <Link to="/AdminWalkInQueue" className="view-all-btn">
+          View All Queues
+        </Link>
+      </div>
     </div>
   );
 };

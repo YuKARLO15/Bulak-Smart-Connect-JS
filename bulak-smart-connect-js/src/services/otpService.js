@@ -8,7 +8,7 @@ export const otpService = {
       console.log(`🔄 Sending OTP to ${email} for ${purpose}`);
       const response = await axios.post(`${config.API_BASE_URL}/auth/send-otp`, {
         email,
-        purpose
+        purpose,
       });
       console.log('✅ OTP sent successfully:', response.data);
       return response.data;
@@ -25,7 +25,7 @@ export const otpService = {
       const response = await axios.post(`${config.API_BASE_URL}/auth/verify-otp`, {
         email,
         otp,
-        purpose
+        purpose,
       });
       console.log('✅ OTP verified successfully');
       return response.data;
@@ -36,11 +36,11 @@ export const otpService = {
   },
 
   // Send password reset OTP
-  forgotPassword: async (email) => {
+  forgotPassword: async email => {
     try {
       console.log(`🔄 Sending password reset code to ${email}`);
       const response = await axios.post(`${config.API_BASE_URL}/auth/forgot-password`, {
-        email
+        email,
       });
       console.log('✅ Password reset code sent');
       return response.data;
@@ -57,7 +57,7 @@ export const otpService = {
       const response = await axios.post(`${config.API_BASE_URL}/auth/reset-password`, {
         email,
         otp,
-        newPassword
+        newPassword,
       });
       console.log('✅ Password reset successfully');
       return response.data;
@@ -65,5 +65,5 @@ export const otpService = {
       console.error('❌ Password reset failed:', error);
       throw new Error(error.response?.data?.message || 'Failed to reset password');
     }
-  }
+  },
 };

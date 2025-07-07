@@ -11,14 +11,14 @@
   transition: margin-left 0.3s ease;
 }
 .DocumentsPaperBelow18 {
-      width: 100%;
+  width: 100%;
   max-width: 900px;
   margin: 0 auto;
   margin-top: 16px;
   background: #fff;
   border-radius: 9px;
   border: 1.5px solid #b6c6d2;
-  box-shadow: 0px 2px 10px rgba(24,74,91,0.04);
+  box-shadow: 0px 2px 10px rgba(24, 74, 91, 0.04);
   padding: 36px 32px 32px 32px;
   display: flex;
   flex-direction: column;
@@ -78,7 +78,7 @@
 }
 
 .ButtonContainerBelow18 {
-      display: flex;
+  display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 12px;
@@ -87,13 +87,12 @@
   max-width: 900px;
 }
 
-.BackButtonBelow18{
-      border-color: #184a5b !important;
+.BackButtonBelow18 {
+  border-color: #184a5b !important;
   color: #184a5b !important;
   font-weight: 500 !important;
-  
 }
-.SubmitButtonBelow18{
+.SubmitButtonBelow18 {
   background-color: #184a5b !important;
   color: #fff !important;
   font-weight: 600 !important;
@@ -101,24 +100,20 @@
   min-width: 190px !important;
   transition: background 0.23s;
 }
-.SubmitButtonBelow18:disabled{
+.SubmitButtonBelow18:disabled {
   background: #e0e0e0 !important;
   color: #bdbdbd !important;
   border: none !important;
 }
 @media (max-width: 768px) {
-  .FormTitleBelow18{
+  .FormTitleBelow18 {
     font-size: 1rem !important;
-
   }
-
 }
 
-@media  (max-width: 425px) {
-
- .FormTitleBelow18 {
+@media (max-width: 425px) {
+  .FormTitleBelow18 {
     font-size: 0.8rem !important;
     width: 100%;
   }
-
 }

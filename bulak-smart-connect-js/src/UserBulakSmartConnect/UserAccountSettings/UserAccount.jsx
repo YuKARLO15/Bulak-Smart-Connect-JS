@@ -22,7 +22,7 @@ const UserAccount = () => {
   const [email, setEmail] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  
+
   // Password states
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
@@ -150,7 +150,7 @@ const UserAccount = () => {
 
     if (isSensitiveEdit) {
       if (isEditing.email) updates.email = email;
-      if (isEditing.phoneNumber) updates.contactNumber = phoneNumber; 
+      if (isEditing.phoneNumber) updates.contactNumber = phoneNumber;
       if (isEditing.username && canChangeUsername) updates.username = username;
 
       setPendingUpdates(updates);
@@ -236,7 +236,7 @@ const UserAccount = () => {
   };
 
   // ✅ ENHANCED: Verify current password before sending OTP
-  const verifyCurrentPassword = async (currentPasswordToVerify) => {
+  const verifyCurrentPassword = async currentPasswordToVerify => {
     try {
       const response = await axios.post(`${config.API_BASE_URL}/auth/login`, {
         email: email,
@@ -285,9 +285,9 @@ const UserAccount = () => {
 
     // ✅ NEW: Check if new password is same as current password
     if (currentPassword === newPassword) {
-      setMessage({ 
-        text: '❌ New password must be different from your current password', 
-        type: 'error' 
+      setMessage({
+        text: '❌ New password must be different from your current password',
+        type: 'error',
       });
       return;
     }
@@ -311,11 +311,11 @@ const UserAccount = () => {
 
       // ✅ NEW: Verify current password first
       const isCurrentPasswordValid = await verifyCurrentPassword(currentPassword);
-      
+
       if (!isCurrentPasswordValid) {
-        setMessage({ 
-          text: '❌ Current password is incorrect. Please check and try again.', 
-          type: 'error' 
+        setMessage({
+          text: '❌ Current password is incorrect. Please check and try again.',
+          type: 'error',
         });
         return;
       }
@@ -324,13 +324,13 @@ const UserAccount = () => {
 
       // Send OTP for password change verification
       await otpService.sendOTP(email, 'password_reset');
-      
+
       // Store pending password change data
       setPendingPasswordChange({
         currentPassword,
-        newPassword
+        newPassword,
       });
-      
+
       setShowOTPModal(true);
       setMessage({ text: '📧 OTP sent to your email for verification', type: 'success' });
     } catch (error) {
@@ -353,7 +353,7 @@ const UserAccount = () => {
         `${config.API_BASE_URL}/auth/update-profile`,
         {
           password: pendingPasswordChange.newPassword,
-          oldPassword: pendingPasswordChange.currentPassword, 
+          oldPassword: pendingPasswordChange.currentPassword,
         },
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -366,21 +366,21 @@ const UserAccount = () => {
       setConfirmPassword('');
       setPendingPasswordChange(null);
 
-      setMessage({ 
-        text: '✅ Password updated successfully! You will be logged out in 3 seconds for security...', 
-        type: 'success' 
+      setMessage({
+        text: '✅ Password updated successfully! You will be logged out in 3 seconds for security...',
+        type: 'success',
       });
 
       // Auto logout and redirect after password change
       setTimeout(async () => {
         try {
           await logout();
-          navigate('/LogIn', { 
+          navigate('/LogIn', {
             replace: true,
-            state: { 
+            state: {
               message: '✅ Password changed successfully. Please log in with your new password.',
-              type: 'success'
-            }
+              type: 'success',
+            },
           });
         } catch (error) {
           console.error('Logout error:', error);
@@ -389,7 +389,6 @@ const UserAccount = () => {
           navigate('/LogIn', { replace: true });
         }
       }, 3000);
-
     } catch (error) {
       console.error('Error changing password:', error);
       setMessage({
@@ -429,7 +428,7 @@ const UserAccount = () => {
   };
 
   // Phone number formatting and validation
-  const handlePhoneNumberChange = (e) => {
+  const handlePhoneNumberChange = e => {
     const value = e.target.value.replace(/\D/g, ''); // Remove all non-digit characters
     if (value.length <= 10) {
       setPhoneNumber(value);
@@ -446,19 +445,19 @@ const UserAccount = () => {
       <div className="AccountHeaderUAcc">
         <h1 className="AccountHeaderUAcc"> User Account Settings</h1>
       </div>
-      
+
       <div className="AccountContainerUAcc">
         {message.text && <div className={`MessageUAcc ${message.type}`}>{message.text}</div>}
 
         {/* Tab Navigation */}
         <div className="AccountTabsUAcc">
-          <button 
+          <button
             className={`TabButtonUAcc ${activeTab === 'profile' ? 'active' : ''}`}
             onClick={() => setActiveTab('profile')}
           >
             Profile Information
           </button>
-          <button 
+          <button
             className={`TabButtonUAcc ${activeTab === 'password' ? 'active' : ''}`}
             onClick={() => setActiveTab('password')}
           >
@@ -519,7 +518,9 @@ const UserAccount = () => {
           <div className="TabContentUAcc">
             <form onSubmit={handleSaveProfile} className="AccountFormUAcc">
               <div className="FormGroupUAcc">
-                <label htmlFor="firstName">First name<span style={{color: 'red'}}> *</span></label>
+                <label htmlFor="firstName">
+                  First name<span style={{ color: 'red' }}> *</span>
+                </label>
                 <input
                   type="text"
                   id="firstName"
@@ -530,7 +531,9 @@ const UserAccount = () => {
               </div>
 
               <div className="FormGroupUAcc">
-                <label htmlFor="lastName">Last name<span style={{color: 'red'}}> *</span></label>
+                <label htmlFor="lastName">
+                  Last name<span style={{ color: 'red' }}> *</span>
+                </label>
                 <input
                   type="text"
                   id="lastName"
@@ -541,7 +544,9 @@ const UserAccount = () => {
               </div>
 
               <div className="FormGroupUAcc">
-                <label htmlFor="username">Username<span style={{color: 'red'}}> *</span></label>
+                <label htmlFor="username">
+                  Username<span style={{ color: 'red' }}> *</span>
+                </label>
                 <div className="InputWithActionUAcc">
                   <input
                     type="text"
@@ -558,7 +563,7 @@ const UserAccount = () => {
                       className="EditButtonUAcc"
                       disabled={!canChangeUsername}
                     >
-                       <EditIcon fontSize="small" />
+                      <EditIcon fontSize="small" />
                     </button>
                   ) : (
                     <button
@@ -573,13 +578,16 @@ const UserAccount = () => {
                 {!canChangeUsername && (
                   <p className="RestrictionNoteUAcc">
                     Username can only be changed once every 30 days.
-                    {getTimeUntilUsernameChange() && ` Time remaining: ${getTimeUntilUsernameChange()}`}
+                    {getTimeUntilUsernameChange() &&
+                      ` Time remaining: ${getTimeUntilUsernameChange()}`}
                   </p>
                 )}
               </div>
 
               <div className="FormGroupUAcc">
-                <label htmlFor="email">E-mail<span style={{color: 'red'}}> *</span></label>
+                <label htmlFor="email">
+                  E-mail<span style={{ color: 'red' }}> *</span>
+                </label>
                 <div className="InputWithActionUAcc">
                   <input
                     type="email"
@@ -595,7 +603,7 @@ const UserAccount = () => {
                       onClick={() => setIsEditing({ ...isEditing, email: true })}
                       className="EditButtonUAcc"
                     >
-                       <EditIcon fontSize="small" />
+                      <EditIcon fontSize="small" />
                     </button>
                   ) : (
                     <button
@@ -610,7 +618,9 @@ const UserAccount = () => {
               </div>
 
               <div className="FormGroupUAcc">
-                <label htmlFor="phoneNumber">Phone number<span style={{color: 'red'}}> *</span></label>
+                <label htmlFor="phoneNumber">
+                  Phone number<span style={{ color: 'red' }}> *</span>
+                </label>
                 <div className="PhoneInputContainerUAcc">
                   <div className="PhoneInputWrapperUAcc">
                     <div className="CountryCodeUAcc">+63</div>
@@ -634,7 +644,7 @@ const UserAccount = () => {
                       onClick={() => setIsEditing({ ...isEditing, phoneNumber: true })}
                       className="PhoneEditButtonUAcc"
                     >
-                       <EditIcon fontSize="small" />
+                      <EditIcon fontSize="small" />
                     </button>
                   ) : (
                     <button
@@ -642,13 +652,14 @@ const UserAccount = () => {
                       onClick={() => setIsEditing({ ...isEditing, phoneNumber: false })}
                       className="PhoneCancelButtonUAcc"
                     >
-                    <CloseIcon fontSize="small" />
+                      <CloseIcon fontSize="small" />
                     </button>
                   )}
                 </div>
                 {isEditing.phoneNumber && (
                   <p className="FieldHintUAcc">
-                    Please enter a valid 10-digit phone number without any special characters or spaces.
+                    Please enter a valid 10-digit phone number without any special characters or
+                    spaces.
                   </p>
                 )}
               </div>
@@ -668,7 +679,9 @@ const UserAccount = () => {
             <div className="PasswordTabCardUAcc">
               <form onSubmit={handleChangePassword} className="PasswordFormUAcc">
                 <div className="FormGroupUAcc">
-                  <label htmlFor="currentPassword">Current Password<span style={{color: 'red'}}> *</span></label>
+                  <label htmlFor="currentPassword">
+                    Current Password<span style={{ color: 'red' }}> *</span>
+                  </label>
                   <input
                     type="password"
                     id="currentPassword"
@@ -679,7 +692,9 @@ const UserAccount = () => {
                 </div>
 
                 <div className="FormGroupUAcc">
-                  <label htmlFor="newPassword">New Password<span style={{color: 'red'}}> *</span></label>
+                  <label htmlFor="newPassword">
+                    New Password<span style={{ color: 'red' }}> *</span>
+                  </label>
                   <input
                     type="password"
                     id="newPassword"
@@ -688,12 +703,15 @@ const UserAccount = () => {
                     required
                   />
                   <p className="PasswordRequirementsUAcc">
-                    Password must be at least 8 characters long and include uppercase, lowercase, numbers, and special characters.
+                    Password must be at least 8 characters long and include uppercase, lowercase,
+                    numbers, and special characters.
                   </p>
                 </div>
 
                 <div className="FormGroupUAcc">
-                  <label htmlFor="confirmPassword">Confirm New Password <span style={{color: 'red'}}> *</span></label>
+                  <label htmlFor="confirmPassword">
+                    Confirm New Password <span style={{ color: 'red' }}> *</span>
+                  </label>
                   <input
                     type="password"
                     id="confirmPassword"

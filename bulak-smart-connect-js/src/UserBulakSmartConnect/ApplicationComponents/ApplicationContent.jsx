@@ -14,17 +14,17 @@ const ApplicationContent = () => {
       icon: BirthCertificateIcon,
       route: '/BirthCertificateDashboard',
       details: ['Easily request an official copy of your birth certificate online.'],
-      requirementsRoute: '/RequirementBirthList'
+      requirementsRoute: '/RequirementBirthList',
     },
     {
       title: 'Marriage Certificate',
       icon: MarriageCertificateIcon,
       route: '/MarriageDashboard',
       details: 'Apply for a certified copy of your marriage certificate quickly and conveniently.',
-      requirementsRoute: '/RequirementMarriageList'
-    }
+      requirementsRoute: '/RequirementMarriageList',
+    },
   ];
-  
+
   return (
     <>
       <div className="OnlineApplicationTitleContainer">
@@ -37,14 +37,14 @@ const ApplicationContent = () => {
           <Grid container spacing={2} direction={{ xs: 'column', sm: 'row' }}>
             {certificates.map((cert, index) => (
               <Grid item xs={12} sm={6} key={index}>
-                <Card className="CertificateCard"> 
+                <Card className="CertificateCard">
                   <CardContent>
                     <Typography variant="h5" className="CardTitle">
                       <img src={cert.icon} alt={`${cert.title} Icon`} className="Icon" />
                       {cert.title}
                     </Typography>
                     <ul className="Details">
-                      <li className='ApplicationDescription'>{cert.details}</li>
+                      <li className="ApplicationDescription">{cert.details}</li>
                     </ul>
                     <div className="Actions">
                       <RouterLink to={cert.requirementsRoute}>

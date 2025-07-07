@@ -31,8 +31,7 @@
   margin: 0 auto; centers the header if width is less than 100% 
 } */
 
-
-.label-usermanagement{
+.label-usermanagement {
   font-weight: 600;
   background-color: #184a5b;
   color: white;
@@ -48,7 +47,6 @@
   color: #184a5b;
   font-weight: bold;
 }
-
 
 .modal-overlay {
   position: fixed;

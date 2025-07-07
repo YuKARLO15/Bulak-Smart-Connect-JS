@@ -14,20 +14,18 @@
 }
 
 .queue-stat {
-
   padding: 25px;
-  border-bottom: #1C4D5A 1px solid;
+  border-bottom: #1c4d5a 1px solid;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-
 }
 
 .queue-stat-value {
   display: block;
   font-size: 1.5rem;
   font-weight: 600;
-  color: #1C4D5A;
+  color: #1c4d5a;
 }
 
 .queue-stat-label {
@@ -35,23 +33,22 @@
   color: #666;
 }
 .queue-stat-label-waiting {
-   font-size: 0.85rem;
-   color: #FFA726;
+  font-size: 0.85rem;
+  color: #ffa726;
 }
 .queue-stat-labelprogress {
   font-size: 0.85rem !important;
-  color: #1C4D5A !important;
+  color: #1c4d5a !important;
 }
 
 .queue-footer {
   text-align: center;
   padding-top: 12px;
   border-top: 1px solid #e0e0e0;
-
-} 
+}
 
 .view-all-btn {
-  color: #1C4D5A;
+  color: #1c4d5a;
   text-decoration: none;
   font-weight: 500;
   border: 1px solid #8aacb5 !important;
@@ -63,5 +60,5 @@
 
 .view-all-btn:hover {
   text-decoration: underline;
-  color: #8DC3A7;
+  color: #8dc3a7;
 }

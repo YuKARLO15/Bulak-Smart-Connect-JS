@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Typography, Button } from '@mui/material';
 
-const getStatusColor = (status) => {
+const getStatusColor = status => {
   switch (status?.toLowerCase()) {
     case 'approved':
       return 'green';
@@ -27,8 +27,8 @@ const getStatusColor = (status) => {
 };
 
 const CustomStatusNotification = ({
-    status,
-    id,
+  status,
+  id,
   statusMessage,
   onBookAppointment,
   showBookAppointment,
@@ -63,7 +63,8 @@ const CustomStatusNotification = ({
             fontSize: '1.1rem',
           }}
         >
-Status: {status} {id && `(Application ID: ${id})`}        </Typography>
+          Status: {status} {id && `(Application ID: ${id})`}{' '}
+        </Typography>
         {onClose && (
           <Button size="small" onClick={onClose} sx={{ minWidth: 0, color: '#888' }}>
             ×
@@ -78,7 +79,7 @@ Status: {status} {id && `(Application ID: ${id})`}        </Typography>
             p: 1,
             backgroundColor: '#f5f5f5',
             borderLeft: '3px solid #1c4d5a',
-                      borderRadius: 1,
+            borderRadius: 1,
             color: '#1c4d5a',
           }}
         >

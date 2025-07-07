@@ -1,46 +1,45 @@
 .MarriageCertificateContainer {
-  
-    width: 100vw;
-    margin: 0 auto;
-    transition: margin-left 0.3s;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .MarriageCertificateContainer.sidebar-open {
-    margin-left: 250px;
-  }
-  
-  .TitleMarriageCertificate {
-    background-color: #184a5b;
-    color: #fff;
-    margin-bottom: 8px;
-    text-align: center;
-    font-weight: 600;
-    padding:15px ;
-    width: 100vw;
-    font-weight: 600 !important;
-  }
-  
-  .SubtitleMarriageCertificate {
-    color: #4a6572;
-    margin-bottom: 24px;
-    
-    text-align: center;
-    font-style: italic;
-  }
-  
-  .SectionTitleMarriageCertificate {
-      font-weight: 600 !important;
+  width: 100vw;
+  margin: 0 auto;
+  transition: margin-left 0.3s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.MarriageCertificateContainer.sidebar-open {
+  margin-left: 250px;
+}
+
+.TitleMarriageCertificate {
+  background-color: #184a5b;
+  color: #fff;
+  margin-bottom: 8px;
+  text-align: center;
+  font-weight: 600;
+  padding: 15px;
+  width: 100vw;
+  font-weight: 600 !important;
+}
+
+.SubtitleMarriageCertificate {
+  color: #4a6572;
+  margin-bottom: 24px;
+
+  text-align: center;
+  font-style: italic;
+}
+
+.SectionTitleMarriageCertificate {
+  font-weight: 600 !important;
   color: #184a5b;
   font-size: 1.1rem;
   text-align: left;
   margin-bottom: 14px !important;
   margin-top: 0 !important;
-  }
-  
-  .DocumentsSectionMarriageCertificate {
+}
+
+.DocumentsSectionMarriageCertificate {
   width: 100%;
   max-width: 900px;
   margin: 0 auto;
@@ -48,34 +47,33 @@
   background: #fff;
   border-radius: 9px;
   border: 1.5px solid #b6c6d2;
-  box-shadow: 0px 2px 10px rgba(24,74,91,0.04);
+  box-shadow: 0px 2px 10px rgba(24, 74, 91, 0.04);
   padding: 36px 32px 32px 32px;
   display: flex;
   flex-direction: column;
   gap: 28px;
-  }
-  
-  .SubmitButtonMarriageCertificate {
-    background-color: #184a5b !important;
-    color: white !important;
-    padding: 10px 20px !important;
-    margin-top: 24px !important;
-    display: block !important;
-    width: 30vw !important;
-  }
-  
-  .SubmitButtonMarriageCertificate:disabled {
-    background-color: #cccccc !important;
-    color: #666666 !important;
-  }
-  /* Button Container Styles */
+}
+
+.SubmitButtonMarriageCertificate {
+  background-color: #184a5b !important;
+  color: white !important;
+  padding: 10px 20px !important;
+  margin-top: 24px !important;
+  display: block !important;
+  width: 30vw !important;
+}
+
+.SubmitButtonMarriageCertificate:disabled {
+  background-color: #cccccc !important;
+  color: #666666 !important;
+}
+/* Button Container Styles */
 .ButtonContainerMarriageCertificate {
   display: flex;
   justify-content: space-between;
   margin-top: 30px;
   margin-bottom: 20px;
   width: 60%;
- 
 }
 
 /* Back Button Styles */
@@ -125,14 +123,14 @@
     flex-direction: column;
     align-items: center;
   }
-  
-  .BackButton, 
+
+  .BackButton,
   .SubmitButtonMarriageCertificate {
     width: 100%;
     margin-top: 10px !important;
     margin-right: 0 !important;
   }
-  .TitleMarriageCertificate{
+  .TitleMarriageCertificate {
     font-size: 1rem !important;
     padding: 15px !important;
   }

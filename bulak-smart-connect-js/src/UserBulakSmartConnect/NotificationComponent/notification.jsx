@@ -1,6 +1,6 @@
 import React from 'react';
 import { Snackbar, Alert } from '@mui/material';
-import { useNotification } from '../../services/notificationContext.jsx'; 
+import { useNotification } from '../../services/notificationContext.jsx';
 
 const GlobalNotification = () => {
   const { notif } = useNotification();

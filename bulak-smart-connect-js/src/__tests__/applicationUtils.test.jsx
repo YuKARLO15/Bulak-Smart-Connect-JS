@@ -3,14 +3,14 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 // Mock utility functions based on your codebase patterns
 const applicationUtils = {
   generateApplicationId: () => `app-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-  
-  saveApplication: (applicationData) => {
+
+  saveApplication: applicationData => {
     const applications = JSON.parse(localStorage.getItem('applications') || '[]');
     applications.push({
       ...applicationData,
       id: applicationUtils.generateApplicationId(),
       submittedAt: new Date().toISOString(),
-      status: 'pending'
+      status: 'pending',
     });
     localStorage.setItem('applications', JSON.stringify(applications));
     return applications[applications.length - 1];
@@ -23,7 +23,7 @@ const applicationUtils = {
       applications[index] = {
         ...applications[index],
         ...applicationData,
-        lastUpdated: new Date().toISOString()
+        lastUpdated: new Date().toISOString(),
       };
       localStorage.setItem('applications', JSON.stringify(applications));
       return applications[index];
@@ -31,10 +31,10 @@ const applicationUtils = {
     return null;
   },
 
-  getApplication: (id) => {
+  getApplication: id => {
     const applications = JSON.parse(localStorage.getItem('applications') || '[]');
     return applications.find(app => app.id === id);
-  }
+  },
 };
 
 // Mock localStorage
@@ -58,7 +58,7 @@ describe('applicationUtils', () => {
     it('generates unique application IDs', () => {
       const id1 = applicationUtils.generateApplicationId();
       const id2 = applicationUtils.generateApplicationId();
-      
+
       expect(id1).not.toBe(id2);
       expect(id1).toMatch(/^app-\d+-[a-z0-9]+$/);
     });
@@ -68,7 +68,7 @@ describe('applicationUtils', () => {
     it('saves application to localStorage', () => {
       const applicationData = {
         formData: { name: 'Test User' },
-        certificateType: 'birth'
+        certificateType: 'birth',
       };
 
       const savedApp = applicationUtils.saveApplication(applicationData);
@@ -82,13 +82,11 @@ describe('applicationUtils', () => {
 
   describe('updateApplication', () => {
     it('updates existing application', () => {
-      const existingApps = [
-        { id: 'app-123', formData: { name: 'Old Name' } }
-      ];
+      const existingApps = [{ id: 'app-123', formData: { name: 'Old Name' } }];
       mockLocalStorage.getItem.mockReturnValue(JSON.stringify(existingApps));
 
       const updatedApp = applicationUtils.updateApplication('app-123', {
-        formData: { name: 'New Name' }
+        formData: { name: 'New Name' },
       });
 
       expect(updatedApp.formData.name).toBe('New Name');
@@ -97,16 +95,14 @@ describe('applicationUtils', () => {
 
     it('returns null for non-existent application', () => {
       const result = applicationUtils.updateApplication('non-existent', {});
-      
+
       expect(result).toBeNull();
     });
   });
 
   describe('getApplication', () => {
     it('retrieves application by ID', () => {
-      const existingApps = [
-        { id: 'app-123', formData: { name: 'Test User' } }
-      ];
+      const existingApps = [{ id: 'app-123', formData: { name: 'Test User' } }];
       mockLocalStorage.getItem.mockReturnValue(JSON.stringify(existingApps));
 
       const app = applicationUtils.getApplication('app-123');
@@ -116,7 +112,7 @@ describe('applicationUtils', () => {
 
     it('returns undefined for non-existent application', () => {
       const app = applicationUtils.getApplication('non-existent');
-      
+
       expect(app).toBeUndefined();
     });
   });

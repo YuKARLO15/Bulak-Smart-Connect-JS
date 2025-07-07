@@ -252,8 +252,8 @@
 
 /* Application Type Chip */
 .ApplicationTypeChip {
-  background-color: #EAF6F7 !important;
-  color: #20505C !important;
+  background-color: #eaf6f7 !important;
+  color: #20505c !important;
   font-size: 0.8rem !important;
   font-weight: 500 !important;
   border-radius: 4px !important;
@@ -336,41 +336,41 @@
     margin: 1rem;
     width: calc(100% - 2rem);
   }
-  
+
   .RecentApplicationsTitle {
     font-size: 1.1rem !important;
   }
-  
+
   .ApplicationCard {
     margin-bottom: 16px !important;
   }
-  
+
   .ApplicationCardContent {
     padding: 16px !important;
   }
-  
+
   .ApplicationCardTitle {
     font-size: 1.1rem !important;
     line-height: 1.3;
     margin-bottom: 6px !important;
   }
-  
+
   /* Mobile: Stack everything vertically */
   .ApplicationTitleRow {
     flex-direction: column;
     align-items: flex-start;
     gap: 6px;
   }
-  
+
   .ApplicationSubtype {
     font-size: 0.85rem !important;
-    background-color: #EAF6F7 !important;
-    color: #20505C !important;
+    background-color: #eaf6f7 !important;
+    color: #20505c !important;
     padding: 2px 8px !important;
     border-radius: 4px !important;
     display: inline-block !important;
   }
-  
+
   .ApplicationInfoContainer {
     flex-direction: column !important;
     align-items: flex-start !important;
@@ -396,19 +396,19 @@
     margin: 0.75rem;
     width: calc(100% - 1.5rem);
   }
-  
+
   .RecentApplicationsTitle {
     font-size: 1rem !important;
   }
-  
+
   .ApplicationCardTitle {
     font-size: 1rem !important;
   }
-  
+
   .ApplicationSubtype {
     font-size: 0.8rem !important;
   }
-  
+
   .ApplicationApplicant {
     font-size: 0.75rem !important;
   }
@@ -440,19 +440,19 @@
     margin: 0.5rem;
     width: calc(100% - 1rem);
   }
-  
+
   .RecentApplicationsTitle {
     font-size: 0.95rem !important;
   }
-  
+
   .ApplicationCardTitle {
     font-size: 0.9rem !important;
   }
-  
+
   .ApplicationSubtype {
     font-size: 0.75rem !important;
   }
-  
+
   .ApplicationApplicant {
     font-size: 0.7rem !important;
   }

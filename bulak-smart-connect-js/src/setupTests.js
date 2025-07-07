@@ -14,7 +14,7 @@ vi.mock('*.less', () => ({}));
 // Fix window.matchMedia mock - ensure it returns false by default
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
-  value: vi.fn((query) => ({
+  value: vi.fn(query => ({
     matches: false, // Default to false
     media: query,
     onchange: null,
@@ -38,7 +38,7 @@ window.removeEventListener = vi.fn();
 
 // Mock HTMLFormElement.requestSubmit for jsdom compatibility
 Object.defineProperty(HTMLFormElement.prototype, 'requestSubmit', {
-  value: function() {
+  value: function () {
     this.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
   },
   writable: true,
@@ -52,12 +52,12 @@ const originalWarn = console.warn;
 console.error = (...args) => {
   // Suppress specific React error boundary messages during tests
   if (
-    typeof args[0] === 'string' && 
-    (args[0].includes('Error boundaries') || 
-     args[0].includes('The above error occurred') ||
-     args[0].includes('React will try to recreate') ||
-     args[0].includes('Test error') ||
-     args[0].includes('ErrorBoundary'))
+    typeof args[0] === 'string' &&
+    (args[0].includes('Error boundaries') ||
+      args[0].includes('The above error occurred') ||
+      args[0].includes('React will try to recreate') ||
+      args[0].includes('Test error') ||
+      args[0].includes('ErrorBoundary'))
   ) {
     return;
   }
@@ -66,10 +66,7 @@ console.error = (...args) => {
 
 console.warn = (...args) => {
   // Suppress React warnings during tests
-  if (
-    typeof args[0] === 'string' && 
-    args[0].includes('Warning:')
-  ) {
+  if (typeof args[0] === 'string' && args[0].includes('Warning:')) {
     return;
   }
   originalWarn.apply(console, args);
@@ -83,14 +80,14 @@ const originalOnUnhandledRejection = window.onunhandledrejection;
 window.onerror = (message, source, lineno, colno, error) => {
   // Handle ErrorBoundary test errors specifically
   if (
-    error?.message?.includes('Test error') || 
+    error?.message?.includes('Test error') ||
     error?.message?.includes('React is not defined') ||
     message?.includes('Test error') ||
     source?.includes('ErrorBoundary.test.jsx')
   ) {
     return true; // Prevent default error handling
   }
-  
+
   // Call original handler for other errors
   if (originalOnError) {
     return originalOnError(message, source, lineno, colno, error);
@@ -99,7 +96,7 @@ window.onerror = (message, source, lineno, colno, error) => {
 };
 
 // Enhanced unhandled rejection handler
-window.onunhandledrejection = (event) => {
+window.onunhandledrejection = event => {
   if (
     event.reason?.message?.includes('Test error') ||
     event.reason?.includes('Test error') ||
@@ -108,7 +105,7 @@ window.onunhandledrejection = (event) => {
     event.preventDefault();
     return true;
   }
-  
+
   // Call original handler for other rejections
   if (originalOnUnhandledRejection) {
     return originalOnUnhandledRejection(event);
@@ -150,6 +147,6 @@ vi.mock('../context/AuthContext', () => ({
   useAuth: () => ({
     login: vi.fn().mockResolvedValue({ success: true }),
     isAuthenticated: false,
-    user: null
-  })
+    user: null,
+  }),
 }));

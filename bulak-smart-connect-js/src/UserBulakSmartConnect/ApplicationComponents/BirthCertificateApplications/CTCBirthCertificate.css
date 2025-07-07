@@ -1,5 +1,4 @@
 .MainContainerCTCBirth {
-
   width: 100vw;
 
   justify-content: center;
@@ -75,12 +74,10 @@
 .BackButtonCTCBirth,
 .SubmitButtonCTCBirth {
   min-width: 150px;
-
-
 }
 .SubmitButtonCTCBirth {
- background-color: #1c4d5a !important;
- color: white !important;
+  background-color: #1c4d5a !important;
+  color: white !important;
 }
 .BackButtonCTCBirth {
   color: #1c4d5a !important;
@@ -101,7 +98,6 @@
 }
 
 @media (max-width: 600px) {
- 
   .DocumentsPaperCTCBirth {
     padding: 15px;
   }
@@ -121,18 +117,14 @@
   }
 }
 @media (max-width: 768px) {
-  .TitleCTCBirth{
+  .TitleCTCBirth {
     font-size: 1rem !important;
-
   }
-
 }
 
-@media  (max-width: 425px) {
-
- .TitleCTCBirth{
+@media (max-width: 425px) {
+  .TitleCTCBirth {
     font-size: 0.8rem !important;
     width: 100%;
   }
-
 }

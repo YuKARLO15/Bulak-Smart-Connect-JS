@@ -86,8 +86,8 @@
   outline: none;
   background-color: #ddd;
 }
-.AffidavitShortInput1{
-    border: none;
+.AffidavitShortInput1 {
+  border: none;
   border-bottom: 1px solid #333;
   padding: 0 4px;
   margin: 0 4px;
@@ -110,7 +110,7 @@
   background-color: #ddd;
 }
 .AffidavitMediumInput1 {
-    border: none;
+  border: none;
   border-bottom: 1px solid #333;
   padding: 0 4px;
   margin: 0 4px;

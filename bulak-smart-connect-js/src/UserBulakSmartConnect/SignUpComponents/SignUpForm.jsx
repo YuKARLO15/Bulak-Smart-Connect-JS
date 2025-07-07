@@ -82,7 +82,7 @@ const SignUpForm = () => {
     }
 
     setFormData(updatedFormData);
-    
+
     // Save to sessionStorage (exclude sensitive data like passwords for security)
     const dataToSave = { ...updatedFormData };
     if (name !== 'password' && name !== 'confirmpassword') {
@@ -124,7 +124,8 @@ const SignUpForm = () => {
       } else if (!hasNumbers) {
         formErrors.password = 'Password must contain at least one number';
       } else if (!hasSpecialChars) {
-        formErrors.password = 'Password must contain at least one special character (!@#$%^&*(),.?":{}|<>)';
+        formErrors.password =
+          'Password must contain at least one special character (!@#$%^&*(),.?":{}|<>)';
       }
     }
 
@@ -138,7 +139,7 @@ const SignUpForm = () => {
 
   const handleSubmit = async event => {
     event.preventDefault();
-    
+
     const formErrors = validate(formData);
     setErrors(formErrors);
 
@@ -272,13 +273,10 @@ const SignUpForm = () => {
   };
 
   return (
-   
     <div className="signup-container">
-
-        <div className="Navigation">
-          <NavBar />
-        </div>
-
+      <div className="Navigation">
+        <NavBar />
+      </div>
 
       <h2 className="signup-label">Sign Up Form</h2>
 

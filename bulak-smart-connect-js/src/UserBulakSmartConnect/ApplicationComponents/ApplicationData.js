@@ -13,17 +13,15 @@ export const getApplications = () => {
   }
 };
 
-
 export const updateApplication = (applicationId, updatedData) => {
   try {
     const applications = JSON.parse(localStorage.getItem('applications') || '[]');
     const index = applications.findIndex(app => app.id === applicationId);
-    
+
     if (index !== -1) {
       applications[index] = { ...applications[index], ...updatedData };
       localStorage.setItem('applications', JSON.stringify(applications));
       return true;
-      
     }
     console.log(`Found application at index ${index}`);
     console.log('Original:', applications[index]);
@@ -46,7 +44,7 @@ export const addApplication = applicationData => {
   }
 };
 
-export const getApplicationsByType = (type) => {
+export const getApplicationsByType = type => {
   try {
     const applications = getApplications();
     return applications.filter(app => app.type === type);
@@ -55,5 +53,3 @@ export const getApplicationsByType = (type) => {
     return [];
   }
 };
-
-

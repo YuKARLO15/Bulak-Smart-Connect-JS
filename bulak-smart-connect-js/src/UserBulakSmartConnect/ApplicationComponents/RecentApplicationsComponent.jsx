@@ -18,7 +18,7 @@ import {
   DialogContent,
   DialogActions,
   IconButton,
-  Stack
+  Stack,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import AssignmentIcon from '@mui/icons-material/Assignment';
@@ -55,7 +55,7 @@ const RecentApplicationsComponent = () => {
       }
     };
     fetchApplications();
-    
+
     const handleStorageChange = e => {
       if (e.key === 'applications') {
         fetchApplications();
@@ -75,8 +75,8 @@ const RecentApplicationsComponent = () => {
   const handleCloseDialog = () => {
     setDialogOpen(false);
   };
-    
-  const handleApplicationSelect = (type) => {
+
+  const handleApplicationSelect = type => {
     setDialogOpen(false);
     if (type === 'marriage') {
       navigate('/MarriageDashboard');
@@ -85,7 +85,7 @@ const RecentApplicationsComponent = () => {
     }
   };
 
-  const getStatusChipClass = (status) => {
+  const getStatusChipClass = status => {
     switch (status) {
       case 'Approved':
         return 'StatusChipApproved';
@@ -98,11 +98,11 @@ const RecentApplicationsComponent = () => {
     }
   };
 
-  const handleViewSummary = async (application) => {
-   try {
+  const handleViewSummary = async application => {
+    try {
       // First, try to get full application data from backend
       let applicationData;
-      
+
       try {
         applicationData = await documentApplicationService.getApplication(application.id);
         console.log('Fetched application data:', applicationData);
@@ -115,31 +115,35 @@ const RecentApplicationsComponent = () => {
       }
 
       // Determine application type - handle both backend and local data structures
-      const applicationType = application.type || application.applicationType || applicationData?.applicationType;
+      const applicationType =
+        application.type || application.applicationType || applicationData?.applicationType;
       console.log('Determined application type:', applicationType);
-      
+
       if (applicationType === 'Birth Certificate') {
         if (applicationData?.formData) {
           // Check if it's already in local format or backend format
           if (typeof applicationData.formData === 'object' && applicationData.formData.firstName) {
             // Backend data structure - convert to expected format
             console.log('Converting backend data to form data...');
-            const convertedFormData = convertBackendToFormData(applicationData, 'Birth Certificate');
+            const convertedFormData = convertBackendToFormData(
+              applicationData,
+              'Birth Certificate'
+            );
             console.log('Converted form data:', convertedFormData);
-            
+
             // Store in localStorage with the expected key
             localStorage.setItem('birthCertificateApplication', JSON.stringify(convertedFormData));
             localStorage.setItem('currentApplicationId', application.id);
-            
+
             // Create a local-style application structure and store it
             const localStyleApp = {
               id: applicationData.id,
               type: 'Birth Certificate',
               formData: convertedFormData,
               status: applicationData.status,
-              createdAt: applicationData.createdAt
+              createdAt: applicationData.createdAt,
             };
-            
+
             // Also add to applications array temporarily
             const existingApps = JSON.parse(localStorage.getItem('applications') || '[]');
             const appIndex = existingApps.findIndex(app => app.id === application.id);
@@ -149,12 +153,15 @@ const RecentApplicationsComponent = () => {
               existingApps.push(localStyleApp);
             }
             localStorage.setItem('applications', JSON.stringify(existingApps));
-            
+
             console.log('Stored application data in localStorage');
             navigate('/BirthApplicationSummary');
           } else {
             // Local data structure - works as before
-            localStorage.setItem('birthCertificateApplication', JSON.stringify(applicationData.formData));
+            localStorage.setItem(
+              'birthCertificateApplication',
+              JSON.stringify(applicationData.formData)
+            );
             localStorage.setItem('currentApplicationId', application.id);
             navigate('/BirthApplicationSummary');
           }
@@ -164,7 +171,7 @@ const RecentApplicationsComponent = () => {
             fullName: applicationData.fullName || '',
             status: applicationData.status,
             id: applicationData.id,
-            createdAt: applicationData.createdAt
+            createdAt: applicationData.createdAt,
           };
           localStorage.setItem('birthCertificateApplication', JSON.stringify(basicFormData));
           localStorage.setItem('currentApplicationId', application.id);
@@ -176,7 +183,10 @@ const RecentApplicationsComponent = () => {
           localStorage.setItem('currentMarriageApplicationId', application.id);
           navigate('/MarriageSummaryForm');
         } else if (applicationData) {
-          const convertedFormData = convertBackendToFormData(applicationData, 'Marriage Certificate');
+          const convertedFormData = convertBackendToFormData(
+            applicationData,
+            'Marriage Certificate'
+          );
           localStorage.setItem('marriageFormData', JSON.stringify(convertedFormData));
           localStorage.setItem('currentMarriageApplicationId', application.id);
           navigate('/MarriageSummaryForm');
@@ -206,76 +216,87 @@ const RecentApplicationsComponent = () => {
   const convertBackendToFormData = (backendData, applicationType) => {
     console.log('Converting backend data:', backendData);
     console.log('Backend formData:', backendData.formData);
-    
+
     if (applicationType === 'Birth Certificate') {
       // The backend already has formData, just map the field names to what the summary expects
       const formData = backendData.formData || {};
-      
+
       return {
         // Personal Information - map backend field names to expected names
-        fullName: `${formData.firstName || ''} ${formData.middleName || ''} ${formData.lastName || ''}`.trim(),
+        fullName:
+          `${formData.firstName || ''} ${formData.middleName || ''} ${formData.lastName || ''}`.trim(),
         firstName: formData.firstName || '',
         middleName: formData.middleName || '',
         lastName: formData.lastName || '',
-        
+
         // Date of Birth - combine separate fields
-        dateOfBirth: formData.birthYear && formData.birthMonth && formData.birthDay 
-          ? `${formData.birthYear}-${getMonthNumber(formData.birthMonth)}-${formData.birthDay.padStart(2, '0')}`
-          : '',
+        dateOfBirth:
+          formData.birthYear && formData.birthMonth && formData.birthDay
+            ? `${formData.birthYear}-${getMonthNumber(formData.birthMonth)}-${formData.birthDay.padStart(2, '0')}`
+            : '',
         birthDay: formData.birthDay || '',
         birthMonth: formData.birthMonth || '',
         birthYear: formData.birthYear || '',
-        
+
         // Place of Birth
-        placeOfBirth: `${formData.city || ''}, ${formData.province || ''}`.replace(', ', formData.city && formData.province ? ', ' : ''),
+        placeOfBirth: `${formData.city || ''}, ${formData.province || ''}`.replace(
+          ', ',
+          formData.city && formData.province ? ', ' : ''
+        ),
         city: formData.city || '',
         province: formData.province || '',
-        
+
         // Parent Information
-        fatherName: `${formData.fatherFirstName || ''} ${formData.fatherMiddleName || ''} ${formData.fatherLastName || ''}`.trim(),
+        fatherName:
+          `${formData.fatherFirstName || ''} ${formData.fatherMiddleName || ''} ${formData.fatherLastName || ''}`.trim(),
         fatherFirstName: formData.fatherFirstName || '',
         fatherMiddleName: formData.fatherMiddleName || '',
         fatherLastName: formData.fatherLastName || '',
-        
-        motherName: `${formData.motherFirstName || ''} ${formData.motherMiddleName || ''} ${formData.motherLastName || ''}`.trim(),
+
+        motherName:
+          `${formData.motherFirstName || ''} ${formData.motherMiddleName || ''} ${formData.motherLastName || ''}`.trim(),
         motherFirstName: formData.motherFirstName || '',
         motherMiddleName: formData.motherMiddleName || '',
         motherLastName: formData.motherLastName || '',
-        
+
         // Application Information
         purpose: formData.purpose || '',
         isCopyRequest: formData.isCopyRequest || false,
-        
+
         // System fields
         status: backendData.status,
         id: backendData.id,
         createdAt: backendData.createdAt,
         applicationType: backendData.applicationType || 'Birth Certificate',
-        
+
         // Include all original formData fields as well
-        ...formData
+        ...formData,
       };
     } else if (applicationType === 'Marriage Certificate') {
       const formData = backendData.formData || {};
-      
+
       return {
         // Map marriage certificate fields based on your backend structure
-        groomName: formData.groomName || `${formData.groomFirstName || ''} ${formData.groomMiddleName || ''} ${formData.groomLastName || ''}`.trim(),
-        brideName: formData.brideName || `${formData.brideFirstName || ''} ${formData.brideMiddleName || ''} ${formData.brideLastName || ''}`.trim(),
+        groomName:
+          formData.groomName ||
+          `${formData.groomFirstName || ''} ${formData.groomMiddleName || ''} ${formData.groomLastName || ''}`.trim(),
+        brideName:
+          formData.brideName ||
+          `${formData.brideFirstName || ''} ${formData.brideMiddleName || ''} ${formData.brideLastName || ''}`.trim(),
         marriageDate: formData.marriageDate || '',
         marriagePlace: formData.marriagePlace || '',
-        
+
         // System fields
         status: backendData.status,
         id: backendData.id,
         createdAt: backendData.createdAt,
         applicationType: backendData.applicationType || 'Marriage Certificate',
-        
+
         // Include all original formData fields
-        ...formData
+        ...formData,
       };
     }
-    
+
     // Default structure - use formData if available
     const formData = backendData.formData || {};
     return {
@@ -283,16 +304,25 @@ const RecentApplicationsComponent = () => {
       status: backendData.status,
       id: backendData.id,
       createdAt: backendData.createdAt,
-      applicationType: backendData.applicationType || applicationType
+      applicationType: backendData.applicationType || applicationType,
     };
   };
 
   // Helper function to convert month names to numbers
-  const getMonthNumber = (monthName) => {
+  const getMonthNumber = monthName => {
     const months = {
-      'January': '01', 'February': '02', 'March': '03', 'April': '04',
-      'May': '05', 'June': '06', 'July': '07', 'August': '08',
-      'September': '09', 'October': '10', 'November': '11', 'December': '12'
+      January: '01',
+      February: '02',
+      March: '03',
+      April: '04',
+      May: '05',
+      June: '06',
+      July: '07',
+      August: '08',
+      September: '09',
+      October: '10',
+      November: '11',
+      December: '12',
     };
     return months[monthName] || '01';
   };
@@ -333,15 +363,14 @@ const RecentApplicationsComponent = () => {
                 backgroundColor: '#184a5b',
                 '&:hover': { backgroundColor: '#0d3542' },
                 textTransform: 'none',
-                borderRadius: '6px'
+                borderRadius: '6px',
               }}
               className="StartApplicationBtn"
               onClick={handleOpenDialog}
             >
               Start a New Application
             </Button>
-            
-        
+
             <Dialog
               open={dialogOpen}
               onClose={handleCloseDialog}
@@ -350,18 +379,20 @@ const RecentApplicationsComponent = () => {
               PaperProps={{
                 sx: {
                   borderRadius: '8px',
-                  overflow: 'hidden'
-                }
+                  overflow: 'hidden',
+                },
               }}
             >
-              <DialogTitle sx={{
-                backgroundColor: '#184a5b',
-                color: 'white',
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                py: 1.5
-              }}>
+              <DialogTitle
+                sx={{
+                  backgroundColor: '#184a5b',
+                  color: 'white',
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  py: 1.5,
+                }}
+              >
                 Select Application Type
                 <IconButton onClick={handleCloseDialog} sx={{ color: 'white' }}>
                   <CloseIcon />
@@ -379,19 +410,21 @@ const RecentApplicationsComponent = () => {
                       p: 2,
                       borderRadius: 0,
                       '&:hover': {
-                        backgroundColor: 'rgba(138, 172, 181, 0.1)'
-                      }
+                        backgroundColor: 'rgba(138, 172, 181, 0.1)',
+                      },
                     }}
                   >
                     <FavoriteIcon sx={{ mr: 2, color: '#8aacb5' }} />
                     <Box textAlign="left">
-                      <Typography sx={{ fontWeight: 500, color: '#184a5b' }}>Marriage Certificate</Typography>
+                      <Typography sx={{ fontWeight: 500, color: '#184a5b' }}>
+                        Marriage Certificate
+                      </Typography>
                       <Typography variant="body2" color="text.secondary">
                         Apply for a marriage certificate or license
                       </Typography>
                     </Box>
                   </Button>
-                  
+
                   <Button
                     onClick={() => handleApplicationSelect('birth')}
                     sx={{
@@ -402,13 +435,15 @@ const RecentApplicationsComponent = () => {
                       p: 2,
                       borderRadius: 0,
                       '&:hover': {
-                        backgroundColor: 'rgba(138, 172, 181, 0.1)'
-                      }
+                        backgroundColor: 'rgba(138, 172, 181, 0.1)',
+                      },
                     }}
                   >
                     <AssignmentIcon sx={{ mr: 2, color: '#8aacb5' }} />
                     <Box textAlign="left">
-                      <Typography sx={{ fontWeight: 500, color: '#184a5b' }}>Birth Certificate</Typography>
+                      <Typography sx={{ fontWeight: 500, color: '#184a5b' }}>
+                        Birth Certificate
+                      </Typography>
                       <Typography variant="body2" color="text.secondary">
                         Apply for a birth certificate
                       </Typography>
@@ -427,9 +462,7 @@ const RecentApplicationsComponent = () => {
     return (
       <Box className="LoadingContainerApplications">
         <CircularProgress size={30} />
-        <Typography variant="body2">
-          Loading recent applications...
-        </Typography>
+        <Typography variant="body2">Loading recent applications...</Typography>
       </Box>
     );
   }
@@ -450,17 +483,11 @@ const RecentApplicationsComponent = () => {
         </Typography>
         <Card className="NoApplicationsCard" elevation={0}>
           <CardContent>
-            <Typography variant="body1">
-              You have no recent applications.
-            </Typography>
-            <Button
-              variant="contained"
-              className="StartApplicationBtn"
-              onClick={handleOpenDialog}
-            >
+            <Typography variant="body1">You have no recent applications.</Typography>
+            <Button variant="contained" className="StartApplicationBtn" onClick={handleOpenDialog}>
               Start a New Application
             </Button>
-            
+
             <Dialog
               open={dialogOpen}
               onClose={handleCloseDialog}
@@ -482,20 +509,24 @@ const RecentApplicationsComponent = () => {
                   >
                     <FavoriteIcon className="ApplicationDialogIcon" />
                     <Box className="ApplicationDialogButtonText">
-                      <Typography className="ApplicationDialogButtonTitle">Marriage Certificate</Typography>
+                      <Typography className="ApplicationDialogButtonTitle">
+                        Marriage Certificate
+                      </Typography>
                       <Typography variant="body2" className="ApplicationDialogButtonSubtitle">
                         Apply for a marriage certificate or license
                       </Typography>
                     </Box>
                   </Button>
-                  
+
                   <Button
                     onClick={() => handleApplicationSelect('birth')}
                     className="ApplicationDialogButton"
                   >
                     <AssignmentIcon className="ApplicationDialogIcon" />
                     <Box className="ApplicationDialogButtonText">
-                      <Typography className="ApplicationDialogButtonTitle">Birth Certificate</Typography>
+                      <Typography className="ApplicationDialogButtonTitle">
+                        Birth Certificate
+                      </Typography>
                       <Typography variant="body2" className="ApplicationDialogButtonSubtitle">
                         Apply for a birth certificate
                       </Typography>
@@ -519,67 +550,60 @@ const RecentApplicationsComponent = () => {
       <List disablePadding className="applicationList">
         {applications.map((app, index) => (
           <ListItem key={app.id || index} disablePadding className="applicationListItem">
-  <Card 
-    className={`ApplicationCard Status${app.status}`} 
-    elevation={0}
-  >
-    <CardContent className="ApplicationCardContent">
-      <Grid container alignItems="center" spacing={1}>
-        <Grid item xs={12} sm={7}>
-          <Box>
-        
-            <Box className="ApplicationTitleRow">
-              <Typography 
-                className="ApplicationCardTitle"
-                onClick={() => handleViewSummary(app)}
-              >
-                {app.applicationType || app.type || 'Failed Fetching Application'}
-              </Typography>
-              <Typography className="ApplicationSubtype">
-                {app.applicationSubtype || app.subType}
-              </Typography>
-              <Chip
-                label={app.status}
-                size="small"
-                className={`ApplicationStatusChip ${getStatusChipClass(app.status)}`}
-              />
-            </Box>
-            
-            <Box className="ApplicationInfoContainer">
-              <Typography className="ApplicationApplicant">
-                Applicant: {app.formData?.firstName || ''} {app.formData?.middleName || ''} {app.formData?.lastName || ''}
-              </Typography>
-              <Typography className="ApplicationId">
-                ID: {app.id || 'N/A'}
-              </Typography>
-              <Typography className="ApplicationDate">
-                {app.date}
-              </Typography>
-            </Box>
-            
-            {app.message && (
-              <Typography className="ApplicationDescriptionText">
-                {app.message}
-              </Typography>
-            )}
-          </Box>
-        </Grid>
-        
-        <Grid item xs={12} sm={5}>
-          <Box className="ApplicationButtonContainer">
-            <Button
-              size="small"
-              className="ViewSummaryBtn"
-              onClick={() => handleViewSummary(app)}
-            >
-              View Application
-            </Button>
-          </Box>
-        </Grid>
-      </Grid>
-    </CardContent>
-  </Card>
-</ListItem>
+            <Card className={`ApplicationCard Status${app.status}`} elevation={0}>
+              <CardContent className="ApplicationCardContent">
+                <Grid container alignItems="center" spacing={1}>
+                  <Grid item xs={12} sm={7}>
+                    <Box>
+                      <Box className="ApplicationTitleRow">
+                        <Typography
+                          className="ApplicationCardTitle"
+                          onClick={() => handleViewSummary(app)}
+                        >
+                          {app.applicationType || app.type || 'Failed Fetching Application'}
+                        </Typography>
+                        <Typography className="ApplicationSubtype">
+                          {app.applicationSubtype || app.subType}
+                        </Typography>
+                        <Chip
+                          label={app.status}
+                          size="small"
+                          className={`ApplicationStatusChip ${getStatusChipClass(app.status)}`}
+                        />
+                      </Box>
+
+                      <Box className="ApplicationInfoContainer">
+                        <Typography className="ApplicationApplicant">
+                          Applicant: {app.formData?.firstName || ''}{' '}
+                          {app.formData?.middleName || ''} {app.formData?.lastName || ''}
+                        </Typography>
+                        <Typography className="ApplicationId">ID: {app.id || 'N/A'}</Typography>
+                        <Typography className="ApplicationDate">{app.date}</Typography>
+                      </Box>
+
+                      {app.message && (
+                        <Typography className="ApplicationDescriptionText">
+                          {app.message}
+                        </Typography>
+                      )}
+                    </Box>
+                  </Grid>
+
+                  <Grid item xs={12} sm={5}>
+                    <Box className="ApplicationButtonContainer">
+                      <Button
+                        size="small"
+                        className="ViewSummaryBtn"
+                        onClick={() => handleViewSummary(app)}
+                      >
+                        View Application
+                      </Button>
+                    </Box>
+                  </Grid>
+                </Grid>
+              </CardContent>
+            </Card>
+          </ListItem>
         ))}
       </List>
     </div>

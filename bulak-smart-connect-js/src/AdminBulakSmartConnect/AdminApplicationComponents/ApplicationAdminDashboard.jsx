@@ -17,7 +17,7 @@ import {
   TableBody,
   Snackbar,
   Menu,
-  MenuItem
+  MenuItem,
 } from '@mui/material';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import './ApplicationAdminDashboard.css';
@@ -30,7 +30,7 @@ const FILTER_OPTIONS = [
   { label: 'All', value: 'All' },
   { label: 'Pending', value: 'Pending' },
   { label: 'Approved', value: 'Approved' },
-  { label: 'Denied', value: 'Denied' }
+  { label: 'Denied', value: 'Denied' },
 ];
 
 const AdminApplicationDashboard = () => {
@@ -53,7 +53,7 @@ const AdminApplicationDashboard = () => {
   const handleCloseSnackbar = () => setSnackbar(prev => ({ ...prev, open: false }));
 
   // Data standardization
-  const standardizeApplicationData = (apps) => {
+  const standardizeApplicationData = apps => {
     if (!Array.isArray(apps)) return [];
     return apps.map(app => ({
       id: app.id || app._id || 'unknown-id',
@@ -61,14 +61,16 @@ const AdminApplicationDashboard = () => {
       applicationType: app.applicationSubtype || app.applicationType || app.type || 'Unknown Type',
       date: formatDate(app.createdAt || app.date || new Date()),
       status: app.status || 'Pending',
-      message: app.statusMessage || app.message || `Application for ${app.applicantName || 'Unknown'}`,
-      applicantName: app.applicantName || `${app.firstName || ''} ${app.lastName || ''}`.trim() || 'Unknown',
-      originalData: app
+      message:
+        app.statusMessage || app.message || `Application for ${app.applicantName || 'Unknown'}`,
+      applicantName:
+        app.applicantName || `${app.firstName || ''} ${app.lastName || ''}`.trim() || 'Unknown',
+      originalData: app,
     }));
   };
 
   // Date formatting
-  const formatDate = (dateInput) => {
+  const formatDate = dateInput => {
     if (!dateInput) return 'N/A';
     try {
       const date = new Date(dateInput);
@@ -117,8 +119,10 @@ const AdminApplicationDashboard = () => {
         setFilteredApplications(applications);
       } else if (filter === 'Pending') {
         setFilteredApplications(
-          applications.filter(app => 
-            app.status?.toLowerCase() === 'pending' || app.status?.toLowerCase() === 'submitted')
+          applications.filter(
+            app =>
+              app.status?.toLowerCase() === 'pending' || app.status?.toLowerCase() === 'submitted'
+          )
         );
       } else if (filter === 'Approved') {
         setFilteredApplications(
@@ -142,12 +146,18 @@ const AdminApplicationDashboard = () => {
     status = status.toLowerCase();
     if (status.includes('approved')) return 'Approved';
     if (status.includes('pending') || status.includes('submitted')) return 'Pending';
-    if (status.includes('declined') || status.includes('decline') ||  status.includes('denied') || status.includes('rejected')) return 'Denied';
+    if (
+      status.includes('declined') ||
+      status.includes('decline') ||
+      status.includes('denied') ||
+      status.includes('rejected')
+    )
+      return 'Denied';
     return '';
   };
 
   // Review application
-  const handleReviewApplication = (application) => {
+  const handleReviewApplication = application => {
     try {
       localStorage.setItem('currentApplicationId', application.id);
       navigate('/ApplicationDetails/' + application.id);
@@ -157,9 +167,9 @@ const AdminApplicationDashboard = () => {
   };
 
   // Dropdown logic
-  const handleFilterIconClick = (e) => setAnchorEl(e.currentTarget);
+  const handleFilterIconClick = e => setAnchorEl(e.currentTarget);
   const handleFilterMenuClose = () => setAnchorEl(null);
-  const handleDropdownSelect = (status) => {
+  const handleDropdownSelect = status => {
     setFilter(status);
     setAnchorEl(null);
   };
@@ -178,8 +188,8 @@ const AdminApplicationDashboard = () => {
         <Typography variant="h5" className="ApplicationDashTitle">
           Applications
         </Typography>
-        <Button 
-          variant="outlined" 
+        <Button
+          variant="outlined"
           onClick={handleRefresh}
           startIcon={loading ? <CircularProgress size={20} /> : null}
           disabled={loading}
@@ -191,7 +201,8 @@ const AdminApplicationDashboard = () => {
 
       {dataSource === 'localStorage' && (
         <Alert severity="info" sx={{ mb: 2 }}>
-          Using local data. API connection failed or returned forbidden. Please check your network or permissions.
+          Using local data. API connection failed or returned forbidden. Please check your network
+          or permissions.
         </Alert>
       )}
 
@@ -203,8 +214,6 @@ const AdminApplicationDashboard = () => {
           </Button>
         </Alert>
       )}
-
-     
 
       <Box className="ApplicationDashTableSection">
         <Box className="ApplicationDashTableHeader">
@@ -255,23 +264,30 @@ const AdminApplicationDashboard = () => {
                 src="https://cdn-icons-png.flaticon.com/512/4076/4076549.png"
                 alt="No data"
                 style={{ height: 80, opacity: 0.4, marginBottom: 16 }}
-              /><br />
+              />
+              <br />
               <span>
-                {applications.length === 0 ? 
-                  "No applications found. Try refreshing or check your connection." : 
-                  "No applications found for the selected status."}
+                {applications.length === 0
+                  ? 'No applications found. Try refreshing or check your connection.'
+                  : 'No applications found for the selected status.'}
               </span>
             </Box>
           ) : (
-            <TableContainer component={Paper} elevation={0} sx={{ width: '100%', overflowX: 'hidden', background: 'transparent' }}>
+            <TableContainer
+              component={Paper}
+              elevation={0}
+              sx={{ width: '100%', overflowX: 'hidden', background: 'transparent' }}
+            >
               <Table stickyHeader sx={{ width: '100%', tableLayout: 'fixed', maxWidth: '100%' }}>
                 <TableHead>
                   <TableRow>
-                    <TableCell className='ApplicationDashRowTitle' >Type</TableCell>
-                    <TableCell className='ApplicationDashRowTitle' >Submitted Date</TableCell>
-                    <TableCell className='ApplicationDashRowTitle' >Status</TableCell>
-                    <TableCell className='ApplicationDashRowTitle' >ID</TableCell>
-                    <TableCell className='ApplicationDashRowTitle'  align="right">Action</TableCell>
+                    <TableCell className="ApplicationDashRowTitle">Type</TableCell>
+                    <TableCell className="ApplicationDashRowTitle">Submitted Date</TableCell>
+                    <TableCell className="ApplicationDashRowTitle">Status</TableCell>
+                    <TableCell className="ApplicationDashRowTitle">ID</TableCell>
+                    <TableCell className="ApplicationDashRowTitle" align="right">
+                      Action
+                    </TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -318,11 +334,7 @@ const AdminApplicationDashboard = () => {
         onClose={handleCloseSnackbar}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
       >
-        <Alert 
-          onClose={handleCloseSnackbar} 
-          severity={snackbar.severity}
-          variant="filled"
-        >
+        <Alert onClose={handleCloseSnackbar} severity={snackbar.severity} variant="filled">
           {snackbar.message}
         </Alert>
       </Snackbar>

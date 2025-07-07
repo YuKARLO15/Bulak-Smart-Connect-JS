@@ -3,7 +3,7 @@
   border-radius: 8px;
   overflow: hidden;
   margin-top: 15px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
 }
 
 .RecentApptAdminTitle {
@@ -11,7 +11,6 @@
   font-weight: 600 !important;
   color: #184a5b !important;
   margin-bottom: 8px !important;
-
 }
 
 .AppointmentItemAdmin {
@@ -31,11 +30,10 @@
   font-weight: 500 !important;
   color: #184a5b !important;
   margin-bottom: 2px !important;
-    min-width: 53vw;
-      width: auto; 
-        word-wrap: break-word;
-          flex: 1; 
-
+  min-width: 53vw;
+  width: auto;
+  word-wrap: break-word;
+  flex: 1;
 }
 
 .AppointmentDateTimeAdmin {
@@ -44,10 +42,10 @@
   margin-bottom: 2px;
 }
 
-.AppointmentDateAdmin, .AppointmentTimeAdmin {
+.AppointmentDateAdmin,
+.AppointmentTimeAdmin {
   font-size: 0.75rem !important;
   color: #666 !important;
-
 }
 
 .AppointmentDateAdmin {

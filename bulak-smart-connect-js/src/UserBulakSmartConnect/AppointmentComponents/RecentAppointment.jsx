@@ -1,6 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Box, Typography, Card, CardContent, Button, CircularProgress, Container } from '@mui/material';
+import {
+  Box,
+  Typography,
+  Card,
+  CardContent,
+  Button,
+  CircularProgress,
+  Container,
+} from '@mui/material';
 import { getRecentAppointments, saveRecentAppointments } from './RecentAppointmentData';
 import { appointmentService } from '../../services/appointmentService';
 import './RecentAppointment.css';
@@ -163,7 +171,7 @@ const RecentAppointments = () => {
                 {appointment.status && (
                   <Typography variant="body2" className="AppointmentStatusAppointment">
                     Status:{' '}
-                    <span 
+                    <span
                       style={{
                         color:
                           appointment.status.toLowerCase() === 'completed'
@@ -182,22 +190,21 @@ const RecentAppointments = () => {
                   </Typography>
                 )}
                 <Container className="AppointmentDetailsContainer">
-                <Typography variant="body2" className="AppointmentDateAppointment">
-                  Schedule : {appointment.appointmentDate || appointment.date}  
-                </Typography>
-                <Typography variant="body2" className="AppointmentTimeAppointment">
-                  {appointment.appointmentTime || appointment.time}
-                </Typography>
-            </Container>
+                  <Typography variant="body2" className="AppointmentDateAppointment">
+                    Schedule : {appointment.appointmentDate || appointment.date}
+                  </Typography>
+                  <Typography variant="body2" className="AppointmentTimeAppointment">
+                    {appointment.appointmentTime || appointment.time}
+                  </Typography>
+                </Container>
                 <Button
-                size="small"
-                className="SeeMoreAppointment1"
-                onClick={() => handleSeeMore(appointment)}
-              >
-                See More
-              </Button>
+                  size="small"
+                  className="SeeMoreAppointment1"
+                  onClick={() => handleSeeMore(appointment)}
+                >
+                  See More
+                </Button>
               </div>
-            
             </Box>
           ))
         )}

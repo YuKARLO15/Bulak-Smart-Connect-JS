@@ -35,7 +35,7 @@
 }
 
 .TitleDelayedOutOfTown:after {
-  content: "";
+  content: '';
   position: absolute;
   bottom: 0;
   left: 0;
@@ -143,25 +143,25 @@
     padding: 1.5rem;
     width: 95%;
   }
-  
+
   .ButtonContainerOutOfTown {
     flex-direction: column;
     gap: 1rem;
   }
-  
-  .BackButtonOutOfTown, 
+
+  .BackButtonOutOfTown,
   .SubmitButtonOutOfTown {
     width: 100%;
   }
-  
+
   .BackButtonOutOfTown {
     order: 2;
   }
-  
+
   .SubmitButtonOutOfTown {
     order: 1;
   }
-  .TitleDelayedOutOfTown{
+  .TitleDelayedOutOfTown {
     font-size: 1rem !important;
   }
 }
@@ -173,7 +173,7 @@
   margin-bottom: 16px;
   transition: all 0.2s ease;
   background-color: #fcfcfc;
-  width: 100%; 
+  width: 100%;
 }
 
 .file-upload-container:hover {
@@ -203,7 +203,7 @@
 }
 
 /* Style the drop a file container but keep full width */
-[role="button"] {
+[role='button'] {
   display: flex !important;
   justify-content: center !important;
   align-items: center !important;
@@ -216,19 +216,18 @@
   transition: all 0.2s ease !important;
 }
 
-[role="button"]:hover {
+[role='button']:hover {
   border-color: #184a5b !important;
   background-color: rgba(24, 74, 91, 0.03) !important;
 }
 
 /* Center only the text inside dropzone */
-[role="button"] p {
+[role='button'] p {
   text-align: center;
   margin: 0;
 }
 
 /* Keep Sample links to the right */
-
 
 /* Additional styling for the FileUpload component */
 .FileUploadLabel {

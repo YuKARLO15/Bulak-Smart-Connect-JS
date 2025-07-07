@@ -39,10 +39,10 @@ const RequirementMarriageList = () => {
         {/* General Requirements */}
         <Box className="marriage-requirement-section">
           <Typography variant="h6" className="marriage-requirement-section-title1">
-            For Marriage License Registration 
+            For Marriage License Registration
           </Typography>
-           <Typography variant="h6" className="marriage-requirement-section-title3">
-          Mandatory Requirements
+          <Typography variant="h6" className="marriage-requirement-section-title3">
+            Mandatory Requirements
           </Typography>
           <List dense className="marriage-requirement-list">
             <ListItem>
@@ -68,34 +68,32 @@ const RequirementMarriageList = () => {
                 <CheckCircleOutlineIcon fontSize="small" />
               </ListItemIcon>
               <ListItemText primary="4. Official Receipt" />
-              
             </ListItem>
-             <ListItem  className="marriage-requirement-nested-list">
-                  <ListItemText 
-                    primary="- Civil Wedding - P 650.00"
-                    className="marriage-requirement-subitem" 
-                  />
-                </ListItem>
-                <ListItem className="marriage-requirement-nested-list">
-                  <ListItemText 
-                    primary="- Church Wedding - P 400.00"
-                    className="marriage-requirement-subitem" 
-                  />
-                </ListItem>
+            <ListItem className="marriage-requirement-nested-list">
+              <ListItemText
+                primary="- Civil Wedding - P 650.00"
+                className="marriage-requirement-subitem"
+              />
+            </ListItem>
+            <ListItem className="marriage-requirement-nested-list">
+              <ListItemText
+                primary="- Church Wedding - P 400.00"
+                className="marriage-requirement-subitem"
+              />
+            </ListItem>
           </List>
-          
-       <Typography variant="h6" className="marriage-requirement-section-title3">
-           Additional Requirements
+
+          <Typography variant="h6" className="marriage-requirement-section-title3">
+            Additional Requirements
           </Typography>
         </Box>
-
 
         {/* Foreign National Requirements */}
         <Box className="marriage-requirement-section2">
           <Typography variant="h6" className="marriage-requirement-section-title">
             For Foreign National
           </Typography>
-           
+
           <List dense className="marriage-requirement-list">
             <ListItem>
               <ListItemIcon>
@@ -112,14 +110,12 @@ const RequirementMarriageList = () => {
           </List>
         </Box>
 
-      
-
         {/* Widow/Widower Requirements */}
         <Box className="marriage-requirement-section2">
           <Typography variant="h6" className="marriage-requirement-section-title">
             For Widow/Widower
           </Typography>
-           
+
           <List dense className="marriage-requirement-list">
             <ListItem>
               <ListItemIcon>
@@ -136,14 +132,12 @@ const RequirementMarriageList = () => {
           </List>
         </Box>
 
-
-
         {/* Annulled Requirements */}
         <Box className="marriage-requirement-section2">
           <Typography variant="h6" className="marriage-requirement-section-title">
             For annulled
           </Typography>
-           
+
           <List dense className="marriage-requirement-list">
             <ListItem>
               <ListItemIcon>
@@ -159,12 +153,12 @@ const RequirementMarriageList = () => {
             </ListItem>
           </List>
         </Box>
-          {/* Marriage Certificate Requirements */}
+        {/* Marriage Certificate Requirements */}
         <Box className="marriage-requirement-section">
           <Typography variant="h6" className="marriage-requirement-section-title1">
             For Marriage Certificate Registration
           </Typography>
-           
+
           <List dense className="marriage-requirement-list">
             <ListItem>
               <ListItemIcon>

@@ -87,8 +87,6 @@
   box-sizing: border-box;
 }
 
-
-
 .ButtonContainerMarriageLicense {
   display: flex;
   justify-content: space-between;
@@ -116,7 +114,7 @@
   min-width: 150px;
   flex: 1;
   max-width: 200px;
-margin-bottom: 20px !important;
+  margin-bottom: 20px !important;
 }
 
 .SubmitButtonMarriageLicense:hover {
@@ -173,7 +171,7 @@ margin-bottom: 20px !important;
     width: 90%;
     padding: 18px;
   }
-  .ButtonContainerMarriageLicense{
+  .ButtonContainerMarriageLicense {
     max-width: 80vw !important;
   }
 }
@@ -209,7 +207,6 @@ margin-bottom: 20px !important;
     gap: 15px;
   }
 
-  
   .ButtonContainerMarriageLicense {
     flex-direction: column;
     gap: 1rem;
@@ -227,8 +224,6 @@ margin-bottom: 20px !important;
     float: none !important;
     margin: 0 !important;
   }
-
-
 }
 
 /* Small Mobile Styles (max-width: 480px) */
@@ -236,7 +231,6 @@ margin-bottom: 20px !important;
   .TitleMarriageLicense {
     font-size: 16px !important;
     align-items: center;
-   
   }
 
   .SubtitleMarriageLicense {

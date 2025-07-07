@@ -9,7 +9,7 @@
 /* Header */
 .admin-appointment-dashboard-header {
   width: 100%;
-  background: linear-gradient(135deg, #1C4D5A 0%, #2a5f6e 100%);
+  background: linear-gradient(135deg, #1c4d5a 0%, #2a5f6e 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -58,7 +58,7 @@
   left: -280px;
   width: 280px;
   height: 100%;
-  background: linear-gradient(180deg, #1C4D5A 0%, #2a5f6e 100%);
+  background: linear-gradient(180deg, #1c4d5a 0%, #2a5f6e 100%);
   color: #fff;
   z-index: 1000;
   transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -107,7 +107,7 @@
 
 .admin-appointment-dashboard-side-nav li:hover {
   background: rgba(255, 255, 255, 0.12);
-  border-left-color: #8DC3A7;
+  border-left-color: #8dc3a7;
   transform: translateX(4px);
 }
 
@@ -139,7 +139,7 @@
   width: 100%;
 }
 
-.admin-appointment-dashboard-chart-card{
+.admin-appointment-dashboard-chart-card {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -165,7 +165,7 @@
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
-    min-width: 300px;
+  min-width: 300px;
   max-width: 450px;
 }
 
@@ -178,7 +178,7 @@
   left: 0;
   right: 0;
   height: 4px;
-  background: linear-gradient(90deg, #1C4D5A 0%, #8DC3A7 100%);
+  background: linear-gradient(90deg, #1c4d5a 0%, #8dc3a7 100%);
 }
 
 .admin-appointment-dashboard-current-queue-card:hover,
@@ -195,7 +195,7 @@
 }
 
 .admin-appointment-dashboard-card-title {
-  color: #1C4D5A;
+  color: #1c4d5a;
   font-size: 1.3rem;
   font-weight: 700;
   margin-bottom: 24px;
@@ -207,7 +207,7 @@
 .admin-appointment-dashboard-current-queue-number {
   font-size: 3rem;
   font-weight: 700;
-  color: #1C4D5A;
+  color: #1c4d5a;
   margin-bottom: 16px;
   text-shadow: 0 2px 4px rgba(28, 77, 90, 0.1);
 }
@@ -224,7 +224,7 @@
 .admin-appointment-dashboard-next-queue-number {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #8DC3A7;
+  color: #8dc3a7;
   margin-top: 8px;
   text-shadow: 0 2px 4px rgba(141, 195, 167, 0.2);
 }
@@ -250,14 +250,14 @@
   font-weight: 700;
   font-size: 1.2rem;
   margin: 0 20px;
-  color: #1C4D5A;
+  color: #1c4d5a;
   letter-spacing: 0.5px;
 }
 
 .admin-appointment-dashboard-calendar-nav-btn {
   background: rgba(28, 77, 90, 0.1);
   border: none;
-  color: #1C4D5A;
+  color: #1c4d5a;
   font-size: 1.3rem;
   cursor: pointer;
   padding: 8px 12px;
@@ -275,7 +275,7 @@
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   font-size: 0.9rem;
-  color: #1C4D5A;
+  color: #1c4d5a;
   margin-bottom: 8px;
   text-align: center;
   font-weight: 600;
@@ -295,7 +295,7 @@
   align-items: center;
   justify-content: center;
   font-size: 0.95rem;
-  color: #1C4D5A;
+  color: #1c4d5a;
   margin-bottom: 4px;
   transition: all 0.2s ease;
   cursor: pointer;
@@ -329,14 +329,13 @@
   gap: 24px;
   margin-bottom: 16px;
   justify-content: center;
-;
 }
 
 .admin-appointment-dashboard-legend-item {
   display: flex;
   align-items: center;
   font-size: 1rem;
-  color: #1C4D5A;
+  color: #1c4d5a;
   font-weight: 600;
 }
 
@@ -351,11 +350,11 @@
 }
 
 .admin-appointment-dashboard-walk-in-dot {
-  background: #1C4D5A;
+  background: #1c4d5a;
 }
 
 .admin-appointment-dashboard-appointment-dot {
-  background: #8DC3A7;
+  background: #8dc3a7;
 }
 
 /* Booked Appointments Section */
@@ -384,7 +383,7 @@
   left: 0;
   right: 0;
   height: 4px;
-  background: linear-gradient(90deg, #1C4D5A 0%, #8DC3A7 100%);
+  background: linear-gradient(90deg, #1c4d5a 0%, #8dc3a7 100%);
 }
 
 .admin-appointment-dashboard-section-header {
@@ -397,7 +396,7 @@
 }
 
 .admin-appointment-dashboard-section-title {
-  color: #1C4D5A;
+  color: #1c4d5a;
   font-size: 1.5rem;
   font-weight: 700;
   margin: 0;
@@ -437,7 +436,7 @@
 }
 
 .admin-appointment-dashboard-appointment-card:first-child {
-  background: linear-gradient(135deg, #1C4D5A 0%, #2a5f6e 100%);
+  background: linear-gradient(135deg, #1c4d5a 0%, #2a5f6e 100%);
   color: #fff;
   box-shadow: 0 8px 24px rgba(28, 77, 90, 0.2);
 }
@@ -449,7 +448,7 @@
   left: 0;
   right: 0;
   height: 4px;
-  background: linear-gradient(90deg, #8DC3A7 0%, #a8d5c0 100%);
+  background: linear-gradient(90deg, #8dc3a7 0%, #a8d5c0 100%);
 }
 
 .admin-appointment-dashboard-appointment-type-container {
@@ -503,7 +502,7 @@
 .admin-appointment-dashboard-see-more-btn {
   background: rgba(28, 77, 90, 0.1);
   border: none;
-  color: #1C4D5A;
+  color: #1c4d5a;
   cursor: pointer;
   font-size: 0.9rem;
   font-weight: 600;
@@ -519,12 +518,14 @@
   transform: scale(1.05);
 }
 
-.admin-appointment-dashboard-appointment-card:first-child .admin-appointment-dashboard-see-more-btn {
+.admin-appointment-dashboard-appointment-card:first-child
+  .admin-appointment-dashboard-see-more-btn {
   background: rgba(255, 255, 255, 0.2);
   color: #fff;
 }
 
-.admin-appointment-dashboard-appointment-card:first-child .admin-appointment-dashboard-see-more-btn:hover {
+.admin-appointment-dashboard-appointment-card:first-child
+  .admin-appointment-dashboard-see-more-btn:hover {
   background: rgba(255, 255, 255, 0.3);
 }
 
@@ -542,7 +543,7 @@
     max-width: 98vw;
     padding: 0 16px 32px 16px;
   }
-  
+
   .admin-appointment-dashboard-top-row {
     gap: 24px;
   }
@@ -554,7 +555,7 @@
     gap: 24px;
     align-items: center;
   }
-  
+
   .admin-appointment-dashboard-current-queue-card,
   .admin-appointment-dashboard-available-slots-card,
   .admin-appointment-dashboard-chart-card {
@@ -563,14 +564,14 @@
     height: auto;
     min-height: 280px;
   }
-  
+
   .admin-appointment-dashboard-booked-appointments-section,
   .admin-appointment-dashboard-appointments-list,
   .admin-appointment-dashboard-appointment-card {
     max-width: 100%;
     width: 100%;
   }
-  
+
   .admin-appointment-dashboard-section-header {
     max-width: 100%;
     width: 100%;
@@ -581,19 +582,19 @@
   .admin-appointment-dashboard-content {
     padding: 0 12px 24px 12px;
   }
-  
+
   .admin-appointment-dashboard-booked-appointments-section {
     padding: 24px 16px;
   }
-  
+
   .admin-appointment-dashboard-appointment-card {
     padding: 16px 20px;
   }
-  
+
   .admin-appointment-dashboard-title {
     font-size: 1.3rem;
   }
-  
+
   .admin-appointment-dashboard-menu-icon {
     left: 16px;
   }

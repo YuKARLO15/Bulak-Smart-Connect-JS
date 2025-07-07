@@ -15,7 +15,6 @@ const AdminMarriageAffidavitDetails = ({ applicationId, currentUser }) => {
 
   const { user, hasRole } = useAuth();
 
-
   const canEdit = hasRole('super_admin') || hasRole('admin');
   const canView = hasRole('super_admin') || hasRole('admin') || hasRole('staff');
 
@@ -54,11 +53,11 @@ const AdminMarriageAffidavitDetails = ({ applicationId, currentUser }) => {
     }
   }, [applicationId, canView]);
 
-  const handleChange = (event) => {
+  const handleChange = event => {
     const { name, value, type, checked } = event.target;
     setFormData(prevData => ({
       ...prevData,
-      [name]: type === 'checkbox' ? checked : value
+      [name]: type === 'checkbox' ? checked : value,
     }));
   };
 
@@ -70,9 +69,9 @@ const AdminMarriageAffidavitDetails = ({ applicationId, currentUser }) => {
       const updatedAffidavitData = {
         ...formData,
         lastUpdated: new Date().toISOString(),
-        lastUpdatedBy: user?.login || currentUser?.login
+        lastUpdatedBy: user?.login || currentUser?.login,
       };
-   
+
       await documentApplicationService.updateApplication(applicationId, {
         marriageAffidavitData: updatedAffidavitData,
         formData: { ...formData },
@@ -93,7 +92,6 @@ const AdminMarriageAffidavitDetails = ({ applicationId, currentUser }) => {
     setError('');
     setSuccess('');
   };
-
 
   const getHusbandFullName = () => {
     const firstName = formData.husbandFirstName || '';
@@ -135,7 +133,8 @@ const AdminMarriageAffidavitDetails = ({ applicationId, currentUser }) => {
   };
 
   if (!canView) return <div className="AdminPreviewErrorMcAffidavit">Unauthorized access</div>;
-  if (loading) return <div className="AdminPreviewLoadingMcAffidavit">Loading marriage affidavit...</div>;
+  if (loading)
+    return <div className="AdminPreviewLoadingMcAffidavit">Loading marriage affidavit...</div>;
   if (error) return <div className="AdminPreviewErrorMcAffidavit">{error}</div>;
 
   return (
@@ -148,7 +147,9 @@ const AdminMarriageAffidavitDetails = ({ applicationId, currentUser }) => {
           </div>
           <div className="AdminInfoRowMcAffidavit">
             <span className="AdminInfoLabelMcAffidavit">Application Status:</span>
-            <span className={`AdminInfoValueMcAffidavit StatusMcAffidavit ${applicationDetails.status}`}>
+            <span
+              className={`AdminInfoValueMcAffidavit StatusMcAffidavit ${applicationDetails.status}`}
+            >
               {applicationDetails.status || 'Unknown'}
             </span>
           </div>
@@ -157,14 +158,18 @@ const AdminMarriageAffidavitDetails = ({ applicationId, currentUser }) => {
               <div className="AdminEditControlsMcAffidavit" style={{ marginLeft: 'auto' }}>
                 {!isEditMode ? (
                   <button
-                    onClick={() => { setIsEditMode(true); setSuccess(''); setError(''); }}
+                    onClick={() => {
+                      setIsEditMode(true);
+                      setSuccess('');
+                      setError('');
+                    }}
                     style={{
                       padding: '8px 16px',
                       backgroundColor: '#0066cc',
                       color: 'white',
                       border: 'none',
                       borderRadius: '4px',
-                      cursor: 'pointer'
+                      cursor: 'pointer',
                     }}
                   >
                     Edit Marriage Affidavit
@@ -179,10 +184,10 @@ const AdminMarriageAffidavitDetails = ({ applicationId, currentUser }) => {
                         color: 'white',
                         border: 'none',
                         borderRadius: '4px',
-                        cursor: 'pointer'
+                        cursor: 'pointer',
                       }}
                     >
-                      {loading ? "Saving..." : "Save Changes"}
+                      {loading ? 'Saving...' : 'Save Changes'}
                     </button>
                     <button
                       onClick={handleCancel}
@@ -192,7 +197,7 @@ const AdminMarriageAffidavitDetails = ({ applicationId, currentUser }) => {
                         color: 'white',
                         border: 'none',
                         borderRadius: '4px',
-                        cursor: 'pointer'
+                        cursor: 'pointer',
                       }}
                     >
                       Cancel
@@ -401,9 +406,9 @@ const AdminMarriageAffidavitDetails = ({ applicationId, currentUser }) => {
                   className="CheckboxInputMcAffidavit"
                 />
                 <label htmlFor="item2a" className="CheckboxLabelMcAffidavit">
-                  a. That I have ascertained the qualifications of the contracting parties and
-                  have found no legal impediment for them to marry as required by Article 34 of
-                  the Family Code;
+                  a. That I have ascertained the qualifications of the contracting parties and have
+                  found no legal impediment for them to marry as required by Article 34 of the
+                  Family Code;
                 </label>
               </div>
               <div className="CheckboxItemMcAffidavit">
@@ -812,7 +817,9 @@ const AdminMarriageAffidavitDetails = ({ applicationId, currentUser }) => {
                     disabled={!isEditMode}
                     className="CheckboxInputMcAffidavit"
                   />
-                  <label htmlFor="ceremony-a" className="CheckboxLabelMcAffidavit">religious ceremony</label>
+                  <label htmlFor="ceremony-a" className="CheckboxLabelMcAffidavit">
+                    religious ceremony
+                  </label>
                 </div>
                 <div className="CeremonyTypeMcAffidavit">
                   <span>b.</span>
@@ -825,7 +832,9 @@ const AdminMarriageAffidavitDetails = ({ applicationId, currentUser }) => {
                     disabled={!isEditMode}
                     className="CheckboxInputMcAffidavit"
                   />
-                  <label htmlFor="ceremony-b" className="CheckboxLabelMcAffidavit">civil ceremony</label>
+                  <label htmlFor="ceremony-b" className="CheckboxLabelMcAffidavit">
+                    civil ceremony
+                  </label>
                 </div>
                 <div className="CeremonyTypeMcAffidavit">
                   <span>c.</span>
@@ -838,7 +847,9 @@ const AdminMarriageAffidavitDetails = ({ applicationId, currentUser }) => {
                     disabled={!isEditMode}
                     className="CheckboxInputMcAffidavit"
                   />
-                  <label htmlFor="ceremony-c" className="CheckboxLabelMcAffidavit">Muslim rites</label>
+                  <label htmlFor="ceremony-c" className="CheckboxLabelMcAffidavit">
+                    Muslim rites
+                  </label>
                 </div>
                 <div className="CeremonyTypeMcAffidavit">
                   <span>d.</span>
@@ -851,15 +862,15 @@ const AdminMarriageAffidavitDetails = ({ applicationId, currentUser }) => {
                     disabled={!isEditMode}
                     className="CheckboxInputMcAffidavit"
                   />
-                  <label htmlFor="ceremony-d" className="CheckboxLabelMcAffidavit">tribal rites</label>
+                  <label htmlFor="ceremony-d" className="CheckboxLabelMcAffidavit">
+                    tribal rites
+                  </label>
                 </div>
               </div>
             </div>
 
             <div className="FormRowMcAffidavit">
-              <div className="AffidavitTextMcAffidavit">
-                3. That the marriage was solemnized:
-              </div>
+              <div className="AffidavitTextMcAffidavit">3. That the marriage was solemnized:</div>
               <div className="AffidavitTextMcAffidavit">
                 a. with marriage license no.
                 {isEditMode ? (

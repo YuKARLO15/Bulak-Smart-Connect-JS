@@ -7,12 +7,15 @@ import { vi } from 'vitest';
 const MockMarriageCertificateForm = () => {
   const [submitted, setSubmitted] = React.useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = e => {
     e.preventDefault();
     // Simulate localStorage interaction
-    window.localStorage.setItem('marriageApplication', JSON.stringify({
-      submittedAt: new Date().toISOString()
-    }));
+    window.localStorage.setItem(
+      'marriageApplication',
+      JSON.stringify({
+        submittedAt: new Date().toISOString(),
+      })
+    );
     setSubmitted(true);
   };
 
@@ -61,18 +64,14 @@ vi.mock('react-router-dom', async () => {
 
 // Mock form submission methods for jsdom
 Object.defineProperty(HTMLFormElement.prototype, 'requestSubmit', {
-  value: function() {
+  value: function () {
     this.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
   },
   writable: true,
 });
 
-const renderWithRouter = (component) => {
-  return render(
-    <BrowserRouter>
-      {component}
-    </BrowserRouter>
-  );
+const renderWithRouter = component => {
+  return render(<BrowserRouter>{component}</BrowserRouter>);
 };
 
 describe('MarriageCertificateForm', () => {
@@ -82,15 +81,15 @@ describe('MarriageCertificateForm', () => {
 
   it('renders form fields correctly', () => {
     renderWithRouter(<MockMarriageCertificateForm />);
-    
+
     expect(screen.getByText(/marriage certificate/i)).toBeInTheDocument();
   });
 
   it('handles form submission correctly', async () => {
     renderWithRouter(<MockMarriageCertificateForm />);
-    
+
     const submitButton = screen.getByRole('button', { name: /submit/i });
-    
+
     fireEvent.click(submitButton);
 
     await waitFor(() => {
@@ -100,7 +99,7 @@ describe('MarriageCertificateForm', () => {
 
   it('validates required fields', async () => {
     renderWithRouter(<MockMarriageCertificateForm />);
-    
+
     const submitButton = screen.getByRole('button', { name: /submit/i });
     fireEvent.click(submitButton);
 
@@ -111,7 +110,7 @@ describe('MarriageCertificateForm', () => {
 
   it('handles editing mode correctly', () => {
     renderWithRouter(<MockMarriageCertificateForm />);
-    
+
     // Test that the form renders without errors
     expect(screen.getByRole('button', { name: /submit/i })).toBeInTheDocument();
   });

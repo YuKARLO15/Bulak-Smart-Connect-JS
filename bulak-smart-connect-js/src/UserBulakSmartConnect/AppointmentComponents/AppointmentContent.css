@@ -12,11 +12,10 @@
   align-content: center;
   justify-content: center;
   align-items: center;
-  box-shadow: 2px 10px 13px 0px rgba(28,77,90,0.25);
--webkit-box-shadow: 2px 10px 13px 0px rgba(28,77,90,0.25);
--moz-box-shadow: 2px 10px 13px 0px rgba(28,77,90,0.25);
+  box-shadow: 2px 10px 13px 0px rgba(28, 77, 90, 0.25);
+  -webkit-box-shadow: 2px 10px 13px 0px rgba(28, 77, 90, 0.25);
+  -moz-box-shadow: 2px 10px 13px 0px rgba(28, 77, 90, 0.25);
 }
-
 
 .StepperContainerAppointForm {
   display: flex;
@@ -24,7 +23,6 @@
   justify-content: flex-start;
   padding: 32px 48px 12px 48px;
   gap: 10px;
-
 }
 
 .StepAppointForm {
@@ -32,7 +30,6 @@
   flex-direction: column;
   align-items: center;
   min-width: 110px;
- 
 }
 
 .TopRowAppointForm {
@@ -40,7 +37,6 @@
   align-items: center;
   margin-bottom: 18px;
 }
-
 
 .StepCircleAppointForm {
   width: 34px;
@@ -84,14 +80,13 @@
 }
 .AppointmentFContainerAppointForm {
   margin: 0 auto;
-width: 80vw  !important;
+  width: 80vw !important;
   padding: 0;
   background: none;
   display: flex;
   flex-direction: column;
   align-items: center;
   margin-top: 20px !important;
-
 }
 .AppointmentFormSectionAppointForm {
   flex: 2 1 0;
@@ -180,7 +175,8 @@ width: 80vw  !important;
   text-align: left;
 }
 
-.InputWrapperAppointForm input, .InputWrapperAppointForm select {
+.InputWrapperAppointForm input,
+.InputWrapperAppointForm select {
   padding: 12px;
   border: 1.5px solid #c6d6f2;
   border-radius: 5px;
@@ -191,7 +187,8 @@ width: 80vw  !important;
   color: #1e3a56;
 }
 
-.InputWrapperAppointForm input:focus, .InputWrapperAppointForm select:focus {
+.InputWrapperAppointForm input:focus,
+.InputWrapperAppointForm select:focus {
   border-color: #1c4d5a !important;
   background: #eaf2fd;
 }
@@ -199,10 +196,16 @@ width: 80vw  !important;
   color: #b7c6d9;
 }
 
-.SmallInputAppointForm input { width: 4vw !important; }
-.LargeInputAppointForm input { width: 35vw !important; }
+.SmallInputAppointForm input {
+  width: 4vw !important;
+}
+.LargeInputAppointForm input {
+  width: 35vw !important;
+}
 
-.AppointTimeAppointForm select { width: 17vw !important; }
+.AppointTimeAppointForm select {
+  width: 17vw !important;
+}
 
 .CalendarAppointForm {
   border: 1px solid #d7e7fa;
@@ -308,7 +311,7 @@ width: 80vw  !important;
 
 .ActualBackButtonAppointForm:hover {
   background: #eaf2fd;
-  color:#1c4d5a;
+  color: #1c4d5a;
 }
 .DialogButtonsAppointForm {
   display: flex;
@@ -328,7 +331,8 @@ width: 80vw  !important;
   transition: background 0.16s;
 }
 
-.SelfButtonAppointForm.SelectedAppointForm, .OtherButtonAppointForm.SelectedAppointForm {
+.SelfButtonAppointForm.SelectedAppointForm,
+.OtherButtonAppointForm.SelectedAppointForm {
   background: #1c4d5a;
   color: white;
 }
@@ -366,7 +370,7 @@ width: 80vw  !important;
 .AppointmentCardAppointForm {
   background: #f4f8fb;
   border-radius: 16px;
-  box-shadow: 2px 10px 13px 0px rgba(28,77,90,0.25);
+  box-shadow: 2px 10px 13px 0px rgba(28, 77, 90, 0.25);
   max-width: 650px;
   width: 100%;
   margin: 40px 0;
@@ -411,7 +415,7 @@ width: 80vw  !important;
 }
 
 /* Remove any dashed borders from date inputs */
-input[type="date"],
+input[type='date'],
 .DateInputWrapperAppointForm {
   border: none !important;
   outline: none !important;
@@ -448,13 +452,13 @@ select.time-select {
   color: black;
 }
 /* Remove dashed borders from the parent containers */
-[class*="AppointForm"] > div > input[type="date"],
+[class*='AppointForm'] > div > input[type='date'],
 div:has(.DatePickerInputAppointForm) {
   border: none !important;
 }
 
 /* Override any dashed outlines that might be applied */
-.AppointmentFormSectionAppointForm input[type="date"],
+.AppointmentFormSectionAppointForm input[type='date'],
 .AppointmentFormSectionAppointForm .DatePickerInputAppointForm {
   outline: none !important;
   border: none !important;
@@ -527,7 +531,7 @@ div:has(.DatePickerInputAppointForm) {
   z-index: 2000;
   top: 110%;
   left: 0;
-  box-shadow: 0 4px 20px rgba(30,58,86,0.15);
+  box-shadow: 0 4px 20px rgba(30, 58, 86, 0.15);
   border-radius: 8px;
   background: white;
   padding: 6px;
@@ -545,23 +549,27 @@ div:has(.DatePickerInputAppointForm) {
     margin-top: 32px;
     max-width: 100%;
   }
-  .InputWrapperAppointForm input, .InputWrapperAppointForm select, .SmallInputAppointForm input, .LargeInputAppointForm input, .AppointTimeAppointForm select {
+  .InputWrapperAppointForm input,
+  .InputWrapperAppointForm select,
+  .SmallInputAppointForm input,
+  .LargeInputAppointForm input,
+  .AppointTimeAppointForm select {
     width: 100% !important;
     min-width: 0;
     max-width: 100%;
   }
-  .ConfirmButtonAppointForm{
+  .ConfirmButtonAppointForm {
     width: 80vw;
     margin-top: 20px;
   }
-   .StepperContainerAppointForm  {
-  justify-content: center;
+  .StepperContainerAppointForm {
+    justify-content: center;
   }
   .StepAppointForm {
     min-width: 30px;
     justify-content: center;
     align-items: center;
-      height: auto;
+    height: auto;
   }
 }
 

@@ -55,7 +55,7 @@
 .btn-back {
   background-color: #aab7b8;
   color: white;
-  order: -1; 
+  order: -1;
 }
 
 .btn-back:hover:not(:disabled) {
@@ -88,7 +88,6 @@
   margin-left: auto;
 }
 
-
 .status-actions .btn-confirm ~ .btn-cancel,
 .status-actions .btn-complete ~ .btn-cancel {
   margin-left: 0;
@@ -98,7 +97,7 @@
   .details-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .appointment-header {
     flex-direction: column;
     text-align: center;
@@ -234,8 +233,12 @@
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .error-content h2 {

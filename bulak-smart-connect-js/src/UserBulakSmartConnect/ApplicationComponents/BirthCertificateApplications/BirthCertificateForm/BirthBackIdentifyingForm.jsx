@@ -17,7 +17,7 @@ const AffidavitBirthForm = ({ formData, handleChange, isReadOnly = false }) => {
   };
 
   const geFatherFullName = () => {
-    if (formData?.maritalStatus === "marital" || formData?.fatherLastName == null) {
+    if (formData?.maritalStatus === 'marital' || formData?.fatherLastName == null) {
       return '';
     }
 
@@ -58,18 +58,18 @@ const AffidavitBirthForm = ({ formData, handleChange, isReadOnly = false }) => {
     }
     return '';
   };
-const getChildBirthPlace = () => {
-  const hospital = formData?.hospital || '';
-  const city = formData?.city || '';
-  const province = formData?.province || '';
-  
-  let birthPlace = [];
-  if (hospital) birthPlace.push(hospital);
-  if (city) birthPlace.push(city);
-  if (province) birthPlace.push(province);
-  
-  return birthPlace.join(', ');
-};
+  const getChildBirthPlace = () => {
+    const hospital = formData?.hospital || '';
+    const city = formData?.city || '';
+    const province = formData?.province || '';
+
+    let birthPlace = [];
+    if (hospital) birthPlace.push(hospital);
+    if (city) birthPlace.push(city);
+    if (province) birthPlace.push(province);
+
+    return birthPlace.join(', ');
+  };
 
   const [registrationType, setRegistrationType] = useState('self');
   const [parentStatus, setParentStatus] = useState(null);
@@ -78,159 +78,162 @@ const getChildBirthPlace = () => {
 
   const handleRegistrationTypeChange = type => {
     setRegistrationType(type);
-    
+
     if (type === 'self' && autoFill) {
       handleChange({
         target: {
           name: 'selfBirthPlace',
-          value:  getChildBirthPlace() ,
-        }
+          value: getChildBirthPlace(),
+        },
       });
       handleChange({
         target: {
           name: 'selfBirthDate',
           value: getChildBirthDate(),
-        }
+        },
       });
-      
+
       // Clear other fields
       handleChange({
         target: {
           name: 'otherPersonName',
           value: '',
-        }
+        },
       });
       handleChange({
         target: {
           name: 'otherBirthPlace',
           value: '',
-        }
+        },
       });
       handleChange({
         target: {
           name: 'otherBirthDate',
           value: '',
-        }
+        },
       });
     } else if (type === 'other' && autoFill) {
       handleChange({
         target: {
           name: 'otherPersonName',
           value: getChildFullName(),
-        }
+        },
       });
       handleChange({
         target: {
           name: 'otherBirthPlace',
           value: getChildBirthPlace(),
-        }
+        },
       });
       handleChange({
         target: {
           name: 'otherBirthDate',
           value: getChildBirthDate(),
-        }
+        },
       });
-      
+
       // Clear self fields
       handleChange({
         target: {
           name: 'selfBirthPlace',
           value: '',
-        }
+        },
       });
       handleChange({
         target: {
           name: 'selfBirthDate',
           value: '',
-        }
+        },
       });
     }
   };
 
   const handleParentStatusChange = status => {
-  // If clicking the already selected checkbox, deselect it
-  if (parentStatus === status) {
-    setParentStatus(null);
-    
-    // Clear fields based on which option was deselected
-    if (status === 'married') {
+    // If clicking the already selected checkbox, deselect it
+    if (parentStatus === status) {
+      setParentStatus(null);
+
+      // Clear fields based on which option was deselected
+      if (status === 'married') {
+        handleChange({
+          target: {
+            name: 'marriageDate',
+            value: '',
+          },
+        });
+        handleChange({
+          target: {
+            name: 'marriagePlace',
+            value: '',
+          },
+        });
+      } else if (status === 'notMarried') {
+        handleChange({
+          target: {
+            name: 'fatherName',
+            value: '',
+          },
+        });
+      }
+      return;
+    }
+
+    // Otherwise, select the clicked checkbox
+    setParentStatus(status);
+
+    if (status === 'married' && autoFill) {
       handleChange({
         target: {
           name: 'marriageDate',
-          value: ''
-        }
+          value:
+            formData?.marriageMonth && formData?.marriageDay && formData?.marriageYear
+              ? `${formData.marriageMonth} ${formData.marriageDay}, ${formData.marriageYear}`
+              : formData?.marriageDate || '',
+        },
       });
       handleChange({
         target: {
           name: 'marriagePlace',
-          value: ''
-        }
+          value:
+            formData?.marriageCity && formData?.marriageProvince
+              ? `${formData.marriageCity}, ${formData.marriageProvince}`
+              : formData?.marriagePlace || '',
+        },
       });
-    } else if (status === 'notMarried') {
+
+      // Clear not married fields
       handleChange({
         target: {
           name: 'fatherName',
-          value: ''
-        }
+          value: '',
+        },
+      });
+    } else if (status === 'notMarried' && autoFill) {
+      handleChange({
+        target: {
+          name: 'fatherName',
+          value:
+            formData?.fatherFirstName && formData?.fatherLastName
+              ? `${formData.fatherFirstName} ${formData.fatherMiddleName || ''} ${formData.fatherLastName}`
+              : formData?.fatherName || '',
+        },
+      });
+
+      // Clear married fields
+      handleChange({
+        target: {
+          name: 'marriageDate',
+          value: '',
+        },
+      });
+      handleChange({
+        target: {
+          name: 'marriagePlace',
+          value: '',
+        },
       });
     }
-    return;
-  }
-  
-  // Otherwise, select the clicked checkbox
-  setParentStatus(status);
-  
-  if (status === 'married' && autoFill) {
-    handleChange({
-      target: {
-        name: 'marriageDate',
-        value: (formData?.marriageMonth && formData?.marriageDay && formData?.marriageYear)
-          ? `${formData.marriageMonth} ${formData.marriageDay}, ${formData.marriageYear}`
-          : formData?.marriageDate || ''
-      }
-    });
-    handleChange({
-      target: {
-        name: 'marriagePlace',
-        value: (formData?.marriageCity && formData?.marriageProvince)
-          ? `${formData.marriageCity}, ${formData.marriageProvince}`
-          : formData?.marriagePlace || ''
-      }
-    });
-    
-    // Clear not married fields
-    handleChange({
-      target: {
-        name: 'fatherName',
-        value: ''
-      }
-    });
-  } else if (status === 'notMarried' && autoFill) {
-    handleChange({
-      target: {
-        name: 'fatherName',
-        value: (formData?.fatherFirstName && formData?.fatherLastName)
-          ? `${formData.fatherFirstName} ${formData.fatherMiddleName || ''} ${formData.fatherLastName}`
-          : formData?.fatherName || ''
-      }
-    });
-    
-    // Clear married fields
-    handleChange({
-      target: {
-        name: 'marriageDate',
-        value: ''
-      }
-    });
-    handleChange({
-      target: {
-        name: 'marriagePlace',
-        value: ''
-      }
-    });
-  }
-};
+  };
 
   const handleMaritalStatusChange = status => {
     setMaritalStatus(status);
@@ -251,33 +254,33 @@ const getChildBirthPlace = () => {
         handleChange({
           target: {
             name: 'selfBirthPlace',
-            value:  getChildBirthPlace(),
-          }
+            value: getChildBirthPlace(),
+          },
         });
         handleChange({
           target: {
             name: 'selfBirthDate',
             value: getChildBirthDate(),
-          }
+          },
         });
       } else if (registrationType === 'other') {
         handleChange({
           target: {
             name: 'otherPersonName',
             value: getChildFullName(),
-          }
+          },
         });
         handleChange({
           target: {
             name: 'otherBirthPlace',
             value: getChildBirthPlace(),
-          }
+          },
         });
         handleChange({
           target: {
             name: 'otherBirthDate',
             value: getChildBirthDate(),
-          }
+          },
         });
       }
 
@@ -286,34 +289,37 @@ const getChildBirthPlace = () => {
         handleChange({
           target: {
             name: 'marriageDate',
-            value: (formData?.marriageMonth && formData?.marriageDay && formData?.marriageYear)
-              ? `${formData.marriageMonth} ${formData.marriageDay}, ${formData.marriageYear}`
-              : formData?.marriageDate || ''
-          }
+            value:
+              formData?.marriageMonth && formData?.marriageDay && formData?.marriageYear
+                ? `${formData.marriageMonth} ${formData.marriageDay}, ${formData.marriageYear}`
+                : formData?.marriageDate || '',
+          },
         });
         handleChange({
           target: {
             name: 'marriagePlace',
-            value: (formData?.marriageCity && formData?.marriageProvince)
-              ? `${formData.marriageCity}, ${formData.marriageProvince}`
-              : formData?.marriagePlace || ''
-          }
+            value:
+              formData?.marriageCity && formData?.marriageProvince
+                ? `${formData.marriageCity}, ${formData.marriageProvince}`
+                : formData?.marriagePlace || '',
+          },
         });
       } else if (parentStatus === 'notMarried') {
         handleChange({
           target: {
             name: 'fatherName',
-            value: (formData?.fatherFirstName && formData?.fatherLastName)
-              ? `${formData.fatherFirstName} ${formData.fatherMiddleName || ''} ${formData.fatherLastName}`
-              : formData?.fatherName || ''
-          }
+            value:
+              formData?.fatherFirstName && formData?.fatherLastName
+                ? `${formData.fatherFirstName} ${formData.fatherMiddleName || ''} ${formData.fatherLastName}`
+                : formData?.fatherName || '',
+          },
         });
       }
     }
   };
 
   const shouldShowPaternityAffidavit = () => {
-    if (formData.ParentsMarriage == "marital" || formData?.fatherLastName == '') {
+    if (formData.ParentsMarriage == 'marital' || formData?.fatherLastName == '') {
       return false;
     }
     return true;
@@ -323,7 +329,9 @@ const getChildBirthPlace = () => {
     <div className="BirthFormContainerAffidavit">
       {shouldShowPaternityAffidavit() && (
         <>
-          <div className="FormHeaderAffidavit">AFFIDAVIT OF ACKNOWLEDGMENT/ADMISSION OF PATERNITY</div>
+          <div className="FormHeaderAffidavit">
+            AFFIDAVIT OF ACKNOWLEDGMENT/ADMISSION OF PATERNITY
+          </div>
           <div className="SubHeaderAffidavit">(For births before 3 August 1988)</div>
           <div className="FormContentAffidavit">
             <div className="FormSectionAffidavit">
@@ -374,8 +382,8 @@ const getChildBirthPlace = () => {
               </div>
               <div className="FormRowAffidavit">
                 <div className="AffidavitText">
-                  I am / We are executing this affidavit to attest to the truthfulness of the foregoing
-                  statements and for purposes of acknowledging my/our child.
+                  I am / We are executing this affidavit to attest to the truthfulness of the
+                  foregoing statements and for purposes of acknowledging my/our child.
                 </div>
               </div>
               <div className="FormRowAffidavit">
@@ -579,82 +587,94 @@ const getChildBirthPlace = () => {
             </div>
           </div>
 
-         <div className="FormRowAffidavit">
-  <div className="CheckboxContainerAffidavit">
-    <input
-      type="checkbox"
-      id="selfBirthCheckbox"
-      checked={registrationType === 'self'}
-      onChange={() => handleRegistrationTypeChange('self')}
-      className="CheckboxInputAffidavit"
-      disabled={isReadOnly}
-    />
-    <label htmlFor="selfBirthCheckbox" className="CheckboxLabelAffidavit">
-      my birth in
-      <input
-        type="text"
-        name="selfBirthPlace"
-        value={registrationType == 'self'? getChildBirthPlace():''}
-        onChange={handleChange}
-        className="AffidavitMediumInput"
-        disabled={registrationType !== 'self' || isReadOnly}
-      />
-      on
-      <input
-        type="text"
-        name="selfBirthDate"
-        value={registrationType == 'self'? getChildBirthDate():''}
-        onChange={handleChange}
-        className="AffidavitMediumInput"
-        disabled={registrationType !== 'self' || isReadOnly}
-      />
-      .
-    </label>
-  </div>
-</div>
+          <div className="FormRowAffidavit">
+            <div className="CheckboxContainerAffidavit">
+              <input
+                type="checkbox"
+                id="selfBirthCheckbox"
+                checked={registrationType === 'self'}
+                onChange={() => handleRegistrationTypeChange('self')}
+                className="CheckboxInputAffidavit"
+                disabled={isReadOnly}
+              />
+              <label htmlFor="selfBirthCheckbox" className="CheckboxLabelAffidavit">
+                my birth in
+                <input
+                  type="text"
+                  name="selfBirthPlace"
+                  value={registrationType == 'self' ? getChildBirthPlace() : ''}
+                  onChange={handleChange}
+                  className="AffidavitMediumInput"
+                  disabled={registrationType !== 'self' || isReadOnly}
+                />
+                on
+                <input
+                  type="text"
+                  name="selfBirthDate"
+                  value={registrationType == 'self' ? getChildBirthDate() : ''}
+                  onChange={handleChange}
+                  className="AffidavitMediumInput"
+                  disabled={registrationType !== 'self' || isReadOnly}
+                />
+                .
+              </label>
+            </div>
+          </div>
 
-<div className="FormRowAffidavit">
-  <div className="CheckboxContainerAffidavit">
-    <input
-      type="checkbox"
-      id="otherBirthCheckbox"
-      checked={registrationType === 'other'}
-      onChange={() => handleRegistrationTypeChange('other')}
-      className="CheckboxInputAffidavit"
-      disabled={isReadOnly}
-    />
-    <label htmlFor="otherBirthCheckbox" className="CheckboxLabelAffidavit">
-      the birth of
-      <input
-        type="text"
-        name="otherPersonName"
-        value={registrationType === 'other' ? formData?.otherPersonName || getChildFullName() : ''}
-        onChange={handleChange}
-        className="AffidavitMediumInput"
-        disabled={registrationType !== 'other' || isReadOnly}
-      />
-      who was born in
-      <input
-        type="text"
-        name="otherBirthPlace"
-        value={registrationType === 'other' ? formData?.otherBirthPlace || getChildBirthPlace() : ''}
-        onChange={handleChange}
-        className="AffidavitMediumInput"
-        disabled={registrationType !== 'other' || isReadOnly}
-      />
-      on
-      <input
-        type="text"
-        name="otherBirthDate"
-        value={registrationType === 'other' ? formData?.otherBirthDate || getChildBirthDate() : ''}
-        onChange={handleChange}
-        className="AffidavitMediumInput"
-        disabled={registrationType !== 'other' || isReadOnly}
-      />
-      .
-    </label>
-  </div>
-</div>
+          <div className="FormRowAffidavit">
+            <div className="CheckboxContainerAffidavit">
+              <input
+                type="checkbox"
+                id="otherBirthCheckbox"
+                checked={registrationType === 'other'}
+                onChange={() => handleRegistrationTypeChange('other')}
+                className="CheckboxInputAffidavit"
+                disabled={isReadOnly}
+              />
+              <label htmlFor="otherBirthCheckbox" className="CheckboxLabelAffidavit">
+                the birth of
+                <input
+                  type="text"
+                  name="otherPersonName"
+                  value={
+                    registrationType === 'other'
+                      ? formData?.otherPersonName || getChildFullName()
+                      : ''
+                  }
+                  onChange={handleChange}
+                  className="AffidavitMediumInput"
+                  disabled={registrationType !== 'other' || isReadOnly}
+                />
+                who was born in
+                <input
+                  type="text"
+                  name="otherBirthPlace"
+                  value={
+                    registrationType === 'other'
+                      ? formData?.otherBirthPlace || getChildBirthPlace()
+                      : ''
+                  }
+                  onChange={handleChange}
+                  className="AffidavitMediumInput"
+                  disabled={registrationType !== 'other' || isReadOnly}
+                />
+                on
+                <input
+                  type="text"
+                  name="otherBirthDate"
+                  value={
+                    registrationType === 'other'
+                      ? formData?.otherBirthDate || getChildBirthDate()
+                      : ''
+                  }
+                  onChange={handleChange}
+                  className="AffidavitMediumInput"
+                  disabled={registrationType !== 'other' || isReadOnly}
+                />
+                .
+              </label>
+            </div>
+          </div>
           <div className="FormRowAffidavit">
             <div className="AffidavitText">
               2. That I/he/she was attended at birth by
@@ -692,82 +712,88 @@ const getChildBirthPlace = () => {
           </div>
 
           <div className="FormRowAffidavit">
-         <div className="FormRowAffidavit">
-  <div className="AffidavitText">4. That my/his/her parents were</div>
-</div>
-
-<div className="FormRowAffidavit">
-  <div className="CheckboxContainerAffidavit">
-    <input
-      type="checkbox"
-      id="marriedParentsCheckbox"
-      checked={parentStatus === 'married'}
-      onChange={() => handleParentStatusChange('married')}
-      className="CheckboxInputAffidavit"
-      disabled={isReadOnly}
-    />
-    <label htmlFor="marriedParentsCheckbox" className="CheckboxLabelAffidavit">
-      married on
-      <input
-        type="text"
-        name="marriageDate"
-        value={parentStatus === 'married' ? 
-          (formData?.marriageMonth && formData?.marriageDay && formData?.marriageYear
-            ? `${formData.marriageMonth} ${formData.marriageDay}, ${formData.marriageYear}`
-            : formData?.marriageDate || '') : ''
-        }
-        onChange={handleChange}
-        className="AffidavitMediumInput"
-        disabled={parentStatus !== 'married'}
-      />
-      at
-      <input
-        type="text"
-        name="marriagePlace"
-        value={parentStatus === 'married' ?
-          (formData?.marriageCity && formData?.marriageProvince
-            ? `${formData.marriageCity}, ${formData.marriageProvince}`
-            : formData?.marriagePlace || '') : ''
-        }
-        onChange={handleChange}
-        className="AffidavitMediumInput"
-        disabled={parentStatus !== 'married'}
-      />
-      .
-    </label>
-  </div>
-</div>
-
-<div className="FormRowAffidavit">
-  <div className="CheckboxContainerAffidavit">
-    <input
-      type="checkbox"
-      id="notMarriedParentsCheckbox"
-      checked={parentStatus === 'notMarried'}
-      onChange={() => handleParentStatusChange('notMarried')}
-      className="CheckboxInputAffidavit"
-      disabled={isReadOnly}
-    />
-    <label htmlFor="notMarriedParentsCheckbox" className="CheckboxLabelAffidavit">
-      not married but I/he/she was acknowledged/not acknowledged by my/his/her father
-      whose name is
-      <input
-        type="text"
-        name="fatherName"
-        value={parentStatus === 'notMarried' ? 
-          (formData?.fatherFirstName && formData?.fatherLastName
-            ? `${formData.fatherFirstName} ${formData.fatherMiddleName || ''} ${formData.fatherLastName}`
-            : formData?.fatherName || '') : ''
-        }
-        onChange={handleChange}
-        className="AffidavitMediumInput"
-        disabled={parentStatus !== 'notMarried'}
-      />
-      .
-    </label>
-  </div>
-</div>
+            <div className="FormRowAffidavit">
+              <div className="AffidavitText">4. That my/his/her parents were</div>
             </div>
+
+            <div className="FormRowAffidavit">
+              <div className="CheckboxContainerAffidavit">
+                <input
+                  type="checkbox"
+                  id="marriedParentsCheckbox"
+                  checked={parentStatus === 'married'}
+                  onChange={() => handleParentStatusChange('married')}
+                  className="CheckboxInputAffidavit"
+                  disabled={isReadOnly}
+                />
+                <label htmlFor="marriedParentsCheckbox" className="CheckboxLabelAffidavit">
+                  married on
+                  <input
+                    type="text"
+                    name="marriageDate"
+                    value={
+                      parentStatus === 'married'
+                        ? formData?.marriageMonth && formData?.marriageDay && formData?.marriageYear
+                          ? `${formData.marriageMonth} ${formData.marriageDay}, ${formData.marriageYear}`
+                          : formData?.marriageDate || ''
+                        : ''
+                    }
+                    onChange={handleChange}
+                    className="AffidavitMediumInput"
+                    disabled={parentStatus !== 'married'}
+                  />
+                  at
+                  <input
+                    type="text"
+                    name="marriagePlace"
+                    value={
+                      parentStatus === 'married'
+                        ? formData?.marriageCity && formData?.marriageProvince
+                          ? `${formData.marriageCity}, ${formData.marriageProvince}`
+                          : formData?.marriagePlace || ''
+                        : ''
+                    }
+                    onChange={handleChange}
+                    className="AffidavitMediumInput"
+                    disabled={parentStatus !== 'married'}
+                  />
+                  .
+                </label>
+              </div>
+            </div>
+
+            <div className="FormRowAffidavit">
+              <div className="CheckboxContainerAffidavit">
+                <input
+                  type="checkbox"
+                  id="notMarriedParentsCheckbox"
+                  checked={parentStatus === 'notMarried'}
+                  onChange={() => handleParentStatusChange('notMarried')}
+                  className="CheckboxInputAffidavit"
+                  disabled={isReadOnly}
+                />
+                <label htmlFor="notMarriedParentsCheckbox" className="CheckboxLabelAffidavit">
+                  not married but I/he/she was acknowledged/not acknowledged by my/his/her father
+                  whose name is
+                  <input
+                    type="text"
+                    name="fatherName"
+                    value={
+                      parentStatus === 'notMarried'
+                        ? formData?.fatherFirstName && formData?.fatherLastName
+                          ? `${formData.fatherFirstName} ${formData.fatherMiddleName || ''} ${formData.fatherLastName}`
+                          : formData?.fatherName || ''
+                        : ''
+                    }
+                    onChange={handleChange}
+                    className="AffidavitMediumInput"
+                    disabled={parentStatus !== 'notMarried'}
+                  />
+                  .
+                </label>
+              </div>
+            </div>
+          </div>
 
           <div className="FormRowAffidavit">
             <div className="AffidavitText">

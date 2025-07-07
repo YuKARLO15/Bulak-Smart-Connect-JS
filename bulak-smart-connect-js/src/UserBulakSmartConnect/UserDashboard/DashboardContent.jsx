@@ -47,7 +47,7 @@ const DashboardContent = () => {
     setTooltip({ show: false });
   };
 
-  const formatDate = (dateString) => {
+  const formatDate = dateString => {
     try {
       const date = new Date(dateString);
       return date.toLocaleDateString('en-US', {
@@ -55,7 +55,7 @@ const DashboardContent = () => {
         month: 'long',
         day: 'numeric',
         hour: '2-digit',
-        minute: '2-digit'
+        minute: '2-digit',
       });
     } catch (error) {
       return 'Invalid date';
@@ -124,63 +124,63 @@ const DashboardContent = () => {
                 </div>
               ) : announcements.length > 0 ? (
                 <div style={{ maxHeight: '300px', overflowY: 'auto' }}>
-                  {announcements.map((announcement) => (
-                    <div 
-                      key={announcement.id} 
-                      style={{ 
-                        marginBottom: '15px', 
-                        padding: '15px', 
-                        border: '1px solid #e0e0e0', 
+                  {announcements.map(announcement => (
+                    <div
+                      key={announcement.id}
+                      style={{
+                        marginBottom: '15px',
+                        padding: '15px',
+                        border: '1px solid #e0e0e0',
                         borderRadius: '8px',
                         backgroundColor: '#fff',
-                        boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+                        boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
                       }}
                     >
-                      <Typography 
-                        variant="subtitle2" 
-                        style={{ 
+                      <Typography
+                        variant="subtitle2"
+                        style={{
                           fontWeight: 'bold',
                           color: '#184a5b',
-                          marginBottom: '8px'
+                          marginBottom: '8px',
                         }}
                       >
                         {announcement.title}
                       </Typography>
-                      <Typography 
-                        variant="body2" 
-                        style={{ 
+                      <Typography
+                        variant="body2"
+                        style={{
                           marginBottom: '8px',
                           lineHeight: '1.5',
-                          color: '#333'
+                          color: '#333',
                         }}
                       >
                         {announcement.description}
                       </Typography>
                       {announcement.image && (
-                        <img 
-                          src={announcement.image} 
-                          alt="Announcement" 
-                          style={{ 
-                            maxWidth: '100%', 
-                            height: 'auto', 
+                        <img
+                          src={announcement.image}
+                          alt="Announcement"
+                          style={{
+                            maxWidth: '100%',
+                            height: 'auto',
                             borderRadius: '4px',
-                            marginBottom: '8px'
-                          }} 
+                            marginBottom: '8px',
+                          }}
                         />
                       )}
-                      <Typography 
-                        variant="caption" 
-                        style={{ 
-                          color: '#666', 
+                      <Typography
+                        variant="caption"
+                        style={{
+                          color: '#666',
                           fontSize: '0.75rem',
-                          fontStyle: 'italic'
+                          fontStyle: 'italic',
                         }}
                       >
                         Posted: {formatDate(announcement.createdAt)}
                       </Typography>
                     </div>
                   ))}
-                  
+
                   {/* Add refresh button */}
                   <div style={{ textAlign: 'center', marginTop: '10px' }}>
                     <button
@@ -192,7 +192,7 @@ const DashboardContent = () => {
                         padding: '8px 16px',
                         borderRadius: '4px',
                         cursor: 'pointer',
-                        fontSize: '0.85rem'
+                        fontSize: '0.85rem',
                       }}
                       disabled={announcementLoading}
                     >

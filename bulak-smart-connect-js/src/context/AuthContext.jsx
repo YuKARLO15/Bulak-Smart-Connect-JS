@@ -26,16 +26,16 @@ export const AuthProvider = ({ children }) => {
         const response = await axios.get(`${config.API_BASE_URL}/auth/profile`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        
-        console.log("Profile response:", response.data);
-        
+
+        console.log('Profile response:', response.data);
+
         // Process the user data to ensure it has an id
         const userData = response.data;
         const processedUser = {
           ...userData,
-          id: userData.id || userData._id || userData.userId || null
+          id: userData.id || userData._id || userData.userId || null,
         };
-        
+
         setUser(processedUser);
         setIsAuthenticated(true);
 
@@ -55,25 +55,25 @@ export const AuthProvider = ({ children }) => {
   const login = async (emailOrUsername, password, loginType = 'email') => {
     try {
       // Create payload based on login type
-      const payload = { 
+      const payload = {
         password,
-        emailOrUsername: emailOrUsername // Backend expects a single field
+        emailOrUsername: emailOrUsername, // Backend expects a single field
       };
 
       console.log(`Attempting login with ${loginType}:`, emailOrUsername);
-      
+
       const response = await axios.post(`${config.API_BASE_URL}/auth/login`, payload);
 
       // New logging for backend response
-      console.log("Backend auth response:", response.data); //Debugging line
-      console.log("User object from backend:", response.data.user); //Debugging line
+      console.log('Backend auth response:', response.data); //Debugging line
+      console.log('User object from backend:', response.data.user); //Debugging line
 
       const { access_token, user: userData } = response.data;
-      
+
       // Process user data
       const processedUser = {
         ...userData,
-        id: userData.id || userData._id || userData.userId || null
+        id: userData.id || userData._id || userData.userId || null,
       };
 
       // Store token AND user data in localStorage
@@ -82,11 +82,10 @@ export const AuthProvider = ({ children }) => {
 
       // Process roles - ensure we extract role names correctly
       //if (user.roles) {
-        //user.roleNames = user.roles.map(role => role.name);
+      //user.roleNames = user.roles.map(role => role.name);
       //} else {
-        //user.roleNames = user.defaultRole ? [user.defaultRole.name] : [];
+      //user.roleNames = user.defaultRole ? [user.defaultRole.name] : [];
       //} Tempoarily commented out to avoid errors
-
 
       setUser(processedUser);
       setIsAuthenticated(true);
@@ -104,7 +103,7 @@ export const AuthProvider = ({ children }) => {
     setIsAuthenticated(false);
 
     const userId = getCurrentUserId();
-  
+
     // Clear user specific data but leave generic data for backward compatibility
     localStorage.removeItem(`userQueue_${userId}`);
     localStorage.removeItem(`userQueues_${userId}`);
@@ -147,31 +146,27 @@ export const AuthProvider = ({ children }) => {
   };
 
   // Update user profile (for citizens)
-  const updateProfile = async (profileData) => {
+  const updateProfile = async profileData => {
     setError(null);
     setUpdateSuccess(false);
-    
+
     const token = localStorage.getItem('token');
     if (!token) {
       setError('Authentication required');
       return { success: false, error: 'Authentication required' };
     }
-    
+
     try {
-      const response = await axios.post(
-        `${config.API_BASE_URL}/auth/update-profile`,
-        profileData,
-        {
-          headers: { Authorization: `Bearer ${token}` }
-        }
-      );
-      
+      const response = await axios.post(`${config.API_BASE_URL}/auth/update-profile`, profileData, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
       // Update user state and localStorage
       const updatedUserData = response.data;
       setUser(updatedUserData);
       localStorage.setItem('currentUser', JSON.stringify(updatedUserData));
       setUpdateSuccess(true);
-      
+
       return { success: true, user: updatedUserData };
     } catch (err) {
       console.error('Profile update error:', err);
@@ -180,34 +175,34 @@ export const AuthProvider = ({ children }) => {
       return { success: false, error: errorMsg };
     }
   };
-  
+
   // Admin update user (for admins)
   const adminUpdateUser = async (targetUserId, userData) => {
     setError(null);
     setUpdateSuccess(false);
-    
+
     // Verify the current user is an admin
     if (!hasRole('admin') && !hasRole('super_admin')) {
       const errorMsg = 'Insufficient permissions';
       setError(errorMsg);
       return { success: false, error: errorMsg };
     }
-    
+
     const token = localStorage.getItem('token');
     if (!token) {
       setError('Authentication required');
       return { success: false, error: 'Authentication required' };
     }
-    
+
     try {
       const response = await axios.post(
         `${config.API_BASE_URL}/auth/admin/update-user/${targetUserId}`,
         userData,
         {
-          headers: { Authorization: `Bearer ${token}` }
+          headers: { Authorization: `Bearer ${token}` },
         }
       );
-      
+
       setUpdateSuccess(true);
       return { success: true, user: response.data };
     } catch (err) {

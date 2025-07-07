@@ -40,7 +40,7 @@ describe('App Component', () => {
         <App />
       </BrowserRouter>
     );
-    
+
     expect(getByTestId('app')).toBeInTheDocument();
   });
 });

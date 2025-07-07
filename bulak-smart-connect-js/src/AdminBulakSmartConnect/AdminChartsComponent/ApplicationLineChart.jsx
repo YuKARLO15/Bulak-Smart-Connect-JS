@@ -12,7 +12,6 @@ import {
 import { Box, Typography } from '@mui/material';
 
 const ApplicationLineChart = ({ data }) => {
-
   const chartData = data || [
     { name: 'Jan', Birth: 15, Marriage: 20 },
     { name: 'Feb', Birth: 20, Marriage: 25 },

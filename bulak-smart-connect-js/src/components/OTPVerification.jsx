@@ -2,12 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { otpService } from '../services/otpService';
 import './OTPVerification.css';
 
-const OTPVerification = ({ 
-  email, 
-  purpose = 'verification', 
-  onVerified, 
+const OTPVerification = ({
+  email,
+  purpose = 'verification',
+  onVerified,
   onCancel,
-  title = 'Email Verification'
+  title = 'Email Verification',
 }) => {
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
   const [isLoading, setIsLoading] = useState(false);
@@ -28,7 +28,7 @@ const OTPVerification = ({
   // Handle OTP input
   const handleOtpChange = (index, value) => {
     if (value.length > 1) return; // Prevent multiple characters
-    
+
     const newOtp = [...otp];
     newOtp[index] = value;
     setOtp(newOtp);
@@ -94,7 +94,7 @@ const OTPVerification = ({
     }
   };
 
-  const formatTime = (seconds) => {
+  const formatTime = seconds => {
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
     return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
@@ -105,7 +105,9 @@ const OTPVerification = ({
       <div className="otp-verification-card">
         <div className="otp-header">
           <h2>{title}</h2>
-          <p>We've sent a 6-digit code to <strong>{email}</strong></p>
+          <p>
+            We've sent a 6-digit code to <strong>{email}</strong>
+          </p>
         </div>
 
         <div className="otp-input-container">
@@ -115,8 +117,8 @@ const OTPVerification = ({
               id={`otp-${index}`}
               type="text"
               value={digit}
-              onChange={(e) => handleOtpChange(index, e.target.value)}
-              onKeyDown={(e) => handleKeyDown(index, e)}
+              onChange={e => handleOtpChange(index, e.target.value)}
+              onKeyDown={e => handleKeyDown(index, e)}
               className="otp-input"
               maxLength="1"
               disabled={isLoading}
@@ -124,11 +126,7 @@ const OTPVerification = ({
           ))}
         </div>
 
-        {error && (
-          <div className="otp-error">
-            ❌ {error}
-          </div>
-        )}
+        {error && <div className="otp-error">❌ {error}</div>}
 
         <div className="otp-timer">
           {timeLeft > 0 ? (
@@ -147,18 +145,11 @@ const OTPVerification = ({
             {isLoading ? '🔄 Verifying...' : '✅ Verify Code'}
           </button>
 
-          <button
-            onClick={handleResend}
-            disabled={!canResend || isLoading}
-            className="resend-btn"
-          >
+          <button onClick={handleResend} disabled={!canResend || isLoading} className="resend-btn">
             {isLoading ? '📧 Sending...' : '🔄 Resend Code'}
           </button>
 
-          <button
-            onClick={onCancel}
-            className="cancel-btn"
-          >
+          <button onClick={onCancel} className="cancel-btn">
             ❌ Cancel
           </button>
         </div>

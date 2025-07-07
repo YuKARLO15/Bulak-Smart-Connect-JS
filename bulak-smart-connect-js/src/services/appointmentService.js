@@ -3,11 +3,11 @@ import api from './api';
 import config from '../config/env.js';
 
 export const appointmentService = {
-  // Create a new appointment 
-  createAppointment: async (appointmentData) => {
+  // Create a new appointment
+  createAppointment: async appointmentData => {
     try {
       console.log('Creating appointment with data:', appointmentData);
-      
+
       const response = await api.post('/appointments', appointmentData);
       console.log('Appointment created successfully:', response.data);
       return response.data;
@@ -18,7 +18,7 @@ export const appointmentService = {
     }
   },
 
-  // Get user's own appointments 
+  // Get user's own appointments
   fetchUserAppointments: async () => {
     try {
       console.log('Fetching user appointments from /appointments/mine');
@@ -38,13 +38,15 @@ export const appointmentService = {
       // Always include user data for admin operations
       const response = await api.get('/appointments?includeUser=true');
       console.log('📧 All appointments with user data fetched:', response.data);
-      
+
       // Log email availability for debugging
       response.data.forEach(appointment => {
         const email = appointment.user?.email || appointment.email;
-        console.log(`📧 Appointment ${appointment.appointmentNumber || appointment.id}: Email = ${email || 'NOT FOUND'}`);
+        console.log(
+          `📧 Appointment ${appointment.appointmentNumber || appointment.id}: Email = ${email || 'NOT FOUND'}`
+        );
       });
-      
+
       return response.data;
     } catch (error) {
       console.error('Error fetching all appointments:', error);
@@ -53,16 +55,16 @@ export const appointmentService = {
   },
 
   // Get appointment by ID (admin)
-  getAppointmentById: async (appointmentId) => {
+  getAppointmentById: async appointmentId => {
     try {
       console.log(`📧 Fetching appointment ${appointmentId} with user data for notifications...`);
       // Always include user data for admin operations
       const response = await api.get(`/appointments/${appointmentId}?includeUser=true`);
       console.log('📧 Appointment with user data fetched:', response.data);
-      
+
       const email = response.data.user?.email || response.data.email;
       console.log(`📧 Appointment ${appointmentId}: Email = ${email || 'NOT FOUND'}`);
-      
+
       return response.data;
     } catch (error) {
       console.error(`Error fetching appointment ${appointmentId}:`, error);
@@ -71,7 +73,7 @@ export const appointmentService = {
   },
 
   // Get appointment by appointment number (GET /appointments/by-number/:number)
-  getAppointmentByNumber: async (appointmentNumber) => {
+  getAppointmentByNumber: async appointmentNumber => {
     try {
       console.log(`Fetching appointment by number: ${appointmentNumber}`);
       const response = await api.get(`/appointments/by-number/${appointmentNumber}`);
@@ -84,11 +86,11 @@ export const appointmentService = {
   },
 
   // Get appointments by date (GET /appointments/by-date)
-  fetchAppointmentsByDate: async (date) => {
+  fetchAppointmentsByDate: async date => {
     try {
       console.log(`Fetching appointments for date: ${date}`);
       const response = await api.get('/appointments/by-date', {
-        params: { date }
+        params: { date },
       });
       console.log(`Appointments for date ${date}:`, response.data);
       return response.data;
@@ -116,7 +118,7 @@ export const appointmentService = {
     try {
       console.log(`Fetching appointments from ${startDate} to ${endDate}`);
       const response = await api.get('/appointments/date-range', {
-        params: { startDate, endDate }
+        params: { startDate, endDate },
       });
       console.log('Appointments in date range:', response.data);
       return response.data;
@@ -127,11 +129,11 @@ export const appointmentService = {
   },
 
   // Get available time slots (GET /appointments/available-slots)
-  fetchAvailableSlots: async (date) => {
+  fetchAvailableSlots: async date => {
     try {
       console.log(`Fetching available slots for date: ${date}`);
       const response = await api.get('/appointments/available-slots', {
-        params: { date }
+        params: { date },
       });
       console.log('Available slots:', response.data);
       return response.data;
@@ -168,7 +170,7 @@ export const appointmentService = {
   },
 
   // Delete appointment (DELETE /appointments/:id)
-  deleteAppointment: async (appointmentId) => {
+  deleteAppointment: async appointmentId => {
     try {
       console.log(`Deleting appointment: ${appointmentId}`);
       const response = await api.delete(`/appointments/${appointmentId}`);
@@ -181,17 +183,17 @@ export const appointmentService = {
   },
 
   // Helper methods for convenience
-  confirmAppointment: async (appointmentId) => {
+  confirmAppointment: async appointmentId => {
     return appointmentService.updateAppointmentStatus(appointmentId, 'confirmed');
   },
 
-  cancelAppointment: async (appointmentId) => {
+  cancelAppointment: async appointmentId => {
     return appointmentService.updateAppointmentStatus(appointmentId, 'cancelled');
   },
 
-  completeAppointment: async (appointmentId) => {
+  completeAppointment: async appointmentId => {
     return appointmentService.updateAppointmentStatus(appointmentId, 'completed');
-  }
+  },
 };
 
 export default appointmentService;
