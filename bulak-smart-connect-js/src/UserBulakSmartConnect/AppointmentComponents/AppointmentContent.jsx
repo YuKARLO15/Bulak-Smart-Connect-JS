@@ -155,7 +155,7 @@ const AppointmentContainer = ({ onBack, preselectedDate }) => {
         setAvailableSlots(response.availableSlots);
         logger.log('Available slots from API:', response.availableSlots);
       } else {
-        console.warn('Invalid available slots data from API:', response);
+        logger.warn('Invalid available slots data from API:', response);
 
         setAvailableSlots([...allTimeSlots]);
       }
@@ -266,7 +266,7 @@ const AppointmentContainer = ({ onBack, preselectedDate }) => {
 
     const userEmail = getUserEmailForNotification();
     if (!userEmail) {
-      console.warn('⚠️ No email found for notifications, but continuing with appointment creation');
+      logger.warn('⚠️ No email found for notifications, but continuing with appointment creation');
       // Don't block appointment creation if email is missing
     }
 

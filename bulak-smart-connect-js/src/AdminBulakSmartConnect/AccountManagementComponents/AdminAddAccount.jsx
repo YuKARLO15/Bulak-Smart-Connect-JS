@@ -199,7 +199,7 @@ const AdminAddUser = () => {
               throw new Error('No user ID for backend update');
             }
           } catch (backendError) {
-            console.warn('Backend update failed, trying localStorage:', backendError);
+            logger.warn('Backend update failed, trying localStorage:', backendError);
 
             // Fallback to localStorage
             if (userIndex !== undefined) {
@@ -226,7 +226,7 @@ const AdminAddUser = () => {
             logger.log('User created via backend');
             success = true;
           } catch (backendError) {
-            console.warn('Backend creation failed, trying localStorage:', backendError);
+            logger.warn('Backend creation failed, trying localStorage:', backendError);
 
             // Fallback to localStorage
             const result = addUser(userData);

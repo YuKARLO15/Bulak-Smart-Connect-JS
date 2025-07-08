@@ -256,7 +256,7 @@ const SexDobCorrection = () => {
                 logger.log('Application exists in backend:', backendApp);
               }
             } catch (error) {
-              console.warn('Application may not exist in backend:', error);
+              logger.warn('Application may not exist in backend:', error);
             }
           }
 
@@ -306,7 +306,7 @@ const SexDobCorrection = () => {
                 logger.log('Application exists in backend:', backendApp);
               }
             } catch (error) {
-              console.warn('Application may not exist in backend:', error);
+              logger.warn('Application may not exist in backend:', error);
 
               const currentApplicationData = localStorage.getItem('birthCertificateApplication');
               if (currentApplicationData) {
@@ -338,7 +338,7 @@ const SexDobCorrection = () => {
         logger.log(`📊 Current storage usage: ${usage.percentage.toFixed(1)}%`);
 
         if (usage.isNearFull) {
-          console.warn('⚠️ localStorage is getting full, performing cleanup...');
+          logger.warn('⚠️ localStorage is getting full, performing cleanup...');
           await localStorageManager.performCleanup(0.2);
         }
       } catch (error) {
@@ -553,7 +553,7 @@ const SexDobCorrection = () => {
 
       const usage = localStorageManager.getCurrentUsage();
       if (usage.isCritical) {
-        console.warn('Storage critical, performing cleanup before save...');
+        logger.warn('Storage critical, performing cleanup before save...');
         await localStorageManager.performCleanup(0.4);
       }
 

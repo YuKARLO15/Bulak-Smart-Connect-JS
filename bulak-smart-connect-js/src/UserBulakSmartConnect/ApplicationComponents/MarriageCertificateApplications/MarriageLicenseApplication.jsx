@@ -160,7 +160,7 @@ const MarriageLicenseApplication = () => {
           logger.log('Updated existing application:', existingAppId);
           return { id: existingAppId };
         } catch (updateError) {
-          console.warn('Could not update existing application:', updateError);
+          logger.warn('Could not update existing application:', updateError);
           return { id: existingAppId };
         }
       }
@@ -299,7 +299,7 @@ const MarriageLicenseApplication = () => {
               }
             }
           } catch (error) {
-            console.warn('Could not load existing application:', error);
+            logger.warn('Could not load existing application:', error);
             setBackendApplicationCreated(true);
           }
         } else {
@@ -322,7 +322,7 @@ const MarriageLicenseApplication = () => {
                 }
               }
             } catch (error) {
-              console.warn('Could not load existing application:', error);
+              logger.warn('Could not load existing application:', error);
             }
           } else {
             const storedFormData = JSON.parse(localStorage.getItem('marriageFormData') || '{}');
@@ -332,7 +332,7 @@ const MarriageLicenseApplication = () => {
 
               await createBackendApplication(storedFormData);
             } else {
-              console.warn('No form data found. Redirecting to form page.');
+              logger.warn('No form data found. Redirecting to form page.');
               navigate('/MarriageCertificateForm');
             }
           }
@@ -592,7 +592,7 @@ const MarriageLicenseApplication = () => {
 
         logger.log('Application updated in backend with complete data');
       } catch (updateError) {
-        console.warn('Could not update application in backend:', updateError);
+        logger.warn('Could not update application in backend:', updateError);
       }
 
       localStorage.setItem('currentApplicationId', effectiveAppId);

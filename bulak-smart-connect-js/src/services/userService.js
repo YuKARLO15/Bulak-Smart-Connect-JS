@@ -25,7 +25,7 @@ apiClient.interceptors.request.use(
       logger.log('🎫 Sending request with token:', token.substring(0, 20) + '...');
       logger.log('🎯 Request URL:', requestConfig.url);
     } else {
-      console.warn('⚠️ No token found for request to:', requestConfig.url);
+      logger.warn('⚠️ No token found for request to:', requestConfig.url);
     }
     return requestConfig;
   },
@@ -156,7 +156,7 @@ const userService = {
           localStorage.setItem('users', JSON.stringify(localUsers));
         }
       } catch (localErr) {
-        console.warn('Failed to update localStorage:', localErr);
+        logger.warn('Failed to update localStorage:', localErr);
       }
 
       return response.data;
@@ -173,7 +173,7 @@ const userService = {
           return localUsers[index];
         }
       } catch (localErr) {
-        console.warn('Failed to update localStorage:', localErr);
+        logger.warn('Failed to update localStorage:', localErr);
       }
 
       throw error;
@@ -195,7 +195,7 @@ const userService = {
           localStorage.setItem('users', JSON.stringify(localUsers));
         }
       } catch (localErr) {
-        console.warn('Failed to update localStorage:', localErr);
+        logger.warn('Failed to update localStorage:', localErr);
       }
 
       return response.data;
@@ -213,7 +213,7 @@ const userService = {
           return localUsers[index];
         }
       } catch (localErr) {
-        console.warn('Failed to update localStorage:', localErr);
+        logger.warn('Failed to update localStorage:', localErr);
       }
 
       throw error;
@@ -231,7 +231,7 @@ const userService = {
         const filteredUsers = localUsers.filter(u => u.id !== userId);
         localStorage.setItem('users', JSON.stringify(filteredUsers));
       } catch (localErr) {
-        console.warn('Failed to update localStorage:', localErr);
+        logger.warn('Failed to update localStorage:', localErr);
       }
 
       return response.data;
@@ -261,7 +261,7 @@ const userService = {
         };
         return stats;
       } catch (localErr) {
-        console.warn('Failed to generate localStorage stats:', localErr);
+        logger.warn('Failed to generate localStorage stats:', localErr);
         throw error;
       }
     }
@@ -313,7 +313,7 @@ const userService = {
           localUsers.push(newUser);
           localStorage.setItem('users', JSON.stringify(localUsers));
         } catch (localErr) {
-          console.warn('Failed to update localStorage:', localErr);
+          logger.warn('Failed to update localStorage:', localErr);
         }
 
         return response.data;
@@ -364,7 +364,7 @@ const userService = {
           localStorage.setItem('users', JSON.stringify(localUsers));
         }
       } catch (localErr) {
-        console.warn('Failed to update localStorage:', localErr);
+        logger.warn('Failed to update localStorage:', localErr);
       }
 
       return response.data;
@@ -404,7 +404,7 @@ const userService = {
           return localUsers[index];
         }
       } catch (localErr) {
-        console.warn('Failed to update localStorage:', localErr);
+        logger.warn('Failed to update localStorage:', localErr);
       }
 
       throw error;
@@ -437,7 +437,7 @@ const userService = {
           totalPages: 1,
         };
       } catch (localErr) {
-        console.warn('Failed to search localStorage:', localErr);
+        logger.warn('Failed to search localStorage:', localErr);
         throw error;
       }
     }

@@ -139,10 +139,10 @@ const AdminDashboard = () => {
               }).length;
             }
           } catch (appointmentError) {
-            console.warn(`Could not fetch appointments for ${monthData.name}:`, appointmentError);
+            logger.warn(`Could not fetch appointments for ${monthData.name}:`, appointmentError);
           }
         } catch (queueError) {
-          console.warn(`Could not fetch queues for ${monthData.name}:`, queueError);
+          logger.warn(`Could not fetch queues for ${monthData.name}:`, queueError);
         }
 
         monthlyData.push({
@@ -333,7 +333,7 @@ const AdminDashboard = () => {
             setWalkInQueue(walkIns);
           }
         } catch (queueErr) {
-          console.warn('Could not fetch queue data:', queueErr);
+          logger.warn('Could not fetch queue data:', queueErr);
         }
       } catch (err) {
         setError('Error loading data: ' + err.message);

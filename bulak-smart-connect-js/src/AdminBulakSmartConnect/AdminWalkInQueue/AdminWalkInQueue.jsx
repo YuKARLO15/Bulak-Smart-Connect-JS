@@ -157,7 +157,7 @@ const AdminWalkInQueue = () => {
           alert('✅ Ticket printed successfully!');
           return;
         } catch (serialError) {
-          console.warn('❌ Web Serial API failed:', serialError.message);
+          logger.warn('❌ Web Serial API failed:', serialError.message);
         }
       }
 
@@ -185,7 +185,7 @@ const AdminWalkInQueue = () => {
           return;
         }
       } catch (fetchError) {
-        console.warn('❌ Local print server not available:', fetchError.message);
+        logger.warn('❌ Local print server not available:', fetchError.message);
       }
 
       // Method 3: Create downloadable POS file
@@ -206,7 +206,7 @@ const AdminWalkInQueue = () => {
 
         alert('📁 POS file downloaded! Send this file directly to your printer.');
       } catch (downloadError) {
-        console.warn('❌ File download failed:', downloadError.message);
+        logger.warn('❌ File download failed:', downloadError.message);
       }
 
       // Method 4: Fallback to enhanced browser print with POS-like formatting

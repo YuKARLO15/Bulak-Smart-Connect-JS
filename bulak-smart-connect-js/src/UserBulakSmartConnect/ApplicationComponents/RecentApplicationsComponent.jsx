@@ -110,7 +110,7 @@ const RecentApplicationsComponent = () => {
         logger.log('Application data keys:', Object.keys(applicationData || {}));
         logger.log('Application data structure:', JSON.stringify(applicationData, null, 2));
       } catch (backendError) {
-        console.warn('Could not fetch from backend, trying local data:', backendError);
+        logger.warn('Could not fetch from backend, trying local data:', backendError);
         // Fallback to local applications array
         applicationData = applications.find(app => app.id === application.id);
       }

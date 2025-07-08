@@ -88,11 +88,11 @@ export const documentApplicationService = {
 
           return response.data;
         } else {
-          console.warn('API response is not an array:', response.data);
+          logger.warn('API response is not an array:', response.data);
           throw new Error('Invalid API response format');
         }
       } catch (apiError) {
-        console.warn('Enhanced API call failed:', apiError.message);
+        logger.warn('Enhanced API call failed:', apiError.message);
 
         // Fallback to regular API call
         try {
@@ -102,7 +102,7 @@ export const documentApplicationService = {
             return response.data;
           }
         } catch (regularApiError) {
-          console.warn('Regular API call also failed:', regularApiError.message);
+          logger.warn('Regular API call also failed:', regularApiError.message);
         }
 
         // Final fallback to localStorage
@@ -113,7 +113,7 @@ export const documentApplicationService = {
           logger.log(`Found ${localApps.length} applications in localStorage`);
           return localApps;
         } else {
-          console.warn('No applications found in localStorage');
+          logger.warn('No applications found in localStorage');
           return [];
         }
       }
@@ -165,7 +165,7 @@ export const documentApplicationService = {
           localStorage.setItem('applications', JSON.stringify(localApps));
         }
       } catch (localErr) {
-        console.warn('Failed to update localStorage:', localErr);
+        logger.warn('Failed to update localStorage:', localErr);
       }
 
       return response.data;
@@ -182,7 +182,7 @@ export const documentApplicationService = {
           return localApps[index];
         }
       } catch (localErr) {
-        console.warn('Failed to update localStorage:', localErr);
+        logger.warn('Failed to update localStorage:', localErr);
       }
 
       throw error;
@@ -204,7 +204,7 @@ export const documentApplicationService = {
           localStorage.setItem('applications', JSON.stringify(localApps));
         }
       } catch (localErr) {
-        console.warn('Failed to update localStorage:', localErr);
+        logger.warn('Failed to update localStorage:', localErr);
       }
 
       return response.data;
@@ -221,7 +221,7 @@ export const documentApplicationService = {
           return localApps[index];
         }
       } catch (localErr) {
-        console.warn('Failed to update localStorage:', localErr);
+        logger.warn('Failed to update localStorage:', localErr);
       }
 
       throw error;
@@ -239,7 +239,7 @@ export const documentApplicationService = {
         const filteredApps = localApps.filter(a => a.id !== applicationId);
         localStorage.setItem('applications', JSON.stringify(filteredApps));
       } catch (localErr) {
-        console.warn('Failed to update localStorage:', localErr);
+        logger.warn('Failed to update localStorage:', localErr);
       }
 
       return response.data;

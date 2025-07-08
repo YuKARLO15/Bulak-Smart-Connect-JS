@@ -174,7 +174,7 @@ const MarriageSummaryForm = () => {
 
         localStorage.setItem('marriageFormData', JSON.stringify(updatedFormData));
       } else {
-        console.warn('No application ID found for editing');
+        logger.warn('No application ID found for editing');
         localStorage.setItem('marriageFormData', JSON.stringify(formData));
       }
 
