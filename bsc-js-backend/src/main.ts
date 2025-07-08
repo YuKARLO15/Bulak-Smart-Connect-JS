@@ -7,6 +7,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
 import * as Minio from 'minio';
+import { LoggerService } from '../utils/logger.service';
 
 dotenv.config();
 
@@ -14,9 +15,15 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const configService = app.get(ConfigService);
 
+  // Override console methods based on environment
+  LoggerService.overrideConsole(configService);
+
+  // Get the logger service from the app
+  const logger = app.get(LoggerService);
+
   // Debug env variables
-  console.log('JWT_SECRET exists:', !!configService.get('JWT_SECRET'));
-  console.log('JWT_SECRET length:', configService.get('JWT_SECRET')?.length);
+  logger.debug('JWT_SECRET exists: ' + !!configService.get('JWT_SECRET'), 'Bootstrap');
+  logger.debug('JWT_SECRET length: ' + configService.get('JWT_SECRET')?.length, 'Bootstrap');
 
   // Set up global validation pipe with transformation enabled
   app.useGlobalPipes(
@@ -139,14 +146,16 @@ async function bootstrap() {
   const host = configService.get('HOST') || 'localhost';
   await app.listen(port);
 
-  console.log(
+  logger.log(
     `🚀 Application is running on: ${configService.get('SERVER_BASE_URL') || `http://${host}:${port}`}`,
+    'Bootstrap'
   );
-  console.log(
+  logger.log(
     `📚 Swagger docs available at: ${configService.get('SWAGGER_URL') || `http://${host}:${port}/api/docs`}`,
+    'Bootstrap'
   );
-  console.log(`🌐 CORS enabled for: ${allowedOrigins.join(', ')}`);
-  console.log(`🔗 WebSocket CORS: ${configService.get('WS_CORS_ORIGIN')}`);
+  logger.log(`🌐 CORS enabled for: ${allowedOrigins.join(', ')}`, 'Bootstrap');
+  logger.log(`🔗 WebSocket CORS: ${configService.get('WS_CORS_ORIGIN')}`, 'Bootstrap');
 }
 
 async function testMinIOConnection() {
