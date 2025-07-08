@@ -8,6 +8,8 @@ import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
 import * as Minio from 'minio';
+import helmet from 'helmet';
+import * as compression from 'compression';
 
 dotenv.config();
 
@@ -41,6 +43,31 @@ async function bootstrap() {
 
   // ✅ Create a logger instance for bootstrap context
   const logger = new Logger('Bootstrap');
+
+  // Production security enhancements
+  if (process.env.NODE_ENV === 'production') {
+    try {
+      app.use(helmet({
+        contentSecurityPolicy: {
+          directives: {
+            defaultSrc: ["'self'"],
+            styleSrc: ["'self'", "'unsafe-inline'"],
+            scriptSrc: ["'self'"],
+            imgSrc: ["'self'", "data:", "https:"],
+          },
+        },
+        crossOriginEmbedderPolicy: false
+      }));
+      
+      app.use(compression());
+      app.getHttpAdapter().getInstance().set('trust proxy', 1); // Trust Render proxy
+      
+      logger.log('✅ Production security middleware enabled');
+    } catch (error) {
+      logger.error('❌ Failed to setup production middleware:', error.message);
+      logger.warn('⚠️ Continuing without security middleware');
+    }
+  }
 
   // Debug env variables
   logger.debug('JWT_SECRET exists: ' + !!configService.get('JWT_SECRET'));
@@ -163,9 +190,10 @@ async function bootstrap() {
   // Test MinIO connection
   await testMinIOConnection();
 
-  const port = configService.get('PORT') || 3000;
-  const host = configService.get('HOST') || 'localhost';
-  await app.listen(port);
+  // Important: Use PORT environment variable for Render
+  const port = process.env.PORT || configService.get('PORT') || 3000;
+  const host = process.env.HOST || configService.get('HOST') || 'localhost';
+  await app.listen(port, '0.0.0.0'); // Bind to all interfaces
 
   logger.log(
     `🚀 Application is running on: ${configService.get('SERVER_BASE_URL') || `http://${host}:${port}`}`,
