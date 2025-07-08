@@ -1,44 +1,109 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts';
+import { documentApplicationService } from '../../services/documentApplicationService';
 import './ApplicationPieChart.css';
 
-const ApplicationPieChart = ({ applications }) => {
+const ApplicationPieChart = ({ applications: propApplications }) => {
+  const [applications, setApplications] = useState(propApplications || []);
+  const [loading, setLoading] = useState(!propApplications);
+  const [error, setError] = useState(null);
+
+  // Fetch applications from backend if not provided as props
+  useEffect(() => {
+    const fetchApplications = async () => {
+      // If applications are provided as props, use them
+      if (propApplications) {
+        setApplications(propApplications);
+        setLoading(false);
+        return;
+      }
+
+      try {
+        setLoading(true);
+        setError(null);
+        console.log('Fetching applications for pie chart...');
+        
+        const data = await documentApplicationService.getAllApplications();
+        console.log('Fetched applications:', data);
+        
+        setApplications(data || []);
+      } catch (err) {
+        console.error('Error fetching applications for pie chart:', err);
+        setError('Failed to load application data');
+        setApplications([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchApplications();
+  }, [propApplications]);
+
   // Calculate counts for different application statuses by type
-  const getStatusCounts = () => {
-    const birthPending = applications.filter(
-      app => app.type === 'Birth Certificate' && app.status === 'Pending'
-    ).length;
-    const birthApproved = applications.filter(
-      app => app.type === 'Birth Certificate' && app.status === 'Approved'
-    ).length;
-    const birthDenied = applications.filter(
-      app =>
-        app.type === 'Birth Certificate' && (app.status === 'Denied' || app.status === 'Decline')
-    ).length;
+ const getStatusCounts = () => {
+  console.log('Processing applications for pie chart:', applications);
 
-    const marriagePending = applications.filter(
-      app =>
-        (app.type === 'Marriage Certificate' || app.type == ' Marriage License') &&
-        app.status === 'Pending'
-    ).length;
-    const marriageApproved = applications.filter(
-      app => app.type === 'Marriage Certificate' && app.status === 'Approved'
-    ).length;
-    const marriageDenied = applications.filter(
-      app =>
-        app.type === 'Marriage Certificate' && (app.status === 'Denied' || app.status === 'Decline')
-    ).length;
-
-    return [
-      { name: 'Birth - Pending', value: birthPending, color: '#FFA726' },
-      { name: 'Birth - Approved', value: birthApproved, color: '#66BB6A' },
-      { name: 'Birth - Declined', value: birthDenied, color: '#EF5350' },
-      { name: 'Marriage - Pending', value: marriagePending, color: '#F7CB73' },
-      { name: 'Marriage - Approved', value: marriageApproved, color: '#8DC3A7' },
-      { name: 'Marriage - Declined', value: marriageDenied, color: '#D9512C' },
-    ].filter(item => item.value > 0); // Only show segments that have data
+  const stats = {
+    birthCertificate: {
+      pending: 0,
+      approved: 0,
+      declined: 0,
+    },
+    marriage: {
+      pending: 0,
+      approved: 0,
+      declined: 0,
+    },
   };
 
+  applications.forEach(app => {
+    console.log(`Pie Chart - Application: Type=${app.type || app.applicationType}, Status=${app.status}`);
+
+    // Check application type - make case-insensitive checks to improve matching
+    const appType = (app.type || app.applicationType || '').toLowerCase();
+    let docCategory = null;
+
+    // Determine the category based on application type (same logic as RecentApplicationsAdmin)
+    if (appType.includes('marriage')) {
+      docCategory = 'marriage';
+    } else if (appType.includes('birth') || appType.includes('certificate')) {
+      docCategory = 'birthCertificate';
+    }
+
+    // If we identified a category, update stats
+    if (docCategory) {
+      // Process status - normalize to handle different status formats (same logic as RecentApplicationsAdmin)
+      const status = (app.status || '').toLowerCase();
+
+      if (status.includes('pending') || status.includes('submitted') || status === '') {
+        stats[docCategory].pending++;
+      } else if (status.includes('approved') || status.includes('accept')) {
+        stats[docCategory].approved++;
+      } else if (
+        status.includes('declined') ||
+        status.includes('decline') ||
+        status.includes('denied') ||
+        status.includes('reject')
+      ) {
+        stats[docCategory].declined++;
+      } else {
+        // Default to pending for any other status
+        stats[docCategory].pending++;
+      }
+    }
+  });
+
+  console.log('Pie Chart - Calculated statistics:', stats);
+
+  return [
+    { name: 'Birth - Pending', value: stats.birthCertificate.pending, color: '#FFA726' },
+    { name: 'Birth - Approved', value: stats.birthCertificate.approved, color: '#66BB6A' },
+    { name: 'Birth - Declined', value: stats.birthCertificate.declined, color: '#EF5350' },
+    { name: 'Marriage - Pending', value: stats.marriage.pending, color: '#F7CB73' },
+    { name: 'Marriage - Approved', value: stats.marriage.approved, color: '#8DC3A7' },
+    { name: 'Marriage - Declined', value: stats.marriage.declined, color: '#D9512C' },
+  ].filter(item => item.value > 0); // Only show segments that have data
+};
   const data = getStatusCounts();
 
   const COLORS = ['#FFA726', '#66BB6A', '#EF5350', '#42A5F5', '#26C6DA', '#EC407A'];
@@ -78,6 +143,28 @@ const ApplicationPieChart = ({ applications }) => {
       </text>
     ) : null;
   };
+
+  if (loading) {
+    return (
+      <div className="ApplicationPieChartContainer">
+        <h4 className="ApplicationPieChartTitle">Application Status Distribution</h4>
+        <div className="ApplicationPieChartNoData">
+          <p>Loading application data...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="ApplicationPieChartContainer">
+        <h4 className="ApplicationPieChartTitle">Application Status Distribution</h4>
+        <div className="ApplicationPieChartNoData">
+          <p>{error}</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="ApplicationPieChartContainer">
