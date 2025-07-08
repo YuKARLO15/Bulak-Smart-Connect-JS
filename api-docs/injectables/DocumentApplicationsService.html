@@ -1806,7 +1806,7 @@ export class DocumentApplicationsService {
       );
       return filesWithUrls;
     } catch (error) {
-      console.error(&#x27;Service: Error getting application files:&#x27;, error);
+      this.logger.error(&#x27;Service: Error getting application files:&#x27;, error);
       throw error;
     }
   }
@@ -1887,7 +1887,7 @@ export class DocumentApplicationsService {
         allFiles: filesWithUrls,
       };
     } catch (error) {
-      console.error(&#x27;Service: Error getting all application files:&#x27;, error);
+      this.logger.error(&#x27;Service: Error getting all application files:&#x27;, error);
       throw error;
     }
   }

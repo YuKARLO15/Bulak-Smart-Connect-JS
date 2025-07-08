@@ -2467,7 +2467,7 @@ export class AuthController {
 
       return result;
     } catch (error) {
-      console.error(&#x27;Registration error:&#x27;, error);
+      this.logger.error(&#x27;Registration error:&#x27;, error);
       throw error;
     }
   }
@@ -2562,7 +2562,7 @@ export class AuthController {
     this.logger.log(&#x27;Update data:&#x27;, updateUserDto);
 
     if (!req.user || req.user.id &#x3D;&#x3D;&#x3D; undefined || req.user.id &#x3D;&#x3D;&#x3D; null) {
-      console.error(&#x27;❌ No user in request object&#x27;);
+      this.logger.error(&#x27;❌ No user in request object&#x27;);
       throw new UnauthorizedException(&#x27;Invalid admin ID&#x27;);
     }
 
@@ -2573,7 +2573,7 @@ export class AuthController {
         updateUserDto,
       );
     } catch (error) {
-      console.error(&#x27;❌ Admin update error:&#x27;, error);
+      this.logger.error(&#x27;❌ Admin update error:&#x27;, error);
       throw new UnauthorizedException(
         error instanceof Error ? error.message : &#x27;Failed to update user&#x27;,
       );
@@ -2664,7 +2664,7 @@ export class AuthController {
         email: email,
       };
     } catch (error) {
-      console.error(&#x27;Error sending OTP:&#x27;, error);
+      this.logger.error(&#x27;Error sending OTP:&#x27;, error);
       throw new BadRequestException(&#x27;Failed to send OTP&#x27;);
     }
   }
@@ -2755,7 +2755,7 @@ export class AuthController {
         message: &#x27;OTP verified successfully&#x27;,
       };
     } catch (error) {
-      console.error(&#x27;Error verifying OTP:&#x27;, error);
+      this.logger.error(&#x27;Error verifying OTP:&#x27;, error);
       throw new UnauthorizedException(&#x27;Invalid or expired OTP&#x27;);
     }
   }
@@ -2831,7 +2831,7 @@ export class AuthController {
         message: &#x27;Password reset code sent to your email&#x27;,
       };
     } catch (error) {
-      console.error(&#x27;Forgot password error:&#x27;, error);
+      this.logger.error(&#x27;Forgot password error:&#x27;, error);
       throw new BadRequestException(&#x27;Failed to send password reset code&#x27;);
     }
   }
@@ -2937,7 +2937,7 @@ export class AuthController {
         message: &#x27;Password reset successfully&#x27;,
       };
     } catch (error) {
-      console.error(&#x27;Reset password error:&#x27;, error);
+      this.logger.error(&#x27;Reset password error:&#x27;, error);
       throw error;
     }
   }
@@ -3024,7 +3024,7 @@ export class AuthController {
         otp: process.env.NODE_ENV &#x3D;&#x3D;&#x3D; &#x27;development&#x27; ? otp : undefined,
       };
     } catch (error) {
-      console.error(&#x27;Test OTP error:&#x27;, error);
+      this.logger.error(&#x27;Test OTP error:&#x27;, error);
       throw new BadRequestException(&#x27;Failed to generate OTP&#x27;);
     }
   }
@@ -3117,7 +3117,7 @@ export class AuthController {
         message: &#x27;Application notification sent successfully&#x27;,
       };
     } catch (error) {
-      console.error(&#x27;Error sending application notification:&#x27;, error);
+      this.logger.error(&#x27;Error sending application notification:&#x27;, error);
       throw new BadRequestException(&#x27;Failed to send application notification&#x27;);
     }
   }
@@ -3168,7 +3168,7 @@ export class AuthController {
       };
     } catch (error) {
       // Don&#x27;t throw error to avoid breaking queue functionality
-      console.error(&#x27;Queue notification error:&#x27;, error);
+      this.logger.error(&#x27;Queue notification error:&#x27;, error);
       return {
         success: false,
         message: &#x27;Failed to send notification, but queue operation continues&#x27;,
@@ -3240,7 +3240,7 @@ export class AuthController {
         message: &#x27;Appointment confirmation sent successfully&#x27;,
       };
     } catch (error) {
-      console.error(&#x27;Error sending appointment confirmation:&#x27;, error);
+      this.logger.error(&#x27;Error sending appointment confirmation:&#x27;, error);
       throw new BadRequestException(&#x27;Failed to send appointment confirmation&#x27;);
     }
   }
@@ -3308,7 +3308,7 @@ export class AuthController {
         message: &#x27;Appointment status update sent successfully&#x27;,
       };
     } catch (error) {
-      console.error(&#x27;Error sending appointment status update:&#x27;, error);
+      this.logger.error(&#x27;Error sending appointment status update:&#x27;, error);
       throw new BadRequestException(&#x27;Failed to send appointment status update&#x27;);
     }
   }
@@ -3376,7 +3376,7 @@ export class AuthController {
         message: &#x27;Appointment cancellation sent successfully&#x27;,
       };
     } catch (error) {
-      console.error(&#x27;Error sending appointment cancellation:&#x27;, error);
+      this.logger.error(&#x27;Error sending appointment cancellation:&#x27;, error);
       throw new BadRequestException(&#x27;Failed to send appointment cancellation&#x27;);
     }
   }
@@ -3404,7 +3404,7 @@ export class AuthController {
         message: &#x27;Appointment reminder sent successfully&#x27;,
       };
     } catch (error) {
-      console.error(&#x27;Error sending appointment reminder:&#x27;, error);
+      this.logger.error(&#x27;Error sending appointment reminder:&#x27;, error);
       throw new BadRequestException(&#x27;Failed to send appointment reminder&#x27;);
     }
   }

@@ -446,7 +446,7 @@ export class QueuesController {
       this.logger.log(&#x60;Returning ${result.length} walk-in queues&#x60;);
       return result;
     } catch (err: unknown) {
-      console.error(&#x27;Error fetching walk-in queues:&#x27;, err);
+      this.logger.error(&#x27;Error fetching walk-in queues:&#x27;, err);
       throw err;
     }
   }
@@ -481,7 +481,7 @@ export class QueuesController {
 
       return result;
     } catch (err) {
-      console.error(&#x27;Error fetching user queues:&#x27;, err);
+      this.logger.error(&#x27;Error fetching user queues:&#x27;, err);
       throw err;
     }
   }
@@ -517,7 +517,7 @@ export class QueuesController {
         reasonOfVisit: details?.reasonOfVisit || null,
       };
     } catch (err) {
-      console.error(&#x27;Error fetching queue:&#x27;, err);
+      this.logger.error(&#x27;Error fetching queue:&#x27;, err);
       throw err;
     }
   }

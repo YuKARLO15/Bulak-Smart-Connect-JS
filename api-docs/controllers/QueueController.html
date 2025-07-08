@@ -1919,7 +1919,7 @@ export class QueueController {
         message: &#x27;Manual queue created successfully&#x27;,
       };
     } catch (error) {
-      console.error(&#x27;Error creating manual queue:&#x27;, error);
+      this.logger.error(&#x27;Error creating manual queue:&#x27;, error);
       throw error;
     }
   }
@@ -1977,7 +1977,7 @@ export class QueueController {
     try {
       // Validate the status enum value
       if (!Object.values(QueueStatus).includes(body.status)) {
-        console.error(&#x60;Invalid status value: ${body.status}&#x60;);
+        this.logger.error(&#x60;Invalid status value: ${body.status}&#x60;);
         return {
           error: &#x27;Invalid status value&#x27;,
           validValues: Object.values(QueueStatus),
@@ -1991,7 +1991,7 @@ export class QueueController {
       this.logger.log(&#x60;Queue ${id} status updated successfully to ${body.status}&#x60;);
       return result;
     } catch (error) {
-      console.error(&#x60;Error updating queue ${id} status:&#x60;, error);
+      this.logger.error(&#x60;Error updating queue ${id} status:&#x60;, error);
       throw error;
     }
   }
@@ -2047,7 +2047,7 @@ export class QueueController {
       const exists &#x3D; await this.queueService.checkExists(+id);
       return { exists };
     } catch (error) {
-      console.error(&#x60;Error checking if queue ${id} exists:&#x60;, error);
+      this.logger.error(&#x60;Error checking if queue ${id} exists:&#x60;, error);
       return { exists: false };
     }
   }
@@ -2084,7 +2084,7 @@ export class QueueController {
         triggeredBy: user.username,
       };
     } catch (error) {
-      console.error(&#x27;Error during manual daily reset:&#x27;, error);
+      this.logger.error(&#x27;Error during manual daily reset:&#x27;, error);
       throw new InternalServerErrorException(&#x27;Failed to perform daily reset&#x27;);
     }
   }

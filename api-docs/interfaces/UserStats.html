@@ -356,6 +356,7 @@
   NotFoundException,
   BadRequestException,
   ConflictException,
+  Logger,
 } from &#x27;@nestjs/common&#x27;;
 import { InjectRepository } from &#x27;@nestjs/typeorm&#x27;;
 import { Repository, Like, In } from &#x27;typeorm&#x27;;
@@ -382,6 +383,8 @@ export interface UserStats {
 
 @Injectable()
 export class UsersService {
+  private readonly logger &#x3D; new Logger(UsersService.name);
+
   constructor(
     @InjectRepository(User)
     private usersRepository: Repository&lt;User&gt;,
@@ -694,7 +697,7 @@ export class UsersService {
 
       return user;
     } catch (error) {
-      console.error(&#x27;Error creating user:&#x27;, error);
+      this.logger.error(&#x27;Error creating user:&#x27;, error);
       throw error;
     }
   }

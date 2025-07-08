@@ -1346,7 +1346,7 @@ export class AppointmentService {
       this.logger.log(&#x27;Created new appointment:&#x27;, savedAppointment);
       return savedAppointment;
     } catch (error) {
-      console.error(&#x27;Error creating appointment:&#x27;, error);
+      this.logger.error(&#x27;Error creating appointment:&#x27;, error);
       throw error;
     }
   }
@@ -1431,7 +1431,7 @@ export class AppointmentService {
       this.logger.log(&#x60;Updated appointment ${id}:&#x60;, updated);
       return this.appointmentRepository.save(updated);
     } catch (error) {
-      console.error(&#x60;Error updating appointment ${id}:&#x60;, error);
+      this.logger.error(&#x60;Error updating appointment ${id}:&#x60;, error);
       throw error;
     }
   }
@@ -1444,7 +1444,7 @@ export class AppointmentService {
       }
       this.logger.log(&#x60;Deleted appointment ${id}&#x60;);
     } catch (error) {
-      console.error(&#x60;Error deleting appointment ${id}:&#x60;, error);
+      this.logger.error(&#x60;Error deleting appointment ${id}:&#x60;, error);
       throw error;
     }
   }
@@ -1459,7 +1459,7 @@ export class AppointmentService {
       this.logger.log(&#x60;Updated status for appointment ${id} to ${status}&#x60;);
       return this.appointmentRepository.save(appointment);
     } catch (error) {
-      console.error(&#x60;Error updating status for appointment ${id}:&#x60;, error);
+      this.logger.error(&#x60;Error updating status for appointment ${id}:&#x60;, error);
       throw error;
     }
   }
@@ -1491,7 +1491,7 @@ export class AppointmentService {
       // Return only available slots
       return allTimeSlots.filter((slot) &#x3D;&gt; !bookedSlots.includes(slot));
     } catch (error) {
-      console.error(&#x60;Error getting available slots for date ${date}:&#x60;, error);
+      this.logger.error(&#x60;Error getting available slots for date ${date}:&#x60;, error);
       throw error;
     }
   }
@@ -1512,7 +1512,7 @@ export class AppointmentService {
         },
       });
     } catch (error) {
-      console.error(&#x60;Error getting appointments for date ${date}:&#x60;, error);
+      this.logger.error(&#x60;Error getting appointments for date ${date}:&#x60;, error);
       throw error;
     }
   }
@@ -1532,7 +1532,7 @@ export class AppointmentService {
         },
       });
     } catch (error) {
-      console.error(
+      this.logger.error(
         &#x60;Error getting appointments in range ${startDate} to ${endDate}:&#x60;,
         error,
       );
@@ -1587,7 +1587,7 @@ export class AppointmentService {
         today: todayAppointments,
       };
     } catch (error) {
-      console.error(&#x27;Error getting appointment stats:&#x27;, error);
+      this.logger.error(&#x27;Error getting appointment stats:&#x27;, error);
       throw error;
     }
   }
@@ -1610,7 +1610,7 @@ export class AppointmentService {
         throw new BadRequestException(&#x27;This time slot is already booked&#x27;);
       }
     } catch (error) {
-      console.error(
+      this.logger.error(
         &#x60;Error checking time slot availability for ${date} at ${time}:&#x60;,
         error,
       );
