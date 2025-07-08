@@ -21,7 +21,7 @@ import { QueueGateway } from './queue.gateway';
 @Injectable()
 export class QueueService {
   private readonly logger = new Logger(QueueService.name);
-  
+
   constructor(
     @InjectRepository(Queue)
     private queueRepository: Repository<Queue>,
@@ -215,7 +215,7 @@ export class QueueService {
 
       return updatedQueue;
     } catch (error) {
-      console.error(`Error updating queue ${id}:`, error);
+      this.logger.error(`Error updating queue ${id}:`, error);
       throw error;
     }
   }
@@ -300,7 +300,7 @@ export class QueueService {
 
       return detailsMap;
     } catch (error: unknown) {
-      console.error('Error fetching details for multiple queues:', error);
+      this.logger.error('Error fetching details for multiple queues:', error);
       // Return empty details rather than failing
       return {};
     }
@@ -348,7 +348,7 @@ export class QueueService {
         errorMessage = String(error);
       }
 
-      console.error('Error in findByStatusWithDetails:', errorMessage);
+      this.logger.error('Error in findByStatusWithDetails:', errorMessage);
 
       if (error instanceof Error) {
         throw new Error(`Failed to get queue details: ${error.message}`);
@@ -502,7 +502,7 @@ export class QueueService {
     const userIdNumber = parseInt(userId, 10);
 
     if (isNaN(userIdNumber)) {
-      console.error('Invalid userId provided:', userId);
+      this.logger.error('Invalid userId provided:', userId);
       return [];
     }
 

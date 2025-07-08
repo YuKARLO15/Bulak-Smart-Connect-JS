@@ -90,7 +90,7 @@ export class QueueController {
         message: 'Manual queue created successfully',
       };
     } catch (error) {
-      console.error('Error creating manual queue:', error);
+      this.logger.error('Error creating manual queue:', error);
       throw error;
     }
   }
@@ -148,7 +148,7 @@ export class QueueController {
     try {
       // Validate the status enum value
       if (!Object.values(QueueStatus).includes(body.status)) {
-        console.error(`Invalid status value: ${body.status}`);
+        this.logger.error(`Invalid status value: ${body.status}`);
         return {
           error: 'Invalid status value',
           validValues: Object.values(QueueStatus),
@@ -162,7 +162,7 @@ export class QueueController {
       this.logger.log(`Queue ${id} status updated successfully to ${body.status}`);
       return result;
     } catch (error) {
-      console.error(`Error updating queue ${id} status:`, error);
+      this.logger.error(`Error updating queue ${id} status:`, error);
       throw error;
     }
   }
@@ -218,7 +218,7 @@ export class QueueController {
       const exists = await this.queueService.checkExists(+id);
       return { exists };
     } catch (error) {
-      console.error(`Error checking if queue ${id} exists:`, error);
+      this.logger.error(`Error checking if queue ${id} exists:`, error);
       return { exists: false };
     }
   }
@@ -255,7 +255,7 @@ export class QueueController {
         triggeredBy: user.username,
       };
     } catch (error) {
-      console.error('Error during manual daily reset:', error);
+      this.logger.error('Error during manual daily reset:', error);
       throw new InternalServerErrorException('Failed to perform daily reset');
     }
   }

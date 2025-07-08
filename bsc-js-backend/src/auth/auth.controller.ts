@@ -151,7 +151,7 @@ export class AuthController {
 
       return result;
     } catch (error) {
-      console.error('Registration error:', error);
+      this.logger.error('Registration error:', error);
       throw error;
     }
   }
@@ -246,7 +246,7 @@ export class AuthController {
     this.logger.log('Update data:', updateUserDto);
 
     if (!req.user || req.user.id === undefined || req.user.id === null) {
-      console.error('❌ No user in request object');
+      this.logger.error('❌ No user in request object');
       throw new UnauthorizedException('Invalid admin ID');
     }
 
@@ -257,7 +257,7 @@ export class AuthController {
         updateUserDto,
       );
     } catch (error) {
-      console.error('❌ Admin update error:', error);
+      this.logger.error('❌ Admin update error:', error);
       throw new UnauthorizedException(
         error instanceof Error ? error.message : 'Failed to update user',
       );
@@ -348,7 +348,7 @@ export class AuthController {
         email: email,
       };
     } catch (error) {
-      console.error('Error sending OTP:', error);
+      this.logger.error('Error sending OTP:', error);
       throw new BadRequestException('Failed to send OTP');
     }
   }
@@ -439,7 +439,7 @@ export class AuthController {
         message: 'OTP verified successfully',
       };
     } catch (error) {
-      console.error('Error verifying OTP:', error);
+      this.logger.error('Error verifying OTP:', error);
       throw new UnauthorizedException('Invalid or expired OTP');
     }
   }
@@ -515,7 +515,7 @@ export class AuthController {
         message: 'Password reset code sent to your email',
       };
     } catch (error) {
-      console.error('Forgot password error:', error);
+      this.logger.error('Forgot password error:', error);
       throw new BadRequestException('Failed to send password reset code');
     }
   }
@@ -621,7 +621,7 @@ export class AuthController {
         message: 'Password reset successfully',
       };
     } catch (error) {
-      console.error('Reset password error:', error);
+      this.logger.error('Reset password error:', error);
       throw error;
     }
   }
@@ -708,7 +708,7 @@ export class AuthController {
         otp: process.env.NODE_ENV === 'development' ? otp : undefined,
       };
     } catch (error) {
-      console.error('Test OTP error:', error);
+      this.logger.error('Test OTP error:', error);
       throw new BadRequestException('Failed to generate OTP');
     }
   }
@@ -801,7 +801,7 @@ export class AuthController {
         message: 'Application notification sent successfully',
       };
     } catch (error) {
-      console.error('Error sending application notification:', error);
+      this.logger.error('Error sending application notification:', error);
       throw new BadRequestException('Failed to send application notification');
     }
   }
@@ -852,7 +852,7 @@ export class AuthController {
       };
     } catch (error) {
       // Don't throw error to avoid breaking queue functionality
-      console.error('Queue notification error:', error);
+      this.logger.error('Queue notification error:', error);
       return {
         success: false,
         message: 'Failed to send notification, but queue operation continues',
@@ -924,7 +924,7 @@ export class AuthController {
         message: 'Appointment confirmation sent successfully',
       };
     } catch (error) {
-      console.error('Error sending appointment confirmation:', error);
+      this.logger.error('Error sending appointment confirmation:', error);
       throw new BadRequestException('Failed to send appointment confirmation');
     }
   }
@@ -992,7 +992,7 @@ export class AuthController {
         message: 'Appointment status update sent successfully',
       };
     } catch (error) {
-      console.error('Error sending appointment status update:', error);
+      this.logger.error('Error sending appointment status update:', error);
       throw new BadRequestException('Failed to send appointment status update');
     }
   }
@@ -1060,7 +1060,7 @@ export class AuthController {
         message: 'Appointment cancellation sent successfully',
       };
     } catch (error) {
-      console.error('Error sending appointment cancellation:', error);
+      this.logger.error('Error sending appointment cancellation:', error);
       throw new BadRequestException('Failed to send appointment cancellation');
     }
   }
@@ -1088,7 +1088,7 @@ export class AuthController {
         message: 'Appointment reminder sent successfully',
       };
     } catch (error) {
-      console.error('Error sending appointment reminder:', error);
+      this.logger.error('Error sending appointment reminder:', error);
       throw new BadRequestException('Failed to send appointment reminder');
     }
   }

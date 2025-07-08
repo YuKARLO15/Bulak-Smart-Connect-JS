@@ -389,7 +389,7 @@ export class DocumentApplicationsService {
       );
       return filesWithUrls;
     } catch (error) {
-      console.error('Service: Error getting application files:', error);
+      this.logger.error('Service: Error getting application files:', error);
       throw error;
     }
   }
@@ -470,7 +470,7 @@ export class DocumentApplicationsService {
         allFiles: filesWithUrls,
       };
     } catch (error) {
-      console.error('Service: Error getting all application files:', error);
+      this.logger.error('Service: Error getting all application files:', error);
       throw error;
     }
   }

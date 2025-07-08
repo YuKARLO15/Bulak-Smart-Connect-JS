@@ -67,7 +67,7 @@ export class QueuesController {
       this.logger.log(`Returning ${result.length} walk-in queues`);
       return result;
     } catch (err: unknown) {
-      console.error('Error fetching walk-in queues:', err);
+      this.logger.error('Error fetching walk-in queues:', err);
       throw err;
     }
   }
@@ -102,7 +102,7 @@ export class QueuesController {
 
       return result;
     } catch (err) {
-      console.error('Error fetching user queues:', err);
+      this.logger.error('Error fetching user queues:', err);
       throw err;
     }
   }
@@ -138,7 +138,7 @@ export class QueuesController {
         reasonOfVisit: details?.reasonOfVisit || null,
       };
     } catch (err) {
-      console.error('Error fetching queue:', err);
+      this.logger.error('Error fetching queue:', err);
       throw err;
     }
   }

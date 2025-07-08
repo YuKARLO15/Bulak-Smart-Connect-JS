@@ -165,7 +165,7 @@ export class AuthService {
         },
       };
     } catch (error) {
-      console.error('Login error:', error);
+      this.logger.error('Login error:', error);
       throw error;
     }
   }
@@ -243,7 +243,7 @@ export class AuthService {
         user.defaultRoleId = citizenRole.id;
         await this.usersRepository.save(user);
       } catch (error) {
-        console.error('Error assigning citizen role:', error);
+        this.logger.error('Error assigning citizen role:', error);
         // Rollback: Delete the user to maintain a consistent state
         await this.usersRepository.delete(user.id);
         throw new ConflictException(
@@ -267,7 +267,7 @@ export class AuthService {
         },
       };
     } catch (error) {
-      console.error('Registration error:', error);
+      this.logger.error('Registration error:', error);
       throw error;
     }
   }
@@ -428,7 +428,7 @@ export class AuthService {
           defaultRole: updatedUser.defaultRole?.name || 'citizen',
         };
       } catch (error: unknown) {
-        console.error('User update database error:', error);
+        this.logger.error('User update database error:', error);
         if (
           typeof error === 'object' &&
           error !== null &&
@@ -442,7 +442,7 @@ export class AuthService {
         );
       }
     } catch (error) {
-      console.error('User update error:', error);
+      this.logger.error('User update error:', error);
       // Re-throw specific errors
       if (
         error instanceof UnauthorizedException ||
@@ -502,7 +502,7 @@ export class AuthService {
       try {
         await this.updateUserInfo(targetUserId, updateUserDto);
       } catch (err) {
-        console.error('Error during basic user update:', err);
+        this.logger.error('Error during basic user update:', err);
         throw err; // Re-throw to be caught by outer try-catch
       }
 
@@ -528,7 +528,7 @@ export class AuthService {
             `Assigned roles ${updateUserDto.roleIds.join(', ')} to user ${targetUserId}`,
           );
         } catch (error) {
-          console.error('Error assigning roles:', error);
+          this.logger.error('Error assigning roles:', error);
           throw new BadRequestException(
             error instanceof Error ? error.message : 'Failed to assign roles',
           );
@@ -572,7 +572,7 @@ export class AuthService {
             `Updated default role to ${updateUserDto.defaultRoleId} for user ${targetUserId}`,
           );
         } catch (error) {
-          console.error('Error updating default role:', error);
+          this.logger.error('Error updating default role:', error);
           throw new BadRequestException(
             error instanceof Error
               ? error.message
@@ -586,13 +586,13 @@ export class AuthService {
         const updatedUser = await this.getProfile(targetUserId);
         return updatedUser;
       } catch (error) {
-        console.error('Error retrieving updated user profile:', error);
+        this.logger.error('Error retrieving updated user profile:', error);
         throw new BadRequestException(
           'User was updated but profile could not be retrieved',
         );
       }
     } catch (error) {
-      console.error('Admin update user error:', error);
+      this.logger.error('Admin update user error:', error);
 
       // Re-throw specific exceptions
       if (
@@ -619,7 +619,7 @@ export class AuthService {
       });
       return user;
     } catch (error) {
-      console.error('Error finding user by email:', error);
+      this.logger.error('Error finding user by email:', error);
       return null;
     }
   }
@@ -651,7 +651,7 @@ export class AuthService {
 
       this.logger.log(`Password updated successfully for user: ${email}`);
     } catch (error) {
-      console.error('Error updating password:', error);
+      this.logger.error('Error updating password:', error);
       throw error;
     }
   }
