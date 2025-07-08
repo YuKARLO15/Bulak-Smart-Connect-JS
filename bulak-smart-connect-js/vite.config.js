@@ -28,16 +28,16 @@ export default defineConfig({
         globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
         runtimeCaching: [
           {
-            urlPattern: /^https:\/\/api\.*/i,
+            urlPattern: /^https:\/\/.*\.onrender\.com\/api\/.*/i,
             handler: 'NetworkFirst',
             options: {
               cacheName: 'api-cache',
               expiration: {
                 maxEntries: 10,
-                maxAgeSeconds: 60 * 60 * 24 * 365 // 1 year
+                maxAgeSeconds: 60 * 60 * 24 // 24 hours
               },
               cacheableResponse: {
-                statuses: [0, 200]
+                statuses: [200, 201, 202, 204] // Cache successful responses
               }
             }
           }
@@ -108,5 +108,23 @@ export default defineConfig({
         classNameStrategy: 'non-scoped'
       }
     }
-  }
+  },
+  build: {
+    outDir: 'dist',
+    assetsDir: 'assets',
+    sourcemap: false, // Disable sourcemaps in production
+    minify: 'esbuild',
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom'],
+          mui: ['@mui/material', '@mui/icons-material'],
+          utils: ['axios', 'date-fns', 'qrcode.react'],
+          pdf: ['@react-pdf/renderer']
+        }
+      }
+    },
+    chunkSizeWarningLimit: 1000
+  },
+  base: '/', // Important for Render static sites
 })
