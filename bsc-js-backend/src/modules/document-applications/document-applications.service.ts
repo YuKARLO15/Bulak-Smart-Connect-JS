@@ -237,7 +237,7 @@ export class DocumentApplicationsService {
       try {
         await this.minioService.deleteFile(file.minioObjectName);
       } catch (error) {
-        console.warn(`Failed to delete file ${file.minioObjectName}:`, error);
+        this.logger.warn(`Failed to delete file ${file.minioObjectName}:`, error);
       }
     }
 
@@ -365,7 +365,7 @@ export class DocumentApplicationsService {
               downloadUrl: downloadUrl,
             };
           } catch (error) {
-            console.warn(
+            this.logger.warn(
               `Service: Failed to generate URL for file ${file.id}:`,
               error,
             );
@@ -449,7 +449,7 @@ export class DocumentApplicationsService {
               downloadUrl: downloadUrl,
             };
           } catch (error) {
-            console.warn(`Failed to generate URL for file ${file.id}:`, error);
+            this.logger.warn(`Failed to generate URL for file ${file.id}:`, error);
             return {
               id: file.id,
               fileName: file.fileName,
