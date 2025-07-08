@@ -15,7 +15,6 @@ import { DocumentApplicationsModule } from './modules/document-applications/docu
 import { OTP } from './entities/otp.entity';
 import { OTPService } from './services/otp.service';
 import { EmailService } from './services/email.service';
-import { LoggerService } from '../utils/logger.service';
 
 @Module({
   imports: [
@@ -75,6 +74,6 @@ import { LoggerService } from '../utils/logger.service';
     TypeOrmModule.forFeature([OTP]),
   ],
   controllers: [AppController],
-  providers: [AppService, OTPService, EmailService, LoggerService],
+  providers: [AppService, OTPService, EmailService],
 })
 export class AppModule {}
