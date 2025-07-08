@@ -170,14 +170,14 @@ const WalkInForm = () => {
         localStorage.setItem(`userQueues_${actualUserId}`, JSON.stringify(userQueues));
         localStorage.setItem('userQueue', JSON.stringify(newQueue));
       } catch (e) {
-        console.error('Error updating user queues:', e);
+        logger.error('Error updating user queues:', e);
         localStorage.setItem(`userQueues_${actualUserId}`, JSON.stringify([newQueue]));
       }
 
       window.location.href = '/WalkInDetails';
     } catch (error) {
-      console.error('Error creating queue:', error);
-      console.error('Error details:', error.response?.data || error.message);
+      logger.error('Error creating queue:', error);
+      logger.error('Error details:', error.response?.data || error.message);
       alert('Failed to create queue. Please try again.');
     }
   };

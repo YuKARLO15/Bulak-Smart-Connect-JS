@@ -91,7 +91,7 @@ const AppointmentContainer = ({ onBack, preselectedDate }) => {
 
       return null;
     } catch (error) {
-      console.error('Error getting user email:', error);
+      logger.error('Error getting user email:', error);
       return null;
     }
   };
@@ -116,7 +116,7 @@ const AppointmentContainer = ({ onBack, preselectedDate }) => {
           });
         }
       } catch (error) {
-        console.error('Error fetching user data:', error);
+        logger.error('Error fetching user data:', error);
       } finally {
         setFetchingUserData(false);
       }
@@ -160,7 +160,7 @@ const AppointmentContainer = ({ onBack, preselectedDate }) => {
         setAvailableSlots([...allTimeSlots]);
       }
     } catch (error) {
-      console.error('Error fetching available slots:', error);
+      logger.error('Error fetching available slots:', error);
 
       setAvailableSlots([...allTimeSlots]);
     } finally {
@@ -259,7 +259,7 @@ const AppointmentContainer = ({ onBack, preselectedDate }) => {
 
         return null;
       } catch (error) {
-        console.error('Error getting user email for notification:', error);
+        logger.error('Error getting user email for notification:', error);
         return null;
       }
     };
@@ -357,7 +357,7 @@ const AppointmentContainer = ({ onBack, preselectedDate }) => {
             );
           }
         } catch (notificationError) {
-          console.error('❌ Error sending confirmation notification:', notificationError);
+          logger.error('❌ Error sending confirmation notification:', notificationError);
           alert(
             'Your appointment has been confirmed! However, we could not send the confirmation email.'
           );

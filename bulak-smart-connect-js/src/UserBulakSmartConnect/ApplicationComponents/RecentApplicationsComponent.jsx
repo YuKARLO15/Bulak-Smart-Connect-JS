@@ -49,7 +49,7 @@ const RecentApplicationsComponent = () => {
           const localApps = getApplications();
           setApplications(localApps);
         } catch (localErr) {
-          console.error('Failed to load local applications:', localErr);
+          logger.error('Failed to load local applications:', localErr);
         }
       } finally {
         setLoading(false);
@@ -208,7 +208,7 @@ const RecentApplicationsComponent = () => {
         navigate('/ApplicationDetails/' + application.id);
       }
     } catch (err) {
-      console.error('Error preparing application summary:', err);
+      logger.error('Error preparing application summary:', err);
       alert('An error occurred while loading the application. Please try again.');
     }
   };

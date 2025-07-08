@@ -73,7 +73,7 @@ const MarriageLicenseSummary = () => {
         setApplicationId(latestMarriageApp.id);
       }
     } catch (err) {
-      console.error('Error loading form data:', err);
+      logger.error('Error loading form data:', err);
     } finally {
       setLoading(false);
     }
@@ -113,7 +113,7 @@ const MarriageLicenseSummary = () => {
       logger.log('Final ID to delete:', idToDelete);
 
       if (!idToDelete) {
-        console.error('No application ID found to delete');
+        logger.error('No application ID found to delete');
         alert('Cannot find application ID to delete. Please try refreshing the page.');
         setDeleteDialogOpen(false);
         return;
@@ -124,7 +124,7 @@ const MarriageLicenseSummary = () => {
         await documentApplicationService.deleteApplication(idToDelete);
         logger.log('Marriage application deleted from database:', idToDelete);
       } catch (dbError) {
-        console.error('Error deleting from database:', dbError);
+        logger.error('Error deleting from database:', dbError);
         alert('Failed to delete application from database. Please try again or contact support.');
         setDeleteDialogOpen(false);
         return; // Stop execution if database deletion fails
@@ -165,7 +165,7 @@ const MarriageLicenseSummary = () => {
       alert('Application deleted successfully!');
       navigate('/ApplicationForm');
     } catch (err) {
-      console.error('Error deleting marriage application:', err);
+      logger.error('Error deleting marriage application:', err);
       alert('Error deleting application: ' + err.message);
       setDeleteDialogOpen(false);
     }
@@ -194,7 +194,7 @@ const MarriageLicenseSummary = () => {
         navigate('/MarriageForm');
       }, 100);
     } catch (err) {
-      console.error('Error setting up modification:', err);
+      logger.error('Error setting up modification:', err);
       alert('There was a problem preparing the form for editing. Please try again.');
     }
   };

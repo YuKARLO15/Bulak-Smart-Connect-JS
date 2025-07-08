@@ -10,7 +10,7 @@ export const getApplications = () => {
     const storedApplications = JSON.parse(localStorage.getItem('applications')) || [];
     return storedApplications;
   } catch (err) {
-    console.error('Error loading applications:', err.message);
+    logger.error('Error loading applications:', err.message);
     return [];
   }
 };
@@ -29,7 +29,7 @@ export const updateApplication = (applicationId, updatedData) => {
     logger.log('Original:', applications[index]);
     return false;
   } catch (error) {
-    console.error('Error updating application:', error);
+    logger.error('Error updating application:', error);
     return false;
   }
 };
@@ -41,7 +41,7 @@ export const addApplication = applicationData => {
     localStorage.setItem('applications', JSON.stringify(applications));
     return true;
   } catch (err) {
-    console.error('Error adding application:', err.message);
+    logger.error('Error adding application:', err.message);
     return false;
   }
 };
@@ -51,7 +51,7 @@ export const getApplicationsByType = type => {
     const applications = getApplications();
     return applications.filter(app => app.type === type);
   } catch (error) {
-    console.error(`Error getting applications of type ${type}:`, error);
+    logger.error(`Error getting applications of type ${type}:`, error);
     return [];
   }
 };

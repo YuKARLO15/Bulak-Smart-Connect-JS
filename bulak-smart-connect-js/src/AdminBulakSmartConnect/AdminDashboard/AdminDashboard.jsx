@@ -155,7 +155,7 @@ const AdminDashboard = () => {
       logger.log('Generated monthly analytics from database:', monthlyData);
       return monthlyData;
     } catch (error) {
-      console.error('Error generating monthly analytics from database:', error);
+      logger.error('Error generating monthly analytics from database:', error);
 
       return getLastSixMonths().map(month => ({
         name: month.name,
@@ -244,7 +244,7 @@ const AdminDashboard = () => {
         throw new Error('Invalid response format: Not an array');
       }
     } catch (err) {
-      console.error('Error fetching application data:', err);
+      logger.error('Error fetching application data:', err);
       setError('Error loading application data: ' + err.message);
 
       try {
@@ -287,7 +287,7 @@ const AdminDashboard = () => {
 
         return standardizedData;
       } catch (localErr) {
-        console.error('Failed to load from localStorage:', localErr);
+        logger.error('Failed to load from localStorage:', localErr);
         return [];
       }
     } finally {
@@ -302,7 +302,7 @@ const AdminDashboard = () => {
         overall: Array.isArray(appointments) ? appointments.length : 0,
       });
     } catch (error) {
-      console.error('Error fetching appointment stats:', error);
+      logger.error('Error fetching appointment stats:', error);
       const fetchedAppointments = getRecentAppointments();
       setAppointmentStats({
         overall: fetchedAppointments.length,
@@ -364,7 +364,7 @@ const AdminDashboard = () => {
       const monthlyAnalytics = await generateMonthlyAnalyticsFromDB();
       setWalkInData(monthlyAnalytics);
     } catch (error) {
-      console.error('Error during refresh:', error);
+      logger.error('Error during refresh:', error);
     } finally {
       setLoading(false);
       setChartLoading(false);

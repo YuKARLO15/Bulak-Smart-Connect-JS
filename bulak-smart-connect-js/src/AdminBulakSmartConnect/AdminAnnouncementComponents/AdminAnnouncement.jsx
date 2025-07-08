@@ -54,7 +54,7 @@ const AdminAnnouncement = () => {
         setAnnouncements(transformedData);
       }
     } catch (error) {
-      console.error('Failed to load announcements:', error);
+      logger.error('Failed to load announcements:', error);
       // Keep your existing fallback data if API fails
       logger.log('Using fallback data due to API error');
     } finally {
@@ -79,7 +79,7 @@ const AdminAnnouncement = () => {
       // Update state (keep your existing logic)
       setAnnouncements([transformedAnnouncement, ...announcements]);
     } catch (error) {
-      console.error('Failed to create announcement:', error);
+      logger.error('Failed to create announcement:', error);
       // Fallback to your original logic if API fails
       const fallbackAnnouncement = {
         ...newAnnouncement,
@@ -120,7 +120,7 @@ const AdminAnnouncement = () => {
         prev.map(a => (a.id === transformedAnnouncement.id ? transformedAnnouncement : a))
       );
     } catch (error) {
-      console.error('Failed to update announcement:', error);
+      logger.error('Failed to update announcement:', error);
       // Fallback to your original logic if API fails
       setAnnouncements(prev =>
         prev.map(a => (a.id === editedAnnouncement.id ? editedAnnouncement : a))
@@ -140,7 +140,7 @@ const AdminAnnouncement = () => {
       // Update state (keep your existing logic)
       setAnnouncements(prev => prev.filter(a => a.id !== id));
     } catch (error) {
-      console.error('Failed to delete announcement:', error);
+      logger.error('Failed to delete announcement:', error);
       // Fallback to your original logic if API fails
       setAnnouncements(prev => prev.filter(a => a.id !== id));
     }

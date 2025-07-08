@@ -83,7 +83,7 @@ export const documentApplicationNotificationService = {
       logger.log('✅ Application confirmation notification sent successfully');
       return { success: true, data: response.data };
     } catch (error) {
-      console.error('❌ Failed to send application confirmation:', error);
+      logger.error('❌ Failed to send application confirmation:', error);
       return { success: false, error: error.message || 'Failed to send application confirmation' };
     }
   },
@@ -130,7 +130,7 @@ export const documentApplicationNotificationService = {
       logger.log('✅ Status update notification sent successfully');
       return { success: true, data: response.data };
     } catch (error) {
-      console.error('❌ Failed to send status update notification:', error);
+      logger.error('❌ Failed to send status update notification:', error);
       return {
         success: false,
         error: error.message || 'Failed to send status update notification',
@@ -174,7 +174,7 @@ export const documentApplicationNotificationService = {
       logger.log('✅ Rejection notification sent successfully');
       return { success: true, data: response.data };
     } catch (error) {
-      console.error('❌ Failed to send rejection notification:', error);
+      logger.error('❌ Failed to send rejection notification:', error);
       return { success: false, error: error.message || 'Failed to send rejection notification' };
     }
   },
@@ -213,7 +213,7 @@ export const documentApplicationNotificationService = {
       logger.log('✅ Approval notification sent successfully');
       return { success: true, data: response.data };
     } catch (error) {
-      console.error('❌ Failed to send approval notification:', error);
+      logger.error('❌ Failed to send approval notification:', error);
       return { success: false, error: error.message || 'Failed to send approval notification' };
     }
   },

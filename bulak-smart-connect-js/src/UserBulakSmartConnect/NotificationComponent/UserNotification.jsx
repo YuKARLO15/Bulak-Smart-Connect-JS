@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import logger from '../../utils/logger';
 import { Outlet } from 'react-router-dom';
 import { NotificationProvider } from '../../services/notificationContext.jsx';
 import CustomStatusNotification from './CustomStatusNotification';
@@ -49,7 +50,7 @@ const UserNotificationContent = () => {
           }
         }
       } catch (error) {
-        console.error('Failed to fetch status:', error);
+        logger.error('Failed to fetch status:', error);
       }
     }, 3000);
 

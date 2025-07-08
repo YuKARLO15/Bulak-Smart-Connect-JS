@@ -10,7 +10,7 @@ export const getUsers = () => {
     const storedUsers = localStorage.getItem('users');
     return storedUsers ? JSON.parse(storedUsers) : [];
   } catch (error) {
-    console.error('Error getting users from localStorage:', error);
+    logger.error('Error getting users from localStorage:', error);
     return [];
   }
 };
@@ -51,7 +51,7 @@ export const addUser = userData => {
     logger.log('User added successfully:', newUser);
     return { success: true, user: newUser };
   } catch (error) {
-    console.error('Error adding user:', error);
+    logger.error('Error adding user:', error);
     return { success: false, message: 'Failed to add user' };
   }
 };
@@ -73,7 +73,7 @@ export const updateUser = (index, updatedData) => {
     }
     return { success: false, message: 'User not found' };
   } catch (error) {
-    console.error('Error updating user:', error);
+    logger.error('Error updating user:', error);
     return { success: false, message: 'Failed to update user' };
   }
 };
@@ -89,7 +89,7 @@ export const updateUser = (index, updatedData) => {
 //     }
 //     return false;
 //   } catch (error) {
-//     console.error("Error deleting user:", error);
+//     logger.error("Error deleting user:", error);
 //     return false;
 //   }
 // };
@@ -113,7 +113,7 @@ export const updateUserImage = (index, imageUrl) => {
     }
     return false;
   } catch (error) {
-    console.error('Error updating user image:', error);
+    logger.error('Error updating user image:', error);
     return false;
   }
 };

@@ -95,7 +95,7 @@ const MarriageCertificateForm = () => {
 
                 logger.log(`Loaded existing ${option} data from localStorage for editing`);
               } catch (err) {
-                console.error(
+                logger.error(
                   'Error loading marriage form data from localStorage for editing:',
                   err
                 );
@@ -103,7 +103,7 @@ const MarriageCertificateForm = () => {
             }
           }
         } catch (error) {
-          console.error('Error fetching application from backend:', error);
+          logger.error('Error fetching application from backend:', error);
 
           const savedData = localStorage.getItem('marriageFormData');
           if (savedData) {
@@ -122,7 +122,7 @@ const MarriageCertificateForm = () => {
                 `Loaded existing ${option} data from localStorage for editing (fallback)`
               );
             } catch (err) {
-              console.error('Error loading marriage form data from localStorage for editing:', err);
+              logger.error('Error loading marriage form data from localStorage for editing:', err);
             }
           }
         }
@@ -147,7 +147,7 @@ const MarriageCertificateForm = () => {
         }
       }
     } catch (error) {
-      console.error('Error checking for previous license data:', error);
+      logger.error('Error checking for previous license data:', error);
     }
   };
 
@@ -361,7 +361,7 @@ const MarriageCertificateForm = () => {
           applicationId = backendResponse.id || currentEditingId;
           logger.log('Successfully updated application in backend:', applicationId);
         } catch (backendError) {
-          console.error('Backend update failed:', backendError);
+          logger.error('Backend update failed:', backendError);
 
           const applications = JSON.parse(localStorage.getItem('applications') || '[]');
           const index = applications.findIndex(app => app.id === currentEditingId);
@@ -408,7 +408,7 @@ const MarriageCertificateForm = () => {
           }
           logger.log('Successfully created application in backend:', applicationId);
         } catch (backendError) {
-          console.error('Backend creation failed:', backendError);
+          logger.error('Backend creation failed:', backendError);
 
           logger.log('Falling back to localStorage creation only');
         }
@@ -464,7 +464,7 @@ const MarriageCertificateForm = () => {
         });
       }
     } catch (error) {
-      console.error('Error submitting form:', error);
+      logger.error('Error submitting form:', error);
       alert('There was an error submitting your application. Please try again.');
     }
   };

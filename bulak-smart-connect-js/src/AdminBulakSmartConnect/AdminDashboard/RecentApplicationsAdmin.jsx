@@ -89,7 +89,7 @@ const RecentApplicationsAdmin = () => {
           throw new Error('Invalid response format: Not an array');
         }
       } catch (err) {
-        console.error('Failed to fetch from API:', err);
+        logger.error('Failed to fetch from API:', err);
         setError('Error loading applications: ' + err.message);
 
         // Fallback to localStorage
@@ -102,7 +102,7 @@ const RecentApplicationsAdmin = () => {
           // Calculate statistics using local data
           calculateStatistics(standardizedData);
         } catch (localErr) {
-          console.error('Failed to load from localStorage:', localErr);
+          logger.error('Failed to load from localStorage:', localErr);
         }
       } finally {
         setLoading(false);

@@ -102,7 +102,7 @@ const dataURLtoFile = (dataurl, filename, mimeType) => {
 
   const arr = dataurl.split(',');
   if (arr.length < 2) {
-    console.error('Invalid data URL format');
+    logger.error('Invalid data URL format');
     return null;
   }
 
@@ -199,7 +199,7 @@ const MarriageCertificateApplication = () => {
 
       return response;
     } catch (error) {
-      console.error('Failed to create Marriage Certificate application:', error);
+      logger.error('Failed to create Marriage Certificate application:', error);
       showNotification(`Failed to create application: ${error.message}`, 'error');
       return null;
     }
@@ -283,7 +283,7 @@ const MarriageCertificateApplication = () => {
           }
         }
       } catch (error) {
-        console.error('Error loading application data:', error);
+        logger.error('Error loading application data:', error);
         showNotification('Error loading application data', 'error');
       }
     };
@@ -340,7 +340,7 @@ const MarriageCertificateApplication = () => {
           // Single file - convert to array
           filesToUpload = [fileDataObj];
         } else {
-          console.error('Invalid file data format:', fileDataObj);
+          logger.error('Invalid file data format:', fileDataObj);
           showNotification('Invalid file data format', 'error');
           setUploadedFiles(prevState => ({ ...prevState, [label]: false }));
           return;
@@ -350,7 +350,7 @@ const MarriageCertificateApplication = () => {
 
         for (const [index, fileData] of filesToUpload.entries()) {
           if (!fileData || !fileData.data || !fileData.name) {
-            console.error(`Invalid file data at index ${index}:`, fileData);
+            logger.error(`Invalid file data at index ${index}:`, fileData);
             continue;
           }
 
@@ -371,7 +371,7 @@ const MarriageCertificateApplication = () => {
             );
             logger.log(`Upload response for ${fileData.name}:`, response);
           } catch (fileError) {
-            console.error(`Failed to upload file ${fileData.name}:`, fileError);
+            logger.error(`Failed to upload file ${fileData.name}:`, fileError);
             throw fileError;
           }
         }
@@ -384,10 +384,10 @@ const MarriageCertificateApplication = () => {
 
         showNotification(successMessage, 'success');
       } catch (error) {
-        console.error(`Failed to upload "${label}":`, error);
+        logger.error(`Failed to upload "${label}":`, error);
 
         if (error.response) {
-          console.error('Server response:', error.response.status, error.response.data);
+          logger.error('Server response:', error.response.status, error.response.data);
 
           if (error.response.status === 404) {
             showNotification('Application not found. Creating new application...', 'info');
@@ -415,7 +415,7 @@ const MarriageCertificateApplication = () => {
                 showNotification(successMessage, 'success');
                 return;
               } catch (retryError) {
-                console.error('Retry upload failed:', retryError);
+                logger.error('Retry upload failed:', retryError);
               }
             }
           }
@@ -487,7 +487,7 @@ const MarriageCertificateApplication = () => {
         localStorage.getItem('currentApplicationId');
 
       if (!effectiveAppId) {
-        console.error('No application ID found');
+        logger.error('No application ID found');
         showNotification('Error submitting application: No application ID found.', 'error');
         setIsLoading(false);
         setIsSubmitted(false);
@@ -565,7 +565,7 @@ const MarriageCertificateApplication = () => {
             );
           }
         } catch (notificationError) {
-          console.error('❌ Error sending confirmation notification:', notificationError);
+          logger.error('❌ Error sending confirmation notification:', notificationError);
           showNotification(
             'Application submitted successfully! However, we could not send the confirmation email.',
             'warning'
@@ -584,7 +584,7 @@ const MarriageCertificateApplication = () => {
         });
       }, 2000);
     } catch (error) {
-      console.error('Error submitting application:', error);
+      logger.error('Error submitting application:', error);
       showNotification(`Error submitting application: ${error.message}`, 'error');
       setIsLoading(false);
       setIsSubmitted(false);
@@ -672,7 +672,7 @@ const MarriageCertificateApplication = () => {
         replace: false,
       });
     } catch (error) {
-      console.error('Error saving modify state:', error);
+      logger.error('Error saving modify state:', error);
       showNotification('Error saving current state. Some data may be lost.', 'warning');
 
       navigate('/MarriageForm', {

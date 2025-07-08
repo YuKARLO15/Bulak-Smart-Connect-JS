@@ -14,7 +14,7 @@ export const otpService = {
       logger.log('✅ OTP sent successfully:', response.data);
       return response.data;
     } catch (error) {
-      console.error('❌ Error sending OTP:', error);
+      logger.error('❌ Error sending OTP:', error);
       throw new Error(error.response?.data?.message || 'Failed to send OTP');
     }
   },
@@ -31,7 +31,7 @@ export const otpService = {
       logger.log('✅ OTP verified successfully');
       return response.data;
     } catch (error) {
-      console.error('❌ OTP verification failed:', error);
+      logger.error('❌ OTP verification failed:', error);
       throw new Error(error.response?.data?.message || 'Invalid OTP');
     }
   },
@@ -46,7 +46,7 @@ export const otpService = {
       logger.log('✅ Password reset code sent');
       return response.data;
     } catch (error) {
-      console.error('❌ Error sending reset code:', error);
+      logger.error('❌ Error sending reset code:', error);
       throw new Error(error.response?.data?.message || 'Failed to send reset code');
     }
   },
@@ -63,7 +63,7 @@ export const otpService = {
       logger.log('✅ Password reset successfully');
       return response.data;
     } catch (error) {
-      console.error('❌ Password reset failed:', error);
+      logger.error('❌ Password reset failed:', error);
       throw new Error(error.response?.data?.message || 'Failed to reset password');
     }
   },

@@ -12,7 +12,7 @@ export const authLockoutService = {
       logger.log('✅ Lockout check result:', response.data);
       return response.data;
     } catch (error) {
-      console.error('❌ Error checking account lockout:', error);
+      logger.error('❌ Error checking account lockout:', error);
       return { isLocked: false, attempts: 0 };
     }
   },
@@ -26,7 +26,7 @@ export const authLockoutService = {
       logger.log('✅ Failed attempt recorded:', response.data);
       return response.data;
     } catch (error) {
-      console.error('❌ Error recording failed attempt:', error);
+      logger.error('❌ Error recording failed attempt:', error);
       return { attempts: 0, isLocked: false };
     }
   },
@@ -39,7 +39,7 @@ export const authLockoutService = {
       });
       logger.log('✅ Account lockout cleared');
     } catch (error) {
-      console.error('❌ Error clearing account lockout:', error);
+      logger.error('❌ Error clearing account lockout:', error);
     }
   }
 };

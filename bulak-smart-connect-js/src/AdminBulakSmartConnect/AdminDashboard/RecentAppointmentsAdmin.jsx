@@ -98,7 +98,7 @@ const RecentAppointmentsAdmin = () => {
         weekCanceled: canceledCount,
       });
     } catch (error) {
-      console.error('Error fetching appointment statistics:', error);
+      logger.error('Error fetching appointment statistics:', error);
       setError(error.message || 'Failed to load appointment statistics');
 
       // Fallback: Try the regular stats endpoint if manual calculation fails
@@ -116,7 +116,7 @@ const RecentAppointmentsAdmin = () => {
           weekCanceled: parseInt(stats.weekCanceled || 0),
         });
       } catch (fallbackError) {
-        console.error('Fallback also failed:', fallbackError);
+        logger.error('Fallback also failed:', fallbackError);
         // Keep the original error
       }
     } finally {

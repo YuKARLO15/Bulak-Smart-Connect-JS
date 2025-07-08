@@ -12,7 +12,7 @@ export const queueService = {
       logger.log('Walk-in queues API response:', response.data);
       return response.data;
     } catch (error) {
-      console.error('API error getting walk-in queues:', error);
+      logger.error('API error getting walk-in queues:', error);
       throw error;
     }
   },
@@ -24,7 +24,7 @@ export const queueService = {
       logger.log('Current queues API response:', response.data);
       return response.data;
     } catch (error) {
-      console.error('API error getting current queues:', error);
+      logger.error('API error getting current queues:', error);
       throw error;
     }
   },
@@ -41,7 +41,7 @@ export const queueService = {
       logger.log('Position API response:', response.data);
       return response.data;
     } catch (error) {
-      console.error('API error getting position:', error);
+      logger.error('API error getting position:', error);
       throw error;
     }
   },
@@ -58,7 +58,7 @@ export const queueService = {
       logger.log('Queue creation response:', response.data);
       return response.data;
     } catch (error) {
-      console.error('Error creating queue:', error);
+      logger.error('Error creating queue:', error);
       throw error;
     }
   },
@@ -68,7 +68,7 @@ export const queueService = {
       const response = await axios.get(`${config.API_BASE_URL}/queue/${queueId}/exists`);
       return response.data.exists;
     } catch (error) {
-      console.error('Error checking if queue exists:', error);
+      logger.error('Error checking if queue exists:', error);
       return false;
     }
   },
@@ -80,7 +80,7 @@ export const queueService = {
       logger.log(`Details for queue ${queueId}:`, response.data);
       return response.data;
     } catch (error) {
-      console.error(`Error fetching details for queue ${queueId}:`, error);
+      logger.error(`Error fetching details for queue ${queueId}:`, error);
       throw error;
     }
   },
@@ -93,7 +93,7 @@ export const queueService = {
       logger.log('Pending queues with details:', response.data);
       return response.data;
     } catch (error) {
-      console.error('Error fetching pending queues with details:', error);
+      logger.error('Error fetching pending queues with details:', error);
       throw error;
     }
   },
@@ -106,7 +106,7 @@ export const queueService = {
       logger.log('Current queues with details:', response.data);
       return response.data;
     } catch (error) {
-      console.error('Error fetching current queues with details:', error);
+      logger.error('Error fetching current queues with details:', error);
       throw error;
     }
   },
@@ -119,7 +119,7 @@ export const queueService = {
       logger.log('Bulk queue details:', response.data);
       return response.data;
     } catch (error) {
-      console.error('Error fetching bulk queue details:', error);
+      logger.error('Error fetching bulk queue details:', error);
       throw error;
     }
   },
@@ -153,8 +153,8 @@ export const queueService = {
       logger.log('Update status response:', response.data);
       return response.data;
     } catch (error) {
-      console.error(`Error updating queue ${queueId} status:`, error);
-      console.error('Error details:', error.response?.data || error.message);
+      logger.error(`Error updating queue ${queueId} status:`, error);
+      logger.error('Error details:', error.response?.data || error.message);
       throw error;
     }
   },
@@ -167,7 +167,7 @@ export const queueService = {
       logger.log('User queues API response:', response.data);
       return response.data;
     } catch (error) {
-      console.error('Error fetching user queues:', error);
+      logger.error('Error fetching user queues:', error);
       throw error;
     }
   },
@@ -180,7 +180,7 @@ export const queueService = {
       logger.log('Queue details API response:', response.data);
       return response.data;
     } catch (error) {
-      console.error('Error fetching queue details:', error);
+      logger.error('Error fetching queue details:', error);
       throw error;
     }
   },
@@ -212,8 +212,8 @@ export const queueService = {
       logger.log('Service: Manual queue created:', response.data);
       return response.data;
     } catch (error) {
-      console.error('Service: Error creating manual queue:', error);
-      console.error('Service: Error response:', error.response?.data);
+      logger.error('Service: Error creating manual queue:', error);
+      logger.error('Service: Error response:', error.response?.data);
       throw error;
     }
   },
@@ -241,7 +241,7 @@ export const queueService = {
       );
       return response.data;
     } catch (error) {
-      console.error('Error triggering manual reset:', error);
+      logger.error('Error triggering manual reset:', error);
 
       if (error.response?.status === 401) {
         throw new Error('Authentication failed. Please log in again.');
@@ -264,7 +264,7 @@ export const queueService = {
       });
       return response.data;
     } catch (error) {
-      console.error('Error getting pending count:', error);
+      logger.error('Error getting pending count:', error);
       throw error;
     }
   },

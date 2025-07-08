@@ -369,7 +369,7 @@ const AdminWalkInQueue = () => {
       `);
       printWindow.document.close();
     } catch (error) {
-      console.error('❌ All printing methods failed:', error);
+      logger.error('❌ All printing methods failed:', error);
 
       // Final fallback - show ticket info
       const ticketText = `
@@ -408,7 +408,7 @@ const AdminWalkInQueue = () => {
         }
       }
     } catch (error) {
-      console.error('Error sending admin notification:', error);
+      logger.error('Error sending admin notification:', error);
       // Don't break the flow if notification fails
     }
   };
@@ -450,9 +450,9 @@ const AdminWalkInQueue = () => {
       setShowManualQueueModal(false);
       resetForm();
     } catch (error) {
-      console.error('Error creating manual queue:', error);
-      console.error('Error response:', error.response?.data);
-      console.error('Error status:', error.response?.status);
+      logger.error('Error creating manual queue:', error);
+      logger.error('Error response:', error.response?.data);
+      logger.error('Error status:', error.response?.status);
 
       if (error.response?.status === 401) {
         alert('Authentication failed. Please log in again.');
@@ -558,8 +558,8 @@ const AdminWalkInQueue = () => {
       // Refresh data after updating with a slight delay to ensure backend has processed the change
       setTimeout(() => fetchQueueData(), 500);
     } catch (error) {
-      console.error('Failed to update queue status:', error);
-      console.error('Error details:', error.response?.data || error.message);
+      logger.error('Failed to update queue status:', error);
+      logger.error('Error details:', error.response?.data || error.message);
       alert(
         `Failed to update queue status. Error: ${error.response?.data?.message || error.message}`
       );
@@ -602,7 +602,7 @@ const AdminWalkInQueue = () => {
       setCurrentQueues(formattedCurrentQueues);
       setError(null);
     } catch (err) {
-      console.error('Error fetching queue data:', err);
+      logger.error('Error fetching queue data:', err);
       setError('Failed to load queue data. Please ensure the server is running.');
     } finally {
       setLoading(false);
@@ -615,7 +615,7 @@ const AdminWalkInQueue = () => {
       const data = await queueService.getTodayPendingCount();
       setPendingCount(data.pendingCount);
     } catch (error) {
-      console.error('Error fetching pending count:', error);
+      logger.error('Error fetching pending count:', error);
     }
   };
 
@@ -632,7 +632,7 @@ const AdminWalkInQueue = () => {
       await fetchQueueData(); // Refresh the queue data
       await fetchPendingCount(); // Update pending count
     } catch (error) {
-      console.error('Error during manual reset:', error);
+      logger.error('Error during manual reset:', error);
 
       // ✅ IMPROVED: Better error handling
       if (error.message.includes('Server error during reset')) {

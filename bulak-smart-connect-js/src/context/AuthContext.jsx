@@ -43,7 +43,7 @@ export const AuthProvider = ({ children }) => {
         // Store user in localStorage during auth check too
         localStorage.setItem('currentUser', JSON.stringify(processedUser));
       } catch (err) {
-        console.error('Auth check failed:', err);
+        logger.error('Auth check failed:', err);
         localStorage.removeItem('token');
       } finally {
         setLoading(false);
@@ -92,7 +92,7 @@ export const AuthProvider = ({ children }) => {
       setIsAuthenticated(true);
       return { success: true, user: processedUser };
     } catch (err) {
-      console.error('Login error:', err);
+      logger.error('Login error:', err);
       setError(err.response?.data?.message || 'Login failed');
       return { success: false };
     }
@@ -170,7 +170,7 @@ export const AuthProvider = ({ children }) => {
 
       return { success: true, user: updatedUserData };
     } catch (err) {
-      console.error('Profile update error:', err);
+      logger.error('Profile update error:', err);
       const errorMsg = err.response?.data?.message || 'Profile update failed';
       setError(errorMsg);
       return { success: false, error: errorMsg };
@@ -207,7 +207,7 @@ export const AuthProvider = ({ children }) => {
       setUpdateSuccess(true);
       return { success: true, user: response.data };
     } catch (err) {
-      console.error('Admin user update error:', err);
+      logger.error('Admin user update error:', err);
       const errorMsg = err.response?.data?.message || 'User update failed';
       setError(errorMsg);
       return { success: false, error: errorMsg };

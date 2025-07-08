@@ -5,6 +5,7 @@
 
 import axios from 'axios';
 import config from '../config/env.js';
+import logger from '../utils/logger.js';
 
 const api = axios.create({
   baseURL: config.API_BASE_URL,
@@ -22,7 +23,7 @@ const getCurrentUserId = () => {
     const userData = JSON.parse(currentUser);
     return userData?.id || userData?._id || null;
   } catch (e) {
-    console.error('Error parsing user data from localStorage', e);
+    logger.error('Error parsing user data from localStorage', e);
     return null;
   }
 };

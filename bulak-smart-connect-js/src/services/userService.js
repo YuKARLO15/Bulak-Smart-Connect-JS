@@ -48,15 +48,15 @@ apiClient.interceptors.response.use(
   error => {
     // Log detailed error information for 403 errors
     if (error.response?.status === 403) {
-      console.error('🚫 403 Forbidden Error Details:');
-      console.error('URL:', error.config?.url);
-      console.error('Headers:', error.config?.headers);
-      console.error('Response:', error.response?.data);
+      logger.error('🚫 403 Forbidden Error Details:');
+      logger.error('URL:', error.config?.url);
+      logger.error('Headers:', error.config?.headers);
+      logger.error('Response:', error.response?.data);
 
       // Check if user data exists
       const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
-      console.error('Current User:', currentUser);
-      console.error('User Roles:', currentUser.roles);
+      logger.error('Current User:', currentUser);
+      logger.error('User Roles:', currentUser.roles);
     }
     return Promise.reject(error);
   }
@@ -99,11 +99,11 @@ const userService = {
       logger.log('✅ Users fetched successfully:', response.data);
       return response.data;
     } catch (error) {
-      console.error('❌ Error fetching users:', error);
+      logger.error('❌ Error fetching users:', error);
 
       // Enhanced error handling for 403/401
       if (error.response?.status === 403 || error.response?.status === 401) {
-        console.error('🚫 Access denied - insufficient permissions');
+        logger.error('🚫 Access denied - insufficient permissions');
         throw new Error('Access denied. Only super administrators can manage users.');
       }
 
@@ -118,7 +118,7 @@ const userService = {
       logger.log('✅ Authentication test successful:', response.data);
       return { success: true, user: response.data };
     } catch (error) {
-      console.error('❌ Authentication test failed:', error.response?.status, error.response?.data);
+      logger.error('❌ Authentication test failed:', error.response?.status, error.response?.data);
       return { success: false, error: error.response?.data };
     }
   },
@@ -129,7 +129,7 @@ const userService = {
       const response = await apiClient.get(`/users/${userId}`);
       return response.data;
     } catch (error) {
-      console.error(`Error getting user ${userId}:`, error);
+      logger.error(`Error getting user ${userId}:`, error);
 
       // Fallback to localStorage
       const localUsers = JSON.parse(localStorage.getItem('users') || '[]');
@@ -161,7 +161,7 @@ const userService = {
 
       return response.data;
     } catch (error) {
-      console.error(`Error updating user ${userId}:`, error);
+      logger.error(`Error updating user ${userId}:`, error);
 
       // Update localStorage even if API fails
       try {
@@ -200,7 +200,7 @@ const userService = {
 
       return response.data;
     } catch (error) {
-      console.error(`Error updating user status ${userId}:`, error);
+      logger.error(`Error updating user status ${userId}:`, error);
 
       // Update localStorage even if API fails
       try {
@@ -236,7 +236,7 @@ const userService = {
 
       return response.data;
     } catch (error) {
-      console.error(`Error deleting user ${userId}:`, error);
+      logger.error(`Error deleting user ${userId}:`, error);
       throw error;
     }
   },
@@ -247,7 +247,7 @@ const userService = {
       const response = await apiClient.get('/users/stats');
       return response.data;
     } catch (error) {
-      console.error('Error getting user stats:', error);
+      logger.error('Error getting user stats:', error);
 
       // Fallback to localStorage-based stats
       try {
@@ -337,7 +337,7 @@ const userService = {
         return response.data;
       }
     } catch (error) {
-      console.error('❌ Error creating user:', error);
+      logger.error('❌ Error creating user:', error);
       throw error;
     }
   },
@@ -369,28 +369,28 @@ const userService = {
 
       return response.data;
     } catch (error) {
-      console.error(`❌ Error admin updating user ${userId}:`, error);
+      logger.error(`❌ Error admin updating user ${userId}:`, error);
 
       // Enhanced error logging
       if (error.response?.status === 401) {
-        console.error('🚫 Authentication failed - checking token...');
+        logger.error('🚫 Authentication failed - checking token...');
         const token =
           localStorage.getItem('token') || localStorage.getItem(`${config.STORAGE_PREFIX}token`);
-        console.error('Token exists:', !!token);
-        console.error('Token length:', token?.length);
+        logger.error('Token exists:', !!token);
+        logger.error('Token length:', token?.length);
 
         // Check if token is expired
         if (token) {
           try {
             const payload = JSON.parse(atob(token.split('.')[1]));
             const isExpired = payload.exp * 1000 < Date.now();
-            console.error('Token expired:', isExpired);
+            logger.error('Token expired:', isExpired);
           } catch (parseErr) {
-            console.error('Token parse error:', parseErr);
+            logger.error('Token parse error:', parseErr);
           }
         }
       } else if (error.response?.status === 403) {
-        console.error('🚫 Insufficient permissions');
+        logger.error('🚫 Insufficient permissions');
       }
 
       // Fallback to localStorage update
@@ -417,7 +417,7 @@ const userService = {
       const response = await apiClient.get(`/users?search=${encodeURIComponent(query)}`);
       return response.data;
     } catch (error) {
-      console.error('Error searching users:', error);
+      logger.error('Error searching users:', error);
 
       // Fallback to localStorage search
       try {

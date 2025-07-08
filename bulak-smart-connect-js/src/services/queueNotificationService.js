@@ -19,7 +19,7 @@ export const queueNotificationService = {
       logger.log('✅ [USER SIDE] Queue position alert sent successfully', response.data);
       return response.data;
     } catch (error) {
-      console.error('❌ [USER SIDE] Error sending queue position alert:', error);
+      logger.error('❌ [USER SIDE] Error sending queue position alert:', error);
       // Don't throw error to avoid breaking queue functionality
       return { success: false, error: error.message };
     }
@@ -41,7 +41,7 @@ export const queueNotificationService = {
       logger.log('✅ [USER SIDE] Now serving alert sent successfully', response.data);
       return response.data;
     } catch (error) {
-      console.error('❌ [USER SIDE] Error sending now serving alert:', error);
+      logger.error('❌ [USER SIDE] Error sending now serving alert:', error);
       return { success: false, error: error.message };
     }
   },

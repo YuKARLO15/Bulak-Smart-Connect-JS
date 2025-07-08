@@ -45,7 +45,7 @@ const AdminWalkInDetails = () => {
         setQueueDetails(details);
         setError(null);
       } catch (err) {
-        console.error('Error fetching queue details:', err);
+        logger.error('Error fetching queue details:', err);
         setError('Failed to load queue details');
       } finally {
         setLoading(false);
@@ -62,8 +62,8 @@ const AdminWalkInDetails = () => {
       alert('Queue marked as complete!');
       navigate(-1); // Go back to previous page
     } catch (err) {
-      console.error('Error completing queue:', err);
-      console.error('Error details:', err.response?.data || err.message);
+      logger.error('Error completing queue:', err);
+      logger.error('Error details:', err.response?.data || err.message);
       alert(`Failed to complete queue. Error: ${err.response?.data?.message || err.message}`);
     }
   };

@@ -56,7 +56,7 @@ const AllAppointmentsAdmin = () => {
       setAppointments(appointmentsArray);
       setFilteredAppointments(appointmentsArray);
     } catch (error) {
-      console.error('Error fetching appointments:', error);
+      logger.error('Error fetching appointments:', error);
       setError('Failed to load appointments. Please try again.');
       setAppointments([]);
       setFilteredAppointments([]);
@@ -95,7 +95,7 @@ const AllAppointmentsAdmin = () => {
       logger.log('📋 User object:', appointment.user);
       return null;
     } catch (error) {
-      console.error('Error getting appointment email:', error);
+      logger.error('Error getting appointment email:', error);
       return null;
     }
   };
@@ -232,7 +232,7 @@ const AllAppointmentsAdmin = () => {
       });
 
       if (!appointment) {
-        console.error('Appointment not found:', appointmentId);
+        logger.error('Appointment not found:', appointmentId);
         logger.log(
           '📋 Available appointments:',
           appointments.map(app => ({
@@ -272,7 +272,7 @@ const AllAppointmentsAdmin = () => {
             logger.log('⚠️ Status update notification failed:', notificationResult.error);
           }
         } catch (notificationError) {
-          console.error('❌ Error sending status update notification:', notificationError);
+          logger.error('❌ Error sending status update notification:', notificationError);
         }
       } else {
         logger.log('⚠️ No email found for appointment, skipping notification');
@@ -285,7 +285,7 @@ const AllAppointmentsAdmin = () => {
         `Appointment ${newStatus} successfully! ${appointmentEmail ? `Notification sent to ${appointmentEmail}` : 'No email available for notification.'}`
       );
     } catch (error) {
-      console.error('Error updating appointment status:', error);
+      logger.error('Error updating appointment status:', error);
       setError('Failed to update appointment status. Please try again.');
     }
   };
@@ -321,7 +321,7 @@ const AllAppointmentsAdmin = () => {
       });
 
       if (!appointment) {
-        console.error('Appointment not found:', cancelDialog.appointmentId);
+        logger.error('Appointment not found:', cancelDialog.appointmentId);
         logger.log(
           '📋 Available appointments:',
           appointments.map(app => ({
@@ -361,7 +361,7 @@ const AllAppointmentsAdmin = () => {
             logger.log('⚠️ Cancellation notification failed:', notificationResult.error);
           }
         } catch (notificationError) {
-          console.error('❌ Error sending cancellation notification:', notificationError);
+          logger.error('❌ Error sending cancellation notification:', notificationError);
         }
       } else {
         logger.log('⚠️ No email found for appointment, skipping notification');
@@ -375,7 +375,7 @@ const AllAppointmentsAdmin = () => {
         `Appointment cancelled successfully! ${appointmentEmail ? `Notification sent to ${appointmentEmail}` : 'No email available for notification.'}`
       );
     } catch (error) {
-      console.error('Error cancelling appointment:', error);
+      logger.error('Error cancelling appointment:', error);
       setError('Failed to cancel appointment. Please try again.');
     }
   };

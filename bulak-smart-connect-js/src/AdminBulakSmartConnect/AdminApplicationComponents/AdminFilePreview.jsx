@@ -113,7 +113,7 @@ const FileUploadPreview = ({
         setAllFiles(allFilesData.allFiles);
       }
     } catch (error) {
-      console.error('AdminFilePreview: Error fetching application files:', error);
+      logger.error('AdminFilePreview: Error fetching application files:', error);
 
       // Show placeholders on error
       const requiredDocs = getRequiredDocuments();
@@ -249,7 +249,7 @@ const FileUploadPreview = ({
 
       setUploadedFiles(files);
     } catch (error) {
-      console.error('Error extracting files from formData:', error);
+      logger.error('Error extracting files from formData:', error);
       // If all else fails, show required documents list
       const requiredDocs = getRequiredDocuments();
       setUploadedFiles(

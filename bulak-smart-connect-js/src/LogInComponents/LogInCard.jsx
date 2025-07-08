@@ -126,7 +126,7 @@ export default function LogInCard({ onLogin }) {
         setLoginAttempts(lockoutData.attempts);
       }
     } catch (error) {
-      console.error('Error checking lockout status:', error);
+      logger.error('Error checking lockout status:', error);
     }
   };
 
@@ -236,7 +236,7 @@ export default function LogInCard({ onLogin }) {
           await handleLoginFailure('Login failed. Please check your credentials.');
         }
       } catch (error) {
-        console.error('Login error:', error);
+        logger.error('Login error:', error);
 
         let errorMessage = 'An error occurred during login. Please try again.';
 
@@ -310,7 +310,7 @@ export default function LogInCard({ onLogin }) {
 
       setError(finalErrorMessage);
     } catch (error) {
-      console.error('Error recording failed attempt:', error);
+      logger.error('Error recording failed attempt:', error);
       setError(errorMessage);
     }
 

@@ -36,7 +36,7 @@ const AppointmentDetailsCard = () => {
       logger.log('📧 Appointment data with user relationship:', appointmentData);
       setAppointment(appointmentData);
     } catch (error) {
-      console.error('Error fetching appointment details:', error);
+      logger.error('Error fetching appointment details:', error);
     } finally {
       setLoading(false);
     }
@@ -73,7 +73,7 @@ const AppointmentDetailsCard = () => {
       logger.log('📋 User object:', appointment.user);
       return null;
     } catch (error) {
-      console.error('Error getting appointment email:', error);
+      logger.error('Error getting appointment email:', error);
       return null;
     }
   };
@@ -84,7 +84,7 @@ const AppointmentDetailsCard = () => {
       logger.log(`📝 Updating appointment ${id} status to: ${newStatus}`);
 
       if (!appointment) {
-        console.error('No appointment data available');
+        logger.error('No appointment data available');
         alert('Error: Appointment data not available');
         return;
       }
@@ -121,7 +121,7 @@ const AppointmentDetailsCard = () => {
             );
           }
         } catch (notificationError) {
-          console.error('❌ Error sending status update notification:', notificationError);
+          logger.error('❌ Error sending status update notification:', notificationError);
           alert(
             `Appointment ${newStatus} successfully! However, notification email could not be sent.`
           );
@@ -132,7 +132,7 @@ const AppointmentDetailsCard = () => {
         alert(`Appointment ${newStatus} successfully! No email available for notification.`);
       }
     } catch (error) {
-      console.error('Error updating appointment status:', error);
+      logger.error('Error updating appointment status:', error);
       alert('Error updating appointment status');
     }
   };

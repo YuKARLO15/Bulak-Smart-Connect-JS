@@ -50,7 +50,7 @@ const SignUpForm = () => {
         const parsedData = JSON.parse(savedFormData);
         setFormData(parsedData);
       } catch (error) {
-        console.error('Error parsing saved form data:', error);
+        logger.error('Error parsing saved form data:', error);
         // Clear corrupted data
         sessionStorage.removeItem('signupFormData');
       }
@@ -153,7 +153,7 @@ const SignUpForm = () => {
           setShowOtpVerification(true);
           return; // Stop here, continue after OTP verification
         } catch (error) {
-          console.error('Error sending OTP:', error);
+          logger.error('Error sending OTP:', error);
           setErrors({ email: 'Failed to send verification code' });
           return;
         }
@@ -206,7 +206,7 @@ const SignUpForm = () => {
           setErrors({ ...formErrors, submit: 'Registration failed. Please try again.' });
         }
 
-        console.error('Registration error:', error);
+        logger.error('Registration error:', error);
       }
     }
   };
@@ -258,7 +258,7 @@ const SignUpForm = () => {
         setErrors({ ...formErrors, submit: 'Registration failed. Please try again.' });
       }
 
-      console.error('Registration error:', error);
+      logger.error('Registration error:', error);
     }
   };
 

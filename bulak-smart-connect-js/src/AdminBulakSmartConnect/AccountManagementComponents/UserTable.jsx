@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import logger from '../../utils/logger';
 import '../AccountManagementComponents/UserTable.css';
 import { useNavigate } from 'react-router-dom';
 import userService from '../../services/userService';
@@ -72,7 +73,7 @@ const UserTable = ({ users, handleUpload, removeUser, loading, onRefresh }) => {
 
       alert(`User ${newStatus ? 'activated' : 'deactivated'} successfully!`);
     } catch (err) {
-      console.error('Error updating user status:', err);
+      logger.error('Error updating user status:', err);
       alert('Failed to update user status. Please try again.');
     } finally {
       setStatusUpdating(prev => ({ ...prev, [index]: false }));

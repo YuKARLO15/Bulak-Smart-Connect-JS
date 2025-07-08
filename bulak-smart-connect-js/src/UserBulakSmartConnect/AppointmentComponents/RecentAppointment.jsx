@@ -79,7 +79,7 @@ const RecentAppointments = () => {
           }
         });
       } catch (error) {
-        console.error('Failed to fetch real appointments from backend:', error);
+        logger.error('Failed to fetch real appointments from backend:', error);
         setError('Could not load latest appointments from server. Showing local data.');
         // Keep using local storage data if backend fails
       } finally {

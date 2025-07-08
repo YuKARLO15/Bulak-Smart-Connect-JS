@@ -39,7 +39,7 @@ const AdminAppointmentDashboard = () => {
       const queue = calculateCurrentQueue(appointments);
       setCurrentQueue(queue);
     } catch (error) {
-      console.error('Error fetching dashboard data:', error);
+      logger.error('Error fetching dashboard data:', error);
     }
   };
 

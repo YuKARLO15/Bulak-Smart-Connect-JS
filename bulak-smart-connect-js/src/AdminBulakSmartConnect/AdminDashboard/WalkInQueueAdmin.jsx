@@ -67,7 +67,7 @@ const WalkInQueueAdmin = () => {
               userData: detailsMap[queue.id] || {},
             }));
           } catch (error) {
-            console.error('Failed to fetch queue details in bulk:', error);
+            logger.error('Failed to fetch queue details in bulk:', error);
 
             // Fallback to individual requests if bulk fetch fails
             logger.log('Attempting to fetch details individually');
@@ -137,7 +137,7 @@ const WalkInQueueAdmin = () => {
       setCurrentQueues(formattedCurrentQueues);
       setError(null);
     } catch (err) {
-      console.error('Error fetching queue data:', err);
+      logger.error('Error fetching queue data:', err);
       setError('Could not load queue data. Please ensure the server is running.');
       setPendingQueues([]);
       setCurrentQueues([]);
@@ -179,8 +179,8 @@ const WalkInQueueAdmin = () => {
       // Refresh data after updating to ensure our UI is in sync with the server
       setTimeout(() => fetchQueueData(), 500);
     } catch (error) {
-      console.error('Failed to update queue status:', error);
-      console.error('Error details:', error.response?.data || error.message);
+      logger.error('Failed to update queue status:', error);
+      logger.error('Error details:', error.response?.data || error.message);
 
       // Show friendlier error message
       alert('Failed to update queue status. Please try again.');

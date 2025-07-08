@@ -59,8 +59,8 @@ class AppointmentNotificationService {
       logger.log('✅ Appointment confirmation notification sent:', response.data);
       return { success: true, data: response.data };
     } catch (error) {
-      console.error('❌ Failed to send appointment confirmation:', error);
-      console.error('❌ Error details:', error.response?.data || error.message);
+      logger.error('❌ Failed to send appointment confirmation:', error);
+      logger.error('❌ Error details:', error.response?.data || error.message);
       return {
         success: false,
         error: error.response?.data?.message || error.message,
@@ -109,7 +109,7 @@ class AppointmentNotificationService {
       logger.log('✅ Appointment status update notification sent:', response.data);
       return { success: true, data: response.data };
     } catch (error) {
-      console.error('❌ Failed to send appointment status update:', error);
+      logger.error('❌ Failed to send appointment status update:', error);
       return {
         success: false,
         error: error.response?.data?.message || error.message,
@@ -163,7 +163,7 @@ class AppointmentNotificationService {
       logger.log('✅ Appointment cancellation notification sent:', response.data);
       return { success: true, data: response.data };
     } catch (error) {
-      console.error('❌ Failed to send appointment cancellation:', error);
+      logger.error('❌ Failed to send appointment cancellation:', error);
       return {
         success: false,
         error: error.response?.data?.message || error.message,

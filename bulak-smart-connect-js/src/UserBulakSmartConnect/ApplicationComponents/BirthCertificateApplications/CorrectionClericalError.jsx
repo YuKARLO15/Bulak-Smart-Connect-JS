@@ -212,7 +212,7 @@ const CorrectionClericalError = () => {
 
       return response;
     } catch (error) {
-      console.error('Failed to create application in backend:', error);
+      logger.error('Failed to create application in backend:', error);
       showNotification(
         `Failed to register application: ${error.message}. Please try again.`,
         'error'
@@ -335,7 +335,7 @@ const CorrectionClericalError = () => {
           await localStorageManager.performCleanup(0.2);
         }
       } catch (error) {
-        console.error('Error during initialization:', error);
+        logger.error('Error during initialization:', error);
         showNotification('Error loading application data', 'error');
       } finally {
         setIsInitializing(false);
@@ -357,7 +357,7 @@ const CorrectionClericalError = () => {
       while (n--) u8arr[n] = bstr.charCodeAt(n);
       return new File([u8arr], filename, { type: mime });
     } catch (error) {
-      console.error('Error converting data URL to file:', error);
+      logger.error('Error converting data URL to file:', error);
       throw new Error('Invalid file format');
     }
   }
@@ -442,11 +442,11 @@ const CorrectionClericalError = () => {
 
         showNotification(successMessage, 'success');
       } catch (error) {
-        console.error(`Failed to upload "${label}":`, error);
+        logger.error(`Failed to upload "${label}":`, error);
 
         // Show detailed error information
         if (error.response) {
-          console.error('Server response:', error.response.status, error.response.data);
+          logger.error('Server response:', error.response.status, error.response.data);
 
           // If error is 404 (application not found), try to create it and retry upload
           if (error.response.status === 404) {
@@ -479,7 +479,7 @@ const CorrectionClericalError = () => {
                 showNotification(successMessage, 'success');
                 return;
               } catch (retryError) {
-                console.error('Retry upload failed:', retryError);
+                logger.error('Retry upload failed:', retryError);
               }
             }
           }
@@ -534,7 +534,7 @@ const CorrectionClericalError = () => {
       // Get the application ID
       const currentAppId = applicationId || localStorage.getItem('currentApplicationId');
       if (!currentAppId) {
-        console.error('No application ID found');
+        logger.error('No application ID found');
         showNotification('Application ID is missing. Cannot proceed.', 'error');
         setIsLoading(false);
         setIsSubmitted(false);
@@ -566,7 +566,7 @@ const CorrectionClericalError = () => {
         );
         logger.log('Application status updated in backend:', response);
       } catch (error) {
-        console.error('Failed to update backend status:', error);
+        logger.error('Failed to update backend status:', error);
         showNotification(
           'Warning: Failed to update backend status. Continuing with local update.',
           'warning'
@@ -689,7 +689,7 @@ const CorrectionClericalError = () => {
             );
           }
         } catch (notificationError) {
-          console.error('❌ Error sending confirmation notification:', notificationError);
+          logger.error('❌ Error sending confirmation notification:', notificationError);
           showNotification(
             'Application submitted successfully! However, we could not send the confirmation email.',
             'warning'
@@ -703,7 +703,7 @@ const CorrectionClericalError = () => {
         );
       }
     } catch (error) {
-      console.error('Error submitting application:', error);
+      logger.error('Error submitting application:', error);
       showNotification(`Error submitting application: ${error.message}`, 'error');
       setIsLoading(false);
       setIsSubmitted(false);
@@ -911,7 +911,7 @@ const CorrectionClericalError = () => {
                     replace: false,
                   });
                 } catch (error) {
-                  console.error('Error saving modify state:', error);
+                  logger.error('Error saving modify state:', error);
                   showNotification('Error saving current state: ' + error.message, 'warning');
 
                   navigate('/RequestACopyBirthCertificate', {

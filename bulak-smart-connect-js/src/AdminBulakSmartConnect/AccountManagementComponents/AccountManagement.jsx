@@ -81,7 +81,7 @@ const AdminAccountManagement = () => {
       localStorage.setItem('users', JSON.stringify(transformedUsers));
       logger.log(`Loaded ${transformedUsers.length} non-citizen users from API`);
     } catch (err) {
-      console.error('Error loading users from API:', err);
+      logger.error('Error loading users from API:', err);
       setError('Failed to load users from server, using local data');
 
       // Fallback to localStorage with filtering
@@ -172,7 +172,7 @@ const AdminAccountManagement = () => {
 
         alert('User removed successfully!');
       } catch (err) {
-        console.error('Error removing user:', err);
+        logger.error('Error removing user:', err);
 
         // Still remove locally if backend fails
         const updatedUsers = [...users];

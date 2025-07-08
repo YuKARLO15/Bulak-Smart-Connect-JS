@@ -61,7 +61,7 @@ export const documentApplicationService = {
       const response = await apiClient.post('/document-applications', applicationData);
       return response.data;
     } catch (error) {
-      console.error('Error creating application:', error);
+      logger.error('Error creating application:', error);
       throw error;
     }
   },
@@ -118,7 +118,7 @@ export const documentApplicationService = {
         }
       }
     } catch (error) {
-      console.error('Error in getAllApplications:', error);
+      logger.error('Error in getAllApplications:', error);
       return [];
     }
   },
@@ -138,7 +138,7 @@ export const documentApplicationService = {
 
       return response.data;
     } catch (error) {
-      console.error(`Error getting application ${applicationId}:`, error);
+      logger.error(`Error getting application ${applicationId}:`, error);
 
       // Fallback to localStorage
       const localApps = JSON.parse(localStorage.getItem('applications') || '[]');
@@ -170,7 +170,7 @@ export const documentApplicationService = {
 
       return response.data;
     } catch (error) {
-      console.error(`Error updating application ${applicationId}:`, error);
+      logger.error(`Error updating application ${applicationId}:`, error);
 
       // Update localStorage even if API fails
       try {
@@ -209,7 +209,7 @@ export const documentApplicationService = {
 
       return response.data;
     } catch (error) {
-      console.error(`Error updating application status ${applicationId}:`, error);
+      logger.error(`Error updating application status ${applicationId}:`, error);
 
       // Update localStorage even if API fails
       try {
@@ -244,7 +244,7 @@ export const documentApplicationService = {
 
       return response.data;
     } catch (error) {
-      console.error(`Error deleting application ${applicationId}:`, error);
+      logger.error(`Error deleting application ${applicationId}:`, error);
       throw error;
     }
   },
@@ -311,7 +311,7 @@ export const documentApplicationService = {
 
       return response.data;
     } catch (error) {
-      console.error(`Error uploading file for application ${applicationId}:`, error);
+      logger.error(`Error uploading file for application ${applicationId}:`, error);
 
       // Provide more specific error messages
       if (error.response?.status === 500) {
@@ -332,7 +332,7 @@ export const documentApplicationService = {
       logger.log('Frontend Service: Latest files response:', response.data);
       return response.data;
     } catch (error) {
-      console.error(
+      logger.error(
         `Frontend Service: Error getting files for application ${applicationId}:`,
         error
       );
@@ -354,7 +354,7 @@ export const documentApplicationService = {
       logger.log('Frontend Service: All files response:', response.data);
       return response.data;
     } catch (error) {
-      console.error(
+      logger.error(
         `Frontend Service: Error getting all files for application ${applicationId}:`,
         error
       );
@@ -375,7 +375,7 @@ export const documentApplicationService = {
       const response = await apiClient.get('/document-applications');
       return response.data;
     } catch (error) {
-      console.error('Error getting user applications:', error);
+      logger.error('Error getting user applications:', error);
 
       // Fallback to localStorage
       return JSON.parse(localStorage.getItem('applications') || '[]');

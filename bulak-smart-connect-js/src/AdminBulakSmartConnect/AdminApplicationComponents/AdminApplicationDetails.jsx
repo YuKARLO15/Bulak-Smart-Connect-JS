@@ -62,7 +62,7 @@ const AdminApplicationDetails = () => {
           const userInfo = await userService.getUserById(selectedApplication.userId);
           setUserContactInfo(userInfo);
         } catch (error) {
-          console.error('Error fetching user contact info:', error);
+          logger.error('Error fetching user contact info:', error);
         }
       }
     };
@@ -207,7 +207,7 @@ const AdminApplicationDetails = () => {
         }
       }
     } catch (err) {
-      console.error('Error updating applications from service:', err);
+      logger.error('Error updating applications from service:', err);
     }
   };
 
@@ -352,7 +352,7 @@ const AdminApplicationDetails = () => {
       logger.log('📋 UserContactInfo:', userContactInfo);
       return null;
     } catch (error) {
-      console.error('Error getting application email:', error);
+      logger.error('Error getting application email:', error);
       return null;
     }
   };
@@ -428,7 +428,7 @@ const AdminApplicationDetails = () => {
             logger.log('⚠️ Status update notification failed:', notificationResult.error);
           }
         } catch (notificationError) {
-          console.error('❌ Error sending status update notification:', notificationError);
+          logger.error('❌ Error sending status update notification:', notificationError);
         }
       } else {
         logger.log('⚠️ No email found for application, skipping notification');
@@ -450,7 +450,7 @@ const AdminApplicationDetails = () => {
 
       window.dispatchEvent(new Event('storage'));
     } catch (err) {
-      console.error('Error updating application status:', err);
+      logger.error('Error updating application status:', err);
       setError('Error updating application status: ' + err.message);
     }
   };

@@ -13,8 +13,8 @@ export const appointmentService = {
       logger.log('Appointment created successfully:', response.data);
       return response.data;
     } catch (error) {
-      console.error('Error creating appointment:', error);
-      console.error('Error details:', error.response?.data || error.message);
+      logger.error('Error creating appointment:', error);
+      logger.error('Error details:', error.response?.data || error.message);
       throw error;
     }
   },
@@ -27,7 +27,7 @@ export const appointmentService = {
       logger.log('User appointments fetched:', response.data);
       return response.data;
     } catch (error) {
-      console.error('Error fetching user appointments:', error);
+      logger.error('Error fetching user appointments:', error);
       throw error;
     }
   },
@@ -50,7 +50,7 @@ export const appointmentService = {
 
       return response.data;
     } catch (error) {
-      console.error('Error fetching all appointments:', error);
+      logger.error('Error fetching all appointments:', error);
       throw error;
     }
   },
@@ -68,7 +68,7 @@ export const appointmentService = {
 
       return response.data;
     } catch (error) {
-      console.error(`Error fetching appointment ${appointmentId}:`, error);
+      logger.error(`Error fetching appointment ${appointmentId}:`, error);
       throw error;
     }
   },
@@ -81,7 +81,7 @@ export const appointmentService = {
       logger.log('Appointment fetched by number:', response.data);
       return response.data;
     } catch (error) {
-      console.error(`Error fetching appointment by number ${appointmentNumber}:`, error);
+      logger.error(`Error fetching appointment by number ${appointmentNumber}:`, error);
       throw error;
     }
   },
@@ -96,7 +96,7 @@ export const appointmentService = {
       logger.log(`Appointments for date ${date}:`, response.data);
       return response.data;
     } catch (error) {
-      console.error(`Error fetching appointments for date ${date}:`, error);
+      logger.error(`Error fetching appointments for date ${date}:`, error);
       throw error;
     }
   },
@@ -109,7 +109,7 @@ export const appointmentService = {
       logger.log('Appointment stats:', response.data);
       return response.data;
     } catch (error) {
-      console.error('Error fetching appointment stats:', error);
+      logger.error('Error fetching appointment stats:', error);
       throw error;
     }
   },
@@ -124,7 +124,7 @@ export const appointmentService = {
       logger.log('Appointments in date range:', response.data);
       return response.data;
     } catch (error) {
-      console.error('Error fetching appointments by date range:', error);
+      logger.error('Error fetching appointments by date range:', error);
       throw error;
     }
   },
@@ -139,7 +139,7 @@ export const appointmentService = {
       logger.log('Available slots:', response.data);
       return response.data;
     } catch (error) {
-      console.error('Error fetching available slots:', error);
+      logger.error('Error fetching available slots:', error);
       throw error;
     }
   },
@@ -152,7 +152,7 @@ export const appointmentService = {
       logger.log('Appointment updated:', response.data);
       return response.data;
     } catch (error) {
-      console.error(`Error updating appointment ${appointmentId}:`, error);
+      logger.error(`Error updating appointment ${appointmentId}:`, error);
       throw error;
     }
   },
@@ -165,7 +165,7 @@ export const appointmentService = {
       logger.log('Appointment status updated:', response.data);
       return response.data;
     } catch (error) {
-      console.error(`Error updating appointment ${appointmentId} status:`, error);
+      logger.error(`Error updating appointment ${appointmentId} status:`, error);
       throw error;
     }
   },
@@ -178,7 +178,7 @@ export const appointmentService = {
       logger.log('Appointment deleted:', response.data);
       return response.data;
     } catch (error) {
-      console.error(`Error deleting appointment ${appointmentId}:`, error);
+      logger.error(`Error deleting appointment ${appointmentId}:`, error);
       throw error;
     }
   },

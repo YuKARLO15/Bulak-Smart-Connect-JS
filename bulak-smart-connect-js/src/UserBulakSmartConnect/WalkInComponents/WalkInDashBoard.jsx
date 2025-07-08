@@ -31,7 +31,7 @@ const getCurrentUserId = () => {
     const currentUser = JSON.parse(localStorage.getItem('currentUser'));
     return currentUser?.id || currentUser?.email || 'guest';
   } catch (e) {
-    console.error('Error getting current user:', e);
+    logger.error('Error getting current user:', e);
     return 'guest';
   }
 };
@@ -80,7 +80,7 @@ const WalkInQueueContainer = () => {
       logger.log('❌ No email found in AuthContext or localStorage');
       return null;
     } catch (e) {
-      console.error('Error getting user email:', e);
+      logger.error('Error getting user email:', e);
       return null;
     }
   };
@@ -151,7 +151,7 @@ const WalkInQueueContainer = () => {
         // Update last notified position
         setLastNotifiedPosition(position);
       } catch (error) {
-        console.error('❌ Error sending queue notification:', error);
+        logger.error('❌ Error sending queue notification:', error);
         // Don't break the app if notification fails
       }
     },
@@ -185,7 +185,7 @@ const WalkInQueueContainer = () => {
           }
         }
       } catch (err) {
-        console.error('Error validating user queue:', err);
+        logger.error('Error validating user queue:', err);
       }
     };
 
@@ -231,7 +231,7 @@ const WalkInQueueContainer = () => {
               userQueues = [parsedQueue];
             }
           } catch (e) {
-            console.error('Error parsing generic queue:', e);
+            logger.error('Error parsing generic queue:', e);
           }
         }
       }
@@ -242,7 +242,7 @@ const WalkInQueueContainer = () => {
       logger.log('Found user queues:', userQueues);
       return userQueues;
     } catch (err) {
-      console.error('Error getting user queues:', err);
+      logger.error('Error getting user queues:', err);
       return [];
     }
   };
@@ -259,15 +259,15 @@ const WalkInQueueContainer = () => {
       // Make API calls in parallel
       const promises = [
         queueService.fetchCurrentQueues().catch(err => {
-          console.error('Error fetching current queues:', err);
+          logger.error('Error fetching current queues:', err);
           return [];
         }),
         queueService.fetchPendingQueues().catch(err => {
-          console.error('Error fetching pending queues:', err);
+          logger.error('Error fetching pending queues:', err);
           return [];
         }),
         queueService.fetchUserQueues(currentUser).catch(err => {
-          console.error('Error fetching user queues:', err);
+          logger.error('Error fetching user queues:', err);
           return [];
         }),
       ];
@@ -280,7 +280,7 @@ const WalkInQueueContainer = () => {
         try {
           localUserQueueData = JSON.parse(storedUserQueue);
         } catch (e) {
-          console.error('Error parsing user queue from localStorage:', e);
+          logger.error('Error parsing user queue from localStorage:', e);
         }
       }
 
@@ -315,7 +315,7 @@ const WalkInQueueContainer = () => {
                 localStorage.setItem(`userQueues_${userId}`, JSON.stringify(filteredQueues));
               }
             } catch (e) {
-              console.error('Error updating user queues:', e);
+              logger.error('Error updating user queues:', e);
             }
 
             return false; // Don't include completed queues
@@ -376,7 +376,7 @@ const WalkInQueueContainer = () => {
                 setQueuePosition(null);
               }
             } catch (error) {
-              console.error('❌ Error fetching position:', error);
+              logger.error('❌ Error fetching position:', error);
               setQueuePosition(null);
             }
           } else {
@@ -427,7 +427,7 @@ const WalkInQueueContainer = () => {
                 }
               }
             } catch (error) {
-              console.error('Error checking queue status:', error);
+              logger.error('Error checking queue status:', error);
               setUserQueue(localUserQueueData);
               setQueuePosition(null);
             }
@@ -518,7 +518,7 @@ const WalkInQueueContainer = () => {
 
       setLoading(false);
     } catch (error) {
-      console.error('Failed to fetch queue data:', error);
+      logger.error('Failed to fetch queue data:', error);
       setLoading(false);
     }
   }, [checkPositionAndNotify]); // Add checkPositionAndNotify to dependencies
@@ -626,7 +626,7 @@ const WalkInQueueContainer = () => {
       });
 
       socket.on('error', error => {
-        console.error('Socket error:', error);
+        logger.error('Socket error:', error);
       });
 
       socket.on('disconnect', reason => {
@@ -644,7 +644,7 @@ const WalkInQueueContainer = () => {
         }
       };
     } catch (err) {
-      console.error('Socket connection error:', err);
+      logger.error('Socket connection error:', err);
       return () => {
         if (socket) socket.disconnect();
       };

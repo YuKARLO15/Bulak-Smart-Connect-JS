@@ -189,7 +189,7 @@ const BirthApplicationSummary = () => {
 
       // Verify we have an ID
       if (!applicationId) {
-        console.error('No application ID to delete');
+        logger.error('No application ID to delete');
         setDeleteDialogOpen(false);
         return;
       }
@@ -199,7 +199,7 @@ const BirthApplicationSummary = () => {
         await documentApplicationService.deleteApplication(applicationId);
         logger.log('Application deleted from database:', applicationId);
       } catch (dbError) {
-        console.error('Error deleting from database:', dbError);
+        logger.error('Error deleting from database:', dbError);
         // Continue with local deletion even if database deletion fails
         // You might want to show a warning here
       }
@@ -242,7 +242,7 @@ const BirthApplicationSummary = () => {
       // Navigate back to applications
       navigate('/ApplicationForm');
     } catch (err) {
-      console.error('Error deleting application:', err);
+      logger.error('Error deleting application:', err);
       setError('Error deleting application: ' + err.message);
       setDeleteDialogOpen(false);
     }
@@ -257,7 +257,7 @@ const BirthApplicationSummary = () => {
     try {
       // Basic validation
       if (!applicationId) {
-        console.error('Missing application ID');
+        logger.error('Missing application ID');
         alert('Application ID is missing. Cannot edit this application.');
         return;
       }
@@ -267,7 +267,7 @@ const BirthApplicationSummary = () => {
       const application = applications.find(app => app.id === applicationId);
 
       if (!application || !application.formData) {
-        console.error('Application not found in storage');
+        logger.error('Application not found in storage');
         alert('Application data is missing. Cannot edit this application.');
         return;
       }
@@ -291,7 +291,7 @@ const BirthApplicationSummary = () => {
         window.location.href = '/BirthCertificateForm';
       }
     } catch (error) {
-      console.error('Error in handleEditApplication:', error);
+      logger.error('Error in handleEditApplication:', error);
       alert('There was a problem setting up edit mode. Please try again.');
     }
   };
