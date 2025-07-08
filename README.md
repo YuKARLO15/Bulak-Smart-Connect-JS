@@ -268,7 +268,7 @@ Our live dashboard provides:
     <table>
         <tbody>
             <tr>
-                <th colspan="6"><h3>Additional Technologies</h3></th>
+                <th colspan="7"><h3>Additional Technologies</h3></th>
             </tr>
             <tr>
                 <td><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/javascript/javascript-original.svg" alt="JavaScript" width="60px" height="auto" /></td>
@@ -277,6 +277,7 @@ Our live dashboard provides:
                 <td><img src="https://raw.githubusercontent.com/typeorm/typeorm/master/resources/logo_big.png" alt="TypeORM" width="60px" height="auto" /></td>
                 <td><img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub Actions" width="60px" height="auto" /></td>
                 <td><img src="https://avatars.githubusercontent.com/u/36424661?s=200&v=4" alt="Render" width="60px" height="auto" /></td>
+                <td><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/docker/docker-original.svg" alt="Docker" width="60px" height="auto" /></td>
             </tr>
             <tr>
                 <td><p><b>JavaScript</b></p></td>
@@ -285,6 +286,7 @@ Our live dashboard provides:
                 <td><p><b>TypeORM</b></p></td>
                 <td><p><b>GitHub Actions</b></p></td>
                 <td><p><b>Render</b></p></td>
+                <td><p><b>Docker</b></p></td>
             </tr>
             <tr>
                 <td><p>Core programming language</p></td>
@@ -293,6 +295,7 @@ Our live dashboard provides:
                 <td><p>ORM for database interactions</p></td>
                 <td><p>CI/CD workflows</p></td>
                 <td><p>Cloud deployment platform</p></td>
+                <td><p>Containerization platform</p></td>
             </tr>
         </tbody>
     </table>
