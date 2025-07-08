@@ -16,6 +16,10 @@ Edit your `.env` file with these REQUIRED settings:
 NODE_ENV=development
 PORT=3000
 
+# Console Logging Configuration
+ENABLE_CONSOLE_LOGS=true
+LOG_LEVEL=debug
+
 # Database (Update with your MySQL credentials)
 DB_HOST=localhost
 DB_PORT=3306
