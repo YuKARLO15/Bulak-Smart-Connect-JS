@@ -181,7 +181,7 @@ const DashboardContent = () => {
                     </div>
                   ))}
 
-                  {/* Add refresh button */}
+                 
                   <div style={{ textAlign: 'center', marginTop: '10px' }}>
                     <button
                       onClick={loadRecentAnnouncements}

@@ -25,5 +25,5 @@ root.render(
 );
 
 scan({
-  enabled: true, // Enable scanning for debugging, disable in production
+  enabled: false, // Enable scanning for debugging, disable in production
 });

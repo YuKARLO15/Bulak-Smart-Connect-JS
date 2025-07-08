@@ -1,28 +1,28 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Button, Container, Grid, Typography, Card, CardContent } from '@mui/material';
+import { Box, Typography, Button, Card, CardContent, Modal, Dialog, DialogTitle, DialogContent, List, ListItem, ListItemText, Container, Grid } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import './LandingPage.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Footer from '../footer';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import DescriptionIcon from '@mui/icons-material/Description';
-import QrCodeScannerIcon from '@mui/icons-material/QrCodeScanner';
 import DirectionsWalkOutlinedIcon from '@mui/icons-material/DirectionsWalkOutlined';
 import NavBar from '../NavigationComponents/NavBar';
-import DeviceMockUp from './LandingPageAssets/DeviceMockUp.png';
 import BulakLGULogo from './LandingPageAssets/BulakLGULogo.png';
 import HeroBg from './LandingPageAssets/HeroBg.JPEG';
 import PhTimeComponent from './PhTimeComponent';
 import { useAuth } from '../context/AuthContext';
 import { announcementService } from '../services/announcementService';
-import FloatingAnnouncementButton from './FloatingAnnouncement';
 
 const LandingPage = () => {
   const { isAuthenticated } = useAuth();
+  const navigate = useNavigate();
+    const [showAppointmentContent, setShowAppointmentContent] = useState(false);
 
   const [announcements, setAnnouncements] = useState([]);
   const [announcementLoading, setAnnouncementLoading] = useState(true);
   const [announcementError, setAnnouncementError] = useState(null);
+  const [requirementsModalOpen, setRequirementsModalOpen] = useState(false);
 
   useEffect(() => {
     loadRecentAnnouncements();
@@ -43,12 +43,73 @@ const LandingPage = () => {
       setAnnouncementLoading(false);
     }
   };
-
+    const handleRequirementClick = type => {
+    if (type === 'birth') {
+      navigate('/RequirementBirthList');
+    } else if (type === 'marriage') {
+      navigate('/RequirementMarriageList');
+    } else if (type === 'death') {
+      navigate('/RequirementDeathCertificateList');
+    }
+  };
+  const handleViewRequirements = () => {
+    setRequirementsModalOpen(true);
+  };
   return (
     <Box className="LandingContainer">
       <Box className=" NavbarLanding">
         <NavBar />
       </Box>
+      
+      <Dialog 
+        open={requirementsModalOpen} 
+        onClose={() => setRequirementsModalOpen(false)}
+        maxWidth="sm"
+        fullWidth
+      >
+        <DialogTitle>
+          <Typography variant="h6" style={{ fontWeight: 'bold' }}>
+            Document Requirements
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            Please select which requirements you would like to view
+          </Typography>
+        </DialogTitle>
+        <DialogContent>
+          <List>
+            <ListItem 
+              button 
+              onClick={() => handleRequirementClick('birth')}
+              style={{ cursor: 'pointer', borderRadius: '8px', marginBottom: '8px' }}
+            >
+              <ListItemText 
+                primary="Birth Certificate Requirements"
+                secondary="View required documents for birth certificate applications"
+              />
+            </ListItem>
+            <ListItem 
+              button 
+              onClick={() => handleRequirementClick('marriage')}
+              style={{ cursor: 'pointer', borderRadius: '8px', marginBottom: '8px' }}
+            >
+              <ListItemText 
+                primary="Marriage License Requirements"
+                secondary="View required documents for marriage license/certificate applications"
+              />
+            </ListItem>
+            <ListItem 
+              button 
+              onClick={() => handleRequirementClick('death')}
+              style={{ cursor: 'pointer', borderRadius: '8px', marginBottom: '8px' }}
+            >
+              <ListItemText 
+                primary="Death Certificate Requirements"
+                secondary="View required documents for death certificate applications"
+              />
+            </ListItem>
+          </List>
+        </DialogContent>
+      </Dialog>
 
       <div className="PhTimeComponent">
         <PhTimeComponent />{' '}
@@ -68,11 +129,18 @@ const LandingPage = () => {
                   their queues and applications online, enhancing service efficiency and
                   convenience.
                 </Typography>
-                <Link to={isAuthenticated ? '/Home' : '/SignUpForm'}>
-                  <Button variant="contained" color="primary" className="SignUpButtonLanding">
-                    {isAuthenticated ? 'DASHBOARD' : 'SIGN UP'}
-                  </Button>
-                </Link>
+               
+                   <Button 
+    variant="contained" 
+    color="primary" 
+    className="SignUpButtonLanding"
+    onClick={isAuthenticated ? handleViewRequirements : undefined}
+    component={isAuthenticated ? 'button' : Link}
+    to={isAuthenticated ? undefined : '/SignUpForm'}
+  >
+    {isAuthenticated ? 'VIEW REQUIREMENTS' : 'SIGN UP'}
+  </Button>
+             
               </Box>
             </Grid>
           </Grid>
@@ -243,9 +311,6 @@ const LandingPage = () => {
               </Card>
             </Grid>
           </Grid>
-        </Box>
-        <Box className="AnnouncementButtonContainer">
-          <FloatingAnnouncementButton />
         </Box>
       </Container>
       <Footer />
