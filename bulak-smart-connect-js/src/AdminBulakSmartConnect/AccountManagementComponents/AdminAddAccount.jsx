@@ -208,7 +208,7 @@ const AdminAddUser = () => {
                 logger.log('User updated via localStorage');
                 success = true;
               } else {
-                alert(result.message || 'Failed to update user');
+                // alert(result.message || 'Failed to update user');
               }
             }
           }
@@ -234,19 +234,19 @@ const AdminAddUser = () => {
               logger.log('User created via localStorage');
               success = true;
             } else {
-              alert(result.message || 'Failed to create user');
+              // alert(result.message || 'Failed to create user');
             }
           }
         }
 
         if (success) {
-          alert(isModifying ? 'User updated successfully!' : 'User created successfully!');
+          // alert(isModifying ? 'User updated successfully!' : 'User created successfully!');
           navigate('/admin-user-management');
         }
       }
     } catch (error) {
       logger.error('Error submitting form:', error);
-      alert('An error occurred. Please try again.');
+      // alert('An error occurred. Please try again.');
     } finally {
       setSubmitting(false);
     }

@@ -154,7 +154,7 @@ const AdminWalkInQueue = () => {
           await port.close();
 
           logger.log('✅ Ticket printed successfully via Web Serial API');
-          alert('✅ Ticket printed successfully!');
+          // alert('✅ Ticket printed successfully!');
           return;
         } catch (serialError) {
           logger.warn('❌ Web Serial API failed:', serialError.message);
@@ -181,7 +181,7 @@ const AdminWalkInQueue = () => {
 
         if (response.ok) {
           logger.log('✅ Ticket printed via local print server');
-          alert('✅ Ticket printed successfully!');
+          // alert('✅ Ticket printed successfully!');
           return;
         }
       } catch (fetchError) {
@@ -204,7 +204,7 @@ const AdminWalkInQueue = () => {
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
 
-        alert('📁 POS file downloaded! Send this file directly to your printer.');
+        // alert('📁 POS file downloaded! Send this file directly to your printer.');
       } catch (downloadError) {
         logger.warn('❌ File download failed:', downloadError.message);
       }
@@ -361,7 +361,7 @@ const AdminWalkInQueue = () => {
                 a.download = 'ticket-${queueData.queueNumber}.pos';
                 a.click();
                 URL.revokeObjectURL(url);
-                alert('POS file downloaded! Send directly to printer.');
+                // alert('POS file downloaded! Send directly to printer.');
               }
             </script>
           </body>
@@ -387,7 +387,7 @@ const AdminWalkInQueue = () => {
    Thank you!
     `;
 
-      alert("⚠️ Automatic printing failed. Here's your ticket info:\n" + ticketText);
+      // alert("⚠️ Automatic printing failed. Here's your ticket info:\n" + ticketText);
     }
   };
 
@@ -446,7 +446,7 @@ const AdminWalkInQueue = () => {
       // Refresh queue data
       await fetchQueueData();
 
-      alert(`Queue ${queueNumber} created successfully!`);
+      // alert(`Queue ${queueNumber} created successfully!`);
       setShowManualQueueModal(false);
       resetForm();
     } catch (error) {
@@ -461,7 +461,7 @@ const AdminWalkInQueue = () => {
         // More detailed error message
         const errorMessage =
           error.response?.data?.message || error.response?.data?.error || error.message;
-        alert(`Failed to create queue: ${errorMessage}`);
+        // alert(`Failed to create queue: ${errorMessage}`);
       }
     } finally {
       setIsCreatingQueue(false);
@@ -560,9 +560,9 @@ const AdminWalkInQueue = () => {
     } catch (error) {
       logger.error('Failed to update queue status:', error);
       logger.error('Error details:', error.response?.data || error.message);
-      alert(
-        `Failed to update queue status. Error: ${error.response?.data?.message || error.message}`
-      );
+      // alert(
+      //   `Failed to update queue status. Error: ${error.response?.data?.message || error.message}`
+      // );
     }
   };
 
@@ -628,7 +628,7 @@ const AdminWalkInQueue = () => {
     setIsResetting(true);
     try {
       const result = await queueService.triggerManualReset();
-      alert(`✅ Daily reset completed! ${result.message}`);
+      // alert(`✅ Daily reset completed! ${result.message}`);
       await fetchQueueData(); // Refresh the queue data
       await fetchPendingCount(); // Update pending count
     } catch (error) {
@@ -637,11 +637,11 @@ const AdminWalkInQueue = () => {
       // ✅ IMPROVED: Better error handling
       if (error.message.includes('Server error during reset')) {
         // Reset might have worked despite the error
-        alert('⚠️ Reset completed but with server warnings. Refreshing data...');
+        // alert('⚠️ Reset completed but with server warnings. Refreshing data...');
         await fetchQueueData();
         await fetchPendingCount();
       } else {
-        alert(`❌ ${error.message}`);
+        // alert(`❌ ${error.message}`);
       }
     } finally {
       setIsResetting(false);

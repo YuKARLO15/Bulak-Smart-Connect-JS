@@ -258,7 +258,7 @@ const BirthApplicationSummary = () => {
       // Basic validation
       if (!applicationId) {
         logger.error('Missing application ID');
-        alert('Application ID is missing. Cannot edit this application.');
+        // alert('Application ID is missing. Cannot edit this application.');
         return;
       }
 
@@ -268,7 +268,7 @@ const BirthApplicationSummary = () => {
 
       if (!application || !application.formData) {
         logger.error('Application not found in storage');
-        alert('Application data is missing. Cannot edit this application.');
+        // alert('Application data is missing. Cannot edit this application.');
         return;
       }
 
@@ -292,7 +292,7 @@ const BirthApplicationSummary = () => {
       }
     } catch (error) {
       logger.error('Error in handleEditApplication:', error);
-      alert('There was a problem setting up edit mode. Please try again.');
+      // alert('There was a problem setting up edit mode. Please try again.');
     }
   };
   const renderUploadedFile = fileData => {

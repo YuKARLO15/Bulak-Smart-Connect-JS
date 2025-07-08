@@ -178,7 +178,7 @@ const WalkInForm = () => {
     } catch (error) {
       logger.error('Error creating queue:', error);
       logger.error('Error details:', error.response?.data || error.message);
-      alert('Failed to create queue. Please try again.');
+      // alert('Failed to create queue. Please try again.');
     }
   };
 

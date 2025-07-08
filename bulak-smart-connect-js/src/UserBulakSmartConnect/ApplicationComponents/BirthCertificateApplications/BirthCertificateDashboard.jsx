@@ -44,7 +44,7 @@ const BirthCertificateDashboard = () => {
 
   const handleNext = () => {
     if (!selectedOption) {
-      alert('Please select an option before proceeding.');
+      // alert('Please select an option before proceeding.');
       return;
     }
     sessionStorage.setItem('selectedBirthCertificateOption', selectedOption);

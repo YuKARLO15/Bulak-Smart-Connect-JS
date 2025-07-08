@@ -446,7 +446,7 @@ const AdminApplicationDetails = () => {
       const emailMessage = applicationEmail
         ? `Notification sent to ${applicationEmail}`
         : 'No email available for notification';
-      alert(`Application status updated to ${newStatus} successfully! ${emailMessage}`);
+      // alert(`Application status updated to ${newStatus} successfully! ${emailMessage}`);
 
       window.dispatchEvent(new Event('storage'));
     } catch (err) {

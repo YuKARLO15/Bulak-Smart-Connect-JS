@@ -114,7 +114,7 @@ const MarriageLicenseSummary = () => {
 
       if (!idToDelete) {
         logger.error('No application ID found to delete');
-        alert('Cannot find application ID to delete. Please try refreshing the page.');
+        // alert('Cannot find application ID to delete. Please try refreshing the page.');
         setDeleteDialogOpen(false);
         return;
       }
@@ -125,7 +125,7 @@ const MarriageLicenseSummary = () => {
         logger.log('Marriage application deleted from database:', idToDelete);
       } catch (dbError) {
         logger.error('Error deleting from database:', dbError);
-        alert('Failed to delete application from database. Please try again or contact support.');
+        // alert('Failed to delete application from database. Please try again or contact support.');
         setDeleteDialogOpen(false);
         return; // Stop execution if database deletion fails
       }
@@ -162,11 +162,11 @@ const MarriageLicenseSummary = () => {
       const customEvent = new Event('customStorageUpdate');
       window.dispatchEvent(customEvent);
 
-      alert('Application deleted successfully!');
+      // alert('Application deleted successfully!');
       navigate('/ApplicationForm');
     } catch (err) {
       logger.error('Error deleting marriage application:', err);
-      alert('Error deleting application: ' + err.message);
+      // alert('Error deleting application: ' + err.message);
       setDeleteDialogOpen(false);
     }
   };
@@ -195,7 +195,7 @@ const MarriageLicenseSummary = () => {
       }, 100);
     } catch (err) {
       logger.error('Error setting up modification:', err);
-      alert('There was a problem preparing the form for editing. Please try again.');
+      // alert('There was a problem preparing the form for editing. Please try again.');
     }
   };
 

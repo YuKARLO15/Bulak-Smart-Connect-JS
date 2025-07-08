@@ -281,9 +281,9 @@ const AllAppointmentsAdmin = () => {
 
       await fetchAppointments();
 
-      alert(
-        `Appointment ${newStatus} successfully! ${appointmentEmail ? `Notification sent to ${appointmentEmail}` : 'No email available for notification.'}`
-      );
+      // alert(
+      //   `Appointment ${newStatus} successfully! ${appointmentEmail ? `Notification sent to ${appointmentEmail}` : 'No email available for notification.'}`
+      // );
     } catch (error) {
       logger.error('Error updating appointment status:', error);
       setError('Failed to update appointment status. Please try again.');
@@ -371,9 +371,9 @@ const AllAppointmentsAdmin = () => {
       await fetchAppointments();
       setCancelDialog({ show: false, appointmentId: null, appointmentName: '' });
 
-      alert(
-        `Appointment cancelled successfully! ${appointmentEmail ? `Notification sent to ${appointmentEmail}` : 'No email available for notification.'}`
-      );
+      // alert(
+      //   `Appointment cancelled successfully! ${appointmentEmail ? `Notification sent to ${appointmentEmail}` : 'No email available for notification.'}`
+      // );
     } catch (error) {
       logger.error('Error cancelling appointment:', error);
       setError('Failed to cancel appointment. Please try again.');

@@ -347,26 +347,26 @@ const AppointmentContainer = ({ onBack, preselectedDate }) => {
 
           if (notificationResult.success) {
             logger.log('✅ Confirmation notification sent successfully');
-            alert(
-              'Your appointment has been confirmed! A confirmation email has been sent to you.'
-            );
+            // alert(
+            //   'Your appointment has been confirmed! A confirmation email has been sent to you.'
+            // );
           } else {
             logger.log('⚠️ Confirmation notification failed:', notificationResult.error);
-            alert(
-              'Your appointment has been confirmed! However, we could not send the confirmation email.'
-            );
+            // alert(
+            //   'Your appointment has been confirmed! However, we could not send the confirmation email.'
+            // );
           }
         } catch (notificationError) {
           logger.error('❌ Error sending confirmation notification:', notificationError);
-          alert(
-            'Your appointment has been confirmed! However, we could not send the confirmation email.'
-          );
+          // alert(
+          //   'Your appointment has been confirmed! However, we could not send the confirmation email.'
+          // );
         }
       } else {
         logger.log('⚠️ No email available for notifications');
-        alert(
-          'Your appointment has been confirmed! No confirmation email will be sent as no email was found.'
-        );
+        // alert(
+        //   'Your appointment has been confirmed! No confirmation email will be sent as no email was found.'
+        // );
       }
 
       navigate(`/QRCodeAppointment/${newAppointment.appointmentNumber || newAppointment.id}`, {
@@ -387,7 +387,7 @@ const AppointmentContainer = ({ onBack, preselectedDate }) => {
       let errorMessage = 'Failed to create appointment. Please try again.';
       if (error.response?.data?.message) errorMessage = error.response.data.message;
       else if (error.message) errorMessage = error.message;
-      alert(errorMessage);
+      // alert(errorMessage);
     } finally {
       setIsSubmitting(false);
     }

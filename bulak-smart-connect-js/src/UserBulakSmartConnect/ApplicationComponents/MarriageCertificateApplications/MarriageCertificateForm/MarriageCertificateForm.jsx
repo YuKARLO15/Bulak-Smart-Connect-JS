@@ -465,7 +465,7 @@ const MarriageCertificateForm = () => {
       }
     } catch (error) {
       logger.error('Error submitting form:', error);
-      alert('There was an error submitting your application. Please try again.');
+      // alert('There was an error submitting your application. Please try again.');
     }
   };
 

@@ -59,12 +59,12 @@ const AdminWalkInDetails = () => {
     try {
       // Use queueService for consistency
       await queueService.updateQueueStatus(id, 'completed');
-      alert('Queue marked as complete!');
+      // alert('Queue marked as complete!');
       navigate(-1); // Go back to previous page
     } catch (err) {
       logger.error('Error completing queue:', err);
       logger.error('Error details:', err.response?.data || err.message);
-      alert(`Failed to complete queue. Error: ${err.response?.data?.message || err.message}`);
+      // alert(`Failed to complete queue. Error: ${err.response?.data?.message || err.message}`);
     }
   };
 

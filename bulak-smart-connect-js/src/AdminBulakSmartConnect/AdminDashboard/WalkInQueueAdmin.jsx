@@ -183,7 +183,7 @@ const WalkInQueueAdmin = () => {
       logger.error('Error details:', error.response?.data || error.message);
 
       // Show friendlier error message
-      alert('Failed to update queue status. Please try again.');
+      // alert('Failed to update queue status. Please try again.');
 
       // Refresh data to revert UI to server state
       fetchQueueData();

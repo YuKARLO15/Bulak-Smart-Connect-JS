@@ -17,7 +17,7 @@ const UserTable = ({ users, handleUpload, removeUser, loading, onRefresh }) => {
 
   const handleModifyClick = (user, index) => {
     if (!isSuperAdmin) {
-      alert('Only super administrators can modify users');
+      // alert('Only super administrators can modify users');
       return;
     }
 
@@ -33,7 +33,7 @@ const UserTable = ({ users, handleUpload, removeUser, loading, onRefresh }) => {
 
   const handleRemoveClick = index => {
     if (!isSuperAdmin) {
-      alert('Only super administrators can remove users');
+      // alert('Only super administrators can remove users');
       return;
     }
     removeUser(index);
@@ -48,12 +48,12 @@ const UserTable = ({ users, handleUpload, removeUser, loading, onRefresh }) => {
 
   const handleStatusToggle = async (user, index) => {
     if (!isSuperAdmin) {
-      alert('Only super administrators can change user status');
+      // alert('Only super administrators can change user status');
       return;
     }
 
     if (!user.id) {
-      alert('Cannot update status for local-only users');
+      // alert('Cannot update status for local-only users');
       return;
     }
 
@@ -71,10 +71,10 @@ const UserTable = ({ users, handleUpload, removeUser, loading, onRefresh }) => {
 
       if (onRefresh) onRefresh();
 
-      alert(`User ${newStatus ? 'activated' : 'deactivated'} successfully!`);
+      // alert(`User ${newStatus ? 'activated' : 'deactivated'} successfully!`);
     } catch (err) {
       logger.error('Error updating user status:', err);
-      alert('Failed to update user status. Please try again.');
+      // alert('Failed to update user status. Please try again.');
     } finally {
       setStatusUpdating(prev => ({ ...prev, [index]: false }));
     }

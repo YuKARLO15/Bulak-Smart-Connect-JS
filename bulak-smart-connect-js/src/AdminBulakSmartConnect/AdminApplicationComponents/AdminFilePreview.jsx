@@ -432,7 +432,7 @@ const FileUploadPreview = ({
 
   const handleViewDocument = file => {
     if (file.placeholder) {
-      alert('This is a placeholder. No actual document is available.');
+      // alert('This is a placeholder. No actual document is available.');
       return;
     }
 
