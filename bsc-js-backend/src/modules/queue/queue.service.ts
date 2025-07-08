@@ -4,6 +4,7 @@ import {
   NotFoundException,
   Inject,
   forwardRef,
+  Logger,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, LessThanOrEqual, LessThan, In, Between } from 'typeorm';
@@ -19,6 +20,8 @@ import { QueueGateway } from './queue.gateway';
 
 @Injectable()
 export class QueueService {
+  private readonly logger = new Logger(QueueService.name);
+  
   constructor(
     @InjectRepository(Queue)
     private queueRepository: Repository<Queue>,
@@ -53,7 +56,7 @@ export class QueueService {
     // This keeps your existing backend format but ensures daily reset
     const queueNumber = `${dateStr}-${String(todayCount + 1).padStart(3, '0')}`;
 
-    console.log(
+    this.logger.log(
       `Creating queue number: ${queueNumber} for today. Daily count: ${todayCount + 1}`,
     );
 
@@ -79,8 +82,8 @@ export class QueueService {
     const isGuest = createQueueDto.isGuest ?? !userId;
 
     // Log for debugging
-    console.log('=== QUEUE SERVICE CREATE DEBUG ===');
-    console.log('Creating queue details with:', {
+    this.logger.log('=== QUEUE SERVICE CREATE DEBUG ===');
+    this.logger.log('Creating queue details with:', {
       providedUserId: createQueueDto.userId,
       parsedUserId: userId,
       providedIsGuest: createQueueDto.isGuest,
@@ -106,7 +109,7 @@ export class QueueService {
 
     const savedDetails = await this.queueDetailsRepository.save(queueDetails);
 
-    console.log('Queue details saved with isGuest:', savedDetails.isGuest);
+    this.logger.log('Queue details saved with isGuest:', savedDetails.isGuest);
 
     // Get queue position
     const position = await this.getQueuePosition(savedQueue.id);
@@ -176,16 +179,16 @@ export class QueueService {
     return { queue, details, position };
   }
   async update(id: number, updateQueueDto: UpdateQueueDto) {
-    console.log(`Updating queue ${id} with:`, updateQueueDto);
+    this.logger.log(`Updating queue ${id} with:`, updateQueueDto);
 
     try {
       // Find the queue
       const queue = await this.findOne(id);
-      console.log('Found queue:', queue);
+      this.logger.log('Found queue:', queue);
 
       if (updateQueueDto.status) {
         // Log the status change
-        console.log(
+        this.logger.log(
           `Changing status from ${queue.status} to ${updateQueueDto.status}`,
         );
         queue.status = updateQueueDto.status;
@@ -202,7 +205,7 @@ export class QueueService {
 
       // Save the updated queue
       const updatedQueue = await this.queueRepository.save(queue);
-      console.log('Queue updated successfully:', updatedQueue);
+      this.logger.log('Queue updated successfully:', updatedQueue);
 
       // Notify clients about the queue update
       this.queueGateway.notifyQueueUpdate(id, {
@@ -218,30 +221,30 @@ export class QueueService {
   }
 
   async getQueuePosition(queueId: number) {
-    console.log(`Getting position for queue ID: ${queueId}`);
+    this.logger.log(`Getting position for queue ID: ${queueId}`);
 
     const queue = await this.findOne(queueId);
-    console.log(`Found queue:`, queue);
+    this.logger.log(`Found queue:`, queue);
 
     // If the queue doesn't exist, return position 0
     if (!queue) {
-      console.log('Queue not found');
+      this.logger.log('Queue not found');
       return { position: 0 };
     }
 
     // If the queue is not pending, return special position values
     if (queue.status === QueueStatus.SERVING) {
-      console.log('Queue is currently being served');
+      this.logger.log('Queue is currently being served');
       return { position: 0, status: 'serving' };
     }
 
     if (queue.status === QueueStatus.COMPLETED) {
-      console.log('Queue is completed');
+      this.logger.log('Queue is completed');
       return { position: 0, status: 'completed' };
     }
 
     if (queue.status !== QueueStatus.PENDING) {
-      console.log(`Queue status is ${queue.status}, not pending`);
+      this.logger.log(`Queue status is ${queue.status}, not pending`);
       return { position: 0, status: queue.status };
     }
 
@@ -251,7 +254,7 @@ export class QueueService {
         status: QueueStatus.SERVING,
       },
     });
-    console.log(`Serving queues count: ${servingCount}`);
+    this.logger.log(`Serving queues count: ${servingCount}`);
 
     // Count how many pending queues are ahead of this one (created earlier)
     const pendingAheadCount = await this.queueRepository.count({
@@ -260,16 +263,16 @@ export class QueueService {
         createdAt: LessThan(queue.createdAt), // Queues created before this one
       },
     });
-    console.log(`Pending queues ahead: ${pendingAheadCount}`);
+    this.logger.log(`Pending queues ahead: ${pendingAheadCount}`);
 
     // Total position = serving queues + pending queues ahead + 1
     const position = servingCount + pendingAheadCount + 1;
-    console.log(`Calculated position: ${position}`);
+    this.logger.log(`Calculated position: ${position}`);
 
     return { position, status: 'pending' };
   }
   async getDetailsForMultipleQueues(queueIds: number[]) {
-    console.log('Getting details for queue IDs:', queueIds);
+    this.logger.log('Getting details for queue IDs:', queueIds);
 
     if (!queueIds || queueIds.length === 0) {
       return {};
@@ -286,7 +289,7 @@ export class QueueService {
         relations: ['user'],
       });
 
-      console.log(
+      this.logger.log(
         `Found ${allDetails.length} details for ${queueIds.length} queues`,
       );
 
@@ -304,7 +307,7 @@ export class QueueService {
   }
 
   async findByStatusWithDetails(status: QueueStatus) {
-    console.log(`Finding queues with status: ${status} and their details`);
+    this.logger.log(`Finding queues with status: ${status} and their details`);
 
     try {
       // First get all queues with this status
@@ -313,7 +316,7 @@ export class QueueService {
         order: { createdAt: 'ASC' },
       });
 
-      console.log(`Found ${queues.length} queues with status ${status}`);
+      this.logger.log(`Found ${queues.length} queues with status ${status}`);
 
       if (queues.length === 0) {
         return [];
@@ -333,7 +336,7 @@ export class QueueService {
         };
       });
 
-      console.log(`Returning ${result.length} queues with details`);
+      this.logger.log(`Returning ${result.length} queues with details`);
       return result;
     } catch (error: unknown) {
       // Handle error message extraction without triggering ESLint

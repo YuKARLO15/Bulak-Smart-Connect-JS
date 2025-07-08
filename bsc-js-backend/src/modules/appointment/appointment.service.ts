@@ -2,6 +2,7 @@ import {
   Injectable,
   NotFoundException,
   BadRequestException,
+  Logger,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, Between } from 'typeorm';
@@ -12,6 +13,8 @@ import { format, addDays, parseISO, isValid } from 'date-fns';
 
 @Injectable()
 export class AppointmentService {
+  private readonly logger = new Logger(AppointmentService.name);
+
   constructor(
     @InjectRepository(Appointment)
     private appointmentRepository: Repository<Appointment>,
@@ -58,7 +61,7 @@ export class AppointmentService {
 
       const savedAppointment =
         await this.appointmentRepository.save(appointment);
-      console.log('Created new appointment:', savedAppointment);
+      this.logger.log('Created new appointment:', savedAppointment);
       return savedAppointment;
     } catch (error) {
       console.error('Error creating appointment:', error);
@@ -143,7 +146,7 @@ export class AppointmentService {
 
       // Update the appointment
       const updated = Object.assign(appointment, updateAppointmentDto);
-      console.log(`Updated appointment ${id}:`, updated);
+      this.logger.log(`Updated appointment ${id}:`, updated);
       return this.appointmentRepository.save(updated);
     } catch (error) {
       console.error(`Error updating appointment ${id}:`, error);
@@ -157,7 +160,7 @@ export class AppointmentService {
       if (result.affected === 0) {
         throw new NotFoundException(`Appointment with ID ${id} not found`);
       }
-      console.log(`Deleted appointment ${id}`);
+      this.logger.log(`Deleted appointment ${id}`);
     } catch (error) {
       console.error(`Error deleting appointment ${id}:`, error);
       throw error;
@@ -171,7 +174,7 @@ export class AppointmentService {
     try {
       const appointment = await this.findOne(id);
       appointment.status = status;
-      console.log(`Updated status for appointment ${id} to ${status}`);
+      this.logger.log(`Updated status for appointment ${id} to ${status}`);
       return this.appointmentRepository.save(appointment);
     } catch (error) {
       console.error(`Error updating status for appointment ${id}:`, error);

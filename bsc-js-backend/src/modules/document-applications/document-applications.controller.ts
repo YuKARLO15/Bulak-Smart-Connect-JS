@@ -12,6 +12,7 @@ import {
   UseGuards,
   //Request, // Uncomment if you need to use Request object
   BadRequestException,
+  Logger,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { DocumentApplicationsService } from './document-applications.service';
@@ -36,6 +37,8 @@ import {
 @UseGuards(JwtAuthGuard)
 @ApiBearerAuth('JWT-auth')
 export class DocumentApplicationsController {
+  private readonly logger = new Logger(DocumentApplicationsController.name);
+
   constructor(
     private readonly documentApplicationsService: DocumentApplicationsService,
   ) {}
@@ -77,7 +80,7 @@ export class DocumentApplicationsController {
     @Body('documentCategory') documentCategory: string,
     @User() user: AuthenticatedUser,
   ) {
-    console.log('Received document category:', documentCategory); // Debug log
+    this.logger.log('Received document category:', documentCategory); // Debug log
 
     if (!documentCategory) {
       throw new BadRequestException('Document category is required');
@@ -124,7 +127,7 @@ export class DocumentApplicationsController {
       ? undefined
       : user.id;
 
-    console.log(
+    this.logger.log(
       `Getting files for application ${id}, user: ${user.email}, isPrivileged: ${!userId}`,
     );
 

@@ -1,4 +1,4 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param, Logger } from '@nestjs/common';
 import { QueueService } from './queue.service';
 import { QueueStatus } from './entities/queue.entity';
 
@@ -13,11 +13,13 @@ interface QueueDetails {
 
 @Controller('queues')
 export class QueuesController {
+  private readonly logger = new Logger(QueuesController.name);
+
   constructor(private readonly queueService: QueueService) {}
   // This endpoint is for supporting the legacy API path that the frontend is using
   @Get('walk-in')
   async getWalkInQueues() {
-    console.log('GET /queues/walk-in endpoint called');
+    this.logger.log('GET /queues/walk-in endpoint called');
     try {
       // Get both pending and serving queues with details using the service methods
       const [pendingQueuesWithDetails, servingQueuesWithDetails] =
@@ -26,8 +28,8 @@ export class QueuesController {
           this.queueService.findByStatusWithDetails(QueueStatus.SERVING),
         ]);
 
-      console.log('Found pending queues:', pendingQueuesWithDetails.length);
-      console.log('Found serving queues:', servingQueuesWithDetails.length);
+      this.logger.log('Found pending queues:', pendingQueuesWithDetails.length);
+      this.logger.log('Found serving queues:', servingQueuesWithDetails.length);
 
       // Combine all queues
       const allQueues = [
@@ -38,7 +40,7 @@ export class QueuesController {
       // Extract details from the nested structure and flatten them for the frontend
       const result = allQueues.map((queue) => {
         // For debugging
-        console.log('Processing queue:', queue.id, 'status:', queue.status);
+        this.logger.log('Processing queue:', queue.id, 'status:', queue.status);
 
         // Handle potential null/undefined details
         const details: QueueDetails | null = Array.isArray(queue.details)
@@ -62,7 +64,7 @@ export class QueuesController {
         };
       });
 
-      console.log(`Returning ${result.length} walk-in queues`);
+      this.logger.log(`Returning ${result.length} walk-in queues`);
       return result;
     } catch (err: unknown) {
       console.error('Error fetching walk-in queues:', err);
@@ -72,13 +74,13 @@ export class QueuesController {
 
   @Get('user/:userId')
   async getUserQueues(@Param('userId') userId: string) {
-    console.log('GET /queues/user/' + userId + ' endpoint called');
+    this.logger.log('GET /queues/user/' + userId + ' endpoint called');
     try {
       // Find queues for the specific user that are not completed
       const userQueues =
         await this.queueService.findByUserIdWithDetails(userId);
 
-      console.log('Found user queues:', userQueues.length);
+      this.logger.log('Found user queues:', userQueues.length);
 
       const result = userQueues.map((queue) => {
         const details = Array.isArray(queue.details)
@@ -107,7 +109,7 @@ export class QueuesController {
 
   @Get(':id')
   async getQueueById(@Param('id') id: string) {
-    console.log('GET /queues/' + id + ' endpoint called');
+    this.logger.log('GET /queues/' + id + ' endpoint called');
     try {
       const queueId = parseInt(id, 10);
       if (isNaN(queueId)) {

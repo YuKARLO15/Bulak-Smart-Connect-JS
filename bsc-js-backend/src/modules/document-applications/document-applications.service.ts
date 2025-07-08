@@ -2,6 +2,7 @@ import {
   Injectable,
   NotFoundException,
   BadRequestException,
+  Logger,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -18,6 +19,8 @@ import { UpdateDocumentApplicationDto } from './dto/update-document-application.
 
 @Injectable()
 export class DocumentApplicationsService {
+  private readonly logger = new Logger(DocumentApplicationsService.name);
+
   constructor(
     @InjectRepository(DocumentApplication)
     private documentApplicationRepository: Repository<DocumentApplication>,
@@ -295,7 +298,7 @@ export class DocumentApplicationsService {
 
   async getApplicationFiles(applicationId: string, userId?: number) {
     try {
-      console.log(
+      this.logger.log(
         `Service: Getting files for application ${applicationId}, userId: ${userId}`,
       );
 
@@ -314,12 +317,12 @@ export class DocumentApplicationsService {
         throw new NotFoundException(`Application ${applicationId} not found`);
       }
 
-      console.log(
+      this.logger.log(
         `Service: Found application with ${application.files?.length || 0} files`,
       );
 
       if (!application.files || application.files.length === 0) {
-        console.log('Service: No files found for this application');
+        this.logger.log('Service: No files found for this application');
         return [];
       }
 
@@ -338,7 +341,7 @@ export class DocumentApplicationsService {
       // Convert map to array of latest files
       const latestFiles = Array.from(latestFilesByCategory.values());
 
-      console.log(
+      this.logger.log(
         `Service: Filtered to ${latestFiles.length} latest files from ${application.files.length} total files`,
       );
 
@@ -349,7 +352,7 @@ export class DocumentApplicationsService {
             const downloadUrl = await this.minioService.getPresignedUrl(
               file.minioObjectName,
             );
-            console.log(`Service: Generated URL for file ${file.fileName}`);
+            this.logger.log(`Service: Generated URL for file ${file.fileName}`);
             return {
               id: file.id,
               fileName: file.fileName,
@@ -381,7 +384,7 @@ export class DocumentApplicationsService {
         }),
       );
 
-      console.log(
+      this.logger.log(
         `Service: Returning ${filesWithUrls.length} latest files with URLs`,
       );
       return filesWithUrls;
@@ -393,7 +396,7 @@ export class DocumentApplicationsService {
 
   async getAllApplicationFiles(applicationId: string, userId?: number) {
     try {
-      console.log(
+      this.logger.log(
         `Service: Getting ALL files for application ${applicationId}, userId: ${userId}`,
       );
 

@@ -10,6 +10,7 @@ import {
   UseGuards,
   UnauthorizedException,
   InternalServerErrorException,
+  Logger,
 } from '@nestjs/common';
 import { QueueService } from './queue.service';
 import { CreateQueueDto } from './dto/create-queue.dto';
@@ -22,6 +23,8 @@ import { QueueSchedulerService } from './queue-scheduler.service';
 
 @Controller('queue')
 export class QueueController {
+  private readonly logger = new Logger(QueueController.name);
+
   constructor(
     private readonly queueService: QueueService,
     private readonly queueSchedulerService: QueueSchedulerService,
@@ -33,11 +36,11 @@ export class QueueController {
     // Extract user ID from authenticated user
     const userId = user?.id || null;
 
-    console.log('=== QUEUE CREATION BACKEND DEBUG ===');
-    console.log('Queue creation - User from JWT:', user);
-    console.log('Original DTO received:', createQueueDto);
-    console.log('DTO isGuest value:', createQueueDto.isGuest);
-    console.log('DTO isGuest type:', typeof createQueueDto.isGuest);
+    this.logger.log('=== QUEUE CREATION BACKEND DEBUG ===');
+    this.logger.log('Queue creation - User from JWT:', user);
+    this.logger.log('Original DTO received:', createQueueDto);
+    this.logger.log('DTO isGuest value:', createQueueDto.isGuest);
+    this.logger.log('DTO isGuest type:', typeof createQueueDto.isGuest);
 
     // Set userId and respect the isGuest boolean from frontend
     if (userId) {
@@ -51,9 +54,9 @@ export class QueueController {
       createQueueDto.isGuest = true;
     }
 
-    console.log('Final DTO values:');
-    console.log('- userId:', createQueueDto.userId);
-    console.log('- isGuest:', createQueueDto.isGuest);
+    this.logger.log('Final DTO values:');
+    this.logger.log('- userId:', createQueueDto.userId);
+    this.logger.log('- isGuest:', createQueueDto.isGuest);
 
     return this.queueService.create(createQueueDto);
   }
@@ -65,8 +68,8 @@ export class QueueController {
     @User() user?: UserEntity,
   ) {
     try {
-      console.log('Manual queue creation by admin:', user?.id);
-      console.log('Received DTO:', createQueueDto);
+      this.logger.log('Manual queue creation by admin:', user?.id);
+      this.logger.log('Received DTO:', createQueueDto);
 
       // Set default values for manual/guest queues
       const queueData: CreateQueueDto = {
@@ -76,7 +79,7 @@ export class QueueController {
         // Don't override appointmentType - let it come from the frontend
       };
 
-      console.log('Processed queue data:', queueData);
+      this.logger.log('Processed queue data:', queueData);
 
       const result = await this.queueService.create(queueData);
 
@@ -140,7 +143,7 @@ export class QueueController {
     @Param('id') id: string,
     @Body() body: { status: QueueStatus },
   ) {
-    console.log(`PATCH /queue/${id}/status with body:`, body);
+    this.logger.log(`PATCH /queue/${id}/status with body:`, body);
 
     try {
       // Validate the status enum value
@@ -156,7 +159,7 @@ export class QueueController {
       const result = await this.queueService.update(+id, {
         status: body.status,
       });
-      console.log(`Queue ${id} status updated successfully to ${body.status}`);
+      this.logger.log(`Queue ${id} status updated successfully to ${body.status}`);
       return result;
     } catch (error) {
       console.error(`Error updating queue ${id} status:`, error);
@@ -230,7 +233,7 @@ export class QueueController {
         ['admin', 'super_admin', 'staff'].includes(role.name),
       )
     ) {
-      console.log(
+      this.logger.log(
         `Unauthorized reset attempt by user: ${user?.username || 'unknown'} with roles: ${user?.roles?.map((r) => r.name).join(', ') || 'none'}`,
       );
       throw new UnauthorizedException(
@@ -238,7 +241,7 @@ export class QueueController {
       );
     }
 
-    console.log(
+    this.logger.log(
       `Manual daily reset triggered by ${user.roles.map((r) => r.name).join(', ')}: ${user.username}`,
     );
 
