@@ -2400,7 +2400,7 @@ export class AuthController {
   @ApiBody({ type: LoginDto })
   @Post(&#x27;login&#x27;)
   async login(@Body() loginDto: LoginDto) {
-    console.log(&#x27;Login request received:&#x27;, loginDto);
+    this.logger.log(&#x27;Login request received:&#x27;, loginDto);
     try {
       const result &#x3D; await this.authService.login(loginDto);
       return result;
@@ -2555,11 +2555,11 @@ export class AuthController {
     @Body() updateUserDto: AdminUpdateUserDto,
   ) {
     // Add logging to see what&#x27;s happening
-    console.log(&#x27;🔍 Admin update request received:&#x27;);
-    console.log(&#x27;Admin ID:&#x27;, req.user?.id);
-    console.log(&#x27;Admin roles:&#x27;, req.user?.roles);
-    console.log(&#x27;Target User ID:&#x27;, targetUserId);
-    console.log(&#x27;Update data:&#x27;, updateUserDto);
+    this.logger.log(&#x27;🔍 Admin update request received:&#x27;);
+    this.logger.log(&#x27;Admin ID:&#x27;, req.user?.id);
+    this.logger.log(&#x27;Admin roles:&#x27;, req.user?.roles);
+    this.logger.log(&#x27;Target User ID:&#x27;, targetUserId);
+    this.logger.log(&#x27;Update data:&#x27;, updateUserDto);
 
     if (!req.user || req.user.id &#x3D;&#x3D;&#x3D; undefined || req.user.id &#x3D;&#x3D;&#x3D; null) {
       console.error(&#x27;❌ No user in request object&#x27;);

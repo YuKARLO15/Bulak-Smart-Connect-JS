@@ -1419,7 +1419,7 @@ export class AuthService {
       );
     }
 
-    console.log(&#x27;Login attempt with:&#x27;, loginDto);
+    this.logger.log(&#x27;Login attempt with:&#x27;, loginDto);
 
     try {
       const user &#x3D; await this.usersRepository.findOne({
@@ -1430,21 +1430,21 @@ export class AuthService {
         relations: [&#x27;defaultRole&#x27;],
       });
 
-      console.log(&#x27;User found:&#x27;, user ? &#x27;Yes&#x27; : &#x27;No&#x27;);
+      this.logger.log(&#x27;User found:&#x27;, user ? &#x27;Yes&#x27; : &#x27;No&#x27;);
 
       if (!user) {
         throw new UnauthorizedException(&#x27;Invalid email or password&#x27;);
       }
 
       // Debug password check
-      console.log(&#x27;Stored password hash:&#x27;, user.password);
-      console.log(&#x27;Comparing with:&#x27;, loginDto.password);
+      this.logger.log(&#x27;Stored password hash:&#x27;, user.password);
+      this.logger.log(&#x27;Comparing with:&#x27;, loginDto.password);
 
       const isPasswordValid &#x3D; await bcrypt.compare(
         loginDto.password,
         user.password,
       );
-      console.log(&#x27;Password valid:&#x27;, isPasswordValid);
+      this.logger.log(&#x27;Password valid:&#x27;, isPasswordValid);
 
       if (!isPasswordValid) {
         throw new UnauthorizedException(&#x27;Invalid email or password&#x27;);
@@ -1461,7 +1461,7 @@ export class AuthService {
       };
 
       const token &#x3D; this.jwtService.sign(payload);
-      console.log(&#x27;Generated token:&#x27;, token ? &#x27;Success&#x27; : &#x27;Failed&#x27;);
+      this.logger.log(&#x27;Generated token:&#x27;, token ? &#x27;Success&#x27; : &#x27;Failed&#x27;);
 
       // Remove password from response
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -1771,7 +1771,7 @@ export class AuthService {
     targetUserId: number,
     updateUserDto: AdminUpdateUserDto,
   ) {
-    console.log(
+    this.logger.log(
       &#x60;Admin ${adminId} attempting to update user ${targetUserId}&#x60;,
       updateUserDto,
     );
@@ -1835,7 +1835,7 @@ export class AuthService {
             targetUserId,
             updateUserDto.roleIds,
           );
-          console.log(
+          this.logger.log(
             &#x60;Assigned roles ${updateUserDto.roleIds.join(&#x27;, &#x27;)} to user ${targetUserId}&#x60;,
           );
         } catch (error) {
@@ -1879,7 +1879,7 @@ export class AuthService {
           await this.usersRepository.update(targetUserId, {
             defaultRoleId: updateUserDto.defaultRoleId,
           });
-          console.log(
+          this.logger.log(
             &#x60;Updated default role to ${updateUserDto.defaultRoleId} for user ${targetUserId}&#x60;,
           );
         } catch (error) {
@@ -1960,7 +1960,7 @@ export class AuthService {
         { password: hashedPassword },
       );
 
-      console.log(&#x60;Password updated successfully for user: ${email}&#x60;);
+      this.logger.log(&#x60;Password updated successfully for user: ${email}&#x60;);
     } catch (error) {
       console.error(&#x27;Error updating password:&#x27;, error);
       throw error;
