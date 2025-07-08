@@ -14,7 +14,7 @@ const UploadProfile = ({ onUpload }) => {
         const url = URL.createObjectURL(file);
         setImageSrc(url);
       } else {
-        alert('Please upload a valid image file.');
+        // alert('Please upload a valid image file.');
       }
       onUpload(file);
     }

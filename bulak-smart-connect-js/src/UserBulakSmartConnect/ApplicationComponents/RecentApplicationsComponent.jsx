@@ -209,7 +209,7 @@ const RecentApplicationsComponent = () => {
       }
     } catch (err) {
       logger.error('Error preparing application summary:', err);
-      alert('An error occurred while loading the application. Please try again.');
+      // alert('An error occurred while loading the application. Please try again.');
     }
   };
 

@@ -85,7 +85,7 @@ const AppointmentDetailsCard = () => {
 
       if (!appointment) {
         logger.error('No appointment data available');
-        alert('Error: Appointment data not available');
+        // alert('Error: Appointment data not available');
         return;
       }
 
@@ -111,29 +111,29 @@ const AppointmentDetailsCard = () => {
 
           if (notificationResult.success) {
             logger.log('✅ Status update notification sent successfully');
-            alert(
-              `Appointment ${newStatus} successfully! Notification email sent to ${appointmentEmail}.`
-            );
+            // alert(
+            //   `Appointment ${newStatus} successfully! Notification email sent to ${appointmentEmail}.`
+            // );
           } else {
             logger.log('⚠️ Status update notification failed:', notificationResult.error);
-            alert(
-              `Appointment ${newStatus} successfully! However, notification email could not be sent.`
-            );
+            // alert(
+            //   `Appointment ${newStatus} successfully! However, notification email could not be sent.`
+            // );
           }
         } catch (notificationError) {
           logger.error('❌ Error sending status update notification:', notificationError);
-          alert(
-            `Appointment ${newStatus} successfully! However, notification email could not be sent.`
-          );
+          // alert(
+          //   `Appointment ${newStatus} successfully! However, notification email could not be sent.`
+          // );
         }
       } else {
         logger.log('⚠️ No email found for appointment, skipping notification');
         logger.log('📋 Available appointment fields:', Object.keys(appointment));
-        alert(`Appointment ${newStatus} successfully! No email available for notification.`);
+        // alert(`Appointment ${newStatus} successfully! No email available for notification.`);
       }
     } catch (error) {
       logger.error('Error updating appointment status:', error);
-      alert('Error updating appointment status');
+      // alert('Error updating appointment status');
     }
   };
 

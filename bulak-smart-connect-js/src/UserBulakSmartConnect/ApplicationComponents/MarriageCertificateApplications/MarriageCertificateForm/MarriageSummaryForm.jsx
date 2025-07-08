@@ -75,7 +75,7 @@ const MarriageSummaryForm = () => {
 
       if (!idToDelete) {
         logger.error('No application ID found to delete');
-        alert('Cannot find application ID to delete. Please try refreshing the page.');
+        // alert('Cannot find application ID to delete. Please try refreshing the page.');
         setConfirmCancelDialog(false);
         return;
       }
@@ -85,7 +85,7 @@ const MarriageSummaryForm = () => {
         logger.log('Marriage certificate application deleted from database:', idToDelete);
       } catch (dbError) {
         logger.error('Error deleting from database:', dbError);
-        alert('Failed to delete application from database. Please try again or contact support.');
+        // alert('Failed to delete application from database. Please try again or contact support.');
         setConfirmCancelDialog(false);
         return;
       }
@@ -135,14 +135,14 @@ const MarriageSummaryForm = () => {
         })
       );
 
-      alert('Application deleted successfully!');
+      // alert('Application deleted successfully!');
 
       setTimeout(() => {
         navigate('/ApplicationForm');
       }, 100);
     } catch (error) {
       logger.error('Error deleting marriage certificate application:', error);
-      alert('Error deleting application: ' + error.message);
+      // alert('Error deleting application: ' + error.message);
       setConfirmCancelDialog(false);
     }
   };
@@ -186,7 +186,7 @@ const MarriageSummaryForm = () => {
       navigate('/MarriageForm');
     } catch (err) {
       logger.error('Error setting up modification:', err);
-      alert('There was a problem preparing the form for editing. Please try again.');
+      // alert('There was a problem preparing the form for editing. Please try again.');
     }
   };
 

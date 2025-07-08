@@ -170,7 +170,7 @@ const AdminAccountManagement = () => {
         // Update localStorage
         localStorage.setItem('users', JSON.stringify(updatedUsers));
 
-        alert('User removed successfully!');
+        // alert('User removed successfully!');
       } catch (err) {
         logger.error('Error removing user:', err);
 
@@ -180,7 +180,7 @@ const AdminAccountManagement = () => {
         setUsers(updatedUsers);
         localStorage.setItem('users', JSON.stringify(updatedUsers));
 
-        alert('User removed locally (server sync may have failed)');
+        // alert('User removed locally (server sync may have failed)');
       }
     }
   };
