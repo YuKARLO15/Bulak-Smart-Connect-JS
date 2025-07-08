@@ -28,6 +28,7 @@ const config = {
     PWA: import.meta.env.VITE_ENABLE_PWA === 'true',
     ANALYTICS: import.meta.env.VITE_ENABLE_ANALYTICS === 'true',
     DEBUG: import.meta.env.VITE_ENABLE_DEBUG === 'true',
+    REACT_SCAN: import.meta.env.VITE_ENABLE_REACT_SCAN === 'true',
   },
 
   // External Services
