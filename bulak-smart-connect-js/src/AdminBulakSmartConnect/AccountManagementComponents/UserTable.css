@@ -473,7 +473,14 @@ td {
   font-size: 20px;
   font-weight: bold;
   margin-bottom: 40px;
-  color: #184a5b;
+  color: #eee;
+  background-color: #184a5b;
+  padding: 10px;
+  border-radius: 4px;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 30px;
+
 }
 
 .user-detail-row {
@@ -499,4 +506,68 @@ td {
   text-align: left;
   margin-left: 10vw;
   color: #444;
+}
+
+/* Confirmation Dialog Styles */
+.confirm-dialog {
+  max-width: 400px;
+  text-align: center;
+}
+
+.confirm-message {
+  font-size: 16px;
+  color: #333;
+  margin: 20px 0 10px 0;
+}
+
+.confirm-warning {
+  font-size: 14px;
+  color: #666;
+  margin: 10px 0 30px 0;
+  font-style: italic;
+}
+
+.confirm-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.cancel-btn {
+  background: #6c757d;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.2s;
+}
+
+.cancel-btn:hover {
+  background: #5a6268;
+}
+
+.confirm-btn {
+  background: #dc3545;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.2s;
+}
+
+.confirm-btn:hover {
+  background: #c82333;
+}
+
+.activate-btn {
+  background: #28a745 !important;
+}
+
+.activate-btn:hover {
+  background: #218838 !important;
 }
