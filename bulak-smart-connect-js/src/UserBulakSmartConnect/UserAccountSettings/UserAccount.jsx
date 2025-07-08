@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import logger from '../../utils/logger';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -198,7 +199,7 @@ const UserAccount = () => {
     e.preventDefault();
 
     try {
-      console.log('Attempting to verify password');
+      logger.log('Attempting to verify password');
 
       const response = await axios.post(`${config.API_BASE_URL}/auth/login`, {
         email: email,
@@ -207,21 +208,21 @@ const UserAccount = () => {
         password: confirmationPassword,
       });
 
-      console.log('Verification response received');
+      logger.log('Verification response received');
 
       if (response.data && response.data.access_token) {
-        console.log('Password verification successful');
+        logger.log('Password verification successful');
         await submitProfileUpdates(pendingUpdates);
       } else {
-        console.log('Password verification failed - unexpected response format');
+        logger.log('Password verification failed - unexpected response format');
         setMessage({ text: '❌ Incorrect password. Please try again.', type: 'error' });
       }
     } catch (error) {
       console.error('Error verifying password:', error);
 
       if (error.response) {
-        console.log('Error status:', error.response.status);
-        console.log('Error data:', error.response.data);
+        logger.log('Error status:', error.response.status);
+        logger.log('Error data:', error.response.data);
         setMessage({
           text: `❌ ${error.response.data.message || 'Incorrect password. Please try again.'}`,
           type: 'error',

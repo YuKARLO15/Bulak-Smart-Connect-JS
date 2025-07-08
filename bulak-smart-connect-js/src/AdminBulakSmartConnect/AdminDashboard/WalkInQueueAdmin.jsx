@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { queueService } from '../../services/queueService';
 import axios from 'axios';
 import './WalkInQueueAdmin.css';
+import logger from '../../utils/logger';
 
 // Format queue number to WK format
 const formatWKNumber = queueNumber => {
@@ -38,7 +39,7 @@ const WalkInQueueAdmin = () => {
           queueService.fetchCurrentQueuesWithDetails(),
         ]);
       } catch (e) {
-        console.log('Detailed endpoints not available, falling back to basic endpoints');
+        logger.log('Detailed endpoints not available, falling back to basic endpoints');
         // Fallback: Fetch basic queue data without details
         [pendingData, currentData] = await Promise.all([
           queueService.fetchPendingQueues(),
@@ -69,7 +70,7 @@ const WalkInQueueAdmin = () => {
             console.error('Failed to fetch queue details in bulk:', error);
 
             // Fallback to individual requests if bulk fetch fails
-            console.log('Attempting to fetch details individually');
+            logger.log('Attempting to fetch details individually');
 
             // Fetch details for each pending queue
             const pendingDetailsPromises = pendingData.map(
@@ -98,7 +99,7 @@ const WalkInQueueAdmin = () => {
 
       // Process and format pending queues with details
       const formattedPendingQueues = pendingData.map(queue => {
-        console.log('Queue with details:', queue);
+        logger.log('Queue with details:', queue);
 
         // Extract userData from wherever it exists
         const userData = queue.userData || queue.details || queue.user || {};
@@ -146,7 +147,7 @@ const WalkInQueueAdmin = () => {
   }, []); // Update queue status using the queueService
   const updateQueueStatus = async (queueId, newStatus) => {
     try {
-      console.log(`Attempting to update queue ${queueId} to status: ${newStatus}`);
+      logger.log(`Attempting to update queue ${queueId} to status: ${newStatus}`);
 
       // Parse the queueId if it's not already a number
       const parsedQueueId = parseInt(queueId, 10) || queueId;
@@ -173,7 +174,7 @@ const WalkInQueueAdmin = () => {
 
       // Make API call to update status using queueService
       await queueService.updateQueueStatus(parsedQueueId, newStatus);
-      console.log(`Queue status updated successfully: ${queueId} → ${newStatus}`);
+      logger.log(`Queue status updated successfully: ${queueId} → ${newStatus}`);
 
       // Refresh data after updating to ensure our UI is in sync with the server
       setTimeout(() => fetchQueueData(), 500);
@@ -201,18 +202,18 @@ const WalkInQueueAdmin = () => {
   };
   // Fetch queue data on component mount and refresh periodically
   useEffect(() => {
-    console.log('WalkInQueueAdmin: Initial data fetch');
+    logger.log('WalkInQueueAdmin: Initial data fetch');
     fetchQueueData();
 
     // Refresh queue data every 5 seconds
     const intervalId = setInterval(() => {
-      console.log('WalkInQueueAdmin: Auto-refreshing queue data');
+      logger.log('WalkInQueueAdmin: Auto-refreshing queue data');
       fetchQueueData();
     }, 5000); // 5000 (5 seconds)
 
     // Clean up on component unmount
     return () => {
-      console.log('WalkInQueueAdmin: Cleanup - clearing interval');
+      logger.log('WalkInQueueAdmin: Cleanup - clearing interval');
       clearInterval(intervalId);
     };
   }, [fetchQueueData]);

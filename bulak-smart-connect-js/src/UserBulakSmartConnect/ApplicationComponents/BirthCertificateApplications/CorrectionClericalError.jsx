@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import logger from '../../../utils/logger';
 import { useNavigate, useLocation } from 'react-router-dom';
 import {
   Box,
@@ -172,7 +173,7 @@ const CorrectionClericalError = () => {
   // Create application in backend
   const createBackendApplication = async () => {
     try {
-      console.log('Creating application in backend...');
+      logger.log('Creating application in backend...');
 
       // Get current application ID from localStorage or create a new one
       const currentId = localStorage.getItem('currentApplicationId');
@@ -180,7 +181,7 @@ const CorrectionClericalError = () => {
 
       if (!appId) {
         appId = 'BC-' + Date.now().toString().slice(-6);
-        console.log('Generated new application ID:', appId);
+        logger.log('Generated new application ID:', appId);
         localStorage.setItem('currentApplicationId', appId);
       }
 
@@ -196,11 +197,11 @@ const CorrectionClericalError = () => {
         status: 'PENDING',
       };
 
-      console.log('Creating application with data:', backendApplicationData);
+      logger.log('Creating application with data:', backendApplicationData);
 
       // Call API to create application
       const response = await documentApplicationService.createApplication(backendApplicationData);
-      console.log('Backend created application:', response);
+      logger.log('Backend created application:', response);
 
       // Store the backend ID
       if (response && response.id) {
@@ -224,7 +225,7 @@ const CorrectionClericalError = () => {
   useEffect(() => {
     const count = Object.values(uploadedFiles).filter(Boolean).length;
     setUploadedDocumentsCount(count);
-    console.log(`Uploaded documents count: ${count}`);
+    logger.log(`Uploaded documents count: ${count}`);
   }, [uploadedFiles]);
 
   useEffect(() => {
@@ -235,9 +236,9 @@ const CorrectionClericalError = () => {
 
         // Load application data
         if (isEditing) {
-          console.log('Loading data for editing...');
+          logger.log('Loading data for editing...');
           const editingId = localStorage.getItem('editingApplicationId');
-          console.log('Editing application ID:', editingId);
+          logger.log('Editing application ID:', editingId);
 
           if (editingId) {
             setApplicationId(editingId);
@@ -247,7 +248,7 @@ const CorrectionClericalError = () => {
               const backendApp = await documentApplicationService.getApplication(editingId);
               if (backendApp) {
                 setBackendApplicationCreated(true);
-                console.log('Application exists in backend:', backendApp);
+                logger.log('Application exists in backend:', backendApp);
               }
             } catch (error) {
               console.warn('Application may not exist in backend:', error);
@@ -259,7 +260,7 @@ const CorrectionClericalError = () => {
           const applicationToEdit = applications.find(app => app.id === editingId);
 
           if (applicationToEdit) {
-            console.log('Found application to edit:', applicationToEdit);
+            logger.log('Found application to edit:', applicationToEdit);
             if (applicationToEdit.formData && applicationToEdit.formData.correctionOptions) {
               setSelectedOptions(applicationToEdit.formData.correctionOptions);
             }
@@ -281,7 +282,7 @@ const CorrectionClericalError = () => {
               if (parsedData.uploadedFiles) {
                 setUploadedFiles(parsedData.uploadedFiles || {});
               }
-              console.log('Loaded form data from birthCertificateApplication');
+              logger.log('Loaded form data from birthCertificateApplication');
             }
           }
         } else {
@@ -295,7 +296,7 @@ const CorrectionClericalError = () => {
               const backendApp = await documentApplicationService.getApplication(currentId);
               if (backendApp) {
                 setBackendApplicationCreated(true);
-                console.log('Application exists in backend:', backendApp);
+                logger.log('Application exists in backend:', backendApp);
               }
             } catch (error) {
               console.warn('Application may not exist in backend:', error);
@@ -327,7 +328,7 @@ const CorrectionClericalError = () => {
 
         // Check storage usage
         const usage = localStorageManager.getCurrentUsage();
-        console.log(`📊 Current storage usage: ${usage.percentage.toFixed(1)}%`);
+        logger.log(`📊 Current storage usage: ${usage.percentage.toFixed(1)}%`);
 
         if (usage.isNearFull) {
           console.warn('⚠️ localStorage is getting full, performing cleanup...');
@@ -394,7 +395,7 @@ const CorrectionClericalError = () => {
     // Update the uploadedFiles state
     setUploadedFiles(prevState => {
       const newState = { ...prevState, [label]: isUploaded };
-      console.log('Updated uploadedFiles:', newState);
+      logger.log('Updated uploadedFiles:', newState);
       return newState;
     });
 
@@ -412,13 +413,13 @@ const CorrectionClericalError = () => {
           return;
         }
 
-        console.log('Application ID:', currentAppId);
+        logger.log('Application ID:', currentAppId);
 
         // Handle multiple files (array) or single file (object)
         const filesToUpload = Array.isArray(fileDataObj) ? fileDataObj : [fileDataObj];
 
         for (const [index, fileData] of filesToUpload.entries()) {
-          console.log(`Uploading file ${index + 1}:`, fileData.name);
+          logger.log(`Uploading file ${index + 1}:`, fileData.name);
 
           const file = dataURLtoFile(fileData.data, fileData.name, fileData.type);
 
@@ -430,7 +431,7 @@ const CorrectionClericalError = () => {
             file,
             uploadLabel
           );
-          console.log(`Upload response for ${fileData.name}:`, response);
+          logger.log(`Upload response for ${fileData.name}:`, response);
         }
 
         const fileCount = filesToUpload.length;
@@ -466,7 +467,7 @@ const CorrectionClericalError = () => {
                     file,
                     uploadLabel
                   );
-                  console.log(`Retry upload response for ${fileData.name}:`, retryResponse);
+                  logger.log(`Retry upload response for ${fileData.name}:`, retryResponse);
                 }
 
                 const fileCount = filesToUpload.length;
@@ -563,7 +564,7 @@ const CorrectionClericalError = () => {
           currentAppId,
           backendData
         );
-        console.log('Application status updated in backend:', response);
+        logger.log('Application status updated in backend:', response);
       } catch (error) {
         console.error('Failed to update backend status:', error);
         showNotification(
@@ -649,7 +650,7 @@ const CorrectionClericalError = () => {
         })
       );
 
-      console.log('Application submitted successfully');
+      logger.log('Application submitted successfully');
 
       // Navigate to summary page after a short delay
       setTimeout(() => {
@@ -660,7 +661,7 @@ const CorrectionClericalError = () => {
       const userEmail = user?.email;
       if (userEmail) {
         try {
-          console.log('📧 Sending application confirmation notification to:', userEmail);
+          logger.log('📧 Sending application confirmation notification to:', userEmail);
           const notificationResult =
             await documentApplicationNotificationService.sendApplicationConfirmation(
               userEmail,
@@ -675,13 +676,13 @@ const CorrectionClericalError = () => {
             );
 
           if (notificationResult.success) {
-            console.log('✅ Confirmation notification sent successfully');
+            logger.log('✅ Confirmation notification sent successfully');
             showNotification(
               'Application submitted successfully! A confirmation email has been sent to you.',
               'success'
             );
           } else {
-            console.log('⚠️ Confirmation notification failed:', notificationResult.error);
+            logger.log('⚠️ Confirmation notification failed:', notificationResult.error);
             showNotification(
               'Application submitted successfully! However, we could not send the confirmation email.',
               'warning'
@@ -695,7 +696,7 @@ const CorrectionClericalError = () => {
           );
         }
       } else {
-        console.log('⚠️ No email available for notifications');
+        logger.log('⚠️ No email available for notifications');
         showNotification(
           'Application submitted successfully! No confirmation email will be sent as no email was found.',
           'success'
@@ -903,7 +904,7 @@ const CorrectionClericalError = () => {
                     localStorage.setItem('applications', JSON.stringify(applications));
                   }
 
-                  console.log('Navigating back with modify state:', modifyApplicationState);
+                  logger.log('Navigating back with modify state:', modifyApplicationState);
 
                   navigate('/RequestACopyBirthCertificate', {
                     state: modifyApplicationState,

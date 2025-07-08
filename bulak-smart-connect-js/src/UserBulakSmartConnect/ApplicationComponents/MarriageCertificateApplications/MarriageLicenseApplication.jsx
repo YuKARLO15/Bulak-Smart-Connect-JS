@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import logger from '../../../utils/logger';
 import { useLocation, useNavigate } from 'react-router-dom';
 import {
   Box,
@@ -141,7 +142,7 @@ const MarriageLicenseApplication = () => {
       const existingAppId = localStorage.getItem('currentApplicationId');
 
       if (existingAppId) {
-        console.log('Using existing application ID:', existingAppId);
+        logger.log('Using existing application ID:', existingAppId);
         setApplicationId(existingAppId);
         setBackendApplicationCreated(true);
 
@@ -156,7 +157,7 @@ const MarriageLicenseApplication = () => {
             lastUpdated: new Date().toISOString(),
           });
 
-          console.log('Updated existing application:', existingAppId);
+          logger.log('Updated existing application:', existingAppId);
           return { id: existingAppId };
         } catch (updateError) {
           console.warn('Could not update existing application:', updateError);
@@ -164,7 +165,7 @@ const MarriageLicenseApplication = () => {
         }
       }
 
-      console.log('Creating NEW Marriage License application in backend...');
+      logger.log('Creating NEW Marriage License application in backend...');
 
       const newAppId = 'ML-' + Date.now().toString().slice(-6);
 
@@ -186,10 +187,10 @@ const MarriageLicenseApplication = () => {
         },
       };
 
-      console.log('Creating Marriage License application with data:', backendApplicationData);
+      logger.log('Creating Marriage License application with data:', backendApplicationData);
 
       const response = await documentApplicationService.createApplication(backendApplicationData);
-      console.log('Backend created Marriage License application:', response);
+      logger.log('Backend created Marriage License application:', response);
 
       if (response && response.id) {
         setApplicationId(response.id);
@@ -198,7 +199,7 @@ const MarriageLicenseApplication = () => {
         localStorage.setItem('currentApplicationId', response.id);
         localStorage.setItem('marriageApplicationId', response.id);
 
-        console.log('NEW Marriage License Application ID set:', response.id);
+        logger.log('NEW Marriage License Application ID set:', response.id);
       }
 
       return response;
@@ -229,7 +230,7 @@ const MarriageLicenseApplication = () => {
         const stateData = location.state;
 
         if (stateData && stateData.applicationId && stateData.formData) {
-          console.log('Using state data from form:', stateData);
+          logger.log('Using state data from form:', stateData);
           setApplicationId(stateData.applicationId);
           setFormData(stateData.formData);
 
@@ -261,17 +262,17 @@ const MarriageLicenseApplication = () => {
         }
 
         const existingAppId = localStorage.getItem('currentApplicationId');
-        console.log('Checking for existing application ID:', existingAppId);
+        logger.log('Checking for existing application ID:', existingAppId);
 
         if (existingAppId) {
-          console.log('Using existing application ID:', existingAppId);
+          logger.log('Using existing application ID:', existingAppId);
           setApplicationId(existingAppId);
 
           try {
             const backendApp = await documentApplicationService.getApplication(existingAppId);
             if (backendApp) {
               setBackendApplicationCreated(true);
-              console.log('Found existing Marriage License application:', backendApp);
+              logger.log('Found existing Marriage License application:', backendApp);
 
               if (backendApp.formData) {
                 setFormData(backendApp.formData);
@@ -306,7 +307,7 @@ const MarriageLicenseApplication = () => {
           const editingId = localStorage.getItem('currentEditingApplicationId');
 
           if (isEditing && editingId) {
-            console.log('Loading existing application for editing:', editingId);
+            logger.log('Loading existing application for editing:', editingId);
             setApplicationId(editingId);
             localStorage.setItem('currentApplicationId', editingId);
             setBackendApplicationCreated(true);
@@ -314,7 +315,7 @@ const MarriageLicenseApplication = () => {
             try {
               const backendApp = await documentApplicationService.getApplication(editingId);
               if (backendApp && backendApp.applicationType === 'Marriage License') {
-                console.log('Found existing Marriage License application for editing:', backendApp);
+                logger.log('Found existing Marriage License application for editing:', backendApp);
 
                 if (backendApp.formData) {
                   setFormData(backendApp.formData);
@@ -326,7 +327,7 @@ const MarriageLicenseApplication = () => {
           } else {
             const storedFormData = JSON.parse(localStorage.getItem('marriageFormData') || '{}');
             if (Object.keys(storedFormData).length > 0) {
-              console.log('Loaded marriage form data:', storedFormData);
+              logger.log('Loaded marriage form data:', storedFormData);
               setFormData(storedFormData);
 
               await createBackendApplication(storedFormData);
@@ -370,7 +371,7 @@ const MarriageLicenseApplication = () => {
   }
 
   const handleFileUpload = async (label, isUploaded, fileDataObj) => {
-    console.log(`File upload for "${label}":`, { isUploaded, fileDataObj });
+    logger.log(`File upload for "${label}":`, { isUploaded, fileDataObj });
 
     // Create application if needed before uploading files
     if (!backendApplicationCreated && isUploaded) {
@@ -387,7 +388,7 @@ const MarriageLicenseApplication = () => {
     // Update the uploadedFiles state
     setUploadedFiles(prevState => {
       const newState = { ...prevState, [label]: isUploaded };
-      console.log('Updated uploadedFiles:', newState);
+      logger.log('Updated uploadedFiles:', newState);
       return newState;
     });
 
@@ -406,7 +407,7 @@ const MarriageLicenseApplication = () => {
           return;
         }
 
-        console.log('Application ID:', currentAppId);
+        logger.log('Application ID:', currentAppId);
 
         // Ensure we handle both single files and multiple files correctly
         let filesToUpload = [];
@@ -424,7 +425,7 @@ const MarriageLicenseApplication = () => {
           return;
         }
 
-        console.log(`Processing ${filesToUpload.length} file(s) for "${label}":`, filesToUpload);
+        logger.log(`Processing ${filesToUpload.length} file(s) for "${label}":`, filesToUpload);
 
         for (const [index, fileData] of filesToUpload.entries()) {
           if (!fileData || !fileData.data || !fileData.name) {
@@ -432,7 +433,7 @@ const MarriageLicenseApplication = () => {
             continue;
           }
 
-          console.log(`Uploading file ${index + 1}/${filesToUpload.length}:`, {
+          logger.log(`Uploading file ${index + 1}/${filesToUpload.length}:`, {
             name: fileData.name,
             type: fileData.type,
             size: fileData.data?.length || 0,
@@ -447,7 +448,7 @@ const MarriageLicenseApplication = () => {
               file,
               uploadLabel
             );
-            console.log(`Upload response for ${fileData.name}:`, response);
+            logger.log(`Upload response for ${fileData.name}:`, response);
           } catch (fileError) {
             console.error(`Failed to upload file ${fileData.name}:`, fileError);
             throw fileError;
@@ -589,7 +590,7 @@ const MarriageLicenseApplication = () => {
           formData: completeFormData,
         });
 
-        console.log('Application updated in backend with complete data');
+        logger.log('Application updated in backend with complete data');
       } catch (updateError) {
         console.warn('Could not update application in backend:', updateError);
       }
@@ -603,7 +604,7 @@ const MarriageLicenseApplication = () => {
       const userEmail = user?.email;
       if (userEmail) {
         try {
-          console.log('📧 Sending application confirmation notification to:', userEmail);
+          logger.log('📧 Sending application confirmation notification to:', userEmail);
           const groomName =
             completeFormData.groomFirstName && completeFormData.groomLastName
               ? `${completeFormData.groomFirstName} ${completeFormData.groomLastName}`
@@ -628,13 +629,13 @@ const MarriageLicenseApplication = () => {
             );
 
           if (notificationResult.success) {
-            console.log('✅ Confirmation notification sent successfully');
+            logger.log('✅ Confirmation notification sent successfully');
             showNotification(
               'Application submitted successfully! A confirmation email has been sent to you.',
               'success'
             );
           } else {
-            console.log('⚠️ Confirmation notification failed:', notificationResult.error);
+            logger.log('⚠️ Confirmation notification failed:', notificationResult.error);
             showNotification(
               'Application submitted successfully! However, we could not send the confirmation email.',
               'warning'
@@ -648,7 +649,7 @@ const MarriageLicenseApplication = () => {
           );
         }
       } else {
-        console.log('⚠️ No email available for notifications');
+        logger.log('⚠️ No email available for notifications');
       }
 
       setTimeout(() => {
@@ -1069,7 +1070,7 @@ const MarriageLicenseApplication = () => {
                 localStorage.setItem('applications', JSON.stringify(applications));
               }
 
-              console.log('Navigating back with modify state:', modifyApplicationState);
+              logger.log('Navigating back with modify state:', modifyApplicationState);
 
               navigate('/MarriageForm', {
                 state: {

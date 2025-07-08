@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import logger from '../../utils/logger';
 import { useNavigate } from 'react-router-dom';
 import {
   Box,
@@ -36,13 +37,13 @@ const RecentAppointmentsAdmin = () => {
     setError(null);
 
     try {
-      console.log('Attempting to fetch appointment statistics...');
+      logger.log('Attempting to fetch appointment statistics...');
 
       // This line has the wrong function name - let's use the proper method name
       // Original: const allAppointments = await appointmentService.getAllAppointments();
       // Correct method name:
       const allAppointments = await appointmentService.fetchAllAppointments();
-      console.log('Raw appointments data:', allAppointments);
+      logger.log('Raw appointments data:', allAppointments);
 
       // Calculate statistics manually from appointments data
       const today = new Date();
@@ -90,7 +91,7 @@ const RecentAppointmentsAdmin = () => {
         weekCanceled: canceledCount,
       });
 
-      console.log('Calculated statistics:', {
+      logger.log('Calculated statistics:', {
         todayTotal: todayCount,
         weekPending: pendingCount,
         weekCompleted: completedCount,
@@ -102,9 +103,9 @@ const RecentAppointmentsAdmin = () => {
 
       // Fallback: Try the regular stats endpoint if manual calculation fails
       try {
-        console.log('Falling back to stats API endpoint...');
+        logger.log('Falling back to stats API endpoint...');
         const response = await appointmentService.getAppointmentStats();
-        console.log('Stats API response:', response);
+        logger.log('Stats API response:', response);
 
         const stats = response?.data || response || {};
 

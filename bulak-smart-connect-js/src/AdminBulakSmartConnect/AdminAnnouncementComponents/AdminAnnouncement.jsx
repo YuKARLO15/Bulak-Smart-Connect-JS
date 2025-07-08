@@ -5,6 +5,7 @@ import EditAnnouncementModal from './EditAnnouncementModal';
 import { announcementService } from '../../services/announcementService';
 import '../AdminAnnouncementComponents/AdminAnnouncement.css';
 import NavBar from '../../NavigationComponents/NavSide';
+import logger from '../../utils/logger';
 
 const AdminAnnouncement = () => {
   const [announcements, setAnnouncements] = useState([
@@ -55,7 +56,7 @@ const AdminAnnouncement = () => {
     } catch (error) {
       console.error('Failed to load announcements:', error);
       // Keep your existing fallback data if API fails
-      console.log('Using fallback data due to API error');
+      logger.log('Using fallback data due to API error');
     } finally {
       setLoading(false);
     }

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import logger from '../../utils/logger';
 import {
   Box,
   Typography,
@@ -45,17 +46,17 @@ const FileUploadPreview = ({
   // const currentUser = "dennissegailfrancisco"; // Current user's login
 
   useEffect(() => {
-    console.log('AdminFilePreview: useEffect triggered');
-    console.log('AdminFilePreview: formData:', formData);
-    console.log('AdminFilePreview: formData.id:', formData?.id);
-    console.log('AdminFilePreview: applicationType:', applicationType);
+    logger.log('AdminFilePreview: useEffect triggered');
+    logger.log('AdminFilePreview: formData:', formData);
+    logger.log('AdminFilePreview: formData.id:', formData?.id);
+    logger.log('AdminFilePreview: applicationType:', applicationType);
 
     // Fetch files when component mounts or when formData changes
     if (formData && formData.id) {
-      console.log('AdminFilePreview: Calling fetchApplicationFiles with ID:', formData.id);
+      logger.log('AdminFilePreview: Calling fetchApplicationFiles with ID:', formData.id);
       fetchApplicationFiles(formData.id);
     } else {
-      console.log('AdminFilePreview: No formData.id, calling extractFilesFromFormData');
+      logger.log('AdminFilePreview: No formData.id, calling extractFilesFromFormData');
       // Fallback to extracting files from formData if no ID
       extractFilesFromFormData();
     }
@@ -65,7 +66,7 @@ const FileUploadPreview = ({
   const fetchApplicationFiles = async applicationId => {
     setLoading(true);
     try {
-      console.log(`AdminFilePreview: Fetching files for application ID: ${applicationId}`);
+      logger.log(`AdminFilePreview: Fetching files for application ID: ${applicationId}`);
 
       // Get latest files by default
       const latestFiles = await documentApplicationService.getApplicationFiles(applicationId);
@@ -73,12 +74,12 @@ const FileUploadPreview = ({
       // Get all files for admin view
       const allFilesData = await documentApplicationService.getAllApplicationFiles(applicationId);
 
-      console.log('AdminFilePreview: Retrieved latest files:', latestFiles);
-      console.log('AdminFilePreview: Retrieved all files data:', allFilesData);
+      logger.log('AdminFilePreview: Retrieved latest files:', latestFiles);
+      logger.log('AdminFilePreview: Retrieved all files data:', allFilesData);
 
       if (Array.isArray(latestFiles) && latestFiles.length > 0) {
         const transformedFiles = latestFiles.map((file, index) => {
-          console.log(`AdminFilePreview: Processing file ${index + 1}:`, file);
+          logger.log(`AdminFilePreview: Processing file ${index + 1}:`, file);
           return {
             id: file.id,
             name: file.fileName || file.name,
@@ -95,7 +96,7 @@ const FileUploadPreview = ({
 
         setUploadedFiles(transformedFiles);
       } else {
-        console.log('AdminFilePreview: No files returned from API, showing placeholders...');
+        logger.log('AdminFilePreview: No files returned from API, showing placeholders...');
         const requiredDocs = getRequiredDocuments();
         const placeholders = requiredDocs.map(doc => ({
           name: doc,

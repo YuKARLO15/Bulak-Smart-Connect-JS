@@ -1,14 +1,15 @@
 import axios from 'axios';
 import api from './api'; // Import your preconfigured axios instance
 import config from '../config/env.js';
+import logger from '../utils/logger.js';
 
 export const queueService = {
   // Get all walk-in queues (both pending and serving)
   fetchWalkInQueues: async () => {
     try {
-      console.log(`Making request to: ${config.API_BASE_URL}/queues/walk-in`);
+      logger.log(`Making request to: ${config.API_BASE_URL}/queues/walk-in`);
       const response = await axios.get(`${config.API_BASE_URL}/queues/walk-in`);
-      console.log('Walk-in queues API response:', response.data);
+      logger.log('Walk-in queues API response:', response.data);
       return response.data;
     } catch (error) {
       console.error('API error getting walk-in queues:', error);
@@ -18,9 +19,9 @@ export const queueService = {
 
   fetchCurrentQueues: async () => {
     try {
-      console.log(`Making request to: ${config.API_BASE_URL}/queue/serving`);
+      logger.log(`Making request to: ${config.API_BASE_URL}/queue/serving`);
       const response = await axios.get(`${config.API_BASE_URL}/queue/serving`);
-      console.log('Current queues API response:', response.data);
+      logger.log('Current queues API response:', response.data);
       return response.data;
     } catch (error) {
       console.error('API error getting current queues:', error);
@@ -35,9 +36,9 @@ export const queueService = {
 
   getQueuePosition: async queueId => {
     try {
-      console.log(`Making request to: ${config.API_BASE_URL}/queue/${queueId}/position`);
+      logger.log(`Making request to: ${config.API_BASE_URL}/queue/${queueId}/position`);
       const response = await axios.get(`${config.API_BASE_URL}/queue/${queueId}/position`);
-      console.log('Position API response:', response.data);
+      logger.log('Position API response:', response.data);
       return response.data;
     } catch (error) {
       console.error('API error getting position:', error);
@@ -47,14 +48,14 @@ export const queueService = {
 
   createQueue: async queueData => {
     try {
-      console.log('Creating queue with data:', queueData);
+      logger.log('Creating queue with data:', queueData);
 
       // Debug token
       const token = localStorage.getItem('token');
-      console.log('Token being used:', token ? 'Valid token present' : 'No token');
+      logger.log('Token being used:', token ? 'Valid token present' : 'No token');
 
       const response = await api.post('/queue', queueData);
-      console.log('Queue creation response:', response.data);
+      logger.log('Queue creation response:', response.data);
       return response.data;
     } catch (error) {
       console.error('Error creating queue:', error);
@@ -74,9 +75,9 @@ export const queueService = {
 
   fetchQueueDetails: async queueId => {
     try {
-      console.log(`Making request to: ${config.API_BASE_URL}/queue/${queueId}/details`);
+      logger.log(`Making request to: ${config.API_BASE_URL}/queue/${queueId}/details`);
       const response = await axios.get(`${config.API_BASE_URL}/queue/${queueId}/details`);
-      console.log(`Details for queue ${queueId}:`, response.data);
+      logger.log(`Details for queue ${queueId}:`, response.data);
       return response.data;
     } catch (error) {
       console.error(`Error fetching details for queue ${queueId}:`, error);
@@ -87,9 +88,9 @@ export const queueService = {
   // Fetch details for all pending queues
   fetchPendingQueuesWithDetails: async () => {
     try {
-      console.log(`Making request to: ${config.API_BASE_URL}/queue/pending/details`);
+      logger.log(`Making request to: ${config.API_BASE_URL}/queue/pending/details`);
       const response = await axios.get(`${config.API_BASE_URL}/queue/pending/details`);
-      console.log('Pending queues with details:', response.data);
+      logger.log('Pending queues with details:', response.data);
       return response.data;
     } catch (error) {
       console.error('Error fetching pending queues with details:', error);
@@ -100,9 +101,9 @@ export const queueService = {
   // Fetch details for all current (serving) queues
   fetchCurrentQueuesWithDetails: async () => {
     try {
-      console.log(`Making request to: ${config.API_BASE_URL}/queue/serving/details`);
+      logger.log(`Making request to: ${config.API_BASE_URL}/queue/serving/details`);
       const response = await axios.get(`${config.API_BASE_URL}/queue/serving/details`);
-      console.log('Current queues with details:', response.data);
+      logger.log('Current queues with details:', response.data);
       return response.data;
     } catch (error) {
       console.error('Error fetching current queues with details:', error);
@@ -113,9 +114,9 @@ export const queueService = {
   // Bulk fetch details for multiple queue IDs
   fetchDetailsForMultipleQueues: async queueIds => {
     try {
-      console.log(`Making request to: ${config.API_BASE_URL}/queue/bulk-details`);
+      logger.log(`Making request to: ${config.API_BASE_URL}/queue/bulk-details`);
       const response = await axios.post(`${config.API_BASE_URL}/queue/bulk-details`, { queueIds });
-      console.log('Bulk queue details:', response.data);
+      logger.log('Bulk queue details:', response.data);
       return response.data;
     } catch (error) {
       console.error('Error fetching bulk queue details:', error);
@@ -125,7 +126,7 @@ export const queueService = {
   // Update queue status
   updateQueueStatus: async (queueId, status) => {
     try {
-      console.log(`Updating queue ${queueId} status to ${status}`);
+      logger.log(`Updating queue ${queueId} status to ${status}`);
 
       // Map frontend status values to backend expected values
       let backendStatus;
@@ -143,13 +144,13 @@ export const queueService = {
           backendStatus = status;
       }
 
-      console.log(`Mapped status: ${status} -> ${backendStatus}`);
-      console.log(`Making request to: ${config.API_BASE_URL}/queue/${queueId}/status`);
+      logger.log(`Mapped status: ${status} -> ${backendStatus}`);
+      logger.log(`Making request to: ${config.API_BASE_URL}/queue/${queueId}/status`);
 
       const response = await axios.patch(`${config.API_BASE_URL}/queue/${queueId}/status`, {
         status: backendStatus,
       });
-      console.log('Update status response:', response.data);
+      logger.log('Update status response:', response.data);
       return response.data;
     } catch (error) {
       console.error(`Error updating queue ${queueId} status:`, error);
@@ -161,9 +162,9 @@ export const queueService = {
   // New method to fetch user queues from backend
   fetchUserQueues: async userId => {
     try {
-      console.log(`Making request to: ${config.API_BASE_URL}/queues/user/${userId}`);
+      logger.log(`Making request to: ${config.API_BASE_URL}/queues/user/${userId}`);
       const response = await axios.get(`${config.API_BASE_URL}/queues/user/${userId}`);
-      console.log('User queues API response:', response.data);
+      logger.log('User queues API response:', response.data);
       return response.data;
     } catch (error) {
       console.error('Error fetching user queues:', error);
@@ -174,9 +175,9 @@ export const queueService = {
   // Add method to get queue details including status
   getQueueDetails: async queueId => {
     try {
-      console.log(`Making request to: ${config.API_BASE_URL}/queues/${queueId}`);
+      logger.log(`Making request to: ${config.API_BASE_URL}/queues/${queueId}`);
       const response = await axios.get(`${config.API_BASE_URL}/queues/${queueId}`);
-      console.log('Queue details API response:', response.data);
+      logger.log('Queue details API response:', response.data);
       return response.data;
     } catch (error) {
       console.error('Error fetching queue details:', error);
@@ -187,7 +188,7 @@ export const queueService = {
   // Create manual queue for walk-in guests
   createManualQueue: async (guestData = {}) => {
     try {
-      console.log('Service: Creating manual queue with data:', guestData);
+      logger.log('Service: Creating manual queue with data:', guestData);
 
       const payload = {
         firstName: guestData.firstName || 'Walk-in',
@@ -199,7 +200,7 @@ export const queueService = {
         appointmentType: guestData.reasonOfVisit || 'General Inquiry',
       };
 
-      console.log('Service: Sending payload:', payload);
+      logger.log('Service: Sending payload:', payload);
 
       const response = await axios.post(`${config.API_BASE_URL}/queue/manual`, payload, {
         headers: {
@@ -208,7 +209,7 @@ export const queueService = {
         },
       });
 
-      console.log('Service: Manual queue created:', response.data);
+      logger.log('Service: Manual queue created:', response.data);
       return response.data;
     } catch (error) {
       console.error('Service: Error creating manual queue:', error);
@@ -221,7 +222,7 @@ export const queueService = {
   onDailyReset: callback => {
     if (window.socket) {
       window.socket.on('dailyQueueReset', data => {
-        console.log('📅 Daily queue reset notification:', data);
+        logger.log('📅 Daily queue reset notification:', data);
         callback(data);
       });
     }

@@ -1,5 +1,6 @@
 import axios from 'axios';
 import config from '../config/env.js';
+import logger from '../utils/logger.js';
 
 // Create an axios instance with common configurations
 const apiClient = axios.create({
@@ -21,8 +22,8 @@ apiClient.interceptors.request.use(
 
     if (token) {
       requestConfig.headers.Authorization = `Bearer ${token}`;
-      console.log('🎫 Sending request with token:', token.substring(0, 20) + '...');
-      console.log('🎯 Request URL:', requestConfig.url);
+      logger.log('🎫 Sending request with token:', token.substring(0, 20) + '...');
+      logger.log('🎯 Request URL:', requestConfig.url);
     } else {
       console.warn('⚠️ No token found for request to:', requestConfig.url);
     }
@@ -65,14 +66,14 @@ const userService = {
   // Get all users with pagination and filters
   getAllUsers: async (params = {}) => {
     try {
-      console.log('🔍 Trying to fetch all users for admin...');
+      logger.log('🔍 Trying to fetch all users for admin...');
 
       // Verify user has proper role before making request
       const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
       const token = localStorage.getItem('token');
 
-      console.log('👤 Current user roles:', currentUser.roles);
-      console.log('🎫 Token exists:', !!token);
+      logger.log('👤 Current user roles:', currentUser.roles);
+      logger.log('🎫 Token exists:', !!token);
 
       if (!token) {
         throw new Error('No authentication token found');
@@ -95,7 +96,7 @@ const userService = {
 
       const response = await apiClient.get(`/users?${queryParams}`);
 
-      console.log('✅ Users fetched successfully:', response.data);
+      logger.log('✅ Users fetched successfully:', response.data);
       return response.data;
     } catch (error) {
       console.error('❌ Error fetching users:', error);
@@ -114,7 +115,7 @@ const userService = {
   testAuth: async () => {
     try {
       const response = await apiClient.get('/users/profile');
-      console.log('✅ Authentication test successful:', response.data);
+      logger.log('✅ Authentication test successful:', response.data);
       return { success: true, user: response.data };
     } catch (error) {
       console.error('❌ Authentication test failed:', error.response?.status, error.response?.data);
@@ -269,11 +270,11 @@ const userService = {
   // Register new user (admin creates user)
   createUser: async userData => {
     try {
-      console.log('🔧 Creating user with userService:', userData);
+      logger.log('🔧 Creating user with userService:', userData);
 
       // Check if this is an admin-created user (has roleIds)
       if (userData.roleIds && userData.roleIds.length > 0) {
-        console.log('🔑 Using admin user creation endpoint');
+        logger.log('🔑 Using admin user creation endpoint');
 
         // Use admin endpoint for user creation with role assignment
         const response = await apiClient.post('/users/admin-create', {
@@ -290,7 +291,7 @@ const userService = {
           defaultRoleId: userData.defaultRoleId,
         });
 
-        console.log('✅ Admin user creation successful:', response.data);
+        logger.log('✅ Admin user creation successful:', response.data);
 
         // Update localStorage with the new user
         try {
@@ -317,7 +318,7 @@ const userService = {
 
         return response.data;
       } else {
-        console.log('👥 Using regular citizen registration endpoint');
+        logger.log('👥 Using regular citizen registration endpoint');
 
         // Use regular registration endpoint for citizen users
         const response = await apiClient.post('/auth/register', {
@@ -332,7 +333,7 @@ const userService = {
           password: userData.password,
         });
 
-        console.log('✅ Regular user creation successful:', response.data);
+        logger.log('✅ Regular user creation successful:', response.data);
         return response.data;
       }
     } catch (error) {
@@ -344,7 +345,7 @@ const userService = {
   // Admin update any user
   adminUpdateUser: async (userId, userData) => {
     try {
-      console.log('🔧 Admin updating user:', userId, userData);
+      logger.log('🔧 Admin updating user:', userId, userData);
 
       // Verify current user has super_admin role
       const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
@@ -399,7 +400,7 @@ const userService = {
         if (index >= 0) {
           localUsers[index] = { ...localUsers[index], ...userData };
           localStorage.setItem('users', JSON.stringify(localUsers));
-          console.log('✅ Updated user in localStorage as fallback');
+          logger.log('✅ Updated user in localStorage as fallback');
           return localUsers[index];
         }
       } catch (localErr) {

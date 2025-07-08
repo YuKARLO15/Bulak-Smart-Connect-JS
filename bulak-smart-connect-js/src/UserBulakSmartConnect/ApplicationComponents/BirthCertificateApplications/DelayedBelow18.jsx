@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import logger from '../../../utils/logger';
 import { useNavigate, useLocation } from 'react-router-dom';
 import {
   Box,
@@ -154,7 +155,7 @@ const Below18Registration = () => {
   // Create application in backend
   const createBackendApplication = async () => {
     try {
-      console.log('Creating application in backend...');
+      logger.log('Creating application in backend...');
 
       // Get current application ID from localStorage or create a new one
       const currentId = localStorage.getItem('currentApplicationId');
@@ -162,7 +163,7 @@ const Below18Registration = () => {
 
       if (!appId) {
         appId = 'BC-' + Date.now().toString().slice(-6);
-        console.log('Generated new application ID:', appId);
+        logger.log('Generated new application ID:', appId);
         localStorage.setItem('currentApplicationId', appId);
       }
 
@@ -178,11 +179,11 @@ const Below18Registration = () => {
         status: 'PENDING',
       };
 
-      console.log('Creating application with data:', backendApplicationData);
+      logger.log('Creating application with data:', backendApplicationData);
 
       // Call API to create application
       const response = await documentApplicationService.createApplication(backendApplicationData);
-      console.log('Backend created application:', response);
+      logger.log('Backend created application:', response);
 
       // Store the backend ID
       if (response && response.id) {
@@ -206,7 +207,7 @@ const Below18Registration = () => {
   useEffect(() => {
     const count = Object.values(uploadedFiles).filter(Boolean).length;
     setUploadedDocumentsCount(count);
-    console.log(`Uploaded documents count: ${count}`);
+    logger.log(`Uploaded documents count: ${count}`);
   }, [uploadedFiles]);
 
   useEffect(() => {
@@ -216,9 +217,9 @@ const Below18Registration = () => {
 
         // Load application data
         if (isEditing) {
-          console.log('Loading data for editing...');
+          logger.log('Loading data for editing...');
           const editingId = localStorage.getItem('editingApplicationId');
-          console.log('Editing application ID:', editingId);
+          logger.log('Editing application ID:', editingId);
 
           if (editingId) {
             setApplicationId(editingId);
@@ -228,7 +229,7 @@ const Below18Registration = () => {
               const backendApp = await documentApplicationService.getApplication(editingId);
               if (backendApp) {
                 setBackendApplicationCreated(true);
-                console.log('Application exists in backend:', backendApp);
+                logger.log('Application exists in backend:', backendApp);
               }
             } catch (error) {
               console.warn('Application may not exist in backend:', error);
@@ -240,7 +241,7 @@ const Below18Registration = () => {
           const applicationToEdit = applications.find(app => app.id === editingId);
 
           if (applicationToEdit) {
-            console.log('Found application to edit:', applicationToEdit);
+            logger.log('Found application to edit:', applicationToEdit);
             if (applicationToEdit.documentStatus) {
               setMaritalStatus(applicationToEdit.documentStatus);
             }
@@ -268,7 +269,7 @@ const Below18Registration = () => {
               if (parsedData.motherNotPresent) {
                 setMotherNotPresent(parsedData.motherNotPresent);
               }
-              console.log('Loaded form data from birthCertificateApplication');
+              logger.log('Loaded form data from birthCertificateApplication');
             }
           }
         } else {
@@ -282,7 +283,7 @@ const Below18Registration = () => {
               const backendApp = await documentApplicationService.getApplication(currentId);
               if (backendApp) {
                 setBackendApplicationCreated(true);
-                console.log('Application exists in backend:', backendApp);
+                logger.log('Application exists in backend:', backendApp);
               }
             } catch (error) {
               console.warn('Application may not exist in backend:', error);
@@ -320,7 +321,7 @@ const Below18Registration = () => {
 
         // Check storage usage
         const usage = localStorageManager.getCurrentUsage();
-        console.log(`📊 Current storage usage: ${usage.percentage.toFixed(1)}%`);
+        logger.log(`📊 Current storage usage: ${usage.percentage.toFixed(1)}%`);
 
         if (usage.isNearFull) {
           console.warn('⚠️ localStorage is getting full, performing cleanup...');
@@ -370,7 +371,7 @@ const Below18Registration = () => {
     // Update the uploadedFiles state
     setUploadedFiles(prevState => {
       const newState = { ...prevState, [label]: isUploaded };
-      console.log('Updated uploadedFiles:', newState);
+      logger.log('Updated uploadedFiles:', newState);
       return newState;
     });
 
@@ -388,13 +389,13 @@ const Below18Registration = () => {
           return;
         }
 
-        console.log('Application ID:', currentAppId);
+        logger.log('Application ID:', currentAppId);
 
         // Handle multiple files (array) or single file (object)
         const filesToUpload = Array.isArray(fileDataObj) ? fileDataObj : [fileDataObj];
 
         for (const [index, fileData] of filesToUpload.entries()) {
-          console.log(`Uploading file ${index + 1}:`, fileData.name);
+          logger.log(`Uploading file ${index + 1}:`, fileData.name);
 
           const file = dataURLtoFile(fileData.data, fileData.name, fileData.type);
 
@@ -406,7 +407,7 @@ const Below18Registration = () => {
             file,
             uploadLabel
           );
-          console.log(`Upload response for ${fileData.name}:`, response);
+          logger.log(`Upload response for ${fileData.name}:`, response);
         }
 
         const fileCount = filesToUpload.length;
@@ -442,7 +443,7 @@ const Below18Registration = () => {
                     file,
                     uploadLabel
                   );
-                  console.log(`Retry upload response for ${fileData.name}:`, retryResponse);
+                  logger.log(`Retry upload response for ${fileData.name}:`, retryResponse);
                 }
 
                 const fileCount = filesToUpload.length;
@@ -486,7 +487,7 @@ const Below18Registration = () => {
     const allMandatoryDocsUploaded = mandatoryDocuments.every(doc => {
       const isUploaded = uploadedFiles[doc] === true;
       if (!isUploaded) {
-        console.log(`Missing document: ${doc}`);
+        logger.log(`Missing document: ${doc}`);
       }
       return isUploaded;
     });
@@ -495,14 +496,14 @@ const Below18Registration = () => {
       maritalStatus !== 'marital' || uploadedFiles['Certificate of Marriage of Parents'] === true;
 
     if (!isCertificateOfMarriageUploaded) {
-      console.log('Missing Certificate of Marriage of Parents');
+      logger.log('Missing Certificate of Marriage of Parents');
     }
 
     const isMotherAffidavitUploaded =
       !motherNotPresent || uploadedFiles['Affidavit of Whereabouts of the Mother'] === true;
 
     if (!isMotherAffidavitUploaded) {
-      console.log('Missing Affidavit of Whereabouts of the Mother');
+      logger.log('Missing Affidavit of Whereabouts of the Mother');
     }
 
     return allMandatoryDocsUploaded && isCertificateOfMarriageUploaded && isMotherAffidavitUploaded;
@@ -561,7 +562,7 @@ const Below18Registration = () => {
           currentAppId,
           backendData
         );
-        console.log('Application status updated in backend:', response);
+        logger.log('Application status updated in backend:', response);
       } catch (error) {
         console.error('Failed to update backend status:', error);
         showNotification(
@@ -650,13 +651,13 @@ const Below18Registration = () => {
         })
       );
 
-      console.log('Application submitted successfully');
+      logger.log('Application submitted successfully');
 
       // 📧 SEND CONFIRMATION NOTIFICATION (ENHANCED)
       const userEmail = user?.email;
       if (userEmail) {
         try {
-          console.log('📧 Sending application confirmation notification to:', userEmail);
+          logger.log('📧 Sending application confirmation notification to:', userEmail);
           const notificationResult =
             await documentApplicationNotificationService.sendApplicationConfirmation(
               userEmail,
@@ -671,13 +672,13 @@ const Below18Registration = () => {
             );
 
           if (notificationResult.success) {
-            console.log('✅ Confirmation notification sent successfully');
+            logger.log('✅ Confirmation notification sent successfully');
             showNotification(
               'Application submitted successfully! A confirmation email has been sent to you.',
               'success'
             );
           } else {
-            console.log('⚠️ Confirmation notification failed:', notificationResult.error);
+            logger.log('⚠️ Confirmation notification failed:', notificationResult.error);
             showNotification(
               'Application submitted successfully! However, we could not send the confirmation email.',
               'warning'
@@ -691,7 +692,7 @@ const Below18Registration = () => {
           );
         }
       } else {
-        console.log('⚠️ No email available for notifications');
+        logger.log('⚠️ No email available for notifications');
       }
       setTimeout(() => {
         navigate('/BirthApplicationSummary');
@@ -870,7 +871,7 @@ const Below18Registration = () => {
                       localStorage.setItem('applications', JSON.stringify(applications));
                     }
 
-                    console.log('Navigating back with modify state:', modifyApplicationState);
+                    logger.log('Navigating back with modify state:', modifyApplicationState);
 
                     navigate('/BirthCertificateForm', {
                       state: modifyApplicationState,

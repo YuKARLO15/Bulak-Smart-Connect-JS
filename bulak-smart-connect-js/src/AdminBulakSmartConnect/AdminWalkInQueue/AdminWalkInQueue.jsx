@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import logger from '../../utils/logger.js';
 import { useNavigate } from 'react-router-dom';
 import './AdminWalkInQueue.css';
 import NavBar from '../../NavigationComponents/NavSide';
@@ -64,7 +65,7 @@ const AdminWalkInQueue = () => {
   // Print queue ticket function - Direct POS Commands without driver
   const printQueueTicket = async queueData => {
     try {
-      console.log('Printing ticket for:', queueData);
+      logger.log('Printing ticket for:', queueData);
 
       // Create ESC/POS command sequence
       const createPOSCommands = () => {
@@ -127,7 +128,7 @@ const AdminWalkInQueue = () => {
       // Method 1: Try Web Serial API (Chrome/Edge)
       if ('serial' in navigator) {
         try {
-          console.log('Attempting Web Serial API printing...');
+          logger.log('Attempting Web Serial API printing...');
 
           // Request port without vendor filter for broader compatibility
           const port = await navigator.serial.requestPort();
@@ -152,7 +153,7 @@ const AdminWalkInQueue = () => {
           await writer.close();
           await port.close();
 
-          console.log('✅ Ticket printed successfully via Web Serial API');
+          logger.log('✅ Ticket printed successfully via Web Serial API');
           alert('✅ Ticket printed successfully!');
           return;
         } catch (serialError) {
@@ -162,7 +163,7 @@ const AdminWalkInQueue = () => {
 
       // Method 2: Try Raw Printing via Fetch API (if you have a local print server)
       try {
-        console.log('Attempting raw print via local server...');
+        logger.log('Attempting raw print via local server...');
 
         const commands = createPOSCommands();
 
@@ -179,7 +180,7 @@ const AdminWalkInQueue = () => {
         });
 
         if (response.ok) {
-          console.log('✅ Ticket printed via local print server');
+          logger.log('✅ Ticket printed via local print server');
           alert('✅ Ticket printed successfully!');
           return;
         }
@@ -189,7 +190,7 @@ const AdminWalkInQueue = () => {
 
       // Method 3: Create downloadable POS file
       try {
-        console.log('Creating downloadable POS file...');
+        logger.log('Creating downloadable POS file...');
 
         const commands = createPOSCommands();
         const blob = new Blob([commands], { type: 'application/octet-stream' });
@@ -209,7 +210,7 @@ const AdminWalkInQueue = () => {
       }
 
       // Method 4: Fallback to enhanced browser print with POS-like formatting
-      console.log('Using enhanced browser print fallback...');
+      logger.log('Using enhanced browser print fallback...');
 
       const printWindow = window.open('', '_blank', 'width=400,height=700');
       printWindow.document.write(`
@@ -403,7 +404,7 @@ const AdminWalkInQueue = () => {
         if (newStatus === 'serving') {
           // Send "now serving" notification
           await queueNotificationService.sendNowServingAlert(userEmail, queueNumber);
-          console.log('📧 Admin triggered "now serving" notification for:', queueNumber);
+          logger.log('📧 Admin triggered "now serving" notification for:', queueNumber);
         }
       }
     } catch (error) {
@@ -425,11 +426,11 @@ const AdminWalkInQueue = () => {
         phoneNumber: 'N/A',
       };
 
-      console.log('Creating manual queue with data:', queueData);
+      logger.log('Creating manual queue with data:', queueData);
 
       // Create queue via API
       const response = await queueService.createManualQueue(queueData);
-      console.log('Manual queue created:', response);
+      logger.log('Manual queue created:', response);
 
       const queueNumber = formatWKNumber(response.queue.queueNumber || response.queue.id);
 
@@ -501,7 +502,7 @@ const AdminWalkInQueue = () => {
   // Update queue status
   const updateQueueStatus = async (queueId, newStatus) => {
     try {
-      console.log(`Attempting to update queue ${queueId} to status: ${newStatus}`);
+      logger.log(`Attempting to update queue ${queueId} to status: ${newStatus}`);
 
       // Parse the queueId if it's not already a number
       const parsedQueueId = parseInt(queueId, 10) || queueId;
@@ -514,7 +515,7 @@ const AdminWalkInQueue = () => {
       // Make API call to update status using queueService
       await queueService.updateQueueStatus(parsedQueueId, newStatus);
 
-      console.log(`Queue status updated successfully: ${queueId} → ${newStatus}`);
+      logger.log(`Queue status updated successfully: ${queueId} → ${newStatus}`);
 
       // Send notification if status changed to serving
       if (newStatus === 'serving' && queueToUpdate) {

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import logger from '../../utils/logger';
 import { useNavigate } from 'react-router-dom';
 import {
   Box,
@@ -68,13 +69,13 @@ const RecentApplicationsAdmin = () => {
     const fetchApplications = async () => {
       try {
         setLoading(true);
-        console.log('Fetching applications for RecentApplicationsAdmin...');
+        logger.log('Fetching applications for RecentApplicationsAdmin...');
 
         // Use the service to get applications from the database
         const response = await documentApplicationService.getAllApplications();
 
         // Log the raw response to help with debugging
-        console.log('API response:', response);
+        logger.log('API response:', response);
 
         if (Array.isArray(response)) {
           // Standardize the data to ensure consistent structure
@@ -130,11 +131,11 @@ const RecentApplicationsAdmin = () => {
     };
 
     // Log the number of applications for debugging
-    console.log(`Processing ${apps.length} applications for statistics`);
+    logger.log(`Processing ${apps.length} applications for statistics`);
 
     apps.forEach(app => {
       // Log each application type and status to debug
-      console.log(`Application: Type=${app.type}, Status=${app.status}`);
+      logger.log(`Application: Type=${app.type}, Status=${app.status}`);
 
       // Check application type - make case-insensitive checks to improve matching
       const appType = (app.type || app.applicationType || '').toLowerCase();
@@ -174,7 +175,7 @@ const RecentApplicationsAdmin = () => {
     });
 
     // Log the calculated statistics for debugging
-    console.log('Calculated statistics:', stats);
+    logger.log('Calculated statistics:', stats);
 
     setStatistics(stats);
   };

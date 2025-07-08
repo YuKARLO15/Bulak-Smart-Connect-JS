@@ -1,5 +1,6 @@
 import axios from 'axios';
 import config from '../config/env.js';
+import logger from '../utils/logger.js';
 
 class AppointmentNotificationService {
   constructor() {
@@ -13,21 +14,21 @@ class AppointmentNotificationService {
     try {
       // Validate inputs first
       if (!userEmail) {
-        console.log('⚠️ No email provided for appointment confirmation');
+        logger.log('⚠️ No email provided for appointment confirmation');
         return { success: false, error: 'No email provided' };
       }
 
       if (!appointmentNumber) {
-        console.log('⚠️ No appointment number provided');
+        logger.log('⚠️ No appointment number provided');
         return { success: false, error: 'No appointment number provided' };
       }
 
       if (!appointmentDetails) {
-        console.log('⚠️ No appointment details provided');
+        logger.log('⚠️ No appointment details provided');
         return { success: false, error: 'No appointment details provided' };
       }
 
-      console.log('📧 Sending appointment confirmation notification...', {
+      logger.log('📧 Sending appointment confirmation notification...', {
         email: userEmail,
         appointmentNumber,
         details: appointmentDetails,
@@ -48,14 +49,14 @@ class AppointmentNotificationService {
         },
       };
 
-      console.log('📧 Sending payload:', payload);
+      logger.log('📧 Sending payload:', payload);
 
       const response = await axios.post(
         `${this.baseURL}/auth/notifications/appointment-confirmation`,
         payload
       );
 
-      console.log('✅ Appointment confirmation notification sent:', response.data);
+      logger.log('✅ Appointment confirmation notification sent:', response.data);
       return { success: true, data: response.data };
     } catch (error) {
       console.error('❌ Failed to send appointment confirmation:', error);
@@ -73,11 +74,11 @@ class AppointmentNotificationService {
   async sendStatusUpdateNotification(userEmail, appointmentNumber, newStatus, appointmentDetails) {
     try {
       if (!userEmail) {
-        console.log('⚠️ No email provided for status update');
+        logger.log('⚠️ No email provided for status update');
         return { success: false, error: 'No email provided' };
       }
 
-      console.log('📧 Sending appointment status update notification...', {
+      logger.log('📧 Sending appointment status update notification...', {
         email: userEmail,
         appointmentNumber,
         newStatus,
@@ -105,7 +106,7 @@ class AppointmentNotificationService {
         payload
       );
 
-      console.log('✅ Appointment status update notification sent:', response.data);
+      logger.log('✅ Appointment status update notification sent:', response.data);
       return { success: true, data: response.data };
     } catch (error) {
       console.error('❌ Failed to send appointment status update:', error);
@@ -127,11 +128,11 @@ class AppointmentNotificationService {
   ) {
     try {
       if (!userEmail) {
-        console.log('⚠️ No email provided for cancellation notification');
+        logger.log('⚠️ No email provided for cancellation notification');
         return { success: false, error: 'No email provided' };
       }
 
-      console.log('📧 Sending appointment cancellation notification...', {
+      logger.log('📧 Sending appointment cancellation notification...', {
         email: userEmail,
         appointmentNumber,
         reason,
@@ -159,7 +160,7 @@ class AppointmentNotificationService {
         payload
       );
 
-      console.log('✅ Appointment cancellation notification sent:', response.data);
+      logger.log('✅ Appointment cancellation notification sent:', response.data);
       return { success: true, data: response.data };
     } catch (error) {
       console.error('❌ Failed to send appointment cancellation:', error);

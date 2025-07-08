@@ -1,5 +1,6 @@
 import axios from 'axios';
 import config from '../config/env.js';
+import logger from '../utils/logger.js';
 
 // Create an axios instance with common configurations
 const apiClient = axios.create({
@@ -68,7 +69,7 @@ export const documentApplicationService = {
   // Get all applications with user data (admin only) - ENHANCED FOR NOTIFICATIONS
   getAllApplications: async () => {
     try {
-      console.log('📧 Fetching all applications with user data for notifications...');
+      logger.log('📧 Fetching all applications with user data for notifications...');
 
       // First, try to get data from backend with user relationships
       try {
@@ -77,12 +78,12 @@ export const documentApplicationService = {
 
         // Verify the response is an array
         if (Array.isArray(response.data)) {
-          console.log(`📧 Fetched ${response.data.length} applications with user data from API`);
+          logger.log(`📧 Fetched ${response.data.length} applications with user data from API`);
 
           // Log email availability for debugging
           response.data.forEach(application => {
             const email = application.user?.email || application.email;
-            console.log(`📧 Application ${application.id}: Email = ${email || 'NOT FOUND'}`);
+            logger.log(`📧 Application ${application.id}: Email = ${email || 'NOT FOUND'}`);
           });
 
           return response.data;
@@ -97,7 +98,7 @@ export const documentApplicationService = {
         try {
           const response = await apiClient.get('/document-applications');
           if (Array.isArray(response.data)) {
-            console.log(`Fetched ${response.data.length} applications from regular API`);
+            logger.log(`Fetched ${response.data.length} applications from regular API`);
             return response.data;
           }
         } catch (regularApiError) {
@@ -105,11 +106,11 @@ export const documentApplicationService = {
         }
 
         // Final fallback to localStorage
-        console.log('Falling back to localStorage...');
+        logger.log('Falling back to localStorage...');
         const localApps = JSON.parse(localStorage.getItem('applications') || '[]');
 
         if (Array.isArray(localApps) && localApps.length > 0) {
-          console.log(`Found ${localApps.length} applications in localStorage`);
+          logger.log(`Found ${localApps.length} applications in localStorage`);
           return localApps;
         } else {
           console.warn('No applications found in localStorage');
@@ -125,15 +126,15 @@ export const documentApplicationService = {
   // Get a specific application by ID
   getApplication: async applicationId => {
     try {
-      console.log(`📧 Fetching application ${applicationId} with user data for notifications...`);
+      logger.log(`📧 Fetching application ${applicationId} with user data for notifications...`);
       // Always include user data for admin operations
       const response = await apiClient.get(
         `/document-applications/${applicationId}?includeUser=true`
       );
-      console.log('📧 Application with user data fetched:', response.data);
+      logger.log('📧 Application with user data fetched:', response.data);
 
       const email = response.data.user?.email || response.data.email;
-      console.log(`📧 Application ${applicationId}: Email = ${email || 'NOT FOUND'}`);
+      logger.log(`📧 Application ${applicationId}: Email = ${email || 'NOT FOUND'}`);
 
       return response.data;
     } catch (error) {
@@ -251,9 +252,9 @@ export const documentApplicationService = {
   // Upload a file for an application
   uploadFile: async (applicationId, file, documentType) => {
     try {
-      console.log(`Frontend Service: Uploading file for application ${applicationId}...`);
-      console.log('File details:', { name: file.name, size: file.size, type: file.type });
-      console.log('Document type:', documentType);
+      logger.log(`Frontend Service: Uploading file for application ${applicationId}...`);
+      logger.log('File details:', { name: file.name, size: file.size, type: file.type });
+      logger.log('Document type:', documentType);
 
       // Enhanced sanitization for document labels/types
       const sanitizeDocumentType = docType => {
@@ -287,15 +288,15 @@ export const documentApplicationService = {
       if (documentType && documentType !== 'undefined') {
         const sanitizedDocType = sanitizeDocumentType(documentType);
         formData.append('documentCategory', sanitizedDocType);
-        console.log('Original document type:', documentType);
-        console.log('Sanitized document type:', sanitizedDocType);
+        logger.log('Original document type:', documentType);
+        logger.log('Sanitized document type:', sanitizedDocType);
       } else {
         throw new Error('Document type/category is required');
       }
 
-      console.log('Uploading file with category:', documentType);
-      console.log('Original filename:', file.name);
-      console.log('Sanitized filename:', sanitizedFileName);
+      logger.log('Uploading file with category:', documentType);
+      logger.log('Original filename:', file.name);
+      logger.log('Sanitized filename:', sanitizedFileName);
 
       const response = await apiClient.post(
         `/document-applications/${applicationId}/files`,
@@ -326,9 +327,9 @@ export const documentApplicationService = {
   // Get application files (latest per category)
   getApplicationFiles: async applicationId => {
     try {
-      console.log(`Frontend Service: Fetching latest files for application ${applicationId}...`);
+      logger.log(`Frontend Service: Fetching latest files for application ${applicationId}...`);
       const response = await apiClient.get(`/document-applications/${applicationId}/files`);
-      console.log('Frontend Service: Latest files response:', response.data);
+      logger.log('Frontend Service: Latest files response:', response.data);
       return response.data;
     } catch (error) {
       console.error(
@@ -337,7 +338,7 @@ export const documentApplicationService = {
       );
 
       if (error.response?.status === 404) {
-        console.log('Frontend Service: Application or files not found, returning empty array');
+        logger.log('Frontend Service: Application or files not found, returning empty array');
         return [];
       }
 
@@ -348,9 +349,9 @@ export const documentApplicationService = {
   // Get all application files (for admin)
   getAllApplicationFiles: async applicationId => {
     try {
-      console.log(`Frontend Service: Fetching ALL files for application ${applicationId}...`);
+      logger.log(`Frontend Service: Fetching ALL files for application ${applicationId}...`);
       const response = await apiClient.get(`/document-applications/${applicationId}/files/all`);
-      console.log('Frontend Service: All files response:', response.data);
+      logger.log('Frontend Service: All files response:', response.data);
       return response.data;
     } catch (error) {
       console.error(
@@ -359,7 +360,7 @@ export const documentApplicationService = {
       );
 
       if (error.response?.status === 404) {
-        console.log('Frontend Service: Application or files not found, returning empty object');
+        logger.log('Frontend Service: Application or files not found, returning empty object');
         return { latestByCategory: {}, allFiles: [] };
       }
 

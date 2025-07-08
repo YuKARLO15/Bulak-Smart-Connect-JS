@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import logger from '../../utils/logger';
 import {
   Box,
   Typography,
@@ -83,7 +84,7 @@ const AdminApplicationDetails = () => {
           let subtype = '';
 
           // Debug logging
-          console.log('Processing app:', app.id, app);
+          logger.log('Processing app:', app.id, app);
 
           // More explicit type determination
           if (app.formData?.applicationType) {
@@ -105,7 +106,7 @@ const AdminApplicationDetails = () => {
             subtype = app.subtype;
           }
 
-          console.log('Processed type:', baseType, 'subtype:', subtype);
+          logger.log('Processed type:', baseType, 'subtype:', subtype);
 
           return {
             ...app,
@@ -318,37 +319,37 @@ const AdminApplicationDetails = () => {
     try {
       // Check user relationship first (main method for appointment/queue system)
       if (application.user && application.user.email) {
-        console.log('📧 Found email in application.user.email:', application.user.email);
+        logger.log('📧 Found email in application.user.email:', application.user.email);
         return application.user.email;
       }
 
       // Check direct email field
       if (application.email) {
-        console.log('📧 Found email in application.email:', application.email);
+        logger.log('📧 Found email in application.email:', application.email);
         return application.email;
       }
 
       // Check if User object exists with email (different casing)
       if (application.User && application.User.email) {
-        console.log('📧 Found email in application.User.email:', application.User.email);
+        logger.log('📧 Found email in application.User.email:', application.User.email);
         return application.User.email;
       }
 
       // Check if userEmail field exists
       if (application.userEmail) {
-        console.log('📧 Found email in application.userEmail:', application.userEmail);
+        logger.log('📧 Found email in application.userEmail:', application.userEmail);
         return application.userEmail;
       }
 
       // Check userContactInfo from your existing logic
       if (userContactInfo?.email) {
-        console.log('📧 Found email in userContactInfo.email:', userContactInfo.email);
+        logger.log('📧 Found email in userContactInfo.email:', userContactInfo.email);
         return userContactInfo.email;
       }
 
-      console.log('⚠️ No email found for application. Available fields:', Object.keys(application));
-      console.log('📋 User object:', application.user);
-      console.log('📋 UserContactInfo:', userContactInfo);
+      logger.log('⚠️ No email found for application. Available fields:', Object.keys(application));
+      logger.log('📋 User object:', application.user);
+      logger.log('📋 UserContactInfo:', userContactInfo);
       return null;
     } catch (error) {
       console.error('Error getting application email:', error);
@@ -358,7 +359,7 @@ const AdminApplicationDetails = () => {
 
   const handleUpdateStatus = async () => {
     try {
-      console.log(`📝 Updating application ${selectedApplication.id} status to: ${newStatus}`);
+      logger.log(`📝 Updating application ${selectedApplication.id} status to: ${newStatus}`);
       // Update status in database
       await documentApplicationService.updateApplication(selectedApplication.id, {
         status: newStatus,
@@ -371,7 +372,7 @@ const AdminApplicationDetails = () => {
 
       if (applicationEmail) {
         try {
-          console.log(`📧 Sending status update notification to: ${applicationEmail}`);
+          logger.log(`📧 Sending status update notification to: ${applicationEmail}`);
 
           // Get applicant name for notification
           const applicantName =
@@ -422,16 +423,16 @@ const AdminApplicationDetails = () => {
           }
 
           if (notificationResult.success) {
-            console.log('✅ Status update notification sent successfully');
+            logger.log('✅ Status update notification sent successfully');
           } else {
-            console.log('⚠️ Status update notification failed:', notificationResult.error);
+            logger.log('⚠️ Status update notification failed:', notificationResult.error);
           }
         } catch (notificationError) {
           console.error('❌ Error sending status update notification:', notificationError);
         }
       } else {
-        console.log('⚠️ No email found for application, skipping notification');
-        console.log('📋 Available application fields:', Object.keys(selectedApplication));
+        logger.log('⚠️ No email found for application, skipping notification');
+        logger.log('📋 Available application fields:', Object.keys(selectedApplication));
       }
 
       // Refresh applications list

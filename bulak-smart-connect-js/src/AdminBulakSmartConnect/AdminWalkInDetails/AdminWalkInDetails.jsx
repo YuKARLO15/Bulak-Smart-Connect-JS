@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import logger from '../../utils/logger';
 import './AdminWalkInDetails.css';
 import { queueService } from '../../services/queueService';
 import axios from 'axios';
@@ -40,7 +41,7 @@ const AdminWalkInDetails = () => {
       try {
         setLoading(true);
         const details = await queueService.fetchQueueDetails(id);
-        console.log('Queue details fetched:', details);
+        logger.log('Queue details fetched:', details);
         setQueueDetails(details);
         setError(null);
       } catch (err) {

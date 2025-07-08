@@ -1,3 +1,5 @@
+import logger from '../../../utils/logger.js';
+
 const BirthCertificateApplicationData = formData => {
   const timestamp = Date.now().toString().slice(-6);
   const applicationId = `BA-${timestamp}`;
@@ -21,7 +23,7 @@ const BirthCertificateApplicationData = formData => {
 
   localStorage.setItem('applications', JSON.stringify(existingApplications));
 
-  console.log('Data saved to local storage with ID:', applicationId);
+  logger.log('Data saved to local storage with ID:', applicationId);
 
   window.dispatchEvent(new Event('storage'));
 

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'; //useState Here
+import logger from '../utils/logger';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
@@ -178,14 +179,14 @@ export default function LogInCard({ onLogin }) {
     if (validateInputs()) {
       try {
         setIsLoginAttempting(true);
-        console.log(`Sending login request with ${loginType}:`, { [loginType]: email, password });
+        logger.log(`Sending login request with ${loginType}:`, { [loginType]: email, password });
 
         // Old Method to use the API service from api.js, now using the AuthContext
-        //console.log('Sending login request with:', { email, password });
+        //logger.log('Sending login request with:', { email, password });
 
         //Old Logic to use the API service from api.js, now using the AuthContext
         //const data = await authService.login(email, password);
-        //console.log('Login successful:', data);
+        //logger.log('Login successful:', data);
         //onLogin(data.user);
         //login(); // Set auth context
         //navigate("/UserDashboard");
@@ -197,7 +198,7 @@ export default function LogInCard({ onLogin }) {
         // Use the login function from AuthContext
         const { success, user } = await login(email, password, loginType);
 
-        console.log('Login successful:', success);
+        logger.log('Login successful:', success);
 
         if (success) {
           // Clear lockout on successful login
@@ -225,10 +226,10 @@ export default function LogInCard({ onLogin }) {
               user.roles?.includes('admin') ||
               user.roles?.includes('super_admin'))
           ) {
-            console.log('User has admin role - navigating to AdminHome');
+            logger.log('User has admin role - navigating to AdminHome');
             navigate('/AdminHome');
           } else {
-            console.log('User is a regular user - navigating to Home');
+            logger.log('User is a regular user - navigating to Home');
             navigate('/Home');
           }
         } else {
@@ -240,8 +241,8 @@ export default function LogInCard({ onLogin }) {
         let errorMessage = 'An error occurred during login. Please try again.';
 
         if (error.response) {
-          console.log('Error status:', error.response.status);
-          console.log('Error data:', error.response.data);
+          logger.log('Error status:', error.response.status);
+          logger.log('Error data:', error.response.data);
 
           // Check for specific error types
           if (error.response.status === 401) {

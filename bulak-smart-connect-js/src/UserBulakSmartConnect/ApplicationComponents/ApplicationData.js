@@ -1,3 +1,5 @@
+import logger from '../../utils/logger.js';
+
 // src/services/ApplicationDataService.js
 
 /**
@@ -23,8 +25,8 @@ export const updateApplication = (applicationId, updatedData) => {
       localStorage.setItem('applications', JSON.stringify(applications));
       return true;
     }
-    console.log(`Found application at index ${index}`);
-    console.log('Original:', applications[index]);
+    logger.log(`Found application at index ${index}`);
+    logger.log('Original:', applications[index]);
     return false;
   } catch (error) {
     console.error('Error updating application:', error);

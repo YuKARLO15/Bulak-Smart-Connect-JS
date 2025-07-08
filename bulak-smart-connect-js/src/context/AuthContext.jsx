@@ -1,6 +1,7 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import axios from 'axios';
 import config from '../config/env.js';
+import logger from '../utils/logger.js';
 
 const AuthContext = createContext(null);
 
@@ -27,7 +28,7 @@ export const AuthProvider = ({ children }) => {
           headers: { Authorization: `Bearer ${token}` },
         });
 
-        console.log('Profile response:', response.data);
+        logger.log('Profile response:', response.data);
 
         // Process the user data to ensure it has an id
         const userData = response.data;
@@ -60,13 +61,13 @@ export const AuthProvider = ({ children }) => {
         emailOrUsername: emailOrUsername, // Backend expects a single field
       };
 
-      console.log(`Attempting login with ${loginType}:`, emailOrUsername);
+      logger.log(`Attempting login with ${loginType}:`, emailOrUsername);
 
       const response = await axios.post(`${config.API_BASE_URL}/auth/login`, payload);
 
       // New logging for backend response
-      console.log('Backend auth response:', response.data); //Debugging line
-      console.log('User object from backend:', response.data.user); //Debugging line
+      logger.log('Backend auth response:', response.data); //Debugging line
+      logger.log('User object from backend:', response.data.user); //Debugging line
 
       const { access_token, user: userData } = response.data;
 

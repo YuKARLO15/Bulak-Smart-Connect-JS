@@ -1,3 +1,5 @@
+import logger from "../../utils/logger";
+
 /**
  * User management utility functions for handling user data across components
  */
@@ -46,7 +48,7 @@ export const addUser = userData => {
     // Save back to localStorage
     localStorage.setItem('users', JSON.stringify(updatedUsers));
 
-    console.log('User added successfully:', newUser);
+    logger.log('User added successfully:', newUser);
     return { success: true, user: newUser };
   } catch (error) {
     console.error('Error adding user:', error);

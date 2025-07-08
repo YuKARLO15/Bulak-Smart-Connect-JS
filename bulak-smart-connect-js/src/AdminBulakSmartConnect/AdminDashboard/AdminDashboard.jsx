@@ -5,6 +5,7 @@ import axios from 'axios';
 import { queueService } from '../../services/queueService';
 import { documentApplicationService } from '../../services/documentApplicationService';
 import { appointmentService } from '../../services/appointmentService';
+import logger from '../../utils/logger';
 import {
   LineChart,
   Line,
@@ -151,7 +152,7 @@ const AdminDashboard = () => {
         });
       }
 
-      console.log('Generated monthly analytics from database:', monthlyData);
+      logger.log('Generated monthly analytics from database:', monthlyData);
       return monthlyData;
     } catch (error) {
       console.error('Error generating monthly analytics from database:', error);
@@ -194,10 +195,10 @@ const AdminDashboard = () => {
   const fetchApplicationData = useCallback(async () => {
     try {
       setLoading(true);
-      console.log('Fetching applications for dashboard statistics...');
+      logger.log('Fetching applications for dashboard statistics...');
 
       const response = await documentApplicationService.getAllApplications();
-      console.log('API response:', response);
+      logger.log('API response:', response);
 
       if (Array.isArray(response)) {
         const standardizedData = standardizeApplicationData(response);
@@ -235,7 +236,7 @@ const AdminDashboard = () => {
           }
         });
 
-        console.log('Calculated application statistics:', stats);
+        logger.log('Calculated application statistics:', stats);
         setStatistics(stats);
 
         return standardizedData;
@@ -247,7 +248,7 @@ const AdminDashboard = () => {
       setError('Error loading application data: ' + err.message);
 
       try {
-        console.log('Falling back to localStorage for applications...');
+        logger.log('Falling back to localStorage for applications...');
         const localData = JSON.parse(localStorage.getItem('applications') || '[]');
         const standardizedData = standardizeApplicationData(localData);
         setApplications(standardizedData);
