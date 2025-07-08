@@ -1,6 +1,7 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import axios from 'axios';
 import config from '../config/env.js';
+import logger from '../utils/logger.js';
 
 const AuthContext = createContext(null);
 
@@ -27,7 +28,7 @@ export const AuthProvider = ({ children }) => {
           headers: { Authorization: `Bearer ${token}` },
         });
 
-        console.log('Profile response:', response.data);
+        logger.log('Profile response:', response.data);
 
         // Process the user data to ensure it has an id
         const userData = response.data;
@@ -42,7 +43,7 @@ export const AuthProvider = ({ children }) => {
         // Store user in localStorage during auth check too
         localStorage.setItem('currentUser', JSON.stringify(processedUser));
       } catch (err) {
-        console.error('Auth check failed:', err);
+        logger.error('Auth check failed:', err);
         localStorage.removeItem('token');
       } finally {
         setLoading(false);
@@ -60,13 +61,13 @@ export const AuthProvider = ({ children }) => {
         emailOrUsername: emailOrUsername, // Backend expects a single field
       };
 
-      console.log(`Attempting login with ${loginType}:`, emailOrUsername);
+      logger.log(`Attempting login with ${loginType}:`, emailOrUsername);
 
       const response = await axios.post(`${config.API_BASE_URL}/auth/login`, payload);
 
       // New logging for backend response
-      console.log('Backend auth response:', response.data); //Debugging line
-      console.log('User object from backend:', response.data.user); //Debugging line
+      logger.log('Backend auth response:', response.data); //Debugging line
+      logger.log('User object from backend:', response.data.user); //Debugging line
 
       const { access_token, user: userData } = response.data;
 
@@ -91,7 +92,7 @@ export const AuthProvider = ({ children }) => {
       setIsAuthenticated(true);
       return { success: true, user: processedUser };
     } catch (err) {
-      console.error('Login error:', err);
+      logger.error('Login error:', err);
       setError(err.response?.data?.message || 'Login failed');
       return { success: false };
     }
@@ -169,7 +170,7 @@ export const AuthProvider = ({ children }) => {
 
       return { success: true, user: updatedUserData };
     } catch (err) {
-      console.error('Profile update error:', err);
+      logger.error('Profile update error:', err);
       const errorMsg = err.response?.data?.message || 'Profile update failed';
       setError(errorMsg);
       return { success: false, error: errorMsg };
@@ -206,7 +207,7 @@ export const AuthProvider = ({ children }) => {
       setUpdateSuccess(true);
       return { success: true, user: response.data };
     } catch (err) {
-      console.error('Admin user update error:', err);
+      logger.error('Admin user update error:', err);
       const errorMsg = err.response?.data?.message || 'User update failed';
       setError(errorMsg);
       return { success: false, error: errorMsg };

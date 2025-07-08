@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import logger from '../../utils/logger';
 import { useNavigate, useLocation } from 'react-router-dom';
 import {
   Box,
@@ -48,7 +49,7 @@ const RecentApplicationsComponent = () => {
           const localApps = getApplications();
           setApplications(localApps);
         } catch (localErr) {
-          console.error('Failed to load local applications:', localErr);
+          logger.error('Failed to load local applications:', localErr);
         }
       } finally {
         setLoading(false);
@@ -105,11 +106,11 @@ const RecentApplicationsComponent = () => {
 
       try {
         applicationData = await documentApplicationService.getApplication(application.id);
-        console.log('Fetched application data:', applicationData);
-        console.log('Application data keys:', Object.keys(applicationData || {}));
-        console.log('Application data structure:', JSON.stringify(applicationData, null, 2));
+        logger.log('Fetched application data:', applicationData);
+        logger.log('Application data keys:', Object.keys(applicationData || {}));
+        logger.log('Application data structure:', JSON.stringify(applicationData, null, 2));
       } catch (backendError) {
-        console.warn('Could not fetch from backend, trying local data:', backendError);
+        logger.warn('Could not fetch from backend, trying local data:', backendError);
         // Fallback to local applications array
         applicationData = applications.find(app => app.id === application.id);
       }
@@ -117,19 +118,19 @@ const RecentApplicationsComponent = () => {
       // Determine application type - handle both backend and local data structures
       const applicationType =
         application.type || application.applicationType || applicationData?.applicationType;
-      console.log('Determined application type:', applicationType);
+      logger.log('Determined application type:', applicationType);
 
       if (applicationType === 'Birth Certificate') {
         if (applicationData?.formData) {
           // Check if it's already in local format or backend format
           if (typeof applicationData.formData === 'object' && applicationData.formData.firstName) {
             // Backend data structure - convert to expected format
-            console.log('Converting backend data to form data...');
+            logger.log('Converting backend data to form data...');
             const convertedFormData = convertBackendToFormData(
               applicationData,
               'Birth Certificate'
             );
-            console.log('Converted form data:', convertedFormData);
+            logger.log('Converted form data:', convertedFormData);
 
             // Store in localStorage with the expected key
             localStorage.setItem('birthCertificateApplication', JSON.stringify(convertedFormData));
@@ -154,7 +155,7 @@ const RecentApplicationsComponent = () => {
             }
             localStorage.setItem('applications', JSON.stringify(existingApps));
 
-            console.log('Stored application data in localStorage');
+            logger.log('Stored application data in localStorage');
             navigate('/BirthApplicationSummary');
           } else {
             // Local data structure - works as before
@@ -207,15 +208,15 @@ const RecentApplicationsComponent = () => {
         navigate('/ApplicationDetails/' + application.id);
       }
     } catch (err) {
-      console.error('Error preparing application summary:', err);
+      logger.error('Error preparing application summary:', err);
       alert('An error occurred while loading the application. Please try again.');
     }
   };
 
   // Helper function to convert backend data to expected form data structure
   const convertBackendToFormData = (backendData, applicationType) => {
-    console.log('Converting backend data:', backendData);
-    console.log('Backend formData:', backendData.formData);
+    logger.log('Converting backend data:', backendData);
+    logger.log('Backend formData:', backendData.formData);
 
     if (applicationType === 'Birth Certificate') {
       // The backend already has formData, just map the field names to what the summary expects

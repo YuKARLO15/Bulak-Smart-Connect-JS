@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import logger from '../../../../utils/logger';
 import { useNavigate } from 'react-router-dom';
 import './MarriageSummaryForm.css';
 import {
@@ -43,7 +44,7 @@ const MarriageSummaryForm = () => {
         setFormData(JSON.parse(savedCertificateData));
       }
     } catch (err) {
-      console.error('Error loading form data:', err);
+      logger.error('Error loading form data:', err);
     } finally {
       setLoading(false);
     }
@@ -51,9 +52,9 @@ const MarriageSummaryForm = () => {
 
   const handleCancelApplication = async () => {
     try {
-      console.log('=== Attempting to cancel marriage certificate application ===');
-      console.log('applicationId state:', applicationId);
-      console.log('formData:', formData);
+      logger.log('=== Attempting to cancel marriage certificate application ===');
+      logger.log('applicationId state:', applicationId);
+      logger.log('formData:', formData);
 
       let idToDelete = applicationId || formData.applicationId || formData.id || formData.appId;
 
@@ -66,14 +67,14 @@ const MarriageSummaryForm = () => {
 
         if (marriageApps.length > 0) {
           idToDelete = marriageApps[0].id;
-          console.log('Found ID from applications array:', idToDelete);
+          logger.log('Found ID from applications array:', idToDelete);
         }
       }
 
-      console.log('Final ID to delete:', idToDelete);
+      logger.log('Final ID to delete:', idToDelete);
 
       if (!idToDelete) {
-        console.error('No application ID found to delete');
+        logger.error('No application ID found to delete');
         alert('Cannot find application ID to delete. Please try refreshing the page.');
         setConfirmCancelDialog(false);
         return;
@@ -81,21 +82,21 @@ const MarriageSummaryForm = () => {
 
       try {
         await documentApplicationService.deleteApplication(idToDelete);
-        console.log('Marriage certificate application deleted from database:', idToDelete);
+        logger.log('Marriage certificate application deleted from database:', idToDelete);
       } catch (dbError) {
-        console.error('Error deleting from database:', dbError);
+        logger.error('Error deleting from database:', dbError);
         alert('Failed to delete application from database. Please try again or contact support.');
         setConfirmCancelDialog(false);
         return;
       }
 
       const existingApplications = JSON.parse(localStorage.getItem('applications') || '[]');
-      console.log('Current applications count:', existingApplications.length);
+      logger.log('Current applications count:', existingApplications.length);
 
       const updatedApplications = existingApplications.filter(
         app => String(app.id) !== String(idToDelete)
       );
-      console.log('Updated applications count:', updatedApplications.length);
+      logger.log('Updated applications count:', updatedApplications.length);
 
       localStorage.setItem('applications', JSON.stringify(updatedApplications));
 
@@ -121,7 +122,7 @@ const MarriageSummaryForm = () => {
         localStorage.removeItem('marriageFormData');
       }
 
-      console.log(
+      logger.log(
         'Marriage certificate application deleted successfully from both database and localStorage:',
         idToDelete
       );
@@ -140,7 +141,7 @@ const MarriageSummaryForm = () => {
         navigate('/ApplicationForm');
       }, 100);
     } catch (error) {
-      console.error('Error deleting marriage certificate application:', error);
+      logger.error('Error deleting marriage certificate application:', error);
       alert('Error deleting application: ' + error.message);
       setConfirmCancelDialog(false);
     }
@@ -160,10 +161,10 @@ const MarriageSummaryForm = () => {
 
   const handleModify = () => {
     try {
-      console.log('Current formData:', formData);
+      logger.log('Current formData:', formData);
 
       const appId = applicationId || formData.applicationId || formData.id;
-      console.log('Application ID for editing:', appId);
+      logger.log('Application ID for editing:', appId);
 
       if (appId) {
         const updatedFormData = {
@@ -173,7 +174,7 @@ const MarriageSummaryForm = () => {
 
         localStorage.setItem('marriageFormData', JSON.stringify(updatedFormData));
       } else {
-        console.warn('No application ID found for editing');
+        logger.warn('No application ID found for editing');
         localStorage.setItem('marriageFormData', JSON.stringify(formData));
       }
 
@@ -184,7 +185,7 @@ const MarriageSummaryForm = () => {
 
       navigate('/MarriageForm');
     } catch (err) {
-      console.error('Error setting up modification:', err);
+      logger.error('Error setting up modification:', err);
       alert('There was a problem preparing the form for editing. Please try again.');
     }
   };

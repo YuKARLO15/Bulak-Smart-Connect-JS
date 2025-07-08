@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import logger from '../../../../utils/logger';
 import { useNavigate } from 'react-router-dom';
 import {
   Button,
@@ -42,7 +43,7 @@ const MarriageCertificateForm = () => {
     const isNewApplication = !localStorage.getItem('isEditingMarriageForm');
 
     if (isNewApplication) {
-      console.log('Starting new Marriage application - clearing previous application IDs');
+      logger.log('Starting new Marriage application - clearing previous application IDs');
       localStorage.removeItem('currentApplicationId');
       localStorage.removeItem('marriageApplicationId');
     }
@@ -70,7 +71,7 @@ const MarriageCertificateForm = () => {
 
           if (backendApp && backendApp.formData) {
             setFormData(backendApp.formData);
-            console.log('Loaded form data from backend for editing:', currentEditingId);
+            logger.log('Loaded form data from backend for editing:', currentEditingId);
 
             if (backendApp.formData.husbandCivilStatus === 'Widowed') {
               setShowHusbandWidowedFields?.(true);
@@ -92,9 +93,9 @@ const MarriageCertificateForm = () => {
                   setShowWifeWidowedFields?.(true);
                 }
 
-                console.log(`Loaded existing ${option} data from localStorage for editing`);
+                logger.log(`Loaded existing ${option} data from localStorage for editing`);
               } catch (err) {
-                console.error(
+                logger.error(
                   'Error loading marriage form data from localStorage for editing:',
                   err
                 );
@@ -102,7 +103,7 @@ const MarriageCertificateForm = () => {
             }
           }
         } catch (error) {
-          console.error('Error fetching application from backend:', error);
+          logger.error('Error fetching application from backend:', error);
 
           const savedData = localStorage.getItem('marriageFormData');
           if (savedData) {
@@ -117,11 +118,11 @@ const MarriageCertificateForm = () => {
                 setShowWifeWidowedFields?.(true);
               }
 
-              console.log(
+              logger.log(
                 `Loaded existing ${option} data from localStorage for editing (fallback)`
               );
             } catch (err) {
-              console.error('Error loading marriage form data from localStorage for editing:', err);
+              logger.error('Error loading marriage form data from localStorage for editing:', err);
             }
           }
         }
@@ -146,7 +147,7 @@ const MarriageCertificateForm = () => {
         }
       }
     } catch (error) {
-      console.error('Error checking for previous license data:', error);
+      logger.error('Error checking for previous license data:', error);
     }
   };
 
@@ -154,12 +155,12 @@ const MarriageCertificateForm = () => {
     setFormData(previousLicenseData.formData);
     setDataPreFilled(true);
     setShowDataDialog(false);
-    console.log('Using data from previous Marriage License:', previousLicenseData.id);
+    logger.log('Using data from previous Marriage License:', previousLicenseData.id);
   };
 
   const handleUseNewData = () => {
     setShowDataDialog(false);
-    console.log('User chose to fill out a new form');
+    logger.log('User chose to fill out a new form');
   };
 
   const handleChange = e => {
@@ -318,13 +319,13 @@ const MarriageCertificateForm = () => {
     }
 
     try {
-      console.log('==== MARRIAGE FORM SUBMISSION ====');
+      logger.log('==== MARRIAGE FORM SUBMISSION ====');
 
       const isEditing = localStorage.getItem('isEditingMarriageForm') === 'true';
       const currentEditingId = localStorage.getItem('currentEditingApplicationId');
 
-      console.log('Is editing mode?', isEditing);
-      console.log('Editing ID:', currentEditingId);
+      logger.log('Is editing mode?', isEditing);
+      logger.log('Editing ID:', currentEditingId);
 
       const applicationType = selectedOption || 'Marriage Certificate';
       const applicationSubtype = selectedOption || 'Marriage Certificate';
@@ -358,9 +359,9 @@ const MarriageCertificateForm = () => {
           });
 
           applicationId = backendResponse.id || currentEditingId;
-          console.log('Successfully updated application in backend:', applicationId);
+          logger.log('Successfully updated application in backend:', applicationId);
         } catch (backendError) {
-          console.error('Backend update failed:', backendError);
+          logger.error('Backend update failed:', backendError);
 
           const applications = JSON.parse(localStorage.getItem('applications') || '[]');
           const index = applications.findIndex(app => app.id === currentEditingId);
@@ -378,7 +379,7 @@ const MarriageCertificateForm = () => {
 
             localStorage.setItem('applications', JSON.stringify(applications));
             applicationId = currentEditingId;
-            console.log('Fallback to localStorage update for editing:', applicationId);
+            logger.log('Fallback to localStorage update for editing:', applicationId);
           } else {
             throw new Error('Application not found for editing.');
           }
@@ -405,11 +406,11 @@ const MarriageCertificateForm = () => {
           if (backendResponse && backendResponse.id) {
             applicationId = backendResponse.id;
           }
-          console.log('Successfully created application in backend:', applicationId);
+          logger.log('Successfully created application in backend:', applicationId);
         } catch (backendError) {
-          console.error('Backend creation failed:', backendError);
+          logger.error('Backend creation failed:', backendError);
 
-          console.log('Falling back to localStorage creation only');
+          logger.log('Falling back to localStorage creation only');
         }
 
         const applications = JSON.parse(localStorage.getItem('applications') || '[]');
@@ -463,7 +464,7 @@ const MarriageCertificateForm = () => {
         });
       }
     } catch (error) {
-      console.error('Error submitting form:', error);
+      logger.error('Error submitting form:', error);
       alert('There was an error submitting your application. Please try again.');
     }
   };

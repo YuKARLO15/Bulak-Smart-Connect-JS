@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import logger from '../../../../utils/logger';
 import './MarriageAffidavitForm.css';
 
 const MarriageAffidavitForm = ({
@@ -17,7 +18,7 @@ const MarriageAffidavitForm = ({
   // Simple submit handler
   const handleSubmit = e => {
     e.preventDefault();
-    console.log('Form reviewed:', formData);
+    logger.log('Form reviewed:', formData);
 
     // Always report success to parent
     if (onValidationChange) {

@@ -5,6 +5,7 @@ import { addUser, updateUser } from './NewUserInfo'; // Keep for localStorage fa
 import NavBar from '../../NavigationComponents/NavSide';
 import userService from '../../services/userService';
 import { useAuth } from '../../context/AuthContext';
+import logger from '../../utils/logger';
 
 const AdminAddUser = () => {
   const navigate = useNavigate();
@@ -192,19 +193,19 @@ const AdminAddUser = () => {
 
               // Use userService instead of adminUpdateUser from context
               const response = await userService.adminUpdateUser(userId, backendData);
-              console.log('User updated via backend:', response);
+              logger.log('User updated via backend:', response);
               success = true;
             } else {
               throw new Error('No user ID for backend update');
             }
           } catch (backendError) {
-            console.warn('Backend update failed, trying localStorage:', backendError);
+            logger.warn('Backend update failed, trying localStorage:', backendError);
 
             // Fallback to localStorage
             if (userIndex !== undefined) {
               const result = updateUser(userIndex, userData);
               if (result.success) {
-                console.log('User updated via localStorage');
+                logger.log('User updated via localStorage');
                 success = true;
               } else {
                 alert(result.message || 'Failed to update user');
@@ -222,15 +223,15 @@ const AdminAddUser = () => {
             };
 
             await userService.createUser(backendData);
-            console.log('User created via backend');
+            logger.log('User created via backend');
             success = true;
           } catch (backendError) {
-            console.warn('Backend creation failed, trying localStorage:', backendError);
+            logger.warn('Backend creation failed, trying localStorage:', backendError);
 
             // Fallback to localStorage
             const result = addUser(userData);
             if (result.success) {
-              console.log('User created via localStorage');
+              logger.log('User created via localStorage');
               success = true;
             } else {
               alert(result.message || 'Failed to create user');
@@ -244,7 +245,7 @@ const AdminAddUser = () => {
         }
       }
     } catch (error) {
-      console.error('Error submitting form:', error);
+      logger.error('Error submitting form:', error);
       alert('An error occurred. Please try again.');
     } finally {
       setSubmitting(false);

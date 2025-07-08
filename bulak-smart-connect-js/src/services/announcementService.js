@@ -1,4 +1,5 @@
 import axios from 'axios';
+import logger from '../utils/logger.js';
 import config from '../config/env.js';
 
 export const announcementService = {
@@ -8,7 +9,7 @@ export const announcementService = {
       const response = await axios.get(`${config.API_BASE_URL}/announcements`);
       return response.data;
     } catch (error) {
-      console.error('Error fetching announcements:', error);
+      logger.error('Error fetching announcements:', error);
       throw error;
     }
   },
@@ -21,7 +22,7 @@ export const announcementService = {
       );
       return response.data;
     } catch (error) {
-      console.error('Error fetching recent announcements:', error);
+      logger.error('Error fetching recent announcements:', error);
       throw error;
     }
   },
@@ -32,7 +33,7 @@ export const announcementService = {
       const response = await axios.get(`${config.API_BASE_URL}/announcements/${id}`);
       return response.data;
     } catch (error) {
-      console.error('Error fetching announcement:', error);
+      logger.error('Error fetching announcement:', error);
       throw error;
     }
   },
@@ -43,7 +44,7 @@ export const announcementService = {
       const response = await axios.post(`${config.API_BASE_URL}/announcements`, announcementData);
       return response.data;
     } catch (error) {
-      console.error('Error creating announcement:', error);
+      logger.error('Error creating announcement:', error);
       throw error;
     }
   },
@@ -57,7 +58,7 @@ export const announcementService = {
       );
       return response.data;
     } catch (error) {
-      console.error('Error updating announcement:', error);
+      logger.error('Error updating announcement:', error);
       throw error;
     }
   },
@@ -68,7 +69,7 @@ export const announcementService = {
       await axios.delete(`${config.API_BASE_URL}/announcements/${id}`);
       return true;
     } catch (error) {
-      console.error('Error deleting announcement:', error);
+      logger.error('Error deleting announcement:', error);
       throw error;
     }
   },

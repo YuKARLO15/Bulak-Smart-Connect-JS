@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import logger from '../../utils/logger';
 import './ScreenSmartQueue.css';
 import { queueService } from '../../services/queueService';
 
@@ -22,7 +23,7 @@ const ScreenSmartQueue = () => {
       setNextQueue(pending[0] ? formatQueueNumber(pending[0].queueNumber || pending[0].id) : '—');
       setInQueueList(pending.slice(1, 13).map(q => formatQueueNumber(q.queueNumber || q.id)));
     } catch (err) {
-      console.error('Failed to fetch queue data:', err);
+      logger.error('Failed to fetch queue data:', err);
     }
   };
 

@@ -6,6 +6,7 @@ import { getUsers, updateUserImage } from './NewUserInfo'; // Keep for fallback
 import NavBar from '../../NavigationComponents/NavSide';
 import userService from '../../services/userService';
 import { useAuth } from '../../context/AuthContext';
+import logger from '../../utils/logger';
 
 const AdminAccountManagement = () => {
   const { user: currentUser, hasRole } = useAuth();
@@ -37,7 +38,7 @@ const AdminAccountManagement = () => {
       setLoading(true);
       setError('');
 
-      console.log('Loading users from API...');
+      logger.log('Loading users from API...');
 
       // Build query params, only include search if it's not empty
       const queryParams = {
@@ -78,9 +79,9 @@ const AdminAccountManagement = () => {
 
       // Update localStorage for consistency
       localStorage.setItem('users', JSON.stringify(transformedUsers));
-      console.log(`Loaded ${transformedUsers.length} non-citizen users from API`);
+      logger.log(`Loaded ${transformedUsers.length} non-citizen users from API`);
     } catch (err) {
-      console.error('Error loading users from API:', err);
+      logger.error('Error loading users from API:', err);
       setError('Failed to load users from server, using local data');
 
       // Fallback to localStorage with filtering
@@ -104,7 +105,7 @@ const AdminAccountManagement = () => {
       });
 
       setUsers(localUsers);
-      console.log(`Fallback: Loaded ${localUsers.length} non-citizen users from localStorage`);
+      logger.log(`Fallback: Loaded ${localUsers.length} non-citizen users from localStorage`);
     } finally {
       setLoading(false);
     }
@@ -158,7 +159,7 @@ const AdminAccountManagement = () => {
         // Try to remove from backend first
         if (user.id) {
           await userService.deleteUser(user.id);
-          console.log(`User ${user.id} deleted from backend`);
+          logger.log(`User ${user.id} deleted from backend`);
         }
 
         // Remove from local state
@@ -171,7 +172,7 @@ const AdminAccountManagement = () => {
 
         alert('User removed successfully!');
       } catch (err) {
-        console.error('Error removing user:', err);
+        logger.error('Error removing user:', err);
 
         // Still remove locally if backend fails
         const updatedUsers = [...users];

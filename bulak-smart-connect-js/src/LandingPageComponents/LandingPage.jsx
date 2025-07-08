@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import logger from '../utils/logger';
 import { Box, Button, Container, Grid, Typography, Card, CardContent } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import './LandingPage.css';
@@ -35,7 +36,7 @@ const LandingPage = () => {
       setAnnouncements(data);
       setAnnouncementError(null);
     } catch (error) {
-      console.error('Failed to load announcements:', error);
+      logger.error('Failed to load announcements:', error);
       setAnnouncementError('Failed to load announcements');
       // Keep empty array as fallback
       setAnnouncements([]);

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import logger from '../../../utils/logger';
 import {
   Box,
   Typography,
@@ -116,19 +117,19 @@ const BirthApplicationSummary = () => {
   // Enhanced event listener
   useEffect(() => {
     // Initial data load
-    console.log('Running loadApplicationData initial effect');
+    logger.log('Running loadApplicationData initial effect');
     loadApplicationData();
 
     // Set up event listener for storage changes
     const handleStorageChange = event => {
-      console.log('Storage changed detected:', event?.key || 'custom event');
+      logger.log('Storage changed detected:', event?.key || 'custom event');
 
       // Get most current application ID
       const currentId = localStorage.getItem('currentApplicationId');
 
       // If ID changed, update it first
       if (currentId && currentId !== applicationId) {
-        console.log('Application ID changed to:', currentId);
+        logger.log('Application ID changed to:', currentId);
         setApplicationId(currentId);
       }
 
@@ -143,7 +144,7 @@ const BirthApplicationSummary = () => {
 
     // Also listen for custom storage event (for same-window updates)
     const customStorageHandler = () => {
-      console.log('Custom storage event triggered');
+      logger.log('Custom storage event triggered');
       handleStorageChange();
     };
     window.addEventListener('customStorageUpdate', customStorageHandler);
@@ -184,11 +185,11 @@ const BirthApplicationSummary = () => {
   // Confirm delete application
   const confirmDeleteApplication = async () => {
     try {
-      console.log('Deleting application ID:', applicationId);
+      logger.log('Deleting application ID:', applicationId);
 
       // Verify we have an ID
       if (!applicationId) {
-        console.error('No application ID to delete');
+        logger.error('No application ID to delete');
         setDeleteDialogOpen(false);
         return;
       }
@@ -196,20 +197,20 @@ const BirthApplicationSummary = () => {
       // Delete from database first
       try {
         await documentApplicationService.deleteApplication(applicationId);
-        console.log('Application deleted from database:', applicationId);
+        logger.log('Application deleted from database:', applicationId);
       } catch (dbError) {
-        console.error('Error deleting from database:', dbError);
+        logger.error('Error deleting from database:', dbError);
         // Continue with local deletion even if database deletion fails
         // You might want to show a warning here
       }
 
       // Get existing applications from localStorage
       const existingApplications = JSON.parse(localStorage.getItem('applications') || '[]');
-      console.log('Current applications count:', existingApplications.length);
+      logger.log('Current applications count:', existingApplications.length);
 
       // Filter out this application
       const updatedApplications = existingApplications.filter(app => app.id !== applicationId);
-      console.log('Updated applications count:', updatedApplications.length);
+      logger.log('Updated applications count:', updatedApplications.length);
 
       // Save updated list to localStorage
       localStorage.setItem('applications', JSON.stringify(updatedApplications));
@@ -231,7 +232,7 @@ const BirthApplicationSummary = () => {
         localStorage.removeItem('birthCertificateApplication');
       }
 
-      console.log('Application deleted:', applicationId);
+      logger.log('Application deleted:', applicationId);
       setDeleteDialogOpen(false);
 
       // Dispatch a storage event to notify other components
@@ -241,7 +242,7 @@ const BirthApplicationSummary = () => {
       // Navigate back to applications
       navigate('/ApplicationForm');
     } catch (err) {
-      console.error('Error deleting application:', err);
+      logger.error('Error deleting application:', err);
       setError('Error deleting application: ' + err.message);
       setDeleteDialogOpen(false);
     }
@@ -251,12 +252,12 @@ const BirthApplicationSummary = () => {
   };
   // Handle Edit Application
   const handleEditApplication = () => {
-    console.log('Edit button clicked for application ID:', applicationId);
+    logger.log('Edit button clicked for application ID:', applicationId);
 
     try {
       // Basic validation
       if (!applicationId) {
-        console.error('Missing application ID');
+        logger.error('Missing application ID');
         alert('Application ID is missing. Cannot edit this application.');
         return;
       }
@@ -266,7 +267,7 @@ const BirthApplicationSummary = () => {
       const application = applications.find(app => app.id === applicationId);
 
       if (!application || !application.formData) {
-        console.error('Application not found in storage');
+        logger.error('Application not found in storage');
         alert('Application data is missing. Cannot edit this application.');
         return;
       }
@@ -281,8 +282,8 @@ const BirthApplicationSummary = () => {
       localStorage.setItem('birthCertificateApplication', JSON.stringify(formDataToEdit));
 
       // Log to verify data was properly saved
-      console.log('Edit mode activated for:', applicationId);
-      console.log('Form data saved for editing:', formDataToEdit);
+      logger.log('Edit mode activated for:', applicationId);
+      logger.log('Form data saved for editing:', formDataToEdit);
 
       if (isCopyRequest) {
         window.location.href = '/RequestACopyBirthCertificate';
@@ -290,7 +291,7 @@ const BirthApplicationSummary = () => {
         window.location.href = '/BirthCertificateForm';
       }
     } catch (error) {
-      console.error('Error in handleEditApplication:', error);
+      logger.error('Error in handleEditApplication:', error);
       alert('There was a problem setting up edit mode. Please try again.');
     }
   };

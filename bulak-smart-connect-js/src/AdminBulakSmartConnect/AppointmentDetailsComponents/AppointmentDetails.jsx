@@ -5,6 +5,7 @@ import { appointmentNotificationService } from '../../services/appointmentNotifi
 import './AppointmentDetails.css';
 import UserInfoCard from './UserInfoCard';
 import NavBar from '../../NavigationComponents/NavSide';
+import logger from '../../utils/logger';
 
 const AppointmentDetailsCard = () => {
   const { id } = useParams();
@@ -30,12 +31,12 @@ const AppointmentDetailsCard = () => {
       }
 
       // If not in state, fetch from API
-      console.log('📧 Fetching appointment with user details for notifications...');
+      logger.log('📧 Fetching appointment with user details for notifications...');
       const appointmentData = await appointmentService.getAppointmentById(id);
-      console.log('📧 Appointment data with user relationship:', appointmentData);
+      logger.log('📧 Appointment data with user relationship:', appointmentData);
       setAppointment(appointmentData);
     } catch (error) {
-      console.error('Error fetching appointment details:', error);
+      logger.error('Error fetching appointment details:', error);
     } finally {
       setLoading(false);
     }
@@ -46,33 +47,33 @@ const AppointmentDetailsCard = () => {
     try {
       // Check user relationship first
       if (appointment.user && appointment.user.email) {
-        console.log('📧 Found email in appointment.user.email:', appointment.user.email);
+        logger.log('📧 Found email in appointment.user.email:', appointment.user.email);
         return appointment.user.email;
       }
 
       // Check direct email field
       if (appointment.email) {
-        console.log('📧 Found email in appointment.email:', appointment.email);
+        logger.log('📧 Found email in appointment.email:', appointment.email);
         return appointment.email;
       }
 
       // Check if User object exists with email (different casing)
       if (appointment.User && appointment.User.email) {
-        console.log('📧 Found email in appointment.User.email:', appointment.User.email);
+        logger.log('📧 Found email in appointment.User.email:', appointment.User.email);
         return appointment.User.email;
       }
 
       // Check if userEmail field exists
       if (appointment.userEmail) {
-        console.log('📧 Found email in appointment.userEmail:', appointment.userEmail);
+        logger.log('📧 Found email in appointment.userEmail:', appointment.userEmail);
         return appointment.userEmail;
       }
 
-      console.log('⚠️ No email found for appointment. Available fields:', Object.keys(appointment));
-      console.log('📋 User object:', appointment.user);
+      logger.log('⚠️ No email found for appointment. Available fields:', Object.keys(appointment));
+      logger.log('📋 User object:', appointment.user);
       return null;
     } catch (error) {
-      console.error('Error getting appointment email:', error);
+      logger.error('Error getting appointment email:', error);
       return null;
     }
   };
@@ -80,10 +81,10 @@ const AppointmentDetailsCard = () => {
   // Enhanced handleStatusUpdate function
   const handleStatusUpdate = async newStatus => {
     try {
-      console.log(`📝 Updating appointment ${id} status to: ${newStatus}`);
+      logger.log(`📝 Updating appointment ${id} status to: ${newStatus}`);
 
       if (!appointment) {
-        console.error('No appointment data available');
+        logger.error('No appointment data available');
         alert('Error: Appointment data not available');
         return;
       }
@@ -99,7 +100,7 @@ const AppointmentDetailsCard = () => {
 
       if (appointmentEmail) {
         try {
-          console.log(`📧 Sending status update notification to: ${appointmentEmail}`);
+          logger.log(`📧 Sending status update notification to: ${appointmentEmail}`);
           const notificationResult =
             await appointmentNotificationService.sendStatusUpdateNotification(
               appointmentEmail,
@@ -109,29 +110,29 @@ const AppointmentDetailsCard = () => {
             );
 
           if (notificationResult.success) {
-            console.log('✅ Status update notification sent successfully');
+            logger.log('✅ Status update notification sent successfully');
             alert(
               `Appointment ${newStatus} successfully! Notification email sent to ${appointmentEmail}.`
             );
           } else {
-            console.log('⚠️ Status update notification failed:', notificationResult.error);
+            logger.log('⚠️ Status update notification failed:', notificationResult.error);
             alert(
               `Appointment ${newStatus} successfully! However, notification email could not be sent.`
             );
           }
         } catch (notificationError) {
-          console.error('❌ Error sending status update notification:', notificationError);
+          logger.error('❌ Error sending status update notification:', notificationError);
           alert(
             `Appointment ${newStatus} successfully! However, notification email could not be sent.`
           );
         }
       } else {
-        console.log('⚠️ No email found for appointment, skipping notification');
-        console.log('📋 Available appointment fields:', Object.keys(appointment));
+        logger.log('⚠️ No email found for appointment, skipping notification');
+        logger.log('📋 Available appointment fields:', Object.keys(appointment));
         alert(`Appointment ${newStatus} successfully! No email available for notification.`);
       }
     } catch (error) {
-      console.error('Error updating appointment status:', error);
+      logger.error('Error updating appointment status:', error);
       alert('Error updating appointment status');
     }
   };

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import logger from '../../utils/logger.js';
 import { useNavigate } from 'react-router-dom';
 import './AdminWalkInQueue.css';
 import NavBar from '../../NavigationComponents/NavSide';
@@ -64,7 +65,7 @@ const AdminWalkInQueue = () => {
   // Print queue ticket function - Direct POS Commands without driver
   const printQueueTicket = async queueData => {
     try {
-      console.log('Printing ticket for:', queueData);
+      logger.log('Printing ticket for:', queueData);
 
       // Create ESC/POS command sequence
       const createPOSCommands = () => {
@@ -127,7 +128,7 @@ const AdminWalkInQueue = () => {
       // Method 1: Try Web Serial API (Chrome/Edge)
       if ('serial' in navigator) {
         try {
-          console.log('Attempting Web Serial API printing...');
+          logger.log('Attempting Web Serial API printing...');
 
           // Request port without vendor filter for broader compatibility
           const port = await navigator.serial.requestPort();
@@ -152,17 +153,17 @@ const AdminWalkInQueue = () => {
           await writer.close();
           await port.close();
 
-          console.log('✅ Ticket printed successfully via Web Serial API');
+          logger.log('✅ Ticket printed successfully via Web Serial API');
           alert('✅ Ticket printed successfully!');
           return;
         } catch (serialError) {
-          console.warn('❌ Web Serial API failed:', serialError.message);
+          logger.warn('❌ Web Serial API failed:', serialError.message);
         }
       }
 
       // Method 2: Try Raw Printing via Fetch API (if you have a local print server)
       try {
-        console.log('Attempting raw print via local server...');
+        logger.log('Attempting raw print via local server...');
 
         const commands = createPOSCommands();
 
@@ -179,17 +180,17 @@ const AdminWalkInQueue = () => {
         });
 
         if (response.ok) {
-          console.log('✅ Ticket printed via local print server');
+          logger.log('✅ Ticket printed via local print server');
           alert('✅ Ticket printed successfully!');
           return;
         }
       } catch (fetchError) {
-        console.warn('❌ Local print server not available:', fetchError.message);
+        logger.warn('❌ Local print server not available:', fetchError.message);
       }
 
       // Method 3: Create downloadable POS file
       try {
-        console.log('Creating downloadable POS file...');
+        logger.log('Creating downloadable POS file...');
 
         const commands = createPOSCommands();
         const blob = new Blob([commands], { type: 'application/octet-stream' });
@@ -205,11 +206,11 @@ const AdminWalkInQueue = () => {
 
         alert('📁 POS file downloaded! Send this file directly to your printer.');
       } catch (downloadError) {
-        console.warn('❌ File download failed:', downloadError.message);
+        logger.warn('❌ File download failed:', downloadError.message);
       }
 
       // Method 4: Fallback to enhanced browser print with POS-like formatting
-      console.log('Using enhanced browser print fallback...');
+      logger.log('Using enhanced browser print fallback...');
 
       const printWindow = window.open('', '_blank', 'width=400,height=700');
       printWindow.document.write(`
@@ -368,7 +369,7 @@ const AdminWalkInQueue = () => {
       `);
       printWindow.document.close();
     } catch (error) {
-      console.error('❌ All printing methods failed:', error);
+      logger.error('❌ All printing methods failed:', error);
 
       // Final fallback - show ticket info
       const ticketText = `
@@ -403,11 +404,11 @@ const AdminWalkInQueue = () => {
         if (newStatus === 'serving') {
           // Send "now serving" notification
           await queueNotificationService.sendNowServingAlert(userEmail, queueNumber);
-          console.log('📧 Admin triggered "now serving" notification for:', queueNumber);
+          logger.log('📧 Admin triggered "now serving" notification for:', queueNumber);
         }
       }
     } catch (error) {
-      console.error('Error sending admin notification:', error);
+      logger.error('Error sending admin notification:', error);
       // Don't break the flow if notification fails
     }
   };
@@ -425,11 +426,11 @@ const AdminWalkInQueue = () => {
         phoneNumber: 'N/A',
       };
 
-      console.log('Creating manual queue with data:', queueData);
+      logger.log('Creating manual queue with data:', queueData);
 
       // Create queue via API
       const response = await queueService.createManualQueue(queueData);
-      console.log('Manual queue created:', response);
+      logger.log('Manual queue created:', response);
 
       const queueNumber = formatWKNumber(response.queue.queueNumber || response.queue.id);
 
@@ -449,9 +450,9 @@ const AdminWalkInQueue = () => {
       setShowManualQueueModal(false);
       resetForm();
     } catch (error) {
-      console.error('Error creating manual queue:', error);
-      console.error('Error response:', error.response?.data);
-      console.error('Error status:', error.response?.status);
+      logger.error('Error creating manual queue:', error);
+      logger.error('Error response:', error.response?.data);
+      logger.error('Error status:', error.response?.status);
 
       if (error.response?.status === 401) {
         alert('Authentication failed. Please log in again.');
@@ -501,7 +502,7 @@ const AdminWalkInQueue = () => {
   // Update queue status
   const updateQueueStatus = async (queueId, newStatus) => {
     try {
-      console.log(`Attempting to update queue ${queueId} to status: ${newStatus}`);
+      logger.log(`Attempting to update queue ${queueId} to status: ${newStatus}`);
 
       // Parse the queueId if it's not already a number
       const parsedQueueId = parseInt(queueId, 10) || queueId;
@@ -514,7 +515,7 @@ const AdminWalkInQueue = () => {
       // Make API call to update status using queueService
       await queueService.updateQueueStatus(parsedQueueId, newStatus);
 
-      console.log(`Queue status updated successfully: ${queueId} → ${newStatus}`);
+      logger.log(`Queue status updated successfully: ${queueId} → ${newStatus}`);
 
       // Send notification if status changed to serving
       if (newStatus === 'serving' && queueToUpdate) {
@@ -557,8 +558,8 @@ const AdminWalkInQueue = () => {
       // Refresh data after updating with a slight delay to ensure backend has processed the change
       setTimeout(() => fetchQueueData(), 500);
     } catch (error) {
-      console.error('Failed to update queue status:', error);
-      console.error('Error details:', error.response?.data || error.message);
+      logger.error('Failed to update queue status:', error);
+      logger.error('Error details:', error.response?.data || error.message);
       alert(
         `Failed to update queue status. Error: ${error.response?.data?.message || error.message}`
       );
@@ -601,7 +602,7 @@ const AdminWalkInQueue = () => {
       setCurrentQueues(formattedCurrentQueues);
       setError(null);
     } catch (err) {
-      console.error('Error fetching queue data:', err);
+      logger.error('Error fetching queue data:', err);
       setError('Failed to load queue data. Please ensure the server is running.');
     } finally {
       setLoading(false);
@@ -614,7 +615,7 @@ const AdminWalkInQueue = () => {
       const data = await queueService.getTodayPendingCount();
       setPendingCount(data.pendingCount);
     } catch (error) {
-      console.error('Error fetching pending count:', error);
+      logger.error('Error fetching pending count:', error);
     }
   };
 
@@ -631,7 +632,7 @@ const AdminWalkInQueue = () => {
       await fetchQueueData(); // Refresh the queue data
       await fetchPendingCount(); // Update pending count
     } catch (error) {
-      console.error('Error during manual reset:', error);
+      logger.error('Error during manual reset:', error);
 
       // ✅ IMPROVED: Better error handling
       if (error.message.includes('Server error during reset')) {
