@@ -1,5 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import { Logger } from '@nestjs/common';
 import * as dotenv from 'dotenv';
 import { DataSource } from 'typeorm';
 import { Role } from './roles/entities/role.entity';
@@ -10,13 +11,40 @@ import * as Minio from 'minio';
 
 dotenv.config();
 
+// ✅ Simple console override function
+function overrideConsoleInProduction() {
+  const isProduction = process.env.NODE_ENV === 'production';
+  const consoleEnabled = process.env.ENABLE_CONSOLE_LOGS === 'true';
+
+  if (isProduction && !consoleEnabled) {
+    console.log = () => {};
+    console.info = () => {};
+    console.warn = () => {};
+    console.debug = () => {};
+    // Keep console.error for critical issues
+  }
+}
+
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  // ✅ Override console BEFORE creating the app
+  overrideConsoleInProduction();
+
+  const app = await NestFactory.create(AppModule, {
+    // ✅ Configure NestJS logger based on environment
+    logger:
+      process.env.NODE_ENV === 'production' && process.env.ENABLE_CONSOLE_LOGS !== 'true'
+        ? ['error'] // Only errors in production
+        : ['log', 'error', 'warn', 'debug', 'verbose'], // All logs in development
+  });
+
   const configService = app.get(ConfigService);
 
+  // ✅ Create a logger instance for bootstrap context
+  const logger = new Logger('Bootstrap');
+
   // Debug env variables
-  console.log('JWT_SECRET exists:', !!configService.get('JWT_SECRET'));
-  console.log('JWT_SECRET length:', configService.get('JWT_SECRET')?.length);
+  logger.debug('JWT_SECRET exists: ' + !!configService.get('JWT_SECRET'));
+  logger.debug('JWT_SECRET length: ' + configService.get('JWT_SECRET')?.length);
 
   // Set up global validation pipe with transformation enabled
   app.useGlobalPipes(
@@ -139,19 +167,21 @@ async function bootstrap() {
   const host = configService.get('HOST') || 'localhost';
   await app.listen(port);
 
-  console.log(
+  logger.log(
     `🚀 Application is running on: ${configService.get('SERVER_BASE_URL') || `http://${host}:${port}`}`,
   );
-  console.log(
+  logger.log(
     `📚 Swagger docs available at: ${configService.get('SWAGGER_URL') || `http://${host}:${port}/api/docs`}`,
   );
-  console.log(`🌐 CORS enabled for: ${allowedOrigins.join(', ')}`);
-  console.log(`🔗 WebSocket CORS: ${configService.get('WS_CORS_ORIGIN')}`);
+  logger.log(`🌐 CORS enabled for: ${allowedOrigins.join(', ')}`);
+  logger.log(`🔗 WebSocket CORS: ${configService.get('WS_CORS_ORIGIN')}`);
 }
 
 async function testMinIOConnection() {
+  const logger = new Logger('MinIO'); // ✅ Create logger for this context
+
   try {
-    console.log('🧪 Testing MinIO connection...');
+    logger.log('🧪 Testing MinIO connection...');
 
     const minioClient = new Minio.Client({
       endPoint: process.env.MINIO_ENDPOINT || 'localhost',
@@ -163,9 +193,7 @@ async function testMinIOConnection() {
 
     // Test connection by listing buckets
     const buckets = await minioClient.listBuckets();
-    console.log(
-      `✅ MinIO connection successful! Found ${buckets.length} buckets`,
-    );
+    logger.log(`✅ MinIO connection successful! Found ${buckets.length} buckets`);
 
     // Ensure bulak-smart-connect bucket exists
     const bucketName = process.env.MINIO_BUCKET_NAME || 'bulak-smart-connect';
@@ -173,9 +201,9 @@ async function testMinIOConnection() {
 
     if (!bucketExists) {
       await minioClient.makeBucket(bucketName, 'us-east-1');
-      console.log(`✅ Created bucket: ${bucketName}`);
+      logger.log(`✅ Created bucket: ${bucketName}`);
     } else {
-      console.log(`✅ Bucket '${bucketName}' already exists`);
+      logger.log(`✅ Bucket '${bucketName}' already exists`);
     }
 
     // Test file upload
@@ -183,38 +211,49 @@ async function testMinIOConnection() {
     const testObjectName = `test/connection-test-${Date.now()}.txt`;
 
     await minioClient.putObject(bucketName, testObjectName, testData);
-    console.log(`✅ Test file uploaded: ${testObjectName}`);
+    logger.log(`✅ Test file uploaded: ${testObjectName}`);
 
     // Clean up test file
     await minioClient.removeObject(bucketName, testObjectName);
-    console.log(`✅ Test file cleaned up`);
+    logger.log(`✅ Test file cleaned up`);
 
-    console.log('🎉 MinIO is ready for document storage!');
+    logger.log('🎉 MinIO is ready for document storage!');
   } catch (error) {
-    console.error(
-      '❌ MinIO connection failed:',
-      error instanceof Error ? error.message : 'Unknown error',
-    );
-    console.error('💡 Make sure MinIO server is running on localhost:9000');
-    console.error('💡 Check your MinIO credentials in .env file');
+    logger.error('❌ MinIO connection failed:', error.message);
+    logger.warn('💡 Make sure MinIO server is running on localhost:9000');
+    logger.warn('💡 Check your MinIO credentials in .env file');
     // Don't throw error to allow app to continue starting
   }
 }
 
 async function seedDatabaseIfNeeded(dataSource: DataSource) {
-  // Check if roles exist and create them if needed
-  // This helps prevent sync issues with references
-  const roleRepo = dataSource.getRepository(Role);
-  const count = await roleRepo.count();
+  const logger = new Logger('Database'); // ✅ Create logger for this context
 
-  if (count === 0) {
-    await roleRepo.save([
-      { name: 'super_admin', description: 'Has all permissions' },
-      { name: 'admin', description: 'Can manage staff and citizens' },
-      { name: 'staff', description: 'Can process applications' },
-      { name: 'citizen', description: 'Regular user' },
-    ]);
+  try {
+    // Check if roles exist and create them if needed
+    const roleRepo = dataSource.getRepository(Role);
+    const count = await roleRepo.count();
+
+    if (count === 0) {
+      logger.log('🌱 Seeding database with default roles...');
+
+      await roleRepo.save([
+        { name: 'super_admin', description: 'Has all permissions' },
+        { name: 'admin', description: 'Can manage staff and citizens' },
+        { name: 'staff', description: 'Can process applications' },
+        { name: 'citizen', description: 'Regular user' },
+      ]);
+
+      logger.log('🎉 Database seeding completed!');
+    } else {
+      logger.log('✅ Database already seeded with roles');
+    }
+  } catch (error) {
+    logger.error('❌ Database seeding failed:', error.message);
   }
 }
 
-bootstrap().catch((err) => console.error('Error during bootstrap:', err));
+bootstrap().catch((err) => {
+  const logger = new Logger('Bootstrap');
+  logger.error('Error during bootstrap:', err);
+});

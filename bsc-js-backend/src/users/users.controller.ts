@@ -12,6 +12,7 @@ import {
   UseGuards,
   Request,
   Query,
+  Logger,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -36,6 +37,8 @@ import { UserResponseDto } from './dto/user-response.dto';
 @UseGuards(JwtAuthGuard)
 @ApiBearerAuth()
 export class UsersController {
+  private readonly logger = new Logger(UsersController.name);
+  
   constructor(private readonly usersService: UsersService) {}
 
   @Get()
@@ -176,7 +179,7 @@ export class UsersController {
 
       return userWithRoles;
     } catch (error) {
-      console.error('Error in admin create user:', error);
+      this.logger.error('Error in admin create user:', error);
       throw error;
     }
   }

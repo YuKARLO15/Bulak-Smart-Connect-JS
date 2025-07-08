@@ -2,6 +2,7 @@ import {
   Injectable,
   NotFoundException,
   BadRequestException,
+  Logger,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, Between } from 'typeorm';
@@ -12,6 +13,8 @@ import { format, addDays, parseISO, isValid } from 'date-fns';
 
 @Injectable()
 export class AppointmentService {
+  private readonly logger = new Logger(AppointmentService.name);
+
   constructor(
     @InjectRepository(Appointment)
     private appointmentRepository: Repository<Appointment>,
@@ -58,10 +61,10 @@ export class AppointmentService {
 
       const savedAppointment =
         await this.appointmentRepository.save(appointment);
-      console.log('Created new appointment:', savedAppointment);
+      this.logger.log('Created new appointment:', savedAppointment);
       return savedAppointment;
     } catch (error) {
-      console.error('Error creating appointment:', error);
+      this.logger.error('Error creating appointment:', error);
       throw error;
     }
   }
@@ -143,10 +146,10 @@ export class AppointmentService {
 
       // Update the appointment
       const updated = Object.assign(appointment, updateAppointmentDto);
-      console.log(`Updated appointment ${id}:`, updated);
+      this.logger.log(`Updated appointment ${id}:`, updated);
       return this.appointmentRepository.save(updated);
     } catch (error) {
-      console.error(`Error updating appointment ${id}:`, error);
+      this.logger.error(`Error updating appointment ${id}:`, error);
       throw error;
     }
   }
@@ -157,9 +160,9 @@ export class AppointmentService {
       if (result.affected === 0) {
         throw new NotFoundException(`Appointment with ID ${id} not found`);
       }
-      console.log(`Deleted appointment ${id}`);
+      this.logger.log(`Deleted appointment ${id}`);
     } catch (error) {
-      console.error(`Error deleting appointment ${id}:`, error);
+      this.logger.error(`Error deleting appointment ${id}:`, error);
       throw error;
     }
   }
@@ -171,10 +174,10 @@ export class AppointmentService {
     try {
       const appointment = await this.findOne(id);
       appointment.status = status;
-      console.log(`Updated status for appointment ${id} to ${status}`);
+      this.logger.log(`Updated status for appointment ${id} to ${status}`);
       return this.appointmentRepository.save(appointment);
     } catch (error) {
-      console.error(`Error updating status for appointment ${id}:`, error);
+      this.logger.error(`Error updating status for appointment ${id}:`, error);
       throw error;
     }
   }
@@ -206,7 +209,7 @@ export class AppointmentService {
       // Return only available slots
       return allTimeSlots.filter((slot) => !bookedSlots.includes(slot));
     } catch (error) {
-      console.error(`Error getting available slots for date ${date}:`, error);
+      this.logger.error(`Error getting available slots for date ${date}:`, error);
       throw error;
     }
   }
@@ -227,7 +230,7 @@ export class AppointmentService {
         },
       });
     } catch (error) {
-      console.error(`Error getting appointments for date ${date}:`, error);
+      this.logger.error(`Error getting appointments for date ${date}:`, error);
       throw error;
     }
   }
@@ -247,7 +250,7 @@ export class AppointmentService {
         },
       });
     } catch (error) {
-      console.error(
+      this.logger.error(
         `Error getting appointments in range ${startDate} to ${endDate}:`,
         error,
       );
@@ -302,7 +305,7 @@ export class AppointmentService {
         today: todayAppointments,
       };
     } catch (error) {
-      console.error('Error getting appointment stats:', error);
+      this.logger.error('Error getting appointment stats:', error);
       throw error;
     }
   }
@@ -325,7 +328,7 @@ export class AppointmentService {
         throw new BadRequestException('This time slot is already booked');
       }
     } catch (error) {
-      console.error(
+      this.logger.error(
         `Error checking time slot availability for ${date} at ${time}:`,
         error,
       );
