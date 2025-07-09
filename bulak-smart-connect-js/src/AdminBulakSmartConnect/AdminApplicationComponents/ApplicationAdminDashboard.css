@@ -2,12 +2,12 @@
 
 .ApplicationDashContainer {
   display: flex;
-
   width: 100%;
   max-height: 100%;
   min-height: 100vh;
   flex-direction: column;
   align-items: center;
+  justify-content: flex-start;
   transition: margin-left 0.3s ease;
   background-color: #f5f8fa;
   overflow-x: hidden;
@@ -300,6 +300,7 @@
   margin-bottom: 50px;
   justify-content: center;
   align-items: center;
+  margin-top: 2vw ;
 }
 
 .ApplicationDashTableHeader {

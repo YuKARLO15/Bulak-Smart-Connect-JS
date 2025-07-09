@@ -377,23 +377,8 @@ const AdminDashboard = () => {
 
       <div className="admin-dashboard-top-nav">
         <h1 className="AdminDahboardHeader">Dashboard</h1>
-        <div className="admin-dashboard-search-bar">
-          <input type="text" placeholder="Search" value={searchTerm} onChange={handleSearch} />
-          <Button
-            variant="contained"
-            onClick={handleRefresh}
-            size="small"
-            disabled={loading || chartLoading}
-            sx={{ ml: 1, bgcolor: '#184a5b', '&:hover': { bgcolor: '#0f323d' } }}
-          >
-            {loading || chartLoading ? (
-              <CircularProgress size={24} sx={{ color: '#fff' }} />
-            ) : (
-              'Refresh'
-            )}
-          </Button>
         </div>
-      </div>
+   
 
       <div className="admin-dashboard-content-wrapper">
         <div className="admin-dashboard-container">

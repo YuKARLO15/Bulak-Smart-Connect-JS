@@ -1,4 +1,4 @@
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, useLocation } from 'react-router-dom';
 //import { useEffect } from 'react';
 import './App.css';
 
@@ -91,6 +91,7 @@ import AdminAccount from './AdminBulakSmartConnect/AdminAccount/AdminAccount';
 import ScreenSmartQueue from './AdminBulakSmartConnect/AdminSmartQueueComponents/ScreenSmartQueue';
 
 function App() {
+    const location = useLocation();
   /*
   // Initialize localStorageManager
   useEffect(() => {
@@ -110,6 +111,23 @@ function App() {
   */
 
   // App Routes
+
+    const userRoutes = [
+    "/" , '/Home', '/UserDashboard', '/AppointmentForm', '/ApplicationForm', '/QR',
+    '/ClericalErrorApplication', '/BirthCertificateDashboard', '/FirstNameCorrection',
+    '/MarriageLicenseApplication', '/Above18Registration', '/Below18Registration',
+    '/SexDobCorrection', '/DelayedOutOfTownRegistration', '/DelayedOneParentForeignerRegistration',
+    '/MarriageDashboard', '/MarriageCertificateApplication', '/MarriageLicenseSummary',
+    '/BirthCertificateForm', '/BirthApplicationSummary', '/MarriageForm',
+    '/WalkInQueue', '/WalkInForm', '/WalkInDetails', '/CTCBirthCertificate',
+    '/RequestACopyBirthCertificate', '/RequirementBirthList', '/MarriageSummaryForm',
+    '/RequirementMarriageList', '/UserAccount', '/RequirementDeathCertificateList'
+  ];
+   const isUserRoute = userRoutes.some(route => 
+    location.pathname === route || location.pathname.startsWith(route + '/')
+  );
+
+
   return (
     <AuthProvider>
       <Routes>
@@ -194,9 +212,11 @@ function App() {
           </Route>
         </Route>
       </Routes>
-      <Box className="AnnouncementButtonContainer">
-        <FloatingAnnouncementButton />
-      </Box>
+        {isUserRoute && (
+        <Box className="AnnouncementButtonContainer">
+          <FloatingAnnouncementButton />
+        </Box>
+      )}
       <OfflineIndicator />
     </AuthProvider>
   );

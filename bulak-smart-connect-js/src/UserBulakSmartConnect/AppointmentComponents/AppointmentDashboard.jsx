@@ -7,7 +7,6 @@ import './AppointmentDashboard.css';
 import RecentAppointments from './RecentAppointment';
 import AppointmentContainer from './AppointmentContent';
 import { announcementService } from '../../services/announcementService';
-import FloatingAnnouncementButton from '../../LandingPageComponents/FloatingAnnouncement';
 import { useNavigate } from 'react-router-dom';
 
 const AppointmentDashboard = () => {
@@ -146,9 +145,7 @@ const AppointmentDashboard = () => {
             <RecentAppointments />
           </Box>
 
-          <Box className="AnnouncementButtonContainer">
-            <FloatingAnnouncementButton />
-          </Box>
+   
         </>
       )}
     </Box>

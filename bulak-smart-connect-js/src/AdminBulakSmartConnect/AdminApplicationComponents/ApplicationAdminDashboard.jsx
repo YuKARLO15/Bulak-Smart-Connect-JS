@@ -191,9 +191,10 @@ const AdminApplicationDashboard = () => {
         <Button
           variant="outlined"
           onClick={handleRefresh}
+          color='white'
           startIcon={loading ? <CircularProgress size={20} /> : null}
           disabled={loading}
-          sx={{ ml: 2 }}
+          sx={{ ml: 3, color: 'white', borderColor: 'white', '&:hover': { borderColor: 'white' } }}
         >
           Refresh
         </Button>

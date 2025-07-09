@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import './WalkInDetails.css';
 import NavBar from '../../NavigationComponents/NavSide';
@@ -6,7 +7,11 @@ import NavBar from '../../NavigationComponents/NavSide';
 const WalkInQueueDetail = () => {
   const [queueData, setQueueData] = useState(null);
   const [queuePosition, setQueuePosition] = useState(5);
+  const location = useLocation();
+  const { queueData: passedQueueData, source } = location.state || {};
+  
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const userData = JSON.parse(localStorage.getItem('userQueue'));
@@ -14,6 +19,18 @@ const WalkInQueueDetail = () => {
       setQueueData(userData);
     }
   }, []);
+
+  useEffect(() => {
+    // Use passed queue data first, then fallback to localStorage
+    if (passedQueueData) {
+      setQueueData(passedQueueData);
+    } else {
+      const userData = JSON.parse(localStorage.getItem('userQueue'));
+      if (userData) {
+        setQueueData(userData);
+      }
+    }
+  }, [passedQueueData]);
 
   // Function to determine requirements link based on reason of visit
   const getRequirementsLink = reasonOfVisit => {
@@ -23,14 +40,29 @@ const WalkInQueueDetail = () => {
       return '/RequirementBirthList';
     } else if (reason?.includes('marriage')) {
       return '/RequirementMarriageList';
-    } else {
+    } else if (reason?.includes('death') || type?.includes('death certificate')) {
+      return('/RequirementDeathCertificateList');
+    }
+    else {
       // For general inquiry, return null to show different content
       return null;
     }
   };
 
-  // Function to render requirements section
-  const renderRequirementsSection = reasonOfVisit => {
+  const getButtonText = () => {
+    return source === 'walkinqueue' ? 'Back to Queue List' : 'Back';
+  };
+
+  const handleBackClick = () => {
+    if (source === 'walkinqueue') {
+      navigate('/WalkInQueue');
+    } else {
+      navigate('/WalkInQueue');
+    }
+  };
+
+  // Function to render requirements section or back button for inquiry
+  const renderRequirementsOrBack = reasonOfVisit => {
     const requirementsLink = getRequirementsLink(reasonOfVisit);
 
     if (requirementsLink) {
@@ -40,8 +72,7 @@ const WalkInQueueDetail = () => {
         </div>
       );
     } else {
-      // Return null to hide the section for general inquiries
-      return null;
+     
     }
   };
 
@@ -71,7 +102,7 @@ const WalkInQueueDetail = () => {
           <div className="queue-number">{id}</div>
         </div>
 
-        {renderRequirementsSection(userData.reasonOfVisit)}
+        {renderRequirementsOrBack(userData.reasonOfVisit)}
 
         <div className="appointment-info">
           <p>
@@ -87,7 +118,12 @@ const WalkInQueueDetail = () => {
             <span className="label">Reason of Visit:</span> {userData.reasonOfVisit}
           </p>
         </div>
+         <button onClick={handleBackClick} className="CompleteAppointment">
+        {getButtonText()}
+      </button>
       </div>
+      
+     
     </div>
   );
 };
