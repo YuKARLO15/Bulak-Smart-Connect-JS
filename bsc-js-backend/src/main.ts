@@ -189,7 +189,8 @@ async function bootstrap() {
     try {
       // Check database connection
       const dataSource = app.get(DataSource);
-      if (!dataSource.isInitialized) {
+      
+      if (!dataSource || !dataSource.isInitialized) {
         return res.status(500).json({ 
           status: 'error', 
           message: 'Database not connected',
@@ -197,34 +198,16 @@ async function bootstrap() {
         });
       }
 
-      // Check MinIO connection (handle missing service gracefully)
-      let minioStatus = 'not_configured';
-      try {
-        // Try to get MinioService - this might fail if not properly registered
-        const minioService = app.get('MinioService', { strict: false });
-        if (minioService) {
-          minioStatus = 'available';
-        } else {
-          minioStatus = 'service_not_found';
-        }
-      } catch (minioError) {
-        minioStatus = 'not_available';
-        console.warn('MinIO service not available:', minioError.message);
-      }
+      // Simple database ping
+      await dataSource.query('SELECT 1 as health_check');
 
-      // Return comprehensive health status
+      // Return simple health status
       return res.status(200).json({
         status: 'ok',
         timestamp: new Date().toISOString(),
-        uptime: process.uptime(),
-        memory: {
-          used: Math.round(process.memoryUsage().heapUsed / 1024 / 1024),
-          total: Math.round(process.memoryUsage().heapTotal / 1024 / 1024)
-        },
-        services: {
-          database: 'connected',
-          minio: minioStatus
-        },
+        uptime: Math.round(process.uptime()),
+        memory_mb: Math.round(process.memoryUsage().heapUsed / 1024 / 1024),
+        database: 'connected',
         environment: process.env.NODE_ENV || 'development',
         service: 'bulak-smart-connect-backend'
       });
@@ -243,7 +226,7 @@ async function bootstrap() {
   const dataSource = app.get(DataSource);
   await seedDatabaseIfNeeded(dataSource);
 
-  // Test MinIO connection
+  // Test MinIO connection (but don't fail if it's not available)
   await testMinIOConnection();
 
   // Important: Use PORT environment variable for Render
@@ -259,6 +242,7 @@ async function bootstrap() {
   );
   logger.log(`🌐 CORS enabled for: ${allowedOrigins.join(', ')}`);
   logger.log(`🔗 WebSocket CORS: ${configService.get('WS_CORS_ORIGIN')}`);
+  logger.log(`❤️ Health check available at: /healthz`);
 }
 
 async function testMinIOConnection() {
