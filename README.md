@@ -11,7 +11,39 @@
   <a href="https://bulak-smart-connect-backend-prod.onrender.com/api/docs" target="_blank">
     <img src="https://img.shields.io/badge/📚%20API%20Docs-Production-blue?style=for-the-badge&logo=swagger&logoColor=white" alt="Production API Documentation" />
   </a>
+  <a href="https://stats.uptimerobot.com/i5jh6hNIJI" target="_blank">
+    <img src="https://img.shields.io/badge/📊%20Service%20Status-Live-success?style=for-the-badge&logo=statuspage&logoColor=white" alt="Service Status Dashboard" />
+  </a>
 </p>
+
+<!-- System Status & Uptime -->
+<div align="center">
+  <h3>🔍 Real-time System Status</h3>
+  <p>
+    <strong>📈 <a href="https://stats.uptimerobot.com/i5jh6hNIJI" target="_blank">View Live Status Dashboard</a></strong>
+  </p>
+  
+  <table>
+    <tr>
+      <td><strong>🌐 Frontend Service</strong></td>
+      <td><a href="https://bulak-smart-connect-frontend-prod.onrender.com">bulak-smart-connect-frontend-prod.onrender.com</a></td>
+    </tr>
+    <tr>
+      <td><strong>⚙️ Backend Service</strong></td>
+      <td><a href="https://bulak-smart-connect-backend-prod.onrender.com">bulak-smart-connect-backend-prod.onrender.com</a></td>
+    </tr>
+    <tr>
+      <td><strong>🔄 Status Dashboard</strong></td>
+      <td><a href="https://stats.uptimerobot.com/i5jh6hNIJI">stats.uptimerobot.com/i5jh6hNIJI</a></td>
+    </tr>
+    <tr>
+      <td><strong>📊 Monitoring</strong></td>
+      <td>24/7 Uptime Tracking & Performance Metrics</td>
+    </tr>
+  </table>
+</div>
+
+---
 
 <!-- GitHub Actions Status Badges -->
 <p align="center">
