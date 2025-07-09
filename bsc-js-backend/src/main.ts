@@ -197,17 +197,19 @@ async function bootstrap() {
         });
       }
 
-      // Optional: Check MinIO connection (lightweight check)
-      let minioStatus = 'ok';
+      // Check MinIO connection (handle missing service gracefully)
+      let minioStatus = 'not_configured';
       try {
-        const minioService = app.get('MinioService');
-        // Just verify the service exists, don't perform heavy operations
-        if (!minioService) {
+        // Try to get MinioService - this might fail if not properly registered
+        const minioService = app.get('MinioService', { strict: false });
+        if (minioService) {
+          minioStatus = 'available';
+        } else {
           minioStatus = 'service_not_found';
         }
       } catch (minioError) {
-        minioStatus = 'connection_issue';
-        console.warn('MinIO health check warning:', minioError.message);
+        minioStatus = 'not_available';
+        console.warn('MinIO service not available:', minioError.message);
       }
 
       // Return comprehensive health status
