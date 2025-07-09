@@ -27,6 +27,10 @@ DB_USERNAME=root
 DB_PASSWORD=your_actual_password
 DB_NAME=bulak_smart_connect
 
+# Database SSL Configuration (Aiven MySQL)
+DB_SSL=false
+DB_SSL_REJECT_UNAUTHORIZED=false
+
 # JWT Secret (Generate a secure one!)
 JWT_SECRET=your_super_secure_jwt_secret_key_minimum_32_characters
 
