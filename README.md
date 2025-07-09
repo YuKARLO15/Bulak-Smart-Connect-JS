@@ -234,7 +234,7 @@ Our live dashboard provides:
     <table>
         <tbody>
             <tr>
-                <th colspan="6"><h3>Backend Technologies</h3></th>
+                <th colspan="8"><h3>Backend Technologies</h3></th>
             </tr>
             <tr>
                 <td><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/nestjs/nestjs-original.svg" alt="NestJS" width="60px" height="auto" /></td>
@@ -243,6 +243,8 @@ Our live dashboard provides:
                 <td><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/jest/jest-plain.svg" alt="Jest" width="60px" height="auto" /></td>
                 <td><img src="https://static1.smartbear.co/swagger/media/assets/images/swagger_logo.svg" alt="Swagger" width="60px" height="auto" /></td>
                 <td><img src="https://github.com/minio/minio/raw/master/.github/logo.svg" alt="MinIO" width="60px" height="auto" /></td>
+                <td><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/cloudflare/cloudflare-original.svg" alt="Cloudflare R2" width="60px" height="auto" /></td>
+                <td><img src="https://avatars.githubusercontent.com/u/14290521?s=200&v=4" alt="Aiven" width="60px" height="auto" /></td>
             </tr>
             <tr>
                 <td><p><b>NestJS</b></p></td>
@@ -251,6 +253,8 @@ Our live dashboard provides:
                 <td><p><b>Jest</b></p></td>
                 <td><p><b>Swagger</b></p></td>
                 <td><p><b>MinIO</b></p></td>
+                <td><p><b>Cloudflare R2</b></p></td>
+                <td><p><b>Aiven</b></p></td>
             </tr>
             <tr>
                 <td><p>Progressive Node.js framework</p></td>
@@ -259,6 +263,8 @@ Our live dashboard provides:
                 <td><p>Testing framework</p></td>
                 <td><p>API documentation</p></td>
                 <td><p>Object storage for documents</p></td>
+                <td><p>S3-compatible cloud storage</p></td>
+                <td><p>Managed MySQL hosting</p></td>
             </tr>
         </tbody>
     </table>
