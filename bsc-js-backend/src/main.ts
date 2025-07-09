@@ -183,6 +183,60 @@ async function bootstrap() {
     allowedHeaders: ['Content-Type', 'Authorization'],
   });
 
+  // Add health check endpoint to prevent Render spin-down
+  const httpAdapter = app.getHttpAdapter();
+  httpAdapter.get('/healthz', async (req: any, res: any) => {
+    try {
+      // Check database connection
+      const dataSource = app.get(DataSource);
+      if (!dataSource.isInitialized) {
+        return res.status(500).json({ 
+          status: 'error', 
+          message: 'Database not connected',
+          timestamp: new Date().toISOString()
+        });
+      }
+
+      // Optional: Check MinIO connection (lightweight check)
+      let minioStatus = 'ok';
+      try {
+        const minioService = app.get('MinioService');
+        // Just verify the service exists, don't perform heavy operations
+        if (!minioService) {
+          minioStatus = 'service_not_found';
+        }
+      } catch (minioError) {
+        minioStatus = 'connection_issue';
+        console.warn('MinIO health check warning:', minioError.message);
+      }
+
+      // Return comprehensive health status
+      return res.status(200).json({
+        status: 'ok',
+        timestamp: new Date().toISOString(),
+        uptime: process.uptime(),
+        memory: {
+          used: Math.round(process.memoryUsage().heapUsed / 1024 / 1024),
+          total: Math.round(process.memoryUsage().heapTotal / 1024 / 1024)
+        },
+        services: {
+          database: 'connected',
+          minio: minioStatus
+        },
+        environment: process.env.NODE_ENV || 'development',
+        service: 'bulak-smart-connect-backend'
+      });
+    } catch (error) {
+      console.error('Health check failed:', error);
+      return res.status(500).json({ 
+        status: 'error', 
+        message: error.message,
+        timestamp: new Date().toISOString(),
+        service: 'bulak-smart-connect-backend'
+      });
+    }
+  });
+
   // Optional: Check and seed database before full startup
   const dataSource = app.get(DataSource);
   await seedDatabaseIfNeeded(dataSource);
