@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import logger from '../../utils/logger';
 import QueueListWalkIn from './WalkInQueueList';
 import './WalkInQueue.css';
 import NavBar from '../../NavigationComponents/NavSide';
@@ -30,7 +31,7 @@ const getCurrentUserId = () => {
     const currentUser = JSON.parse(localStorage.getItem('currentUser'));
     return currentUser?.id || currentUser?.email || 'guest';
   } catch (e) {
-    console.error('Error getting current user:', e);
+    logger.error('Error getting current user:', e);
     return 'guest';
   }
 };
@@ -54,7 +55,7 @@ const WalkInQueueContainer = () => {
     try {
       // First try AuthContext
       if (user && user.email) {
-        console.log(`✅ Found email from AuthContext: ${user.email}`);
+        logger.log(`✅ Found email from AuthContext: ${user.email}`);
         return user.email;
       }
 
@@ -67,7 +68,7 @@ const WalkInQueueContainer = () => {
           try {
             const parsedUser = JSON.parse(userData);
             if (parsedUser && parsedUser.email) {
-              console.log(`✅ Found email from localStorage['${key}']: ${parsedUser.email}`);
+              logger.log(`✅ Found email from localStorage['${key}']: ${parsedUser.email}`);
               return parsedUser.email;
             }
           } catch (parseError) {
@@ -76,10 +77,10 @@ const WalkInQueueContainer = () => {
         }
       }
 
-      console.log('❌ No email found in AuthContext or localStorage');
+      logger.log('❌ No email found in AuthContext or localStorage');
       return null;
     } catch (e) {
-      console.error('Error getting user email:', e);
+      logger.error('Error getting user email:', e);
       return null;
     }
   };
@@ -87,13 +88,13 @@ const WalkInQueueContainer = () => {
   // Enhanced function to check position and send notifications
   const checkPositionAndNotify = useCallback(
     async (position, queueData) => {
-      console.log('🔍 checkPositionAndNotify called with:', { position, queueData });
+      logger.log('🔍 checkPositionAndNotify called with:', { position, queueData });
 
       const userEmail = getUserEmail();
-      console.log('📧 User email from localStorage:', userEmail);
+      logger.log('📧 User email from localStorage:', userEmail);
 
       if (!userEmail || !queueData) {
-        console.log('❌ Skipping notification - Missing email or queue data:', {
+        logger.log('❌ Skipping notification - Missing email or queue data:', {
           userEmail,
           queueData,
         });
@@ -101,12 +102,12 @@ const WalkInQueueContainer = () => {
       }
 
       const queueNumber = queueData.queueNumber || queueData.id;
-      console.log('🎫 Processing queue number:', queueNumber, 'at position:', position);
+      logger.log('🎫 Processing queue number:', queueNumber, 'at position:', position);
 
       try {
         // Send notification when user reaches position 3 (and hasn't been notified yet)
         if (position === 3 && !notificationsSent.has(`${queueNumber}_3`)) {
-          console.log('📧 Attempting to send position 3 notification for:', queueNumber);
+          logger.log('📧 Attempting to send position 3 notification for:', queueNumber);
           const estimatedMinutes = (position - 1) * 5; // Assuming 5 minutes per person
 
           const result = await queueNotificationService.sendQueuePositionAlert(
@@ -119,12 +120,12 @@ const WalkInQueueContainer = () => {
           if (result && result.success !== false) {
             // Mark as notified
             setNotificationsSent(prev => new Set([...prev, `${queueNumber}_3`]));
-            console.log('✅ Position 3 notification sent successfully for queue:', queueNumber);
+            logger.log('✅ Position 3 notification sent successfully for queue:', queueNumber);
           } else {
-            console.log('❌ Position 3 notification failed for queue:', queueNumber, result);
+            logger.log('❌ Position 3 notification failed for queue:', queueNumber, result);
           }
         } else if (position === 3) {
-          console.log('⚠️ Position 3 notification already sent for:', queueNumber);
+          logger.log('⚠️ Position 3 notification already sent for:', queueNumber);
         }
 
         // Send notification when it's their turn (position 1 or "NOW SERVING")
@@ -132,25 +133,25 @@ const WalkInQueueContainer = () => {
           (position === 1 || position === 'NOW SERVING') &&
           !notificationsSent.has(`${queueNumber}_serving`)
         ) {
-          console.log('📧 Attempting to send "now serving" notification for:', queueNumber);
+          logger.log('📧 Attempting to send "now serving" notification for:', queueNumber);
 
           const result = await queueNotificationService.sendNowServingAlert(userEmail, queueNumber);
 
           if (result && result.success !== false) {
             // Mark as notified for serving
             setNotificationsSent(prev => new Set([...prev, `${queueNumber}_serving`]));
-            console.log('✅ "Now serving" notification sent successfully for queue:', queueNumber);
+            logger.log('✅ "Now serving" notification sent successfully for queue:', queueNumber);
           } else {
-            console.log('❌ "Now serving" notification failed for queue:', queueNumber, result);
+            logger.log('❌ "Now serving" notification failed for queue:', queueNumber, result);
           }
         } else if (position === 1 || position === 'NOW SERVING') {
-          console.log('⚠️ "Now serving" notification already sent for:', queueNumber);
+          logger.log('⚠️ "Now serving" notification already sent for:', queueNumber);
         }
 
         // Update last notified position
         setLastNotifiedPosition(position);
       } catch (error) {
-        console.error('❌ Error sending queue notification:', error);
+        logger.error('❌ Error sending queue notification:', error);
         // Don't break the app if notification fails
       }
     },
@@ -178,13 +179,13 @@ const WalkInQueueContainer = () => {
           const isValid = await queueService.checkQueueExists(queueId).catch(() => false);
 
           if (!isValid) {
-            console.log('User queue not found in system - clearing');
+            logger.log('User queue not found in system - clearing');
             localStorage.removeItem('userQueue');
             setUserQueue(null);
           }
         }
       } catch (err) {
-        console.error('Error validating user queue:', err);
+        logger.error('Error validating user queue:', err);
       }
     };
 
@@ -195,7 +196,7 @@ const WalkInQueueContainer = () => {
   const getAllUserQueues = () => {
     try {
       const userId = getCurrentUserId();
-      console.log('Getting ALL queues for user:', userId);
+      logger.log('Getting ALL queues for user:', userId);
 
       // Try user-specific storage first
       const userSpecificQueueKey = `userQueue_${userId}`;
@@ -230,7 +231,7 @@ const WalkInQueueContainer = () => {
               userQueues = [parsedQueue];
             }
           } catch (e) {
-            console.error('Error parsing generic queue:', e);
+            logger.error('Error parsing generic queue:', e);
           }
         }
       }
@@ -238,10 +239,10 @@ const WalkInQueueContainer = () => {
       // Filter queues that belong to current user
       userQueues = userQueues.filter(queue => !queue.userId || queue.userId === userId);
 
-      console.log('Found user queues:', userQueues);
+      logger.log('Found user queues:', userQueues);
       return userQueues;
     } catch (err) {
-      console.error('Error getting user queues:', err);
+      logger.error('Error getting user queues:', err);
       return [];
     }
   };
@@ -258,15 +259,15 @@ const WalkInQueueContainer = () => {
       // Make API calls in parallel
       const promises = [
         queueService.fetchCurrentQueues().catch(err => {
-          console.error('Error fetching current queues:', err);
+          logger.error('Error fetching current queues:', err);
           return [];
         }),
         queueService.fetchPendingQueues().catch(err => {
-          console.error('Error fetching pending queues:', err);
+          logger.error('Error fetching pending queues:', err);
           return [];
         }),
         queueService.fetchUserQueues(currentUser).catch(err => {
-          console.error('Error fetching user queues:', err);
+          logger.error('Error fetching user queues:', err);
           return [];
         }),
       ];
@@ -279,7 +280,7 @@ const WalkInQueueContainer = () => {
         try {
           localUserQueueData = JSON.parse(storedUserQueue);
         } catch (e) {
-          console.error('Error parsing user queue from localStorage:', e);
+          logger.error('Error parsing user queue from localStorage:', e);
         }
       }
 
@@ -293,12 +294,12 @@ const WalkInQueueContainer = () => {
         Array.isArray(userQueuesResponse) &&
         userQueuesResponse.length > 0
       ) {
-        console.log('Using user queues from backend:', userQueuesResponse);
+        logger.log('Using user queues from backend:', userQueuesResponse);
 
         // Filter out completed queues and clear them from localStorage
         const activeUserQueues = userQueuesResponse.filter(queue => {
           if (queue.status === 'completed') {
-            console.log('Found completed queue, clearing from localStorage:', queue.id);
+            logger.log('Found completed queue, clearing from localStorage:', queue.id);
 
             // Clear completed queue from localStorage
             const userId = getCurrentUserId();
@@ -314,7 +315,7 @@ const WalkInQueueContainer = () => {
                 localStorage.setItem(`userQueues_${userId}`, JSON.stringify(filteredQueues));
               }
             } catch (e) {
-              console.error('Error updating user queues:', e);
+              logger.error('Error updating user queues:', e);
             }
 
             return false; // Don't include completed queues
@@ -343,7 +344,7 @@ const WalkInQueueContainer = () => {
             isPrimaryQueue: true,
           }));
 
-          console.log('Valid active user queues:', validUserQueues);
+          logger.log('Valid active user queues:', validUserQueues);
           setUserQueue(validUserQueues);
 
           // Get position for user's active queue
@@ -351,45 +352,45 @@ const WalkInQueueContainer = () => {
           const servingQueue = validUserQueues.find(q => q.status === 'serving');
 
           if (servingQueue) {
-            console.log('🎯 User queue is being served');
+            logger.log('🎯 User queue is being served');
             setQueuePosition('NOW SERVING');
 
             // ✅ NOTIFICATION: Check and notify for "now serving"
-            console.log('🔔 About to check notifications for serving queue:', servingQueue);
+            logger.log('🔔 About to check notifications for serving queue:', servingQueue);
             await checkPositionAndNotify('NOW SERVING', servingQueue);
           } else if (pendingQueue) {
-            console.log('⏳ Found pending queue, getting position for:', pendingQueue.dbId);
+            logger.log('⏳ Found pending queue, getting position for:', pendingQueue.dbId);
             try {
               const positionData = await queueService.getQueuePosition(pendingQueue.dbId);
-              console.log('📍 Position data received:', positionData);
+              logger.log('📍 Position data received:', positionData);
 
               if (positionData.status === 'serving') {
                 setQueuePosition('NOW SERVING');
-                console.log('🔔 About to check notifications for NOW SERVING');
+                logger.log('🔔 About to check notifications for NOW SERVING');
                 await checkPositionAndNotify('NOW SERVING', pendingQueue);
               } else if (positionData.position > 0) {
                 setQueuePosition(positionData.position);
-                console.log('🔔 About to check notifications for position:', positionData.position);
+                logger.log('🔔 About to check notifications for position:', positionData.position);
                 await checkPositionAndNotify(positionData.position, pendingQueue);
               } else {
                 setQueuePosition(null);
               }
             } catch (error) {
-              console.error('❌ Error fetching position:', error);
+              logger.error('❌ Error fetching position:', error);
               setQueuePosition(null);
             }
           } else {
-            console.log('No active queue found');
+            logger.log('No active queue found');
             setQueuePosition(null);
           }
         } else {
-          console.log('No active user queues, clearing state');
+          logger.log('No active user queues, clearing state');
           setUserQueue(null);
           setQueuePosition(null);
         }
       } else if (localUserQueueData) {
         // Fallback to localStorage - but also check if it's completed
-        console.log('Using user queue from localStorage as fallback');
+        logger.log('Using user queue from localStorage as fallback');
 
         // Check if localStorage queue is completed by fetching its current status
         const userQueuesData = getAllUserQueues();
@@ -401,7 +402,7 @@ const WalkInQueueContainer = () => {
               const queueDetails = await queueService.getQueueDetails(firstQueue.dbId);
 
               if (queueDetails.status === 'completed') {
-                console.log('localStorage queue is completed, clearing');
+                logger.log('localStorage queue is completed, clearing');
                 const userId = getCurrentUserId();
                 localStorage.removeItem('userQueue');
                 localStorage.removeItem(`userQueue_${userId}`);
@@ -426,7 +427,7 @@ const WalkInQueueContainer = () => {
                 }
               }
             } catch (error) {
-              console.error('Error checking queue status:', error);
+              logger.error('Error checking queue status:', error);
               setUserQueue(localUserQueueData);
               setQueuePosition(null);
             }
@@ -439,7 +440,7 @@ const WalkInQueueContainer = () => {
 
       // Process current queues - FIX: Use setCurrentQueue instead of setCurrentQueues
       if (currentQueuesResponse && Array.isArray(currentQueuesResponse)) {
-        console.log('Raw current queues data:', currentQueuesResponse);
+        logger.log('Raw current queues data:', currentQueuesResponse);
 
         const formattedCurrentQueues = currentQueuesResponse.map(queue => {
           const details = Array.isArray(queue.details) ? queue.details[0] : queue.details;
@@ -460,7 +461,7 @@ const WalkInQueueContainer = () => {
           };
         });
 
-        console.log('Setting current queues to:', formattedCurrentQueues);
+        logger.log('Setting current queues to:', formattedCurrentQueues);
         setCurrentQueue(formattedCurrentQueues); // FIXED: Use setCurrentQueue
       } else {
         setCurrentQueue([]); // FIXED: Use setCurrentQueue
@@ -468,7 +469,7 @@ const WalkInQueueContainer = () => {
 
       // Process pending queues
       if (pendingQueuesResponse && Array.isArray(pendingQueuesResponse)) {
-        console.log('All pending queues before filtering:', pendingQueuesResponse);
+        logger.log('All pending queues before filtering:', pendingQueuesResponse);
 
         const userQueuesData = getAllUserQueues();
 
@@ -517,7 +518,7 @@ const WalkInQueueContainer = () => {
 
       setLoading(false);
     } catch (error) {
-      console.error('Failed to fetch queue data:', error);
+      logger.error('Failed to fetch queue data:', error);
       setLoading(false);
     }
   }, [checkPositionAndNotify]); // Add checkPositionAndNotify to dependencies
@@ -527,7 +528,7 @@ const WalkInQueueContainer = () => {
     // Handle forced sync from any tab
     const handleStorageChange = e => {
       if (e.key === 'lastSyncTime' || e.key === 'forceSync') {
-        console.log('Sync triggered from another tab:', e.key);
+        logger.log('Sync triggered from another tab:', e.key);
 
         // Force a complete refresh of all data
         if (e.key === 'forceSync') {
@@ -566,24 +567,24 @@ const WalkInQueueContainer = () => {
       });
 
       socket.on('connect', () => {
-        console.log('Socket connected successfully');
+        logger.log('Socket connected successfully');
 
         // Join queue update events
         socket.emit('joinQueueList');
-        console.log('Joined queue list updates');
+        logger.log('Joined queue list updates');
 
         if (userQueue?.dbId) {
           socket.emit('joinQueue', userQueue.dbId);
-          console.log('Joined specific queue room:', userQueue.dbId);
+          logger.log('Joined specific queue room:', userQueue.dbId);
         }
       });
 
       socket.on('queueListUpdate', data => {
-        console.log('Queue list update event received:', data);
+        logger.log('Queue list update event received:', data);
 
         // Clear localStorage cache to force fresh data
         if (data && data.action === 'cleared') {
-          console.log('Database was cleared - removing cached data');
+          logger.log('Database was cleared - removing cached data');
           localStorage.removeItem('currentQueue');
           localStorage.removeItem('pendingQueues');
           setCurrentQueue([]);
@@ -595,7 +596,7 @@ const WalkInQueueContainer = () => {
       });
 
       socket.on('queueUpdate', data => {
-        console.log('Queue update event received:', data);
+        logger.log('Queue update event received:', data);
 
         // If user's queue was completed, clear it immediately
         if (data.status === 'completed') {
@@ -606,7 +607,7 @@ const WalkInQueueContainer = () => {
             const completedQueue = userQueueArray.find(q => q.dbId === data.queueId);
 
             if (completedQueue) {
-              console.log('User queue completed via socket, clearing localStorage');
+              logger.log('User queue completed via socket, clearing localStorage');
               const userId = getCurrentUserId();
               localStorage.removeItem('userQueue');
               localStorage.removeItem(`userQueue_${userId}`);
@@ -625,11 +626,11 @@ const WalkInQueueContainer = () => {
       });
 
       socket.on('error', error => {
-        console.error('Socket error:', error);
+        logger.error('Socket error:', error);
       });
 
       socket.on('disconnect', reason => {
-        console.log('Socket disconnected:', reason);
+        logger.log('Socket disconnected:', reason);
       });
 
       // Clean up function
@@ -643,7 +644,7 @@ const WalkInQueueContainer = () => {
         }
       };
     } catch (err) {
-      console.error('Socket connection error:', err);
+      logger.error('Socket connection error:', err);
       return () => {
         if (socket) socket.disconnect();
       };
@@ -657,7 +658,7 @@ const WalkInQueueContainer = () => {
     // Periodically check for updates
     const intervalId = setInterval(() => {
       fetchQueueData();
-    }, 30000); // Check every 30 seconds
+    }, 5000); // Check every 5 seconds
 
     return () => {
       cleanup();

@@ -1,5 +1,6 @@
 import axios from 'axios';
 import config from '../config/env.js';
+import logger from '../utils/logger.js';
 
 // Create an axios instance with common configurations
 const apiClient = axios.create({
@@ -21,10 +22,10 @@ apiClient.interceptors.request.use(
 
     if (token) {
       requestConfig.headers.Authorization = `Bearer ${token}`;
-      console.log('🎫 Sending request with token:', token.substring(0, 20) + '...');
-      console.log('🎯 Request URL:', requestConfig.url);
+      logger.log('🎫 Sending request with token:', token.substring(0, 20) + '...');
+      logger.log('🎯 Request URL:', requestConfig.url);
     } else {
-      console.warn('⚠️ No token found for request to:', requestConfig.url);
+      logger.warn('⚠️ No token found for request to:', requestConfig.url);
     }
     return requestConfig;
   },
@@ -47,15 +48,15 @@ apiClient.interceptors.response.use(
   error => {
     // Log detailed error information for 403 errors
     if (error.response?.status === 403) {
-      console.error('🚫 403 Forbidden Error Details:');
-      console.error('URL:', error.config?.url);
-      console.error('Headers:', error.config?.headers);
-      console.error('Response:', error.response?.data);
+      logger.error('🚫 403 Forbidden Error Details:');
+      logger.error('URL:', error.config?.url);
+      logger.error('Headers:', error.config?.headers);
+      logger.error('Response:', error.response?.data);
 
       // Check if user data exists
       const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
-      console.error('Current User:', currentUser);
-      console.error('User Roles:', currentUser.roles);
+      logger.error('Current User:', currentUser);
+      logger.error('User Roles:', currentUser.roles);
     }
     return Promise.reject(error);
   }
@@ -65,14 +66,14 @@ const userService = {
   // Get all users with pagination and filters
   getAllUsers: async (params = {}) => {
     try {
-      console.log('🔍 Trying to fetch all users for admin...');
+      logger.log('🔍 Trying to fetch all users for admin...');
 
       // Verify user has proper role before making request
       const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
       const token = localStorage.getItem('token');
 
-      console.log('👤 Current user roles:', currentUser.roles);
-      console.log('🎫 Token exists:', !!token);
+      logger.log('👤 Current user roles:', currentUser.roles);
+      logger.log('🎫 Token exists:', !!token);
 
       if (!token) {
         throw new Error('No authentication token found');
@@ -95,14 +96,14 @@ const userService = {
 
       const response = await apiClient.get(`/users?${queryParams}`);
 
-      console.log('✅ Users fetched successfully:', response.data);
+      logger.log('✅ Users fetched successfully:', response.data);
       return response.data;
     } catch (error) {
-      console.error('❌ Error fetching users:', error);
+      logger.error('❌ Error fetching users:', error);
 
       // Enhanced error handling for 403/401
       if (error.response?.status === 403 || error.response?.status === 401) {
-        console.error('🚫 Access denied - insufficient permissions');
+        logger.error('🚫 Access denied - insufficient permissions');
         throw new Error('Access denied. Only super administrators can manage users.');
       }
 
@@ -114,10 +115,10 @@ const userService = {
   testAuth: async () => {
     try {
       const response = await apiClient.get('/users/profile');
-      console.log('✅ Authentication test successful:', response.data);
+      logger.log('✅ Authentication test successful:', response.data);
       return { success: true, user: response.data };
     } catch (error) {
-      console.error('❌ Authentication test failed:', error.response?.status, error.response?.data);
+      logger.error('❌ Authentication test failed:', error.response?.status, error.response?.data);
       return { success: false, error: error.response?.data };
     }
   },
@@ -128,7 +129,7 @@ const userService = {
       const response = await apiClient.get(`/users/${userId}`);
       return response.data;
     } catch (error) {
-      console.error(`Error getting user ${userId}:`, error);
+      logger.error(`Error getting user ${userId}:`, error);
 
       // Fallback to localStorage
       const localUsers = JSON.parse(localStorage.getItem('users') || '[]');
@@ -155,12 +156,12 @@ const userService = {
           localStorage.setItem('users', JSON.stringify(localUsers));
         }
       } catch (localErr) {
-        console.warn('Failed to update localStorage:', localErr);
+        logger.warn('Failed to update localStorage:', localErr);
       }
 
       return response.data;
     } catch (error) {
-      console.error(`Error updating user ${userId}:`, error);
+      logger.error(`Error updating user ${userId}:`, error);
 
       // Update localStorage even if API fails
       try {
@@ -172,7 +173,7 @@ const userService = {
           return localUsers[index];
         }
       } catch (localErr) {
-        console.warn('Failed to update localStorage:', localErr);
+        logger.warn('Failed to update localStorage:', localErr);
       }
 
       throw error;
@@ -194,12 +195,12 @@ const userService = {
           localStorage.setItem('users', JSON.stringify(localUsers));
         }
       } catch (localErr) {
-        console.warn('Failed to update localStorage:', localErr);
+        logger.warn('Failed to update localStorage:', localErr);
       }
 
       return response.data;
     } catch (error) {
-      console.error(`Error updating user status ${userId}:`, error);
+      logger.error(`Error updating user status ${userId}:`, error);
 
       // Update localStorage even if API fails
       try {
@@ -212,7 +213,7 @@ const userService = {
           return localUsers[index];
         }
       } catch (localErr) {
-        console.warn('Failed to update localStorage:', localErr);
+        logger.warn('Failed to update localStorage:', localErr);
       }
 
       throw error;
@@ -230,12 +231,12 @@ const userService = {
         const filteredUsers = localUsers.filter(u => u.id !== userId);
         localStorage.setItem('users', JSON.stringify(filteredUsers));
       } catch (localErr) {
-        console.warn('Failed to update localStorage:', localErr);
+        logger.warn('Failed to update localStorage:', localErr);
       }
 
       return response.data;
     } catch (error) {
-      console.error(`Error deleting user ${userId}:`, error);
+      logger.error(`Error deleting user ${userId}:`, error);
       throw error;
     }
   },
@@ -246,7 +247,7 @@ const userService = {
       const response = await apiClient.get('/users/stats');
       return response.data;
     } catch (error) {
-      console.error('Error getting user stats:', error);
+      logger.error('Error getting user stats:', error);
 
       // Fallback to localStorage-based stats
       try {
@@ -260,7 +261,7 @@ const userService = {
         };
         return stats;
       } catch (localErr) {
-        console.warn('Failed to generate localStorage stats:', localErr);
+        logger.warn('Failed to generate localStorage stats:', localErr);
         throw error;
       }
     }
@@ -269,11 +270,11 @@ const userService = {
   // Register new user (admin creates user)
   createUser: async userData => {
     try {
-      console.log('🔧 Creating user with userService:', userData);
+      logger.log('🔧 Creating user with userService:', userData);
 
       // Check if this is an admin-created user (has roleIds)
       if (userData.roleIds && userData.roleIds.length > 0) {
-        console.log('🔑 Using admin user creation endpoint');
+        logger.log('🔑 Using admin user creation endpoint');
 
         // Use admin endpoint for user creation with role assignment
         const response = await apiClient.post('/users/admin-create', {
@@ -290,7 +291,7 @@ const userService = {
           defaultRoleId: userData.defaultRoleId,
         });
 
-        console.log('✅ Admin user creation successful:', response.data);
+        logger.log('✅ Admin user creation successful:', response.data);
 
         // Update localStorage with the new user
         try {
@@ -312,12 +313,12 @@ const userService = {
           localUsers.push(newUser);
           localStorage.setItem('users', JSON.stringify(localUsers));
         } catch (localErr) {
-          console.warn('Failed to update localStorage:', localErr);
+          logger.warn('Failed to update localStorage:', localErr);
         }
 
         return response.data;
       } else {
-        console.log('👥 Using regular citizen registration endpoint');
+        logger.log('👥 Using regular citizen registration endpoint');
 
         // Use regular registration endpoint for citizen users
         const response = await apiClient.post('/auth/register', {
@@ -332,11 +333,11 @@ const userService = {
           password: userData.password,
         });
 
-        console.log('✅ Regular user creation successful:', response.data);
+        logger.log('✅ Regular user creation successful:', response.data);
         return response.data;
       }
     } catch (error) {
-      console.error('❌ Error creating user:', error);
+      logger.error('❌ Error creating user:', error);
       throw error;
     }
   },
@@ -344,7 +345,7 @@ const userService = {
   // Admin update any user
   adminUpdateUser: async (userId, userData) => {
     try {
-      console.log('🔧 Admin updating user:', userId, userData);
+      logger.log('🔧 Admin updating user:', userId, userData);
 
       // Verify current user has super_admin role
       const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
@@ -363,33 +364,33 @@ const userService = {
           localStorage.setItem('users', JSON.stringify(localUsers));
         }
       } catch (localErr) {
-        console.warn('Failed to update localStorage:', localErr);
+        logger.warn('Failed to update localStorage:', localErr);
       }
 
       return response.data;
     } catch (error) {
-      console.error(`❌ Error admin updating user ${userId}:`, error);
+      logger.error(`❌ Error admin updating user ${userId}:`, error);
 
       // Enhanced error logging
       if (error.response?.status === 401) {
-        console.error('🚫 Authentication failed - checking token...');
+        logger.error('🚫 Authentication failed - checking token...');
         const token =
           localStorage.getItem('token') || localStorage.getItem(`${config.STORAGE_PREFIX}token`);
-        console.error('Token exists:', !!token);
-        console.error('Token length:', token?.length);
+        logger.error('Token exists:', !!token);
+        logger.error('Token length:', token?.length);
 
         // Check if token is expired
         if (token) {
           try {
             const payload = JSON.parse(atob(token.split('.')[1]));
             const isExpired = payload.exp * 1000 < Date.now();
-            console.error('Token expired:', isExpired);
+            logger.error('Token expired:', isExpired);
           } catch (parseErr) {
-            console.error('Token parse error:', parseErr);
+            logger.error('Token parse error:', parseErr);
           }
         }
       } else if (error.response?.status === 403) {
-        console.error('🚫 Insufficient permissions');
+        logger.error('🚫 Insufficient permissions');
       }
 
       // Fallback to localStorage update
@@ -399,11 +400,11 @@ const userService = {
         if (index >= 0) {
           localUsers[index] = { ...localUsers[index], ...userData };
           localStorage.setItem('users', JSON.stringify(localUsers));
-          console.log('✅ Updated user in localStorage as fallback');
+          logger.log('✅ Updated user in localStorage as fallback');
           return localUsers[index];
         }
       } catch (localErr) {
-        console.warn('Failed to update localStorage:', localErr);
+        logger.warn('Failed to update localStorage:', localErr);
       }
 
       throw error;
@@ -416,7 +417,7 @@ const userService = {
       const response = await apiClient.get(`/users?search=${encodeURIComponent(query)}`);
       return response.data;
     } catch (error) {
-      console.error('Error searching users:', error);
+      logger.error('Error searching users:', error);
 
       // Fallback to localStorage search
       try {
@@ -436,7 +437,7 @@ const userService = {
           totalPages: 1,
         };
       } catch (localErr) {
-        console.warn('Failed to search localStorage:', localErr);
+        logger.warn('Failed to search localStorage:', localErr);
         throw error;
       }
     }

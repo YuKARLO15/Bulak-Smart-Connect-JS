@@ -5,6 +5,7 @@ import axios from 'axios';
 import { queueService } from '../../services/queueService';
 import { documentApplicationService } from '../../services/documentApplicationService';
 import { appointmentService } from '../../services/appointmentService';
+import logger from '../../utils/logger';
 import {
   LineChart,
   Line,
@@ -138,10 +139,10 @@ const AdminDashboard = () => {
               }).length;
             }
           } catch (appointmentError) {
-            console.warn(`Could not fetch appointments for ${monthData.name}:`, appointmentError);
+            logger.warn(`Could not fetch appointments for ${monthData.name}:`, appointmentError);
           }
         } catch (queueError) {
-          console.warn(`Could not fetch queues for ${monthData.name}:`, queueError);
+          logger.warn(`Could not fetch queues for ${monthData.name}:`, queueError);
         }
 
         monthlyData.push({
@@ -151,10 +152,10 @@ const AdminDashboard = () => {
         });
       }
 
-      console.log('Generated monthly analytics from database:', monthlyData);
+      logger.log('Generated monthly analytics from database:', monthlyData);
       return monthlyData;
     } catch (error) {
-      console.error('Error generating monthly analytics from database:', error);
+      logger.error('Error generating monthly analytics from database:', error);
 
       return getLastSixMonths().map(month => ({
         name: month.name,
@@ -194,10 +195,10 @@ const AdminDashboard = () => {
   const fetchApplicationData = useCallback(async () => {
     try {
       setLoading(true);
-      console.log('Fetching applications for dashboard statistics...');
+      logger.log('Fetching applications for dashboard statistics...');
 
       const response = await documentApplicationService.getAllApplications();
-      console.log('API response:', response);
+      logger.log('API response:', response);
 
       if (Array.isArray(response)) {
         const standardizedData = standardizeApplicationData(response);
@@ -235,7 +236,7 @@ const AdminDashboard = () => {
           }
         });
 
-        console.log('Calculated application statistics:', stats);
+        logger.log('Calculated application statistics:', stats);
         setStatistics(stats);
 
         return standardizedData;
@@ -243,11 +244,11 @@ const AdminDashboard = () => {
         throw new Error('Invalid response format: Not an array');
       }
     } catch (err) {
-      console.error('Error fetching application data:', err);
+      logger.error('Error fetching application data:', err);
       setError('Error loading application data: ' + err.message);
 
       try {
-        console.log('Falling back to localStorage for applications...');
+        logger.log('Falling back to localStorage for applications...');
         const localData = JSON.parse(localStorage.getItem('applications') || '[]');
         const standardizedData = standardizeApplicationData(localData);
         setApplications(standardizedData);
@@ -286,7 +287,7 @@ const AdminDashboard = () => {
 
         return standardizedData;
       } catch (localErr) {
-        console.error('Failed to load from localStorage:', localErr);
+        logger.error('Failed to load from localStorage:', localErr);
         return [];
       }
     } finally {
@@ -301,7 +302,7 @@ const AdminDashboard = () => {
         overall: Array.isArray(appointments) ? appointments.length : 0,
       });
     } catch (error) {
-      console.error('Error fetching appointment stats:', error);
+      logger.error('Error fetching appointment stats:', error);
       const fetchedAppointments = getRecentAppointments();
       setAppointmentStats({
         overall: fetchedAppointments.length,
@@ -332,7 +333,7 @@ const AdminDashboard = () => {
             setWalkInQueue(walkIns);
           }
         } catch (queueErr) {
-          console.warn('Could not fetch queue data:', queueErr);
+          logger.warn('Could not fetch queue data:', queueErr);
         }
       } catch (err) {
         setError('Error loading data: ' + err.message);
@@ -348,7 +349,7 @@ const AdminDashboard = () => {
       fetchApplicationData();
       fetchAppointmentStats();
       generateMonthlyAnalyticsFromDB().then(setWalkInData);
-    }, 300000);
+    }, 30000); // 30 seconds
 
     return () => clearInterval(intervalId);
   }, [fetchApplicationData]);
@@ -363,7 +364,7 @@ const AdminDashboard = () => {
       const monthlyAnalytics = await generateMonthlyAnalyticsFromDB();
       setWalkInData(monthlyAnalytics);
     } catch (error) {
-      console.error('Error during refresh:', error);
+      logger.error('Error during refresh:', error);
     } finally {
       setLoading(false);
       setChartLoading(false);

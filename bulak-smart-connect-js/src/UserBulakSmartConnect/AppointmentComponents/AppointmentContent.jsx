@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import logger from '../../utils/logger';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import DatePickerInputAppointForm from './DataPickerAppointmentForm';
@@ -90,7 +91,7 @@ const AppointmentContainer = ({ onBack, preselectedDate }) => {
 
       return null;
     } catch (error) {
-      console.error('Error getting user email:', error);
+      logger.error('Error getting user email:', error);
       return null;
     }
   };
@@ -115,7 +116,7 @@ const AppointmentContainer = ({ onBack, preselectedDate }) => {
           });
         }
       } catch (error) {
-        console.error('Error fetching user data:', error);
+        logger.error('Error fetching user data:', error);
       } finally {
         setFetchingUserData(false);
       }
@@ -141,25 +142,25 @@ const AppointmentContainer = ({ onBack, preselectedDate }) => {
           ? `${selectedDate.getFullYear()}-${String(selectedDate.getMonth() + 1).padStart(2, '0')}-${String(selectedDate.getDate()).padStart(2, '0')}`
           : selectedDate;
 
-      console.log('Fetching available slots for date:', formattedDate);
+      logger.log('Fetching available slots for date:', formattedDate);
 
       const response = await appointmentService.fetchAvailableSlots(formattedDate);
 
-      console.log('API Response:', response);
+      logger.log('API Response:', response);
 
       if (Array.isArray(response)) {
         setAvailableSlots(response);
-        console.log('Available slots from API:', response);
+        logger.log('Available slots from API:', response);
       } else if (response && response.availableSlots && Array.isArray(response.availableSlots)) {
         setAvailableSlots(response.availableSlots);
-        console.log('Available slots from API:', response.availableSlots);
+        logger.log('Available slots from API:', response.availableSlots);
       } else {
-        console.warn('Invalid available slots data from API:', response);
+        logger.warn('Invalid available slots data from API:', response);
 
         setAvailableSlots([...allTimeSlots]);
       }
     } catch (error) {
-      console.error('Error fetching available slots:', error);
+      logger.error('Error fetching available slots:', error);
 
       setAvailableSlots([...allTimeSlots]);
     } finally {
@@ -236,7 +237,7 @@ const AppointmentContainer = ({ onBack, preselectedDate }) => {
       try {
         // First try from auth context (like queue system)
         if (user && user.email) {
-          console.log('📧 Using email from auth context:', user.email);
+          logger.log('📧 Using email from auth context:', user.email);
           return user.email;
         }
 
@@ -245,7 +246,7 @@ const AppointmentContainer = ({ onBack, preselectedDate }) => {
         if (userData) {
           const parsedUser = JSON.parse(userData);
           if (parsedUser.email) {
-            console.log('📧 Using email from localStorage:', parsedUser.email);
+            logger.log('📧 Using email from localStorage:', parsedUser.email);
             return parsedUser.email;
           }
         }
@@ -253,19 +254,19 @@ const AppointmentContainer = ({ onBack, preselectedDate }) => {
         // Check if user is in formData (for guests)
         const token = localStorage.getItem('token');
         if (token) {
-          console.log('📧 Token found, but no email in user data');
+          logger.log('📧 Token found, but no email in user data');
         }
 
         return null;
       } catch (error) {
-        console.error('Error getting user email for notification:', error);
+        logger.error('Error getting user email for notification:', error);
         return null;
       }
     };
 
     const userEmail = getUserEmailForNotification();
     if (!userEmail) {
-      console.warn('⚠️ No email found for notifications, but continuing with appointment creation');
+      logger.warn('⚠️ No email found for notifications, but continuing with appointment creation');
       // Don't block appointment creation if email is missing
     }
 
@@ -290,7 +291,7 @@ const AppointmentContainer = ({ onBack, preselectedDate }) => {
         // Don't add email to appointment data - keep it separate for notifications
       };
 
-      console.log('Sending appointment data with date:', appointmentData.appointmentDate);
+      logger.log('Sending appointment data with date:', appointmentData.appointmentDate);
 
       const result = await appointmentService.createAppointment(appointmentData);
 
@@ -320,8 +321,8 @@ const AppointmentContainer = ({ onBack, preselectedDate }) => {
       // 📧 SEND CONFIRMATION NOTIFICATION (ENHANCED ERROR HANDLING)
       if (userEmail) {
         try {
-          console.log('📧 Sending appointment confirmation notification to:', userEmail);
-          console.log('📧 Appointment details for notification:', {
+          logger.log('📧 Sending appointment confirmation notification to:', userEmail);
+          logger.log('📧 Appointment details for notification:', {
             appointmentNumber: newAppointment.appointmentNumber || newAppointment.id,
             type: newAppointment.reasonOfVisit,
             date: newAppointment.appointmentDate,
@@ -345,27 +346,27 @@ const AppointmentContainer = ({ onBack, preselectedDate }) => {
             );
 
           if (notificationResult.success) {
-            console.log('✅ Confirmation notification sent successfully');
-            alert(
-              'Your appointment has been confirmed! A confirmation email has been sent to you.'
-            );
+            logger.log('✅ Confirmation notification sent successfully');
+            // alert(
+            //   'Your appointment has been confirmed! A confirmation email has been sent to you.'
+            // );
           } else {
-            console.log('⚠️ Confirmation notification failed:', notificationResult.error);
-            alert(
-              'Your appointment has been confirmed! However, we could not send the confirmation email.'
-            );
+            logger.log('⚠️ Confirmation notification failed:', notificationResult.error);
+            // alert(
+            //   'Your appointment has been confirmed! However, we could not send the confirmation email.'
+            // );
           }
         } catch (notificationError) {
-          console.error('❌ Error sending confirmation notification:', notificationError);
-          alert(
-            'Your appointment has been confirmed! However, we could not send the confirmation email.'
-          );
+          logger.error('❌ Error sending confirmation notification:', notificationError);
+          // alert(
+          //   'Your appointment has been confirmed! However, we could not send the confirmation email.'
+          // );
         }
       } else {
-        console.log('⚠️ No email available for notifications');
-        alert(
-          'Your appointment has been confirmed! No confirmation email will be sent as no email was found.'
-        );
+        logger.log('⚠️ No email available for notifications');
+        // alert(
+        //   'Your appointment has been confirmed! No confirmation email will be sent as no email was found.'
+        // );
       }
 
       navigate(`/QRCodeAppointment/${newAppointment.appointmentNumber || newAppointment.id}`, {
@@ -386,7 +387,7 @@ const AppointmentContainer = ({ onBack, preselectedDate }) => {
       let errorMessage = 'Failed to create appointment. Please try again.';
       if (error.response?.data?.message) errorMessage = error.response.data.message;
       else if (error.message) errorMessage = error.message;
-      alert(errorMessage);
+      // alert(errorMessage);
     } finally {
       setIsSubmitting(false);
     }
@@ -585,7 +586,7 @@ const AppointmentContainer = ({ onBack, preselectedDate }) => {
 
                     {availableSlots.length > 0 ? (
                       availableSlots.map((slot, index) => {
-                        console.log('Rendering slot:', slot);
+                        logger.log('Rendering slot:', slot);
                         return (
                           <option key={index} value={slot}>
                             {slot}

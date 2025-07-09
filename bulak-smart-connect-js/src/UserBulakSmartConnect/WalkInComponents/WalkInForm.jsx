@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import logger from '../../utils/logger';
 import { useNavigate } from 'react-router-dom';
 import './WalkInForm.css';
 import NavBar from '../../NavigationComponents/NavSide';
@@ -96,16 +97,16 @@ const WalkInForm = () => {
     setAppointmentType(isOwner ? 'self' : 'other');
 
     // Add console log to verify the state
-    console.log('Dialog response - isAccountOwner:', isOwner, 'will be guest:', !isOwner);
+    logger.log('Dialog response - isAccountOwner:', isOwner, 'will be guest:', !isOwner);
   };
 
   const handleSubmit = async e => {
     e.preventDefault();
 
     try {
-      console.log('=== FRONTEND QUEUE CREATION DEBUG ===');
-      console.log('User object:', user);
-      console.log('isAccountOwner state:', isAccountOwner);
+      logger.log('=== FRONTEND QUEUE CREATION DEBUG ===');
+      logger.log('User object:', user);
+      logger.log('isAccountOwner state:', isAccountOwner);
 
       const actualUserId = user?.id || null;
 
@@ -114,10 +115,10 @@ const WalkInForm = () => {
       // When user clicks "No, enter new details" -> isAccountOwner = false -> isGuest = true
       const isGuestValue = !isAccountOwner; // Direct boolean conversion
 
-      console.log('Final values:');
-      console.log('- actualUserId:', actualUserId);
-      console.log('- isAccountOwner:', isAccountOwner);
-      console.log('- isGuestValue (boolean):', isGuestValue);
+      logger.log('Final values:');
+      logger.log('- actualUserId:', actualUserId);
+      logger.log('- isAccountOwner:', isAccountOwner);
+      logger.log('- isGuestValue (boolean):', isGuestValue);
 
       const requestPayload = {
         userId: actualUserId,
@@ -132,11 +133,11 @@ const WalkInForm = () => {
         appointmentType: formData.reasonOfVisit,
       };
 
-      console.log('Request payload being sent:', requestPayload);
+      logger.log('Request payload being sent:', requestPayload);
 
       const response = await queueService.createQueue(requestPayload);
 
-      console.log('Queue creation response:', response);
+      logger.log('Queue creation response:', response);
 
       // Format the queue number to WK format for display
       const queueNumber = formatWKNumber(response.queue.queueNumber);
@@ -169,15 +170,15 @@ const WalkInForm = () => {
         localStorage.setItem(`userQueues_${actualUserId}`, JSON.stringify(userQueues));
         localStorage.setItem('userQueue', JSON.stringify(newQueue));
       } catch (e) {
-        console.error('Error updating user queues:', e);
+        logger.error('Error updating user queues:', e);
         localStorage.setItem(`userQueues_${actualUserId}`, JSON.stringify([newQueue]));
       }
 
       window.location.href = '/WalkInDetails';
     } catch (error) {
-      console.error('Error creating queue:', error);
-      console.error('Error details:', error.response?.data || error.message);
-      alert('Failed to create queue. Please try again.');
+      logger.error('Error creating queue:', error);
+      logger.error('Error details:', error.response?.data || error.message);
+      // alert('Failed to create queue. Please try again.');
     }
   };
 

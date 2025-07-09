@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import logger from '../../utils/logger';
 import { Box, Typography, Button, Card, CardContent } from '@mui/material';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
@@ -35,7 +36,7 @@ const AppointmentDashboard = () => {
       const data = await announcementService.getRecentAnnouncements(2);
       setAnnouncements(data);
     } catch (error) {
-      console.error('Failed to load announcements:', error);
+      logger.error('Failed to load announcements:', error);
     } finally {
       setAnnouncementLoading(false);
     }

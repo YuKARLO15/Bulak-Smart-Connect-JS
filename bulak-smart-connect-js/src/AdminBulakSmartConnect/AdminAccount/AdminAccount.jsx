@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import logger from '../../utils/logger';
 import {
   Box,
   Typography,
@@ -96,7 +97,7 @@ const AccountManagement = () => {
           checkUsernameChangeEligibility(new Date(usernameChangeDate));
         }
       } catch (error) {
-        console.error('Error fetching admin profile:', error);
+        logger.error('Error fetching admin profile:', error);
         setMessage({
           text: error.response?.data?.message || '❌ Failed to load profile data',
           type: 'error',
@@ -207,7 +208,7 @@ const AccountManagement = () => {
         username: false,
       });
     } catch (error) {
-      console.error('Error updating profile:', error);
+      logger.error('Error updating profile:', error);
       setMessage({
         text: `❌ ${error.response?.data?.message || 'Failed to update profile'}`,
         type: 'error',
@@ -227,7 +228,7 @@ const AccountManagement = () => {
 
       return response.data && response.data.access_token;
     } catch (error) {
-      console.error('Current password verification failed:', error);
+      logger.error('Current password verification failed:', error);
       return false;
     }
   };
@@ -307,7 +308,7 @@ const AccountManagement = () => {
       setShowOTPModal(true);
       setMessage({ text: '📧 OTP sent to your email for verification', type: 'success' });
     } catch (error) {
-      console.error('Error in password change process:', error);
+      logger.error('Error in password change process:', error);
       setMessage({
         text: `❌ Failed to send verification code: ${error.message}`,
         type: 'error',
@@ -358,14 +359,14 @@ const AccountManagement = () => {
             },
           });
         } catch (error) {
-          console.error('Logout error:', error);
+          logger.error('Logout error:', error);
           // Force logout even if API call fails
           localStorage.clear();
           navigate('/LogIn', { replace: true });
         }
       }, 3000);
     } catch (error) {
-      console.error('Error changing password:', error);
+      logger.error('Error changing password:', error);
       setMessage({
         text: `❌ ${error.response?.data?.message || 'Failed to change password. Please try again.'}`,
         type: 'error',

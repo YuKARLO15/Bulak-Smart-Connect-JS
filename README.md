@@ -3,6 +3,16 @@
 <h2>Bulak LGU Smart Connect</h2>
 <p>Information and Queuing Management System</p>
 
+<!-- Production Links -->
+<p align="center">
+  <a href="https://bulak-smart-connect-frontend-prod.onrender.com" target="_blank">
+    <img src="https://img.shields.io/badge/🌐%20Live%20App-Production-brightgreen?style=for-the-badge&logo=render&logoColor=white" alt="Live Production App" />
+  </a>
+  <a href="https://bulak-smart-connect-backend-prod.onrender.com/api/docs" target="_blank">
+    <img src="https://img.shields.io/badge/📚%20API%20Docs-Production-blue?style=for-the-badge&logo=swagger&logoColor=white" alt="Production API Documentation" />
+  </a>
+</p>
+
 <!-- GitHub Actions Status Badges -->
 <p align="center">
   <a href="https://github.com/YuKARLO15/Bulak-Smart-Connect-JS/actions/workflows/ci.yml">
@@ -234,7 +244,7 @@ Our live dashboard provides:
     <table>
         <tbody>
             <tr>
-                <th colspan="6"><h3>Backend Technologies</h3></th>
+                <th colspan="8"><h3>Backend Technologies</h3></th>
             </tr>
             <tr>
                 <td><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/nestjs/nestjs-original.svg" alt="NestJS" width="60px" height="auto" /></td>
@@ -243,6 +253,8 @@ Our live dashboard provides:
                 <td><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/jest/jest-plain.svg" alt="Jest" width="60px" height="auto" /></td>
                 <td><img src="https://static1.smartbear.co/swagger/media/assets/images/swagger_logo.svg" alt="Swagger" width="60px" height="auto" /></td>
                 <td><img src="https://github.com/minio/minio/raw/master/.github/logo.svg" alt="MinIO" width="60px" height="auto" /></td>
+                <td><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/cloudflare/cloudflare-original.svg" alt="Cloudflare R2" width="60px" height="auto" /></td>
+                <td><img src="https://avatars.githubusercontent.com/u/14290521?s=200&v=4" alt="Aiven" width="60px" height="auto" /></td>
             </tr>
             <tr>
                 <td><p><b>NestJS</b></p></td>
@@ -251,6 +263,8 @@ Our live dashboard provides:
                 <td><p><b>Jest</b></p></td>
                 <td><p><b>Swagger</b></p></td>
                 <td><p><b>MinIO</b></p></td>
+                <td><p><b>Cloudflare R2</b></p></td>
+                <td><p><b>Aiven</b></p></td>
             </tr>
             <tr>
                 <td><p>Progressive Node.js framework</p></td>
@@ -259,6 +273,8 @@ Our live dashboard provides:
                 <td><p>Testing framework</p></td>
                 <td><p>API documentation</p></td>
                 <td><p>Object storage for documents</p></td>
+                <td><p>S3-compatible cloud storage</p></td>
+                <td><p>Managed MySQL hosting</p></td>
             </tr>
         </tbody>
     </table>
@@ -268,7 +284,7 @@ Our live dashboard provides:
     <table>
         <tbody>
             <tr>
-                <th colspan="5"><h3>Additional Technologies</h3></th>
+                <th colspan="7"><h3>Additional Technologies</h3></th>
             </tr>
             <tr>
                 <td><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/javascript/javascript-original.svg" alt="JavaScript" width="60px" height="auto" /></td>
@@ -276,6 +292,8 @@ Our live dashboard provides:
                 <td><img src="https://jwt.io/img/pic_logo.svg" alt="JWT" width="60px" height="auto" /></td>
                 <td><img src="https://raw.githubusercontent.com/typeorm/typeorm/master/resources/logo_big.png" alt="TypeORM" width="60px" height="auto" /></td>
                 <td><img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub Actions" width="60px" height="auto" /></td>
+                <td><img src="https://avatars.githubusercontent.com/u/36424661?s=200&v=4" alt="Render" width="60px" height="auto" /></td>
+                <td><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/docker/docker-original.svg" alt="Docker" width="60px" height="auto" /></td>
             </tr>
             <tr>
                 <td><p><b>JavaScript</b></p></td>
@@ -283,6 +301,8 @@ Our live dashboard provides:
                 <td><p><b>JWT</b></p></td>
                 <td><p><b>TypeORM</b></p></td>
                 <td><p><b>GitHub Actions</b></p></td>
+                <td><p><b>Render</b></p></td>
+                <td><p><b>Docker</b></p></td>
             </tr>
             <tr>
                 <td><p>Core programming language</p></td>
@@ -290,6 +310,8 @@ Our live dashboard provides:
                 <td><p>Secure authentication</p></td>
                 <td><p>ORM for database interactions</p></td>
                 <td><p>CI/CD workflows</p></td>
+                <td><p>Cloud deployment platform</p></td>
+                <td><p>Containerization platform</p></td>
             </tr>
         </tbody>
     </table>
@@ -666,12 +688,35 @@ console.log('API Base URL:', config.API_BASE_URL);
 
 *The OTP system is production-ready and seamlessly integrates with your existing authentication flow. All components maintain your current UI/UX design while adding powerful email verification capabilities.*
 
-## Site Accessibility
+## 🌐 Site Accessibility
 
+### **🚀 Production Environment**
+- **🌟 Live Application**: [https://bulak-smart-connect-frontend-prod.onrender.com](https://bulak-smart-connect-frontend-prod.onrender.com)
+- **📚 Production API Documentation**: [https://bulak-smart-connect-backend-prod.onrender.com/api/docs](https://bulak-smart-connect-backend-prod.onrender.com/api/docs)
+- **🔗 Backend API**: [https://bulak-smart-connect-backend-prod.onrender.com](https://bulak-smart-connect-backend-prod.onrender.com)
+
+### **📊 Development & Documentation**
 - **Live Dashboard**: https://yukarlo15.github.io/Bulak-Smart-Connect-JS/dashboard/
 - **Documentation Hub**: https://yukarlo15.github.io/Bulak-Smart-Connect-JS/
 - **Component Documentation**: https://yukarlo15.github.io/Bulak-Smart-Connect-JS/frontend-docs/
 - **API Documentation**: https://yukarlo15.github.io/Bulak-Smart-Connect-JS/api-docs/
+
+### **🏗️ Architecture Overview**
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    PRODUCTION DEPLOYMENT                    │
+├─────────────────────────────────────────────────────────────┤
+│ 🌐 Frontend (Static Site)                                  │
+│    └── https://bulak-smart-connect-frontend-prod.onrender.com │
+│                                                             │
+│ ⚙️  Backend (Web Service)                                   │
+│    └── https://bulak-smart-connect-backend-prod.onrender.com │
+│                                                             │
+│ 🗄️  Database: Aiven MySQL (Managed)                        │
+│ 📁 Storage: Cloudflare R2 (S3-Compatible)                  │
+│ 🚀 Hosting: Render (Static + Web Service)                  │
+└─────────────────────────────────────────────────────────────┘
+```
 
 ## How to Install (Frontend)
 

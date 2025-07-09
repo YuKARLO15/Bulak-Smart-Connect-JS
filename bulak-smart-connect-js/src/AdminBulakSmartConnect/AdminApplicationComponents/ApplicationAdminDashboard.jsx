@@ -108,7 +108,7 @@ const AdminApplicationDashboard = () => {
   // Initial fetch and polling
   useEffect(() => {
     fetchApplications();
-    const intervalId = setInterval(fetchApplications, 120000);
+    const intervalId = setInterval(fetchApplications, 30000); // 30 seconds
     return () => clearInterval(intervalId);
   }, []);
 

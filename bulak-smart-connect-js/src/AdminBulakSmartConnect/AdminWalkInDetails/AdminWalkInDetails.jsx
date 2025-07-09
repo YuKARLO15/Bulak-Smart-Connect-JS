@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import logger from '../../utils/logger';
 import './AdminWalkInDetails.css';
 import { queueService } from '../../services/queueService';
 import axios from 'axios';
@@ -40,11 +41,11 @@ const AdminWalkInDetails = () => {
       try {
         setLoading(true);
         const details = await queueService.fetchQueueDetails(id);
-        console.log('Queue details fetched:', details);
+        logger.log('Queue details fetched:', details);
         setQueueDetails(details);
         setError(null);
       } catch (err) {
-        console.error('Error fetching queue details:', err);
+        logger.error('Error fetching queue details:', err);
         setError('Failed to load queue details');
       } finally {
         setLoading(false);
@@ -58,12 +59,12 @@ const AdminWalkInDetails = () => {
     try {
       // Use queueService for consistency
       await queueService.updateQueueStatus(id, 'completed');
-      alert('Queue marked as complete!');
+      // alert('Queue marked as complete!');
       navigate(-1); // Go back to previous page
     } catch (err) {
-      console.error('Error completing queue:', err);
-      console.error('Error details:', err.response?.data || err.message);
-      alert(`Failed to complete queue. Error: ${err.response?.data?.message || err.message}`);
+      logger.error('Error completing queue:', err);
+      logger.error('Error details:', err.response?.data || err.message);
+      // alert(`Failed to complete queue. Error: ${err.response?.data?.message || err.message}`);
     }
   };
 

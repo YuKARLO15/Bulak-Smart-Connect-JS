@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import logger from '../../utils/logger';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -83,7 +84,7 @@ const UserAccount = () => {
           checkUsernameChangeEligibility(new Date(usernameChangeDate));
         }
       } catch (error) {
-        console.error('Error fetching user data:', error);
+        logger.error('Error fetching user data:', error);
         setMessage({ text: '❌ Failed to load user data. Please try again.', type: 'error' });
       } finally {
         setLoading(false);
@@ -186,7 +187,7 @@ const UserAccount = () => {
       setConfirmationPassword('');
       setPendingUpdates(null);
     } catch (error) {
-      console.error('Error updating profile:', error);
+      logger.error('Error updating profile:', error);
       setMessage({
         text: `❌ ${error.response?.data?.message || 'Failed to update profile'}`,
         type: 'error',
@@ -198,7 +199,7 @@ const UserAccount = () => {
     e.preventDefault();
 
     try {
-      console.log('Attempting to verify password');
+      logger.log('Attempting to verify password');
 
       const response = await axios.post(`${config.API_BASE_URL}/auth/login`, {
         email: email,
@@ -207,21 +208,21 @@ const UserAccount = () => {
         password: confirmationPassword,
       });
 
-      console.log('Verification response received');
+      logger.log('Verification response received');
 
       if (response.data && response.data.access_token) {
-        console.log('Password verification successful');
+        logger.log('Password verification successful');
         await submitProfileUpdates(pendingUpdates);
       } else {
-        console.log('Password verification failed - unexpected response format');
+        logger.log('Password verification failed - unexpected response format');
         setMessage({ text: '❌ Incorrect password. Please try again.', type: 'error' });
       }
     } catch (error) {
-      console.error('Error verifying password:', error);
+      logger.error('Error verifying password:', error);
 
       if (error.response) {
-        console.log('Error status:', error.response.status);
-        console.log('Error data:', error.response.data);
+        logger.log('Error status:', error.response.status);
+        logger.log('Error data:', error.response.data);
         setMessage({
           text: `❌ ${error.response.data.message || 'Incorrect password. Please try again.'}`,
           type: 'error',
@@ -247,7 +248,7 @@ const UserAccount = () => {
 
       return response.data && response.data.access_token;
     } catch (error) {
-      console.error('Current password verification failed:', error);
+      logger.error('Current password verification failed:', error);
       return false;
     }
   };
@@ -334,7 +335,7 @@ const UserAccount = () => {
       setShowOTPModal(true);
       setMessage({ text: '📧 OTP sent to your email for verification', type: 'success' });
     } catch (error) {
-      console.error('Error in password change process:', error);
+      logger.error('Error in password change process:', error);
       setMessage({
         text: `❌ Failed to send verification code: ${error.message}`,
         type: 'error',
@@ -383,14 +384,14 @@ const UserAccount = () => {
             },
           });
         } catch (error) {
-          console.error('Logout error:', error);
+          logger.error('Logout error:', error);
           // Force logout even if API call fails
           localStorage.clear();
           navigate('/LogIn', { replace: true });
         }
       }, 3000);
     } catch (error) {
-      console.error('Error changing password:', error);
+      logger.error('Error changing password:', error);
       setMessage({
         text: `❌ ${error.response?.data?.message || 'Failed to change password. Please try again.'}`,
         type: 'error',

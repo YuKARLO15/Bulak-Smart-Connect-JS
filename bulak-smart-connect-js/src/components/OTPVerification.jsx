@@ -86,7 +86,7 @@ const OTPVerification = ({
       setCanResend(false);
       setOtp(['', '', '', '', '', '']);
       document.getElementById('otp-0')?.focus();
-      alert('✅ New OTP sent to your email!');
+      // alert('✅ New OTP sent to your email!');
     } catch (error) {
       setError('Failed to resend OTP. Please try again.');
     } finally {

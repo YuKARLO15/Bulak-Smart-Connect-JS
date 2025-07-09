@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import logger from '../../../utils/logger';
 import {
   Box,
   Typography,
@@ -163,7 +164,7 @@ const DelayedOutOfTownRegistration = () => {
   // Create application in backend
   const createBackendApplication = async () => {
     try {
-      console.log('Creating application in backend...');
+      logger.log('Creating application in backend...');
 
       // Get current application ID from localStorage or create a new one
       const currentId = localStorage.getItem('currentApplicationId');
@@ -171,7 +172,7 @@ const DelayedOutOfTownRegistration = () => {
 
       if (!appId) {
         appId = 'BC-' + Date.now().toString().slice(-6);
-        console.log('Generated new application ID:', appId);
+        logger.log('Generated new application ID:', appId);
         localStorage.setItem('currentApplicationId', appId);
       }
 
@@ -187,11 +188,11 @@ const DelayedOutOfTownRegistration = () => {
         status: 'PENDING',
       };
 
-      console.log('Creating application with data:', backendApplicationData);
+      logger.log('Creating application with data:', backendApplicationData);
 
       // Call API to create application
       const response = await documentApplicationService.createApplication(backendApplicationData);
-      console.log('Backend created application:', response);
+      logger.log('Backend created application:', response);
 
       // Store the backend ID
       if (response && response.id) {
@@ -202,7 +203,7 @@ const DelayedOutOfTownRegistration = () => {
 
       return response;
     } catch (error) {
-      console.error('Failed to create application in backend:', error);
+      logger.error('Failed to create application in backend:', error);
       showNotification(
         `Failed to register application: ${error.message}. Please try again.`,
         'error'
@@ -215,14 +216,14 @@ const DelayedOutOfTownRegistration = () => {
   useEffect(() => {
     const count = Object.values(uploadedFiles).filter(Boolean).length;
     setUploadedDocumentsCount(count);
-    console.log(`Uploaded documents count: ${count}`);
+    logger.log(`Uploaded documents count: ${count}`);
   }, [uploadedFiles]);
 
   useEffect(() => {
     const maritalStatus = localStorage.getItem('maritalStatus');
     if (maritalStatus) {
       setStatus(maritalStatus);
-      console.log('Status loaded from localStorage:', maritalStatus);
+      logger.log('Status loaded from localStorage:', maritalStatus);
     }
 
     const loadData = async () => {
@@ -231,9 +232,9 @@ const DelayedOutOfTownRegistration = () => {
 
         // Load application data
         if (isEditing) {
-          console.log('Loading data for editing...');
+          logger.log('Loading data for editing...');
           const editingId = localStorage.getItem('editingApplicationId');
-          console.log('Editing application ID:', editingId);
+          logger.log('Editing application ID:', editingId);
 
           if (editingId) {
             setApplicationId(editingId);
@@ -243,10 +244,10 @@ const DelayedOutOfTownRegistration = () => {
               const backendApp = await documentApplicationService.getApplication(editingId);
               if (backendApp) {
                 setBackendApplicationCreated(true);
-                console.log('Application exists in backend:', backendApp);
+                logger.log('Application exists in backend:', backendApp);
               }
             } catch (error) {
-              console.warn('Application may not exist in backend:', error);
+              logger.warn('Application may not exist in backend:', error);
             }
           }
 
@@ -255,7 +256,7 @@ const DelayedOutOfTownRegistration = () => {
           const applicationToEdit = applications.find(app => app.id === editingId);
 
           if (applicationToEdit) {
-            console.log('Found application to edit:', applicationToEdit);
+            logger.log('Found application to edit:', applicationToEdit);
             if (applicationToEdit.uploadedFiles) {
               setUploadedFiles(applicationToEdit.uploadedFiles || {});
             }
@@ -271,7 +272,7 @@ const DelayedOutOfTownRegistration = () => {
               if (parsedData.uploadedFiles) {
                 setUploadedFiles(parsedData.uploadedFiles || {});
               }
-              console.log('Loaded form data from birthCertificateApplication');
+              logger.log('Loaded form data from birthCertificateApplication');
             }
           }
         } else {
@@ -285,10 +286,10 @@ const DelayedOutOfTownRegistration = () => {
               const backendApp = await documentApplicationService.getApplication(currentId);
               if (backendApp) {
                 setBackendApplicationCreated(true);
-                console.log('Application exists in backend:', backendApp);
+                logger.log('Application exists in backend:', backendApp);
               }
             } catch (error) {
-              console.warn('Application may not exist in backend:', error);
+              logger.warn('Application may not exist in backend:', error);
 
               // If we have form data but no backend application, automatically create it
               const currentApplicationData = localStorage.getItem('birthCertificateApplication');
@@ -314,14 +315,14 @@ const DelayedOutOfTownRegistration = () => {
 
         // Check storage usage
         const usage = localStorageManager.getCurrentUsage();
-        console.log(`📊 Current storage usage: ${usage.percentage.toFixed(1)}%`);
+        logger.log(`📊 Current storage usage: ${usage.percentage.toFixed(1)}%`);
 
         if (usage.isNearFull) {
-          console.warn('⚠️ localStorage is getting full, performing cleanup...');
+          logger.warn('⚠️ localStorage is getting full, performing cleanup...');
           await localStorageManager.performCleanup(0.2);
         }
       } catch (error) {
-        console.error('Error during initialization:', error);
+        logger.error('Error during initialization:', error);
         showNotification('Error loading application data', 'error');
       } finally {
         setIsInitializing(false);
@@ -343,7 +344,7 @@ const DelayedOutOfTownRegistration = () => {
       while (n--) u8arr[n] = bstr.charCodeAt(n);
       return new File([u8arr], filename, { type: mime });
     } catch (error) {
-      console.error('Error converting data URL to file:', error);
+      logger.error('Error converting data URL to file:', error);
       throw new Error('Invalid file format');
     }
   }
@@ -364,7 +365,7 @@ const DelayedOutOfTownRegistration = () => {
     // Update the uploadedFiles state
     setUploadedFiles(prevState => {
       const newState = { ...prevState, [label]: isUploaded };
-      console.log('Updated uploadedFiles:', newState);
+      logger.log('Updated uploadedFiles:', newState);
       return newState;
     });
 
@@ -382,13 +383,13 @@ const DelayedOutOfTownRegistration = () => {
           return;
         }
 
-        console.log('Application ID:', currentAppId);
+        logger.log('Application ID:', currentAppId);
 
         // Handle multiple files (array) or single file (object)
         const filesToUpload = Array.isArray(fileDataObj) ? fileDataObj : [fileDataObj];
 
         for (const [index, fileData] of filesToUpload.entries()) {
-          console.log(`Uploading file ${index + 1}:`, fileData.name);
+          logger.log(`Uploading file ${index + 1}:`, fileData.name);
 
           const file = dataURLtoFile(fileData.data, fileData.name, fileData.type);
 
@@ -400,7 +401,7 @@ const DelayedOutOfTownRegistration = () => {
             file,
             uploadLabel
           );
-          console.log(`Upload response for ${fileData.name}:`, response);
+          logger.log(`Upload response for ${fileData.name}:`, response);
         }
 
         const fileCount = filesToUpload.length;
@@ -411,11 +412,11 @@ const DelayedOutOfTownRegistration = () => {
 
         showNotification(successMessage, 'success');
       } catch (error) {
-        console.error(`Failed to upload "${label}":`, error);
+        logger.error(`Failed to upload "${label}":`, error);
 
         // Show detailed error information
         if (error.response) {
-          console.error('Server response:', error.response.status, error.response.data);
+          logger.error('Server response:', error.response.status, error.response.data);
 
           // If error is 404 (application not found), try to create it and retry upload
           if (error.response.status === 404) {
@@ -436,7 +437,7 @@ const DelayedOutOfTownRegistration = () => {
                     file,
                     uploadLabel
                   );
-                  console.log(`Retry upload response for ${fileData.name}:`, retryResponse);
+                  logger.log(`Retry upload response for ${fileData.name}:`, retryResponse);
                 }
 
                 const fileCount = filesToUpload.length;
@@ -448,7 +449,7 @@ const DelayedOutOfTownRegistration = () => {
                 showNotification(successMessage, 'success');
                 return;
               } catch (retryError) {
-                console.error('Retry upload failed:', retryError);
+                logger.error('Retry upload failed:', retryError);
               }
             }
           }
@@ -479,7 +480,7 @@ const DelayedOutOfTownRegistration = () => {
   const isMandatoryComplete = () => {
     const incomplete = baseRequiredDocuments.filter(doc => uploadedFiles[doc] !== true);
     if (incomplete.length > 0) {
-      console.log('Missing uploads for:', incomplete);
+      logger.log('Missing uploads for:', incomplete);
     }
     return incomplete.length === 0;
   };
@@ -505,7 +506,7 @@ const DelayedOutOfTownRegistration = () => {
       // Get the application ID
       const currentAppId = applicationId || localStorage.getItem('currentApplicationId');
       if (!currentAppId) {
-        console.error('No application ID found');
+        logger.error('No application ID found');
         showNotification('Application ID is missing. Cannot proceed.', 'error');
         setIsLoading(false);
         setIsSubmitted(false);
@@ -515,7 +516,7 @@ const DelayedOutOfTownRegistration = () => {
       // Check storage usage before saving
       const usage = localStorageManager.getCurrentUsage();
       if (usage.isCritical) {
-        console.warn('Storage critical, performing cleanup before save...');
+        logger.warn('Storage critical, performing cleanup before save...');
         await localStorageManager.performCleanup(0.4);
       }
 
@@ -534,9 +535,9 @@ const DelayedOutOfTownRegistration = () => {
           currentAppId,
           backendData
         );
-        console.log('Application status updated in backend:', response);
+        logger.log('Application status updated in backend:', response);
       } catch (error) {
-        console.error('Failed to update backend status:', error);
+        logger.error('Failed to update backend status:', error);
         showNotification(
           'Warning: Failed to update backend status. Continuing with local update.',
           'warning'
@@ -599,7 +600,7 @@ const DelayedOutOfTownRegistration = () => {
       const userEmail = user?.email;
       if (userEmail) {
         try {
-          console.log('📧 Sending application confirmation notification to:', userEmail);
+          logger.log('📧 Sending application confirmation notification to:', userEmail);
           const notificationResult =
             await documentApplicationNotificationService.sendApplicationConfirmation(
               userEmail,
@@ -614,15 +615,15 @@ const DelayedOutOfTownRegistration = () => {
             );
 
           if (notificationResult.success) {
-            console.log('✅ Confirmation notification sent successfully');
+            logger.log('✅ Confirmation notification sent successfully');
           } else {
-            console.log('⚠️ Confirmation notification failed:', notificationResult.error);
+            logger.log('⚠️ Confirmation notification failed:', notificationResult.error);
           }
         } catch (notificationError) {
-          console.error('❌ Error sending confirmation notification:', notificationError);
+          logger.error('❌ Error sending confirmation notification:', notificationError);
         }
       } else {
-        console.log('⚠️ No email available for notifications');
+        logger.log('⚠️ No email available for notifications');
       }
 
       if (!applicationsStored || !formDataStored) {
@@ -647,14 +648,14 @@ const DelayedOutOfTownRegistration = () => {
         })
       );
 
-      console.log('Application submitted successfully');
+      logger.log('Application submitted successfully');
 
       // Navigate to summary page after a short delay
       setTimeout(() => {
         navigate('/BirthApplicationSummary');
       }, 2000);
     } catch (error) {
-      console.error('Error submitting application:', error);
+      logger.error('Error submitting application:', error);
       showNotification(`Error submitting application: ${error.message}`, 'error');
       setIsLoading(false);
       setIsSubmitted(false);
@@ -790,14 +791,14 @@ const DelayedOutOfTownRegistration = () => {
                     localStorage.setItem('applications', JSON.stringify(applications));
                   }
 
-                  console.log('Navigating back with modify state:', modifyApplicationState);
+                  logger.log('Navigating back with modify state:', modifyApplicationState);
 
                   navigate('/BirthCertificateForm', {
                     state: modifyApplicationState,
                     replace: false,
                   });
                 } catch (error) {
-                  console.error('Error saving modify state:', error);
+                  logger.error('Error saving modify state:', error);
                   showNotification('Error saving current state. Some data may be lost.', 'warning');
 
                   navigate('/BirthCertificateForm', {

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import logger from '../../utils/logger';
 import '../AdminAnnouncementComponents/AnnouncementForm.css';
 
 const AnnouncementForm = ({ addAnnouncement }) => {
@@ -33,7 +34,7 @@ const AnnouncementForm = ({ addAnnouncement }) => {
       // Reset form on successful submission
       setAnnouncement({ title: '', description: '', image: '' });
     } catch (error) {
-      console.error('Form submission error:', error);
+      logger.error('Form submission error:', error);
     } finally {
       setIsSubmitting(false);
     }

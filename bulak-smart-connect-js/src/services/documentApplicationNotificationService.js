@@ -1,5 +1,6 @@
 import axios from 'axios';
 import config from '../config/env.js';
+import logger from '../utils/logger.js';
 
 // Create an axios instance with common configurations
 const apiClient = axios.create({
@@ -49,21 +50,21 @@ export const documentApplicationNotificationService = {
     try {
       // Validate inputs first
       if (!userEmail) {
-        console.log('⚠️ No email provided for application confirmation');
+        logger.log('⚠️ No email provided for application confirmation');
         return { success: false, error: 'No email provided' };
       }
 
       if (!applicationId) {
-        console.log('⚠️ No application ID provided');
+        logger.log('⚠️ No application ID provided');
         return { success: false, error: 'No application ID provided' };
       }
 
       if (!applicationDetails) {
-        console.log('⚠️ No application details provided');
+        logger.log('⚠️ No application details provided');
         return { success: false, error: 'No application details provided' };
       }
 
-      console.log('📧 Sending application confirmation notification...', {
+      logger.log('📧 Sending application confirmation notification...', {
         email: userEmail,
         applicationId,
         details: applicationDetails,
@@ -79,10 +80,10 @@ export const documentApplicationNotificationService = {
         status: applicationDetails.status || 'Pending',
       });
 
-      console.log('✅ Application confirmation notification sent successfully');
+      logger.log('✅ Application confirmation notification sent successfully');
       return { success: true, data: response.data };
     } catch (error) {
-      console.error('❌ Failed to send application confirmation:', error);
+      logger.error('❌ Failed to send application confirmation:', error);
       return { success: false, error: error.message || 'Failed to send application confirmation' };
     }
   },
@@ -93,21 +94,21 @@ export const documentApplicationNotificationService = {
   async sendStatusUpdateNotification(userEmail, applicationId, newStatus, applicationDetails) {
     try {
       if (!userEmail) {
-        console.log('⚠️ No email provided for status update');
+        logger.log('⚠️ No email provided for status update');
         return { success: false, error: 'No email provided' };
       }
 
       if (!applicationId) {
-        console.log('⚠️ No application ID provided');
+        logger.log('⚠️ No application ID provided');
         return { success: false, error: 'No application ID provided' };
       }
 
       if (!newStatus) {
-        console.log('⚠️ No status provided');
+        logger.log('⚠️ No status provided');
         return { success: false, error: 'No status provided' };
       }
 
-      console.log('📧 Sending status update notification...', {
+      logger.log('📧 Sending status update notification...', {
         email: userEmail,
         applicationId,
         newStatus,
@@ -126,10 +127,10 @@ export const documentApplicationNotificationService = {
         previousStatus: applicationDetails?.status,
       });
 
-      console.log('✅ Status update notification sent successfully');
+      logger.log('✅ Status update notification sent successfully');
       return { success: true, data: response.data };
     } catch (error) {
-      console.error('❌ Failed to send status update notification:', error);
+      logger.error('❌ Failed to send status update notification:', error);
       return {
         success: false,
         error: error.message || 'Failed to send status update notification',
@@ -143,16 +144,16 @@ export const documentApplicationNotificationService = {
   async sendRejectionNotification(userEmail, applicationId, applicationDetails, reason) {
     try {
       if (!userEmail) {
-        console.log('⚠️ No email provided for rejection notification');
+        logger.log('⚠️ No email provided for rejection notification');
         return { success: false, error: 'No email provided' };
       }
 
       if (!applicationId) {
-        console.log('⚠️ No application ID provided');
+        logger.log('⚠️ No application ID provided');
         return { success: false, error: 'No application ID provided' };
       }
 
-      console.log('📧 Sending rejection notification...', {
+      logger.log('📧 Sending rejection notification...', {
         email: userEmail,
         applicationId,
         reason,
@@ -170,10 +171,10 @@ export const documentApplicationNotificationService = {
         rejectionReason: reason,
       });
 
-      console.log('✅ Rejection notification sent successfully');
+      logger.log('✅ Rejection notification sent successfully');
       return { success: true, data: response.data };
     } catch (error) {
-      console.error('❌ Failed to send rejection notification:', error);
+      logger.error('❌ Failed to send rejection notification:', error);
       return { success: false, error: error.message || 'Failed to send rejection notification' };
     }
   },
@@ -184,16 +185,16 @@ export const documentApplicationNotificationService = {
   async sendApprovalNotification(userEmail, applicationId, applicationDetails) {
     try {
       if (!userEmail) {
-        console.log('⚠️ No email provided for approval notification');
+        logger.log('⚠️ No email provided for approval notification');
         return { success: false, error: 'No email provided' };
       }
 
       if (!applicationId) {
-        console.log('⚠️ No application ID provided');
+        logger.log('⚠️ No application ID provided');
         return { success: false, error: 'No application ID provided' };
       }
 
-      console.log('📧 Sending approval notification...', {
+      logger.log('📧 Sending approval notification...', {
         email: userEmail,
         applicationId,
         details: applicationDetails,
@@ -209,10 +210,10 @@ export const documentApplicationNotificationService = {
           `${applicationDetails?.firstName || ''} ${applicationDetails?.lastName || ''}`.trim(),
       });
 
-      console.log('✅ Approval notification sent successfully');
+      logger.log('✅ Approval notification sent successfully');
       return { success: true, data: response.data };
     } catch (error) {
-      console.error('❌ Failed to send approval notification:', error);
+      logger.error('❌ Failed to send approval notification:', error);
       return { success: false, error: error.message || 'Failed to send approval notification' };
     }
   },

@@ -25,9 +25,22 @@ dist-ssr
 
 # Environment variables
 .env
+.env.development.local
+.env.test.local
+.env.production.local
+.env.local
 
 # PWA Development Files
 dev-dist/
 
 # PWA Build Files (if not already covered by dist/)
 dist/
+
+# Environment variables
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+# Keep .env.example for reference
+!.env.example

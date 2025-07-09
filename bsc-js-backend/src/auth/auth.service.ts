@@ -3,6 +3,7 @@ import {
   UnauthorizedException,
   ConflictException,
   BadRequestException,
+  Logger,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -14,14 +15,24 @@ import { RegisterDto } from './dto/register.dto';
 import { RolesService } from '../roles/roles.service';
 import { UpdateUserDto, AdminUpdateUserDto } from './dto/update-user.dto';
 
+interface LockoutData {
+  attempts: number;
+  lastAttempt: Date;
+  lockedUntil?: Date;
+}
+
 @Injectable()
 export class AuthService {
+  private readonly logger = new Logger(AuthService.name);
+
   constructor(
     @InjectRepository(User)
     private usersRepository: Repository<User>,
     private jwtService: JwtService,
     private rolesService: RolesService,
   ) {}
+
+  private readonly failedAttempts = new Map<string, LockoutData>();
 
   async validateUser(loginDto: LoginDto): Promise<any> {
     const user = await this.usersRepository.findOne({
@@ -38,8 +49,66 @@ export class AuthService {
     return null;
   }
 
+  async getAccountLockout(identifier: string) {
+    const key = identifier.toLowerCase();
+    return this.failedAttempts.get(key) || null;
+  }
+
+  async recordFailedLoginAttempt(identifier: string) {
+    const key = identifier.toLowerCase();
+    const current = this.failedAttempts.get(key) || {
+      attempts: 0,
+      lastAttempt: new Date(),
+    };
+
+    current.attempts++;
+    current.lastAttempt = new Date();
+
+    // Lock account after 5 attempts for 3 minutes (was 15 minutes)
+    if (current.attempts >= 5) {
+      current.lockedUntil = new Date(Date.now() + 3 * 60 * 1000); // 3 minutes
+      this.logger.warn(
+        `Account locked for ${identifier} after ${current.attempts} failed attempts`,
+      );
+    }
+
+    this.failedAttempts.set(key, current);
+
+    return {
+      attempts: current.attempts,
+      isLocked: current.attempts >= 5,
+      lockedUntil: current.lockedUntil,
+      timeRemaining: current.lockedUntil
+        ? Math.ceil(
+            (current.lockedUntil.getTime() - Date.now()) / 1000,
+          )
+        : 0,
+    };
+  }
+
+  async clearAccountLockout(identifier: string) {
+    const key = identifier.toLowerCase();
+    this.failedAttempts.delete(key);
+    this.logger.log(`Account lockout cleared for ${identifier}`);
+    return { success: true };
+  }
+
   async login(loginDto: LoginDto) {
-    console.log('Login attempt with:', loginDto);
+    const identifier = loginDto.emailOrUsername.toLowerCase();
+
+    // Check if account is locked
+    const lockoutData = await this.getAccountLockout(identifier);
+    if (lockoutData?.lockedUntil && lockoutData.lockedUntil > new Date()) {
+      const timeRemaining = Math.ceil(
+        (lockoutData.lockedUntil.getTime() - Date.now()) / 1000,
+      );
+      const minutesRemaining = Math.ceil(timeRemaining / 60);
+      throw new UnauthorizedException(
+        `Account locked due to multiple failed attempts. Try again in ${minutesRemaining} minutes or use "Forgot Password".`,
+      );
+    }
+
+    this.logger.log('Login attempt with:', loginDto);
 
     try {
       const user = await this.usersRepository.findOne({
@@ -50,21 +119,21 @@ export class AuthService {
         relations: ['defaultRole'],
       });
 
-      console.log('User found:', user ? 'Yes' : 'No');
+      this.logger.log('User found:', user ? 'Yes' : 'No');
 
       if (!user) {
         throw new UnauthorizedException('Invalid email or password');
       }
 
       // Debug password check
-      console.log('Stored password hash:', user.password);
-      console.log('Comparing with:', loginDto.password);
+      this.logger.log('Stored password hash:', user.password);
+      this.logger.log('Comparing with:', loginDto.password);
 
       const isPasswordValid = await bcrypt.compare(
         loginDto.password,
         user.password,
       );
-      console.log('Password valid:', isPasswordValid);
+      this.logger.log('Password valid:', isPasswordValid);
 
       if (!isPasswordValid) {
         throw new UnauthorizedException('Invalid email or password');
@@ -81,7 +150,7 @@ export class AuthService {
       };
 
       const token = this.jwtService.sign(payload);
-      console.log('Generated token:', token ? 'Success' : 'Failed');
+      this.logger.log('Generated token:', token ? 'Success' : 'Failed');
 
       // Remove password from response
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -96,7 +165,7 @@ export class AuthService {
         },
       };
     } catch (error) {
-      console.error('Login error:', error);
+      this.logger.error('Login error:', error);
       throw error;
     }
   }
@@ -174,7 +243,7 @@ export class AuthService {
         user.defaultRoleId = citizenRole.id;
         await this.usersRepository.save(user);
       } catch (error) {
-        console.error('Error assigning citizen role:', error);
+        this.logger.error('Error assigning citizen role:', error);
         // Rollback: Delete the user to maintain a consistent state
         await this.usersRepository.delete(user.id);
         throw new ConflictException(
@@ -198,7 +267,7 @@ export class AuthService {
         },
       };
     } catch (error) {
-      console.error('Registration error:', error);
+      this.logger.error('Registration error:', error);
       throw error;
     }
   }
@@ -359,7 +428,7 @@ export class AuthService {
           defaultRole: updatedUser.defaultRole?.name || 'citizen',
         };
       } catch (error: unknown) {
-        console.error('User update database error:', error);
+        this.logger.error('User update database error:', error);
         if (
           typeof error === 'object' &&
           error !== null &&
@@ -373,7 +442,7 @@ export class AuthService {
         );
       }
     } catch (error) {
-      console.error('User update error:', error);
+      this.logger.error('User update error:', error);
       // Re-throw specific errors
       if (
         error instanceof UnauthorizedException ||
@@ -391,7 +460,7 @@ export class AuthService {
     targetUserId: number,
     updateUserDto: AdminUpdateUserDto,
   ) {
-    console.log(
+    this.logger.log(
       `Admin ${adminId} attempting to update user ${targetUserId}`,
       updateUserDto,
     );
@@ -433,7 +502,7 @@ export class AuthService {
       try {
         await this.updateUserInfo(targetUserId, updateUserDto);
       } catch (err) {
-        console.error('Error during basic user update:', err);
+        this.logger.error('Error during basic user update:', err);
         throw err; // Re-throw to be caught by outer try-catch
       }
 
@@ -455,11 +524,11 @@ export class AuthService {
             targetUserId,
             updateUserDto.roleIds,
           );
-          console.log(
+          this.logger.log(
             `Assigned roles ${updateUserDto.roleIds.join(', ')} to user ${targetUserId}`,
           );
         } catch (error) {
-          console.error('Error assigning roles:', error);
+          this.logger.error('Error assigning roles:', error);
           throw new BadRequestException(
             error instanceof Error ? error.message : 'Failed to assign roles',
           );
@@ -499,11 +568,11 @@ export class AuthService {
           await this.usersRepository.update(targetUserId, {
             defaultRoleId: updateUserDto.defaultRoleId,
           });
-          console.log(
+          this.logger.log(
             `Updated default role to ${updateUserDto.defaultRoleId} for user ${targetUserId}`,
           );
         } catch (error) {
-          console.error('Error updating default role:', error);
+          this.logger.error('Error updating default role:', error);
           throw new BadRequestException(
             error instanceof Error
               ? error.message
@@ -517,13 +586,13 @@ export class AuthService {
         const updatedUser = await this.getProfile(targetUserId);
         return updatedUser;
       } catch (error) {
-        console.error('Error retrieving updated user profile:', error);
+        this.logger.error('Error retrieving updated user profile:', error);
         throw new BadRequestException(
           'User was updated but profile could not be retrieved',
         );
       }
     } catch (error) {
-      console.error('Admin update user error:', error);
+      this.logger.error('Admin update user error:', error);
 
       // Re-throw specific exceptions
       if (
@@ -550,7 +619,7 @@ export class AuthService {
       });
       return user;
     } catch (error) {
-      console.error('Error finding user by email:', error);
+      this.logger.error('Error finding user by email:', error);
       return null;
     }
   }
@@ -580,9 +649,9 @@ export class AuthService {
         { password: hashedPassword },
       );
 
-      console.log(`Password updated successfully for user: ${email}`);
+      this.logger.log(`Password updated successfully for user: ${email}`);
     } catch (error) {
-      console.error('Error updating password:', error);
+      this.logger.error('Error updating password:', error);
       throw error;
     }
   }

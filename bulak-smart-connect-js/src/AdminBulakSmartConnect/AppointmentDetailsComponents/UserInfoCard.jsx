@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import logger from '../../utils/logger';
 import './UserInfoCard.css';
 
 const UserInfoCard = ({ data, onBack, onNext, onStatusUpdate }) => {
@@ -49,7 +50,7 @@ const UserInfoCard = ({ data, onBack, onNext, onStatusUpdate }) => {
       await handleStatusUpdate('cancelled');
       setCancelDialog({ show: false, appointmentId: null, appointmentName: '' });
     } catch (error) {
-      console.error('Error cancelling appointment:', error);
+      logger.error('Error cancelling appointment:', error);
     }
   };
 

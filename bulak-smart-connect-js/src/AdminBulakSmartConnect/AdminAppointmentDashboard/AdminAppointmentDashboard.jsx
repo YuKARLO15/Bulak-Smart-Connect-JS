@@ -5,6 +5,7 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 import NavBar from '../../NavigationComponents/NavSide';
 import AllAppointmentsAdmin from './AllAppointmentsAdmin';
 import { appointmentService } from '../../services/appointmentService';
+import logger from '../../utils/logger';
 
 const AdminAppointmentDashboard = () => {
   // State for appointments data
@@ -27,7 +28,7 @@ const AdminAppointmentDashboard = () => {
   const fetchDashboardData = async () => {
     try {
       const appointments = await appointmentService.fetchAllAppointments();
-      console.log('Dashboard appointments:', appointments);
+      logger.log('Dashboard appointments:', appointments);
       setAppointmentsData(appointments);
 
       // Generate chart data
@@ -38,7 +39,7 @@ const AdminAppointmentDashboard = () => {
       const queue = calculateCurrentQueue(appointments);
       setCurrentQueue(queue);
     } catch (error) {
-      console.error('Error fetching dashboard data:', error);
+      logger.error('Error fetching dashboard data:', error);
     }
   };
 

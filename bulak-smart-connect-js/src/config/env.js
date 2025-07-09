@@ -28,6 +28,7 @@ const config = {
     PWA: import.meta.env.VITE_ENABLE_PWA === 'true',
     ANALYTICS: import.meta.env.VITE_ENABLE_ANALYTICS === 'true',
     DEBUG: import.meta.env.VITE_ENABLE_DEBUG === 'true',
+    REACT_SCAN: import.meta.env.VITE_ENABLE_REACT_SCAN === 'true',
   },
 
   // External Services
@@ -97,6 +98,13 @@ const config = {
       import.meta.env.VITE_DOCUMENT_APPLICATIONS_ENDPOINT || '/document-applications',
     USERS: import.meta.env.VITE_USERS_ENDPOINT || '/users',
   },
+
+  // Logging Configuration
+  LOGGING: {
+    ENABLED: import.meta.env.VITE_ENABLE_LOGGING === 'true' || import.meta.env.DEV,
+    LEVEL: import.meta.env.VITE_LOG_LEVEL || 'info',
+    CONSOLE_ENABLED: import.meta.env.VITE_ENABLE_CONSOLE_LOGS === 'true' || import.meta.env.DEV,
+  },
 };
 
 // Validation function to check required environment variables
@@ -121,5 +129,33 @@ export const validateConfig = () => {
     });
   }
 };
+
+// Console control based on environment
+if (!config.LOGGING.CONSOLE_ENABLED) {
+  // Store original methods for potential restoration
+  const originalLog = console.log;
+  const originalInfo = console.info;
+  const originalWarn = console.warn;
+  const originalDebug = console.debug;
+
+  // Override console methods
+  console.log = () => {};
+  console.info = () => {};
+  console.warn = () => {};
+  console.debug = () => {};
+
+  // Keep console.error for critical issues in production
+  // console.error = () => {}; // Uncomment to disable error logs too
+
+  // Provide restore method for development/testing
+  if (typeof window !== 'undefined') {
+    window.restoreConsole = () => {
+      console.log = originalLog;
+      console.info = originalInfo;
+      console.warn = originalWarn;
+      console.debug = originalDebug;
+    };
+  }
+}
 
 export default config;

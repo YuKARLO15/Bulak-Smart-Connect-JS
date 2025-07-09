@@ -1,9 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import * as nodemailer from 'nodemailer';
 import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class EmailService {
+  private readonly logger = new Logger(EmailService.name);
   private transporter: nodemailer.Transporter;
 
   constructor(private configService: ConfigService) {
@@ -384,7 +385,7 @@ export class EmailService {
       html,
     });
 
-    console.log(`✅ Appointment confirmation email sent to ${email}`);
+    this.logger.log(`✅ Appointment confirmation email sent to ${email}`);
   }
 
   /**
@@ -525,7 +526,7 @@ export class EmailService {
       html,
     });
 
-    console.log(
+    this.logger.log(
       `✅ Appointment status update email sent to ${email} - Status: ${newStatus}`,
     );
   }
@@ -629,7 +630,7 @@ export class EmailService {
       html,
     });
 
-    console.log(`✅ Appointment cancellation email sent to ${email}`);
+    this.logger.log(`✅ Appointment cancellation email sent to ${email}`);
   }
 
   /**
@@ -733,7 +734,7 @@ export class EmailService {
       html,
     });
 
-    console.log(`✅ Appointment reminder email sent to ${email}`);
+    this.logger.log(`✅ Appointment reminder email sent to ${email}`);
   }
 
   /**
@@ -842,7 +843,7 @@ export class EmailService {
       html,
     });
 
-    console.log(`✅ Document application confirmation email sent to ${email}`);
+    this.logger.log(`✅ Document application confirmation email sent to ${email}`);
   }
 
   /**
@@ -990,7 +991,7 @@ export class EmailService {
       html,
     });
 
-    console.log(
+    this.logger.log(
       `✅ Document application status update email sent to ${email} - Status: ${newStatus}`,
     );
   }
@@ -1118,6 +1119,6 @@ export class EmailService {
       html,
     });
 
-    console.log(`✅ Document application rejection email sent to ${email}`);
+    this.logger.log(`✅ Document application rejection email sent to ${email}`);
   }
 }

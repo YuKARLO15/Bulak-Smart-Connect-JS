@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import logger from '../../utils/logger';
 import {
   Box,
   Typography,
@@ -26,18 +27,18 @@ const RecentAppointments = () => {
 
       // Only try to fetch from backend if user is authenticated
       if (!token) {
-        console.log('No token found, using local storage data only');
+        logger.log('No token found, using local storage data only');
         return;
       }
 
       try {
         setLoading(true);
-        console.log('Fetching real appointments from backend...');
+        logger.log('Fetching real appointments from backend...');
 
         // Fetch real appointments from backend
         const realAppointments = await appointmentService.fetchUserAppointments();
 
-        console.log('Real appointments fetched:', realAppointments);
+        logger.log('Real appointments fetched:', realAppointments);
 
         // Transform real backend data to match existing structure
         const transformedAppointments = realAppointments.map(appointment => ({
@@ -78,7 +79,7 @@ const RecentAppointments = () => {
           }
         });
       } catch (error) {
-        console.error('Failed to fetch real appointments from backend:', error);
+        logger.error('Failed to fetch real appointments from backend:', error);
         setError('Could not load latest appointments from server. Showing local data.');
         // Keep using local storage data if backend fails
       } finally {
@@ -90,7 +91,7 @@ const RecentAppointments = () => {
   }, []);
 
   const handleSeeMore = appointment => {
-    console.log('Navigating to QRCodeAppointment with real appointment:', appointment);
+    logger.log('Navigating to QRCodeAppointment with real appointment:', appointment);
 
     const appointmentId = appointment.appointmentNumber || appointment.id;
 

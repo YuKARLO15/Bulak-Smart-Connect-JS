@@ -34,7 +34,7 @@ const SearchAddUser = ({ onSearch }) => {
 
   const handleAddUserClick = () => {
     if (!isSuperAdmin) {
-      alert('Only super administrators can add users');
+      // alert('Only super administrators can add users');
       return;
     }
     navigate('/add-user');

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import logger from '../../utils/logger';
 import { Box, Typography, Card, CardContent } from '@mui/material';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
@@ -23,7 +24,7 @@ const DashboardContent = () => {
       setAnnouncements(data);
       setAnnouncementError(null);
     } catch (error) {
-      console.error('Failed to load announcements:', error);
+      logger.error('Failed to load announcements:', error);
       setAnnouncementError('Failed to load announcements');
       // Keep empty array as fallback
       setAnnouncements([]);

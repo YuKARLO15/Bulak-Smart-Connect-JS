@@ -1,12 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import logger from '../../utils/logger';
 import './WalkInQueue.css';
 const WalkInQueueList = ({ pendingQueues, userQueue }) => {
   // Convert single userQueue to array if needed and handle multiple queues
   const userQueues = userQueue ? (Array.isArray(userQueue) ? userQueue : [userQueue]) : [];
 
-  console.log('Processing user queues:', userQueues);
-  console.log('Processing pending queues:', pendingQueues);
+  logger.log('Processing user queues:', userQueues);
+  logger.log('Processing pending queues:', pendingQueues);
 
   // Get all user queue IDs for filtering - COMPREHENSIVE MATCHING
   const userQueueIds = userQueues
@@ -20,7 +21,7 @@ const WalkInQueueList = ({ pendingQueues, userQueue }) => {
     ])
     .filter(val => val !== null && val !== undefined && val !== '');
 
-  console.log('User queue IDs for filtering:', userQueueIds);
+  logger.log('User queue IDs for filtering:', userQueueIds);
 
   const filteredPendingQueues = pendingQueues.filter(queue => {
     const isUserQueue =
@@ -32,7 +33,7 @@ const WalkInQueueList = ({ pendingQueues, userQueue }) => {
       userQueueIds.includes(queue.queueNumber);
 
     if (isUserQueue) {
-      console.log(`✅ Filtering out user queue: ${queue.id} (rawId: ${queue.rawId})`);
+      logger.log(`✅ Filtering out user queue: ${queue.id} (rawId: ${queue.rawId})`);
     }
 
     return !isUserQueue;

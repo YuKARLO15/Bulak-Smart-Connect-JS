@@ -1,4 +1,5 @@
 import React, { useRef, useState } from 'react';
+import logger from '../../utils/logger';
 import { Box, Typography } from '@mui/material';
 import './FileUpload.css';
 
@@ -79,7 +80,7 @@ const FileUpload = ({ label, description, onUpload, multiple = false }) => {
 
       setIsLoading(false);
     } catch (err) {
-      console.error('Error uploading files:', err);
+      logger.error('Error uploading files:', err);
       setError('Error uploading files. Please try again.');
       setIsLoading(false);
     }

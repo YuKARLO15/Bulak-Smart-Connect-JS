@@ -36,7 +36,7 @@ const MarriageDashboard = () => {
 
   const handleNext = () => {
     if (!selectedOption) {
-      alert('Please select an application type before proceeding.');
+      // alert('Please select an application type before proceeding.');
       return;
     }
 

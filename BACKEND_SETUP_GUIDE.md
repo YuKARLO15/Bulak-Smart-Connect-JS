@@ -16,12 +16,20 @@ Edit your `.env` file with these REQUIRED settings:
 NODE_ENV=development
 PORT=3000
 
+# Console Logging Configuration
+ENABLE_CONSOLE_LOGS=true
+LOG_LEVEL=debug
+
 # Database (Update with your MySQL credentials)
 DB_HOST=localhost
 DB_PORT=3306
 DB_USERNAME=root
 DB_PASSWORD=your_actual_password
 DB_NAME=bulak_smart_connect
+
+# Database SSL Configuration (Aiven MySQL)
+DB_SSL=false
+DB_SSL_REJECT_UNAUTHORIZED=false
 
 # JWT Secret (Generate a secure one!)
 JWT_SECRET=your_super_secure_jwt_secret_key_minimum_32_characters

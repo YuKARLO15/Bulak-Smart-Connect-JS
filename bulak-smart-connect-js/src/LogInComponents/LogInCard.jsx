@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'; //useState Here
+import logger from '../utils/logger';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
@@ -19,6 +20,7 @@ import './LogInCard.css';
 import { Link as RouterLink, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext'; //Current AuthContext to handle login and roles
 import { authService } from '../services/api'; //API Service to NestJS, initially used on early iteration of the login, without the roles
+import { authLockoutService } from '../services/authLockoutService';
 
 export default function LogInCard({ onLogin }) {
   const location = useLocation();
@@ -33,6 +35,12 @@ export default function LogInCard({ onLogin }) {
   const [loginType, setLoginType] = useState('email'); // Add login type state
   const [showPassword, setShowPassword] = useState(false); // Show password state
   const [rememberMe, setRememberMe] = useState(false); // Remember me state
+  const [isLoginAttempting, setIsLoginAttempting] = useState(false);
+  const [loginAttempts, setLoginAttempts] = useState(0);
+  const [isAccountLocked, setIsAccountLocked] = useState(false);
+  const [lockoutEndTime, setLockoutEndTime] = useState(null);
+  const [lockoutTimeRemaining, setLockoutTimeRemaining] = useState(0);
+  const [message, setMessage] = useState({ text: '', type: '' });
   const navigate = useNavigate();
   const { login, hasRole, isStaff } = useAuth(); // New AuthContext to handle login and roles
 
@@ -63,6 +71,74 @@ export default function LogInCard({ onLogin }) {
     }
   }, [location.state]);
 
+  // Helper function to format time remaining
+  const formatTimeRemaining = seconds => {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+  };
+
+  // Check lockout status when email changes
+  useEffect(() => {
+    if (email && email.trim()) {
+      checkLockoutStatus();
+    }
+  }, [email]);
+
+  // Add timer ref to store timer ID
+  const [timerRef, setTimerRef] = useState(null);
+
+  const checkLockoutStatus = async () => {
+    if (!email || !email.trim()) return;
+
+    // Clear any existing timer first
+    if (timerRef) {
+      clearInterval(timerRef);
+      setTimerRef(null);
+    }
+
+    try {
+      const lockoutData = await authLockoutService.checkAccountLockout(email);
+
+      if (lockoutData.isLocked) {
+        setIsAccountLocked(true);
+        setLockoutTimeRemaining(lockoutData.timeRemaining);
+        setLoginAttempts(lockoutData.attemptsUsed);
+
+        // Start countdown timer and store reference
+        const timer = setInterval(() => {
+          setLockoutTimeRemaining(prev => {
+            if (prev <= 1) {
+              setIsAccountLocked(false);
+              setLoginAttempts(0);
+              clearInterval(timer);
+              setTimerRef(null); // Clear the ref
+              return 0;
+            }
+            return prev - 1;
+          });
+        }, 1000);
+
+        // Store timer reference for cleanup
+        setTimerRef(timer);
+      } else {
+        setIsAccountLocked(false);
+        setLoginAttempts(lockoutData.attempts);
+      }
+    } catch (error) {
+      logger.error('Error checking lockout status:', error);
+    }
+  };
+
+  // Add cleanup effect for component unmount
+  useEffect(() => {
+    return () => {
+      if (timerRef) {
+        clearInterval(timerRef);
+      }
+    };
+  }, [timerRef]);
+
   const toggleLoginType = () => {
     const newType = loginType === 'email' ? 'username' : 'email';
     setLoginType(newType);
@@ -90,19 +166,27 @@ export default function LogInCard({ onLogin }) {
     setRememberMe(event.target.checked);
   };
 
+  // Replace your existing handleSubmit function
   const handleSubmit = async event => {
     event.preventDefault();
 
+    // Check if account is locked
+    if (isAccountLocked) {
+      setError(`🔒 Account is locked. Try again in ${formatTimeRemaining(lockoutTimeRemaining)} or use "Forgot Password" to reset.`);
+      return;
+    }
+
     if (validateInputs()) {
       try {
-        console.log(`Sending login request with ${loginType}:`, { [loginType]: email, password });
+        setIsLoginAttempting(true);
+        logger.log(`Sending login request with ${loginType}:`, { [loginType]: email, password });
 
         // Old Method to use the API service from api.js, now using the AuthContext
-        //console.log('Sending login request with:', { email, password });
+        //logger.log('Sending login request with:', { email, password });
 
         //Old Logic to use the API service from api.js, now using the AuthContext
         //const data = await authService.login(email, password);
-        //console.log('Login successful:', data);
+        //logger.log('Login successful:', data);
         //onLogin(data.user);
         //login(); // Set auth context
         //navigate("/UserDashboard");
@@ -114,9 +198,14 @@ export default function LogInCard({ onLogin }) {
         // Use the login function from AuthContext
         const { success, user } = await login(email, password, loginType);
 
-        console.log('Login successful:', success);
-        //Auth Success Step
+        logger.log('Login successful:', success);
+
         if (success) {
+          // Clear lockout on successful login
+          await authLockoutService.clearAccountLockout(email);
+          setLoginAttempts(0);
+          setIsAccountLocked(false);
+
           // Handle "Remember Me" functionality
           if (rememberMe) {
             localStorage.setItem('rememberedEmail', email);
@@ -137,27 +226,103 @@ export default function LogInCard({ onLogin }) {
               user.roles?.includes('admin') ||
               user.roles?.includes('super_admin'))
           ) {
-            console.log('User has admin role - navigating to AdminHome');
+            logger.log('User has admin role - navigating to AdminHome');
             navigate('/AdminHome');
           } else {
-            console.log('User is a regular user - navigating to Home');
+            logger.log('User is a regular user - navigating to Home');
             navigate('/Home');
           }
         } else {
-          setError('Login failed. Please check your credentials.');
+          await handleLoginFailure('Login failed. Please check your credentials.');
         }
       } catch (error) {
-        console.error('Login error:', error);
+        logger.error('Login error:', error);
+
+        let errorMessage = 'An error occurred during login. Please try again.';
 
         if (error.response) {
-          console.log('Error status:', error.response.status);
-          console.log('Error data:', error.response.data);
-          setError(error.response.data.message || 'Invalid credentials');
-        } else {
-          setError('An error occurred during login. Please try again.');
+          logger.log('Error status:', error.response.status);
+          logger.log('Error data:', error.response.data);
+
+          // Check for specific error types
+          if (error.response.status === 401) {
+            errorMessage = error.response.data.message || 'Invalid credentials. Please check your email/username and password.';
+          } else if (error.response.status === 404) {
+            errorMessage = 'Account not found. Please check your email/username.';
+          } else if (error.response.status === 403) {
+            errorMessage = 'Account is disabled. Please contact support.';
+          } else {
+            errorMessage = error.response.data.message || 'Login failed. Please try again.';
+          }
         }
+
+        await handleLoginFailure(errorMessage);
+      } finally {
+        setIsLoginAttempting(false);
       }
     }
+  };
+
+  // Replace your existing handleLoginFailure function
+  const handleLoginFailure = async errorMessage => {
+    // 🔧 AUTO CLEAR PASSWORD ON FAILED LOGIN
+    setPassword('');
+    localStorage.removeItem('rememberedPassword');
+
+    try {
+      const attemptResult = await authLockoutService.recordFailedAttempt(email);
+      
+      setLoginAttempts(attemptResult.attempts);
+
+      if (attemptResult.isLocked) {
+        setIsAccountLocked(true);
+        setLockoutTimeRemaining(attemptResult.timeRemaining);
+        setError(`🔒 Account locked due to multiple failed attempts. Try again in ${Math.floor(attemptResult.timeRemaining / 60)} minutes or use "Forgot Password" to reset your account.`);
+
+        // Start countdown timer
+        const timer = setInterval(() => {
+          setLockoutTimeRemaining(prev => {
+            if (prev <= 1) {
+              setIsAccountLocked(false);
+              setLoginAttempts(0);
+              clearInterval(timer);
+              return 0;
+            }
+            return prev - 1;
+          });
+        }, 1000);
+
+        return;
+      }
+
+      // Set error message with attempt counter
+      let finalErrorMessage = errorMessage;
+
+      if (attemptResult.attempts >= 3) {
+        const attemptsLeft = 5 - attemptResult.attempts;
+        finalErrorMessage += ` (${attemptsLeft} attempt${attemptsLeft !== 1 ? 's' : ''} remaining before lockout)`;
+      }
+
+      // 🔧 SHOW ADDITIONAL HELP AFTER MULTIPLE FAILED ATTEMPTS
+      if (attemptResult.attempts >= 3) {
+        finalErrorMessage += ' Having trouble? Try using the "Forgot Password" option below.';
+      }
+
+      setError(finalErrorMessage);
+    } catch (error) {
+      logger.error('Error recording failed attempt:', error);
+      setError(errorMessage);
+    }
+
+    // Auto focus and shake animation
+    setTimeout(() => {
+      const passwordInput = document.getElementById('password');
+      if (passwordInput) {
+        passwordInput.focus();
+        passwordInput.classList.add('error-shake');
+        setTimeout(() => passwordInput.classList.remove('error-shake'), 500);
+      }
+    }, 100);
   };
 
   const validateInputs = () => {
@@ -283,10 +448,53 @@ export default function LogInCard({ onLogin }) {
           className="RememberMe"
         />
         <ForgotPassword open={open} handleClose={handleClose} />
-        <Button type="submit" fullWidth variant="contained" className="LoginButton">
-          Log In
+        <Button
+          type="submit"
+          fullWidth
+          variant="contained"
+          className={`LoginButton ${isAccountLocked ? 'locked' : ''}`}
+          disabled={isLoginAttempting || isAccountLocked}
+        >
+          {isAccountLocked
+            ? `Locked (${formatTimeRemaining(lockoutTimeRemaining)})`
+            : isLoginAttempting
+              ? 'Logging in...'
+              : 'Log In'}
         </Button>
-        {error && <Typography color="error">{error}</Typography>}
+        {error && (
+          <Box sx={{ mt: 2 }}>
+            <Typography
+              color="error"
+              sx={{
+                fontSize: '0.9rem',
+                textAlign: 'center',
+                backgroundColor: isAccountLocked ? '#ffebee' : 'transparent',
+                padding: isAccountLocked ? '12px' : '0',
+                borderRadius: isAccountLocked ? '8px' : '0',
+                border: isAccountLocked ? '1px solid #ffcdd2' : 'none',
+              }}
+            >
+              {error}
+            </Typography>
+
+            {/* Show unlock countdown if account is locked */}
+            {isAccountLocked && (
+              <Box sx={{ mt: 2, textAlign: 'center' }}>
+                <Typography variant="body2" color="text.secondary">
+                  🕐 Account will unlock in: {formatTimeRemaining(lockoutTimeRemaining)}
+                </Typography>
+                <Button
+                  variant="outlined"
+                  size="small"
+                  onClick={handleClickOpen}
+                  sx={{ mt: 1, color: '#184a5b', borderColor: '#184a5b' }}
+                >
+                  Reset Password Instead
+                </Button>
+              </Box>
+            )}
+          </Box>
+        )}
       </Box>
     </Card>
   );
