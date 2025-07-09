@@ -14,6 +14,8 @@ export class MinioService {
       useSSL: process.env.MINIO_USE_SSL === 'true',
       accessKey: process.env.MINIO_ACCESS_KEY || 'minioadmin',
       secretKey: process.env.MINIO_SECRET_KEY || 'minioadmin123',
+      region: 'auto', // R2 uses 'auto' region
+      pathStyle: true, // Required for R2 compatibility
     });
 
     this.bucketName = process.env.MINIO_BUCKET_NAME || 'bulak-smart-connect';
