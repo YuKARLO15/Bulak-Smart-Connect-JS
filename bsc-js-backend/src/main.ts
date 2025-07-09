@@ -217,6 +217,8 @@ async function testMinIOConnection() {
       useSSL: process.env.MINIO_USE_SSL === 'true',
       accessKey: process.env.MINIO_ACCESS_KEY || 'minioadmin',
       secretKey: process.env.MINIO_SECRET_KEY || 'minioadmin123',
+      region: 'auto', // Add this for R2
+      pathStyle: true, // Add this for R2
     });
 
     // Test connection by listing buckets
@@ -228,7 +230,7 @@ async function testMinIOConnection() {
     const bucketExists = await minioClient.bucketExists(bucketName);
 
     if (!bucketExists) {
-      await minioClient.makeBucket(bucketName, 'us-east-1');
+      await minioClient.makeBucket(bucketName, 'auto');
       logger.log(`✅ Created bucket: ${bucketName}`);
     } else {
       logger.log(`✅ Bucket '${bucketName}' already exists`);
