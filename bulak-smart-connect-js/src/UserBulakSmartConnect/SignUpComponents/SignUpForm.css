@@ -209,16 +209,140 @@ button.btn:hover {
   margin-right: 8px;
 }
 
-@media (max-width: 600px) {
-  .form-group input {
-    width: 100%;
+@media (max-width: 768px) {
+  .signup-container {
+    padding: 16px;
+    width: 100vw;
   }
 
   form {
     padding: 16px;
+    max-width: 100%;
+    width: 100%;
   }
 
   .form-group {
     padding: 0 10px;
+  }
+
+  .form-group input {
+    width: 100%;
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .form-group label {
+    font-size: 13px;
+  }
+
+  /* Full Name Section - Stack in single column */
+  .form-group.fullname {
+    display: flex !important;
+    flex-direction: column !important;
+    grid-template-columns: none !important;
+    gap: 15px;
+    grid-column-gap: 0;
+  }
+
+  .form-group.fullname .textbox {
+    margin-top: 15px;
+    width: 100%;
+  }
+
+  .form-group.fullname input {
+    width: 100%;
+  }
+
+  /* Contact Information Section - Stack in single column */
+  .form-group.contactinformation {
+    display: flex !important;
+    flex-direction: column !important;
+    grid-template-columns: none !important;
+    gap: 15px;
+    grid-column-gap: 0;
+  }
+
+  .form-group.contactinformation .textbox {
+    width: 100%;
+  }
+
+  .form-group.contactinformation input {
+    width: 100%;
+  }
+
+  /* Extension section adjustments */
+  .checkbox-extension {
+    flex-direction: column;
+    align-items: flex-start;
+    margin-left: 0;
+    gap: 10px;
+  }
+
+  #Extension {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  /* Button adjustments */
+  button.signup-btn {
+    width: 90%;
+    margin-left: 5%;
+    margin-right: 5%;
+  }
+
+  /* Signup label adjustments */
+  .signup-label {
+    font-size: 1.5rem;
+    margin-top: 10vh;
+  }
+
+  .label-in {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .signup-container {
+    padding: 8px;
+  }
+
+  form {
+    padding: 12px;
+  }
+
+  .form-group {
+    padding: 0 5px;
+    margin-top: 20px;
+  }
+
+  .signup-label {
+    font-size: 1.3rem;
+    margin-top: 8vh;
+  }
+
+  button.signup-btn {
+    width: 95%;
+    margin-left: 2.5%;
+    margin-right: 2.5%;
+    padding: 10px;
+    font-size: 14px;
+  }
+
+  .form-group input {
+    font-size: 13px;
+    padding: 8px;
+  }
+
+  .label-in {
+    font-size: 12px;
+  }
+
+  .form-group.fullname .textbox {
+    margin-top: 10px;
+  }
+
+  .form-group.fullname,
+  .form-group.contactinformation {
+    gap: 10px;
   }
 }
