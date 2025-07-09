@@ -3,6 +3,16 @@
 <h2>Bulak LGU Smart Connect</h2>
 <p>Information and Queuing Management System</p>
 
+<!-- Production Links -->
+<p align="center">
+  <a href="https://bulak-smart-connect-frontend-prod.onrender.com" target="_blank">
+    <img src="https://img.shields.io/badge/🌐%20Live%20App-Production-brightgreen?style=for-the-badge&logo=render&logoColor=white" alt="Live Production App" />
+  </a>
+  <a href="https://bulak-smart-connect-backend-prod.onrender.com/api/docs" target="_blank">
+    <img src="https://img.shields.io/badge/📚%20API%20Docs-Production-blue?style=for-the-badge&logo=swagger&logoColor=white" alt="Production API Documentation" />
+  </a>
+</p>
+
 <!-- GitHub Actions Status Badges -->
 <p align="center">
   <a href="https://github.com/YuKARLO15/Bulak-Smart-Connect-JS/actions/workflows/ci.yml">
@@ -678,12 +688,35 @@ console.log('API Base URL:', config.API_BASE_URL);
 
 *The OTP system is production-ready and seamlessly integrates with your existing authentication flow. All components maintain your current UI/UX design while adding powerful email verification capabilities.*
 
-## Site Accessibility
+## 🌐 Site Accessibility
 
+### **🚀 Production Environment**
+- **🌟 Live Application**: [https://bulak-smart-connect-frontend-prod.onrender.com](https://bulak-smart-connect-frontend-prod.onrender.com)
+- **📚 Production API Documentation**: [https://bulak-smart-connect-backend-prod.onrender.com/api/docs](https://bulak-smart-connect-backend-prod.onrender.com/api/docs)
+- **🔗 Backend API**: [https://bulak-smart-connect-backend-prod.onrender.com](https://bulak-smart-connect-backend-prod.onrender.com)
+
+### **📊 Development & Documentation**
 - **Live Dashboard**: https://yukarlo15.github.io/Bulak-Smart-Connect-JS/dashboard/
 - **Documentation Hub**: https://yukarlo15.github.io/Bulak-Smart-Connect-JS/
 - **Component Documentation**: https://yukarlo15.github.io/Bulak-Smart-Connect-JS/frontend-docs/
 - **API Documentation**: https://yukarlo15.github.io/Bulak-Smart-Connect-JS/api-docs/
+
+### **🏗️ Architecture Overview**
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    PRODUCTION DEPLOYMENT                    │
+├─────────────────────────────────────────────────────────────┤
+│ 🌐 Frontend (Static Site)                                  │
+│    └── https://bulak-smart-connect-frontend-prod.onrender.com │
+│                                                             │
+│ ⚙️  Backend (Web Service)                                   │
+│    └── https://bulak-smart-connect-backend-prod.onrender.com │
+│                                                             │
+│ 🗄️  Database: Aiven MySQL (Managed)                        │
+│ 📁 Storage: Cloudflare R2 (S3-Compatible)                  │
+│ 🚀 Hosting: Render (Static + Web Service)                  │
+└─────────────────────────────────────────────────────────────┘
+```
 
 ## How to Install (Frontend)
 

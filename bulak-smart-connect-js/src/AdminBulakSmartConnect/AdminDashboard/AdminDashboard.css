@@ -270,17 +270,110 @@
   align-items: center;
   justify-content: center;
 }
-/* Media query for large desktop screens */
-@media (min-width: 1601px) {
+
+/* Enhanced layout for bigger screens to match image */
+@media (min-width: 1400px) {
   .admin-dashboard-content-wrapper {
     max-width: 1600px;
+    padding: 32px 24px;
+  }
+  
+  .admin-dashboard-container {
+    gap: 32px;
+  }
+  
+  .admin-dashboard-charts {
+    gap: 32px;
+    margin-bottom: 32px;
+  }
+  
+  .admin-dashboard-chart-card {
+    padding: 24px 20px 16px 20px;
+  }
+  
+  .admin-dashboard-sidebar {
+    width: 380px;
+    min-width: 380px;
+  }
+  
+  .admin-dashboard-main {
+    max-width: calc(100% - 380px - 32px);
   }
 }
 
-/* Media query for desktop screens */
-@media (min-width: 1201px) and (max-width: 1600px) {
+/* Extra large screens (1920px and above) */
+@media (min-width: 1920px) {
   .admin-dashboard-content-wrapper {
-    max-width: 1400px;
+    max-width: 1800px;
+    padding: 40px 32px;
+  }
+  
+  .admin-dashboard-container {
+    gap: 40px;
+  }
+  
+  .admin-dashboard-charts {
+    gap: 40px;
+    margin-bottom: 40px;
+  }
+  
+  .admin-dashboard-sidebar {
+    width: 420px;
+    min-width: 420px;
+  }
+  
+  .admin-dashboard-main {
+    max-width: calc(100% - 420px - 40px);
+  }
+  
+  .admin-dashboard-chart-card {
+    padding: 28px 24px 20px 24px;
+  }
+  
+  .admin-dashboard-chart-card .recharts-responsive-container {
+    min-height: 280px;
+  }
+}
+
+/* Ultra-wide screens (2560px and above) */
+@media (min-width: 2560px) {
+  .admin-dashboard-content-wrapper {
+    max-width: 2200px;
+    padding: 48px 40px;
+  }
+  
+  .admin-dashboard-container {
+    gap: 48px;
+  }
+  
+  .admin-dashboard-charts {
+    gap: 48px;
+    margin-bottom: 48px;
+  }
+  
+  .admin-dashboard-sidebar {
+    width: 480px;
+    min-width: 480px;
+  }
+  
+  .admin-dashboard-main {
+    max-width: calc(100% - 480px - 48px);
+  }
+  
+  .admin-dashboard-chart-card {
+    padding: 32px 28px 24px 28px;
+  }
+  
+  .admin-dashboard-chart-card .recharts-responsive-container {
+    min-height: 320px;
+  }
+}
+
+
+
+@media (min-width: 1601px) {
+  .admin-dashboard-content-wrapper {
+    max-width: 1600px;
   }
 }
 

@@ -25,7 +25,12 @@ const QRCodeAppointment = () => {
       navigate('/RequirementBirthList');
     } else if (type?.includes('marriage') || type?.includes('marriage certificate')) {
       navigate('/RequirementMarriageList');
-    } else {
+    }
+      else if (type?.includes('death') || type?.includes('death certificate')) {
+      navigate('/RequirementDeathCertificateList');
+    }
+    
+    else {
       // For other types, we could navigate to a general requirements page or show a message
       navigate('/RequirementBirthList');
     }

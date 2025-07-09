@@ -1,7 +1,7 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import logger from '../../utils/logger';
 import './WalkInQueue.css';
-
 const WalkInQueueList = ({ pendingQueues, userQueue }) => {
   // Convert single userQueue to array if needed and handle multiple queues
   const userQueues = userQueue ? (Array.isArray(userQueue) ? userQueue : [userQueue]) : [];
@@ -23,7 +23,6 @@ const WalkInQueueList = ({ pendingQueues, userQueue }) => {
 
   logger.log('User queue IDs for filtering:', userQueueIds);
 
-  // Enhanced filtering to catch all user queues
   const filteredPendingQueues = pendingQueues.filter(queue => {
     const isUserQueue =
       userQueueIds.includes(queue.id) ||
@@ -40,7 +39,7 @@ const WalkInQueueList = ({ pendingQueues, userQueue }) => {
     return !isUserQueue;
   });
 
-  // Sort all queues by queue number for sequential display
+
   const sortByQueueNumber = queues => {
     return [...queues].sort((a, b) => {
       const idA = typeof a.id === 'string' ? a.id : a.id?.toString() || '';
@@ -55,7 +54,7 @@ const WalkInQueueList = ({ pendingQueues, userQueue }) => {
   const sortedPendingQueues = sortByQueueNumber(filteredPendingQueues);
   const sortedUserQueues = sortByQueueNumber(userQueues);
 
-  // Combine all queues for sequential display
+  
   const allQueues = [
     ...sortedPendingQueues.map(queue => ({
       ...queue,
@@ -64,7 +63,7 @@ const WalkInQueueList = ({ pendingQueues, userQueue }) => {
     ...sortedUserQueues.map((queue, index) => ({
       ...queue,
       isUserQueue: true,
-      isPrimaryQueue: index === 0, // Mark the first queue as primary
+      isPrimaryQueue: index === 0, 
     })),
   ];
 
@@ -77,41 +76,60 @@ const WalkInQueueList = ({ pendingQueues, userQueue }) => {
         <div
           key={index}
           className={`QueueItemWalkIn ${queue.isUserQueue ? 'UserQueueWalkIn' : 'PendingWalkIn'}`}
-        >
-          <div className="QueueStatusWalkIn">
+        >    <div className="QueueStatusWalkIn">
             <span className="StatusLabelWalkIn">
               {queue.isUserQueue ? 'YOUR QUEUE' : 'PENDING QUEUE'}
             </span>
             <span className="QueueDateWalkIn">{queue.date}</span>
           </div>
           <div className="QueueIdContainerWalkIn">
+            
             <span className="QueueListIdWalkIn">{queue.id}</span>
-            {queue.isUserQueue && (
-              <span
-                style={{
-                  marginLeft: '10px',
-                  padding: '2px 8px',
-                  background:
-                    queue.status === 'serving'
-                      ? '#ff6b35'
-                      : queue.isPrimaryQueue
-                        ? '#4caf50'
-                        : '#24536a',
-                  color: 'white',
-                  borderRadius: '12px',
-                  fontSize: '10px',
-                  fontWeight: 'bold',
-                  animation: queue.status === 'serving' ? 'pulse 1.5s infinite' : 'none',
-                }}
+{queue.isUserQueue && (
+  <span
+    style={{
+      marginLeft: '10px',
+      padding: '2px 8px',
+      background:
+        queue.status === 'serving'
+          ? '#ff6b35'
+          : index === 0  // First in line (next to be served)
+            ? '#4caf50'
+            : index === 1  // Second in line  
+              ? '#ffa726'
+              : '#24536a',
+      color: 'white',
+      borderRadius: '12px',
+      fontSize: '10px',
+      fontWeight: 'bold',
+      animation: queue.status === 'serving' ? 'pulse 1.5s infinite' : 'none',
+    }}
+  >
+    {queue.status === 'serving'
+      ? 'NOW SERVING'
+      : index === 0
+        ? 'NEXT TO SERVE'
+        : index === 1
+          ? 'UP NEXT'
+          : `POSITION ${index + 1}`}
+  </span>
+)}     </div>
+      
+       
+          
+          {/* Add View Queue Details button for user queues */}
+          {queue.isUserQueue && (
+            <div className="queue-actions" style={{ marginTop: '8px', textAlign: 'center' }}>
+              <Link 
+                to="/WalkInDetails" 
+                state={{ queueData: queue, source: 'walkinqueue' }}
+                className="view-details-btn"
+            
               >
-                {queue.status === 'serving'
-                  ? 'NOW SERVING'
-                  : queue.isPrimaryQueue
-                    ? 'ACTIVE'
-                    : 'YOUR QUEUE'}
-              </span>
-            )}
-          </div>
+                View Queue Details
+              </Link>
+            </div>
+          )}
         </div>
       ))}
     </div>
