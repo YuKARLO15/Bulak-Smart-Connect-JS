@@ -843,7 +843,9 @@ export class EmailService {
       html,
     });
 
-    this.logger.log(`✅ Document application confirmation email sent to ${email}`);
+    this.logger.log(
+      `✅ Document application confirmation email sent to ${email}`,
+    );
   }
 
   /**

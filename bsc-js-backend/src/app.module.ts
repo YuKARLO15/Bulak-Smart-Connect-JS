@@ -36,9 +36,13 @@ import { EmailService } from './services/email.service';
         logging: configService.get('DB_LOGGING') === 'true', // Use environment variable
         logger: 'advanced-console',
         // Aiven MySQL SSL Configuration
-        ssl: configService.get('NODE_ENV') === 'production' ? {
-          rejectUnauthorized: configService.get('DB_SSL_REJECT_UNAUTHORIZED') === 'true'
-        } : false,
+        ssl:
+          configService.get('NODE_ENV') === 'production'
+            ? {
+                rejectUnauthorized:
+                  configService.get('DB_SSL_REJECT_UNAUTHORIZED') === 'true',
+              }
+            : false,
         // Connection pool settings for production
         extra: {
           connectionLimit: 10,

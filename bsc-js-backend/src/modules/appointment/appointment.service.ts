@@ -209,7 +209,10 @@ export class AppointmentService {
       // Return only available slots
       return allTimeSlots.filter((slot) => !bookedSlots.includes(slot));
     } catch (error) {
-      this.logger.error(`Error getting available slots for date ${date}:`, error);
+      this.logger.error(
+        `Error getting available slots for date ${date}:`,
+        error,
+      );
       throw error;
     }
   }

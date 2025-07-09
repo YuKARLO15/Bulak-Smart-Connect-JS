@@ -34,7 +34,8 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     // ✅ Configure NestJS logger based on environment
     logger:
-      process.env.NODE_ENV === 'production' && process.env.ENABLE_CONSOLE_LOGS !== 'true'
+      process.env.NODE_ENV === 'production' &&
+      process.env.ENABLE_CONSOLE_LOGS !== 'true'
         ? ['error'] // Only errors in production
         : ['log', 'error', 'warn', 'debug', 'verbose'], // All logs in development
   });
@@ -47,21 +48,23 @@ async function bootstrap() {
   // Production security enhancements
   if (process.env.NODE_ENV === 'production') {
     try {
-      app.use(helmet({
-        contentSecurityPolicy: {
-          directives: {
-            defaultSrc: ["'self'"],
-            styleSrc: ["'self'", "'unsafe-inline'"],
-            scriptSrc: ["'self'"],
-            imgSrc: ["'self'", "data:", "https:"],
+      app.use(
+        helmet({
+          contentSecurityPolicy: {
+            directives: {
+              defaultSrc: ["'self'"],
+              styleSrc: ["'self'", "'unsafe-inline'"],
+              scriptSrc: ["'self'"],
+              imgSrc: ["'self'", 'data:', 'https:'],
+            },
           },
-        },
-        crossOriginEmbedderPolicy: false
-      }));
-      
+          crossOriginEmbedderPolicy: false,
+        }),
+      );
+
       app.use(compression());
       app.getHttpAdapter().getInstance().set('trust proxy', 1); // Trust Render proxy
-      
+
       logger.log('✅ Production security middleware enabled');
     } catch (error) {
       logger.error('❌ Failed to setup production middleware:', error.message);
@@ -221,7 +224,9 @@ async function testMinIOConnection() {
 
     // Test connection by listing buckets
     const buckets = await minioClient.listBuckets();
-    logger.log(`✅ MinIO connection successful! Found ${buckets.length} buckets`);
+    logger.log(
+      `✅ MinIO connection successful! Found ${buckets.length} buckets`,
+    );
 
     // Ensure bulak-smart-connect bucket exists
     const bucketName = process.env.MINIO_BUCKET_NAME || 'bulak-smart-connect';
