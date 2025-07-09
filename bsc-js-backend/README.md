@@ -2,6 +2,19 @@
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
 </p>
 
+<h1 align="center">Bulak Smart Connect - Backend API</h1>
+<p align="center">Municipal Services Digital Platform Backend</p>
+
+<!-- Production Links -->
+<p align="center">
+  <a href="https://bulak-smart-connect-backend-prod.onrender.com/api/docs" target="_blank">
+    <img src="https://img.shields.io/badge/🚀%20Production%20API-Live-brightgreen?style=for-the-badge&logo=swagger&logoColor=white" alt="Production API" />
+  </a>
+  <a href="https://bulak-smart-connect-frontend-prod.onrender.com" target="_blank">
+    <img src="https://img.shields.io/badge/🌐%20Frontend%20App-Live-blue?style=for-the-badge&logo=react&logoColor=white" alt="Frontend App" />
+  </a>
+</p>
+
 [circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
 [circleci-url]: https://circleci.com/gh/nestjs/nest
 
