@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts';
 import { documentApplicationService } from '../../services/documentApplicationService';
 import './ApplicationPieChart.css';
+import logger from '../../utils/logger';
 
 const ApplicationPieChart = ({ applications: propApplications }) => {
   const [applications, setApplications] = useState(propApplications || []);
@@ -21,14 +22,14 @@ const ApplicationPieChart = ({ applications: propApplications }) => {
       try {
         setLoading(true);
         setError(null);
-        console.log('Fetching applications for pie chart...');
+        logger.log('Fetching applications for pie chart...');
         
         const data = await documentApplicationService.getAllApplications();
-        console.log('Fetched applications:', data);
+        logger.log('Fetched applications:', data);
         
         setApplications(data || []);
       } catch (err) {
-        console.error('Error fetching applications for pie chart:', err);
+        logger.error('Error fetching applications for pie chart:', err);
         setError('Failed to load application data');
         setApplications([]);
       } finally {
@@ -41,7 +42,7 @@ const ApplicationPieChart = ({ applications: propApplications }) => {
 
   // Calculate counts for different application statuses by type
  const getStatusCounts = () => {
-  console.log('Processing applications for pie chart:', applications);
+  logger.log('Processing applications for pie chart:', applications);
 
   const stats = {
     birthCertificate: {
@@ -57,7 +58,7 @@ const ApplicationPieChart = ({ applications: propApplications }) => {
   };
 
   applications.forEach(app => {
-    console.log(`Pie Chart - Application: Type=${app.type || app.applicationType}, Status=${app.status}`);
+    logger.log(`Pie Chart - Application: Type=${app.type || app.applicationType}, Status=${app.status}`);
 
     // Check application type - make case-insensitive checks to improve matching
     const appType = (app.type || app.applicationType || '').toLowerCase();
@@ -93,7 +94,7 @@ const ApplicationPieChart = ({ applications: propApplications }) => {
     }
   });
 
-  console.log('Pie Chart - Calculated statistics:', stats);
+  logger.log('Pie Chart - Calculated statistics:', stats);
 
   return [
     { name: 'Birth - Pending', value: stats.birthCertificate.pending, color: '#FFA726' },
