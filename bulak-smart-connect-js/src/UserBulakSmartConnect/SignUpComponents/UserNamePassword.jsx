@@ -104,7 +104,24 @@ const UsernamePasswordSection = ({ formData, handleInputChange, errors, setError
         />
         <span className="error-message">{errors.password}</span>
         
-        {/* Password Validation Display */}
+      </div>
+      
+
+      <div className="form-control" id="confirmpassword-container">
+        <label className="labels">
+          Confirm Password <span className="asterisk"> *</span>{' '}
+          <span className="error-message-password">{errors.confirmpassword}</span>
+        </label>
+        <input
+          type="password"
+          name="confirmpassword"
+          placeholder="Confirm Password"
+          value={formData.confirmpassword}
+          onChange={handlePasswordValidation}
+          required
+        />
+      </div>
+            {/* Password Validation Display */}
         {formData.password && (
           <div className="password-validation">
             <h4>Your password must contain:</h4>
@@ -130,22 +147,6 @@ const UsernamePasswordSection = ({ formData, handleInputChange, errors, setError
             />
           </div>
         )}
-      </div>
-
-      <div className="form-control" id="confirmpassword-container">
-        <label className="labels">
-          Confirm Password <span className="asterisk"> *</span>{' '}
-          <span className="error-message-password">{errors.confirmpassword}</span>
-        </label>
-        <input
-          type="password"
-          name="confirmpassword"
-          placeholder="Confirm Password"
-          value={formData.confirmpassword}
-          onChange={handlePasswordValidation}
-          required
-        />
-      </div>
     </div>
   );
 };
