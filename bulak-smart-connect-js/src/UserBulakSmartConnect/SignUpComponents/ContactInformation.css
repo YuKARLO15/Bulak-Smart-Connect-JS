@@ -57,3 +57,64 @@ input[name='contact'] {
   flex: 1;
   padding-left: 10px;
 }
+
+/* Mobile Responsiveness for Contact Information */
+@media (max-width: 768px) {
+  .form-group.contactinformation {
+    display: flex !important;
+    flex-direction: column !important;
+    grid-template-columns: none !important;
+    gap: 15px;
+    grid-column-gap: 0;
+  }
+
+  .form-group.contactinformation .textbox {
+    width: 100%;
+  }
+
+  .form-group.contactinformation input {
+    width: 100%;
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  /* Contact number input group adjustments */
+  .form-group.contactinformation .textbox div {
+    gap: 8px;
+  }
+
+  .form-group.contactinformation input[disabled] {
+    width: 50px;
+    font-size: 12px;
+  }
+
+  input[name='contact'] {
+    flex: 1;
+    padding-left: 8px;
+  }
+
+  input[name='email'] {
+    padding-left: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .form-group.contactinformation {
+    gap: 10px;
+  }
+
+  .form-group.contactinformation input {
+    font-size: 13px;
+    padding: 8px;
+  }
+
+  .form-group.contactinformation input[disabled] {
+    width: 45px;
+    font-size: 11px;
+  }
+
+  input[name='contact'],
+  input[name='email'] {
+    padding-left: 6px;
+  }
+}
