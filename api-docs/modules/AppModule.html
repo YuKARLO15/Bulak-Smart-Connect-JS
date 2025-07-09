@@ -394,6 +394,16 @@ import { EmailService } from &#x27;./services/email.service&#x27;;
         synchronize: configService.get(&#x27;DB_SYNCHRONIZE&#x27;) &#x3D;&#x3D;&#x3D; &#x27;true&#x27;, // Use environment variable
         logging: configService.get(&#x27;DB_LOGGING&#x27;) &#x3D;&#x3D;&#x3D; &#x27;true&#x27;, // Use environment variable
         logger: &#x27;advanced-console&#x27;,
+        // Aiven MySQL SSL Configuration
+        ssl: configService.get(&#x27;NODE_ENV&#x27;) &#x3D;&#x3D;&#x3D; &#x27;production&#x27; ? {
+          rejectUnauthorized: configService.get(&#x27;DB_SSL_REJECT_UNAUTHORIZED&#x27;) &#x3D;&#x3D;&#x3D; &#x27;true&#x27;
+        } : false,
+        // Connection pool settings for production
+        extra: {
+          connectionLimit: 10,
+          acquireTimeout: 60000,
+          timeout: 60000,
+        },
         // Prevent data loss in development (below code is for development only)
         // synchronize: true,
         migrationsRun: false,
