@@ -229,8 +229,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="59"
-                                    class="link-to-prism">src/services/minio.service.ts:59</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="61"
+                                    class="link-to-prism">src/services/minio.service.ts:61</a></div>
                         </td>
                     </tr>
 
@@ -298,8 +298,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="46"
-                                    class="link-to-prism">src/services/minio.service.ts:46</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="48"
+                                    class="link-to-prism">src/services/minio.service.ts:48</a></div>
                         </td>
                     </tr>
 
@@ -367,8 +367,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="22"
-                                    class="link-to-prism">src/services/minio.service.ts:22</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="24"
+                                    class="link-to-prism">src/services/minio.service.ts:24</a></div>
                         </td>
                     </tr>
 
@@ -535,6 +535,8 @@ export class MinioService {
       useSSL: process.env.MINIO_USE_SSL &#x3D;&#x3D;&#x3D; &#x27;true&#x27;,
       accessKey: process.env.MINIO_ACCESS_KEY || &#x27;minioadmin&#x27;,
       secretKey: process.env.MINIO_SECRET_KEY || &#x27;minioadmin123&#x27;,
+      region: &#x27;auto&#x27;, // R2 uses &#x27;auto&#x27; region
+      pathStyle: true, // Required for R2 compatibility
     });
 
     this.bucketName &#x3D; process.env.MINIO_BUCKET_NAME || &#x27;bulak-smart-connect&#x27;;
