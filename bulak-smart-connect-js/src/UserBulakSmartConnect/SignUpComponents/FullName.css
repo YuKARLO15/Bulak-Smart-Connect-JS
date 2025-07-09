@@ -39,6 +39,17 @@ body {
   display: block;
 }
 
+/* Personal Information Label Styling */
+.label-personalinfo {
+  font-weight: bold !important;
+  font-size: 20px !important;
+  color: #1c4d5a;
+  margin-bottom: 20px;
+  margin-top: 10px;
+  display: block;
+  letter-spacing: 0.5px;
+}
+
 .form-group.fullname {
   display: grid;
   gap: 15px;
@@ -117,4 +128,96 @@ input[name='middlename'] {
   margin-right: 21px;
   margin-left: 0px;
   margin-left: 170px;
+}
+
+/* Mobile Responsiveness for Full Name */
+@media (max-width: 768px) {
+  .signup-container {
+    padding: 16px;
+  }
+
+  .form-group.fullname {
+    display: flex !important;
+    flex-direction: column !important;
+    grid-template-columns: none !important;
+    gap: 15px;
+    grid-column-gap: 0;
+  }
+
+  .form-group.fullname .textbox {
+    margin-top: 15px;
+    width: 100%;
+  }
+
+  .form-group.fullname input {
+    width: 100%;
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .label-in {
+    font-size: 13px;
+  }
+
+  .label-personalinfo {
+    font-size: 16px;
+    margin-bottom: 15px;
+    margin-top: 8px;
+  }
+
+  /* Extension section adjustments */
+  .checkbox-extension {
+    flex-direction: column;
+    align-items: flex-start;
+    margin-left: 0;
+    gap: 10px;
+    margin-top: 15px;
+  }
+
+  .checkbox-extension label {
+    font-size: 11px;
+  }
+
+  #Extension {
+    margin-left: 0;
+    width: 100%;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .signup-container {
+    padding: 8px;
+  }
+
+  .form-group.fullname {
+    gap: 10px;
+  }
+
+  .form-group.fullname .textbox {
+    margin-top: 10px;
+  }
+
+  .form-group.fullname input {
+    font-size: 13px;
+    padding: 8px;
+  }
+
+  .label-in {
+    font-size: 12px;
+  }
+
+  .label-personalinfo {
+    font-size: 14px;
+    margin-bottom: 12px;
+    margin-top: 5px;
+  }
+
+  .checkbox-extension label {
+    font-size: 10px;
+  }
+
+  #Extension {
+    font-size: 13px;
+  }
 }

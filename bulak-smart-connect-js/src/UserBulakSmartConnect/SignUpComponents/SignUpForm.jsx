@@ -279,21 +279,20 @@ const SignUpForm = () => {
         <NavBar />
       </div>
 
-      <h2 className="signup-label">Sign Up Form</h2>
-
+             <h2 className="signup-label">Sign Up Form</h2>
       <form onSubmit={handleSubmit}>
-        <FullNameSection
-          formData={formData}
-          handleInputChange={handleInputChange}
-          errors={errors}
-        />
-        <UsernamePasswordSection
+               <UsernamePasswordSection
           formData={formData}
           handleInputChange={handleInputChange}
           errors={errors}
           setErrors={setErrors}
         />
         <ContactInformationSection
+          formData={formData}
+          handleInputChange={handleInputChange}
+          errors={errors}
+        />
+             <FullNameSection
           formData={formData}
           handleInputChange={handleInputChange}
           errors={errors}
