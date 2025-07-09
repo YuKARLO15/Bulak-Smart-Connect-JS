@@ -33,6 +33,8 @@ export class MinioService implements OnModuleInit {
       useSSL: useSSL,
       accessKey: accessKey,
       secretKey: secretKey,
+      region: 'auto', // R2 uses 'auto' region
+      pathStyle: true, // Required for R2 compatibility
     });
 
     this.bucketName = this.configService.get<string>(
@@ -51,7 +53,7 @@ export class MinioService implements OnModuleInit {
     try {
       const exists = await this.minioClient.bucketExists(this.bucketName);
       if (!exists) {
-        await this.minioClient.makeBucket(this.bucketName, 'us-east-1');
+        await this.minioClient.makeBucket(this.bucketName, 'auto');
         this.logger.log(`Bucket ${this.bucketName} created successfully`);
       } else {
         this.logger.log(`Bucket ${this.bucketName} already exists`);
@@ -102,6 +104,30 @@ export class MinioService implements OnModuleInit {
       );
     } catch (error) {
       this.logger.error('Error generating presigned URL:', error);
+      throw error;
+    }
+  }
+
+  async getR2PresignedUrl(
+    objectName: string,
+    expiry: number = 3600,
+  ): Promise<string> {
+    try {
+      // Use direct AWS SDK v3 for better R2 compatibility
+      const url = await this.minioClient.presignedGetObject(
+        this.bucketName,
+        objectName,
+        expiry,
+        {
+          'response-content-disposition': 'inline',
+        },
+      );
+      
+      // Log for debugging
+      this.logger.debug(`Generated presigned URL for ${objectName}: ${url}`);
+      return url;
+    } catch (error) {
+      this.logger.error('Error generating R2 presigned URL:', error);
       throw error;
     }
   }

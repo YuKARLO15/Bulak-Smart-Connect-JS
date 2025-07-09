@@ -84,7 +84,7 @@ describe('MinioService (Document Applications)', () => {
       );
       expect(mockMinioClient.makeBucket).toHaveBeenCalledWith(
         'bulak-smart-connect',
-        'us-east-1',
+        'auto',
       );
     });
   });
