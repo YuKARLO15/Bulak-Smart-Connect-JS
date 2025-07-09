@@ -4,8 +4,8 @@ import '../SignUpComponents/FullName.css';
 const FullNameSection = ({ formData, handleInputChange, errors }) => {
   return (
     <div>
-
       <div className="form-group">
+        <label className="label-personalinfo"> Personal Information</label>
         <div className="form-group fullname">
           <div className="textbox">
             <label className="label-in">

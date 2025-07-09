@@ -103,9 +103,7 @@ const UsernamePasswordSection = ({ formData, handleInputChange, errors, setError
           required
         />
         <span className="error-message">{errors.password}</span>
-        
       </div>
-      
 
       <div className="form-control" id="confirmpassword-container">
         <label className="labels">
@@ -121,32 +119,33 @@ const UsernamePasswordSection = ({ formData, handleInputChange, errors, setError
           required
         />
       </div>
-            {/* Password Validation Display */}
-        {formData.password && (
-          <div className="password-validation">
-            <h4>Your password must contain:</h4>
-            <ValidationItem 
-              isValid={passwordValidation.length} 
-              text="At least 8 characters" 
-            />
-            <ValidationItem 
-              isValid={passwordValidation.lowercase} 
-              text="Lowercase letters (a-z)" 
-            />
-            <ValidationItem 
-              isValid={passwordValidation.uppercase} 
-              text="Uppercase letters (A-Z)" 
-            />
-            <ValidationItem 
-              isValid={passwordValidation.number} 
-              text="Numbers (0-9)" 
-            />
-            <ValidationItem 
-              isValid={passwordValidation.special} 
-              text="Special characters (e.g. !@#$%^&*)" 
-            />
-          </div>
-        )}
+
+      {/* Password Validation Display - Positioned in second column */}
+      {formData.password && (
+        <div className="password-validation">
+          <h4>Your password must contain:</h4>
+          <ValidationItem 
+            isValid={passwordValidation.length} 
+            text="At least 8 characters" 
+          />
+          <ValidationItem 
+            isValid={passwordValidation.lowercase} 
+            text="Lowercase letters (a-z)" 
+          />
+          <ValidationItem 
+            isValid={passwordValidation.uppercase} 
+            text="Uppercase letters (A-Z)" 
+          />
+          <ValidationItem 
+            isValid={passwordValidation.number} 
+            text="Numbers (0-9)" 
+          />
+          <ValidationItem 
+            isValid={passwordValidation.special} 
+            text="Special characters (e.g. !@#$%^&*)" 
+          />
+        </div>
+      )}
     </div>
   );
 };
