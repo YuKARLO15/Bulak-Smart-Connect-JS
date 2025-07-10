@@ -1,17 +1,24 @@
+/* Base styles */
 .MainContainerSummaryBirth {
   padding: 2rem;
   width: 100vw;
   margin: 0 auto;
   justify-items: center !important;
   align-items: center;
+  box-sizing: border-box;
+  overflow-x: hidden;
 }
 
 .SummaryPaperSummaryBirth {
   padding: 2rem;
   margin-bottom: 2rem;
+  width: 80%;
+  box-sizing: border-box;
+  overflow: hidden;
 }
+
 .EditButtonSummaryBirth {
-  background-color: #1c4d5a !important; /* Purple color */
+  background-color: #1c4d5a !important;
   margin: 0 10px !important;
   color: white !important;
 }
@@ -39,11 +46,13 @@
   font-weight: 600 !important;
   color: #1c4d5a;
   margin-bottom: 0.5rem !important;
+  word-break: break-word;
 }
 
 .SubtitleSummaryBirth {
   color: #5a5a5a;
   font-size: 1rem !important;
+  word-break: break-word;
 }
 
 .DividerSummaryBirth {
@@ -199,6 +208,8 @@ button.MuiButton-contained {
 
 .registryContainer {
   border: 1px solid #ccc;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .provinceSection {
@@ -230,7 +241,10 @@ button.MuiButton-contained {
 .fieldContainer {
   padding: 10px;
   border-bottom: 1px solid #ccc;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
+
 
 .fieldLabel {
   font-weight: bold;
@@ -238,6 +252,10 @@ button.MuiButton-contained {
 
 .nameFieldContainer {
   text-align: center;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  padding: 5px;
+  font-size: 0.9rem;
 }
 
 .nameField {
@@ -248,11 +266,15 @@ button.MuiButton-contained {
   padding: 10px;
   border-right: 1px solid #ccc;
   border-bottom: 1px solid #ccc;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 .fieldGroupNoBorder {
   padding: 10px;
   border-bottom: 1px solid #ccc;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 .marriageSection {
@@ -273,12 +295,6 @@ button.MuiButton-contained {
   padding: 10px;
 }
 
-.buttonsContainer {
-  padding: 15px;
-  display: flex;
-  justify-content: space-between;
-  gap: 10px;
-}
 .StatusSection {
   display: flex;
   flex-direction: column;
@@ -291,11 +307,14 @@ button.MuiButton-contained {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   z-index: 100;
 }
+
 .ApplicationStatusMessage {
   font-size: 1rem;
   color: #1c4d5a;
   margin-top: 0.5rem;
+  word-break: break-word;
 }
+
 /* Floating action button styles */
 .ActionButtonContainerBirth {
   position: fixed;
@@ -403,6 +422,78 @@ button.MuiButton-contained {
   }
 }
 
+/* Status indicator colors */
+.ApplicationStatus[status="approved"] {
+  color: green;
+}
+
+.ApplicationStatus[status="ready for pickup"] {
+  color: #4caf50;
+}
+
+.ApplicationStatus[status="pending"] {
+  color: #ff9800;
+}
+
+.ApplicationStatus[status="processing"],
+.ApplicationStatus[status="submitted"] {
+  color: #2196f3;
+}
+
+.ApplicationStatus[status="declined"],
+.ApplicationStatus[status="rejected"] {
+  color: red;
+}
+
+.ApplicationStatus[status="requires additional info"] {
+  color: #ff8c00;
+}
+
+.ApplicationStatus[status="cancelled"] {
+  color: #d32f2f;
+}
+
+/* Large screens (desktops) */
+@media (min-width: 1200px) {
+  .MainContainerSummaryBirth {
+    padding: 2rem;
+  }
+
+  .SummaryPaperSummaryBirth {
+    padding: 2rem;
+  }
+}
+
+/* Medium-sized screens (tablets) */
+@media (max-width: 1023px) {
+  .MainContainerSummaryBirth {
+    padding: 1.5rem;
+  }
+
+  .SummaryPaperSummaryBirth {
+    padding: 1.5rem;
+  }
+
+  .StatusSection {
+    position: relative;
+    width: 100%;
+    left: 0;
+    margin-bottom: 1rem;
+  }
+
+  .ActionButtonContainerBirth {
+    right: 20px;
+    bottom: 20px;
+    top: auto;
+    transform: none;
+  }
+
+  .TitleSummaryBirth {
+    font-size: 1.75rem !important;
+  }
+}
+
+/* Small screens (small tablets and large phones) */
 @media (max-width: 768px) {
   .MainContainerSummaryBirth {
     padding: 1rem;
@@ -410,6 +501,7 @@ button.MuiButton-contained {
 
   .SummaryPaperSummaryBirth {
     padding: 1rem;
+    width: 100% !important;
   }
 
   .TitleSummaryBirth {
@@ -424,5 +516,269 @@ button.MuiButton-contained {
   .BackButtonSummaryBirth,
   .PrintButtonSummaryBirth {
     width: 100%;
+  }
+
+  .ActionButtonContainerBirth {
+    right:30vw;
+    bottom: 20px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  .ActionButtonBirth {
+    width: 80px !important;
+    height: 40px !important;
+  }
+
+  .InfoGridSummaryBirth {
+    padding: 0 0.5rem;
+  }
+
+  .registryContainer {
+    overflow-x: auto;
+  }
+
+  .verticalText {
+    font-size: 0.9rem;
+  }
+
+  .fieldLabel {
+    font-size: 0.85rem;
+  }
+  
+  .StatusSection {
+    padding: 1rem !important;
+  }
+  
+  .ApplicationStatusMessage {
+    font-size: 0.9rem;
+  }
+
+}
+
+/* Mobile phones */
+@media (max-width: 576px) {
+  .MainContainerSummaryBirth {
+    padding: 0.75rem;
+    width: 100%;
+  }
+
+
+  .SummaryPaperSummaryBirth {
+    padding: 0.75rem;
+  }
+
+  .TitleSummaryBirth {
+    font-size: 1.3rem !important;
+  }
+
+  .SubtitleSummaryBirth {
+    font-size: 0.875rem !important;
+  }
+
+  .SectionTitleSummaryBirth {
+    font-size: 1.1rem !important;
+  }
+
+  .ActionButtonContainerBirth {
+    right: 30vw;
+    bottom: 16px;
+  
+  }
+
+  .ActionButtonBirth {
+    width: 70px !important;
+    height: 45px !important;
+
+
+  }
+  
+  .buttonsContainer {
+    flex-direction: column;
+  }
+  
+  button.MuiButton-contained {
+    width: 100%;
+    margin: 5px 0;
+  }
+  
+  .verticalText {
+    font-size: 0.75rem;
+  }
+  
+  .fieldContainer, 
+  .fieldGroup, 
+  .fieldGroupNoBorder {
+    padding: 5px;
+    font-size: 0.8rem;
+  }
+  
+  .fieldLabel {
+    font-size: 0.7rem !important;
+    margin-bottom: 3px;
+  }
+  
+   .nameFieldContainer {
+    font-size: 0.8rem !important;
+    padding: 3px;
+  }
+  
+  .provinceSection,
+  .registrySection,
+  .fieldContainer,
+  .fieldGroup,
+  .fieldGroupNoBorder {
+    padding: 8px;
+  }
+  
+ /* Fix for table layout on small screens */
+  .registryContainer {
+    table-layout: fixed;
+    width: 100%;
+  }
+  
+  /* Limit text length with ellipsis for very long values */
+  .nameField {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  /* Make all typography in the form smaller */
+  .SummaryPaperSummaryBirth .MuiTypography-body1 {
+    font-size: 0.85rem;
+    line-height: 1.3;
+  }
+  
+  .SummaryPaperSummaryBirth .MuiTypography-body2 {
+    font-size: 0.75rem;
+    line-height: 1.2;
+  }
+  .ApplicationStatusMessage {
+    font-size: 0.85rem;
+  }
+}
+
+/* Very small screens */
+@media (max-width: 425px) {
+  .MainContainerSummaryBirth {
+    padding: 0.5rem;
+  }
+
+  .SummaryPaperSummaryBirth {
+    padding: 0.5rem;
+  }
+
+  .TitleSummaryBirth {
+    font-size: 1.1rem !important;
+  }
+
+  .SubtitleSummaryBirth {
+    font-size: 0.75rem !important;
+  }
+  
+  .SectionTitleSummaryBirth {
+    font-size: 1rem !important;
+    margin-bottom: 0.75rem !important;
+  }
+
+  .ActionButtonContainerBirth {
+ 
+    justify-content: center;
+    align-items: center;
+  }
+
+  .ActionButtonBirth .MuiButton-startIcon svg {
+    font-size: 20px !important;
+  }
+  
+  .certificateHeaderContainer {
+    padding: 10px 5px;
+  }
+
+  .headerInfoText {
+    font-size: 0.8rem;
+  }
+  
+  .verticalText {
+    font-size: 0.7rem;
+  }
+  
+  .fieldLabel {
+    font-size: 0.7rem;
+  }
+  
+  .provinceSection,
+  .registrySection,
+  .fieldContainer,
+  .fieldGroup,
+  .fieldGroupNoBorder {
+    padding: 5px;
+  }
+  
+    .nameFieldContainer {
+    font-size: 0.7rem;
+    padding: 2px;
+  }
+  
+  .fieldContainer, 
+  .fieldGroup, 
+  .fieldGroupNoBorder {
+    padding: 3px;
+    font-size: 0.7rem;
+  }
+  
+  .fieldLabel {
+    font-size: 0.65rem;
+    margin-bottom: 2px;
+  }
+  
+  .SummaryPaperSummaryBirth .MuiTypography-body1 {
+    font-size: 0.75rem;
+    line-height: 1.2;
+  }
+  
+  .SummaryPaperSummaryBirth .MuiTypography-body2 {
+    font-size: 0.65rem;
+    line-height: 1.1;
+  }
+}
+
+/* Smallest screens (older phones) */
+@media (max-width: 320px) {
+  .MainContainerSummaryBirth {
+    padding: 0.25rem;
+  }
+  
+  .SummaryPaperSummaryBirth {
+    padding: 0.5rem 0.25rem;
+  }
+  
+  .TitleSummaryBirth {
+    font-size: 1rem !important;
+  }
+  
+  .SubtitleSummaryBirth {
+    font-size: 0.7rem !important;
+  }
+  
+  .SectionTitleSummaryBirth {
+    font-size: 0.9rem !important;
+  }
+  
+  .verticalText {
+    font-size: 0.65rem;
+  }
+  
+  .fieldLabel {
+    font-size: 0.65rem;
+  }
+  
+  .StatusSection {
+    padding: 0.5rem !important;
+  }
+  
+  .ApplicationStatusMessage {
+    font-size: 0.75rem;
   }
 }

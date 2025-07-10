@@ -25,6 +25,8 @@ import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from '@mui/material/styles';
 
 const BirthApplicationSummary = () => {
   const [formData, setFormData] = useState(null);
@@ -38,6 +40,9 @@ const BirthApplicationSummary = () => {
   const [applicationStatus, setApplicationStatus] = useState('Pending');
   const [statusMessage, setStatusMessage] = useState('');
   const [updateTrigger, setUpdateTrigger] = useState(0);
+  const theme = useTheme();
+const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'));
 
   const uiTitleMap = {
     'Request a Copy of Birth Certificate': 'Copy of Birth Certificate Request',
@@ -536,12 +541,12 @@ const BirthApplicationSummary = () => {
             </Grid>
           </Box>
 
-          <Box className="NoteSectionSummaryBirth">
-            <Alert severity="info">
-              Your request for a copy of birth certificate is being processed. Please wait for
-              approval. You will be notified once your request has been processed.
-            </Alert>
-          </Box>
+      <Box className="NoteSectionSummaryBirth">
+  <Alert severity="info" sx={{ fontSize: isMobile ? '0.75rem' : '0.875rem' }}>
+    Your request for a copy of birth certificate is being processed. Please wait for 
+    approval. You will be notified once your request has been processed.
+  </Alert>
+</Box>
 
           <Box className="buttonsContainer">
             <Button

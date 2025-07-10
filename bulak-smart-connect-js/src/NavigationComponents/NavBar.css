@@ -18,6 +18,8 @@
   height: auto;
 }
 
+
+
 /* Divider after logo */
 .LogoNavBar::after {
   content: '';
@@ -144,7 +146,7 @@
   }
 }
 
-@media (max-width: 480px) {
+@media (min-width:385px) and (max-width: 480px) {
   .NavBarContainer {
     padding: 6px 8px;
     flex-wrap: nowrap;
@@ -169,7 +171,7 @@
 
   .NavBarContainer Button {
     padding: 5px 8px;
-    font-size: 12px !important;
+    font-size: 10px !important;
     margin: 0 1px;
     border-radius: 18px;
   }
@@ -187,7 +189,7 @@
     min-width: 36px !important;
   }
 }
-@media (max-width: 375px) {
+@media (max-width: 385px) {
   .NavBarContainer {
     padding: 4px 6px;
     flex-wrap: nowrap;
@@ -212,7 +214,7 @@
 
   .NavBarContainer Button {
     padding: 4px 6px;
-    font-size: 11px !important;
+    font-size: 8px !important;
     margin: 0 1px;
     border-radius: 16px;
     min-width: auto;
