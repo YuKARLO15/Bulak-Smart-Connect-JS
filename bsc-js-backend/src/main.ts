@@ -34,7 +34,8 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     // ✅ Configure NestJS logger based on environment
     logger:
-      process.env.NODE_ENV === 'production' && process.env.ENABLE_CONSOLE_LOGS !== 'true'
+      process.env.NODE_ENV === 'production' &&
+      process.env.ENABLE_CONSOLE_LOGS !== 'true'
         ? ['error'] // Only errors in production
         : ['log', 'error', 'warn', 'debug', 'verbose'], // All logs in development
   });
@@ -47,21 +48,23 @@ async function bootstrap() {
   // Production security enhancements
   if (process.env.NODE_ENV === 'production') {
     try {
-      app.use(helmet({
-        contentSecurityPolicy: {
-          directives: {
-            defaultSrc: ["'self'"],
-            styleSrc: ["'self'", "'unsafe-inline'"],
-            scriptSrc: ["'self'"],
-            imgSrc: ["'self'", "data:", "https:"],
+      app.use(
+        helmet({
+          contentSecurityPolicy: {
+            directives: {
+              defaultSrc: ["'self'"],
+              styleSrc: ["'self'", "'unsafe-inline'"],
+              scriptSrc: ["'self'"],
+              imgSrc: ["'self'", 'data:', 'https:'],
+            },
           },
-        },
-        crossOriginEmbedderPolicy: false
-      }));
-      
+          crossOriginEmbedderPolicy: false,
+        }),
+      );
+
       app.use(compression());
       app.getHttpAdapter().getInstance().set('trust proxy', 1); // Trust Render proxy
-      
+
       logger.log('✅ Production security middleware enabled');
     } catch (error) {
       logger.error('❌ Failed to setup production middleware:', error.message);
@@ -189,12 +192,12 @@ async function bootstrap() {
     try {
       // Check database connection
       const dataSource = app.get(DataSource);
-      
+
       if (!dataSource || !dataSource.isInitialized) {
-        return res.status(500).json({ 
-          status: 'error', 
+        return res.status(500).json({
+          status: 'error',
           message: 'Database not connected',
-          timestamp: new Date().toISOString()
+          timestamp: new Date().toISOString(),
         });
       }
 
@@ -209,15 +212,15 @@ async function bootstrap() {
         memory_mb: Math.round(process.memoryUsage().heapUsed / 1024 / 1024),
         database: 'connected',
         environment: process.env.NODE_ENV || 'development',
-        service: 'bulak-smart-connect-backend'
+        service: 'bulak-smart-connect-backend',
       });
     } catch (error) {
       console.error('Health check failed:', error);
-      return res.status(500).json({ 
-        status: 'error', 
+      return res.status(500).json({
+        status: 'error',
         message: error.message,
         timestamp: new Date().toISOString(),
-        service: 'bulak-smart-connect-backend'
+        service: 'bulak-smart-connect-backend',
       });
     }
   });
@@ -251,19 +254,37 @@ async function testMinIOConnection() {
   try {
     logger.log('🧪 Testing MinIO connection...');
 
-    const minioClient = new Minio.Client({
+    const enablePort = process.env.MINIO_ENABLE_PORT !== 'false'; // Default to true for backward compatibility
+
+    const minioConfig: {
+      endPoint: string;
+      useSSL: boolean;
+      accessKey: string;
+      secretKey: string;
+      region: string;
+      pathStyle: boolean;
+      port?: number;
+    } = {
       endPoint: process.env.MINIO_ENDPOINT || 'localhost',
-      port: parseInt(process.env.MINIO_PORT || '9000'),
       useSSL: process.env.MINIO_USE_SSL === 'true',
       accessKey: process.env.MINIO_ACCESS_KEY || 'minioadmin',
       secretKey: process.env.MINIO_SECRET_KEY || 'minioadmin123',
       region: 'auto', // Add this for R2
       pathStyle: true, // Add this for R2
-    });
+    };
+
+    // Conditionally include port for R2 compatibility
+    if (enablePort) {
+      minioConfig.port = parseInt(process.env.MINIO_PORT || '9000');
+    }
+
+    const minioClient = new Minio.Client(minioConfig);
 
     // Test connection by listing buckets
     const buckets = await minioClient.listBuckets();
-    logger.log(`✅ MinIO connection successful! Found ${buckets.length} buckets`);
+    logger.log(
+      `✅ MinIO connection successful! Found ${buckets.length} buckets`,
+    );
 
     // Ensure bulak-smart-connect bucket exists
     const bucketName = process.env.MINIO_BUCKET_NAME || 'bulak-smart-connect';

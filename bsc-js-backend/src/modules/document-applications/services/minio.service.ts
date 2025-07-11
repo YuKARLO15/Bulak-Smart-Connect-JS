@@ -14,6 +14,8 @@ export class MinioService implements OnModuleInit {
       'localhost',
     );
     const port = this.configService.get<number>('MINIO_PORT', 9000);
+    const enablePort =
+      this.configService.get<string>('MINIO_ENABLE_PORT', 'true') !== 'false'; // Default to true for backward compatibility
     const useSSLValue = this.configService
       .get<string>('MINIO_USE_SSL', 'false')
       .toLowerCase();
@@ -27,22 +29,39 @@ export class MinioService implements OnModuleInit {
       'minioadmin123',
     );
 
-    this.minioClient = new Minio.Client({
+    const minioConfig: {
+      endPoint: string;
+      useSSL: boolean;
+      accessKey: string;
+      secretKey: string;
+      region: string;
+      pathStyle: boolean;
+      port?: number;
+    } = {
       endPoint: endpoint,
-      port: port,
       useSSL: useSSL,
       accessKey: accessKey,
       secretKey: secretKey,
       region: 'auto', // R2 uses 'auto' region
       pathStyle: true, // Required for R2 compatibility
-    });
+    };
+
+    // Conditionally include port for R2 compatibility
+    if (enablePort) {
+      minioConfig.port = port;
+    }
+
+    this.minioClient = new Minio.Client(minioConfig);
 
     this.bucketName = this.configService.get<string>(
       'MINIO_BUCKET_NAME',
       'bulak-smart-connect',
     );
 
-    this.logger.log(`MinIO configured with endpoint: ${endpoint}:${port}`);
+    const portDisplay = enablePort ? `:${port}` : '';
+    this.logger.log(
+      `MinIO configured with endpoint: ${endpoint}${portDisplay}`,
+    );
   }
 
   async onModuleInit() {
@@ -122,7 +141,7 @@ export class MinioService implements OnModuleInit {
           'response-content-disposition': 'inline',
         },
       );
-      
+
       // Log for debugging
       this.logger.debug(`Generated presigned URL for ${objectName}: ${url}`);
       return url;

@@ -38,7 +38,7 @@ import { UserResponseDto } from './dto/user-response.dto';
 @ApiBearerAuth()
 export class UsersController {
   private readonly logger = new Logger(UsersController.name);
-  
+
   constructor(private readonly usersService: UsersService) {}
 
   @Get()
