@@ -45,6 +45,7 @@ MINIO_PORT=9000
 MINIO_ACCESS_KEY=minioadmin
 MINIO_SECRET_KEY=minioadmin123
 MINIO_BUCKET_NAME=document-applications
+MINIO_ENABLE_PORT=true
 
 #Queue Reset Configuration
 QUEUE_RESET_TIMEZONE=Asia/Manila
@@ -81,6 +82,16 @@ Copy the output and paste it as your `JWT_SECRET` value.
 - Default credentials: minioadmin/minioadmin123
 - Server should run on http://localhost:9000
 
+#### Cloudflare R2 Setup (Alternative)
+If using Cloudflare R2 instead of local MinIO:
+```bash
+MINIO_ENDPOINT=your-account-id.r2.cloudflarestorage.com
+MINIO_ENABLE_PORT=false  # Important for R2 compatibility
+MINIO_USE_SSL=true
+MINIO_ACCESS_KEY=your_r2_access_key
+MINIO_SECRET_KEY=your_r2_secret_key
+```
+
 ### 6. Start the Server
 ```bash
 npm install
@@ -104,6 +115,7 @@ npm run start:dev
 - `PORT` - Server port (default: 3000)
 - `DB_HOST` - Database host (default: localhost)
 - `MINIO_ENDPOINT` - MinIO server (default: localhost)
+- `MINIO_ENABLE_PORT` - Include port in MinIO config (default: true, set to false for Cloudflare R2)
 
 ## 🚨 Common Issues & Solutions
 
