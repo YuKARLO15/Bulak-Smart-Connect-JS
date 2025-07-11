@@ -20,6 +20,7 @@ describe('MinioService (Document Applications)', () => {
         MINIO_ACCESS_KEY: 'minioadmin',
         MINIO_SECRET_KEY: 'minioadmin123',
         MINIO_BUCKET_NAME: 'bulak-smart-connect',
+        MINIO_ENABLE_PORT: 'true', // Default for testing
       };
       return config[key] || defaultValue;
     }),
@@ -60,6 +61,160 @@ describe('MinioService (Document Applications)', () => {
 
   it('should be defined', () => {
     expect(service).toBeDefined();
+  });
+
+  describe('MinIO client configuration', () => {
+    let originalMinioClient: unknown;
+
+    beforeEach(() => {
+      originalMinioClient = require('minio').Client;
+    });
+
+    it('should include port when MINIO_ENABLE_PORT is true', async () => {
+      const mockMinioConstructor = jest.fn();
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      require('minio').Client = mockMinioConstructor;
+
+      // Mock config with MINIO_ENABLE_PORT=true
+      const mockConfigWithPort = {
+        get: jest.fn((key: string, defaultValue?: any) => {
+          const config = {
+            MINIO_ENDPOINT: 'localhost',
+            MINIO_PORT: 9000,
+            MINIO_USE_SSL: 'false',
+            MINIO_ACCESS_KEY: 'minioadmin',
+            MINIO_SECRET_KEY: 'minioadmin123',
+            MINIO_BUCKET_NAME: 'bulak-smart-connect',
+            MINIO_ENABLE_PORT: 'true',
+          };
+          return config[key] || defaultValue;
+        }),
+      };
+
+      const module: TestingModule = await Test.createTestingModule({
+        providers: [
+          MinioService,
+          {
+            provide: ConfigService,
+            useValue: mockConfigWithPort,
+          },
+        ],
+      }).compile();
+
+      module.get<MinioService>(MinioService);
+
+      expect(mockMinioConstructor).toHaveBeenCalledWith(
+        expect.objectContaining({
+          endPoint: 'localhost',
+          port: 9000,
+          useSSL: false,
+          accessKey: 'minioadmin',
+          secretKey: 'minioadmin123',
+          region: 'auto',
+          pathStyle: true,
+        }),
+      );
+
+      // Restore original
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      require('minio').Client = originalMinioClient;
+    });
+
+    it('should exclude port when MINIO_ENABLE_PORT is false', async () => {
+      const mockMinioConstructor = jest.fn();
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      require('minio').Client = mockMinioConstructor;
+
+      // Mock config with MINIO_ENABLE_PORT=false
+      const mockConfigWithoutPort = {
+        get: jest.fn((key: string, defaultValue?: any) => {
+          const config = {
+            MINIO_ENDPOINT: 'r2.example.com',
+            MINIO_PORT: 9000,
+            MINIO_USE_SSL: 'true',
+            MINIO_ACCESS_KEY: 'r2-access-key',
+            MINIO_SECRET_KEY: 'r2-secret-key',
+            MINIO_BUCKET_NAME: 'bulak-smart-connect',
+            MINIO_ENABLE_PORT: 'false',
+          };
+          return config[key] || defaultValue;
+        }),
+      };
+
+      const module: TestingModule = await Test.createTestingModule({
+        providers: [
+          MinioService,
+          {
+            provide: ConfigService,
+            useValue: mockConfigWithoutPort,
+          },
+        ],
+      }).compile();
+
+      module.get<MinioService>(MinioService);
+
+      expect(mockMinioConstructor).toHaveBeenCalledWith(
+        expect.objectContaining({
+          endPoint: 'r2.example.com',
+          useSSL: true,
+          accessKey: 'r2-access-key',
+          secretKey: 'r2-secret-key',
+          region: 'auto',
+          pathStyle: true,
+        }),
+      );
+
+      // Ensure port is NOT included
+      expect(mockMinioConstructor.mock.calls[0][0]).not.toHaveProperty('port');
+
+      // Restore original
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      require('minio').Client = originalMinioClient;
+    });
+
+    it('should default to including port when MINIO_ENABLE_PORT is not set', async () => {
+      const mockMinioConstructor = jest.fn();
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      require('minio').Client = mockMinioConstructor;
+
+      // Mock config without MINIO_ENABLE_PORT (should default to true)
+      const mockConfigDefault = {
+        get: jest.fn((key: string, defaultValue?: any) => {
+          const config = {
+            MINIO_ENDPOINT: 'localhost',
+            MINIO_PORT: 9000,
+            MINIO_USE_SSL: 'false',
+            MINIO_ACCESS_KEY: 'minioadmin',
+            MINIO_SECRET_KEY: 'minioadmin123',
+            MINIO_BUCKET_NAME: 'bulak-smart-connect',
+            // MINIO_ENABLE_PORT not set
+          };
+          return config[key] || defaultValue;
+        }),
+      };
+
+      const module: TestingModule = await Test.createTestingModule({
+        providers: [
+          MinioService,
+          {
+            provide: ConfigService,
+            useValue: mockConfigDefault,
+          },
+        ],
+      }).compile();
+
+      module.get<MinioService>(MinioService);
+
+      expect(mockMinioConstructor).toHaveBeenCalledWith(
+        expect.objectContaining({
+          port: 9000,
+        }),
+      );
+
+      // Restore original
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      require('minio').Client = originalMinioClient;
+    });
   });
 
   describe('onModuleInit', () => {

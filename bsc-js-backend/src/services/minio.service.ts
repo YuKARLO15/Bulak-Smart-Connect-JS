@@ -8,15 +8,31 @@ export class MinioService {
   private bucketName: string;
 
   constructor() {
-    this.minioClient = new Minio.Client({
+    const enablePort = process.env.MINIO_ENABLE_PORT !== 'false'; // Default to true for backward compatibility
+
+    const minioConfig: {
+      endPoint: string;
+      useSSL: boolean;
+      accessKey: string;
+      secretKey: string;
+      region: string;
+      pathStyle: boolean;
+      port?: number;
+    } = {
       endPoint: process.env.MINIO_ENDPOINT || 'localhost',
-      port: parseInt(process.env.MINIO_PORT || '9000'),
       useSSL: process.env.MINIO_USE_SSL === 'true',
       accessKey: process.env.MINIO_ACCESS_KEY || 'minioadmin',
       secretKey: process.env.MINIO_SECRET_KEY || 'minioadmin123',
       region: 'auto', // R2 uses 'auto' region
       pathStyle: true, // Required for R2 compatibility
-    });
+    };
+
+    // Conditionally include port for R2 compatibility
+    if (enablePort) {
+      minioConfig.port = parseInt(process.env.MINIO_PORT || '9000');
+    }
+
+    this.minioClient = new Minio.Client(minioConfig);
 
     this.bucketName = process.env.MINIO_BUCKET_NAME || 'bulak-smart-connect';
   }

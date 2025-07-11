@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Typography, Button } from '@mui/material';
+import { Box, Typography, Button, useMediaQuery, useTheme } from '@mui/material';
 
 const getStatusColor = status => {
   switch (status?.toLowerCase()) {
@@ -34,21 +34,27 @@ const CustomStatusNotification = ({
   showBookAppointment,
   onClose,
 }) => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isSmallMobile = useMediaQuery('(max-width:400px)');
+  
   if (!status && !statusMessage) return null;
 
   return (
     <Box
       sx={{
         position: 'fixed',
-        bottom: 32,
-        right: 32,
+        bottom: isMobile ? '16px' : '32px',
+        right: isMobile ? '16px' : '32px',
+        left: isMobile ? '16px' : 'auto',
         zIndex: 1400,
-        minWidth: 320,
-        maxWidth: 400,
+        minWidth: isMobile ? 'auto' : '320px',
+        maxWidth: isMobile ? '100%' : '400px',
+        width: isMobile ? 'calc(100% - 32px)' : 'auto',
         bgcolor: '#fff',
         boxShadow: 6,
         borderRadius: 2,
-        p: 2,
+        p: isSmallMobile ? 1.5 : 2,
         borderLeft: `6px solid ${getStatusColor(status)}`,
         display: 'flex',
         flexDirection: 'column',
@@ -60,13 +66,22 @@ const CustomStatusNotification = ({
           sx={{
             fontWeight: 'bold',
             color: getStatusColor(status),
-            fontSize: '1.1rem',
+            fontSize: isSmallMobile ? '0.95rem' : '1.1rem',
           }}
         >
           Status: {status} {id && `(Application ID: ${id})`}{' '}
         </Typography>
         {onClose && (
-          <Button size="small" onClick={onClose} sx={{ minWidth: 0, color: '#888' }}>
+          <Button 
+            size="small" 
+            onClick={onClose} 
+            sx={{ 
+              minWidth: 0, 
+              color: '#888',
+              padding: isSmallMobile ? '0px 6px' : '4px 8px',
+              fontSize: isSmallMobile ? '1.2rem' : '1.5rem',
+            }}
+          >
             ×
           </Button>
         )}
@@ -74,25 +89,26 @@ const CustomStatusNotification = ({
       {statusMessage && (
         <Typography
           sx={{
-            fontSize: '0.95rem',
-            mt: 1,
-            p: 1,
+            fontSize: isSmallMobile ? '0.85rem' : '0.95rem',
+            mt: isSmallMobile ? 0.5 : 1,
+            p: isSmallMobile ? 0.75 : 1,
             backgroundColor: '#f5f5f5',
             borderLeft: '3px solid #1c4d5a',
             borderRadius: 1,
             color: '#1c4d5a',
+            wordBreak: 'break-word',
           }}
         >
           Message from Administrator: {statusMessage}
         </Typography>
       )}
       {showBookAppointment && (
-        <Box sx={{ mt: 2, borderTop: '1px solid #ccc', pt: 1 }}>
+        <Box sx={{ mt: isSmallMobile ? 1 : 2, borderTop: '1px solid #ccc', pt: isSmallMobile ? 0.75 : 1 }}>
           <Typography
             variant="body2"
             sx={{
-              fontSize: '0.9rem',
-              mb: 1,
+              fontSize: isSmallMobile ? '0.8rem' : '0.9rem',
+              mb: isSmallMobile ? 0.75 : 1,
               color: '#1c4d5a',
             }}
           >
@@ -102,12 +118,15 @@ const CustomStatusNotification = ({
             variant="contained"
             color="primary"
             size="small"
+            fullWidth={isMobile}
             onClick={onBookAppointment}
             sx={{
               backgroundColor: '#f5f5f5',
               color: '#1c4d5a',
               fontWeight: '600 !important',
               border: '1px solid #1c4d5a',
+              padding: isSmallMobile ? '4px 8px' : '6px 12px',
+              fontSize: isSmallMobile ? '0.75rem' : '0.85rem',
               '&:hover': {
                 backgroundColor: '#0f3a47',
                 color: '#f5f5f5',

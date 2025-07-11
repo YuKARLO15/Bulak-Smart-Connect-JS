@@ -79,9 +79,7 @@ export class AuthService {
       isLocked: current.attempts >= 5,
       lockedUntil: current.lockedUntil,
       timeRemaining: current.lockedUntil
-        ? Math.ceil(
-            (current.lockedUntil.getTime() - Date.now()) / 1000,
-          )
+        ? Math.ceil((current.lockedUntil.getTime() - Date.now()) / 1000)
         : 0,
     };
   }

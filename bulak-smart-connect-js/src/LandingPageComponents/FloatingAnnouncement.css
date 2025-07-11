@@ -48,7 +48,6 @@
   background: #d5dcdd;
   height: auto;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
-  /* Add this to ensure content stays within the container */
   overflow-wrap: break-word;
   word-wrap: break-word;
 }
@@ -58,7 +57,6 @@
   color: #184a5b;
   margin-bottom: 4px;
   font-weight: 600 !important;
-  /* Add these properties to prevent title overflow */
   overflow-wrap: break-word;
   word-break: break-word;
 }
@@ -68,9 +66,7 @@
   margin-bottom: 8px;
   line-height: 1.5;
   height: auto;
-  /* Remove fixed width constraint that was causing overflow */
-  width: 100% !important; /* Change from 15vw to 100% */
-  /* Add these properties to handle text wrapping properly */
+  width: 100% !important;
   overflow-wrap: break-word;
   word-wrap: break-word;
   white-space: normal;
@@ -108,4 +104,80 @@
   top: -17px;
   right: 35px;
   z-index: 1400;
+}
+
+/* Responsive styles for tablets */
+@media (max-width: 768px) {
+  .DialogFab {
+    width: 85%;
+    max-width: 450px;
+    right: 50%;
+    bottom: 50%;
+    transform: translate(50%, 50%);
+  }
+  
+  .FabButtonFab {
+    bottom: 20px;
+    right: 20px;
+  }
+}
+
+/* Responsive styles for mobile phones */
+@media (max-width: 480px) {
+  .DialogFab {
+    width: 90%;
+    max-width: none;
+    height: 80%;
+    max-height: 550px;
+    right: 40%;
+    bottom: 50%;
+    transform: translate(50%, 50%);
+    border-radius: 16px;
+  }
+  
+  .DialogContentFab {
+    height: calc(100% - 56px); /* Adjust for header height */
+  }
+  
+  .FabButtonFab {
+    bottom: 16px;
+    right: 16px;
+    height: 48px !important;
+    width: 48px !important;
+    min-height: 0 !important;
+  }
+  
+  .BadgeFab .MuiBadge-badge {
+    top: -12px;
+    right: 24px;
+    min-width: 18px;
+    height: 18px;
+    font-size: 0.8rem;
+  }
+  
+  .DialogTitleFab {
+    padding: 12px 16px;
+    font-size: 16px;
+  }
+  
+  .AnnouncementItemFab {
+    padding: 12px;
+    margin-bottom: 12px;
+  }
+}
+
+/* Very small devices */
+@media (max-width: 320px) {
+  .DialogFab {
+    width: 95%;
+    height: 85%;
+  }
+  
+  .AnnouncementTitleFab {
+    font-size: 14px;
+  }
+  
+  .AnnouncementDescriptionFab {
+    font-size: 12px;
+  }
 }

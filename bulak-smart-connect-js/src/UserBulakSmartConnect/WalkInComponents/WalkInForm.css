@@ -1,30 +1,39 @@
+
 .WalkInFormContainerWalkIn {
   display: flex;
   flex-direction: column;
   width: 100vw;
+
   color: #333;
-  transition: margin-left ease;
-  margin-left: 0;
+  margin: 0 auto;
+  box-sizing: border-box;
+  overflow-x: hidden;
 }
 
 .WalkInFormContainerWalkIn.sidebar-open {
   margin-left: 250px;
+  transition: margin-left 0.3s ease;
 }
 
 .FormHeaderWalkIn {
   display: flex;
   margin-bottom: 20px;
   background-color: #184a5b;
-  padding: 0%;
   align-items: center;
+  width: 100%;
+  border-radius: 0 0 4px 4px;
 }
 
 .FormHeaderWalkIn h1 {
   font-size: 22px;
   color: white;
-  padding: 20px;
   text-align: center !important;
-  margin-left: 43vw;
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  margin: 0;
 }
 
 .FormTitleWalkIn {
@@ -33,23 +42,31 @@
   margin-left: 5vw;
   margin-top: 3vw;
 }
+
 .FormTitleWalkIn h2 {
   color: #184a5b;
   text-align: start;
+  margin-bottom: 5px;
+}
+
+.FormTitleWalkIn p {
+  margin-top: 5px;
+  color: #555;
 }
 
 .AppointmentBtnWalkIn.ActiveWalkIn {
   background-color: #e0e0e0;
 }
+
 .WalkInForm {
   display: flex;
   flex-direction: column;
-  width: 80vw;
-  height: 100vh;
-  justify-items: center;
-  align-self: center;
+  width: 90%;
+  max-width: 900px;
+  margin: 0 auto;
+  justify-content: center;
   align-items: center;
-  padding: 5%;
+  padding: 2% 5%;
 }
 
 .FormRowWalkIn {
@@ -57,15 +74,14 @@
   flex-direction: row;
   gap: 15px;
   margin-bottom: 20px;
+  width: 100%;
 }
 
 .FormGroupWalkIn {
   flex: 1;
   display: flex;
   flex-direction: column;
-  padding-left: 20px;
-  padding-right: 20px;
-  padding-top: 20px;
+  padding: 15px;
 }
 
 .FormGroupWalkIn.SmallWalkIn {
@@ -83,20 +99,21 @@
 .FormGroupWalkIn input,
 .FormGroupWalkIn select {
   width: 100%;
-  padding: 8px;
+  padding: 10px;
   border-radius: 6px;
   font-size: 16px;
   border: 1.5px solid #2a5764 !important;
   background-color: #fffdfd;
   box-shadow: inset 0px 3px 2px rgba(0, 0, 0, 0.1);
   color: #1c4d5a !important;
+  transition: all 0.2s ease;
 }
 
 .FormGroupWalkIn input:focus,
 .FormGroupWalkIn select:focus {
   outline: none;
-  border: 2px solid #24677a;
-  color: #1c4d5a !important;
+  border: 2px solid #24677a !important;
+  box-shadow: 0 0 5px rgba(36, 103, 122, 0.3);
 }
 
 .FormGroupWalkIn select {
@@ -105,20 +122,13 @@
   background-repeat: no-repeat;
   background-position: right 10px center;
   padding-right: 30px;
-  width: 100%;
-  padding: 8px;
-  border-radius: 6px;
-  font-size: 16px;
-  border: 1.5px solid #2a5764 !important;
-  background-color: #fffdfd;
-  box-shadow: inset 0px 3px 2px rgba(0, 0, 0, 0.1);
-  color: #1c4d5a !important;
 }
 
 .FormActionsWalkIn {
   display: flex;
   justify-content: flex-end;
   margin-top: 30px;
+  width: 100%;
 }
 
 .ConfirmBtnWalkIn {
@@ -130,8 +140,12 @@
   border-radius: 4px;
   font-weight: bold;
   cursor: pointer;
+  transition: background-color 0.2s;
 }
-/* Add these styles to your WalkInForm.css file */
+
+.ConfirmBtnWalkIn:hover {
+  background-color: #1c6674;
+}
 
 .DialogOverlay {
   position: fixed;
@@ -159,11 +173,13 @@
   margin-top: 0;
   font-size: 20px;
   margin-bottom: 12px;
+  color: #184a5b;
 }
 
 .DialogBox p {
   margin-bottom: 24px;
   font-size: 16px;
+  line-height: 1.5;
 }
 
 .DialogActions {
@@ -198,4 +214,225 @@
 
 .NoBtn:hover {
   background-color: #e5e5e5;
+}
+
+/* Large screens (desktops) */
+@media (min-width: 1200px) {
+  .WalkInForm {
+    width: 80%;
+  }
+  
+  .FormGroupWalkIn input,
+  .FormGroupWalkIn select {
+    font-size: 16px;
+    padding: 12px;
+  }
+}
+
+/* Medium-sized screens (tablets) */
+@media (max-width: 992px) {
+  .WalkInFormContainerWalkIn.sidebar-open {
+    margin-left: 200px;
+  }
+  
+  .FormTitleWalkIn {
+    margin-left: 3vw;
+  }
+  
+  .WalkInForm {
+    width: 95%;
+  }
+}
+
+/* Small screens (small tablets and large phones) */
+@media (min-width:526) and (max-width: 768px) {
+  .WalkInFormContainerWalkIn {
+    width: 100%;
+    padding: 10px;
+  }
+
+  .WalkInFormContainerWalkIn.sidebar-open {
+    margin-left: 0;
+  }
+
+  .FormHeaderWalkIn h1 {
+    font-size: 18px;
+    padding: 15px;
+  }
+
+  .FormTitleWalkIn {
+    margin-left: 0;
+    margin-top: 10px;
+    text-align: center;
+  }
+
+  .FormTitleWalkIn h2 {
+    font-size: 18px;
+    text-align: center;
+  }
+
+  .WalkInForm {
+    width: 100%;
+    padding: 10px;
+  }
+
+  .FormRowWalkIn {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .FormGroupWalkIn {
+    padding: 10px;
+  }
+
+  .FormGroupWalkIn.SmallWalkIn {
+    flex: 1;
+  }
+
+  .FormGroupWalkIn label {
+    font-size: 14px;
+  }
+
+  .FormGroupWalkIn input,
+  .FormGroupWalkIn select {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .FormActionsWalkIn {
+    justify-content: center;
+    margin-top: 20px;
+  }
+
+  .ConfirmBtnWalkIn {
+    padding: 10px 20px;
+    margin-right: 0;
+    width: 80%;
+  }
+
+  .DialogBox {
+    width: 95%;
+    max-width: 350px;
+    padding: 20px;
+  }
+}
+
+
+@media  (max-width: 636px) {
+  .WalkInFormContainerWalkIn {
+    width: 100vw;
+   
+  }
+  .WalkInForm{
+    padding: 10px;
+    
+  }
+
+  .FormHeaderWalkIn h1 {
+    font-size: 16px;
+    padding: 30px;
+    
+  }
+
+  .FormTitleWalkIn {
+    margin-left: 30px;
+    margin-top: 30px;
+  }
+
+  .FormTitleWalkIn h2 {
+    font-size: 16px;
+  }
+  
+  .FormTitleWalkIn p {
+    font-size: 14px;
+  }
+
+  .WalkInForm {
+    width: 100%;
+    padding: 10px 5px;
+  }
+
+  .FormRowWalkIn {
+    flex-direction: column !important;
+    gap: 8px;
+  }
+
+  .FormGroupWalkIn {
+    padding: 8px 5px;
+  }
+
+  .FormGroupWalkIn label {
+    font-size: 12px;
+    margin-bottom: 4px;
+  }
+
+  .FormGroupWalkIn input,
+  .FormGroupWalkIn select {
+    font-size: 14px;
+    padding: 8px;
+  }
+
+  .FormActionsWalkIn {
+    justify-content: center;
+    margin-top: 15px;
+  }
+
+  .ConfirmBtnWalkIn {
+    padding: 10px 15px;
+    margin-right: 0;
+    width: 100%;
+  }
+
+  .DialogBox {
+    width: 90%;
+    max-width: 300px;
+    padding: 15px;
+  }
+
+  .DialogBox h3 {
+    font-size: 16px;
+  }
+
+  .DialogBox p {
+    font-size: 12px;
+    margin-bottom: 15px;
+  }
+
+  .DialogActions {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .DialogBtn {
+    width: 100%;
+    font-size: 14px;
+    padding: 8px;
+  }
+}
+
+/* Very small screens */
+@media (max-width: 320px) {
+  .FormHeaderWalkIn h1 {
+    font-size: 14px;
+    padding: 8px;
+  }
+  
+  .FormTitleWalkIn h2 {
+    font-size: 14px;
+  }
+  
+  .FormGroupWalkIn label {
+    font-size: 10px;
+  }
+  
+  .FormGroupWalkIn input,
+  .FormGroupWalkIn select {
+    font-size: 12px;
+    padding: 6px;
+  }
+  
+  .ConfirmBtnWalkIn {
+    font-size: 12px;
+    padding: 8px 12px;
+  }
 }

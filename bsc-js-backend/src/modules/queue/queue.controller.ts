@@ -159,7 +159,9 @@ export class QueueController {
       const result = await this.queueService.update(+id, {
         status: body.status,
       });
-      this.logger.log(`Queue ${id} status updated successfully to ${body.status}`);
+      this.logger.log(
+        `Queue ${id} status updated successfully to ${body.status}`,
+      );
       return result;
     } catch (error) {
       this.logger.error(`Error updating queue ${id} status:`, error);
