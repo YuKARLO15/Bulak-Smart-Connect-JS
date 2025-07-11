@@ -297,8 +297,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="313"
-                                    class="link-to-prism">src/modules/appointment/appointment.service.ts:313</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="316"
+                                    class="link-to-prism">src/modules/appointment/appointment.service.ts:316</a></div>
                         </td>
                     </tr>
 
@@ -735,8 +735,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="338"
-                                    class="link-to-prism">src/modules/appointment/appointment.service.ts:338</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="341"
+                                    class="link-to-prism">src/modules/appointment/appointment.service.ts:341</a></div>
                         </td>
                     </tr>
 
@@ -774,8 +774,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="217"
-                                    class="link-to-prism">src/modules/appointment/appointment.service.ts:217</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="220"
+                                    class="link-to-prism">src/modules/appointment/appointment.service.ts:220</a></div>
                         </td>
                     </tr>
 
@@ -843,8 +843,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="238"
-                                    class="link-to-prism">src/modules/appointment/appointment.service.ts:238</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="241"
+                                    class="link-to-prism">src/modules/appointment/appointment.service.ts:241</a></div>
                         </td>
                     </tr>
 
@@ -924,8 +924,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="261"
-                                    class="link-to-prism">src/modules/appointment/appointment.service.ts:261</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="264"
+                                    class="link-to-prism">src/modules/appointment/appointment.service.ts:264</a></div>
                         </td>
                     </tr>
 
@@ -1491,7 +1491,10 @@ export class AppointmentService {
       // Return only available slots
       return allTimeSlots.filter((slot) &#x3D;&gt; !bookedSlots.includes(slot));
     } catch (error) {
-      this.logger.error(&#x60;Error getting available slots for date ${date}:&#x60;, error);
+      this.logger.error(
+        &#x60;Error getting available slots for date ${date}:&#x60;,
+        error,
+      );
       throw error;
     }
   }

@@ -979,7 +979,7 @@ import { UserResponseDto } from &#x27;./dto/user-response.dto&#x27;;
 @ApiBearerAuth()
 export class UsersController {
   private readonly logger &#x3D; new Logger(UsersController.name);
-  
+
   constructor(private readonly usersService: UsersService) {}
 
   @Get()

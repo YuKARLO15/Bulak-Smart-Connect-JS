@@ -320,8 +320,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="458"
-                                    class="link-to-prism">src/auth/auth.service.ts:458</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="456"
+                                    class="link-to-prism">src/auth/auth.service.ts:456</a></div>
                         </td>
                     </tr>
 
@@ -413,8 +413,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="89"
-                                    class="link-to-prism">src/auth/auth.service.ts:89</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="87"
+                                    class="link-to-prism">src/auth/auth.service.ts:87</a></div>
                         </td>
                     </tr>
 
@@ -482,8 +482,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="614"
-                                    class="link-to-prism">src/auth/auth.service.ts:614</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="612"
+                                    class="link-to-prism">src/auth/auth.service.ts:612</a></div>
                         </td>
                     </tr>
 
@@ -620,8 +620,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="280"
-                                    class="link-to-prism">src/auth/auth.service.ts:280</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="278"
+                                    class="link-to-prism">src/auth/auth.service.ts:278</a></div>
                         </td>
                     </tr>
 
@@ -689,8 +689,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="275"
-                                    class="link-to-prism">src/auth/auth.service.ts:275</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="273"
+                                    class="link-to-prism">src/auth/auth.service.ts:273</a></div>
                         </td>
                     </tr>
 
@@ -758,8 +758,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="96"
-                                    class="link-to-prism">src/auth/auth.service.ts:96</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="94"
+                                    class="link-to-prism">src/auth/auth.service.ts:94</a></div>
                         </td>
                     </tr>
 
@@ -896,8 +896,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="173"
-                                    class="link-to-prism">src/auth/auth.service.ts:173</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="171"
+                                    class="link-to-prism">src/auth/auth.service.ts:171</a></div>
                         </td>
                     </tr>
 
@@ -965,8 +965,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="628"
-                                    class="link-to-prism">src/auth/auth.service.ts:628</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="626"
+                                    class="link-to-prism">src/auth/auth.service.ts:626</a></div>
                         </td>
                     </tr>
 
@@ -1046,8 +1046,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="308"
-                                    class="link-to-prism">src/auth/auth.service.ts:308</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="306"
+                                    class="link-to-prism">src/auth/auth.service.ts:306</a></div>
                         </td>
                     </tr>
 
@@ -1127,8 +1127,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="659"
-                                    class="link-to-prism">src/auth/auth.service.ts:659</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="657"
+                                    class="link-to-prism">src/auth/auth.service.ts:657</a></div>
                         </td>
                     </tr>
 
@@ -1390,9 +1390,7 @@ export class AuthService {
       isLocked: current.attempts &gt;&#x3D; 5,
       lockedUntil: current.lockedUntil,
       timeRemaining: current.lockedUntil
-        ? Math.ceil(
-            (current.lockedUntil.getTime() - Date.now()) / 1000,
-          )
+        ? Math.ceil((current.lockedUntil.getTime() - Date.now()) / 1000)
         : 0,
     };
   }

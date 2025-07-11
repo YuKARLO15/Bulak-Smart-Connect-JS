@@ -489,8 +489,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="274"
-                                    class="link-to-prism">src/modules/document-applications/document-applications.service.ts:274</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="277"
+                                    class="link-to-prism">src/modules/document-applications/document-applications.service.ts:277</a></div>
                         </td>
                     </tr>
 
@@ -651,8 +651,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="397"
-                                    class="link-to-prism">src/modules/document-applications/document-applications.service.ts:397</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="400"
+                                    class="link-to-prism">src/modules/document-applications/document-applications.service.ts:400</a></div>
                         </td>
                     </tr>
 
@@ -732,8 +732,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="299"
-                                    class="link-to-prism">src/modules/document-applications/document-applications.service.ts:299</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="302"
+                                    class="link-to-prism">src/modules/document-applications/document-applications.service.ts:302</a></div>
                         </td>
                     </tr>
 
@@ -813,8 +813,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="247"
-                                    class="link-to-prism">src/modules/document-applications/document-applications.service.ts:247</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="250"
+                                    class="link-to-prism">src/modules/document-applications/document-applications.service.ts:250</a></div>
                         </td>
                     </tr>
 
@@ -882,8 +882,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="284"
-                                    class="link-to-prism">src/modules/document-applications/document-applications.service.ts:284</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="287"
+                                    class="link-to-prism">src/modules/document-applications/document-applications.service.ts:287</a></div>
                         </td>
                     </tr>
 
@@ -1188,8 +1188,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="265"
-                                    class="link-to-prism">src/modules/document-applications/document-applications.service.ts:265</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="268"
+                                    class="link-to-prism">src/modules/document-applications/document-applications.service.ts:268</a></div>
                         </td>
                     </tr>
 
@@ -1654,7 +1654,10 @@ export class DocumentApplicationsService {
       try {
         await this.minioService.deleteFile(file.minioObjectName);
       } catch (error) {
-        this.logger.warn(&#x60;Failed to delete file ${file.minioObjectName}:&#x60;, error);
+        this.logger.warn(
+          &#x60;Failed to delete file ${file.minioObjectName}:&#x60;,
+          error,
+        );
       }
     }
 
@@ -1866,7 +1869,10 @@ export class DocumentApplicationsService {
               downloadUrl: downloadUrl,
             };
           } catch (error) {
-            this.logger.warn(&#x60;Failed to generate URL for file ${file.id}:&#x60;, error);
+            this.logger.warn(
+              &#x60;Failed to generate URL for file ${file.id}:&#x60;,
+              error,
+            );
             return {
               id: file.id,
               fileName: file.fileName,

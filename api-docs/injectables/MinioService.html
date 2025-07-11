@@ -229,8 +229,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="61"
-                                    class="link-to-prism">src/services/minio.service.ts:61</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="77"
+                                    class="link-to-prism">src/services/minio.service.ts:77</a></div>
                         </td>
                     </tr>
 
@@ -298,8 +298,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="48"
-                                    class="link-to-prism">src/services/minio.service.ts:48</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="64"
+                                    class="link-to-prism">src/services/minio.service.ts:64</a></div>
                         </td>
                     </tr>
 
@@ -367,8 +367,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="24"
-                                    class="link-to-prism">src/services/minio.service.ts:24</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="40"
+                                    class="link-to-prism">src/services/minio.service.ts:40</a></div>
                         </td>
                     </tr>
 
@@ -529,15 +529,31 @@ export class MinioService {
   private bucketName: string;
 
   constructor() {
-    this.minioClient &#x3D; new Minio.Client({
+    const enablePort &#x3D; process.env.MINIO_ENABLE_PORT !&#x3D;&#x3D; &#x27;false&#x27;; // Default to true for backward compatibility
+
+    const minioConfig: {
+      endPoint: string;
+      useSSL: boolean;
+      accessKey: string;
+      secretKey: string;
+      region: string;
+      pathStyle: boolean;
+      port?: number;
+    } &#x3D; {
       endPoint: process.env.MINIO_ENDPOINT || &#x27;localhost&#x27;,
-      port: parseInt(process.env.MINIO_PORT || &#x27;9000&#x27;),
       useSSL: process.env.MINIO_USE_SSL &#x3D;&#x3D;&#x3D; &#x27;true&#x27;,
       accessKey: process.env.MINIO_ACCESS_KEY || &#x27;minioadmin&#x27;,
       secretKey: process.env.MINIO_SECRET_KEY || &#x27;minioadmin123&#x27;,
       region: &#x27;auto&#x27;, // R2 uses &#x27;auto&#x27; region
       pathStyle: true, // Required for R2 compatibility
-    });
+    };
+
+    // Conditionally include port for R2 compatibility
+    if (enablePort) {
+      minioConfig.port &#x3D; parseInt(process.env.MINIO_PORT || &#x27;9000&#x27;);
+    }
+
+    this.minioClient &#x3D; new Minio.Client(minioConfig);
 
     this.bucketName &#x3D; process.env.MINIO_BUCKET_NAME || &#x27;bulak-smart-connect&#x27;;
   }
