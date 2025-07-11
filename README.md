@@ -1376,6 +1376,7 @@ MINIO_USE_SSL=false
 MINIO_ACCESS_KEY=minioadmin
 MINIO_SECRET_KEY=minioadmin123
 MINIO_BUCKET_NAME=bulak-smart-connect
+MINIO_ENABLE_PORT=true
 FILE_STORAGE_TYPE=minio
 
 # Swagger Documentation
