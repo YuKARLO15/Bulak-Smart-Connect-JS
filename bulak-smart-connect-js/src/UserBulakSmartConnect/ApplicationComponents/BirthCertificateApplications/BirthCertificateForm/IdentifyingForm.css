@@ -181,7 +181,9 @@
   min-width: 80px;
   background-color: #ffffff;
 }
-
+.SexSectionChild {
+  margin-left: 140px;
+}
 .DateSectionContainerChild {
   display: flex;
   flex-direction: column;
@@ -379,13 +381,42 @@
   .TypeBirthContainerChild {
     width: 100%;
   }
-}
 
+}
+@media screen and (max-width: 768px) {
+  /* Make the birth date and sex sections stack on mobile */
+  .FormRowChild {
+    flex-direction: column;
+  }
+  
+  /* Add space between the stacked sections */
+  .SectionTitleHalfChild {
+    margin-top: 20px;
+  }
+  
+  /* Improve the radio group layout for sex selection */
+  .SexContainerChild .RadioGroupChild {
+    display: flex;
+    flex-direction: row;
+    gap: 24px;
+    justify-content: flex-start;
+  }
+  
+  /* First section title shouldn't have extra top margin */
+  .FormSectionChild:first-child .SectionTitleHalfChild {
+    margin-top: 0;
+  }
+}
 @media screen and (max-width: 576px) {
   .FormContentChild {
     padding: 12px 8px;
   }
-
+.SexSectionChild{
+  margin-left: 0px;
+}
+.SexContainerChild{
+  margin-top: 5px !important;
+}
   .FormGroupChild {
     width: 100%;
     flex: none;
@@ -416,4 +447,37 @@
   .RadioLabelChild {
     font-size: 0.8rem;
   }
+}
+@media screen and (max-width: 576px) {
+  .DateSectionContainerChild {
+    width: 100%;
+  }
+
+  .DateRowChild {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .DateInputsRowChild {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .DateLabelChild {
+    font-size: 0.875rem;
+    margin-bottom: 2px;
+  }
+
+  .SelectInputChild.DateSelectChild {
+    margin-bottom: 8px;
+  }
+
+  /* Improve select elements on mobile */
+  .SelectInputChild {
+    width: 100%;
+    min-width: 100%;
+    font-size: 14px ;
+    padding: 8px 6px;
+  }
+  
 }

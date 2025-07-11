@@ -65,3 +65,45 @@
   font-weight: 500;
   text-align: center;
 }
+@media screen and (max-width: 768px) {
+  .BirthCertificateForm {
+    width: 90vw;
+    margin-top: 20px;
+  }
+
+  .FormTitleHeader {
+    padding: 10px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  .back-button-home-form {
+    position: absolute; 
+    left: 10px;
+    margin-bottom: 0;
+    font-size: 0.75rem !important;
+    padding: 4px 10px !important;
+  }
+
+  .FormTitleText {
+    font-size: 1.2rem !important;
+    text-align: center;
+    padding: 0 40px; 
+  }
+}
+
+
+@media screen and (max-width: 480px) {
+  .FormTitleText {
+    font-size: 0.9rem !important;
+    padding: 0 30px;
+  }
+  
+  .back-button-home-form {
+    padding: 2px 8px !important;
+    font-size: 0.7rem !important;
+    left: 5px;
+  }
+}

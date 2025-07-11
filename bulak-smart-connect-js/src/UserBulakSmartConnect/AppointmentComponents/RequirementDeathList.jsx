@@ -33,13 +33,13 @@ const RequirementDeathList = () => {
           >
             Back
           </Button>
-          <Typography variant="h5">Requirements for Registration of Death Certificate</Typography>
+          <Typography variant="h5">Requirements for Death Certificate</Typography>
         </Box>
 
         {/* Death Registration */}
         <Box className="requirement-section-death">
           <Typography variant="h6" className="requirement-section-title-death">
-            For Registration of Death (at the Local Civil Registry Office - LCRO)
+            For Registration of Death 
           </Typography>
 
           <Box className="requirement-subsection-death">

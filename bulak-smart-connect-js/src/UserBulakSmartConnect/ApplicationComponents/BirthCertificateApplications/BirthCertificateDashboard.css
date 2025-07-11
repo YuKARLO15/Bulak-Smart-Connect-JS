@@ -4,6 +4,7 @@
   align-items: center;
   height: 100vh;
   width: 100vw;
+  overflow-x: hidden;
 }
 
 .FormTitle {
@@ -11,8 +12,8 @@
   font-weight: bold;
   background-color: #1c4d5a;
   color: white;
-  font-size: 2vw !important;
-  width: 100vw;
+  font-size: min(2vw, 24px) !important;
+  width: 100%;
   padding: 15px;
   text-align: center;
 }
@@ -20,7 +21,7 @@
 .FormTitleContent {
   display: flex;
   align-items: center;
-  justify-content: center; /* centers the text horizontally */
+  justify-content: center;
   position: relative;
 }
 
@@ -31,7 +32,7 @@
 
 .back-button-home {
   position: absolute;
-  left: 60px;
+  left: 20px;
   background-color: #184a5b !important;
   color: #f5f5f5 !important;
   border-color: none;
@@ -44,23 +45,15 @@
   background-color: white !important;
   color: #184a5b !important;
 }
+
 .FormPaper {
   padding: 20px;
   width: 80vw !important;
+  max-width: 1200px;
   background-color: white;
   border-radius: 8px;
   margin-top: 5vh !important;
 }
-
-/* .FormTitle {
-  text-align: center;
-  font-weight: bold;
-  background-color: #1c4d5a;
-  color: white;
-  font-size: 2vw !important;
-  width: 100vw;
-  padding: 15px;
-} */
 
 .Section {
   margin-bottom: 15px;
@@ -77,7 +70,7 @@
 }
 
 .SubTitleBirthCertificate {
-  font-size: 1.3vw !important;
+  font-size: clamp(14px, 1.3vw, 18px) !important;
   color: #555;
   margin-left: 35px !important;
   text-align: start;
@@ -85,16 +78,18 @@
   font-weight: bold !important;
   margin-top: 3vh !important;
 }
+
 .BirthDashRadioGroup {
   margin-left: 30px !important;
 }
+
 .BirthNextButton {
   background-color: #1c4d5a !important;
   color: white !important;
-  width: 10vw;
+  width: clamp(120px, 10vw, 200px);
   margin-top: 5vh !important;
 }
-/* for Nav side bar */
+
 .BirthDashboardContainer {
   transition: margin-left ease;
   margin-left: 0;
@@ -102,22 +97,116 @@
 
 .BirthDashboardContainer.sidebar-open {
   margin-left: 250px;
-  width: 80vw;
+  width: calc(100vw - 250px);
 }
+
 .dataPrivacyNotice {
   font-size: 12px;
   color: #1c4d5a;
   font-weight: bold;
   margin-top: 20px !important;
 }
+
 .dataPrivacyNoticeLink {
   color: #1c4d5a !important;
   font-weight: bold !important;
 }
+
 .dataPrivacyNoticeContainer {
   margin-left: 20px;
 }
 
 .Privacy-TagalogNotice {
   color: rgb(72, 71, 71);
+}
+
+@media screen and (max-width: 1024px) {
+  .FormPaper {
+    width: 90vw !important;
+  }
+  
+  .BirthDashboardContainer.sidebar-open {
+    margin-left: 200px;
+    width: calc(100vw - 200px);
+  }
+    .SubTitleBirthCertificate {
+    margin-left: 20px !important;
+   font-size: 18px   !important;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .FormTitle {
+    font-size: 18px !important;
+    padding: 12px;
+  }
+  
+  .back-button-home {
+    left: 10px;
+    padding: 4px 10px !important;
+    font-size: 0.75rem !important;
+  }
+  
+  .FormPaper {
+    width: 95vw !important;
+    padding: 15px;
+  }
+  
+  .SubTitleBirthCertificate {
+    margin-left: 20px !important;
+   font-size: 18px   !important;
+  }
+  
+  .BirthDashRadioGroup {
+    margin-left: 15px !important;
+  }
+  
+  .BirthDashboardContainer.sidebar-open {
+    margin-left: 0;
+    width: 100vw;
+  }
+  
+  .dataPrivacyNoticeContainer {
+    margin-left: 10px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .FormTitle {
+    font-size: 16px !important;
+    padding: 10px;
+  }
+  
+  .back-button-home {
+    left: 5px;
+    padding: 3px 8px !important;
+    font-size: 0.7rem !important;
+  }
+  
+  .FormPaper {
+    padding: 10px;
+    margin-top: 3vh !important;
+  }
+  
+  .SectionTitle {
+    padding: 8px;
+  }
+  
+  .SubTitleBirthCertificate {
+    margin-left: 10px !important;
+    margin-top: 2vh !important;
+  font-size: 18px   !important;
+  }
+  
+  .BirthDashRadioGroup {
+    margin-left: 5px !important;
+  }
+  
+  .BirthNextButton {
+    width: 100%;
+  }
+  
+  .dataPrivacyNoticeContainer {
+    margin-left: 5px;
+  }
 }

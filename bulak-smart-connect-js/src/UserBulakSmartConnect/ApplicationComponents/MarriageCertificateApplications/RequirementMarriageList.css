@@ -4,17 +4,26 @@
 }
 
 .marriage-requirement-paper {
+  width: 100%;
+  margin: 0;
   padding: 0;
+  box-shadow: none !important;
+  border-radius: 0;
 }
 
 .marriage-requirement-main-title {
   background-color: #184a5b;
   color: white;
-  padding: 15px;
-  margin-bottom: 20px !important;
+  margin: 0 !important;
   display: flex;
   align-items: center;
-  position: relative;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: 0;
+  height: 60px;
 }
 
 .marriage-requirement-main-title .marriage-back-button {
@@ -37,6 +46,7 @@
   font-weight: 600;
   text-align: center;
   flex-grow: 1;
+  padding: 0 100px;
 }
 
 .marriage-requirement-section {
@@ -165,24 +175,35 @@
   text-align: left !important;
 }
 
-@media screen and (max-width: 600px) {
-  .marriage-requirement-paper {
-    padding: 12px;
-  }
-
+@media screen and (max-width: 768px) {
   .marriage-requirement-main-title {
-    font-size: 1.2rem !important;
+    padding: 15px 10px;
   }
-
-  .marriage-requirement-section-title {
+  
+  .marriage-requirement-main-title h5 {
     font-size: 1.1rem !important;
+    padding: 0 80px;
   }
-
-  .marriage-requirement-subsection-title {
-    font-size: 0.95rem !important;
+  
+  .marriage-requirement-main-title .marriage-back-button {
+    left: 15px;
+    max-width: 70px !important;
   }
+}
 
-  .marriage-requirement-nested-list {
-    padding-left: 20px !important;
+@media screen and (max-width: 480px) {
+  .marriage-requirement-main-title {
+    padding: 15px 5px;
+  }
+  
+  .marriage-requirement-main-title h5 {
+    font-size: 0.7rem !important;
+  
+  }
+  
+  .marriage-requirement-main-title .marriage-back-button {
+    left: 10px;
+    max-width: 60px !important;
+    padding: 3px 8px !important;
   }
 }
