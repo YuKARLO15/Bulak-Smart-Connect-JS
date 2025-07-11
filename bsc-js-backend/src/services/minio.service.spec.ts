@@ -34,6 +34,120 @@ describe('MinioService', () => {
     expect(service).toBeDefined();
   });
 
+  describe('MinIO client configuration with MINIO_ENABLE_PORT', () => {
+    let originalEnv: NodeJS.ProcessEnv;
+    let originalMinioClient: unknown;
+
+    beforeEach(() => {
+      originalEnv = process.env;
+      originalMinioClient = require('minio').Client;
+    });
+
+    afterEach(() => {
+      process.env = originalEnv;
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      require('minio').Client = originalMinioClient;
+    });
+
+    it('should include port when MINIO_ENABLE_PORT is true', async () => {
+      const mockMinioConstructor = jest.fn();
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      require('minio').Client = mockMinioConstructor;
+
+      process.env = {
+        ...originalEnv,
+        MINIO_ENDPOINT: 'localhost',
+        MINIO_PORT: '9000',
+        MINIO_USE_SSL: 'false',
+        MINIO_ACCESS_KEY: 'minioadmin',
+        MINIO_SECRET_KEY: 'minioadmin123',
+        MINIO_ENABLE_PORT: 'true',
+      };
+
+      const module: TestingModule = await Test.createTestingModule({
+        providers: [MinioService],
+      }).compile();
+
+      module.get<MinioService>(MinioService);
+
+      expect(mockMinioConstructor).toHaveBeenCalledWith(
+        expect.objectContaining({
+          endPoint: 'localhost',
+          port: 9000,
+          useSSL: false,
+          accessKey: 'minioadmin',
+          secretKey: 'minioadmin123',
+          region: 'auto',
+          pathStyle: true,
+        }),
+      );
+    });
+
+    it('should exclude port when MINIO_ENABLE_PORT is false', async () => {
+      const mockMinioConstructor = jest.fn();
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      require('minio').Client = mockMinioConstructor;
+
+      process.env = {
+        ...originalEnv,
+        MINIO_ENDPOINT: 'r2.example.com',
+        MINIO_PORT: '9000',
+        MINIO_USE_SSL: 'true',
+        MINIO_ACCESS_KEY: 'r2-access-key',
+        MINIO_SECRET_KEY: 'r2-secret-key',
+        MINIO_ENABLE_PORT: 'false',
+      };
+
+      const module: TestingModule = await Test.createTestingModule({
+        providers: [MinioService],
+      }).compile();
+
+      module.get<MinioService>(MinioService);
+
+      expect(mockMinioConstructor).toHaveBeenCalledWith(
+        expect.objectContaining({
+          endPoint: 'r2.example.com',
+          useSSL: true,
+          accessKey: 'r2-access-key',
+          secretKey: 'r2-secret-key',
+          region: 'auto',
+          pathStyle: true,
+        }),
+      );
+
+      // Ensure port is NOT included
+      expect(mockMinioConstructor.mock.calls[0][0]).not.toHaveProperty('port');
+    });
+
+    it('should default to including port when MINIO_ENABLE_PORT is not set', async () => {
+      const mockMinioConstructor = jest.fn();
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      require('minio').Client = mockMinioConstructor;
+
+      process.env = {
+        ...originalEnv,
+        MINIO_ENDPOINT: 'localhost',
+        MINIO_PORT: '9000',
+        MINIO_USE_SSL: 'false',
+        MINIO_ACCESS_KEY: 'minioadmin',
+        MINIO_SECRET_KEY: 'minioadmin123',
+        // MINIO_ENABLE_PORT not set
+      };
+
+      const module: TestingModule = await Test.createTestingModule({
+        providers: [MinioService],
+      }).compile();
+
+      module.get<MinioService>(MinioService);
+
+      expect(mockMinioConstructor).toHaveBeenCalledWith(
+        expect.objectContaining({
+          port: 9000,
+        }),
+      );
+    });
+  });
+
   describe('uploadFile', () => {
     it('should upload a file successfully', async () => {
       const mockFile = {
