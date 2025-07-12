@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'; //useState Here
+import React, { useState, useEffect } from 'react';
 import logger from '../utils/logger';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -18,9 +18,12 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import ForgotPassword from './ForgotPassword';
 import './LogInCard.css';
 import { Link as RouterLink, useNavigate, useLocation } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext'; //Current AuthContext to handle login and roles
-import { authService } from '../services/api'; //API Service to NestJS, initially used on early iteration of the login, without the roles
+import { useAuth } from '../context/AuthContext'; 
+import { authService } from '../services/api'; 
 import { authLockoutService } from '../services/authLockoutService';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
+
 
 export default function LogInCard({ onLogin }) {
   const location = useLocation();
@@ -43,6 +46,7 @@ export default function LogInCard({ onLogin }) {
   const [message, setMessage] = useState({ text: '', type: '' });
   const navigate = useNavigate();
   const { login, hasRole, isStaff } = useAuth(); // New AuthContext to handle login and roles
+const [openErrorSnackbar, setOpenErrorSnackbar] = useState(false);
 
   // Load saved credentials on component mount
   useEffect(() => {
@@ -58,6 +62,11 @@ export default function LogInCard({ onLogin }) {
       setRememberMe(true);
     }
   }, []);
+  useEffect(() => {
+  if (error) {
+    setOpenErrorSnackbar(true);
+  }
+}, [error]);
 
   // Show message from password change redirect
   useEffect(() => {
@@ -461,41 +470,106 @@ export default function LogInCard({ onLogin }) {
               ? 'Logging in...'
               : 'Log In'}
         </Button>
-        {error && (
-          <Box sx={{ mt: 2 }}>
-            <Typography
-              color="error"
-              sx={{
-                fontSize: '0.9rem',
-                textAlign: 'center',
-                backgroundColor: isAccountLocked ? '#ffebee' : 'transparent',
-                padding: isAccountLocked ? '12px' : '0',
-                borderRadius: isAccountLocked ? '8px' : '0',
-                border: isAccountLocked ? '1px solid #ffcdd2' : 'none',
-              }}
-            >
-              {error}
-            </Typography>
 
-            {/* Show unlock countdown if account is locked */}
-            {isAccountLocked && (
-              <Box sx={{ mt: 2, textAlign: 'center' }}>
-                <Typography variant="body2" color="text.secondary">
-                  🕐 Account will unlock in: {formatTimeRemaining(lockoutTimeRemaining)}
-                </Typography>
-                <Button
-                  variant="outlined"
-                  size="small"
-                  onClick={handleClickOpen}
-                  sx={{ mt: 1, color: '#184a5b', borderColor: '#184a5b' }}
-                >
-                  Reset Password Instead
-                </Button>
-              </Box>
-            )}
-          </Box>
-        )}
+
+<Snackbar
+  open={openErrorSnackbar && Boolean(error)}
+  autoHideDuration={7000}
+  onClose={() => setOpenErrorSnackbar(false)}
+  anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }} 
+  sx={{
+    mb: 2, 
+    mr: 2  
+  }}
+>
+  <Alert 
+    onClose={() => setOpenErrorSnackbar(false)} 
+    severity="error" 
+    variant="filled"
+    sx={{ 
+      width: '100%',
+      maxWidth: '400px',
+      borderRadius: '8px',
+      boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+      backgroundColor: '#ffff', 
+      '& .MuiAlert-icon': {
+        color: '#b91f1fff'
+      },
+      '& .MuiAlert-message': {
+        color: '#184a5b'
+      },
+      '& .MuiAlert-action': {
+        color: '#184a5b'
+      }
+    }}
+  >
+    <Typography 
+      variant="body2"
+      sx={{ 
+        fontWeight: 500, 
+        color: 'red',
+        mb: !isAccountLocked ? 1: 0,
+      }}
+    >
+      {error}
+    </Typography>
+    
+    {!isAccountLocked && (
+      <Link
+        component="button"
+        type="button"
+        onClick={() => {
+          handleClickOpen();
+          setOpenErrorSnackbar(false);
+        }}
+        variant="body2"
+        sx={{
+           color: '#184a5b',
+          textDecoration: 'underline',
+          textAlign: 'center',
+          justifyContent: 'center',
+          mt: 1,
+          '&:hover': {
+            textDecoration: 'none',
+          }
+        }}
+      >
+        Forgot your password?
+      </Link>
+    )}
+    
+    {isAccountLocked && (
+      <Box sx={{ mt: 1, textAlign: 'center' }}>
+        <Typography 
+          variant="body2"
+          sx={{ color: '#184a5b', fontWeight: 500 }}
+        >
+          🕐 Account will unlock in: {formatTimeRemaining(lockoutTimeRemaining)}
+        </Typography>
+        <Button
+          variant="outlined"
+          size="small"
+          onClick={() => {
+            handleClickOpen();
+            setOpenErrorSnackbar(false);
+          }}
+          sx={{ 
+            mt: 1,
+            color: 'white',
+            color: '#184a5b',
+            '&:hover': {
+              backgroundColor: 'rgba(255, 255, 255, 0.1)',
+              borderColor: 'white'
+            }
+          }}
+        >
+          Reset Password
+        </Button>
       </Box>
+    )}
+  </Alert>
+</Snackbar>
+        </Box>
     </Card>
   );
 }

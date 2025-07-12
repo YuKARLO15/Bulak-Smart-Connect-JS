@@ -250,9 +250,24 @@
   text-align: left;
   border-bottom: 2px solid rgba(28, 77, 90, 0.1);
   padding-bottom: 12px;
+  justify-content: space-between;
+  display: flex;
+
+}
+.ButtonDisplay {
+  background: #1c4d5a;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 5px 20px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.ButtonDisplay:hover {
+  background: #163944;
 }
 
-/* Queue Content Styles */
 .queue-content {
   width: 100%;
 }
