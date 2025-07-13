@@ -158,7 +158,7 @@ const RecentApplicationsComponent = () => {
             logger.log('Stored application data in localStorage');
             navigate('/BirthApplicationSummary');
           } else {
-            // Local data structure - works as before
+         
             localStorage.setItem(
               'birthCertificateApplication',
               JSON.stringify(applicationData.formData)
@@ -167,7 +167,7 @@ const RecentApplicationsComponent = () => {
             navigate('/BirthApplicationSummary');
           }
         } else if (applicationData) {
-          // Backend data without formData - create a basic structure
+          
           const basicFormData = {
             fullName: applicationData.fullName || '',
             status: applicationData.status,
@@ -179,29 +179,35 @@ const RecentApplicationsComponent = () => {
           navigate('/BirthApplicationSummary');
         }
       } else if (applicationType === 'Marriage Certificate') {
-        if (applicationData?.formData) {
-          localStorage.setItem('marriageFormData', JSON.stringify(applicationData.formData));
-          localStorage.setItem('currentMarriageApplicationId', application.id);
-          navigate('/MarriageSummaryForm');
-        } else if (applicationData) {
-          const convertedFormData = convertBackendToFormData(
-            applicationData,
-            'Marriage Certificate'
-          );
-          localStorage.setItem('marriageFormData', JSON.stringify(convertedFormData));
-          localStorage.setItem('currentMarriageApplicationId', application.id);
-          navigate('/MarriageSummaryForm');
-        }
-      } else if (applicationType === 'Marriage License') {
-        if (applicationData?.formData) {
-          localStorage.setItem('marriageFormData', JSON.stringify(applicationData.formData));
-          navigate('/MarriageLicenseSummary');
-        } else if (applicationData) {
-          const convertedFormData = convertBackendToFormData(applicationData, 'Marriage License');
-          localStorage.setItem('marriageFormData', JSON.stringify(convertedFormData));
-          navigate('/MarriageLicenseSummary');
-        }
-      } else {
+  if (applicationData?.formData) {
+    localStorage.setItem('marriageFormData', JSON.stringify(applicationData.formData));
+    localStorage.setItem('currentApplicationId', application.id);
+    localStorage.setItem('currentMarriageApplicationId', application.id);
+    navigate('/MarriageSummaryForm');
+  } else if (applicationData) {
+    const convertedFormData = convertBackendToFormData(
+      applicationData,
+      'Marriage Certificate'
+    );
+    localStorage.setItem('marriageFormData', JSON.stringify(convertedFormData));
+    localStorage.setItem('currentApplicationId', application.id);
+    localStorage.setItem('currentMarriageApplicationId', application.id);
+    navigate('/MarriageSummaryForm');
+  }
+} else if (applicationType === 'Marriage License') {
+  if (applicationData?.formData) {
+    localStorage.setItem('marriageFormData', JSON.stringify(applicationData.formData));
+    localStorage.setItem('currentApplicationId', application.id);
+    localStorage.setItem('currentMarriageApplicationId', application.id);
+    navigate('/MarriageLicenseSummary');
+  } else if (applicationData) {
+    const convertedFormData = convertBackendToFormData(applicationData, 'Marriage License');
+    localStorage.setItem('marriageFormData', JSON.stringify(convertedFormData));
+    localStorage.setItem('currentApplicationId', application.id); 
+    localStorage.setItem('currentMarriageApplicationId', application.id);
+    navigate('/MarriageLicenseSummary');
+  }
+}else {
         // Generic handler for unknown types or backend applications
         localStorage.setItem('currentApplicationId', application.id);
         localStorage.setItem('backendApplicationData', JSON.stringify(applicationData));
@@ -284,8 +290,10 @@ const RecentApplicationsComponent = () => {
         brideName:
           formData.brideName ||
           `${formData.brideFirstName || ''} ${formData.brideMiddleName || ''} ${formData.brideLastName || ''}`.trim(),
-        marriageDate: formData.marriageDate || '',
-        marriagePlace: formData.marriagePlace || '',
+marriageDate:
+  formData.marriageMonth && formData.marriageDay && formData.marriageYear
+    ? `${formData.marriageMonth} ${formData.marriageDay}, ${formData.marriageYear}`
+    : '',        marriagePlace: formData.marriagePlace || '',
 
         // System fields
         status: backendData.status,
