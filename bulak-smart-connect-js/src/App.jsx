@@ -12,6 +12,7 @@ import OTPTest from './components/OTPTest';
 import FloatingAnnouncementButton from './LandingPageComponents/FloatingAnnouncement';
 import { Box, Button, Container, Grid, Typography, Card, CardContent } from '@mui/material';
 import UserLayout from './UserBulakSmartConnect/NotificationComponent/UserNotification';
+import UpdateNotification from './components/UpdateNotification';
 //-----------SERVICES --------------//
 //import { localStorageManager } from './services/localStorageManager';
 
@@ -218,6 +219,7 @@ function App() {
         </Box>
       )}
       <OfflineIndicator />
+      <UpdateNotification />
     </AuthProvider>
   );
 }
