@@ -17,10 +17,18 @@ const PRIMARY_BLUE = '#1C4D5A';
 const Light_Blue = '#d5dcdd';
 
 const InstallPrompt = ({ open, onClose }) => {
-  const { installPWA } = usePWA();
+  const { installPWA, dismissInstallPrompt } = usePWA();
 
-  const handleInstall = () => {
-    installPWA();
+  const handleInstall = async () => {
+    const success = await installPWA();
+    if (success) {
+      onClose();
+    }
+    // If not successful, installPWA will show manual instructions
+  };
+
+  const handleDismiss = () => {
+    dismissInstallPrompt();
     onClose();
   };
 
@@ -113,7 +121,7 @@ const InstallPrompt = ({ open, onClose }) => {
           Install Now
         </Button>
         <Button
-          onClick={onClose}
+          onClick={handleDismiss}
           color="inherit"
           sx={{
             borderRadius: 2,
