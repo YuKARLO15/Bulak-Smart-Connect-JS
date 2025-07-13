@@ -146,7 +146,7 @@
   }
 }
 
-@media (min-width:385px) and (max-width: 480px) {
+@media (min-width:385px) and (max-width: 560px) {
   .NavBarContainer {
     padding: 6px 8px;
     flex-wrap: nowrap;
@@ -164,14 +164,14 @@
 
   .NavButtons {
     margin-right: 5px;
-    gap: 4px;
+    gap: 2px !important;
     flex-wrap: wrap;
     justify-content: flex-end;
   }
 
   .NavBarContainer Button {
-    padding: 5px 8px;
-    font-size: 10px !important;
+    padding: 2px 4px;
+    font-size: 8px !important;
     margin: 0 1px;
     border-radius: 18px;
   }
@@ -189,7 +189,7 @@
     min-width: 36px !important;
   }
 }
-@media (max-width: 385px) {
+@media (max-width: 480px) {
   .NavBarContainer {
     padding: 4px 6px;
     flex-wrap: nowrap;
