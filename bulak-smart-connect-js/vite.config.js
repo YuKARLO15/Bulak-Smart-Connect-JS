@@ -25,6 +25,9 @@ export default defineConfig({
         type: 'module' // Use 'module' for modern browsers, 'classic' for older browsers
       },
       workbox: {
+        // **ENHANCED**: More aggressive cache busting
+        skipWaiting: true,
+        clientsClaim: true,
         globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
         runtimeCaching: [
           {
@@ -41,7 +44,9 @@ export default defineConfig({
               }
             }
           }
-        ]
+        ],
+        // **FORCE UPDATE**: Clear old caches on update
+        cleanupOutdatedCaches: true,
       },
       includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'masked-icon.svg'],
       manifest: {
@@ -116,6 +121,10 @@ export default defineConfig({
     minify: 'esbuild',
     rollupOptions: {
       output: {
+        // **ENHANCED**: Better cache busting for builds
+        entryFileNames: 'assets/[name]-[hash].js',
+        chunkFileNames: 'assets/[name]-[hash].js',
+        assetFileNames: 'assets/[name]-[hash].[ext]',
         manualChunks: {
           vendor: ['react', 'react-dom'],
           mui: ['@mui/material', '@mui/icons-material'],

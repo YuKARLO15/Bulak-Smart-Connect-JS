@@ -60,18 +60,20 @@ export const usePWA = () => {
       setDeferredPrompt(e);
       setCanInstall(true);
       
-      // **KEY FIX**: Show install prompt immediately in production
-      // Don't wait for user interaction in production environments
-      const isProduction = window.location.hostname !== 'localhost' && 
-                          window.location.hostname !== '127.0.0.1';
+      // **CRITICAL FIX**: Only prevent default, don't auto-show
+      // Let user interaction trigger the prompt to avoid browser blocking
+      console.log('💾 Install prompt deferred - waiting for user interaction');
       
-      if (isProduction) {
-        // In production, show prompt immediately to avoid browser timeout
-        console.log('🚀 Production environment detected - showing install prompt immediately');
-        setShowInstallPrompt(true);
-      } else {
-        // In development, you can delay if needed
-        setTimeout(() => setShowInstallPrompt(true), 1000);
+      // Check if we should show our custom modal
+      const lastPromptTime = localStorage.getItem('pwa-install-prompt-time');
+      const now = Date.now();
+      const oneDayMs = 24 * 60 * 60 * 1000;
+      
+      if (!lastPromptTime || (now - parseInt(lastPromptTime)) > oneDayMs) {
+        // Small delay to avoid immediate conflicts
+        setTimeout(() => {
+          setShowInstallPrompt(true);
+        }, 500);
       }
     };
 
@@ -105,15 +107,20 @@ export const usePWA = () => {
     if (deferredPrompt) {
       try {
         console.log('📱 Using deferred prompt...');
-        deferredPrompt.prompt();
+        
+        // **CRITICAL**: This must be called within user interaction
+        await deferredPrompt.prompt();
         const { outcome } = await deferredPrompt.userChoice;
         
         console.log('📊 Install prompt outcome:', outcome);
 
         if (outcome === 'accepted') {
           console.log('✅ User accepted the install prompt');
+        } else {
+          console.log('❌ User dismissed the install prompt');
         }
 
+        // Clean up regardless of outcome
         setDeferredPrompt(null);
         setShowInstallPrompt(false);
         localStorage.setItem('pwa-install-prompt-time', Date.now().toString());
@@ -121,11 +128,15 @@ export const usePWA = () => {
         return outcome === 'accepted';
       } catch (error) {
         console.error('❌ Error during installation:', error);
+        
+        // If prompt fails, show manual instructions
+        showManualInstallInstructions();
+        return false;
       }
     }
 
     // Fallback: show manual installation instructions
-    console.log('📖 Showing manual installation instructions...');
+    console.log('📖 No deferred prompt available - showing manual installation instructions...');
     showManualInstallInstructions();
     return false;
   };
@@ -162,6 +173,10 @@ export const usePWA = () => {
       existingModal.remove();
     }
 
+    // Colors matching InstallPrompt.jsx
+    const PRIMARY_BLUE = '#1C4D5A';
+    const Light_Blue = '#d5dcdd';
+
     // Create modal
     const modal = document.createElement('div');
     modal.id = 'pwa-install-modal';
@@ -181,8 +196,8 @@ export const usePWA = () => {
 
     const content = document.createElement('div');
     content.style.cssText = `
-      background: white;
-      border-radius: 12px;
+      background: linear-gradient(135deg, #fff 80%, ${Light_Blue} 100%);
+      border-radius: 16px;
       padding: 24px;
       max-width: 400px;
       margin: 20px;
@@ -190,26 +205,54 @@ export const usePWA = () => {
     `;
 
     content.innerHTML = `
-      <h3 style="margin: 0 0 16px 0; color: #1C4D5A; font-size: 18px; font-weight: 600;">${title}</h3>
-      <p style="margin: 0 0 20px 0; color: #333; line-height: 1.5; white-space: pre-line;">${instructions}</p>
-      <div style="display: flex; gap: 12px; justify-content: flex-end;">
+      <h3 style="
+        margin: 0 0 16px 0; 
+        color: ${PRIMARY_BLUE}; 
+        font-size: 18px; 
+        font-weight: 600;
+        text-align: center;
+      ">${title}</h3>
+      <p style="
+        margin: 0 0 24px 0; 
+        color: #222; 
+        line-height: 1.6; 
+        white-space: pre-line;
+        font-size: 14px;
+      ">${instructions}</p>
+      <div style="
+        display: flex; 
+        gap: 12px; 
+        justify-content: center;
+      ">
         <button id="pwa-modal-close" style="
-          background: #f5f5f5;
+          background: transparent;
           border: none;
-          border-radius: 6px;
-          padding: 8px 16px;
+          border-radius: 8px;
+          padding: 12px 24px;
           cursor: pointer;
           font-size: 14px;
-        ">Maybe Later</button>
+          font-weight: 500;
+          color: #757575;
+          transition: background-color 0.2s ease;
+        " 
+        onmouseover="this.style.backgroundColor='#f5f5f5'"
+        onmouseout="this.style.backgroundColor='transparent'"
+        >Maybe Later</button>
         <button id="pwa-modal-ok" style="
-          background: #1C4D5A;
+          background: ${PRIMARY_BLUE};
           color: white;
           border: none;
-          border-radius: 6px;
-          padding: 8px 16px;
+          border-radius: 8px;
+          padding: 12px 24px;
           cursor: pointer;
           font-size: 14px;
-        ">Got it!</button>
+          font-weight: 600;
+          box-shadow: 0 2px 4px rgba(28, 77, 90, 0.2);
+          transition: background-color 0.2s ease;
+        "
+        onmouseover="this.style.backgroundColor='#133740'"
+        onmouseout="this.style.backgroundColor='${PRIMARY_BLUE}'"
+        >Got it!</button>
       </div>
     `;
 

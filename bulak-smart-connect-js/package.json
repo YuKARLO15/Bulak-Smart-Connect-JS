@@ -7,6 +7,7 @@
     "dev": "concurrently \"npm:start-backend\" \"npm:start-frontend\"",
     "start-backend": "cd ../bsc-js-backend && npm run start:dev",
     "start-frontend": "vite",
+    "prebuild": "node scripts/build-hook.js",
     "build": "vite build",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
