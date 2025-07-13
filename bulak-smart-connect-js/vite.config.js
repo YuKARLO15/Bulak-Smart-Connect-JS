@@ -28,8 +28,21 @@ export default defineConfig({
         // **ENHANCED**: More aggressive cache busting
         skipWaiting: true,
         clientsClaim: true,
-        globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
+        // Add image patterns to cache
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,jpg,jpeg,JPEG}'],
         runtimeCaching: [
+          {
+            // Cache images specifically
+            urlPattern: /\.(?:png|jpg|jpeg|svg|gif|webp|JPEG)$/,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'images-cache',
+              expiration: {
+                maxEntries: 60,
+                maxAgeSeconds: 30 * 24 * 60 * 60, // 30 days
+              },
+            },
+          },
           {
             urlPattern: /^https:\/\/.*\.onrender\.com\/api\/.*/i,
             handler: 'NetworkFirst',
