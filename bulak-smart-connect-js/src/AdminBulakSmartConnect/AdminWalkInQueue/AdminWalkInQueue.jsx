@@ -733,6 +733,7 @@ const AdminWalkInQueue = () => {
           <div className="admin-walkin-queue-summary-card">
             <h2 className="admin-walkin-queue-summary-title">CURRENT QUEUE</h2>
             <div className="admin-walkin-queue-summary-number">{currentQueue}</div>
+          
             <div className="admin-walkin-queue-summary-next">
               Next on Queue{' '}
               <span className="admin-walkin-queue-summary-next-number">{nextQueue}</span>
@@ -741,13 +742,18 @@ const AdminWalkInQueue = () => {
           <div className="admin-walkin-queue-summary-card gray">
             <h2 className="admin-walkin-queue-summary-title">TOTAL NUMBER OF QUEUE</h2>
             <div className="admin-walkin-queue-summary-number">{totalQueues}</div>
+         
           </div>
         </div>
 
         {/* Walk-In Queues List */}
         <div className="admin-walkin-queue-list-section">
-          <h2 className="admin-walkin-queue-list-title">Walk - In Queues</h2>
-
+          <div className="admin-walkin-queue-list-title">Walk - In Queues
+            <button onClick={() => window.location.href = '/ScreenSmartQueue'} className="ButtonDisplay">
+  Show Display
+</button>
+          </div>
+          
           <div className="queue-content">
             {loading ? (
               <div className="queue-loading">
