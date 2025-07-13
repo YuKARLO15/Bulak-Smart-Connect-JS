@@ -73,7 +73,7 @@ const BirthCertificateDashboard = () => {
 
   return (
     <Box className={`BirthDashboardContainer ${isSidebarOpen ? 'sidebar-open' : ''}`}>
-      <NavBar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
+   
       <Typography variant="h4" className="FormTitle">
         <Box className="FormTitleContent">
           <Button
@@ -130,6 +130,10 @@ const BirthCertificateDashboard = () => {
           <Typography variant="subtitle1" className="SubTitleBirthCertificate">
             Correction for Birth Certificate
           </Typography>
+          
+            <Typography variant="body2" sx={{color: 'warning.main', background: '#fffbe6', p: 1.5, borderRadius: 1, border: '1px solid #ffe082', marginBottom: 2, marginTop: 1 , marginLeft: 3}}>
+              <strong>Note:</strong> Correction for Birth Certificate application is for initial screening only. You are still required to visit the Municipal Civil Registrar for an interview to begin the correction applicaiton process. 
+                        </Typography>
           <RadioGroup
             value={selectedOption}
             onChange={e => setSelectedOption(e.target.value)}
@@ -152,6 +156,7 @@ const BirthCertificateDashboard = () => {
               label="Correction of First Name"
             />
           </RadioGroup>
+          
         </Box>
         <Box className="Section">
           <Typography variant="h6" className="SectionTitle">

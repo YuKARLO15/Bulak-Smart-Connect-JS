@@ -31,24 +31,77 @@ const MarriageSummaryForm = () => {
   const [confirmCancelDialog, setConfirmCancelDialog] = useState(false);
   const [statusMessage, setStatusMessage] = useState('');
   const navigate = useNavigate();
-
-  useEffect(() => {
-    try {
-      const currentApplicationId = localStorage.getItem('currentApplicationId');
-      if (currentApplicationId) {
-        setApplicationId(currentApplicationId);
+  const [applicationStatus, setApplicationStatus] = useState('Pending');
+  
+  const getStatusColor = (status) => {
+    const statusLower = status.toLowerCase();
+    if (statusLower === 'approved') return 'green';
+    if (statusLower === 'ready for pickup') return '#4caf50';
+    if (statusLower === 'pending') return '#ff9800';
+    if (statusLower === 'processing' || statusLower === 'submitted') return '#2196f3';
+    if (statusLower === 'declined' || statusLower === 'rejected') return 'red';
+    if (statusLower === 'requires additional info') return '#ff8c00';
+    if (statusLower === 'cancelled') return '#d32f2f';
+    return '#1c4d5a';
+  };
+useEffect(() => {
+  try {
+    const currentApplicationId = localStorage.getItem('currentApplicationId');
+    if (currentApplicationId) {
+      setApplicationId(currentApplicationId);
+      
+      const allApplications = JSON.parse(localStorage.getItem('applications') || '[]');
+      const currentApp = allApplications.find(app => app.id === currentApplicationId);
+      
+      if (currentApp) {
+        if (currentApp.status) {
+          setApplicationStatus(currentApp.status);
+          console.log("Found status in applications array:", currentApp.status);
+        }
+        
+        if (currentApp.statusMessage) {
+          setStatusMessage(currentApp.statusMessage);
+          console.log("Found message in applications array:", currentApp.statusMessage);
+        }
       }
-
-      const savedCertificateData = localStorage.getItem('marriageFormData');
-      if (savedCertificateData) {
-        setFormData(JSON.parse(savedCertificateData));
-      }
-    } catch (err) {
-      logger.error('Error loading form data:', err);
-    } finally {
-      setLoading(false);
     }
-  }, []);
+
+    const savedCertificateData = localStorage.getItem('marriageFormData');
+    if (savedCertificateData) {
+      const parsedData = JSON.parse(savedCertificateData);
+      setFormData(parsedData);
+      
+      if (parsedData.status) {
+        setApplicationStatus(parsedData.status);
+        console.log("Setting application status from formData.status:", parsedData.status);
+      } else if (parsedData.applicationStatus) {
+        setApplicationStatus(parsedData.applicationStatus);
+        console.log("Setting application status from formData.applicationStatus:", parsedData.applicationStatus);
+      } else if (parsedData.metadata && parsedData.metadata.status) {
+        setApplicationStatus(parsedData.metadata.status);
+        console.log("Setting application status from formData.metadata.status:", parsedData.metadata.status);
+      }
+      
+      if (parsedData.statusMessage) {
+        setStatusMessage(parsedData.statusMessage);
+        console.log("Setting status message from formData.statusMessage:", parsedData.statusMessage);
+      } else if (parsedData.message) {
+        setStatusMessage(parsedData.message);
+        console.log("Setting status message from formData.message:", parsedData.message);
+      } else if (parsedData.metadata && parsedData.metadata.message) {
+        setStatusMessage(parsedData.metadata.message);
+        console.log("Setting status message from formData.metadata.message:", parsedData.metadata.message);
+      }
+    }
+    
+
+    
+  } catch (err) {
+    logger.error('Error loading form data:', err);
+  } finally {
+    setLoading(false);
+  }
+}, []);
 
   const handleCancelApplication = async () => {
     try {
@@ -75,7 +128,6 @@ const MarriageSummaryForm = () => {
 
       if (!idToDelete) {
         logger.error('No application ID found to delete');
-        // alert('Cannot find application ID to delete. Please try refreshing the page.');
         setConfirmCancelDialog(false);
         return;
       }
@@ -85,7 +137,6 @@ const MarriageSummaryForm = () => {
         logger.log('Marriage certificate application deleted from database:', idToDelete);
       } catch (dbError) {
         logger.error('Error deleting from database:', dbError);
-        // alert('Failed to delete application from database. Please try again or contact support.');
         setConfirmCancelDialog(false);
         return;
       }
@@ -134,15 +185,12 @@ const MarriageSummaryForm = () => {
           detail: { id: idToDelete, reason: statusMessage },
         })
       );
-
-      // alert('Application deleted successfully!');
-
+      
       setTimeout(() => {
         navigate('/ApplicationForm');
       }, 100);
     } catch (error) {
       logger.error('Error deleting marriage certificate application:', error);
-      // alert('Error deleting application: ' + error.message);
       setConfirmCancelDialog(false);
     }
   };
@@ -186,7 +234,6 @@ const MarriageSummaryForm = () => {
       navigate('/MarriageForm');
     } catch (err) {
       logger.error('Error setting up modification:', err);
-      // alert('There was a problem preparing the form for editing. Please try again.');
     }
   };
 
@@ -216,6 +263,72 @@ const MarriageSummaryForm = () => {
           </Typography>
         </Box>
       )}
+
+<div className="ApplicationDetails">
+  <Box className="StatusSection" sx={{ marginTop: '15px', marginBottom: '15px' }}>
+    <Typography
+      className="ApplicationStatus"
+      sx={{
+        fontWeight: 'bold',
+        color: getStatusColor(applicationStatus || 'Pending'),
+      }}
+    >
+      Status: {applicationStatus || 'Pending'}
+    </Typography>
+
+    <Typography
+      className="ApplicationStatusMessage"
+      sx={{
+        fontSize: '0.9rem',
+        marginTop: '8px',
+        padding: '8px',
+        backgroundColor: '#f5f5f5',
+        borderLeft: '3px solid #1c4d5a',
+      }}
+    >
+      {statusMessage 
+        ? `Message from Administrator: ${statusMessage}`
+        : "No messages from administrator yet. Your application is being processed."}
+          </Typography>
+              {(applicationStatus?.toLowerCase() === 'ready for pickup' ||
+                applicationStatus?.toLowerCase() === 'ready for pickup') && (
+                <Box sx={{ marginTop: '20px', borderTop: '1px solid #ccc', paddingTop: '10px' }}>
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      fontSize: '0.9rem',
+                      marginBottom: '8px',
+                      color: '#1c4d5a',
+                    }}
+                  >
+                    You may book an appointment to pick up your document for faster transaction.
+                  </Typography>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    size="small"
+                    onClick={() => navigate('/AppointmentForm')}
+                    sx={{
+                      backgroundColor: '#f5f5f5',
+                      color: '#1c4d5a',
+                      fontWeight: '600 !important',
+                      border: '1px solid #1c4d5a',
+                      '&:hover': {
+                        backgroundColor: '#0f3a47',
+                        color: '#f5f5f5',
+                      },
+                    }}
+                  >
+                    Book Appointment
+                  </Button>
+                </Box>
+              )}
+            </Box>
+        </div>          
+          
+
+      
+ 
       <div className="MarriageSummaryContainerMSummary">
         <div className="FormHeaderMSummary">
           Municipal Form No. 97

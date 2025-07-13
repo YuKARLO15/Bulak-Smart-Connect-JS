@@ -261,6 +261,8 @@
   color: white !important;
 }
 
+
+
 @media print {
   .MarriageSummaryContainerMSummary {
     margin: 0;

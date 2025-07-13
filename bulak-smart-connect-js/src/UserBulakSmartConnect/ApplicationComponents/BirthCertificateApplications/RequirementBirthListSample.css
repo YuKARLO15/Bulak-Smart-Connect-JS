@@ -2,22 +2,29 @@
   width: 100%;
   max-width: 1000px;
   margin: 20px auto;
+  padding: 0 16px;
+  box-sizing: border-box;
 }
 
 .RequirementPaper {
   padding: 24px;
   border-radius: 8px;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
 }
 
 .RequirementTitle {
   color: #1976d2;
   margin-bottom: 16px;
   font-weight: 600;
+  font-size: clamp(1.2rem, 4vw, 1.5rem);
 }
+
 .requirement-main-title {
   position: fixed;
   top: 0;
 }
+
 .RequirementDivider {
   margin: 16px 0 !important;
 }
@@ -26,19 +33,28 @@
   margin: 16px 0 8px;
   color: #333;
   font-weight: 500;
+  font-size: clamp(1rem, 3vw, 1.25rem);
 }
 
 .RequirementListItem {
   padding: 8px 0;
   border-bottom: 1px dashed #eee;
+  flex-wrap: wrap;
+}
+
+.RequirementText {
+  flex: 1;
+  min-width: 0;
 }
 
 .RequirementText .MuiListItemText-primary {
   font-weight: 500;
+  font-size: clamp(0.9rem, 2.5vw, 1rem);
 }
 
 .RequirementText .MuiListItemText-secondary {
   color: #555;
+  font-size: clamp(0.75rem, 2vw, 0.875rem);
 }
 
 .SampleButton {
@@ -50,6 +66,7 @@
   margin: 16px 0 !important;
   border-radius: 8px !important;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+  width: 100%;
 }
 
 .AccordionSummary {
@@ -60,6 +77,7 @@
   display: flex;
   align-items: center;
   font-weight: 500;
+  font-size: clamp(0.85rem, 2.5vw, 1rem);
 }
 
 .FeesAndTimeSection {
@@ -74,6 +92,7 @@
   font-weight: 500;
   color: #333;
   margin-bottom: 8px;
+  font-size: clamp(0.9rem, 2.5vw, 1rem);
 }
 
 .FeeItem {
@@ -83,27 +102,31 @@
 .ProcessingTimeText {
   color: #1976d2;
   font-weight: 500;
+  font-size: clamp(0.85rem, 2.5vw, 1rem);
 }
 
 .SampleDialog .MuiPaper-root {
-  max-width: 800px;
+  max-width: min(800px, 90vw);
+  margin: 16px;
 }
 
 .SampleDialogTitle {
   background-color: #1976d2;
   color: white;
+  padding: clamp(12px, 3vw, 24px);
+  font-size: clamp(1rem, 3vw, 1.2rem);
 }
 
 .SampleDialogContent {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 24px !important;
+  padding: clamp(16px, 5vw, 24px) !important;
 }
 
 .SampleImage {
   max-width: 100%;
-  max-height: 400px;
+  max-height: min(70vh, 400px);
   object-fit: contain;
   margin-bottom: 16px;
   border: 1px solid #ddd;
@@ -112,6 +135,14 @@
 .SampleDescription {
   text-align: center;
   color: #555;
+  font-size: clamp(0.8rem, 2.5vw, 0.95rem);
+}
+
+/* Media Queries for Different Screen Sizes */
+@media (max-width: 768px) {
+  .RequirementPaper {
+    padding: 20px;
+  }
 }
 
 @media (max-width: 600px) {
@@ -123,5 +154,48 @@
     margin-left: 8px;
     min-width: 70px;
     font-size: 0.7rem;
+  }
+
+  .RequirementTitle {
+    font-size: 1.2rem;
+  }
+  
+  .RequirementListItem {
+    padding: 12px 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .RequirementContainer {
+    padding: 0 8px;
+  }
+  
+  .SampleButton {
+    margin-top: 8px;
+    margin-left: 36px; /* Align with text after icon */
+  }
+  
+  .RequirementListItem .MuiListItemIcon-root {
+    min-width: 36px;
+  }
+  
+  .SampleImage {
+    max-height: 300px;
+  }
+}
+
+@media (max-width: 360px) {
+  .RequirementPaper {
+    padding: 12px;
+  }
+  
+  .FeesAndTimeSection {
+    padding: 12px;
+  }
+  
+  .SampleButton {
+    margin-left: 0;
+    margin-top: 8px;
+    width: 100%;
   }
 }

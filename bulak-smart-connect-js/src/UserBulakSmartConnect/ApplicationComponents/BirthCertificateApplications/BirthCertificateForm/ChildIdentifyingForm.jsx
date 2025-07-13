@@ -316,9 +316,7 @@ const ChildIdentifyingForm = forwardRef(({ formData, handleChange }, ref) => {
 
               <div className="DateSectionContainerChild">
                 <div className="DateRowChild">
-                  <div className="DateLabelChild">Month {requiredField}</div>
-                  <div className="DateLabelChild">Day {requiredField}</div>
-                  <div className="DateLabelChild">Year {requiredField}</div>
+                 
                 </div>
                 <div className="DateInputsRowChild">
                   <select
@@ -328,8 +326,9 @@ const ChildIdentifyingForm = forwardRef(({ formData, handleChange }, ref) => {
                     onBlur={handleBlur}
                     className={`SelectInputChild DateSelectChild ${errors.birthMonth ? 'error' : ''}`}
                     required
+
                   >
-                    <option value="">Select</option>
+                    <option value="">Month</option>
                     {[
                       'January',
                       'February',
@@ -358,7 +357,7 @@ const ChildIdentifyingForm = forwardRef(({ formData, handleChange }, ref) => {
                     className={`SelectInputChild DateSelectChild ${errors.birthDay ? 'error' : ''}`}
                     required
                   >
-                    <option value="">Select</option>
+                    <option value="">Day</option>
                     {[...Array(31)].map((_, i) => (
                       <option key={i + 1} value={i + 1}>
                         {i + 1}
@@ -374,7 +373,7 @@ const ChildIdentifyingForm = forwardRef(({ formData, handleChange }, ref) => {
                     className={`SelectInputChild DateSelectChild ${errors.birthYear ? 'error' : ''}`}
                     required
                   >
-                    <option value="">Select</option>
+                    <option value="">Year</option>
                     {[...Array(100)].map((_, i) => {
                       const year = new Date().getFullYear() - i;
                       return (
@@ -394,13 +393,13 @@ const ChildIdentifyingForm = forwardRef(({ formData, handleChange }, ref) => {
             </div>
 
             <div
-              className="FormGroupChild"
-              style={{ flex: 1, alignSelf: 'flex-start', marginLeft: '140px' }}
+              className="FormGroupChild SexSectionChild"
+              style={{ flex: 1, alignSelf: 'flex-start'}}
             >
               <div className="SectionTitleHalfChild">3. SEX (Kasarian) {requiredField}</div>
 
               <div className="SexContainerChild">
-                <div className="RadioGroupChild" style={{ marginTop: '24px' }}>
+                <div className="RadioGroupChild" >
                   <div className="RadioGroupChild">
                     <label className="RadioLabelChild">
                       <input
