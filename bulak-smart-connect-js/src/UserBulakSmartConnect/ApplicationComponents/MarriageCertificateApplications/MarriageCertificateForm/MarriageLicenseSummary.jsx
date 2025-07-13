@@ -25,7 +25,52 @@ const MarriageLicenseSummary = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [applicationId, setApplicationId] = useState('');
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+    const [applicationStatus, setApplicationStatus] = useState('Pending');
+  
+    const [statusMessage, setStatusMessage] = useState('');
+  
+  const getStatusColor = (status) => {
+    const statusLower = status.toLowerCase();
+    if (statusLower === 'approved') return 'green';
+    if (statusLower === 'ready for pickup') return '#4caf50';
+    if (statusLower === 'pending') return '#ff9800';
+    if (statusLower === 'processing' || statusLower === 'submitted') return '#2196f3';
+    if (statusLower === 'decline' || statusLower === 'rejected') return 'red';
+    if (statusLower === 'requires additional info') return '#ff8c00';
+    if (statusLower === 'cancelled') return '#d32f2f';
+    return '#1c4d5a';
+  };
 
+ useEffect(() => {
+  const fetchLatestStatus = async () => {
+    try {
+      const currentApplicationId = localStorage.getItem('currentApplicationId');
+      if (currentApplicationId) {
+
+        const latestApp = await documentApplicationService.getApplication(currentApplicationId);
+        if (latestApp) {
+          setApplicationStatus(latestApp.status || 'Pending');
+          setStatusMessage(latestApp.statusMessage || '');
+
+          const allApplications = JSON.parse(localStorage.getItem('applications') || '[]');
+          const appIndex = allApplications.findIndex(app => app.id === currentApplicationId);
+          if (appIndex >= 0) {
+            allApplications[appIndex] = { ...allApplications[appIndex], ...latestApp };
+            localStorage.setItem('applications', JSON.stringify(allApplications));
+          }
+        }
+      }
+    } catch (err) {
+      logger.error('Error fetching latest application status:', err);
+    }
+  };
+
+
+  fetchLatestStatus();
+  const intervalId = setInterval(fetchLatestStatus, 30000);
+
+  return () => clearInterval(intervalId);
+}, []);
   useEffect(() => {
     try {
       logger.log('=== Marriage License Summary - Loading Data ===');
@@ -169,6 +214,8 @@ const MarriageLicenseSummary = () => {
       // alert('Error deleting application: ' + err.message);
       setDeleteDialogOpen(false);
     }
+
+
   };
 
   const handleModify = () => {
@@ -258,6 +305,68 @@ const MarriageLicenseSummary = () => {
           </Typography>
         </Box>
       )}
+
+      <div className="ApplicationDetails">
+        <Box className="StatusSection" sx={{ marginTop: '15px', marginBottom: '15px' }}>
+          <Typography
+            className="ApplicationStatus"
+            sx={{
+              fontWeight: 'bold',
+              color: getStatusColor(applicationStatus || 'Pending'),
+            }}
+          >
+            Status: {applicationStatus || 'Pending'}
+          </Typography>
+      
+          <Typography
+            className="ApplicationStatusMessage"
+            sx={{
+              fontSize: '0.9rem',
+              marginTop: '8px',
+              padding: '8px',
+              backgroundColor: '#f5f5f5',
+              borderLeft: '3px solid #1c4d5a',
+            }}
+          >
+            {statusMessage 
+              ? `Message from Administrator: ${statusMessage}`
+              : "No messages from administrator yet. Your application is being processed."}
+                </Typography>
+                    {(applicationStatus?.toLowerCase() === 'ready for pickup' ||
+                      applicationStatus?.toLowerCase() === 'ready for pickup') && (
+                      <Box sx={{ marginTop: '20px', borderTop: '1px solid #ccc', paddingTop: '10px' }}>
+                        <Typography
+                          variant="body2"
+                          sx={{
+                            fontSize: '0.9rem',
+                            marginBottom: '8px',
+                            color: '#1c4d5a',
+                          }}
+                        >
+                          You may book an appointment to pick up your document for faster transaction.
+                        </Typography>
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          size="small"
+                          onClick={() => navigate('/AppointmentForm')}
+                          sx={{
+                            backgroundColor: '#f5f5f5',
+                            color: '#1c4d5a',
+                            fontWeight: '600 !important',
+                            border: '1px solid #1c4d5a',
+                            '&:hover': {
+                              backgroundColor: '#0f3a47',
+                              color: '#f5f5f5',
+                            },
+                          }}
+                        >
+                          Book Appointment
+                        </Button>
+                      </Box>
+                    )}
+                  </Box>
+              </div>   
       <div className="FormDocumentMLSummary">
         <div className="DocumentHeaderMLSummary">
           <div className="FormNumberMLSummary">
