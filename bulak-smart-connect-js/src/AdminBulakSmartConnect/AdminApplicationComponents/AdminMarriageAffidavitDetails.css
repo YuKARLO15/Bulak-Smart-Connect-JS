@@ -147,6 +147,7 @@
   font-size: 14px;
   font-family: inherit;
   width: 100%;
+  color: #000 !important;
 }
 
 .WitnessInputMcAffidavit:focus {
@@ -171,6 +172,7 @@
   font-family: inherit;
   min-width: 100px;
   text-align: center;
+  color: #000 !important;
 }
 
 .AffidavitUnderlineInputMcAffidavit:focus {
