@@ -50,6 +50,7 @@ const AnnouncementForm = ({ addAnnouncement }) => {
         onChange={handleChange}
         required
         disabled={isSubmitting}
+        
       />
       <textarea
         name="description"

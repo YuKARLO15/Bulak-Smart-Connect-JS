@@ -65,6 +65,7 @@
   transition: border-color 0.2s ease;
   width: 100%;
   box-sizing: border-box;
+  color: #000;
 }
 
 .modal input:focus,
