@@ -109,7 +109,7 @@ const NavBar = ({ isSidebarOpen, setIsSidebarOpen }) => {
               <DirectionsWalkIcon /> Smart Walk-In
             </Link>
 
-            {/* Staff+ links */}
+            {/* Staff+ links
             {(hasRole('staff') || hasRole('admin') || hasRole('super_admin')) && (
               <Link
                 to="/applicationAdmin"
@@ -117,7 +117,7 @@ const NavBar = ({ isSidebarOpen, setIsSidebarOpen }) => {
               >
                 <AdminPanelSettingsIcon /> Application Admin
               </Link>
-            )}
+            )} */}
 
             {/* Admin+ links */}
             {(hasRole('admin') || hasRole('super_admin')) && (
