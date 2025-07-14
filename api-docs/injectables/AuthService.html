@@ -137,6 +137,11 @@
                             <li>
                                     <span class="modifier">Private</span>
                                     <span class="modifier">Readonly</span>
+                                <a href="#bcryptRounds" >bcryptRounds</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                    <span class="modifier">Readonly</span>
                                 <a href="#failedAttempts" >failedAttempts</a>
                             </li>
                             <li>
@@ -175,6 +180,11 @@
                             <li>
                                     <span class="modifier">Async</span>
                                 <a href="#getProfile" >getProfile</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                    <span class="modifier">Async</span>
+                                <a href="#hashPassword" >hashPassword</a>
                             </li>
                             <li>
                                     <span class="modifier">Private</span>
@@ -231,7 +241,7 @@
                 </tr>
                         <tr>
                             <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="26" class="link-to-prism">src/auth/auth.service.ts:26</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="28" class="link-to-prism">src/auth/auth.service.ts:28</a></div>
                             </td>
                         </tr>
 
@@ -320,8 +330,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="456"
-                                    class="link-to-prism">src/auth/auth.service.ts:456</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="465"
+                                    class="link-to-prism">src/auth/auth.service.ts:465</a></div>
                         </td>
                     </tr>
 
@@ -413,8 +423,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="87"
-                                    class="link-to-prism">src/auth/auth.service.ts:87</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="98"
+                                    class="link-to-prism">src/auth/auth.service.ts:98</a></div>
                         </td>
                     </tr>
 
@@ -482,8 +492,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="612"
-                                    class="link-to-prism">src/auth/auth.service.ts:612</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="621"
+                                    class="link-to-prism">src/auth/auth.service.ts:621</a></div>
                         </td>
                     </tr>
 
@@ -551,8 +561,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="52"
-                                    class="link-to-prism">src/auth/auth.service.ts:52</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="63"
+                                    class="link-to-prism">src/auth/auth.service.ts:63</a></div>
                         </td>
                     </tr>
 
@@ -620,8 +630,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="278"
-                                    class="link-to-prism">src/auth/auth.service.ts:278</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="288"
+                                    class="link-to-prism">src/auth/auth.service.ts:288</a></div>
                         </td>
                     </tr>
 
@@ -671,6 +681,76 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
+                    <a name="hashPassword"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                            <span class="modifier">Async</span>
+                        <span ><b>hashPassword</b></span>
+                        <a href="#hashPassword"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>hashPassword(password: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="41"
+                                    class="link-to-prism">src/auth/auth.service.ts:41</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>password</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;string&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
                     <a name="isValidEmail"></a>
                     <span class="name">
                             <span class="modifier">Private</span>
@@ -689,8 +769,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="273"
-                                    class="link-to-prism">src/auth/auth.service.ts:273</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="283"
+                                    class="link-to-prism">src/auth/auth.service.ts:283</a></div>
                         </td>
                     </tr>
 
@@ -758,8 +838,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="94"
-                                    class="link-to-prism">src/auth/auth.service.ts:94</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="105"
+                                    class="link-to-prism">src/auth/auth.service.ts:105</a></div>
                         </td>
                     </tr>
 
@@ -827,8 +907,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="57"
-                                    class="link-to-prism">src/auth/auth.service.ts:57</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="68"
+                                    class="link-to-prism">src/auth/auth.service.ts:68</a></div>
                         </td>
                     </tr>
 
@@ -896,8 +976,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="171"
-                                    class="link-to-prism">src/auth/auth.service.ts:171</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="182"
+                                    class="link-to-prism">src/auth/auth.service.ts:182</a></div>
                         </td>
                     </tr>
 
@@ -965,8 +1045,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="626"
-                                    class="link-to-prism">src/auth/auth.service.ts:626</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="635"
+                                    class="link-to-prism">src/auth/auth.service.ts:635</a></div>
                         </td>
                     </tr>
 
@@ -1046,8 +1126,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="306"
-                                    class="link-to-prism">src/auth/auth.service.ts:306</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="316"
+                                    class="link-to-prism">src/auth/auth.service.ts:316</a></div>
                         </td>
                     </tr>
 
@@ -1127,8 +1207,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="657"
-                                    class="link-to-prism">src/auth/auth.service.ts:657</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="665"
+                                    class="link-to-prism">src/auth/auth.service.ts:665</a></div>
                         </td>
                     </tr>
 
@@ -1196,8 +1276,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="37"
-                                    class="link-to-prism">src/auth/auth.service.ts:37</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="48"
+                                    class="link-to-prism">src/auth/auth.service.ts:48</a></div>
                         </td>
                     </tr>
 
@@ -1253,6 +1333,33 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
+                    <a name="bcryptRounds"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                            <span class="modifier">Readonly</span>
+                        <span ><b>bcryptRounds</b></span>
+                        <a href="#bcryptRounds"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>parseInt(process.env.BCRYPT_ROUNDS || &#x27;12&#x27;, 10)</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="28" class="link-to-prism">src/auth/auth.service.ts:28</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
                     <a name="failedAttempts"></a>
                     <span class="name">
                             <span class="modifier">Private</span>
@@ -1269,7 +1376,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="35" class="link-to-prism">src/auth/auth.service.ts:35</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="46" class="link-to-prism">src/auth/auth.service.ts:46</a></div>
                         </td>
                     </tr>
 
@@ -1335,13 +1442,24 @@ interface LockoutData {
 @Injectable()
 export class AuthService {
   private readonly logger &#x3D; new Logger(AuthService.name);
+  // ✅ ADD: Get bcrypt rounds from environment
+  private readonly bcryptRounds &#x3D; parseInt(process.env.BCRYPT_ROUNDS || &#x27;12&#x27;, 10);
 
   constructor(
     @InjectRepository(User)
     private usersRepository: Repository&lt;User&gt;,
     private jwtService: JwtService,
     private rolesService: RolesService,
-  ) {}
+  ) {
+    // ✅ ADD: Log bcrypt configuration for security audit
+    this.logger.log(&#x60;🔐 Bcrypt rounds configured: ${this.bcryptRounds}&#x60;);
+  }
+
+  // ✅ ADD: Centralized password hashing method
+  private async hashPassword(password: string): Promise&lt;string&gt; {
+    const salt &#x3D; await bcrypt.genSalt(this.bcryptRounds);
+    return bcrypt.hash(password, salt);
+  }
 
   private readonly failedAttempts &#x3D; new Map&lt;string, LockoutData&gt;();
 
@@ -1523,9 +1641,8 @@ export class AuthService {
       throw new BadRequestException(passwordValidation.message);
     }
 
-    // Hash password
-    const salt &#x3D; await bcrypt.genSalt();
-    const hashedPassword &#x3D; await bcrypt.hash(password, salt);
+    // ✅ UPDATED: Use centralized hashing method
+    const hashedPassword &#x3D; await this.hashPassword(password);
 
     try {
       // Create new user with all fields
@@ -1662,9 +1779,8 @@ export class AuthService {
           throw new BadRequestException(passwordValidation.message);
         }
 
-        // Hash new password
-        const salt &#x3D; await bcrypt.genSalt();
-        const hashedPassword &#x3D; await bcrypt.hash(updateUserDto.password, salt);
+        // ✅ UPDATED: Use centralized hashing method
+        const hashedPassword &#x3D; await this.hashPassword(updateUserDto.password);
         updateUserDto.password &#x3D; hashedPassword;
       } else {
         // Remove password from DTO if not being updated
@@ -1933,7 +2049,7 @@ export class AuthService {
     }
   }
 
-  // Add this method to update password
+  // Update password method
   async updatePassword(email: string, newPassword: string): Promise&lt;void&gt; {
     try {
       // Validate password strength
@@ -1948,9 +2064,8 @@ export class AuthService {
         throw new BadRequestException(&#x27;User not found&#x27;);
       }
 
-      // Hash new password
-      const salt &#x3D; await bcrypt.genSalt();
-      const hashedPassword &#x3D; await bcrypt.hash(newPassword, salt);
+      // ✅ UPDATED: Use centralized hashing method
+      const hashedPassword &#x3D; await this.hashPassword(newPassword);
 
       // Update password in database
       await this.usersRepository.update(
