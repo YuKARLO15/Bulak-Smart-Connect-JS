@@ -13,6 +13,7 @@ import {
   Request,
   Query,
   Logger,
+  Injectable,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -36,8 +37,11 @@ import { UserResponseDto } from './dto/user-response.dto';
 @Controller('users')
 @UseGuards(JwtAuthGuard)
 @ApiBearerAuth()
+@Injectable()
 export class UsersController {
   private readonly logger = new Logger(UsersController.name);
+  // ✅ ADD: Get bcrypt rounds from environment
+  private readonly bcryptRounds = parseInt(process.env.BCRYPT_ROUNDS || '12', 10);
 
   constructor(private readonly usersService: UsersService) {}
 
@@ -157,8 +161,8 @@ export class UsersController {
     @Body() createUserDto: CreateUserDto,
   ): Promise<UserResponseDto> {
     try {
-      // Hash password
-      const salt = await bcrypt.genSalt();
+      // ✅ UPDATED: Use environment-configured bcrypt rounds
+      const salt = await bcrypt.genSalt(this.bcryptRounds);
       const hashedPassword = await bcrypt.hash(createUserDto.password, salt);
 
       // Create user with hashed password
@@ -170,11 +174,9 @@ export class UsersController {
       const user = await this.usersService.create(userWithHashedPassword);
 
       // Return user without password
-
       const { password, ...userWithoutPassword } = user;
 
       // Get user with roles for response
-
       const userWithRoles = await this.usersService.findOne(user.id);
 
       return userWithRoles;
