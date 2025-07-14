@@ -24,13 +24,24 @@ interface LockoutData {
 @Injectable()
 export class AuthService {
   private readonly logger = new Logger(AuthService.name);
+  // ✅ ADD: Get bcrypt rounds from environment
+  private readonly bcryptRounds = parseInt(process.env.BCRYPT_ROUNDS || '12', 10);
 
   constructor(
     @InjectRepository(User)
     private usersRepository: Repository<User>,
     private jwtService: JwtService,
     private rolesService: RolesService,
-  ) {}
+  ) {
+    // ✅ ADD: Log bcrypt configuration for security audit
+    this.logger.log(`🔐 Bcrypt rounds configured: ${this.bcryptRounds}`);
+  }
+
+  // ✅ ADD: Centralized password hashing method
+  private async hashPassword(password: string): Promise<string> {
+    const salt = await bcrypt.genSalt(this.bcryptRounds);
+    return bcrypt.hash(password, salt);
+  }
 
   private readonly failedAttempts = new Map<string, LockoutData>();
 
@@ -212,9 +223,8 @@ export class AuthService {
       throw new BadRequestException(passwordValidation.message);
     }
 
-    // Hash password
-    const salt = await bcrypt.genSalt();
-    const hashedPassword = await bcrypt.hash(password, salt);
+    // ✅ UPDATED: Use centralized hashing method
+    const hashedPassword = await this.hashPassword(password);
 
     try {
       // Create new user with all fields
@@ -351,9 +361,8 @@ export class AuthService {
           throw new BadRequestException(passwordValidation.message);
         }
 
-        // Hash new password
-        const salt = await bcrypt.genSalt();
-        const hashedPassword = await bcrypt.hash(updateUserDto.password, salt);
+        // ✅ UPDATED: Use centralized hashing method
+        const hashedPassword = await this.hashPassword(updateUserDto.password);
         updateUserDto.password = hashedPassword;
       } else {
         // Remove password from DTO if not being updated
@@ -622,7 +631,7 @@ export class AuthService {
     }
   }
 
-  // Add this method to update password
+  // Update password method
   async updatePassword(email: string, newPassword: string): Promise<void> {
     try {
       // Validate password strength
@@ -637,9 +646,8 @@ export class AuthService {
         throw new BadRequestException('User not found');
       }
 
-      // Hash new password
-      const salt = await bcrypt.genSalt();
-      const hashedPassword = await bcrypt.hash(newPassword, salt);
+      // ✅ UPDATED: Use centralized hashing method
+      const hashedPassword = await this.hashPassword(newPassword);
 
       // Update password in database
       await this.usersRepository.update(
