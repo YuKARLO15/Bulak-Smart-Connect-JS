@@ -2,13 +2,13 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { ConfigService } from '@nestjs/config';
 import { EmailService } from './email.service';
 
-// Mock nodemailer
+// Mock nodemailer properly
 const mockTransporter = {
   sendMail: jest.fn(),
 };
 
 jest.mock('nodemailer', () => ({
-  createTransporter: jest.fn(() => mockTransporter),
+  createTransport: jest.fn(() => mockTransporter),
 }));
 
 describe('EmailService', () => {
