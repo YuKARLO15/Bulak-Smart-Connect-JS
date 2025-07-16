@@ -5,7 +5,7 @@
 
 <!-- Production Links -->
 <p align="center">
-  <a href="https://bulak-smart-connect-frontend-prod.onrender.com" target="_blank">
+  <a href="https://www.bulaklgusmartconnect.systems" target="_blank">
     <img src="https://img.shields.io/badge/🌐%20Live%20App-Production-brightgreen?style=for-the-badge&logo=render&logoColor=white" alt="Live Production App" />
   </a>
   <a href="https://bulak-smart-connect-backend-prod.onrender.com/api/docs" target="_blank">
