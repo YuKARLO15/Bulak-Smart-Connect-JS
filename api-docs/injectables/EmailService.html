@@ -1731,11 +1731,11 @@ export class EmailService {
   async sendOTP(email: string, otp: string, purpose: string &#x3D; &#x27;verification&#x27;) {
     const templates &#x3D; {
       verification: {
-        subject: &#x27;🔐 Bulak LGU Smart Connect - Email Verification&#x27;,
+        subject: &#x27;🔐 Bulak LGU Connect - Email Verification&#x27;,
         html: &#x60;
           &lt;div style&#x3D;&quot;font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;&quot;&gt;
             &lt;div style&#x3D;&quot;background: linear-gradient(135deg, #1c4d5a 0%, #8aacd5 100%); padding: 20px; text-align: center;&quot;&gt;
-              &lt;h1 style&#x3D;&quot;color: white; margin: 0;&quot;&gt;Bulak LGU Smart Connect&lt;/h1&gt;
+              &lt;h1 style&#x3D;&quot;color: white; margin: 0;&quot;&gt;Bulak LGU Connect&lt;/h1&gt;
             &lt;/div&gt;
             &lt;div style&#x3D;&quot;padding: 30px; background-color: #f9f9f9;&quot;&gt;
               &lt;h2 style&#x3D;&quot;color: #333;&quot;&gt;Email Verification Required&lt;/h2&gt;
@@ -1750,17 +1750,17 @@ export class EmailService {
               &lt;/p&gt;
             &lt;/div&gt;
             &lt;div style&#x3D;&quot;background: #333; color: white; padding: 15px; text-align: center; font-size: 12px;&quot;&gt;
-              © 2025 Bulak LGU Smart Connect. All rights reserved.
+              © 2025 Bulak LGU Connect. All rights reserved.
             &lt;/div&gt;
           &lt;/div&gt;
         &#x60;,
       },
       password_reset: {
-        subject: &#x27;🔒 Bulak LGU Smart Connect - Password Reset&#x27;,
+        subject: &#x27;🔒 Bulak LGU Connect - Password Reset&#x27;,
         html: &#x60;
           &lt;div style&#x3D;&quot;font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;&quot;&gt;
             &lt;div style&#x3D;&quot;background: linear-gradient(135deg, #1c4d5a 0%, #8aacd5 100%); padding: 20px; text-align: center;&quot;&gt;
-              &lt;h1 style&#x3D;&quot;color: white; margin: 0;&quot;&gt;Bulak LGU Smart Connect&lt;/h1&gt;
+              &lt;h1 style&#x3D;&quot;color: white; margin: 0;&quot;&gt;Bulak LGU Connect&lt;/h1&gt;
             &lt;/div&gt;
             &lt;div style&#x3D;&quot;padding: 30px; background-color: #f9f9f9;&quot;&gt;
               &lt;h2 style&#x3D;&quot;color: #333;&quot;&gt;Password Reset Request&lt;/h2&gt;
@@ -1775,17 +1775,17 @@ export class EmailService {
               &lt;/p&gt;
             &lt;/div&gt;
             &lt;div style&#x3D;&quot;background: #333; color: white; padding: 15px; text-align: center; font-size: 12px;&quot;&gt;
-              © 2025 Bulak LGU Smart Connect. All rights reserved.
+              © 2025 Bulak LGU Connect. All rights reserved.
             &lt;/div&gt;
           &lt;/div&gt;
         &#x60;,
       },
       application_update: {
-        subject: &#x27;📋 Bulak LGU Smart Connect - Application Status Update&#x27;,
+        subject: &#x27;📋 Bulak LGU Connect - Application Status Update&#x27;,
         html: &#x60;
           &lt;div style&#x3D;&quot;font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;&quot;&gt;
             &lt;div style&#x3D;&quot;background: linear-gradient(135deg, #1c4d5a 0%, #8aacd5 100%); padding: 20px; text-align: center;&quot;&gt;
-              &lt;h1 style&#x3D;&quot;color: white; margin: 0;&quot;&gt;Bulak LGU Smart Connect&lt;/h1&gt;
+              &lt;h1 style&#x3D;&quot;color: white; margin: 0;&quot;&gt;Bulak LGU Connect&lt;/h1&gt;
             &lt;/div&gt;
             &lt;div style&#x3D;&quot;padding: 30px; background-color: #f9f9f9;&quot;&gt;
               &lt;h2 style&#x3D;&quot;color: #333;&quot;&gt;Application Status Update&lt;/h2&gt;
@@ -1798,7 +1798,7 @@ export class EmailService {
               &lt;/div&gt;
             &lt;/div&gt;
             &lt;div style&#x3D;&quot;background: #333; color: white; padding: 15px; text-align: center; font-size: 12px;&quot;&gt;
-              © 2025 Bulak LGU Smart Connect. All rights reserved.
+              © 2025 Bulak LGU Connect. All rights reserved.
             &lt;/div&gt;
           &lt;/div&gt;
         &#x60;,
@@ -1837,7 +1837,7 @@ export class EmailService {
       html: &#x60;
         &lt;div style&#x3D;&quot;font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;&quot;&gt;
           &lt;div style&#x3D;&quot;background: linear-gradient(135deg, #1c4d5a 0%, #8aacd5 100%); padding: 20px; text-align: center;&quot;&gt;
-            &lt;h1 style&#x3D;&quot;color: white; margin: 0;&quot;&gt;Bulak LGU Smart Connect&lt;/h1&gt;
+            &lt;h1 style&#x3D;&quot;color: white; margin: 0;&quot;&gt;Bulak LGU Connect&lt;/h1&gt;
           &lt;/div&gt;
           &lt;div style&#x3D;&quot;padding: 30px; background-color: #f9f9f9;&quot;&gt;
             &lt;h2 style&#x3D;&quot;color: #333;&quot;&gt;Application Status Update&lt;/h2&gt;
@@ -1854,7 +1854,7 @@ export class EmailService {
             &lt;/p&gt;
           &lt;/div&gt;
           &lt;div style&#x3D;&quot;background: #333; color: white; padding: 15px; text-align: center; font-size: 12px;&quot;&gt;
-            © 2025 Bulak LGU Smart Connect. All rights reserved.
+            © 2025 Bulak LGU Connect. All rights reserved.
           &lt;/div&gt;
         &lt;/div&gt;
       &#x60;,
@@ -1869,7 +1869,7 @@ export class EmailService {
     position: number,
     estimatedTime: string,
   ): Promise&lt;any&gt; {
-    const subject &#x3D; &#x60;🔔 Bulak LGU Smart Connect - You&#x27;re Almost Up! (Position #${position})&#x60;;
+    const subject &#x3D; &#x60;🔔 Bulak LGU Connect - You&#x27;re Almost Up! (Position #${position})&#x60;;
 
     const html &#x3D; &#x60;
       &lt;!DOCTYPE html&gt;
@@ -1881,7 +1881,7 @@ export class EmailService {
       &lt;body style&#x3D;&quot;font-family: Arial, sans-serif; line-height: 1.6; color: #333;&quot;&gt;
           &lt;div style&#x3D;&quot;max-width: 600px; margin: 0 auto; padding: 20px;&quot;&gt;
               &lt;div style&#x3D;&quot;text-align: center; margin-bottom: 30px;&quot;&gt;
-                  &lt;h1 style&#x3D;&quot;color: #2c3e50;&quot;&gt;🎫 Bulak LGU Smart Connect&lt;/h1&gt;
+                  &lt;h1 style&#x3D;&quot;color: #2c3e50;&quot;&gt;🎫 Bulak LGU Connect&lt;/h1&gt;
                   &lt;p style&#x3D;&quot;color: #7f8c8d;&quot;&gt;Queue Position Alert&lt;/p&gt;
               &lt;/div&gt;
               
@@ -1913,7 +1913,7 @@ export class EmailService {
               &lt;div style&#x3D;&quot;text-align: center; margin-top: 30px;&quot;&gt;
                   &lt;p style&#x3D;&quot;color: #7f8c8d; font-size: 14px;&quot;&gt;
                       Thank you for your patience! 🙏&lt;br/&gt;
-                      Civil Registrar Office - Bulak LGU Smart Connect
+                      Civil Registrar Office - Bulak LGU Connect
                   &lt;/p&gt;
               &lt;/div&gt;
           &lt;/div&gt;
@@ -1935,7 +1935,7 @@ export class EmailService {
     status: string,
     message: string,
   ): Promise&lt;any&gt; {
-    const subject &#x3D; &#x60;🎯 Bulak LGU Smart Connect - Please Proceed to Counter!&#x60;;
+    const subject &#x3D; &#x60;🎯 Bulak LGU Connect - Please Proceed to Counter!&#x60;;
 
     const html &#x3D; &#x60;
       &lt;!DOCTYPE html&gt;
@@ -1947,7 +1947,7 @@ export class EmailService {
       &lt;body style&#x3D;&quot;font-family: Arial, sans-serif; line-height: 1.6; color: #333;&quot;&gt;
           &lt;div style&#x3D;&quot;max-width: 600px; margin: 0 auto; padding: 20px;&quot;&gt;
               &lt;div style&#x3D;&quot;text-align: center; margin-bottom: 30px;&quot;&gt;
-                  &lt;h1 style&#x3D;&quot;color: #2c3e50;&quot;&gt;🎫 Bulak LGU Smart Connect&lt;/h1&gt;
+                  &lt;h1 style&#x3D;&quot;color: #2c3e50;&quot;&gt;🎫 Bulak LGU Connect&lt;/h1&gt;
                   &lt;p style&#x3D;&quot;color: #7f8c8d;&quot;&gt;Now Serving&lt;/p&gt;
               &lt;/div&gt;
               
@@ -1975,7 +1975,7 @@ export class EmailService {
               
               &lt;div style&#x3D;&quot;text-align: center; margin-top: 30px;&quot;&gt;
                   &lt;p style&#x3D;&quot;color: #7f8c8d; font-size: 14px;&quot;&gt;
-                      Civil Registrar Office - Bulak LGU Smart Connect&lt;br/&gt;
+                      Civil Registrar Office - Bulak LGU Connect&lt;br/&gt;
                       Serving you better with technology! 🙏
                   &lt;/p&gt;
               &lt;/div&gt;
@@ -2000,7 +2000,7 @@ export class EmailService {
     appointmentNumber: string,
     appointmentDetails: any,
   ): Promise&lt;void&gt; {
-    const subject &#x3D; &#x27;Appointment Confirmed - Bulak LGU Smart Connect&#x27;;
+    const subject &#x3D; &#x27;Appointment Confirmed - Bulak LGU Connect&#x27;;
 
     const html &#x3D; &#x60;
       &lt;!DOCTYPE html&gt;
@@ -2074,7 +2074,7 @@ export class EmailService {
               &lt;/ul&gt;
             &lt;/div&gt;
             
-            &lt;p&gt;Thank you for using Bulak LGU Smart Connect!&lt;/p&gt;
+            &lt;p&gt;Thank you for using Bulak LGU Connect!&lt;/p&gt;
           &lt;/div&gt;
           
           &lt;div class&#x3D;&quot;footer&quot;&gt;
@@ -2215,7 +2215,7 @@ export class EmailService {
                 : &#x27;&#x27;
             }
             
-            &lt;p&gt;Thank you for using Bulak LGU Smart Connect!&lt;/p&gt;
+            &lt;p&gt;Thank you for using Bulak LGU Connect!&lt;/p&gt;
           &lt;/div&gt;
           
           &lt;div class&#x3D;&quot;footer&quot;&gt;
@@ -2423,7 +2423,7 @@ export class EmailService {
             
             &lt;p&gt;We look forward to seeing you tomorrow!&lt;/p&gt;
             
-            &lt;p&gt;Thank you for using Bulak LGU Smart Connect!&lt;/p&gt;
+            &lt;p&gt;Thank you for using Bulak LGU Connect!&lt;/p&gt;
           &lt;/div&gt;
           
           &lt;div class&#x3D;&quot;footer&quot;&gt;
@@ -2490,7 +2490,7 @@ export class EmailService {
           &lt;div class&#x3D;&quot;content&quot;&gt;
             &lt;p&gt;Dear ${applicantName || &#x27;Valued Client&#x27;},&lt;/p&gt;
             
-            &lt;p&gt;Thank you for submitting your document application through Bulak LGU Smart Connect.&lt;/p&gt;
+            &lt;p&gt;Thank you for submitting your document application through Bulak LGU Connect.&lt;/p&gt;
             
             &lt;div class&#x3D;&quot;application-card&quot;&gt;
               &lt;h3 style&#x3D;&quot;margin-top: 0; color: #28a745;&quot;&gt;Application Details&lt;/h3&gt;
@@ -2532,7 +2532,7 @@ export class EmailService {
               &lt;/ul&gt;
             &lt;/div&gt;
             
-            &lt;p&gt;Thank you for using Bulak LGU Smart Connect!&lt;/p&gt;
+            &lt;p&gt;Thank you for using Bulak LGU Connect!&lt;/p&gt;
           &lt;/div&gt;
           
           &lt;div class&#x3D;&quot;footer&quot;&gt;
@@ -2682,7 +2682,7 @@ export class EmailService {
                 : &#x27;&#x27;
             }
             
-            &lt;p&gt;Thank you for using Bulak LGU Smart Connect!&lt;/p&gt;
+            &lt;p&gt;Thank you for using Bulak LGU Connect!&lt;/p&gt;
           &lt;/div&gt;
           
           &lt;div class&#x3D;&quot;footer&quot;&gt;
