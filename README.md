@@ -1,11 +1,11 @@
 <div align="center">
   <img src="https://github.com/YuKARLO15/Bulak-Smart-Connect-JS/blob/main/bulak-smart-connect-js/src/LandingPageComponents/LandingPageAssets/BulakLGULogo.png?raw=true" width="20%" />
-<h2>Bulak LGU Smart Connect</h2>
+<h2>Bulak LGU Connect</h2>
 <p>Information and Queuing Management System</p>
 
 <!-- Production Links -->
 <p align="center">
-  <a href="https://bulak-smart-connect-frontend-prod.onrender.com" target="_blank">
+  <a href="https://www.bulaklgusmartconnect.systems" target="_blank">
     <img src="https://img.shields.io/badge/🌐%20Live%20App-Production-brightgreen?style=for-the-badge&logo=render&logoColor=white" alt="Live Production App" />
   </a>
   <a href="https://bulak-smart-connect-backend-prod.onrender.com/api/docs" target="_blank">
@@ -529,7 +529,7 @@ The system includes responsive HTML email templates:
 - **Blue gradient theme** for account verification
 - **Clear call-to-action** with OTP code prominently displayed
 - **Security warnings** about code expiration and usage
-- **Professional branding** with Bulak LGU Smart Connect styling
+- **Professional branding** with Bulak LGU Connect styling
 
 #### 🔒 **Password Reset Template**
 - **Red security theme** for password reset alerts

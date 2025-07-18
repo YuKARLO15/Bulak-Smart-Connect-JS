@@ -145,7 +145,7 @@ export class AuthController {
           createUserDto.email,
           'Welcome!',
           'Account Created',
-          'Welcome to Bulak LGU Smart Connect',
+          'Welcome to Bulak LGU Connect',
         );
       }
 
