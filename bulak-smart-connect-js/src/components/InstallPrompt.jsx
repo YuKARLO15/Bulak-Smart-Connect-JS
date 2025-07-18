@@ -67,7 +67,7 @@ const InstallPrompt = ({ open, onClose }) => {
           />
         </Box>
         <Typography variant="h6" sx={{ flexGrow: 1, fontWeight: 600, color: PRIMARY_BLUE }}>
-          Install Bulak LGU Smart Connect
+          Install Bulak LGU Connect
         </Typography>
         <IconButton onClick={onClose} sx={{ color: '#757575' }}>
           <CloseIcon />
