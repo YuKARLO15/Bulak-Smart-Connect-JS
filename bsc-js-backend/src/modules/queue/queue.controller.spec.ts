@@ -2,28 +2,25 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { QueueController } from './queue.controller';
 import { QueueService } from './queue.service';
 
+// Mock QueueSchedulerService
+const mockQueueSchedulerService = {
+  scheduleCleanup: jest.fn(),
+  getScheduledTasks: jest.fn(),
+  cancelScheduledTask: jest.fn(),
+};
+
+const mockQueueService = {
+  findAll: jest.fn(),
+  findOne: jest.fn(),
+  create: jest.fn(),
+  update: jest.fn(),
+  remove: jest.fn(),
+  getStats: jest.fn(),
+};
+
 describe('QueueController', () => {
   let controller: QueueController;
-
-  const mockQueueService = {
-    findAll: jest.fn(),
-    findOne: jest.fn(),
-    create: jest.fn(),
-    update: jest.fn(),
-    remove: jest.fn(),
-    joinQueue: jest.fn(),
-    leaveQueue: jest.fn(),
-    getQueueStatus: jest.fn(),
-    getNextInQueue: jest.fn(),
-    findByStatus: jest.fn(),
-    findByStatusWithDetails: jest.fn(),
-    getDetailsForMultipleQueues: jest.fn(),
-    callNext: jest.fn(),
-    addCounter: jest.fn(),
-    getCounters: jest.fn(),
-    checkExists: jest.fn(),
-    getStats: jest.fn(),
-  };
+  let service: QueueService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -33,13 +30,22 @@ describe('QueueController', () => {
           provide: QueueService,
           useValue: mockQueueService,
         },
+        {
+          provide: 'QueueSchedulerService', // Mock the missing dependency
+          useValue: mockQueueSchedulerService,
+        },
       ],
     }).compile();
 
     controller = module.get<QueueController>(QueueController);
+    service = module.get<QueueService>(QueueService);
+
+    // Reset all mocks
+    jest.clearAllMocks();
   });
 
   it('should be defined', () => {
     expect(controller).toBeDefined();
+    expect(service).toBeDefined();
   });
 });

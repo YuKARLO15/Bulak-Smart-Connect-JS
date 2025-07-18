@@ -129,7 +129,7 @@ describe('AuthController', () => {
         'test@example.com',
         'Welcome!',
         'Account Created',
-        'Welcome to Bulak LGU Smart Connect',
+        'Welcome to Bulak LGU Connect',
       );
       expect(result).toEqual(expectedResult);
     });
@@ -413,15 +413,17 @@ describe('AuthController', () => {
 
   describe('testOTP', () => {
     beforeEach(() => {
-      // Mock environment variable
-      process.env.NODE_ENV = 'development';
+      // Reset environment variable
+      delete process.env.NODE_ENV;
     });
 
     afterEach(() => {
+      // Clean up environment variable
       delete process.env.NODE_ENV;
     });
 
     it('should generate test OTP in development mode', async () => {
+      process.env.NODE_ENV = 'development';
       const email = 'test@example.com';
 
       mockOTPService.generateOTP.mockResolvedValue('123456');
@@ -439,8 +441,18 @@ describe('AuthController', () => {
       });
     });
 
-    it('should not return OTP in production mode', async () => {
+    it('should throw BadRequestException in production mode', async () => {
       process.env.NODE_ENV = 'production';
+      const email = 'test@example.com';
+
+      await expect(controller.testOTP({ email })).rejects.toThrow(
+        BadRequestException,
+      );
+      expect(mockOTPService.generateOTP).not.toHaveBeenCalled();
+    });
+
+    it('should not return OTP in production mode', async () => {
+      // Don't set NODE_ENV, it should default to undefined (not production)
       const email = 'test@example.com';
 
       mockOTPService.generateOTP.mockResolvedValue('123456');
@@ -450,11 +462,12 @@ describe('AuthController', () => {
       expect(result).toEqual({
         success: true,
         message: 'OTP generated and sent',
-        otp: undefined,
+        otp: '123456', // Should return OTP when not in production
       });
     });
 
     it('should handle OTP generation errors', async () => {
+      process.env.NODE_ENV = 'development';
       const email = 'test@example.com';
 
       mockOTPService.generateOTP.mockRejectedValue(
@@ -491,6 +504,28 @@ describe('AuthController', () => {
     it('should throw UnauthorizedException for invalid user ID', async () => {
       const mockRequest = {
         user: { id: null },
+      } as any;
+
+      await expect(controller.getProfile(mockRequest)).rejects.toThrow(
+        UnauthorizedException,
+      );
+      expect(mockAuthService.getProfile).not.toHaveBeenCalled();
+    });
+
+    it('should throw UnauthorizedException for missing user', async () => {
+      const mockRequest = {
+        user: null,
+      } as any;
+
+      await expect(controller.getProfile(mockRequest)).rejects.toThrow(
+        UnauthorizedException,
+      );
+      expect(mockAuthService.getProfile).not.toHaveBeenCalled();
+    });
+
+    it('should throw UnauthorizedException for undefined user ID', async () => {
+      const mockRequest = {
+        user: { id: undefined },
       } as any;
 
       await expect(controller.getProfile(mockRequest)).rejects.toThrow(

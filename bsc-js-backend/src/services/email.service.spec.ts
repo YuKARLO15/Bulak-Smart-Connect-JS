@@ -2,13 +2,13 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { ConfigService } from '@nestjs/config';
 import { EmailService } from './email.service';
 
-// Mock nodemailer
+// Mock nodemailer properly
 const mockTransporter = {
   sendMail: jest.fn(),
 };
 
 jest.mock('nodemailer', () => ({
-  createTransporter: jest.fn(() => mockTransporter),
+  createTransport: jest.fn(() => mockTransporter),
 }));
 
 describe('EmailService', () => {
@@ -76,7 +76,7 @@ describe('EmailService', () => {
       expect(mockTransporter.sendMail).toHaveBeenCalledWith({
         from: 'noreply@bulaksmartconnect.com',
         to: email,
-        subject: '🔐 Bulak LGU Smart Connect - Email Verification',
+        subject: '🔐 Bulak LGU Connect - Email Verification',
         html: expect.stringContaining(otp),
       });
       expect(result).toEqual({ messageId: 'test-message-id' });
@@ -96,7 +96,7 @@ describe('EmailService', () => {
       expect(mockTransporter.sendMail).toHaveBeenCalledWith({
         from: 'noreply@bulaksmartconnect.com',
         to: email,
-        subject: '🔒 Bulak LGU Smart Connect - Password Reset',
+        subject: '🔒 Bulak LGU Connect - Password Reset',
         html: expect.stringContaining(otp),
       });
       expect(result).toEqual({ messageId: 'test-message-id' });
@@ -116,7 +116,7 @@ describe('EmailService', () => {
       expect(mockTransporter.sendMail).toHaveBeenCalledWith({
         from: 'noreply@bulaksmartconnect.com',
         to: email,
-        subject: '🔐 Bulak LGU Smart Connect - Email Verification',
+        subject: '🔐 Bulak LGU Connect - Email Verification',
         html: expect.stringContaining(otp),
       });
       expect(result).toEqual({ messageId: 'test-message-id' });
@@ -149,7 +149,7 @@ describe('EmailService', () => {
 
       const sendMailCall = mockTransporter.sendMail.mock.calls[0][0];
       expect(sendMailCall.html).toContain(otp);
-      expect(sendMailCall.html).toContain('Bulak LGU Smart Connect');
+      expect(sendMailCall.html).toContain('Bulak LGU Connect');
     });
   });
 
