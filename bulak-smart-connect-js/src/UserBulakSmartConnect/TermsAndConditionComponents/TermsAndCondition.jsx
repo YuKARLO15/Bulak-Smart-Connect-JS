@@ -36,9 +36,8 @@ const PrivacyPolicy = () => {
           <div className="english-content">
             <div id="terms-and-conditions">
               <p>
-                <strong>Bulak LGU Smart Connect</strong> Bulak LGU Smart Connect is committed to
-                protecting and respecting your personal data privacy. This website is operated by
-                the
+                <strong>Bulak LGU Connect</strong> Bulak LGU Connect is committed to protecting and
+                respecting your personal data privacy. This website is operated by the
                 <strong> Municipal Civil Registrar Office of San Ildefonso Bulacan</strong> and is
                 fully compliant with the
                 <strong> Data Privacy Act of 2012</strong> (Republic Act No. 10173), the primary law
@@ -49,12 +48,12 @@ const PrivacyPolicy = () => {
                 This Privacy Policy may be revised, modified, or replaced to reflect updates to
                 applicable laws, regulations, or system enhancements. Users will be notified of such
                 changes for review and acceptance. If you do not agree to the updated Privacy
-                Policy, you must stop using the Bulak LGU Smart Connect services.
+                Policy, you must stop using the Bulak LGU Connect services.
               </p>
 
               <h2>Service Description</h2>
               <p>
-                Bulak LGU Smart Connect is an online platform developed for the{' '}
+                Bulak LGU Connect is an online platform developed for the{' '}
                 <strong>Municipal Civil Registrar Office of San Ildefonso.</strong> Through this
                 system, qualified users may request the following civil registry documents:
               </p>
@@ -176,7 +175,7 @@ const PrivacyPolicy = () => {
               <h2>Collection Method</h2>
               <p>
                 The collection of data starts when the user logs onto the{' '}
-                <strong>Bulak LGU Smart Connect </strong>website and agrees to the{' '}
+                <strong>Bulak LGU Connect </strong>website and agrees to the{' '}
                 <strong>User Agreement </strong> and <strong> Privacy Policy. </strong> Without
                 consent, the user cannot proceed. Upon agreement, the user fills out the necessary
                 forms, and personal data is collected based on the document requested.
@@ -252,7 +251,7 @@ const PrivacyPolicy = () => {
               <h1>Terms and Conditions</h1>
 
               <p>
-                Welcome to <strong>Bulak LGU Smart Connect.</strong> These{' '}
+                Welcome to <strong>Bulak LGU Connect.</strong> These{' '}
                 <strong>Terms and Conditions</strong> (“Terms”) govern your use of the Bulak LGU
                 Smart Connect website and services operated by the{' '}
                 <strong>Municipal Civil Registrar Office of San Ildefonso, Bulacan.</strong> By
@@ -262,8 +261,8 @@ const PrivacyPolicy = () => {
 
               <h2>1. Acceptance of Terms</h2>
               <p>
-                By using <strong> Bulak LGU Smart Connect</strong>, you acknowledge that you have to
-                be legally bound by these Terms and our Privacy Policy. If you do not agree with any
+                By using <strong> Bulak LGU Connect</strong>, you acknowledge that you have to be
+                legally bound by these Terms and our Privacy Policy. If you do not agree with any
                 part of these Terms or the Privacy Policy, please do not use the service.
               </p>
 
@@ -386,8 +385,8 @@ const PrivacyPolicy = () => {
           <div className="tagalog-content">
             <div id="terms-and-conditions">
               <p>
-                Ang <strong>Bulak LGU Smart Connect</strong> ay nakatuon sa pagprotekta at paggalang
-                sa inyong pribadong impormasyon. Ang website na ito ay pinapamahalaan ng
+                Ang <strong>Bulak LGU Connect</strong> ay nakatuon sa pagprotekta at paggalang sa
+                inyong pribadong impormasyon. Ang website na ito ay pinapamahalaan ng
                 <strong> Municipal Civil Registrar Office ng San Ildefonso Bulacan</strong> at
                 sumusunod nang lubusan sa
                 <strong> Data Privacy Act ng 2012</strong> (Republic Act No. 10173), ang pangunahing
@@ -399,12 +398,12 @@ const PrivacyPolicy = () => {
                 mga pagbabago sa mga naaangkop na batas, regulasyon, o pagpapahusay ng sistema. Ang
                 mga user ay aabisuhan ng mga pagbabagong ito para sa pagsusuri at pagtanggap. Kung
                 hindi kayo sumasang-ayon sa napapanahong Privacy Policy, dapat kayong tumigil sa
-                paggamit ng mga serbisyo ng Bulak LGU Smart Connect.
+                paggamit ng mga serbisyo ng Bulak LGU Connect.
               </p>
 
               <h2>Paglalarawan ng Serbisyo</h2>
               <p>
-                Ang Bulak LGU Smart Connect ay isang online platform na ginawa para sa{' '}
+                Ang Bulak LGU Connect ay isang online platform na ginawa para sa{' '}
                 <strong>Municipal Civil Registrar Office ng San Ildefonso.</strong> Sa pamamagitan
                 ng sistemang ito, ang mga kwalipikadong user ay maaaring humingi ng mga sumusunod na
                 civil registry documents:
@@ -528,7 +527,7 @@ const PrivacyPolicy = () => {
               <h2>Paraan ng Pagkolekta</h2>
               <p>
                 Ang pagkolekta ng data ay nagsisimula kapag ang user ay nag-log sa{' '}
-                <strong>Bulak LGU Smart Connect </strong>website at sumasang-ayon sa{' '}
+                <strong>Bulak LGU Connect </strong>website at sumasang-ayon sa{' '}
                 <strong>User Agreement </strong> at <strong> Privacy Policy. </strong> Kung walang
                 pahintulot, hindi makakapagpatuloy ang user. Sa pagsang-ayon, pinupunan ng user ang
                 mga kinakailangang form, at ang personal na data ay kinokolekta batay sa hinihinging
@@ -607,8 +606,8 @@ const PrivacyPolicy = () => {
             <div id="terms-and-conditions">
               <h1>Mga Tuntunin at Kundisyon</h1>
               <p>
-                Maligayang pagdating sa <strong>Bulak LGU Smart Connect.</strong> Ang mga Tuntunin
-                at Kundisyon na ito (“Tuntunin”) ay namamahala sa iyong paggamit ng website at mga
+                Maligayang pagdating sa <strong>Bulak LGU Connect.</strong> Ang mga Tuntunin at
+                Kundisyon na ito (“Tuntunin”) ay namamahala sa iyong paggamit ng website at mga
                 serbisyong iniaalok ng Tanggapan ng{' '}
                 <strong>Municipal Civil Registrar ng San Ildefonso, Bulacan.</strong> Sa pag-access
                 o paggamit ng website at serbisyo, ikaw ay sumasang-ayon na sumunod at mapailalim sa
@@ -617,7 +616,7 @@ const PrivacyPolicy = () => {
 
               <h2>1. Pagtanggap sa mga Tuntunin</h2>
               <p>
-                Sa paggamit ng <strong>Bulak LGU Smart Connect,</strong> kinikilala mong nabasa mo,
+                Sa paggamit ng <strong>Bulak LGU Connect,</strong> kinikilala mong nabasa mo,
                 naintindihan, at sumasang-ayon kang legal na sumunod sa mga Tuntunin at aming
                 Patakaran sa Privacy. Kung hindi ka sumasang-ayon sa alinmang bahagi ng mga ito,
                 mangyaring huwag gamitin ang serbisyo.

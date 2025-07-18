@@ -1,5 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Typography, Button, Card, CardContent, Modal, Dialog, DialogTitle, DialogContent, List, ListItem, ListItemText, Container, Grid } from '@mui/material';
+import {
+  Box,
+  Typography,
+  Button,
+  Card,
+  CardContent,
+  Modal,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  List,
+  ListItem,
+  ListItemText,
+  Container,
+  Grid,
+} from '@mui/material';
 import logger from '../utils/logger';
 import { styled } from '@mui/material/styles';
 import './LandingPage.css';
@@ -18,7 +33,7 @@ import { announcementService } from '../services/announcementService';
 const LandingPage = () => {
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
-    const [showAppointmentContent, setShowAppointmentContent] = useState(false);
+  const [showAppointmentContent, setShowAppointmentContent] = useState(false);
 
   const [announcements, setAnnouncements] = useState([]);
   const [announcementLoading, setAnnouncementLoading] = useState(true);
@@ -44,7 +59,7 @@ const LandingPage = () => {
       setAnnouncementLoading(false);
     }
   };
-    const handleRequirementClick = type => {
+  const handleRequirementClick = type => {
     if (type === 'birth') {
       navigate('/RequirementBirthList');
     } else if (type === 'marriage') {
@@ -61,9 +76,9 @@ const LandingPage = () => {
       <Box className=" NavbarLanding">
         <NavBar />
       </Box>
-      
-      <Dialog 
-        open={requirementsModalOpen} 
+
+      <Dialog
+        open={requirementsModalOpen}
         onClose={() => setRequirementsModalOpen(false)}
         maxWidth="sm"
         fullWidth
@@ -78,32 +93,32 @@ const LandingPage = () => {
         </DialogTitle>
         <DialogContent>
           <List>
-            <ListItem 
-              button 
+            <ListItem
+              button
               onClick={() => handleRequirementClick('birth')}
               style={{ cursor: 'pointer', borderRadius: '8px', marginBottom: '8px' }}
             >
-              <ListItemText 
+              <ListItemText
                 primary="Birth Certificate Requirements"
                 secondary="View required documents for birth certificate applications"
               />
             </ListItem>
-            <ListItem 
-              button 
+            <ListItem
+              button
               onClick={() => handleRequirementClick('marriage')}
               style={{ cursor: 'pointer', borderRadius: '8px', marginBottom: '8px' }}
             >
-              <ListItemText 
+              <ListItemText
                 primary="Marriage License Requirements"
                 secondary="View required documents for marriage license/certificate applications"
               />
             </ListItem>
-            <ListItem 
-              button 
+            <ListItem
+              button
               onClick={() => handleRequirementClick('death')}
               style={{ cursor: 'pointer', borderRadius: '8px', marginBottom: '8px' }}
             >
-              <ListItemText 
+              <ListItemText
                 primary="Death Certificate Requirements"
                 secondary="View required documents for death certificate applications"
               />
@@ -124,24 +139,23 @@ const LandingPage = () => {
                   Fast Queues, Simple Transactions, Better Service
                 </Typography>
                 <Typography variant="body1" className="HeroDescriptionLanding">
-                  <strong className="LandingTitle"> Bulak LGU Smart Connect</strong> for the civil
+                  <strong className="LandingTitle"> Bulak LGU Connect</strong> for the civil
                   registrar office of San Ildefonso Bulacan, offers fast queuing, simplified
                   transactions, and improved government services by allowing residents to manage
                   their queues and applications online, enhancing service efficiency and
                   convenience.
                 </Typography>
-               
-                   <Button 
-    variant="contained" 
-    color="primary" 
-    className="SignUpButtonLanding"
-    onClick={isAuthenticated ? handleViewRequirements : undefined}
-    component={isAuthenticated ? 'button' : Link}
-    to={isAuthenticated ? undefined : '/SignUpForm'}
-  >
-    {isAuthenticated ? 'VIEW REQUIREMENTS' : 'SIGN UP'}
-  </Button>
-             
+
+                <Button
+                  variant="contained"
+                  color="primary"
+                  className="SignUpButtonLanding"
+                  onClick={isAuthenticated ? handleViewRequirements : undefined}
+                  component={isAuthenticated ? 'button' : Link}
+                  to={isAuthenticated ? undefined : '/SignUpForm'}
+                >
+                  {isAuthenticated ? 'VIEW REQUIREMENTS' : 'SIGN UP'}
+                </Button>
               </Box>
             </Grid>
           </Grid>
@@ -292,8 +306,8 @@ const LandingPage = () => {
                     className="AboutDescriptionLanding"
                     sx={{ lineHeight: 1.7 }}
                   >
-                    <b>Bulak LGU Smart Connect</b> is the official digital queue and information
-                    system for the Municipal Civil Registrar of San Ildefonso, Bulacan.
+                    <b>Bulak LGU Connect</b> is the official digital queue and information system
+                    for the Municipal Civil Registrar of San Ildefonso, Bulacan.
                     <br />
                     <br />
                     Our mission is to provide fast, organized, and transparent public service.

@@ -13,12 +13,12 @@ const LogInContent = () => {
 
       {/* Main Title */}
       <Typography variant="h3" className="MainTitle">
-        Bulak LGU Smart Connect
+        Bulak LGU Connect
       </Typography>
 
       {/* Placeholder Text */}
       <Typography variant="body1" className="PlaceholderText">
-        <b>Bulak LGU Smart Connect</b> is the official digital queue and information system for the
+        <b>Bulak LGU Connect</b> is the official digital queue and information system for the
         Municipal Civil Registrar of San Ildefonso, Bulacan.
         <br />
       </Typography>
