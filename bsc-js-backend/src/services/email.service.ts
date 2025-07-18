@@ -22,11 +22,11 @@ export class EmailService {
   async sendOTP(email: string, otp: string, purpose: string = 'verification') {
     const templates = {
       verification: {
-        subject: '🔐 Bulak LGU Smart Connect - Email Verification',
+        subject: '🔐 Bulak LGU Connect - Email Verification',
         html: `
           <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
             <div style="background: linear-gradient(135deg, #1c4d5a 0%, #8aacd5 100%); padding: 20px; text-align: center;">
-              <h1 style="color: white; margin: 0;">Bulak LGU Smart Connect</h1>
+              <h1 style="color: white; margin: 0;">Bulak LGU Connect</h1>
             </div>
             <div style="padding: 30px; background-color: #f9f9f9;">
               <h2 style="color: #333;">Email Verification Required</h2>
@@ -41,17 +41,17 @@ export class EmailService {
               </p>
             </div>
             <div style="background: #333; color: white; padding: 15px; text-align: center; font-size: 12px;">
-              © 2025 Bulak LGU Smart Connect. All rights reserved.
+              © 2025 Bulak LGU Connect. All rights reserved.
             </div>
           </div>
         `,
       },
       password_reset: {
-        subject: '🔒 Bulak LGU Smart Connect - Password Reset',
+        subject: '🔒 Bulak LGU Connect - Password Reset',
         html: `
           <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
             <div style="background: linear-gradient(135deg, #1c4d5a 0%, #8aacd5 100%); padding: 20px; text-align: center;">
-              <h1 style="color: white; margin: 0;">Bulak LGU Smart Connect</h1>
+              <h1 style="color: white; margin: 0;">Bulak LGU Connect</h1>
             </div>
             <div style="padding: 30px; background-color: #f9f9f9;">
               <h2 style="color: #333;">Password Reset Request</h2>
@@ -66,17 +66,17 @@ export class EmailService {
               </p>
             </div>
             <div style="background: #333; color: white; padding: 15px; text-align: center; font-size: 12px;">
-              © 2025 Bulak LGU Smart Connect. All rights reserved.
+              © 2025 Bulak LGU Connect. All rights reserved.
             </div>
           </div>
         `,
       },
       application_update: {
-        subject: '📋 Bulak LGU Smart Connect - Application Status Update',
+        subject: '📋 Bulak LGU Connect - Application Status Update',
         html: `
           <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
             <div style="background: linear-gradient(135deg, #1c4d5a 0%, #8aacd5 100%); padding: 20px; text-align: center;">
-              <h1 style="color: white; margin: 0;">Bulak LGU Smart Connect</h1>
+              <h1 style="color: white; margin: 0;">Bulak LGU Connect</h1>
             </div>
             <div style="padding: 30px; background-color: #f9f9f9;">
               <h2 style="color: #333;">Application Status Update</h2>
@@ -89,7 +89,7 @@ export class EmailService {
               </div>
             </div>
             <div style="background: #333; color: white; padding: 15px; text-align: center; font-size: 12px;">
-              © 2025 Bulak LGU Smart Connect. All rights reserved.
+              © 2025 Bulak LGU Connect. All rights reserved.
             </div>
           </div>
         `,
@@ -128,7 +128,7 @@ export class EmailService {
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
           <div style="background: linear-gradient(135deg, #1c4d5a 0%, #8aacd5 100%); padding: 20px; text-align: center;">
-            <h1 style="color: white; margin: 0;">Bulak LGU Smart Connect</h1>
+            <h1 style="color: white; margin: 0;">Bulak LGU Connect</h1>
           </div>
           <div style="padding: 30px; background-color: #f9f9f9;">
             <h2 style="color: #333;">Application Status Update</h2>
@@ -145,7 +145,7 @@ export class EmailService {
             </p>
           </div>
           <div style="background: #333; color: white; padding: 15px; text-align: center; font-size: 12px;">
-            © 2025 Bulak LGU Smart Connect. All rights reserved.
+            © 2025 Bulak LGU Connect. All rights reserved.
           </div>
         </div>
       `,
@@ -160,7 +160,7 @@ export class EmailService {
     position: number,
     estimatedTime: string,
   ): Promise<any> {
-    const subject = `🔔 Bulak LGU Smart Connect - You're Almost Up! (Position #${position})`;
+    const subject = `🔔 Bulak LGU Connect - You're Almost Up! (Position #${position})`;
 
     const html = `
       <!DOCTYPE html>
@@ -172,7 +172,7 @@ export class EmailService {
       <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
           <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
               <div style="text-align: center; margin-bottom: 30px;">
-                  <h1 style="color: #2c3e50;">🎫 Bulak LGU Smart Connect</h1>
+                  <h1 style="color: #2c3e50;">🎫 Bulak LGU Connect</h1>
                   <p style="color: #7f8c8d;">Queue Position Alert</p>
               </div>
               
@@ -204,7 +204,7 @@ export class EmailService {
               <div style="text-align: center; margin-top: 30px;">
                   <p style="color: #7f8c8d; font-size: 14px;">
                       Thank you for your patience! 🙏<br/>
-                      Civil Registrar Office - Bulak LGU Smart Connect
+                      Civil Registrar Office - Bulak LGU Connect
                   </p>
               </div>
           </div>
@@ -226,7 +226,7 @@ export class EmailService {
     status: string,
     message: string,
   ): Promise<any> {
-    const subject = `🎯 Bulak LGU Smart Connect - Please Proceed to Counter!`;
+    const subject = `🎯 Bulak LGU Connect - Please Proceed to Counter!`;
 
     const html = `
       <!DOCTYPE html>
@@ -238,7 +238,7 @@ export class EmailService {
       <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
           <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
               <div style="text-align: center; margin-bottom: 30px;">
-                  <h1 style="color: #2c3e50;">🎫 Bulak LGU Smart Connect</h1>
+                  <h1 style="color: #2c3e50;">🎫 Bulak LGU Connect</h1>
                   <p style="color: #7f8c8d;">Now Serving</p>
               </div>
               
@@ -266,7 +266,7 @@ export class EmailService {
               
               <div style="text-align: center; margin-top: 30px;">
                   <p style="color: #7f8c8d; font-size: 14px;">
-                      Civil Registrar Office - Bulak LGU Smart Connect<br/>
+                      Civil Registrar Office - Bulak LGU Connect<br/>
                       Serving you better with technology! 🙏
                   </p>
               </div>
@@ -291,7 +291,7 @@ export class EmailService {
     appointmentNumber: string,
     appointmentDetails: any,
   ): Promise<void> {
-    const subject = 'Appointment Confirmed - Bulak LGU Smart Connect';
+    const subject = 'Appointment Confirmed - Bulak LGU Connect';
 
     const html = `
       <!DOCTYPE html>
@@ -365,7 +365,7 @@ export class EmailService {
               </ul>
             </div>
             
-            <p>Thank you for using Bulak LGU Smart Connect!</p>
+            <p>Thank you for using Bulak LGU Connect!</p>
           </div>
           
           <div class="footer">
@@ -506,7 +506,7 @@ export class EmailService {
                 : ''
             }
             
-            <p>Thank you for using Bulak LGU Smart Connect!</p>
+            <p>Thank you for using Bulak LGU Connect!</p>
           </div>
           
           <div class="footer">
@@ -714,7 +714,7 @@ export class EmailService {
             
             <p>We look forward to seeing you tomorrow!</p>
             
-            <p>Thank you for using Bulak LGU Smart Connect!</p>
+            <p>Thank you for using Bulak LGU Connect!</p>
           </div>
           
           <div class="footer">
@@ -781,7 +781,7 @@ export class EmailService {
           <div class="content">
             <p>Dear ${applicantName || 'Valued Client'},</p>
             
-            <p>Thank you for submitting your document application through Bulak LGU Smart Connect.</p>
+            <p>Thank you for submitting your document application through Bulak LGU Connect.</p>
             
             <div class="application-card">
               <h3 style="margin-top: 0; color: #28a745;">Application Details</h3>
@@ -823,7 +823,7 @@ export class EmailService {
               </ul>
             </div>
             
-            <p>Thank you for using Bulak LGU Smart Connect!</p>
+            <p>Thank you for using Bulak LGU Connect!</p>
           </div>
           
           <div class="footer">
@@ -973,7 +973,7 @@ export class EmailService {
                 : ''
             }
             
-            <p>Thank you for using Bulak LGU Smart Connect!</p>
+            <p>Thank you for using Bulak LGU Connect!</p>
           </div>
           
           <div class="footer">

@@ -129,7 +129,7 @@ describe('AuthController', () => {
         'test@example.com',
         'Welcome!',
         'Account Created',
-        'Welcome to Bulak LGU Smart Connect',
+        'Welcome to Bulak LGU Connect',
       );
       expect(result).toEqual(expectedResult);
     });
