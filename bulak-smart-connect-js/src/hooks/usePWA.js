@@ -148,13 +148,13 @@ export const usePWA = () => {
     const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
     let instructions = '';
-    let title = 'Install Bulak LGU Smart Connect';
+    let title = 'Install Bulak LGU Connect';
     
     if (isChrome || isEdge) {
       if (isMobile) {
         instructions = '1. Tap the menu button (⋮) in your browser\n2. Look for "Install app" or "Add to Home Screen"\n3. Tap "Install" to add to your home screen';
       } else {
-        instructions = '1. Look for the install icon (⊕) in the address bar\n2. Or click the menu button (⋮) and select "Install Bulak LGU Smart Connect"\n3. Click "Install" in the popup dialog';
+        instructions = '1. Look for the install icon (⊕) in the address bar\n2. Or click the menu button (⋮) and select "Install Bulak LGU Connect"\n3. Click "Install" in the popup dialog';
       }
     } else if (isSafari) {
       instructions = '1. Tap the Share button (□↗) at the bottom\n2. Scroll down and select "Add to Home Screen"\n3. Tap "Add" to confirm installation';
