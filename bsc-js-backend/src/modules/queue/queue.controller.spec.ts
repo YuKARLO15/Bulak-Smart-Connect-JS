@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { QueueController } from './queue.controller';
 import { QueueService } from './queue.service';
+import { QueueSchedulerService } from './queue-scheduler.service';
 
 // Mock QueueSchedulerService
 const mockQueueSchedulerService = {
@@ -31,7 +32,7 @@ describe('QueueController', () => {
           useValue: mockQueueService,
         },
         {
-          provide: 'QueueSchedulerService', // Mock the missing dependency
+          provide: QueueSchedulerService,
           useValue: mockQueueSchedulerService,
         },
       ],
