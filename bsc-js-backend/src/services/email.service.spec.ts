@@ -284,9 +284,10 @@ describe('EmailService', () => {
     });
 
     it('should use secure connection when configured', () => {
+      const originalGet = mockConfigService.get;
       mockConfigService.get.mockImplementation((key: string) => {
         if (key === 'SMTP_SECURE') return 'true';
-        return mockConfigService.get(key);
+        return originalGet(key);
       });
 
       // This tests the constructor logic

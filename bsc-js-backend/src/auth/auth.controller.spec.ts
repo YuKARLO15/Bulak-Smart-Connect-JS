@@ -462,7 +462,7 @@ describe('AuthController', () => {
       expect(result).toEqual({
         success: true,
         message: 'OTP generated and sent',
-        otp: '123456', // Should return OTP when not in production
+        otp: undefined, // Should be undefined when not in development
       });
     });
 
