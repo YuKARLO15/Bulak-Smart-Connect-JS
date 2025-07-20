@@ -2,8 +2,16 @@ name: API Documentation
 
 on:
   push:
-    branches: [ '*']
+    branches: [ 'main' ]
     paths:
+      - 'bsc-js-backend/**'
+      - 'bsc-js-backend/src/**'
+      - 'bsc-js-backend/docs/**'
+      - '.github/workflows/api-documentation.yml'
+  pull_request:
+    branches: [ 'main' ]
+    paths:
+      - 'bsc-js-backend/**'
       - 'bsc-js-backend/src/**'
       - 'bsc-js-backend/docs/**'
       - '.github/workflows/api-documentation.yml'

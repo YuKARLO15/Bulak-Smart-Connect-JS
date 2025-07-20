@@ -2,12 +2,16 @@ name: API Security Scanning
 
 on:
   push:
-    branches: [ '*' ]
+    paths:
+      - 'bsc-js-backend/**'
+      - '.github/workflows/api-security.yaml'
   pull_request:
-    branches: [ main ]
-  schedule:
-    - cron: '0 0 * * 1'  # Weekly on Monday
-  workflow_dispatch:
+    branches: 
+      - main
+      - production
+    paths:
+      - 'bsc-js-backend/**'
+      - '.github/workflows/api-security.yaml'
 
 jobs:
   api-security-scan:
@@ -424,11 +428,7 @@ jobs:
             echo "Stopping API server with PID: $API_PID"
             kill $API_PID 2>/dev/null || echo "API server already stopped"
             
-            # Wait a moment and force kill if necessary
-            sleep 5
-            kill -9 $API_PID 2>/dev/null || echo "Force kill not needed"
-          else
-            echo "No PID file found, attempting to kill any Node.js processes"
+            # Wait a moment and force
             pkill -f "nest start" || echo "No nest processes found"
           fi
           
