@@ -2,9 +2,15 @@ name: Code Quality and Security
 
 on:
   push:
-    branches: [ '*' ]
+    paths:
+      - 'bulak-smart-connect-js/**'
+      - 'bsc-js-backend/**'
+      - '.github/workflows/code-quality-security.yml'
   pull_request:
-    branches: [ main ]
+    paths:
+      - 'bulak-smart-connect-js/**'
+      - 'bsc-js-backend/**'
+      - '.github/workflows/code-quality-security.yml'
   schedule:
     - cron: '0 0 * * 1' # Weekly on Monday
 

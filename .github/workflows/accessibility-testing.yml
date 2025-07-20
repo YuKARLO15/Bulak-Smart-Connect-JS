@@ -2,9 +2,13 @@ name: Accessibility Testing
 
 on:
   push:
-    branches: [ '*' ]
+    paths:
+      - 'bulak-smart-connect-js/**'
+      - '.github/workflows/accessibility-testing.yml'
   pull_request:
-    branches: [ main ]
+    paths:
+      - 'bulak-smart-connect-js/**'
+      - '.github/workflows/accessibility-testing.yml'
   schedule:
     - cron: '0 0 * * 4' # Weekly on Thursday
 

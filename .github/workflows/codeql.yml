@@ -3,8 +3,18 @@ name: "CodeQL"
 on:
   push:
     branches: [ '*' ]
+    paths:
+      - 'bulak-smart-connect-js/**'
+      - 'bsc-js-backend/**'
+      - '.github/workflows/codeql.yml'
   pull_request:
-    branches: [ main ]
+    branches: 
+      - main
+      - production
+    paths:
+      - 'bulak-smart-connect-js/**'
+      - 'bsc-js-backend/**'
+      - '.github/workflows/codeql.yml'
   schedule:
     - cron: '30 1 * * 0'
 
