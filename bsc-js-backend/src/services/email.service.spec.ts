@@ -292,7 +292,9 @@ describe('EmailService', () => {
         SMTP_PASS: 'test-password',
         EMAIL_FROM: 'noreply@bulaksmartconnect.com',
       };
-      mockConfigService.get.mockImplementation((key: string) => configValues[key]);
+      mockConfigService.get.mockImplementation(
+        (key: string) => configValues[key],
+      );
 
       // This tests the constructor logic
       const newService = new EmailService(configService);

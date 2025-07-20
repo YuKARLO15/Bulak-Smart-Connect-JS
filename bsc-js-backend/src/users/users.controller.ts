@@ -41,7 +41,10 @@ import { UserResponseDto } from './dto/user-response.dto';
 export class UsersController {
   private readonly logger = new Logger(UsersController.name);
   // ✅ ADD: Get bcrypt rounds from environment
-  private readonly bcryptRounds = parseInt(process.env.BCRYPT_ROUNDS || '12', 10);
+  private readonly bcryptRounds = parseInt(
+    process.env.BCRYPT_ROUNDS || '12',
+    10,
+  );
 
   constructor(private readonly usersService: UsersService) {}
 

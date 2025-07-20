@@ -25,7 +25,10 @@ interface LockoutData {
 export class AuthService {
   private readonly logger = new Logger(AuthService.name);
   // ✅ ADD: Get bcrypt rounds from environment
-  private readonly bcryptRounds = parseInt(process.env.BCRYPT_ROUNDS || '12', 10);
+  private readonly bcryptRounds = parseInt(
+    process.env.BCRYPT_ROUNDS || '12',
+    10,
+  );
 
   constructor(
     @InjectRepository(User)
