@@ -295,11 +295,16 @@ const AppointmentContainer = ({ onBack, preselectedDate }) => {
 
       const result = await appointmentService.createAppointment(appointmentData);
 
+      const pad = n => String(n).padStart(2, '0');
+      const localDateString = selectedDate
+        ? `${selectedDate.getFullYear()}-${pad(selectedDate.getMonth() + 1)}-${pad(selectedDate.getDate())}`
+        : '';
+
       const newAppointment = {
         id: result.appointmentNumber || `APPT-${Date.now()}`,
         appointmentNumber: result.appointmentNumber,
         type: formData.reason,
-        date: selectedDate.toISOString().split('T')[0],
+        date: localDateString,
         time: formData.time,
         lastName: formData.lastName,
         firstName: formData.firstName,
@@ -307,7 +312,7 @@ const AppointmentContainer = ({ onBack, preselectedDate }) => {
         address: formData.address,
         phoneNumber: formData.phoneNumber,
         reasonOfVisit: formData.reason,
-        appointmentDate: selectedDate.toISOString().split('T')[0],
+        appointmentDate: localDateString,
         appointmentTime: formData.time,
         status: result.status || 'pending',
         dbId: result.id,

@@ -15,6 +15,7 @@ process.env.DB_PORT = '3306';
 process.env.DB_USERNAME = 'root';
 process.env.DB_PASSWORD = 'test_password';
 process.env.DB_NAME = 'bsc_test';
+process.env.DB_SYNCHRONIZE = 'true';
 process.env.JWT_SECRET = 'test_jwt_secret_key_for_testing_purposes_only';
 
 // MinIO test configuration

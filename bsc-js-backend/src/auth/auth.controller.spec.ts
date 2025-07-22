@@ -462,7 +462,7 @@ describe('AuthController', () => {
       expect(result).toEqual({
         success: true,
         message: 'OTP generated and sent',
-        otp: '123456', // Should return OTP when not in production
+        otp: undefined, // Should be undefined when not in development
       });
     });
 
@@ -501,35 +501,44 @@ describe('AuthController', () => {
       expect(result).toEqual(expectedProfile);
     });
 
-    it('should throw UnauthorizedException for invalid user ID', async () => {
+    it('should throw UnauthorizedException for invalid user ID', () => {
       const mockRequest = {
         user: { id: null },
       } as any;
 
-      await expect(controller.getProfile(mockRequest)).rejects.toThrow(
+      expect(() => controller.getProfile(mockRequest)).toThrow(
         UnauthorizedException,
+      );
+      expect(() => controller.getProfile(mockRequest)).toThrow(
+        'Invalid user ID',
       );
       expect(mockAuthService.getProfile).not.toHaveBeenCalled();
     });
 
-    it('should throw UnauthorizedException for missing user', async () => {
+    it('should throw UnauthorizedException for missing user', () => {
       const mockRequest = {
         user: null,
       } as any;
 
-      await expect(controller.getProfile(mockRequest)).rejects.toThrow(
+      expect(() => controller.getProfile(mockRequest)).toThrow(
         UnauthorizedException,
+      );
+      expect(() => controller.getProfile(mockRequest)).toThrow(
+        'Invalid user ID',
       );
       expect(mockAuthService.getProfile).not.toHaveBeenCalled();
     });
 
-    it('should throw UnauthorizedException for undefined user ID', async () => {
+    it('should throw UnauthorizedException for undefined user ID', () => {
       const mockRequest = {
         user: { id: undefined },
       } as any;
 
-      await expect(controller.getProfile(mockRequest)).rejects.toThrow(
+      expect(() => controller.getProfile(mockRequest)).toThrow(
         UnauthorizedException,
+      );
+      expect(() => controller.getProfile(mockRequest)).toThrow(
+        'Invalid user ID',
       );
       expect(mockAuthService.getProfile).not.toHaveBeenCalled();
     });

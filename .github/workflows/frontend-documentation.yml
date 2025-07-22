@@ -2,9 +2,15 @@ name: Frontend Documentation
 
 on:
   push:
-    branches: ['*']
+    branches: ['main']
     paths:
-      - 'bulak-smart-connect-js/src/**'
+      - 'bulak-smart-connect-js/**'
+      - '.github/workflows/frontend-documentation.yml'
+  pull_request:
+    branches: ['main']
+    paths:
+      - 'bulak-smart-connect-js/**'
+      - '.github/workflows/frontend-documentation.yml'
   workflow_dispatch:
 
 permissions:

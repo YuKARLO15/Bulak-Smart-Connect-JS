@@ -284,10 +284,17 @@ describe('EmailService', () => {
     });
 
     it('should use secure connection when configured', () => {
-      mockConfigService.get.mockImplementation((key: string) => {
-        if (key === 'SMTP_SECURE') return 'true';
-        return mockConfigService.get(key);
-      });
+      const configValues: Record<string, any> = {
+        SMTP_HOST: 'smtp.gmail.com',
+        SMTP_PORT: '587',
+        SMTP_SECURE: 'true',
+        SMTP_USER: 'test@gmail.com',
+        SMTP_PASS: 'test-password',
+        EMAIL_FROM: 'noreply@bulaksmartconnect.com',
+      };
+      mockConfigService.get.mockImplementation(
+        (key: string) => configValues[key],
+      );
 
       // This tests the constructor logic
       const newService = new EmailService(configService);

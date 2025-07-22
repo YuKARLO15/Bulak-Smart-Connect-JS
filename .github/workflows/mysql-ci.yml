@@ -2,9 +2,16 @@ name: MySQL Authentication CI
 
 on:
   push:
-    branches: [ '*' ]
+    paths:
+      - 'bsc-js-backend/**'
+      - '.github/workflows/mysql-ci.yml'
   pull_request:
-    branches: [ main ]
+    branches:
+      - main
+      - production
+    paths:
+      - 'bsc-js-backend/**'
+      - '.github/workflows/mysql-ci.yml'
   workflow_dispatch:
 
 jobs:
