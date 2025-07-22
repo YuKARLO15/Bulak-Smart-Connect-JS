@@ -506,8 +506,12 @@ describe('AuthController', () => {
         user: { id: null },
       } as any;
 
-      expect(() => controller.getProfile(mockRequest)).toThrow(UnauthorizedException);
-      expect(() => controller.getProfile(mockRequest)).toThrow('Invalid user ID');
+      expect(() => controller.getProfile(mockRequest)).toThrow(
+        UnauthorizedException,
+      );
+      expect(() => controller.getProfile(mockRequest)).toThrow(
+        'Invalid user ID',
+      );
       expect(mockAuthService.getProfile).not.toHaveBeenCalled();
     });
 
@@ -516,8 +520,12 @@ describe('AuthController', () => {
         user: null,
       } as any;
 
-      expect(() => controller.getProfile(mockRequest)).toThrow(UnauthorizedException);
-      expect(() => controller.getProfile(mockRequest)).toThrow('Invalid user ID');
+      expect(() => controller.getProfile(mockRequest)).toThrow(
+        UnauthorizedException,
+      );
+      expect(() => controller.getProfile(mockRequest)).toThrow(
+        'Invalid user ID',
+      );
       expect(mockAuthService.getProfile).not.toHaveBeenCalled();
     });
 
@@ -526,8 +534,12 @@ describe('AuthController', () => {
         user: { id: undefined },
       } as any;
 
-      expect(() => controller.getProfile(mockRequest)).toThrow(UnauthorizedException);
-      expect(() => controller.getProfile(mockRequest)).toThrow('Invalid user ID');
+      expect(() => controller.getProfile(mockRequest)).toThrow(
+        UnauthorizedException,
+      );
+      expect(() => controller.getProfile(mockRequest)).toThrow(
+        'Invalid user ID',
+      );
       expect(mockAuthService.getProfile).not.toHaveBeenCalled();
     });
   });
