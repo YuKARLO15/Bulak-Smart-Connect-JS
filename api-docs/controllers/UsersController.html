@@ -265,8 +265,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="160"
-                                    class="link-to-prism">src/users/users.controller.ts:160</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="163"
+                                    class="link-to-prism">src/users/users.controller.ts:163</a></div>
                         </td>
                     </tr>
 
@@ -346,8 +346,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="53"
-                                    class="link-to-prism">src/users/users.controller.ts:53</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="56"
+                                    class="link-to-prism">src/users/users.controller.ts:56</a></div>
                         </td>
                     </tr>
 
@@ -440,8 +440,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="87"
-                                    class="link-to-prism">src/users/users.controller.ts:87</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="90"
+                                    class="link-to-prism">src/users/users.controller.ts:90</a></div>
                         </td>
                     </tr>
 
@@ -531,8 +531,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="65"
-                                    class="link-to-prism">src/users/users.controller.ts:65</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="68"
+                                    class="link-to-prism">src/users/users.controller.ts:68</a></div>
                         </td>
                     </tr>
 
@@ -612,8 +612,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="77"
-                                    class="link-to-prism">src/users/users.controller.ts:77</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="80"
+                                    class="link-to-prism">src/users/users.controller.ts:80</a></div>
                         </td>
                     </tr>
 
@@ -664,8 +664,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="128"
-                                    class="link-to-prism">src/users/users.controller.ts:128</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="131"
+                                    class="link-to-prism">src/users/users.controller.ts:131</a></div>
                         </td>
                     </tr>
 
@@ -758,8 +758,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="113"
-                                    class="link-to-prism">src/users/users.controller.ts:113</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="116"
+                                    class="link-to-prism">src/users/users.controller.ts:116</a></div>
                         </td>
                     </tr>
 
@@ -864,8 +864,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="142"
-                                    class="link-to-prism">src/users/users.controller.ts:142</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="145"
+                                    class="link-to-prism">src/users/users.controller.ts:145</a></div>
                         </td>
                     </tr>
 
@@ -982,7 +982,10 @@ import { UserResponseDto } from &#x27;./dto/user-response.dto&#x27;;
 export class UsersController {
   private readonly logger &#x3D; new Logger(UsersController.name);
   // ✅ ADD: Get bcrypt rounds from environment
-  private readonly bcryptRounds &#x3D; parseInt(process.env.BCRYPT_ROUNDS || &#x27;12&#x27;, 10);
+  private readonly bcryptRounds &#x3D; parseInt(
+    process.env.BCRYPT_ROUNDS || &#x27;12&#x27;,
+    10,
+  );
 
   constructor(private readonly usersService: UsersService) {}
 
