@@ -738,6 +738,131 @@ export class EmailService {
   }
 
   /**
+ * Get payment information based on application type and subtype
+ */
+private getPaymentInfo(applicationType: string, applicationSubtype?: string): { items: Array<{item: string, amount: string}>, total?: string, duration?: string } {
+  const type = applicationType?.toLowerCase() || '';
+  const subtype = applicationSubtype?.toLowerCase() || '';
+
+  // Birth Certificate Applications
+  if (type.includes('birth')) {
+    // Correction Applications
+    if (subtype.includes('correction')) {
+      if (subtype.includes('first name')) {
+        return {
+          items: [
+            { item: 'Filing Fee', amount: '₱300.00' },
+            { item: 'Newspaper Publication', amount: '₱3,500.00 (newspaper of your choice)' },
+            { item: 'Other Fees (notarized, new PSA corrected copy)', amount: '₱500.00' }
+          ],
+          total: '₱4,300.00',
+          duration: '4-6 months'
+        };
+      } else if (subtype.includes('clerical')) {
+        return {
+          items: [
+            { item: 'Filing Fee', amount: '₱1,000.00' },
+            { item: 'Miscellaneous Expenses', amount: '₱600.00' },
+            { item: 'Other Fees (notarized, new PSA corrected copy)', amount: '₱500.00' }
+          ],
+          total: '₱2,100.00',
+          duration: '4-6 months'
+        };
+      } else if (subtype.includes('sex') || subtype.includes('date of birth')) {
+        return {
+          items: [
+            { item: 'Filing Fee', amount: '₱300.00' },
+            { item: 'Newspaper Publication', amount: '₱3,500.00 (newspaper of your choice)' },
+            { item: 'Other Fees (notarized, new PSA corrected copy)', amount: '₱500.00' }
+          ],
+          total: '₱4,300.00',
+          duration: '4-6 months'
+        };
+      }
+    }
+    
+    // Delayed Registration Applications
+    if (subtype.includes('delayed')) {
+      if (subtype.includes('above 18')) {
+        return {
+          items: [
+            { item: 'Filing Fee', amount: '₱300.00' },
+            { item: 'Miscellaneous Expenses', amount: '₱600.00' },
+            { item: 'Other Fees (notarized, PSA copy)', amount: '₱500.00' }
+          ],
+          total: '₱1,400.00',
+          duration: '4-6 months'
+        };
+      } else if (subtype.includes('below 18')) {
+        return {
+          items: [
+            { item: 'Filing Fee', amount: '₱300.00' },
+            { item: 'Miscellaneous Expenses', amount: '₱600.00' },
+            { item: 'Other Fees (notarized, PSA copy)', amount: '₱500.00' }
+          ],
+          total: '₱1,400.00',
+          duration: '10 days'
+        };
+      } else if (subtype.includes('foreign parent')) {
+        return {
+          items: [
+            { item: 'Filing Fee', amount: '₱300.00' },
+            { item: 'Miscellaneous Expenses', amount: '₱600.00' },
+            { item: 'Other Fees (notarized, PSA copy)', amount: '₱500.00' }
+          ],
+          total: '₱1,400.00',
+          duration: '4-6 months'
+        };
+      }
+    }
+
+    // Regular/Copy Applications
+    if (subtype.includes('regular') || subtype.includes('copy') || subtype.includes('certified true copy')) {
+      return {
+        items: [
+          { item: 'Application Fee', amount: '₱50.00' },
+          { item: 'Processing Fee', amount: '₱100.00' }
+        ],
+        total: '₱150.00',
+        duration: '3-5 working days'
+      };
+    }
+  }
+
+  // Marriage Applications
+  if (type.includes('marriage')) {
+    if (subtype.includes('license')) {
+      return {
+        items: [
+          { item: 'Marriage License Fee', amount: '₱500.00' },
+          { item: 'Community Tax Certificate', amount: '₱30.00' },
+          { item: 'Processing Fee', amount: '₱100.00' }
+        ],
+        total: '₱630.00',
+        duration: '10 working days (after completion of requirements)'
+      };
+    } else if (subtype.includes('certificate')) {
+      return {
+        items: [
+          { item: 'Marriage Certificate Fee', amount: '₱150.00' },
+          { item: 'Processing Fee', amount: '₱50.00' }
+        ],
+        total: '₱200.00',
+        duration: '3-5 working days'
+      };
+    }
+  }
+
+  // Default fallback
+  return {
+    items: [
+      { item: 'Processing Fee', amount: 'To be determined' }
+    ],
+    duration: 'Please contact our office for details'
+  };
+}
+
+  /**
    * Send document application confirmation email
    */
   async sendDocumentApplicationConfirmation(
@@ -748,8 +873,10 @@ export class EmailService {
     applicantName?: string,
     submissionDate?: string,
     status: string = 'Pending',
+    statusMessage?: string,
   ): Promise<void> {
     const subject = `Application Submitted - ${applicationId}`;
+    const paymentInfo = this.getPaymentInfo(applicationType, applicationSubtype);
 
     const html = `
       <!DOCTYPE html>
