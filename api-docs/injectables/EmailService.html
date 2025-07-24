@@ -156,6 +156,10 @@
                     <td class="col-md-4">
                         <ul class="index-list">
                             <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#getPaymentInfo" >getPaymentInfo</a>
+                            </li>
+                            <li>
                                     <span class="modifier">Async</span>
                                 <a href="#sendApplicationNotification" >sendApplicationNotification</a>
                             </li>
@@ -269,6 +273,89 @@
     <h3 id="methods">
         Methods
     </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getPaymentInfo"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>getPaymentInfo</b></span>
+                        <a href="#getPaymentInfo"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>getPaymentInfo(applicationType: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, applicationSubtype?: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="743"
+                                    class="link-to-prism">src/services/email.service.ts:743</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Get payment information based on application type and subtype</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>applicationType</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>applicationSubtype</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    Yes
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>literal type</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
     <table class="table table-sm table-bordered">
         <tbody>
             <tr>
@@ -800,8 +887,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="1017"
-                                    class="link-to-prism">src/services/email.service.ts:1017</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="1278"
+                                    class="link-to-prism">src/services/email.service.ts:1278</a></div>
                         </td>
                     </tr>
 
@@ -912,15 +999,15 @@
             <tr>
                 <td class="col-md-4">
                         <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>sendDocumentApplicationConfirmation(email: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, applicationId: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, applicationType: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, applicationSubtype?: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, applicantName?: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, submissionDate?: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, status: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                    <code>sendDocumentApplicationConfirmation(email: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, applicationId: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, applicationType: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, applicationSubtype?: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, applicantName?: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, submissionDate?: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, status: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, statusMessage?: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
                 </td>
             </tr>
 
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="743"
-                                    class="link-to-prism">src/services/email.service.ts:743</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="895"
+                                    class="link-to-prism">src/services/email.service.ts:895</a></div>
                         </td>
                     </tr>
 
@@ -1042,6 +1129,20 @@
                                             </td>
 
                                         </tr>
+                                        <tr>
+                                                <td>statusMessage</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    Yes
+                                            </td>
+
+                                            <td>
+                                            </td>
+
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -1078,8 +1179,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="1037"
-                                    class="link-to-prism">src/services/email.service.ts:1037</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="1298"
+                                    class="link-to-prism">src/services/email.service.ts:1298</a></div>
                         </td>
                     </tr>
 
@@ -1221,8 +1322,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="854"
-                                    class="link-to-prism">src/services/email.service.ts:854</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="1069"
+                                    class="link-to-prism">src/services/email.service.ts:1069</a></div>
                         </td>
                     </tr>
 
@@ -2471,6 +2572,158 @@ export class EmailService {
   }
 
   /**
+   * Get payment information based on application type and subtype
+   */
+  private getPaymentInfo(
+    applicationType: string,
+    applicationSubtype?: string,
+  ): {
+    items: Array&lt;{ item: string; amount: string }&gt;;
+    total?: string;
+    duration?: string;
+  } {
+    const type &#x3D; applicationType?.toLowerCase() || &#x27;&#x27;;
+    const subtype &#x3D; applicationSubtype?.toLowerCase() || &#x27;&#x27;;
+
+    // Birth Certificate Applications
+    if (type.includes(&#x27;birth&#x27;)) {
+      // Correction Applications
+      if (subtype.includes(&#x27;correction&#x27;)) {
+        if (subtype.includes(&#x27;first name&#x27;)) {
+          return {
+            items: [
+              { item: &#x27;Filing Fee&#x27;, amount: &#x27;₱300.00&#x27; },
+              {
+                item: &#x27;Newspaper Publication&#x27;,
+                amount: &#x27;₱3,500.00 (newspaper of your choice)&#x27;,
+              },
+              {
+                item: &#x27;Other Fees (notarized, new PSA corrected copy)&#x27;,
+                amount: &#x27;₱500.00&#x27;,
+              },
+            ],
+            total: &#x27;₱4,300.00&#x27;,
+            duration: &#x27;4-6 months&#x27;,
+          };
+        } else if (subtype.includes(&#x27;clerical&#x27;)) {
+          return {
+            items: [
+              { item: &#x27;Filing Fee&#x27;, amount: &#x27;₱1,000.00&#x27; },
+              { item: &#x27;Miscellaneous Expenses&#x27;, amount: &#x27;₱600.00&#x27; },
+              {
+                item: &#x27;Other Fees (notarized, new PSA corrected copy)&#x27;,
+                amount: &#x27;₱500.00&#x27;,
+              },
+            ],
+            total: &#x27;₱2,100.00&#x27;,
+            duration: &#x27;4-6 months&#x27;,
+          };
+        } else if (
+          subtype.includes(&#x27;sex&#x27;) ||
+          subtype.includes(&#x27;date of birth&#x27;)
+        ) {
+          return {
+            items: [
+              { item: &#x27;Filing Fee&#x27;, amount: &#x27;₱300.00&#x27; },
+              {
+                item: &#x27;Newspaper Publication&#x27;,
+                amount: &#x27;₱3,500.00 (newspaper of your choice)&#x27;,
+              },
+              {
+                item: &#x27;Other Fees (notarized, new PSA corrected copy)&#x27;,
+                amount: &#x27;₱500.00&#x27;,
+              },
+            ],
+            total: &#x27;₱4,300.00&#x27;,
+            duration: &#x27;4-6 months&#x27;,
+          };
+        }
+      }
+
+      // Delayed Registration Applications
+      if (subtype.includes(&#x27;delayed&#x27;)) {
+        if (subtype.includes(&#x27;above 18&#x27;)) {
+          return {
+            items: [
+              { item: &#x27;Filing Fee&#x27;, amount: &#x27;₱300.00&#x27; },
+              { item: &#x27;Miscellaneous Expenses&#x27;, amount: &#x27;₱600.00&#x27; },
+              { item: &#x27;Other Fees (notarized, PSA copy)&#x27;, amount: &#x27;₱500.00&#x27; },
+            ],
+            total: &#x27;₱1,400.00&#x27;,
+            duration: &#x27;4-6 months&#x27;,
+          };
+        } else if (subtype.includes(&#x27;below 18&#x27;)) {
+          return {
+            items: [
+              { item: &#x27;Filing Fee&#x27;, amount: &#x27;₱300.00&#x27; },
+              { item: &#x27;Miscellaneous Expenses&#x27;, amount: &#x27;₱600.00&#x27; },
+              { item: &#x27;Other Fees (notarized, PSA copy)&#x27;, amount: &#x27;₱500.00&#x27; },
+            ],
+            total: &#x27;₱1,400.00&#x27;,
+            duration: &#x27;10 days&#x27;,
+          };
+        } else if (subtype.includes(&#x27;foreign parent&#x27;)) {
+          return {
+            items: [
+              { item: &#x27;Filing Fee&#x27;, amount: &#x27;₱300.00&#x27; },
+              { item: &#x27;Miscellaneous Expenses&#x27;, amount: &#x27;₱600.00&#x27; },
+              { item: &#x27;Other Fees (notarized, PSA copy)&#x27;, amount: &#x27;₱500.00&#x27; },
+            ],
+            total: &#x27;₱1,400.00&#x27;,
+            duration: &#x27;4-6 months&#x27;,
+          };
+        }
+      }
+
+      // Regular/Copy Applications
+      if (
+        subtype.includes(&#x27;regular&#x27;) ||
+        subtype.includes(&#x27;copy&#x27;) ||
+        subtype.includes(&#x27;certified true copy&#x27;)
+      ) {
+        return {
+          items: [
+            { item: &#x27;Application Fee&#x27;, amount: &#x27;₱50.00&#x27; },
+            { item: &#x27;Processing Fee&#x27;, amount: &#x27;₱100.00&#x27; },
+          ],
+          total: &#x27;₱150.00&#x27;,
+          duration: &#x27;3-5 working days&#x27;,
+        };
+      }
+    }
+
+    // Marriage Applications
+    if (type.includes(&#x27;marriage&#x27;)) {
+      if (subtype.includes(&#x27;license&#x27;)) {
+        return {
+          items: [
+            { item: &#x27;Marriage License Fee&#x27;, amount: &#x27;₱500.00&#x27; },
+            { item: &#x27;Community Tax Certificate&#x27;, amount: &#x27;₱30.00&#x27; },
+            { item: &#x27;Processing Fee&#x27;, amount: &#x27;₱100.00&#x27; },
+          ],
+          total: &#x27;₱630.00&#x27;,
+          duration: &#x27;10 working days (after completion of requirements)&#x27;,
+        };
+      } else if (subtype.includes(&#x27;certificate&#x27;)) {
+        return {
+          items: [
+            { item: &#x27;Marriage Certificate Fee&#x27;, amount: &#x27;₱150.00&#x27; },
+            { item: &#x27;Processing Fee&#x27;, amount: &#x27;₱50.00&#x27; },
+          ],
+          total: &#x27;₱200.00&#x27;,
+          duration: &#x27;3-5 working days&#x27;,
+        };
+      }
+    }
+
+    // Default fallback
+    return {
+      items: [{ item: &#x27;Processing Fee&#x27;, amount: &#x27;To be determined&#x27; }],
+      duration: &#x27;Please contact our office for details&#x27;,
+    };
+  }
+
+  /**
    * Send document application confirmation email
    */
   async sendDocumentApplicationConfirmation(
@@ -2481,93 +2734,156 @@ export class EmailService {
     applicantName?: string,
     submissionDate?: string,
     status: string &#x3D; &#x27;Pending&#x27;,
+    statusMessage?: string,
   ): Promise&lt;void&gt; {
     const subject &#x3D; &#x60;Application Submitted - ${applicationId}&#x60;;
+    const paymentInfo &#x3D; this.getPaymentInfo(
+      applicationType,
+      applicationSubtype,
+    );
 
     const html &#x3D; &#x60;
-      &lt;!DOCTYPE html&gt;
-      &lt;html&gt;
-      &lt;head&gt;
-        &lt;meta charset&#x3D;&quot;utf-8&quot;&gt;
-        &lt;meta name&#x3D;&quot;viewport&quot; content&#x3D;&quot;width&#x3D;device-width, initial-scale&#x3D;1.0&quot;&gt;
-        &lt;title&gt;Application Confirmation&lt;/title&gt;
-        &lt;style&gt;
-          body { margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f4f4f4; }
-          .container { max-width: 600px; margin: 0 auto; background-color: #ffffff; }
-          .header { background: linear-gradient(135deg, #28a745 0%, #20c997 100%); color: white; padding: 30px 20px; text-align: center; }
-          .content { padding: 30px 20px; }
-          .application-card { background-color: #f8f9fa; border-left: 4px solid #28a745; padding: 20px; margin: 20px 0; border-radius: 8px; }
-          .detail-row { display: flex; justify-content: space-between; margin: 10px 0; padding: 8px 0; border-bottom: 1px solid #e9ecef; }
-          .label { font-weight: bold; color: #495057; }
-          .value { color: #212529; }
-          .footer { background-color: #f8f9fa; padding: 20px; text-align: center; font-size: 12px; color: #6c757d; }
-          .status-badge { display: inline-block; padding: 8px 16px; background-color: #ffc107; color: #212529; border-radius: 20px; font-weight: bold; margin: 10px 0; }
-        &lt;/style&gt;
-      &lt;/head&gt;
-      &lt;body&gt;
-        &lt;div class&#x3D;&quot;container&quot;&gt;
-          &lt;div class&#x3D;&quot;header&quot;&gt;
-            &lt;h1&gt;✅ Application Submitted&lt;/h1&gt;
-            &lt;p&gt;Your document application has been successfully submitted!&lt;/p&gt;
-          &lt;/div&gt;
+    &lt;!DOCTYPE html&gt;
+    &lt;html&gt;
+    &lt;head&gt;
+      &lt;meta charset&#x3D;&quot;utf-8&quot;&gt;
+      &lt;meta name&#x3D;&quot;viewport&quot; content&#x3D;&quot;width&#x3D;device-width, initial-scale&#x3D;1.0&quot;&gt;
+      &lt;title&gt;Application Confirmation&lt;/title&gt;
+      &lt;style&gt;
+        body { margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f4f4f4; }
+        .container { max-width: 600px; margin: 0 auto; background-color: #ffffff; }
+        .header { background: linear-gradient(135deg, #28a745 0%, #20c997 100%); color: white; padding: 30px 20px; text-align: center; }
+        .content { padding: 30px 20px; }
+        .application-card { background-color: #f8f9fa; border-left: 4px solid #28a745; padding: 20px; margin: 20px 0; border-radius: 8px; }
+        .payment-card { background-color: #fff3cd; border-left: 4px solid #ffc107; padding: 20px; margin: 20px 0; border-radius: 8px; }
+        .detail-row { display: flex; justify-content: space-between; margin: 10px 0; padding: 8px 0; border-bottom: 1px solid #e9ecef; }
+        .payment-row { display: flex; justify-content: space-between; margin: 8px 0; padding: 5px 0; }
+        .total-row { display: flex; justify-content: space-between; margin: 15px 0; padding: 10px 0; border-top: 2px solid #ffc107; font-weight: bold; }
+        .label { font-weight: bold; color: #495057; }
+        .value { color: #212529; }
+        .footer { background-color: #f8f9fa; padding: 20px; text-align: center; font-size: 12px; color: #6c757d; }
+        .status-badge { display: inline-block; padding: 8px 16px; background-color: #ffc107; color: #212529; border-radius: 20px; font-weight: bold; margin: 10px 0; }
+      &lt;/style&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+      &lt;div class&#x3D;&quot;container&quot;&gt;
+        &lt;div class&#x3D;&quot;header&quot;&gt;
+          &lt;h1&gt;✅ Application Submitted&lt;/h1&gt;
+          &lt;p&gt;Your document application has been successfully submitted!&lt;/p&gt;
+        &lt;/div&gt;
+        
+        &lt;div class&#x3D;&quot;content&quot;&gt;
+          &lt;p&gt;Dear ${applicantName || &#x27;Valued Client&#x27;},&lt;/p&gt;
+          &lt;p&gt;Thank you for submitting your document application through Bulak LGU Connect.&lt;/p&gt;
           
-          &lt;div class&#x3D;&quot;content&quot;&gt;
-            &lt;p&gt;Dear ${applicantName || &#x27;Valued Client&#x27;},&lt;/p&gt;
-            
-            &lt;p&gt;Thank you for submitting your document application through Bulak LGU Connect.&lt;/p&gt;
-            
-            &lt;div class&#x3D;&quot;application-card&quot;&gt;
-              &lt;h3 style&#x3D;&quot;margin-top: 0; color: #28a745;&quot;&gt;Application Details&lt;/h3&gt;
-              &lt;div class&#x3D;&quot;detail-row&quot;&gt;
-                &lt;span class&#x3D;&quot;label&quot;&gt;Application ID:&lt;/span&gt;
-                &lt;span class&#x3D;&quot;value&quot;&gt;${applicationId}&lt;/span&gt;
-              &lt;/div&gt;
-              &lt;div class&#x3D;&quot;detail-row&quot;&gt;
-                &lt;span class&#x3D;&quot;label&quot;&gt;Document Type:&lt;/span&gt;
-                &lt;span class&#x3D;&quot;value&quot;&gt;${applicationType}&lt;/span&gt;
-              &lt;/div&gt;
-              ${
-                applicationSubtype
-                  ? &#x60;
-              &lt;div class&#x3D;&quot;detail-row&quot;&gt;
-                &lt;span class&#x3D;&quot;label&quot;&gt;Service Type:&lt;/span&gt;
-                &lt;span class&#x3D;&quot;value&quot;&gt;${applicationSubtype}&lt;/span&gt;
-              &lt;/div&gt;
-              &#x60;
-                  : &#x27;&#x27;
-              }
-              &lt;div class&#x3D;&quot;detail-row&quot;&gt;
-                &lt;span class&#x3D;&quot;label&quot;&gt;Submission Date:&lt;/span&gt;
-                &lt;span class&#x3D;&quot;value&quot;&gt;${submissionDate || new Date().toLocaleDateString()}&lt;/span&gt;
-              &lt;/div&gt;
-              &lt;div class&#x3D;&quot;detail-row&quot;&gt;
-                &lt;span class&#x3D;&quot;label&quot;&gt;Status:&lt;/span&gt;
-                &lt;span class&#x3D;&quot;value&quot;&gt;&lt;span class&#x3D;&quot;status-badge&quot;&gt;${status}&lt;/span&gt;&lt;/span&gt;
-              &lt;/div&gt;
+          &lt;div class&#x3D;&quot;application-card&quot;&gt;
+            &lt;h3 style&#x3D;&quot;margin-top: 0; color: #28a745;&quot;&gt;Application Details&lt;/h3&gt;
+            &lt;div class&#x3D;&quot;detail-row&quot;&gt;
+              &lt;span class&#x3D;&quot;label&quot;&gt;Application ID:&lt;/span&gt;
+              &lt;span class&#x3D;&quot;value&quot;&gt;${applicationId}&lt;/span&gt;
             &lt;/div&gt;
-            
-            &lt;div style&#x3D;&quot;background-color: #d1ecf1; border: 1px solid #bee5eb; padding: 15px; border-radius: 8px; margin: 20px 0;&quot;&gt;
-              &lt;h4 style&#x3D;&quot;margin-top: 0;&quot;&gt;📋 What&#x27;s Next?&lt;/h4&gt;
-              &lt;ul style&#x3D;&quot;margin: 10px 0; padding-left: 20px;&quot;&gt;
-                &lt;li&gt;Your application is being reviewed by our staff&lt;/li&gt;
-                &lt;li&gt;You&#x27;ll receive updates via email when status changes&lt;/li&gt;
-                &lt;li&gt;Keep this confirmation email for your records&lt;/li&gt;
-                &lt;li&gt;Processing time varies by document type&lt;/li&gt;
+            &lt;div class&#x3D;&quot;detail-row&quot;&gt;
+              &lt;span class&#x3D;&quot;label&quot;&gt;Document Type:&lt;/span&gt;
+              &lt;span class&#x3D;&quot;value&quot;&gt;${applicationType}&lt;/span&gt;
+            &lt;/div&gt;
+            ${
+              applicationSubtype
+                ? &#x60;
+            &lt;div class&#x3D;&quot;detail-row&quot;&gt;
+              &lt;span class&#x3D;&quot;label&quot;&gt;Service Type:&lt;/span&gt;
+              &lt;span class&#x3D;&quot;value&quot;&gt;${applicationSubtype}&lt;/span&gt;
+            &lt;/div&gt;
+            &#x60;
+                : &#x27;&#x27;
+            }
+            &lt;div class&#x3D;&quot;detail-row&quot;&gt;
+              &lt;span class&#x3D;&quot;label&quot;&gt;Submission Date:&lt;/span&gt;
+              &lt;span class&#x3D;&quot;value&quot;&gt;${submissionDate || new Date().toLocaleDateString()}&lt;/span&gt;
+            &lt;/div&gt;
+            &lt;div class&#x3D;&quot;detail-row&quot;&gt;
+              &lt;span class&#x3D;&quot;label&quot;&gt;Status:&lt;/span&gt;
+              &lt;span class&#x3D;&quot;value&quot;&gt;&lt;span class&#x3D;&quot;status-badge&quot;&gt;${status}&lt;/span&gt;&lt;/span&gt;
+            &lt;/div&gt;
+            ${
+              paymentInfo.duration
+                ? &#x60;
+            &lt;div class&#x3D;&quot;detail-row&quot;&gt;
+              &lt;span class&#x3D;&quot;label&quot;&gt;Processing Duration:&lt;/span&gt;
+              &lt;span class&#x3D;&quot;value&quot;&gt;${paymentInfo.duration}&lt;/span&gt;
+            &lt;/div&gt;
+            &#x60;
+                : &#x27;&#x27;
+            }
+          &lt;/div&gt;
+
+          &lt;div class&#x3D;&quot;payment-card&quot;&gt;
+            &lt;h3 style&#x3D;&quot;margin-top: 0; color: #856404;&quot;&gt;💰 Payment Information&lt;/h3&gt;
+            &lt;p style&#x3D;&quot;margin-bottom: 15px; color: #856404;&quot;&gt;The following fees are required for your application:&lt;/p&gt;
+            ${paymentInfo.items
+              .map(
+                (item) &#x3D;&gt; &#x60;
+            &lt;div class&#x3D;&quot;payment-row&quot;&gt;
+              &lt;span class&#x3D;&quot;label&quot;&gt;${item.item}:&lt;/span&gt;
+              &lt;span class&#x3D;&quot;value&quot;&gt;${item.amount}&lt;/span&gt;
+            &lt;/div&gt;
+            &#x60;,
+              )
+              .join(&#x27;&#x27;)}
+            ${
+              paymentInfo.total
+                ? &#x60;
+            &lt;div class&#x3D;&quot;total-row&quot;&gt;
+              &lt;span class&#x3D;&quot;label&quot;&gt;Total Amount:&lt;/span&gt;
+              &lt;span class&#x3D;&quot;value&quot;&gt;${paymentInfo.total}&lt;/span&gt;
+            &lt;/div&gt;
+            &#x60;
+                : &#x27;&#x27;
+            }
+            &lt;div style&#x3D;&quot;background-color: #d1ecf1; border: 1px solid #bee5eb; padding: 15px; border-radius: 8px; margin: 15px 0;&quot;&gt;
+              &lt;p style&#x3D;&quot;margin: 0; color: #0c5460;&quot;&gt;&lt;strong&gt;💡 Payment Instructions:&lt;/strong&gt;&lt;/p&gt;
+              &lt;ul style&#x3D;&quot;margin: 10px 0; padding-left: 20px; color: #0c5460;&quot;&gt;
+                &lt;li&gt;Payment must be made at the Municipal Civil Registrar&#x27;s Office&lt;/li&gt;
+                &lt;li&gt;Bring this email confirmation and a valid ID&lt;/li&gt;
+                &lt;li&gt;Payment is required before document processing begins&lt;/li&gt;
+                &lt;li&gt;Official receipts will be provided upon payment&lt;/li&gt;
               &lt;/ul&gt;
             &lt;/div&gt;
-            
-            &lt;p&gt;Thank you for using Bulak LGU Connect!&lt;/p&gt;
+          &lt;/div&gt;
+
+          ${
+            statusMessage
+              ? &#x60;
+          &lt;div style&#x3D;&quot;background-color: #fffbe6; border-left: 4px solid #ff9800; padding: 15px; margin: 20px 0; border-radius: 4px;&quot;&gt;
+            &lt;strong&gt;📝 Message from Administrator:&lt;/strong&gt;&lt;br&gt;
+            &lt;span style&#x3D;&quot;color: #333; margin-top: 8px; display: block;&quot;&gt;${statusMessage}&lt;/span&gt;
+          &lt;/div&gt;
+          &#x60;
+              : &#x27;&#x27;
+          }
+          
+          &lt;div style&#x3D;&quot;background-color: #d1ecf1; border: 1px solid #bee5eb; padding: 15px; border-radius: 8px; margin: 20px 0;&quot;&gt;
+            &lt;h4 style&#x3D;&quot;margin-top: 0;&quot;&gt;📋 What&#x27;s Next?&lt;/h4&gt;
+            &lt;ul style&#x3D;&quot;margin: 10px 0; padding-left: 20px;&quot;&gt;
+              &lt;li&gt;Your application is being reviewed by our staff&lt;/li&gt;
+              &lt;li&gt;Visit our office to make the required payment&lt;/li&gt;
+              &lt;li&gt;You&#x27;ll receive updates via email when status changes&lt;/li&gt;
+              &lt;li&gt;Keep this confirmation email for your records&lt;/li&gt;
+            &lt;/ul&gt;
           &lt;/div&gt;
           
-          &lt;div class&#x3D;&quot;footer&quot;&gt;
-            &lt;p&gt;Municipal Civil Registrar&#x27;s Office&lt;br&gt;
-            Bulak Local Government Unit&lt;br&gt;
-            This is an automated message, please do not reply.&lt;/p&gt;
-          &lt;/div&gt;
+          &lt;p&gt;Thank you for using Bulak LGU Connect!&lt;/p&gt;
         &lt;/div&gt;
-      &lt;/body&gt;
-      &lt;/html&gt;
-    &#x60;;
+        
+        &lt;div class&#x3D;&quot;footer&quot;&gt;
+          &lt;p&gt;Municipal Civil Registrar&#x27;s Office&lt;br&gt;
+          Bulak Local Government Unit&lt;br&gt;
+          📞 0936-541-0787 | 📧 slbncr@yahoo.com&lt;br&gt;
+          This is an automated message, please do not reply.&lt;/p&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/body&gt;
+    &lt;/html&gt;
+  &#x60;;
 
     await this.transporter.sendMail({
       from: this.configService.get(&#x27;EMAIL_FROM&#x27;),
@@ -2616,6 +2932,10 @@ export class EmailService {
     const emoji &#x3D; statusEmojis[newStatus.toLowerCase()] || &#x27;📋&#x27;;
 
     const subject &#x3D; &#x60;Application ${newStatus.charAt(0).toUpperCase() + newStatus.slice(1)} - ${applicationId}&#x60;;
+    const paymentInfo &#x3D; this.getPaymentInfo(
+      applicationType,
+      applicationSubtype,
+    );
 
     const html &#x3D; &#x60;
       &lt;!DOCTYPE html&gt;
@@ -2636,6 +2956,9 @@ export class EmailService {
           .footer { background-color: #f8f9fa; padding: 20px; text-align: center; font-size: 12px; color: #6c757d; }
           .status-badge { display: inline-block; padding: 8px 16px; background-color: ${color}; color: white; border-radius: 20px; font-weight: bold; margin: 10px 0; }
           .status-message { background-color: #fffbe6; border-left: 4px solid #ff9800; padding: 15px; margin: 20px 0; border-radius: 4px; }
+          .payment-card { background-color: #fff3cd; border-left: 4px solid #ffc107; padding: 20px; margin: 20px 0; border-radius: 8px; }
+          .payment-row { display: flex; justify-content: space-between; margin: 8px 0; padding: 5px 0; }
+          .total-row { display: flex; justify-content: space-between; margin: 15px 0; padding: 10px 0; border-top: 2px solid #ffc107; font-weight: bold; }
         &lt;/style&gt;
       &lt;/head&gt;
       &lt;body&gt;
@@ -2718,6 +3041,45 @@ export class EmailService {
             &#x60;
                 : &#x27;&#x27;
             }
+
+             ${
+               newStatus.toLowerCase() &#x3D;&#x3D;&#x3D; &#x27;pending&#x27; ||
+               newStatus.toLowerCase() &#x3D;&#x3D;&#x3D; &#x27;approved&#x27; ||
+               newStatus.toLowerCase() &#x3D;&#x3D;&#x3D; &#x27;ready for pickup&#x27;
+                 ? &#x60;
+          &lt;div class&#x3D;&quot;payment-card&quot;&gt;
+            &lt;h3 style&#x3D;&quot;margin-top: 0; color: #856404;&quot;&gt;💰 Payment Required&lt;/h3&gt;
+            &lt;p style&#x3D;&quot;margin-bottom: 15px; color: #856404;&quot;&gt;Please settle the following fees to complete your application:&lt;/p&gt;
+            ${paymentInfo.items
+              .map(
+                (item) &#x3D;&gt; &#x60;
+            &lt;div class&#x3D;&quot;payment-row&quot;&gt;
+              &lt;span class&#x3D;&quot;label&quot;&gt;${item.item}:&lt;/span&gt;
+              &lt;span class&#x3D;&quot;value&quot;&gt;${item.amount}&lt;/span&gt;
+            &lt;/div&gt;
+            &#x60;,
+              )
+              .join(&#x27;&#x27;)}
+            ${
+              paymentInfo.total
+                ? &#x60;
+            &lt;div class&#x3D;&quot;total-row&quot;&gt;
+              &lt;span class&#x3D;&quot;label&quot;&gt;Total Amount:&lt;/span&gt;
+              &lt;span class&#x3D;&quot;value&quot;&gt;${paymentInfo.total}&lt;/span&gt;
+            &lt;/div&gt;
+            &#x60;
+                : &#x27;&#x27;
+            }
+            &lt;div style&#x3D;&quot;background-color: #d1ecf1; border: 1px solid #bee5eb; padding: 15px; border-radius: 8px; margin: 15px 0;&quot;&gt;
+              &lt;p style&#x3D;&quot;margin: 0; color: #0c5460;&quot;&gt;&lt;strong&gt;Payment can be made at:&lt;/strong&gt;&lt;/p&gt;
+              &lt;p style&#x3D;&quot;margin: 5px 0; color: #0c5460;&quot;&gt;Municipal Civil Registrar&#x27;s Office&lt;br&gt;
+              Office Hours: Monday to Friday, 8:00 AM - 5:00 PM&lt;br&gt;
+              📞 0936-541-0787&lt;/p&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+          &#x60;
+                 : &#x27;&#x27;
+             }
             
             &lt;p&gt;Thank you for using Bulak LGU Connect!&lt;/p&gt;
           &lt;/div&gt;
@@ -2777,6 +3139,10 @@ export class EmailService {
     statusMessage?: string,
   ): Promise&lt;void&gt; {
     const subject &#x3D; &#x60;Application Declined - ${applicationId}&#x60;;
+    const paymentInfo &#x3D; this.getPaymentInfo(
+      applicationType,
+      applicationSubtype,
+    );
 
     const html &#x3D; &#x60;
       &lt;!DOCTYPE html&gt;
@@ -2796,6 +3162,9 @@ export class EmailService {
           .value { color: #212529; }
           .footer { background-color: #f8f9fa; padding: 20px; text-align: center; font-size: 12px; color: #6c757d; }
           .resubmit-section { background-color: #e2f3ff; border: 1px solid #b8daff; padding: 20px; border-radius: 8px; margin: 20px 0; text-align: center; }
+          .payment-card { background-color: #fff3cd; border-left: 4px solid #ffc107; padding: 20px; margin: 20px 0; border-radius: 8px; }
+          .payment-row { display: flex; justify-content: space-between; margin: 8px 0; padding: 5px 0; }
+          .total-row { display: flex; justify-content: space-between; margin: 15px 0; padding: 10px 0; border-top: 2px solid #ffc107; font-weight: bold; }
         &lt;/style&gt;
       &lt;/head&gt;
       &lt;body&gt;
@@ -2847,6 +3216,30 @@ export class EmailService {
               &lt;p&gt;You can submit a new application with the required corrections.&lt;/p&gt;
               &lt;p&gt;Please contact our office if you need assistance with the requirements.&lt;/p&gt;
             &lt;/div&gt;
+
+            &lt;div class&#x3D;&quot;payment-card&quot;&gt;
+              &lt;h3 style&#x3D;&quot;margin-top: 0; color: #856404;&quot;&gt;💰 Payment Information&lt;/h3&gt;
+              &lt;p style&#x3D;&quot;margin-bottom: 15px; color: #856404;&quot;&gt;The following fees were applied to your application:&lt;/p&gt;
+              ${paymentInfo.items
+                .map(
+                  (item) &#x3D;&gt; &#x60;
+              &lt;div class&#x3D;&quot;payment-row&quot;&gt;
+                &lt;span class&#x3D;&quot;label&quot;&gt;${item.item}:&lt;/span&gt;
+                &lt;span class&#x3D;&quot;value&quot;&gt;${item.amount}&lt;/span&gt;
+              &lt;/div&gt;
+              &#x60;,
+                )
+                .join(&#x27;&#x27;)}
+              ${
+                paymentInfo.total
+                  ? &#x60;
+              &lt;div class&#x3D;&quot;total-row&quot;&gt;
+                &lt;span class&#x3D;&quot;label&quot;&gt;Total Amount:&lt;/span&gt;
+                &lt;span class&#x3D;&quot;value&quot;&gt;${paymentInfo.total}&lt;/span&gt;
+              &lt;/div&gt;
+              &#x60;
+                  : &#x27;&#x27;
+              }
             
             &lt;p&gt;We apologize for any inconvenience this may have caused.&lt;/p&gt;
           &lt;/div&gt;

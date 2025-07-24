@@ -1407,7 +1407,7 @@ export class AuthController {
         &#x60;Sending application approval notification to: ${dto.email}&#x60;,
       );
 
-      // Use your existing email service  
+      // Use your existing email service
       await this.emailService.sendDocumentApplicationStatusUpdate(
         dto.email,
         dto.applicationId,
