@@ -488,6 +488,7 @@ const AdminApplicationDetails = () => {
                   applicationType: selectedApplication.applicationType || 'Birth Certificate',
                   applicationSubtype: selectedApplication.applicationSubtype,
                   applicantName: applicantName,
+                  statusMessage: statusMessage,
                 }
               );
           } else if (
@@ -502,6 +503,7 @@ const AdminApplicationDetails = () => {
                   applicationType: selectedApplication.applicationType || 'Birth Certificate',
                   applicationSubtype: selectedApplication.applicationSubtype,
                   applicantName: applicantName,
+                  statusMessage: statusMessage,
                 },
                 statusMessage || 'Application declined by administrator'
               );
@@ -515,6 +517,7 @@ const AdminApplicationDetails = () => {
                   applicationType: selectedApplication.applicationType || 'Birth Certificate',
                   applicationSubtype: selectedApplication.applicationSubtype,
                   applicantName: applicantName,
+                  statusMessage: statusMessage,
                 }
               );
           }
