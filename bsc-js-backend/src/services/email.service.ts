@@ -863,117 +863,175 @@ private getPaymentInfo(applicationType: string, applicationSubtype?: string): { 
 }
 
   /**
-   * Send document application confirmation email
-   */
-  async sendDocumentApplicationConfirmation(
-    email: string,
-    applicationId: string,
-    applicationType: string,
-    applicationSubtype?: string,
-    applicantName?: string,
-    submissionDate?: string,
-    status: string = 'Pending',
-    statusMessage?: string,
-  ): Promise<void> {
-    const subject = `Application Submitted - ${applicationId}`;
-    const paymentInfo = this.getPaymentInfo(applicationType, applicationSubtype);
+ * Send document application confirmation email
+ */
+async sendDocumentApplicationConfirmation(
+  email: string,
+  applicationId: string,
+  applicationType: string,
+  applicationSubtype?: string,
+  applicantName?: string,
+  submissionDate?: string,
+  status: string = 'Pending',
+  statusMessage?: string,
+): Promise<void> {
+  const subject = `Application Submitted - ${applicationId}`;
+  const paymentInfo = this.getPaymentInfo(applicationType, applicationSubtype);
 
-    const html = `
-      <!DOCTYPE html>
-      <html>
-      <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Application Confirmation</title>
-        <style>
-          body { margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f4f4f4; }
-          .container { max-width: 600px; margin: 0 auto; background-color: #ffffff; }
-          .header { background: linear-gradient(135deg, #28a745 0%, #20c997 100%); color: white; padding: 30px 20px; text-align: center; }
-          .content { padding: 30px 20px; }
-          .application-card { background-color: #f8f9fa; border-left: 4px solid #28a745; padding: 20px; margin: 20px 0; border-radius: 8px; }
-          .detail-row { display: flex; justify-content: space-between; margin: 10px 0; padding: 8px 0; border-bottom: 1px solid #e9ecef; }
-          .label { font-weight: bold; color: #495057; }
-          .value { color: #212529; }
-          .footer { background-color: #f8f9fa; padding: 20px; text-align: center; font-size: 12px; color: #6c757d; }
-          .status-badge { display: inline-block; padding: 8px 16px; background-color: #ffc107; color: #212529; border-radius: 20px; font-weight: bold; margin: 10px 0; }
-        </style>
-      </head>
-      <body>
-        <div class="container">
-          <div class="header">
-            <h1>✅ Application Submitted</h1>
-            <p>Your document application has been successfully submitted!</p>
-          </div>
+  const html = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Application Confirmation</title>
+      <style>
+        body { margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f4f4f4; }
+        .container { max-width: 600px; margin: 0 auto; background-color: #ffffff; }
+        .header { background: linear-gradient(135deg, #28a745 0%, #20c997 100%); color: white; padding: 30px 20px; text-align: center; }
+        .content { padding: 30px 20px; }
+        .application-card { background-color: #f8f9fa; border-left: 4px solid #28a745; padding: 20px; margin: 20px 0; border-radius: 8px; }
+        .payment-card { background-color: #fff3cd; border-left: 4px solid #ffc107; padding: 20px; margin: 20px 0; border-radius: 8px; }
+        .detail-row { display: flex; justify-content: space-between; margin: 10px 0; padding: 8px 0; border-bottom: 1px solid #e9ecef; }
+        .payment-row { display: flex; justify-content: space-between; margin: 8px 0; padding: 5px 0; }
+        .total-row { display: flex; justify-content: space-between; margin: 15px 0; padding: 10px 0; border-top: 2px solid #ffc107; font-weight: bold; }
+        .label { font-weight: bold; color: #495057; }
+        .value { color: #212529; }
+        .footer { background-color: #f8f9fa; padding: 20px; text-align: center; font-size: 12px; color: #6c757d; }
+        .status-badge { display: inline-block; padding: 8px 16px; background-color: #ffc107; color: #212529; border-radius: 20px; font-weight: bold; margin: 10px 0; }
+      </style>
+    </head>
+    <body>
+      <div class="container">
+        <div class="header">
+          <h1>✅ Application Submitted</h1>
+          <p>Your document application has been successfully submitted!</p>
+        </div>
+        
+        <div class="content">
+          <p>Dear ${applicantName || 'Valued Client'},</p>
+          <p>Thank you for submitting your document application through Bulak LGU Connect.</p>
           
-          <div class="content">
-            <p>Dear ${applicantName || 'Valued Client'},</p>
-            
-            <p>Thank you for submitting your document application through Bulak LGU Connect.</p>
-            
-            <div class="application-card">
-              <h3 style="margin-top: 0; color: #28a745;">Application Details</h3>
-              <div class="detail-row">
-                <span class="label">Application ID:</span>
-                <span class="value">${applicationId}</span>
-              </div>
-              <div class="detail-row">
-                <span class="label">Document Type:</span>
-                <span class="value">${applicationType}</span>
-              </div>
-              ${
-                applicationSubtype
-                  ? `
-              <div class="detail-row">
-                <span class="label">Service Type:</span>
-                <span class="value">${applicationSubtype}</span>
-              </div>
-              `
-                  : ''
-              }
-              <div class="detail-row">
-                <span class="label">Submission Date:</span>
-                <span class="value">${submissionDate || new Date().toLocaleDateString()}</span>
-              </div>
-              <div class="detail-row">
-                <span class="label">Status:</span>
-                <span class="value"><span class="status-badge">${status}</span></span>
-              </div>
+          <div class="application-card">
+            <h3 style="margin-top: 0; color: #28a745;">Application Details</h3>
+            <div class="detail-row">
+              <span class="label">Application ID:</span>
+              <span class="value">${applicationId}</span>
             </div>
-            
-            <div style="background-color: #d1ecf1; border: 1px solid #bee5eb; padding: 15px; border-radius: 8px; margin: 20px 0;">
-              <h4 style="margin-top: 0;">📋 What's Next?</h4>
-              <ul style="margin: 10px 0; padding-left: 20px;">
-                <li>Your application is being reviewed by our staff</li>
-                <li>You'll receive updates via email when status changes</li>
-                <li>Keep this confirmation email for your records</li>
-                <li>Processing time varies by document type</li>
+            <div class="detail-row">
+              <span class="label">Document Type:</span>
+              <span class="value">${applicationType}</span>
+            </div>
+            ${
+              applicationSubtype
+                ? `
+            <div class="detail-row">
+              <span class="label">Service Type:</span>
+              <span class="value">${applicationSubtype}</span>
+            </div>
+            `
+                : ''
+            }
+            <div class="detail-row">
+              <span class="label">Submission Date:</span>
+              <span class="value">${submissionDate || new Date().toLocaleDateString()}</span>
+            </div>
+            <div class="detail-row">
+              <span class="label">Status:</span>
+              <span class="value"><span class="status-badge">${status}</span></span>
+            </div>
+            ${
+              paymentInfo.duration
+                ? `
+            <div class="detail-row">
+              <span class="label">Processing Duration:</span>
+              <span class="value">${paymentInfo.duration}</span>
+            </div>
+            `
+                : ''
+            }
+          </div>
+
+          <div class="payment-card">
+            <h3 style="margin-top: 0; color: #856404;">💰 Payment Information</h3>
+            <p style="margin-bottom: 15px; color: #856404;">The following fees are required for your application:</p>
+            ${paymentInfo.items
+              .map(
+                item => `
+            <div class="payment-row">
+              <span class="label">${item.item}:</span>
+              <span class="value">${item.amount}</span>
+            </div>
+            `
+              )
+              .join('')}
+            ${
+              paymentInfo.total
+                ? `
+            <div class="total-row">
+              <span class="label">Total Amount:</span>
+              <span class="value">${paymentInfo.total}</span>
+            </div>
+            `
+                : ''
+            }
+            <div style="background-color: #d1ecf1; border: 1px solid #bee5eb; padding: 15px; border-radius: 8px; margin: 15px 0;">
+              <p style="margin: 0; color: #0c5460;"><strong>💡 Payment Instructions:</strong></p>
+              <ul style="margin: 10px 0; padding-left: 20px; color: #0c5460;">
+                <li>Payment must be made at the Municipal Civil Registrar's Office</li>
+                <li>Bring this email confirmation and a valid ID</li>
+                <li>Payment is required before document processing begins</li>
+                <li>Official receipts will be provided upon payment</li>
               </ul>
             </div>
-            
-            <p>Thank you for using Bulak LGU Connect!</p>
+          </div>
+
+          ${
+            statusMessage
+              ? `
+          <div style="background-color: #fffbe6; border-left: 4px solid #ff9800; padding: 15px; margin: 20px 0; border-radius: 4px;">
+            <strong>📝 Message from Administrator:</strong><br>
+            <span style="color: #333; margin-top: 8px; display: block;">${statusMessage}</span>
+          </div>
+          `
+              : ''
+          }
+          
+          <div style="background-color: #d1ecf1; border: 1px solid #bee5eb; padding: 15px; border-radius: 8px; margin: 20px 0;">
+            <h4 style="margin-top: 0;">📋 What's Next?</h4>
+            <ul style="margin: 10px 0; padding-left: 20px;">
+              <li>Your application is being reviewed by our staff</li>
+              <li>Visit our office to make the required payment</li>
+              <li>You'll receive updates via email when status changes</li>
+              <li>Keep this confirmation email for your records</li>
+            </ul>
           </div>
           
-          <div class="footer">
-            <p>Municipal Civil Registrar's Office<br>
-            Bulak Local Government Unit<br>
-            This is an automated message, please do not reply.</p>
-          </div>
+          <p>Thank you for using Bulak LGU Connect!</p>
         </div>
-      </body>
-      </html>
-    `;
+        
+        <div class="footer">
+          <p>Municipal Civil Registrar's Office<br>
+          Bulak Local Government Unit<br>
+          📞 0936-541-0787 | 📧 slbncr@yahoo.com<br>
+          This is an automated message, please do not reply.</p>
+        </div>
+      </div>
+    </body>
+    </html>
+  `;
 
-    await this.transporter.sendMail({
-      from: this.configService.get('EMAIL_FROM'),
-      to: email,
-      subject,
-      html,
-    });
+  await this.transporter.sendMail({
+    from: this.configService.get('EMAIL_FROM'),
+    to: email,
+    subject,
+    html,
+  });
 
-    this.logger.log(
-      `✅ Document application confirmation email sent to ${email}`,
-    );
-  }
+  this.logger.log(
+    `✅ Document application confirmation email sent to ${email}`,
+  );
+}
 
   /**
    * Send document application status update email
@@ -1010,6 +1068,7 @@ private getPaymentInfo(applicationType: string, applicationSubtype?: string): { 
     const emoji = statusEmojis[newStatus.toLowerCase()] || '📋';
 
     const subject = `Application ${newStatus.charAt(0).toUpperCase() + newStatus.slice(1)} - ${applicationId}`;
+    const paymentInfo = this.getPaymentInfo(applicationType, applicationSubtype);
 
     const html = `
       <!DOCTYPE html>
@@ -1030,6 +1089,9 @@ private getPaymentInfo(applicationType: string, applicationSubtype?: string): { 
           .footer { background-color: #f8f9fa; padding: 20px; text-align: center; font-size: 12px; color: #6c757d; }
           .status-badge { display: inline-block; padding: 8px 16px; background-color: ${color}; color: white; border-radius: 20px; font-weight: bold; margin: 10px 0; }
           .status-message { background-color: #fffbe6; border-left: 4px solid #ff9800; padding: 15px; margin: 20px 0; border-radius: 4px; }
+          .payment-card { background-color: #fff3cd; border-left: 4px solid #ffc107; padding: 20px; margin: 20px 0; border-radius: 8px; }
+          .payment-row { display: flex; justify-content: space-between; margin: 8px 0; padding: 5px 0; }
+          .total-row { display: flex; justify-content: space-between; margin: 15px 0; padding: 10px 0; border-top: 2px solid #ffc107; font-weight: bold; }
         </style>
       </head>
       <body>
