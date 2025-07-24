@@ -303,6 +303,15 @@ const WalkInForm = () => {
           </div>
 
           <div className="FormActionsWalkIn">
+     
+            <button
+              type="button"
+              className="BackBtnWalkIn"
+              style={{ marginLeft: '10px' }}
+              onClick={() => navigate('/WalkInQueue')}
+            >
+              Back
+            </button>
             <button type="submit" className="ConfirmBtnWalkIn">
               Confirm
             </button>

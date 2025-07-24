@@ -20,6 +20,7 @@ import {
   Select,
   MenuItem,
   InputAdornment,
+  Tooltip,
 } from '@mui/material';
 import { useParams, useNavigate } from 'react-router-dom';
 import './AdminApplicationDetails.css';
@@ -36,10 +37,12 @@ import AdminMarriageAffidavitDetails from './AdminMarriageAffidavitDetails';
 import SearchIcon from '@mui/icons-material/Search';
 import userService from '../../services/userService';
 import { documentApplicationNotificationService } from '../../services/documentApplicationNotificationService';
+import { useAuth } from '../../context/AuthContext';
 
 const AdminApplicationDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { user, hasRole } = useAuth();
   const [applications, setApplications] = useState([]);
   const [selectedApplication, setSelectedApplication] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -229,6 +232,84 @@ const AdminApplicationDetails = () => {
     setStatusUpdateDialog(true);
   };
 
+  const getAvailableStatusOptions = () => {
+    if (!selectedApplication) return [];
+
+    const currentStatus = selectedApplication.status;
+    const isSuperAdmin = hasRole('super_admin');
+    const isAdmin = hasRole('admin');
+    const isStaff = hasRole('staff');
+
+    // All available status options
+    const allStatuses = [
+      'Pending',
+      'Approved',
+      'Decline',
+      'Requires Additional Info',
+      'Ready for Pickup',
+    ];
+
+    // Super admin can change any status to any other status
+    if (isSuperAdmin) {
+      return allStatuses;
+    }
+
+    // For approved applications
+    if (currentStatus === 'Approved') {
+      if (isAdmin || isStaff) {
+        return ['Ready for Pickup'];
+      } else {
+        return [];
+      }
+    }
+
+    // For "Ready for Pickup" status
+    if (currentStatus === 'Ready for Pickup') {
+      if (isSuperAdmin) {
+        return allStatuses;
+      } else {
+        return [];
+      }
+    }
+
+    
+  
+    if (isAdmin || isStaff) {
+      return allStatuses;
+    }
+
+    return [];
+  };
+
+  const isStatusUpdateAllowed = () => {
+    const availableOptions = getAvailableStatusOptions();
+    return availableOptions.length > 0;
+  };
+
+  const getStatusUpdateTooltip = () => {
+    if (!selectedApplication) return '';
+
+    if (hasRole('super_admin')) {
+      return 'Head Admin: Can modify any status';
+    }
+
+    const currentStatus = selectedApplication.status;
+
+    if (currentStatus === 'Ready for Pickup') {
+      return 'Status cannot be changed from "Ready for Pickup" except by Head Admin';
+    }
+
+    if (currentStatus === 'Approved') {
+      return 'Approved applications can only be changed to "Ready for Pickup" or modified by Head Admin';
+    }
+
+    if (isStatusUpdateAllowed()) {
+      return 'Click to update application status';
+    }
+
+    return 'Status update not available';
+  };
+
   const handleStatusChange = event => {
     const selectedStatus = event.target.value;
     setNewStatus(selectedStatus);
@@ -359,28 +440,44 @@ const AdminApplicationDetails = () => {
 
   const handleUpdateStatus = async () => {
     try {
+
+      if (!isStatusUpdateAllowed()) {
+        logger.error('Status update not allowed for current user role and application status');
+        setError('You do not have permission to update this application status.');
+        return;
+      }
+
+      const availableOptions = getAvailableStatusOptions();
+      if (!availableOptions.includes(newStatus)) {
+        logger.error(
+          `Status "${newStatus}" is not allowed for current user role and application status`
+        );
+        setError('The selected status is not allowed for your role or current application status.');
+        return;
+      }
+
       logger.log(`📝 Updating application ${selectedApplication.id} status to: ${newStatus}`);
-      // Update status in database
+ 
       await documentApplicationService.updateApplication(selectedApplication.id, {
         status: newStatus,
         statusMessage: statusMessage,
         lastUpdated: new Date().toISOString(),
       });
 
-      // 📧 ENHANCED EMAIL LOOKUP AND NOTIFICATION (SAME AS APPOINTMENT SYSTEM)
+ 
       const applicationEmail = getApplicationEmail(selectedApplication);
 
       if (applicationEmail) {
         try {
           logger.log(`📧 Sending status update notification to: ${applicationEmail}`);
 
-          // Get applicant name for notification
+         
           const applicantName =
             selectedApplication.applicantName ||
             `${selectedApplication.formData?.firstName || ''} ${selectedApplication.formData?.lastName || ''}`.trim() ||
             'Valued Client';
 
-          // Choose the appropriate notification based on status
+        
           let notificationResult;
           if (newStatus.toLowerCase() === 'approved') {
             notificationResult =
@@ -438,18 +535,17 @@ const AdminApplicationDetails = () => {
         logger.log('📋 Available application fields:', Object.keys(selectedApplication));
       }
 
-      // Refresh applications list
       const updatedApplications = await documentApplicationService.getAllApplications();
       setApplications(updatedApplications);
       const updated = updatedApplications.find(app => app.id === selectedApplication.id);
       setSelectedApplication(updated);
 
       setStatusUpdateDialog(false);
-      // Enhanced success message
+      
       const emailMessage = applicationEmail
         ? `Notification sent to ${applicationEmail}`
         : 'No email available for notification';
-      // alert(`Application status updated to ${newStatus} successfully! ${emailMessage}`);
+      
 
       window.dispatchEvent(new Event('storage'));
     } catch (err) {
@@ -463,7 +559,7 @@ const AdminApplicationDetails = () => {
     return `${month} ${day}, ${year}`;
   };
 
-  // Helper function to get application type safely
+
   const getApplicationType = app => {
     if (app.type) return app.type;
     if (app.applicationType) return app.applicationType;
@@ -471,7 +567,7 @@ const AdminApplicationDetails = () => {
     return 'Document Application';
   };
 
-  // Helper function to get application subtype
+
   const getApplicationSubtype = app => {
     if (app.applicationSubtype) return app.applicationSubtype;
     if (app.formData && app.formData.applicationSubtype) return app.formData.applicationSubtype;
@@ -479,7 +575,7 @@ const AdminApplicationDetails = () => {
     return '';
   };
 
-  // Helper function to determine if it's a copy of birth certificate
+
   const isCopyOfBirthCertificate = app => {
     const subtype = getApplicationSubtype(app);
     return (
@@ -663,7 +759,7 @@ const AdminApplicationDetails = () => {
                       </Typography>
 
                       <Typography variant="body2" className="ApplicationDateAdminAppForm">
-                        {/* For Marriage License applications, prioritize subtype, otherwise show subtype or type */}
+                    
                         Type:{' '}
                         {(() => {
                           const appType = getApplicationType(app);
@@ -742,14 +838,19 @@ const AdminApplicationDetails = () => {
                     </Grid>
                   </Grid>
                   <Box className="SummaryButtonAppAdminPreview">
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      onClick={handleOpenStatusDialog}
-                      className="UpdateStatusButtonAdminAppForm"
-                    >
-                      Update Status
-                    </Button>
+                    <Tooltip title={getStatusUpdateTooltip()} arrow>
+                      <span>
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          onClick={handleOpenStatusDialog}
+                          className="UpdateStatusButtonAdminAppForm"
+                          disabled={!isStatusUpdateAllowed()}
+                        >
+                          Update Status
+                        </Button>
+                      </span>
+                    </Tooltip>
                   </Box>
                 </Paper>
 
@@ -775,7 +876,6 @@ const AdminApplicationDetails = () => {
                       getApplicationSubtype(selectedApplication) !== 'Marriage License' &&
                       getApplicationSubtype(selectedApplication) !==
                         'Application for Marriage License')) &&
-                    // Additional check to explicitly exclude Marriage License applications
                     getApplicationType(selectedApplication) !== 'Marriage License' &&
                     getApplicationSubtype(selectedApplication) !== 'Marriage License' &&
                     getApplicationSubtype(selectedApplication) !==
@@ -2027,14 +2127,19 @@ const AdminApplicationDetails = () => {
                   )}
 
                   <Box className="ActionButtonsContainerAdminAppForm">
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      onClick={handleOpenStatusDialog}
-                      className="UpdateStatusButtonAdminAppForm"
-                    >
-                      Update Status
-                    </Button>
+                    <Tooltip title={getStatusUpdateTooltip()} arrow>
+                      <span>
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          onClick={handleOpenStatusDialog}
+                          className="UpdateStatusButtonAdminAppForm"
+                          disabled={!isStatusUpdateAllowed()}
+                        >
+                          Update Status
+                        </Button>
+                      </span>
+                    </Tooltip>
                   </Box>
                 </Box>
               </Paper>
@@ -2068,6 +2173,26 @@ const AdminApplicationDetails = () => {
             Application ID: {selectedApplication?.id}
           </Box>
 
+          {/* Role-based restriction message */}
+          {selectedApplication && !hasRole('super_admin') && (
+            <Box
+              sx={{
+                marginBottom: 2,
+                padding: 1,
+                backgroundColor: '#fff3cd',
+                borderRadius: 1,
+                border: '1px solid #ffeaa7',
+              }}
+            >
+              <Typography variant="body2" color="textSecondary">
+                {selectedApplication.status === 'Approved' &&
+                  "ℹ️ Once approved, only Head Admin can change to other statuses. You can only set to 'Ready for Pickup'."}
+                {selectedApplication.status === 'Ready for Pickup' &&
+                  "ℹ️ Applications that are 'Ready for Pickup' can only be modified by Head Admin."}
+              </Typography>
+            </Box>
+          )}
+
           <FormControl fullWidth margin="normal" className="StatusFormControlAdminAppForm">
             <InputLabel className="StatusInputLabelAdminAppForm">Status</InputLabel>
             <Select
@@ -2075,28 +2200,17 @@ const AdminApplicationDetails = () => {
               onChange={handleStatusChange}
               label="Status"
               className="StatusSelectAdminAppForm"
+              disabled={!isStatusUpdateAllowed()}
             >
-              <MenuItem value="Pending" className="StatusMenuItemPendingAdminAppForm">
-                Pending
-              </MenuItem>
-              <MenuItem value="Approved" className="StatusMenuItemApprovedAdminAppForm">
-                Approved
-              </MenuItem>
-              <MenuItem value="Decline" className="StatusMenuItemDeclineAdminAppForm">
-                Decline
-              </MenuItem>
-              <MenuItem
-                value="Requires Additional Info"
-                className="StatusMenuItemAdditionalInfoAdminAppForm"
-              >
-                Requires Additional Info
-              </MenuItem>
-              <MenuItem
-                value="Ready for Pickup"
-                className="StatusMenuItemReadyForPickupAdminAppForm"
-              >
-                Ready for Pickup
-              </MenuItem>
+              {getAvailableStatusOptions().map(status => (
+                <MenuItem
+                  key={status}
+                  value={status}
+                  className={`StatusMenuItem${status.replace(/\s+/g, '')}AdminAppForm`}
+                >
+                  {status}
+                </MenuItem>
+              ))}
             </Select>
           </FormControl>
 
@@ -2124,6 +2238,7 @@ const AdminApplicationDetails = () => {
             onClick={handleUpdateStatus}
             variant="contained"
             className="StatusUpdateButtonAdminAppForm"
+            disabled={!isStatusUpdateAllowed()}
           >
             Update Status
           </Button>
