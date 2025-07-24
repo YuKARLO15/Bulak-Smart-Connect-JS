@@ -78,6 +78,7 @@ export const documentApplicationNotificationService = {
         applicantName: applicationDetails.applicantName,
         submissionDate: applicationDetails.submissionDate,
         status: applicationDetails.status || 'Pending',
+        statusMessage: applicationDetails.statusMessage,
       });
 
       logger.log('✅ Application confirmation notification sent successfully');
@@ -125,6 +126,7 @@ export const documentApplicationNotificationService = {
           applicationDetails?.applicantName ||
           `${applicationDetails?.firstName || ''} ${applicationDetails?.lastName || ''}`.trim(),
         previousStatus: applicationDetails?.status,
+        statusMessage: applicationDetails?.statusMessage,
       });
 
       logger.log('✅ Status update notification sent successfully');
@@ -169,6 +171,7 @@ export const documentApplicationNotificationService = {
           applicationDetails?.applicantName ||
           `${applicationDetails?.firstName || ''} ${applicationDetails?.lastName || ''}`.trim(),
         rejectionReason: reason,
+        statusMessage: applicationDetails?.statusMessage,
       });
 
       logger.log('✅ Rejection notification sent successfully');
@@ -208,6 +211,7 @@ export const documentApplicationNotificationService = {
         applicantName:
           applicationDetails?.applicantName ||
           `${applicationDetails?.firstName || ''} ${applicationDetails?.lastName || ''}`.trim(),
+        statusMessage: applicationDetails?.statusMessage,
       });
 
       logger.log('✅ Approval notification sent successfully');

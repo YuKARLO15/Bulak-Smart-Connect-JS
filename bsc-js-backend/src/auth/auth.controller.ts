@@ -1105,6 +1105,7 @@ export class AuthController {
       applicantName: string;
       submissionDate: string;
       status: string;
+      statusMessage?: string;
     },
   ) {
     try {
@@ -1150,6 +1151,7 @@ export class AuthController {
       applicationSubtype?: string;
       applicantName: string;
       previousStatus?: string;
+      statusMessage?: string;
     },
   ) {
     try {
@@ -1166,6 +1168,7 @@ export class AuthController {
         dto.applicationSubtype,
         dto.applicantName,
         dto.previousStatus,
+        dto.statusMessage,
       );
 
       return {
@@ -1193,6 +1196,7 @@ export class AuthController {
       applicationType: string;
       applicationSubtype?: string;
       applicantName: string;
+      statusMessage?: string;
     },
   ) {
     try {
@@ -1200,13 +1204,16 @@ export class AuthController {
         `Sending application approval notification to: ${dto.email}`,
       );
 
-      // Use your existing email service
-      await this.emailService.sendDocumentApplicationApproval(
+      // Use your existing email service  
+      await this.emailService.sendDocumentApplicationStatusUpdate(
         dto.email,
         dto.applicationId,
+        'approved',
         dto.applicationType,
         dto.applicationSubtype,
         dto.applicantName,
+        undefined, // previousStatus
+        dto.statusMessage,
       );
 
       return {
@@ -1235,6 +1242,7 @@ export class AuthController {
       applicationSubtype?: string;
       applicantName: string;
       rejectionReason: string;
+      statusMessage?: string;
     },
   ) {
     try {
@@ -1250,6 +1258,7 @@ export class AuthController {
         dto.applicationSubtype,
         dto.applicantName,
         dto.rejectionReason,
+        dto.statusMessage,
       );
 
       return {
