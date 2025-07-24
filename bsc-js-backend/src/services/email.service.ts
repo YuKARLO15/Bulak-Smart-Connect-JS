@@ -859,6 +859,7 @@ export class EmailService {
     applicationSubtype?: string,
     applicantName?: string,
     previousStatus?: string,
+    statusMessage?: string,
   ): Promise<void> {
     const statusColors = {
       pending: '#ffc107',
@@ -901,6 +902,7 @@ export class EmailService {
           .value { color: #212529; }
           .footer { background-color: #f8f9fa; padding: 20px; text-align: center; font-size: 12px; color: #6c757d; }
           .status-badge { display: inline-block; padding: 8px 16px; background-color: ${color}; color: white; border-radius: 20px; font-weight: bold; margin: 10px 0; }
+          .status-message { background-color: #fffbe6; border-left: 4px solid #ff9800; padding: 15px; margin: 20px 0; border-radius: 4px; }
         </style>
       </head>
       <body>
@@ -938,6 +940,17 @@ export class EmailService {
                   : ''
               }
             </div>
+            
+            ${
+              statusMessage
+                ? `
+            <div class="status-message">
+              <strong>📝 Message from Administrator:</strong><br>
+              <span style="color: #333; margin-top: 8px; display: block;">${statusMessage}</span>
+            </div>
+            `
+                : ''
+            }
             
             ${
               newStatus.toLowerCase() === 'approved'
@@ -1028,6 +1041,7 @@ export class EmailService {
     applicationSubtype?: string,
     applicantName?: string,
     rejectionReason?: string,
+    statusMessage?: string,
   ): Promise<void> {
     const subject = `Application Declined - ${applicationId}`;
 
@@ -1084,11 +1098,11 @@ export class EmailService {
                   : ''
               }
               ${
-                rejectionReason
+                rejectionReason || statusMessage
                   ? `
               <div class="detail-row">
                 <span class="label">Reason:</span>
-                <span class="value">${rejectionReason}</span>
+                <span class="value">${statusMessage || rejectionReason}</span>
               </div>
               `
                   : ''
