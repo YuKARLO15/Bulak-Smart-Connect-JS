@@ -1174,6 +1174,45 @@ async sendDocumentApplicationConfirmation(
             `
                 : ''
             }
+
+             ${
+            newStatus.toLowerCase() === 'pending' ||
+            newStatus.toLowerCase() === 'approved' ||
+            newStatus.toLowerCase() === 'ready for pickup'
+              ? `
+          <div class="payment-card">
+            <h3 style="margin-top: 0; color: #856404;">💰 Payment Required</h3>
+            <p style="margin-bottom: 15px; color: #856404;">Please settle the following fees to complete your application:</p>
+            ${paymentInfo.items
+              .map(
+                item => `
+            <div class="payment-row">
+              <span class="label">${item.item}:</span>
+              <span class="value">${item.amount}</span>
+            </div>
+            `
+              )
+              .join('')}
+            ${
+              paymentInfo.total
+                ? `
+            <div class="total-row">
+              <span class="label">Total Amount:</span>
+              <span class="value">${paymentInfo.total}</span>
+            </div>
+            `
+                : ''
+            }
+            <div style="background-color: #d1ecf1; border: 1px solid #bee5eb; padding: 15px; border-radius: 8px; margin: 15px 0;">
+              <p style="margin: 0; color: #0c5460;"><strong>Payment can be made at:</strong></p>
+              <p style="margin: 5px 0; color: #0c5460;">Municipal Civil Registrar's Office<br>
+              Office Hours: Monday to Friday, 8:00 AM - 5:00 PM<br>
+              📞 0936-541-0787</p>
+            </div>
+          </div>
+          `
+              : ''
+          }
             
             <p>Thank you for using Bulak LGU Connect!</p>
           </div>
@@ -1233,6 +1272,7 @@ async sendDocumentApplicationConfirmation(
     statusMessage?: string,
   ): Promise<void> {
     const subject = `Application Declined - ${applicationId}`;
+    const paymentInfo = this.getPaymentInfo(applicationType, applicationSubtype);
 
     const html = `
       <!DOCTYPE html>
@@ -1252,6 +1292,9 @@ async sendDocumentApplicationConfirmation(
           .value { color: #212529; }
           .footer { background-color: #f8f9fa; padding: 20px; text-align: center; font-size: 12px; color: #6c757d; }
           .resubmit-section { background-color: #e2f3ff; border: 1px solid #b8daff; padding: 20px; border-radius: 8px; margin: 20px 0; text-align: center; }
+          .payment-card { background-color: #fff3cd; border-left: 4px solid #ffc107; padding: 20px; margin: 20px 0; border-radius: 8px; }
+          .payment-row { display: flex; justify-content: space-between; margin: 8px 0; padding: 5px 0; }
+          .total-row { display: flex; justify-content: space-between; margin: 15px 0; padding: 10px 0; border-top: 2px solid #ffc107; font-weight: bold; }
         </style>
       </head>
       <body>
@@ -1303,6 +1346,30 @@ async sendDocumentApplicationConfirmation(
               <p>You can submit a new application with the required corrections.</p>
               <p>Please contact our office if you need assistance with the requirements.</p>
             </div>
+
+            <div class="payment-card">
+              <h3 style="margin-top: 0; color: #856404;">💰 Payment Information</h3>
+              <p style="margin-bottom: 15px; color: #856404;">The following fees were applied to your application:</p>
+              ${paymentInfo.items
+                .map(
+                  item => `
+              <div class="payment-row">
+                <span class="label">${item.item}:</span>
+                <span class="value">${item.amount}</span>
+              </div>
+              `
+                )
+                .join('')}
+              ${
+                paymentInfo.total
+                  ? `
+              <div class="total-row">
+                <span class="label">Total Amount:</span>
+                <span class="value">${paymentInfo.total}</span>
+              </div>
+              `
+                  : ''
+              }
             
             <p>We apologize for any inconvenience this may have caused.</p>
           </div>
