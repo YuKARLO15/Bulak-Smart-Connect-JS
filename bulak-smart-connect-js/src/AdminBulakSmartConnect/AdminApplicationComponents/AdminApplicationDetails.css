@@ -267,7 +267,10 @@
   margin-top: 8px;
   background-color: #184a5b !important;
 }
-
+.UpdateStatusButtonAdminAppForm:disabled{
+  background-color: #b0bec5 !important;
+  color: #fff !important;
+}
 .DetailsDividerAdminAppForm {
   margin: 24px 0;
 }
