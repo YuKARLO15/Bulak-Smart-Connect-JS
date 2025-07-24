@@ -738,147 +738,177 @@ export class EmailService {
   }
 
   /**
- * Get payment information based on application type and subtype
- */
-private getPaymentInfo(applicationType: string, applicationSubtype?: string): { items: Array<{item: string, amount: string}>, total?: string, duration?: string } {
-  const type = applicationType?.toLowerCase() || '';
-  const subtype = applicationSubtype?.toLowerCase() || '';
+   * Get payment information based on application type and subtype
+   */
+  private getPaymentInfo(
+    applicationType: string,
+    applicationSubtype?: string,
+  ): {
+    items: Array<{ item: string; amount: string }>;
+    total?: string;
+    duration?: string;
+  } {
+    const type = applicationType?.toLowerCase() || '';
+    const subtype = applicationSubtype?.toLowerCase() || '';
 
-  // Birth Certificate Applications
-  if (type.includes('birth')) {
-    // Correction Applications
-    if (subtype.includes('correction')) {
-      if (subtype.includes('first name')) {
+    // Birth Certificate Applications
+    if (type.includes('birth')) {
+      // Correction Applications
+      if (subtype.includes('correction')) {
+        if (subtype.includes('first name')) {
+          return {
+            items: [
+              { item: 'Filing Fee', amount: '₱300.00' },
+              {
+                item: 'Newspaper Publication',
+                amount: '₱3,500.00 (newspaper of your choice)',
+              },
+              {
+                item: 'Other Fees (notarized, new PSA corrected copy)',
+                amount: '₱500.00',
+              },
+            ],
+            total: '₱4,300.00',
+            duration: '4-6 months',
+          };
+        } else if (subtype.includes('clerical')) {
+          return {
+            items: [
+              { item: 'Filing Fee', amount: '₱1,000.00' },
+              { item: 'Miscellaneous Expenses', amount: '₱600.00' },
+              {
+                item: 'Other Fees (notarized, new PSA corrected copy)',
+                amount: '₱500.00',
+              },
+            ],
+            total: '₱2,100.00',
+            duration: '4-6 months',
+          };
+        } else if (
+          subtype.includes('sex') ||
+          subtype.includes('date of birth')
+        ) {
+          return {
+            items: [
+              { item: 'Filing Fee', amount: '₱300.00' },
+              {
+                item: 'Newspaper Publication',
+                amount: '₱3,500.00 (newspaper of your choice)',
+              },
+              {
+                item: 'Other Fees (notarized, new PSA corrected copy)',
+                amount: '₱500.00',
+              },
+            ],
+            total: '₱4,300.00',
+            duration: '4-6 months',
+          };
+        }
+      }
+
+      // Delayed Registration Applications
+      if (subtype.includes('delayed')) {
+        if (subtype.includes('above 18')) {
+          return {
+            items: [
+              { item: 'Filing Fee', amount: '₱300.00' },
+              { item: 'Miscellaneous Expenses', amount: '₱600.00' },
+              { item: 'Other Fees (notarized, PSA copy)', amount: '₱500.00' },
+            ],
+            total: '₱1,400.00',
+            duration: '4-6 months',
+          };
+        } else if (subtype.includes('below 18')) {
+          return {
+            items: [
+              { item: 'Filing Fee', amount: '₱300.00' },
+              { item: 'Miscellaneous Expenses', amount: '₱600.00' },
+              { item: 'Other Fees (notarized, PSA copy)', amount: '₱500.00' },
+            ],
+            total: '₱1,400.00',
+            duration: '10 days',
+          };
+        } else if (subtype.includes('foreign parent')) {
+          return {
+            items: [
+              { item: 'Filing Fee', amount: '₱300.00' },
+              { item: 'Miscellaneous Expenses', amount: '₱600.00' },
+              { item: 'Other Fees (notarized, PSA copy)', amount: '₱500.00' },
+            ],
+            total: '₱1,400.00',
+            duration: '4-6 months',
+          };
+        }
+      }
+
+      // Regular/Copy Applications
+      if (
+        subtype.includes('regular') ||
+        subtype.includes('copy') ||
+        subtype.includes('certified true copy')
+      ) {
         return {
           items: [
-            { item: 'Filing Fee', amount: '₱300.00' },
-            { item: 'Newspaper Publication', amount: '₱3,500.00 (newspaper of your choice)' },
-            { item: 'Other Fees (notarized, new PSA corrected copy)', amount: '₱500.00' }
+            { item: 'Application Fee', amount: '₱50.00' },
+            { item: 'Processing Fee', amount: '₱100.00' },
           ],
-          total: '₱4,300.00',
-          duration: '4-6 months'
-        };
-      } else if (subtype.includes('clerical')) {
-        return {
-          items: [
-            { item: 'Filing Fee', amount: '₱1,000.00' },
-            { item: 'Miscellaneous Expenses', amount: '₱600.00' },
-            { item: 'Other Fees (notarized, new PSA corrected copy)', amount: '₱500.00' }
-          ],
-          total: '₱2,100.00',
-          duration: '4-6 months'
-        };
-      } else if (subtype.includes('sex') || subtype.includes('date of birth')) {
-        return {
-          items: [
-            { item: 'Filing Fee', amount: '₱300.00' },
-            { item: 'Newspaper Publication', amount: '₱3,500.00 (newspaper of your choice)' },
-            { item: 'Other Fees (notarized, new PSA corrected copy)', amount: '₱500.00' }
-          ],
-          total: '₱4,300.00',
-          duration: '4-6 months'
+          total: '₱150.00',
+          duration: '3-5 working days',
         };
       }
     }
-    
-    // Delayed Registration Applications
-    if (subtype.includes('delayed')) {
-      if (subtype.includes('above 18')) {
+
+    // Marriage Applications
+    if (type.includes('marriage')) {
+      if (subtype.includes('license')) {
         return {
           items: [
-            { item: 'Filing Fee', amount: '₱300.00' },
-            { item: 'Miscellaneous Expenses', amount: '₱600.00' },
-            { item: 'Other Fees (notarized, PSA copy)', amount: '₱500.00' }
+            { item: 'Marriage License Fee', amount: '₱500.00' },
+            { item: 'Community Tax Certificate', amount: '₱30.00' },
+            { item: 'Processing Fee', amount: '₱100.00' },
           ],
-          total: '₱1,400.00',
-          duration: '4-6 months'
+          total: '₱630.00',
+          duration: '10 working days (after completion of requirements)',
         };
-      } else if (subtype.includes('below 18')) {
+      } else if (subtype.includes('certificate')) {
         return {
           items: [
-            { item: 'Filing Fee', amount: '₱300.00' },
-            { item: 'Miscellaneous Expenses', amount: '₱600.00' },
-            { item: 'Other Fees (notarized, PSA copy)', amount: '₱500.00' }
+            { item: 'Marriage Certificate Fee', amount: '₱150.00' },
+            { item: 'Processing Fee', amount: '₱50.00' },
           ],
-          total: '₱1,400.00',
-          duration: '10 days'
-        };
-      } else if (subtype.includes('foreign parent')) {
-        return {
-          items: [
-            { item: 'Filing Fee', amount: '₱300.00' },
-            { item: 'Miscellaneous Expenses', amount: '₱600.00' },
-            { item: 'Other Fees (notarized, PSA copy)', amount: '₱500.00' }
-          ],
-          total: '₱1,400.00',
-          duration: '4-6 months'
+          total: '₱200.00',
+          duration: '3-5 working days',
         };
       }
     }
 
-    // Regular/Copy Applications
-    if (subtype.includes('regular') || subtype.includes('copy') || subtype.includes('certified true copy')) {
-      return {
-        items: [
-          { item: 'Application Fee', amount: '₱50.00' },
-          { item: 'Processing Fee', amount: '₱100.00' }
-        ],
-        total: '₱150.00',
-        duration: '3-5 working days'
-      };
-    }
+    // Default fallback
+    return {
+      items: [{ item: 'Processing Fee', amount: 'To be determined' }],
+      duration: 'Please contact our office for details',
+    };
   }
-
-  // Marriage Applications
-  if (type.includes('marriage')) {
-    if (subtype.includes('license')) {
-      return {
-        items: [
-          { item: 'Marriage License Fee', amount: '₱500.00' },
-          { item: 'Community Tax Certificate', amount: '₱30.00' },
-          { item: 'Processing Fee', amount: '₱100.00' }
-        ],
-        total: '₱630.00',
-        duration: '10 working days (after completion of requirements)'
-      };
-    } else if (subtype.includes('certificate')) {
-      return {
-        items: [
-          { item: 'Marriage Certificate Fee', amount: '₱150.00' },
-          { item: 'Processing Fee', amount: '₱50.00' }
-        ],
-        total: '₱200.00',
-        duration: '3-5 working days'
-      };
-    }
-  }
-
-  // Default fallback
-  return {
-    items: [
-      { item: 'Processing Fee', amount: 'To be determined' }
-    ],
-    duration: 'Please contact our office for details'
-  };
-}
 
   /**
- * Send document application confirmation email
- */
-async sendDocumentApplicationConfirmation(
-  email: string,
-  applicationId: string,
-  applicationType: string,
-  applicationSubtype?: string,
-  applicantName?: string,
-  submissionDate?: string,
-  status: string = 'Pending',
-  statusMessage?: string,
-): Promise<void> {
-  const subject = `Application Submitted - ${applicationId}`;
-  const paymentInfo = this.getPaymentInfo(applicationType, applicationSubtype);
+   * Send document application confirmation email
+   */
+  async sendDocumentApplicationConfirmation(
+    email: string,
+    applicationId: string,
+    applicationType: string,
+    applicationSubtype?: string,
+    applicantName?: string,
+    submissionDate?: string,
+    status: string = 'Pending',
+    statusMessage?: string,
+  ): Promise<void> {
+    const subject = `Application Submitted - ${applicationId}`;
+    const paymentInfo = this.getPaymentInfo(
+      applicationType,
+      applicationSubtype,
+    );
 
-  const html = `
+    const html = `
     <!DOCTYPE html>
     <html>
     <head>
@@ -957,12 +987,12 @@ async sendDocumentApplicationConfirmation(
             <p style="margin-bottom: 15px; color: #856404;">The following fees are required for your application:</p>
             ${paymentInfo.items
               .map(
-                item => `
+                (item) => `
             <div class="payment-row">
               <span class="label">${item.item}:</span>
               <span class="value">${item.amount}</span>
             </div>
-            `
+            `,
               )
               .join('')}
             ${
@@ -1021,17 +1051,17 @@ async sendDocumentApplicationConfirmation(
     </html>
   `;
 
-  await this.transporter.sendMail({
-    from: this.configService.get('EMAIL_FROM'),
-    to: email,
-    subject,
-    html,
-  });
+    await this.transporter.sendMail({
+      from: this.configService.get('EMAIL_FROM'),
+      to: email,
+      subject,
+      html,
+    });
 
-  this.logger.log(
-    `✅ Document application confirmation email sent to ${email}`,
-  );
-}
+    this.logger.log(
+      `✅ Document application confirmation email sent to ${email}`,
+    );
+  }
 
   /**
    * Send document application status update email
@@ -1068,7 +1098,10 @@ async sendDocumentApplicationConfirmation(
     const emoji = statusEmojis[newStatus.toLowerCase()] || '📋';
 
     const subject = `Application ${newStatus.charAt(0).toUpperCase() + newStatus.slice(1)} - ${applicationId}`;
-    const paymentInfo = this.getPaymentInfo(applicationType, applicationSubtype);
+    const paymentInfo = this.getPaymentInfo(
+      applicationType,
+      applicationSubtype,
+    );
 
     const html = `
       <!DOCTYPE html>
@@ -1176,21 +1209,21 @@ async sendDocumentApplicationConfirmation(
             }
 
              ${
-            newStatus.toLowerCase() === 'pending' ||
-            newStatus.toLowerCase() === 'approved' ||
-            newStatus.toLowerCase() === 'ready for pickup'
-              ? `
+               newStatus.toLowerCase() === 'pending' ||
+               newStatus.toLowerCase() === 'approved' ||
+               newStatus.toLowerCase() === 'ready for pickup'
+                 ? `
           <div class="payment-card">
             <h3 style="margin-top: 0; color: #856404;">💰 Payment Required</h3>
             <p style="margin-bottom: 15px; color: #856404;">Please settle the following fees to complete your application:</p>
             ${paymentInfo.items
               .map(
-                item => `
+                (item) => `
             <div class="payment-row">
               <span class="label">${item.item}:</span>
               <span class="value">${item.amount}</span>
             </div>
-            `
+            `,
               )
               .join('')}
             ${
@@ -1211,8 +1244,8 @@ async sendDocumentApplicationConfirmation(
             </div>
           </div>
           `
-              : ''
-          }
+                 : ''
+             }
             
             <p>Thank you for using Bulak LGU Connect!</p>
           </div>
@@ -1272,7 +1305,10 @@ async sendDocumentApplicationConfirmation(
     statusMessage?: string,
   ): Promise<void> {
     const subject = `Application Declined - ${applicationId}`;
-    const paymentInfo = this.getPaymentInfo(applicationType, applicationSubtype);
+    const paymentInfo = this.getPaymentInfo(
+      applicationType,
+      applicationSubtype,
+    );
 
     const html = `
       <!DOCTYPE html>
@@ -1352,12 +1388,12 @@ async sendDocumentApplicationConfirmation(
               <p style="margin-bottom: 15px; color: #856404;">The following fees were applied to your application:</p>
               ${paymentInfo.items
                 .map(
-                  item => `
+                  (item) => `
               <div class="payment-row">
                 <span class="label">${item.item}:</span>
                 <span class="value">${item.amount}</span>
               </div>
-              `
+              `,
                 )
                 .join('')}
               ${
