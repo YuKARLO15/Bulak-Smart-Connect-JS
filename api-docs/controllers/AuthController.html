@@ -489,8 +489,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="1272"
-                                    class="link-to-prism">src/auth/auth.controller.ts:1272</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="1281"
+                                    class="link-to-prism">src/auth/auth.controller.ts:1281</a></div>
                         </td>
                     </tr>
 
@@ -566,8 +566,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="1314"
-                                    class="link-to-prism">src/auth/auth.controller.ts:1314</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="1323"
+                                    class="link-to-prism">src/auth/auth.controller.ts:1323</a></div>
                         </td>
                     </tr>
 
@@ -899,8 +899,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="1303"
-                                    class="link-to-prism">src/auth/auth.controller.ts:1303</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="1312"
+                                    class="link-to-prism">src/auth/auth.controller.ts:1312</a></div>
                         </td>
                     </tr>
 
@@ -1159,8 +1159,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="1188"
-                                    class="link-to-prism">src/auth/auth.controller.ts:1188</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="1191"
+                                    class="link-to-prism">src/auth/auth.controller.ts:1191</a></div>
                         </td>
                     </tr>
 
@@ -1409,8 +1409,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="1229"
-                                    class="link-to-prism">src/auth/auth.controller.ts:1229</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="1236"
+                                    class="link-to-prism">src/auth/auth.controller.ts:1236</a></div>
                         </td>
                     </tr>
 
@@ -1487,8 +1487,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="1143"
-                                    class="link-to-prism">src/auth/auth.controller.ts:1143</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="1144"
+                                    class="link-to-prism">src/auth/auth.controller.ts:1144</a></div>
                         </td>
                     </tr>
 
@@ -3421,6 +3421,7 @@ export class AuthController {
       applicantName: string;
       submissionDate: string;
       status: string;
+      statusMessage?: string;
     },
   ) {
     try {
@@ -3466,6 +3467,7 @@ export class AuthController {
       applicationSubtype?: string;
       applicantName: string;
       previousStatus?: string;
+      statusMessage?: string;
     },
   ) {
     try {
@@ -3482,6 +3484,7 @@ export class AuthController {
         dto.applicationSubtype,
         dto.applicantName,
         dto.previousStatus,
+        dto.statusMessage,
       );
 
       return {
@@ -3509,6 +3512,7 @@ export class AuthController {
       applicationType: string;
       applicationSubtype?: string;
       applicantName: string;
+      statusMessage?: string;
     },
   ) {
     try {
@@ -3516,13 +3520,16 @@ export class AuthController {
         &#x60;Sending application approval notification to: ${dto.email}&#x60;,
       );
 
-      // Use your existing email service
-      await this.emailService.sendDocumentApplicationApproval(
+      // Use your existing email service  
+      await this.emailService.sendDocumentApplicationStatusUpdate(
         dto.email,
         dto.applicationId,
+        &#x27;approved&#x27;,
         dto.applicationType,
         dto.applicationSubtype,
         dto.applicantName,
+        undefined, // previousStatus
+        dto.statusMessage,
       );
 
       return {
@@ -3551,6 +3558,7 @@ export class AuthController {
       applicationSubtype?: string;
       applicantName: string;
       rejectionReason: string;
+      statusMessage?: string;
     },
   ) {
     try {
@@ -3566,6 +3574,7 @@ export class AuthController {
         dto.applicationSubtype,
         dto.applicantName,
         dto.rejectionReason,
+        dto.statusMessage,
       );
 
       return {
